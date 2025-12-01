@@ -1,0 +1,16 @@
+extends: theme-check:recommended
+
+exclude:
+  - node_modules/**
+  - src/**
+  - dev-url.txt
+  - assets/theme.css
+
+enabled_checks:
+  - LiquidTag
+  - LiquidObject
+  - LiquidFilter
+  - PaginationSize
+  - RemoteAsset
+  - SchemaTranslations
+  - UnusedSnippet

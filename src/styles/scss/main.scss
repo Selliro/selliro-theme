@@ -1,0 +1,17 @@
+// Example SCSS entry. Add your styles here.
+// Files in /src/styles/scss will be compiled to /assets with the same name.
+
+$brand: #0ea5e9; // sky-500
+
+body {
+  color: #111827; // gray-900
+}
+
+.badge {
+  background-color: $brand;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+
