@@ -1,0 +1,103 @@
+{% doc %}
+  Form row block with column layout support.
+  Supports nested input field blocks (textfield, textarea, radio group, select, checkboxes).
+
+  @example
+  {% content_for 'block', type: 'form-row', id: 'name-row' %}
+{% enddoc %}
+
+{%- liquid
+  assign column_layout = block.settings.column_layout | default: 'full'
+  assign gap = block.settings.gap | default: 20
+-%}
+
+<div
+  id="shopify-block-{{ block.id }}"
+  class="form-row form-row--{{ column_layout }}"
+  style="--gap: {{ gap }}px;"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .form-row--half {
+      flex-direction: row;
+    }
+
+    .form-row--half > * {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .form-row--full {
+      flex-direction: column;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Form row",
+  "blocks": [
+    {
+      "type": "form-input-field"
+    },
+    {
+      "type": "@theme"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "column_layout",
+      "label": "Column layout (desktop)",
+      "options": [
+        {
+          "value": "full",
+          "label": "Full width"
+        },
+        {
+          "value": "half",
+          "label": "Half width (2 columns)"
+        }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between columns",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Form row"
+    },
+    {
+      "name": "Form row (half width)",
+      "settings": {
+        "column_layout": "half"
+      }
+    }
+  ]
+}
+{% endschema %}
+

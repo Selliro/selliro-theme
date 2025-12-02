@@ -1,0 +1,162 @@
+{% doc %}
+  Form text area block using Flowbite styling.
+  Supports label, textarea field, error message, and required field indicator.
+
+  @example
+  {% content_for 'block', type: 'form-text-area', id: 'message' %}
+{% enddoc %}
+
+{%- liquid
+  assign label = block.settings.label | default: ''
+  assign placeholder = block.settings.placeholder | default: ''
+  assign field_name = block.settings.field_name | default: ''
+  assign required = block.settings.required | default: false
+  assign error_message = block.settings.error_message | default: ''
+  assign rows = block.settings.rows | default: 4
+-%}
+
+<div
+  id="shopify-block-{{ block.id }}"
+  class="form-text-area tw-flex tw-flex-col tw-gap-2 tw-w-full"
+  {{ block.shopify_attributes }}
+>
+  {%- if label != blank -%}
+    <label
+      for="textarea-{{ block.id }}"
+      class="tw-text-sm tw-font-medium tw-leading-[18px] tw-tracking-[-0.14px] tw-text-black tw-w-full"
+    >
+      {{ label }}
+      {%- if required -%}
+        <span class="tw-text-black-500" aria-label="required"> *</span>
+      {%- endif -%}
+    </label>
+  {%- endif -%}
+
+  <div class="tw-relative tw-w-full">
+    <textarea
+      data-textarea-type="textarea"
+      id="textarea-{{ block.id }}"
+      name="{{ field_name }}"
+      rows="{{ rows }}"
+      placeholder="{{ placeholder }}"
+      {% if required %}required{% endif %}
+      class="tw-w-full tw-min-h-[96px] tw-border tw-border-slate-500 tw-rounded-xl tw-px-3 tw-py-2 tw-text-base tw-leading-[20px] tw-tracking-[-0.16px] tw-bg-white tw-text-body-text tw-outline-none focus:tw-border-slate-500 focus:tw-ring-1 focus:tw-ring-slate-500 disabled:tw-cursor-not-allowed disabled:tw-bg-[#EBEBEB] disabled:tw-text-text-muted placeholder:tw-text-slate-500 tw-resize-none"
+      aria-describedby="error-{{ block.id }}"
+    ></textarea>
+  </div>
+
+  <div
+    id="error-{{ block.id }}"
+    class="tw-hidden tw-mt-2 tw-text-xs tw-leading-4 tw-text-red-500"
+    role="alert"
+    aria-live="polite"
+    data-error-message="{{ error_message | escape }}"
+  >
+    {{ error_message }}
+  </div>
+</div>
+
+{% stylesheet %}
+  .form-text-area {
+    gap: 8px;
+  }
+  
+  .form-text-area label {
+    display: block;
+  }
+  
+  .form-text-area textarea:focus {
+    outline: none;
+  }
+  
+  .form-text-area textarea::placeholder {
+    color: #62748e;
+  }
+  
+  .form-text-area textarea.error {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+  }
+  
+  .form-text-area textarea.error:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 1px #fef2f2, 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+  
+  .form-text-area [role="alert"].show {
+    display: block;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Text area",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Field settings"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Message"
+    },
+    {
+      "type": "text",
+      "id": "field_name",
+      "label": "Field name",
+      "info": "The name attribute for the textarea field",
+      "default": "message"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Placeholder",
+      "default": "Enter some long form content"
+    },
+    {
+      "type": "range",
+      "id": "rows",
+      "label": "Rows",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4,
+      "info": "Initial number of visible rows"
+    },
+    {
+      "type": "checkbox",
+      "id": "required",
+      "label": "Required field",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Error message"
+    },
+    {
+      "type": "text",
+      "id": "error_message",
+      "label": "Default error message",
+      "default": "This field is required",
+      "info": "Default error message (xs font size, red color). Can be overridden dynamically via JavaScript validation."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text area"
+    },
+    {
+      "name": "Text area (required)",
+      "settings": {
+        "label": "Message",
+        "field_name": "message",
+        "placeholder": "Enter some long form content",
+        "required": true
+      }
+    }
+  ]
+}
+{% endschema %}
+

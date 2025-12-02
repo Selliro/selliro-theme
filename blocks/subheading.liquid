@@ -1,0 +1,61 @@
+{%- comment -%}
+  Subheading Theme Block
+  Global subheading component - variant set in presets
+{%- endcomment -%}
+
+{%- liquid
+  assign max_width = block.settings.max_width | default: ''
+-%}
+<style>
+  #shopify-block-{{ block.id }} > div {
+    {% if max_width != blank %}
+      max-width: {{ max_width }};
+    {% endif %}
+  }
+</style>
+
+<div id="shopify-block-{{ block.id }}">
+  {%- render 'subheading',
+    text: block.settings.text,
+    variant: block.settings.variant | default: 'md',
+    color: block.settings.color,
+    block_shopify_attributes: block.shopify_attributes
+  -%}
+</div>
+
+{% schema %}
+{
+  "name": "Subheading",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "variant",
+      "label": "Variant",
+      "info": "Set in preset: sm, md, lg"
+    },
+    {
+      "type": "text",
+      "id": "color",
+      "label": "Color",
+      "info": "Optional: hex color value (e.g., #ffffff)"
+    },
+    {
+      "type": "text",
+      "id": "max_width",
+      "label": "Max width",
+      "info": "Enter max width value (e.g., 800px, 50%, 1200px). Applies to all screen sizes"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Subheading"
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,110 @@
+{%- comment -%}
+  Header Mobile Drawer Menu
+
+  Uses the drawer pattern from `snippets/ui-components.liquid`:
+  - Trigger button: data-drawer-toggle="header-mobile-drawer"
+  - Drawer container: id="header-mobile-drawer" data-drawer
+
+  Expected params:
+  - mobile_menu (linklist handle)
+
+  Behavior:
+  - Drawer open/close handled by global UI components (attachUIEvents)
+  - Nested navigation (2nd/3rd level) handled by custom JS:
+    - Click on any item with children OR a megamenu URL (#megamenu-{id})
+      opens a nested "panel" inside the same drawer, sliding in from the left.
+{%- endcomment -%}
+
+{%- assign drawer_id = 'header-mobile-drawer' -%}
+
+{%- comment -%} Trigger button (icon-only, kept minimal here) {%- endcomment -%}
+<button
+  type="button"
+  class="tw-inline-flex tw-h-10 tw-items-center tw-justify-center tw-bg-white tw-text-[#111827] lg:tw-hidden"
+  aria-label="Open navigation"
+  data-drawer-toggle="{{ drawer_id }}"
+>
+  <span class="tw-relative tw-block tw-h-[2px] tw-w-4 tw-bg-[#111827] tw-rounded-sm">
+    <span class="tw-absolute tw-left-0 tw-top-[-6px] tw-block tw-h-[2px] tw-w-4 tw-bg-[#111827] tw-rounded-sm"></span>
+    <span class="tw-absolute tw-left-0 tw-top-[6px] tw-block tw-h-[2px] tw-w-4 tw-bg-[#111827] tw-rounded-sm"></span>
+  </span>
+</button>
+
+{%- comment -%} Drawer container (position & animation handled by UI-components JS) {%- endcomment -%}
+<div
+  id="{{ drawer_id }}"
+  data-drawer
+  class="tw-hidden tw-fixed tw-inset-0 tw-w-full"
+  data-slide-panel-root
+  data-search-parent
+  
+>
+  <div class="tw-flex tw-flex-col tw-h-full">
+    {%- comment -%} Header row with close button {%- endcomment -%}
+    <div class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-pt-4 tw-pb-3 tw-border-b tw-border-[#e5e7eb]">
+      <span class="tw-text-sm tw-font-medium tw-text-[#111827]"><img src="https://cdn.shopify.com/s/files/1/0952/7502/4673/files/image_10.png?v=1763658171" alt="plus - achomarketplace" width="180" height="30" class="tw-block tw-h-6 tw-w-auto md:tw-h-8"></span>
+      <button type="button"
+        class="tw-inline-flex tw-h-8 tw-w-8 tw-items-center tw-justify-center tw-text-[#092846]"
+        aria-label="Close navigation"
+        data-drawer-hide="{{ drawer_id }}">
+        <span class="tw-relative tw-block tw-h-[2px] tw-w-4 tw-bg-transparent"><span class="tw-absolute tw-left-0 tw-top-1/2 tw-block tw-h-[2px] tw-w-4 tw-bg-[#092846] tw-rounded-sm tw--translate-y-1/2 tw--rotate-45"></span><span class="tw-absolute tw-left-0 tw-top-1/2 tw-block tw-h-[2px] tw-w-4 tw-bg-[#092846] tw-rounded-sm tw--translate-y-1/2 tw-rotate-45"></span></span>
+      </button>
+    </div>
+
+    {%- comment -%} Scrollable nav content {%- endcomment -%}
+    <div class="tw-flex-1 tw-overflow-y-auto">
+      {%- if mobile_menu != blank and linklists[mobile_menu].links.size > 0 -%}
+        {%- comment -%} Search row (input + submit button) {%- endcomment -%}
+         <div class="tw-px-5 header-search__search tw-p-5 tw-sticky tw-top-0 tw-bg-white" style="z-index: 99;" >
+          <div  class="tw-flex tw-items-center tw-gap-2" role="search">
+            <label class="tw-flex-1 tw-relative">
+              <span class="tw-sr-only">Search</span>
+              <input
+                data-search-input
+                data-search-input-mobile
+                type="search"
+                name="q"
+                placeholder="Search"
+                class="tw-w-full tw-h-[42px] tw-rounded-[12px] tw-border tw-border-[#62748e] tw-bg-white tw-px-3 tw-text-[16px] tw-leading-5 tw-tracking-[-0.16px] tw-text-[#092846] tw-placeholder-[#62748e] tw-outline-none focus:tw-border-[#092846]"
+              >
+            </label>
+            <button
+              class="tw-inline-flex tw-items-center tw-justify-center tw-h-[42px] tw-w-[60px] tw-rounded-full tw-border tw-border-[#092846] tw-bg-white"
+              aria-label="Submit search"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M14.1057 14.2L17 17M16.0667 9.53333C16.0667 13.1416 13.1416 16.0667 9.53333 16.0667C5.92507 16.0667 3 13.1416 3 9.53333C3 5.92507 5.92507 3 9.53333 3C13.1416 3 16.0667 5.92507 16.0667 9.53333Z" stroke="#092846" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        {%  render 'header-mobile-nav', mobile_menu:mobile_menu %}
+      {%- else -%}
+        <p class="tw-text-xs tw-text-[#6b7280]">
+          Assign a mobile navigation menu in the Header section settings to show links here.
+        </p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Footer actions (Log In / Create Account) {%- endcomment -%}
+    <div class="tw-px-5 tw-py-5 tw-flex tw-flex-col tw-gap-4">
+      <a
+        href="{{ routes.account_login_url }}"
+        class="tw-w-full tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-bg-[#092846] tw-py-3 tw-text-sm tw-font-bold tw-text-white"
+      >
+        Log in
+      </a>
+      <div class="tw-text-center tw-text-[14px] tw-leading-[18px] tw-text-[#092846]">
+        Don't have an account?
+      </div>
+      <a
+        href="{{ routes.account_register_url }}"
+        class="tw-w-full tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-border tw-border-[#092846] tw-bg-white tw-py-3 tw-text-sm tw-font-bold tw-text-[#092846]"
+      >
+        Create account
+      </a>
+    </div>
+  </div>
+</div>
+
+

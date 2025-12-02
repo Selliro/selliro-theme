@@ -1,0 +1,83 @@
+{%- comment -%}
+  Banner Layout: Image Background
+  
+  Image background layout with overlay support.
+  
+  Accepts:
+  - image_desktop: Desktop image object
+  - image_mobile: Mobile image object
+  - show_overlay: Boolean to show solid overlay
+  - overlay_opacity: Overlay opacity percentage
+  - show_gradient_overlay: Boolean to show gradient overlay
+  - max_height: Maximum height in pixels
+  - image_aspect_ratio_desktop: Optional decimal for desktop aspect ratio (default 1.8)
+  - image_aspect_ratio_mobile: Optional decimal for mobile aspect ratio (default 0.48)
+  - section: Section object with blocks
+{%- endcomment -%}
+
+{%- liquid
+  assign ar_desktop = image_aspect_ratio | default: 1.8
+  assign ar_mobile = image_aspect_ratio_mobile | default: 0.48
+-%}
+
+{%- comment -%} Desktop Image {%- endcomment -%}
+{%- if image_desktop != blank -%}
+  <div class="banner-layout-image__image banner-layout-image__image--desktop tw-hidden md:tw-block tw-inset-0">
+    {%- render 'shopify-responsive-image',
+      image: image_desktop,
+      image_id: 'bg-desktop',
+      image_aspect_ratio: ar_desktop,
+      wrapper_class: 'tw-w-full tw-h-full',
+      image_class: 'tw-w-full tw-h-full tw-object-cover',
+      fill: true,
+      no_lazyload: true,
+      max_height: max_height
+    -%}
+  </div>
+{%- endif -%}
+
+{%- comment -%} Mobile Image {%- endcomment -%}
+{%- if image_mobile != blank -%}
+  <div class="banner-layout-image__image banner-layout-image__image--mobile md:tw-hidden tw-inset-0">
+    {%- render 'shopify-responsive-image',
+      image: image_mobile,
+      image_id: 'bg-mobile',
+      image_aspect_ratio: ar_mobile,
+      wrapper_class: 'tw-w-full tw-h-full',
+      image_class: 'tw-w-full tw-h-full tw-object-cover',
+      fill: true,
+      no_lazyload: true,
+      max_height: max_height
+    -%}
+  </div>
+{%- elsif image_desktop != blank -%}
+  {%- comment -%} Fallback to desktop image on mobile {%- endcomment -%}
+  <div class="banner-layout-image__image banner-layout-image__image--mobile-fallback md:tw-hidden tw-inset-0">
+    {%- render 'shopify-responsive-image',
+      image: image_desktop,
+      image_id: 'bg-mobile-fallback',
+      image_aspect_ratio: ar_mobile,
+      wrapper_class: 'tw-w-full tw-h-full',
+      image_class: 'tw-w-full tw-h-full tw-object-cover',
+      fill: true,
+      no_lazyload: true,
+      max_height: max_height
+    -%}
+  </div>
+{%- endif -%}
+
+{%- comment -%} Placeholder if no images {%- endcomment -%}
+{%- if image_desktop == blank and image_mobile == blank -%}
+  <div class="banner-layout-image__placeholder tw-inset-0">
+    {{ 'lifestyle-1' | placeholder_svg_tag: 'tw-w-full tw-h-full tw-object-cover' }}
+  </div>
+{%- endif -%}
+
+{%- comment -%} Overlay Layers {%- endcomment -%}
+{%- if show_overlay -%}
+  <div class="banner-layout-image__overlay banner-layout-image__overlay--solid tw-absolute tw-inset-0" style="background-color: rgba(0, 0, 0, {{ overlay_opacity | divided_by: 100.0 }});"></div>
+{%- endif -%}
+
+{%- if show_gradient_overlay -%}
+  <div class="banner-layout-image__overlay banner-layout-image__overlay--gradient tw-absolute tw-inset-0" style="background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 55%, rgba(0,0,0,0) 100%);"></div>
+{%- endif -%}

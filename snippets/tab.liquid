@@ -1,0 +1,88 @@
+{%- comment -%}
+  Tab UI Snippet
+  Renders a single tab button or panel based on render_button parameter
+  Works for both side-by-side and stacked layouts
+{%- endcomment -%}
+
+{%- liquid
+  assign is_first = is_first | default: false
+  assign parent_class = parent_class | default: 'tabs'
+  assign tab_id = tab.settings.tab_id
+  assign tab_title = tab.settings.tab_title | default: 'Tab'
+  assign tab_icon = tab.settings.tab_icon | default: ''
+  assign active_background_color = section.settings.active_background_color | default: '#d4f0f0'
+  assign background_color = section.settings.background_color | default: '#ffffff'
+  assign active_text_color = section.settings.active_text_color | default: '#00786f'
+  assign text_color = section.settings.text_color | default: '#323E46'
+  assign text_alignment = text_alignment | default: section.settings.text_alignment | default: 'center'
+  assign border_color = border_color | default: '#90a1b9'
+  assign active_border_color = active_border_color | default: background_color
+-%}
+
+<style>
+  #{{section.id}} .tab-button.active  {
+    background-color: {{ active_background_color }} !important;
+    border-color: {{ active_border_color }} !important;
+  }
+  #{{section.id}} .tab-button:not(.active)  {
+    background-color: {{ background_color }} !important;
+    border-color: {{ border_color }} !important;
+  }
+
+  #{{section.id}} .tab-button.active .rich-text {
+    color: {{ active_text_color }} !important;
+  }
+  #{{section.id}} .tab-button:not(.active) .rich-text {
+    color: {{ text_color }} !important;
+  }
+</style>
+
+
+    <div class="{{ parent_class }}__tab-item" id="{{ section.id }}">
+      <button 
+        data-tab-button="{{- tab_id -}}"
+        id="tab-button-{{- tab_id -}}"
+        tabindex="-1"
+        {%  unless disable_tabindex %}
+          role="tab"
+          aria-selected="{% if is_first %}true{% else %}false{% endif %}"
+          aria-controls="tab-content-{{- tab_id -}}"
+        {% endunless %}
+        class="tw-w-full
+        tab-button
+        tw-box-border 
+        tw-flex 
+        tw-items-center
+        tw-gap-2 tw-p-4 md:tw-px-7 md:tw-py-5 tw-rounded-full
+        {{ parent_class }}__tab-button 
+        {% if is_first %}active{% endif %}
+         tw-border tw-border-solid 
+         {%  unless disable_tabindex %}
+            focus:tw-outline-none
+            focus-visible:tw-ring-2
+            focus-visible:tw-ring-ah-teal
+            focus-visible:tw-ring-offset-2
+         {% endunless %}
+        ">
+
+        {%- if tab_icon != blank -%}
+          <div class="{{ parent_class }}__tab-icon tw-relative tw-shrink-0 tw-w-[26px]">
+            {%- render 'image',
+              desktop_image: tab_icon,
+              image_id: tab.id,
+              layout_type: 'icon',
+              desktop_aspect_ratio: '1.33',
+              parent_class: parent_class
+            -%}
+          </div>
+        {%- endif -%}
+        <div class="{{ parent_class }}__tab-label tw-flex tw-flex-col {% if text_alignment == 'center' %}tw-items-center{% else %}tw-items-start{% endif %} tw-relative tw-w-full">
+          <div class="tw-hidden md:tw-flex {{parent_class}}__tab-label-text tw-flex-col tw-justify-center tw-relative tw-shrink-0  {% if text_alignment == 'center' %}tw-text-center{% else %}tw-text-left{% endif %} tw-w-full">
+            {% render 'body', text: tab_title, variant: 'lg', parent_class: parent_class %}
+          </div>
+          <div class="tw-flex md:tw-hidden {{parent_class}}__tab-label-text tw-flex-col tw-justify-center tw-relative tw-shrink-0  {% if text_alignment == 'center' %}tw-text-center{% else %}tw-text-left{% endif %} tw-w-full">
+            {% render 'body', text: tab_title, variant: 'base-medium', parent_class: parent_class %}
+          </div>
+        </div>
+      </button>
+    </div>

@@ -1,0 +1,296 @@
+{%- comment -%}
+  Multicolumn Horizontal Section
+  
+  Layout: Left side (title/content) + Right side (grid of cards)
+  Desktop: 2-column layout (title left, cards right)
+  Mobile: Stacked layout
+{%- endcomment -%}
+
+{%- liquid
+  assign section_caption = section.settings.caption
+  assign section_heading = section.settings.heading
+  assign section_description = section.settings.description
+  assign show_button = section.settings.show_button
+  assign show_button_2 = section.settings.show_button_2
+  assign show_button_3 = section.settings.show_button_3
+  assign button_label = section.settings.button_label
+  assign button_label_2 = section.settings.button_label_2
+  assign button_label_3 = section.settings.button_label_3
+  assign button_link = section.settings.button_link
+  assign button_link_2 = section.settings.button_link_2
+  assign button_link_3 = section.settings.button_link_3
+  assign columns_desktop = section.settings.columns_desktop | default: 3
+  assign add_top_padding = section.settings.add_top_padding | default: false
+  assign add_bottom_padding = section.settings.add_bottom_padding | default: false
+  assign enable_grid_layout = section.settings.enable_grid_layout 
+-%} 
+
+<style>
+  #{{ section.id }} {
+    padding-top: {{ section.settings.add_top_padding_mobile }}px;
+    padding-bottom: {{ section.settings.add_bottom_padding_mobile }}px;
+  }
+  @media(min-width: 1024px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.add_top_padding_desktop }}px;
+      padding-bottom: {{ section.settings.add_bottom_padding_desktop }}px;
+    }
+  }
+</style>
+
+<div id="{{ section.id }}" class="blog-post-list tw-w-full  section-container">
+  <div class="blog-post-list__container">
+    
+    {%- comment -%} Main Layout: Left Title/Content + Right Cards Grid (Grid at top level) {%- endcomment -%}
+    {%- comment -%} Mobile (< 638px): Stacked | Tablet (638px-1280px): Stacked | Desktop (> 1280px): Side-by-side {%- endcomment -%}
+    <div class="blog-post-list__wrapper{% if enable_grid_layout %} tw-grid tw-grid-cols-1 lg:tw-grid-cols-[310px_1fr] tw-gap-10 md:tw-gap-16{% else %} tw-grid tw-gap-8 md:tw-gap-14 {% endif %}">
+      
+      {%- comment -%} Left: Title Content Wrapper {%- endcomment -%}
+      {%- comment -%} Mobile: Button below (flex-col) | Tablet: Button on right (flex-row) | Desktop: Button below (flex-col) {%- endcomment -%}
+      {%- if section_caption != blank or section_heading != blank or section_description != blank or show_button -%}
+        <div class="blog-post-list__title-wrapper tw-flex tw-flex-col md:tw-flex-row md:tw-items-end md:tw-justify-between tw-gap-4 md-small:tw-gap-5">
+          
+          {%- comment -%} Content Block (Caption, Heading, Description) {%- endcomment -%}
+          <div class="tw-flex tw-flex-col tw-gap-4 md-small:tw-gap-5 tw-max-w-[750px]">
+            {%- comment -%} Caption {%- endcomment -%}
+            {%- if section_caption != blank -%}
+              {%- render 'caption',
+                text: section_caption,
+                color: '#323e46',
+                block_shopify_attributes: ''
+              -%}
+            {%- endif -%}
+            
+            {%- comment -%} Heading {%- endcomment -%}
+            {%- if section_heading != blank -%}
+              {%- render 'heading',
+                text: section_heading,
+                variant: 'h3',
+                color: section.settings.heading_color,
+                block_shopify_attributes: ''
+              -%}
+            {%- endif -%}
+            
+            {%- comment -%} Description {%- endcomment -%}
+            {%- if section_description != blank -%}
+              <div class="blog-post-list__description ">
+                {% render 'body', text: section_description, variant: 'base' , parent_class: "blog-post-list__description", color: '#323e46' %}
+              </div>
+            {%- endif -%}
+          </div>
+          
+          {%- comment -%} Secondary Button (Below on mobile/desktop, Right on tablet) {%- endcomment -%}
+          {%- if show_button or show_button_3 -%}
+            <div class="blog-post-list__button md:tw-pt-0md:tw-justify-end md:tw-shrink-0 lg:tw-pt-5">
+              {%- render 'button-group',
+                show_button_1: false,
+                show_button_1: show_button,
+                button_1_label: button_label,
+                button_1_link: button_link,
+                show_button_2: show_button_2,
+                button_2_label: button_label_2,
+                button_2_link: button_link_2,
+                button_2_color: 'blue',
+                show_button_3: show_button_3,
+                button_3_label: button_label_3,
+                button_3_link: button_link_3,
+                block_shopify_attributes: ''
+              -%}
+            </div>
+          {%- endif -%}
+          
+        </div>
+      {%- endif -%}
+
+        <div class="blog-post-list__cards tw-flex-1 tw-min-w-0">
+            {% comment %} {%- for block in section.blocks -%} {% endcomment %}
+               {% render 'blog-card', section: section %}
+            {% comment %} {%- endfor -%} {% endcomment %}
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Blog Post List",
+  "tag": "section",
+  "class": "section blog-post-list",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Title Content"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption",
+      "default": "Caption"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Heading"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#00a3a3"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum augue a felis accumsan fermentum. Vivamus sit amet lorem eu lectus bibendum bibendum.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "label": "Show button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "View all Services"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Button secondary"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button_2",
+      "label": "Show button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Button label",
+      "default": "View all Services"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Button Tertiary"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button_3",
+      "label": "Show button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label_3",
+      "label": "Button label",
+      "default": "View all Services"
+    },
+    {
+      "type": "url",
+      "id": "button_link_3",
+      "label": "Button link"
+    },
+    {
+        "type": "header",
+        "content": "Blog"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog",
+      "info": "Select a blog to display posts"
+    },
+    {
+      "type": "range",
+      "id": "posts_count",
+      "label": "Number of posts",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 3,
+      "info": "Number of blog posts to display"
+    },
+    {
+      "type": "range",
+      "id": "grid_columns",
+      "label": "Grid columns (desktop)",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "info": "Number of columns on desktop screens (1024px and above). Also used for carousel slides per view on desktop."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_desktop_carousel",
+      "label": "Enable carousel on desktop",
+      "default": false,
+      "info": "Enable carousel on desktop (1024px and above). Mobile always uses carousel."
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "text",
+      "id": "add_top_padding_mobile",
+      "label": "Add top padding mobile",
+      "default": "44"
+    },
+    {
+      "type": "text",
+      "id": "add_bottom_padding_mobile",
+      "label": "Add top padding mobile",
+      "default": "44"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "text",
+      "id": "add_top_padding_desktop",
+      "label": "Add top padding Desktop",
+      "default": "96"
+    },
+    {
+      "type": "text",
+      "id": "add_bottom_padding_desktop",
+      "label": "Add top padding desktop",
+      "default": "96"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog Post List",
+      "blocks": [
+        
+      ]
+    }
+  ]
+}
+{% endschema %}
+

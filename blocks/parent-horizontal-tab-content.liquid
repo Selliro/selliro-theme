@@ -1,0 +1,227 @@
+{%- comment -%}
+  Parent Horizontal Tab Theme Block
+  Two-column layout: Content (left) + Image (right)
+  Uses static blocks for heading, subheading, button-group, divider, icon-text-list, and image
+{%- endcomment -%}
+
+{%- liquid
+  assign content_image = block.settings.content_image
+  assign content_image_mobile = block.settings.content_image_mobile
+  assign mini_icon = block.settings.mini_icon
+  assign content_heading = block.settings.content_heading
+  assign content_subheading = block.settings.content_subheading
+  assign button_label = block.settings.button_label
+  assign button_link = block.settings.button_link
+  assign button_variant = block.settings.button_variant | default: 'secondary'
+  assign button_secondary_color = block.settings.button_secondary_color | default: 'white'
+  assign show_divider = block.settings.show_divider | default: true
+  assign section_id = block.settings.section_id
+-%}
+
+<style>
+    #horizontal-tabs-{{ block.id }} .icon-text-list {
+        max-width: fit-content;
+    }
+</style>
+
+<div data-migrate-section="{{section_id}}" id="horizontal-tabs-{{ block.id }}" >
+    <div  class="horizontal-tabs__panel-content tw-flex tw-flex-col lg:tw-flex-row-reverse tw-gap-4 md:tw-gap-16">
+    {%- comment -%} Full Image - First on mobile, Left on desktop (1024px+) {%- endcomment -%}
+    {%- if content_image != blank or content_image_mobile != blank -%}
+      <div class="horizontal-tabs__panel-image  tw-w-full tw-min-h-[200px] tw-rounded-[12px] lg:tw-max-w-[400px]">
+        {%- render 'image',
+          desktop_image: content_image,
+          mobile_image: content_image_mobile,
+          image_id: block.id | append: '-image',  
+          layout_type: 'full',
+          desktop_aspect_ratio: '1',
+          mobile_aspect_ratio: '1.75',
+          icon_rounded: true,
+          parent_class: 'horizontal-tabs',
+          block_shopify_attributes: ''
+        -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Content Wrapper - Text content {%- endcomment -%}
+    <div class="horizontal-tabs__panel-text tw-flex tw-flex-col tw-gap-2 tw-flex-1">
+      {%- comment -%} Mini Icon - Small icon image {%- endcomment -%}
+      {%- if mini_icon != blank -%}
+        <div class="horizontal-tabs__panel-mini-icon tw-shrink-0 tw-flex-shrink-0">
+          {%- render 'image',
+            desktop_image: mini_icon,
+            mobile_image: mini_icon,
+            image_id: block.id | append: '-mini-icon',
+            layout_type: 'icon',
+            desktop_aspect_ratio: '1.36',
+            mobile_aspect_ratio: '1.36',
+            icon_max_width: '26',
+            parent_class: 'horizontal-tabs-mini-icon',
+            block_shopify_attributes: ''
+          
+          -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Heading {%- endcomment -%}
+      {%- if content_heading != blank -%}
+        {%- render 'heading',
+          text: content_heading,
+          variant: 'h4-medium',
+          color: '#000',
+          parent_class: 'horizontal-tabs-heading'
+        -%}
+      {%- endif -%}
+
+      {%- comment -%} Subheading {%- endcomment -%}
+      {%- if content_subheading != blank -%}
+        <div class="horizontal-tabs__panel-subheading md:tw-max-w-[430px]">
+        {%- render 'body',
+          text: content_subheading,
+          variant: 'base',
+          color: '#323E46',
+          parent_class: 'horizontal-tabs-subheading',
+          block_shopify_attributes: ''
+        -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Button {%- endcomment -%}
+      {%- if button_label != blank and button_link != blank -%}
+        <div class="horizontal-tabs__panel-button tw-pt-2">
+          {%- render 'button',
+            label: button_label,
+            link: button_link,
+            variant: button_variant,
+            secondary_color: button_secondary_color,
+            block_shopify_attributes: ''
+          -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Divider {%- endcomment -%}
+      {%- if show_divider -%}
+        {%- render 'divider',
+          variant: 'simple',
+          color: 'slate-200',
+          parent_class: 'tw-pb-2 horizontal-tabs',
+          block_shopify_attributes: ''
+        -%}
+      {%- endif -%}
+
+      {%- comment -%} Icon Text List Blocks - Render below divider {%- endcomment -%}
+      <div class="horizontal-tabs__panel-icon-text-list tw-mt-2">
+        {%- for nested_block in block.blocks -%}
+          {%- render nested_block, section: section -%}
+        {%- endfor -%} 
+      </div>
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "Horizontal Tab Card",
+  "blocks": [
+    { "type": "icon-text-list" }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_id",
+      "label": "Section ID",
+    },
+    {
+      "type": "header",
+      "content": "Image Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "content_image",
+      "label": "Content Image (Desktop)",
+      "info": "Main image displayed on desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "content_image_mobile",
+      "label": "Content Image (Mobile)",
+      "info": "Optional: Different image for mobile. If not set, desktop image will be used."
+    },
+    {
+      "type": "image_picker",
+      "id": "mini_icon",
+      "label": "Mini Icon",
+      "info": "Small icon displayed above the heading"
+    },
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "text",
+      "id": "content_heading",
+      "label": "Heading",
+      "default": "Respiratory Care"
+    },
+    {
+      "type": "richtext",
+      "id": "content_subheading",
+      "label": "Subheading",
+      "default": "<p>We specialize in progressive and irreversible diseases, like COPD and Neuromuscular diseases, with the ultimate goal of becoming an extension of our healthcare providers in the home.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Button Settings"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Explore Respiratory Care"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "select",
+      "id": "button_variant",
+      "label": "Button Variant",
+      "default": "secondary",
+      "options": [
+        { "value": "primary", "label": "Primary" },
+        { "value": "secondary", "label": "Secondary" },
+        { "value": "tertiary", "label": "Tertiary" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_secondary_color",
+      "label": "Secondary Button Color",
+      "default": "white",
+      "options": [
+        { "value": "white", "label": "White" },
+        { "value": "blue", "label": "Blue" }
+      ],
+      "info": "Only applies when button variant is 'Secondary'"
+    },
+    {
+      "type": "header",
+      "content": "Divider Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show Divider",
+      "default": true,
+      "info": "Display divider above the icon-text-list blocks" 
+    }
+  ],
+  "presets": [
+    {
+      "name": "Horizontal Tab Card"
+    }
+  ]
+}
+{% endschema %}
+

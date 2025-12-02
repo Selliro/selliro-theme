@@ -1,0 +1,28 @@
+<tr class="even:tw-bg-gray-100 odd:tw-bg-transparent" {{ block.shopify_attributes }}>
+  {% for body in block.blocks %}
+    <td class="tw-px-6 tw-py-4 tw-align-top tw-text-sm tw-text-body">
+      {% render body, section: section, block: body %}
+    </td>
+  {% endfor %}
+</tr>
+
+{% schema %}
+{
+  "name": "Table row",
+  "blocks": [
+    { "type": "caption" },
+    { "type": "subheading" },
+    { "type": "body" },
+    { "type": "icon-text" }
+  ],
+  "presets": [
+    {
+      "name": "Table row",
+      "blocks": [
+        { "type": "body", "settings": { "text":  "<p>Body</p>", "variant": "md", "color": "#323e46" } },
+        { "type": "icon-text", "settings": { "text":  "<p>Icon text</p>" } },
+      ]
+    }
+  ]
+}
+{% endschema %}

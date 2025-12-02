@@ -1,0 +1,56 @@
+{%- comment -%}
+  Heading Component
+  Unified heading component with size-based variants
+  Supports: 'h1', 'h2', 'h3', 'h4', 'h5', 'decorative', 'stat', 'blog_heading', 'h2-delivery'
+  
+  Accepts:
+  - text: String
+  - variant: String (optional, 'h1', 'h2', 'h3', 'h4', 'h5', 'decorative', 'stat', 'blog_heading', 'h2-delivery', default: 'h3')
+  - color: Hex color value (optional)
+  - parent_class: String (optional, parent class prefix, default: 'heading')
+  - icon_image: Image object (optional, icon to display as superscript)
+  - icon_max_width: String (optional, max width in pixels for icon, default: '20')
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- liquid
+  assign variant = variant | default: 'h3'
+  assign parent_class = parent_class | default: 'heading'
+  assign color = color | default: '#092846'
+  
+  case variant
+    when 'h1'
+    assign heading_tag = 'h1'
+    assign heading_classes = parent_class | append: '__h1 tw-text-4xl md:tw-text-6xl !tw-leading-[110%] !tw-tracking-[-1.44px] md:!tw-tracking-[-2.4px] !tw-font-bold tw-break-words'  
+    when 'h2'
+      assign heading_tag = 'h2'
+      assign heading_classes = parent_class | append: '__h2 tw-text-4xl md:tw-text-5xl !tw-font-bold !tw-leading-[110%] !tw-tracking-[-1.44px] md:!tw-tracking-[-1.92px] tw-break-words'
+    when 'h3'
+      assign heading_tag = 'h3'
+      assign heading_classes = parent_class | append: '__h3 tw-text-3xl md:tw-text-5xl !tw-font-bold !tw-leading-[110%] !tw-tracking-[-1.2px] md:!tw-tracking-[-1.92px] tw-break-words'
+    when 'h4'
+      assign heading_tag = 'h4'
+      assign heading_classes = parent_class | append: '__h4 tw-text-2xl md:tw-text-3xl !tw-font-bold !tw-leading-[110%] !tw-tracking-[-0.96px] md:!tw-tracking-[-1.2px] tw-break-words'
+    when 'h4-medium'
+      assign heading_tag = 'h4-medium'
+      assign heading_classes = parent_class | append: '__h4-medium tw-text-2xl md:tw-text-3xl !tw-font-medium !tw-leading-[110%] !tw-tracking-[-0.96px] md:!tw-tracking-[-1.2px] tw-break-words'
+      when 'h5'
+      assign heading_tag = 'h5'
+      assign heading_classes = parent_class | append: '__h5 tw-text-5xl !tw-font-bold !tw-leading-[110%] !tw-tracking-[-1.92px] md:!tw-tracking-[-1.92px] tw-break-words'
+  endcase
+
+  assign heading_style = ''
+  if color != blank
+    assign heading_style = 'color: ' | append: color | append: ';'
+  endif
+  assign icon_max_width = icon_max_width | default: '20'
+-%}
+
+{%- if text != blank -%}
+  <{{ heading_tag }} class="{{ heading_classes }} tw-relative tw-inline-block"{% if heading_style != blank %} style="{{ heading_style }}"{% endif %} {{ block_shopify_attributes }}>
+    <span class="tw-relative tw-inline-block"> 
+      {{ text }}{%- if icon_image != blank -%}<sup class="tw-pl-2 tw-hidden md:tw-inline"><img src="{{ icon_image | image_url: width: icon_max_width }}" alt="{{ icon_image.alt | default: '' }}" width="{{ icon_max_width }}" height="{{ icon_max_width }}" loading="lazy" class="tw-inline-block tw-align-baseline"></sup>{%- endif -%}
+    </span>
+  </{{ heading_tag }}>
+{%- endif -%}
+

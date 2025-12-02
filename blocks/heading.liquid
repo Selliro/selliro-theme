@@ -1,0 +1,58 @@
+{%- comment -%}
+  Heading Theme Block
+  Global heading component - variant set in presets
+{%- endcomment -%}
+
+{%- render 'heading',
+  text: block.settings.text,
+  variant: block.settings.variant | default: 'h3',
+  color: block.settings.color,
+  icon_image: block.settings.icon_image,
+  icon_max_width: block.settings.icon_max_width,
+  block_shopify_attributes: block.shopify_attributes,
+  block: block
+-%}
+
+{% schema %}
+{
+  "name": "Heading",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "variant",
+      "label": "Variant",
+      "info": "Set in preset: h1, h2, h3, h4, h5, decorative, stat"
+    },
+    {
+      "type": "text",
+      "id": "color",
+      "label": "Color",
+      "info": "Optional: hex color value (e.g., #ffffff)"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_image",
+      "label": "Icon Image",
+      "info": "Optional: Icon to display as superscript in the upper right corner"
+    },
+    {
+      "type": "text",
+      "id": "icon_max_width",
+      "label": "Icon Max Width",
+      "default": "20",
+      "info": "Optional: Max width in pixels for the icon (default: 20px)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Heading"
+    }
+  ]
+}
+{% endschema %}
+

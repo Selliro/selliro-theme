@@ -1,0 +1,318 @@
+{%- comment -%}
+  Testimonials Section
+  Mobile-first testimonials section with rating display and carousel
+  
+  Layout:
+  - Mobile: Stacked layout, 1 testimonial per view
+  - Desktop: 1.5 testimonials per view with navigation
+{%- endcomment -%}
+
+{%- liquid
+  assign section_caption = section.settings.caption | default: ''
+  assign section_heading = section.settings.heading | default: 'What our customers are saying'
+  assign heading_color = section.settings.heading_color | default: '#092846'
+  assign rating_value = section.settings.rating_value | default: '4.8'
+  assign rating_description = section.settings.rating_description | default: 'Rated by patients across the country'
+  assign background_color = section.settings.background_color
+-%}
+<style>
+  #{{ section.id }} {
+    padding-top: {{ section.settings.add_top_padding_mobile }}px;
+    padding-bottom: {{ section.settings.add_bottom_padding_mobile }}px;
+  }
+  @media(min-width: 1024px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.add_top_padding_desktop }}px;
+      padding-bottom: {{ section.settings.add_bottom_padding_desktop }}px;
+    }
+  }
+</style>
+<style>
+  @media(min-width: 768px) {
+    #{{ section.id }} .testimonials__header {
+      padding-right:0;
+      {% if section.settings.left_content_max_width != blank %}
+      max-width: {{ section.settings.left_content_max_width }};
+      {% endif %}
+    }
+
+    #{{section.id}} .carousel__swiper {
+      padding-left:0;
+    }
+  }
+
+</style>
+
+<div id="{{ section.id }}" class="testimonials tw-w-full"{% if background_color != blank %} style="background-color: {{ background_color }};"{% endif %}>
+  <div class="testimonials__container" data-swiper-parent>
+    {%- comment -%} Grid Layout: Header Content + Carousel {%- endcomment -%}
+    <div class="testimonials__wrapper tw-grid tw-grid-cols-1 
+        md-small:tw-grid-cols-3 tw-gap-8 md-small:tw-gap-12 
+        tw-items-start md-small:tw-items-stretch section-container section-wide--right">
+      
+      {%- comment -%} Left: Header Content (Caption, Heading, Rating) {%- endcomment -%}
+      <div class="testimonials__header tw-flex tw-flex-col tw-gap-4 md-small:tw-gap-5 tw-items-start">
+        {%- comment -%} Caption {%- endcomment -%}
+        {%- if section_caption != blank -%}
+          {%- render 'caption',
+            text: section_caption,
+            color: '#323E46',
+            parent_class: 'testimonials'
+          -%}
+        {%- endif -%}
+        
+        {%- comment -%} Heading {%- endcomment -%}
+        {%- if section_heading != blank -%}
+          <div class="testimonials__heading-wrapper">
+            {%- render 'heading',
+              text: section_heading,
+              variant: 'h3',
+              color: heading_color,
+              parent_class: 'testimonials'
+            -%}
+          </div>
+        {%- endif -%}
+        
+        {%- comment -%} Rating Section {%- endcomment -%}
+        {%- if rating_value != blank -%}
+          <div class="testimonials__rating tw-flex tw-flex-col tw-gap-1 tw-items-start tw-rounded-xl md:tw-py-4">
+            {%- comment -%} Rating Value and Stars {%- endcomment -%}
+            <div class="testimonials__rating-display tw-flex tw-gap-4 tw-items-center tw-w-full">
+              <div class="testimonials__rating-value tw-text-2xl tw-font-medium tw-leading-[1.1] tw-tracking-[-0.96px] tw-text-heading-text">
+                {{ rating_value }}
+              </div>
+              
+              {%- render 'star-rating',
+                rating: rating_value | plus: 0,
+                star_color: section.settings.star_color | default: '#52c3c2',
+                parent_class: 'testimonials'
+              -%}
+            </div>
+            
+            {%- comment -%} Rating Description {%- endcomment -%}
+            {%- if rating_description != blank -%}
+              <div class="testimonials__rating-description">
+                <div class="tw-hidden md:tw-block">
+                {%- render 'body',
+                  text: rating_description,
+                  variant: 'lg',
+                  color: '#323e46',
+                  parent_class: 'testimonials'
+                -%}
+                </div>
+                <div class="tw-block md:tw-hidden">
+                  {%- render 'body',
+                    text: rating_description,
+                    variant: 'base-medium',
+                    color: '#323e46',
+                    parent_class: 'testimonials'
+                  -%}
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+      
+      {%- comment -%} Right: Testimonials Carousel {%- endcomment -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="testimonials__carousel tw-col-span-2">
+          <carousel-swiper class="carousel carousel--testimonials">
+            <script type="application/json">
+              {
+                "slidesPerView": "1",
+                "spaceBetween": 20,
+                "navigation": true,
+                "grabCursor": true,
+                "breakpoints": {
+                  "768": {
+                    "slidesPerView": "1.46",
+                    "spaceBetween": 24
+                  }
+                }
+              }
+            </script>
+            
+            <div class="swiper carousel__swiper">
+              <div class="swiper-wrapper carousel__wrapper">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'testimonial' and block.settings.quote != blank -%}
+                    <div class="swiper-slide carousel__slide tw-h-auto tw-flex">
+                      {%- render 'testimonial-card',
+                        quote: block.settings.quote,
+                        quote_color: block.settings.quote_color,
+                        author: block.settings.author,
+                        author_color: block.settings.author_color,
+                        block_shopify_attributes: block.shopify_attributes
+                      -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          </carousel-swiper>
+        </div>
+      {%- endif -%}
+    </div>
+    {%  render 'swiper-navigation' %}
+    </div> 
+ 
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "section",
+  "class": "section testimonials section-container-wide",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header Content"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption",
+      "default": "TESTIMONIALS"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What our customers are saying"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#092846"
+    },
+    {
+      "type": "text",
+      "id": "left_content_max_width",
+      "label": "Left content max width",
+      "info": "Enter max width value (e.g., 600px, 50%, 800px). Applies to all screen sizes"
+    },
+    {
+      "type": "header",
+      "content": "Rating Settings"
+    },
+    {
+      "type": "text",
+      "id": "rating_value",
+      "label": "Rating value",
+      "default": "4.8",
+      "info": "Enter rating value (e.g., 4.8)"
+    },
+    {
+      "type": "text",
+      "id": "rating_description",
+      "label": "Rating description",
+      "default": "Rated by patients across the country"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#52c3c2"
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "info": "Optional background color for the section"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "text",
+      "id": "add_top_padding_mobile",
+      "label": "Add top padding mobile",
+      "default": "44"
+    },
+    {
+      "type": "text",
+      "id": "add_bottom_padding_mobile",
+      "label": "Add bottom padding mobile",
+      "default": "44"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "text",
+      "id": "add_top_padding_desktop",
+      "label": "Add top padding Desktop",
+      "default": "96"
+    },
+    {
+      "type": "text",
+      "id": "add_bottom_padding_desktop",
+      "label": "Add bottom padding Desktop",
+      "default": "96"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Quote",
+          "default": "<p>So very helpful and sweet attitude. Went out of their way to make sure I had everything that I needed for my CPAP machine.</p>"
+        },
+        {
+          "type": "text",
+          "id": "quote_color",
+          "label": "Quote color",
+          "default": "#323e46",
+          "info": "Enter hex color value (e.g., #323e46)"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author name",
+          "default": "- Genine N."
+        },
+        {
+          "type": "color",
+          "id": "author_color",
+          "label": "Author color",
+          "default": "#58605e"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "<p>So very helpful and sweet attitude. Went out of their way to make sure I had everything that I needed for my CPAP machine. Everyone there was so very nice and had bright smiles. Would recommend this business to anyone with medical supply needs.</p>",
+            "author": "- Genine N."
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "<p>So very helpful and sweet attitude. Went out of their way to make sure I had everything that I needed for my CPAP machine. Everyone there was so very nice and had bright smiles. Would recommend this business to anyone with medical supply needs.</p>",
+            "author": "- Genine N."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

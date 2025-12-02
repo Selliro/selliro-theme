@@ -1,0 +1,148 @@
+{%- comment -%}
+  Form Layout Snippet
+  Mobile-only layout snippet
+  Simple layout structure: heading content, form container, help section
+  
+  Accepts:
+  - background_color: Background color hex value
+  - form_background_color: Form container background color
+  - form_padding: Form container padding in pixels
+  - form_border_radius: Form container border radius in pixels
+  - caption: Caption text
+  - heading: Heading text
+  - subheading: Subheading/body text
+  - section: Section object with blocks
+{%- endcomment -%}
+
+{%- liquid
+  assign background_color = background_color | default: '#092846'
+  assign form_background_color = form_background_color | default: '#ffffff'
+  assign form_padding = form_padding | default: 20
+  assign form_border_radius = form_border_radius | default: 24
+-%}
+
+<div
+  class="form-layout tw-flex tw-flex-col tw-items-center tw-w-full"
+  style="background-color: {{ background_color }};"
+>
+  <div class="form-layout__container section-container tw-grid tw-gap-8 tw-items-start tw-w-full">
+    {%- comment -%} First Div: Heading Content (Caption, Heading, Body) {%- endcomment -%}
+    <div class="form-layout__text-content tw-flex tw-flex-col tw-gap-4 tw-items-start tw-pt-4 tw-w-full">
+      {%- render 'caption',
+        text: caption,
+        variant: 'decorative',
+        color: 'rgba(255,255,255,0.8)',
+        parent_class: 'form-layout',
+        block_shopify_attributes: ''
+      -%}
+      {%- render 'heading',
+        text: heading,
+        variant: 'h3',
+        color: '#ffffff',
+        parent_class: 'form-layout',
+        block_shopify_attributes: ''
+      -%}
+      {%- render 'body',
+        text: subheading,
+        variant: 'base',
+        color: 'rgba(255,255,255,0.8)',
+        parent_class: 'form-layout',
+        block_shopify_attributes: ''
+      -%}
+    </div>
+
+    {%- comment -%} Second Div: Form Container {%- endcomment -%}
+    <div
+      class="form-layout__form-wrapper tw-flex tw-flex-col tw-gap-5 tw-items-start tw-w-full"
+      style="
+        background-color: {{ form_background_color }};
+        padding: {{ form_padding }}px;
+        border-radius: {{ form_border_radius }}px;
+      "
+    >
+      {%- for block in section.blocks -%}
+        {%- if block.settings.position != 'right' -%}
+          {%- case block.type -%}
+            {%- when 'form' -%}
+              {%- render block -%}
+            {%- else -%}
+              {%- render block -%}
+          {%- endcase -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} Third Div: Help Section - Call snippets directly: body, icon-text, button-icon-text {%- endcomment -%}
+    <div class="form-layout__help-wrapper tw-flex tw-flex-col tw-gap-4 tw-items-start tw-w-full">
+      {%- comment -%} First: Body snippet {%- endcomment -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.position == 'right' and block.type == 'body' -%}
+          {%- render 'body',
+            text: block.settings.text,
+            variant: block.settings.variant | default: 'lg',
+            color: block.settings.color | default: 'rgba(255,255,255,0.8)',
+            parent_class: 'form-layout',
+            block_shopify_attributes: block.shopify_attributes
+          -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- comment -%} Second: Icon-text snippet {%- endcomment -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.position == 'right' and block.type == 'icon-text' -%}
+          {%- render 'icon-text',
+            icon: block.settings.icon,
+            icon_position: block.settings.icon_position,
+            label: block.settings.label,
+            label_position: block.settings.label_position,
+            text: block.settings.text,
+            link: block.settings.link,
+            link_type: block.settings.link_type,
+            text_color: block.settings.text_color,
+            link_color: block.settings.link_color,
+            icon_size: block.settings.icon_size,
+            font_variant: block.settings.font_variant,
+            block_shopify_attributes: block.shopify_attributes
+          -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- comment -%} Third: Button-icon-text snippet {%- endcomment -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.position == 'right' and block.type == 'button-icon-text' -%}
+          {%- liquid
+            assign button_label = ''
+            assign button_link = ''
+            assign button_variant = 'secondary'
+            assign button_secondary_color = 'white'
+            
+            for nested_block in block.blocks
+              if nested_block.type == 'button'
+                assign button_label = nested_block.settings.label
+                assign button_link = nested_block.settings.link
+                assign button_variant = nested_block.settings.variant | default: 'secondary'
+                assign button_secondary_color = nested_block.settings.secondary_color | default: 'white'
+                break
+              endif
+            endfor
+          -%}
+          {%- render 'button-icon-text',
+            button_label: button_label,
+            button_link: button_link,
+            button_variant: button_variant,
+            button_secondary_color: button_secondary_color,
+            block: block,
+            section: section,
+            block_shopify_attributes: block.shopify_attributes
+          -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .form-layout__form-wrapper {
+    box-sizing: border-box;
+  }
+{% endstylesheet %}

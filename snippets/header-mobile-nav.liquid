@@ -1,0 +1,113 @@
+<div class="tw-relative tw-h-[400px] tw-overflow-hidden">
+    <div data-slide-panels class="slide-panels tw-w-full tw-h-full tw-relative">
+      <!-- Root Panel -->
+      <div data-slide-panel class="slide-panel tw-absolute tw-inset-0 tw-bg-white tw-transition-transform tw-duration-300 tw-translate-x-0 z-10" data-panel-id="root" style="z-index:20" 
+        data-panel-depth="0">
+        <nav class="mobile-nav mobile-nav--level1">
+          <div class="tw--mx-5">
+            <ul class="tw-flex tw-flex-col">
+            {%- for link in linklists[mobile_menu].links -%}
+              {%- liquid
+                assign is_megamenu_trigger = false
+                if link.url contains '#megamenu-'
+                  assign is_megamenu_trigger = true
+                endif
+              -%}
+              <li class="tw-flex tw-flex-col tw-gap-1 tw-border-b tw-border-[#dddddd] tw-h-[60px] tw-items-stretch tw-px-5">
+                <div
+                  class="tw-flex tw-items-center tw-justify-between tw-gap-2 tw-h-full tw-py-4 tw-px-5"
+                  {% if is_megamenu_trigger %}
+                    data-panel-target="megamenu-{{ link.url | split: '#megamenu-' | last | escape }}"
+                  {% elsif link.links.size > 0 %}
+                    data-panel-target="submenu-{{ forloop.index }}"
+                  {% endif %}
+                >
+                  <a
+                    href="{{ link.url }}"
+                    class="tw-flex-1 tw-text-[20px] tw-font-medium tw-leading-[1.1] tw-tracking-[-0.8px] tw-text-[#092846]"
+                    data-mobile-nav-link
+                  >
+                    {{ link.title }}
+                  </a>
+              
+                  {%- if link.links.size > 0 or is_megamenu_trigger == true -%}
+                  <span
+                    class="tw-inline-flex tw-h-[28px] tw-w-[28px] tw-items-center tw-justify-center pointer-events-none"
+                    aria-hidden="true"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+                      <path d="M11.2002 8.39766L16.8002 13.9977L11.2002 19.5977" stroke="#092846" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                  {%- endif -%}
+                </div>
+              </li>
+              
+            {%- endfor -%}
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <!-- Root Panel END -->
+
+      <!-- Submenu Panels (recursive via snippet) -->
+      {%- for link in linklists[mobile_menu].links -%}
+        {%  assign panel_id = 'submenu-' | append: forloop.index %}
+        {% if link.links.size > 0 %}
+          {% unless link.url contains '#megamenu-' %}
+            {% render 'mobile-nav-panel',
+              items: link.links,
+              parent_panel_id: 'root',
+              panel_id: panel_id,
+              panel_title: link.title 
+            %}
+          {% endunless %}
+        {% endif %}
+      {%- endfor -%}
+
+      <!-- Megamenu panels (sibling) -->
+      {%- for link in linklists[mobile_menu].links -%}
+        {%- if link.url contains '#megamenu-' -%}
+          {%- liquid assign megamenu_id = link.url | split: '#megamenu-' | last -%}
+              <div id="megamenu-mobile-{{ megamenu_id | escape }}" class="site-header__mobile-megamenu-placeholder" data-megamenu-mobile data-megamenu-id="{{ megamenu_id | escape }}"></div>
+        {%- endif -%}
+      {%- endfor -%}
+
+       {% comment %} Search panel {% endcomment %}
+      <div data-slide-panel data-panel-depth="1" class="slide-panel tw-absolute tw-inset-0 tw-bg-white tw-transition-transform tw-duration-300 tw-translate-x-full z-20" data-panel-id="search" aria-hidden="true">
+        <div class="tw-flex tw-items-center tw-justify-between tw-border-b tw-border-[#e5e7eb] tw-px-5 tw-pb-3 tw-pt-3">
+          <span class="tw-text-[20px] tw-font-medium tw-leading-[1.1] tw-tracking-[-0.8px] tw-text-[#092846]">Search</span>
+          <button type="button"
+            class="tw-inline-flex tw-h-8 tw-w-8 tw-items-center tw-justify-center tw-text-[#092846]"
+            aria-label="Back"
+            data-mobile-nav-back
+            data-panel-parent="root">
+            <span class="tw-relative tw-block tw-h-[2px] tw-w-4 tw-bg-transparent"><span class="tw-absolute tw-left-0 tw-top-1/2 tw-block tw-h-[2px] tw-w-4 tw-bg-[#092846] tw-rounded-sm tw--translate-y-1/2 tw--rotate-45"></span><span class="tw-absolute tw-left-0 tw-top-1/2 tw-block tw-h-[2px] tw-w-4 tw-bg-[#092846] tw-rounded-sm tw--translate-y-1/2 tw-rotate-45"></span></span>
+          </button>
+      
+        </div>
+        <ul class="tw-flex tw-flex-col tw-rounded-[16px] tw-overflow-hidden tw-px-5">
+          {%- if section.blocks != blank -%}
+            <div class="header-search__trending-searches" data-trending-searches>
+              <h3 class="tw-text-sm tw-font-semibold tw-text-[#323e46] tw-py-4 tw-leading-none">Top searches</h3>
+              <ul class="tw-flex tw-flex-col tw-gap-2">
+                {%- for block in section.blocks -%}
+                    <li class="tw-leading-none">
+                      <a data-trending-search-item="{{ block.settings.title }}" href="#" class="tw-text-sm tw-text-[#323e46] hover:tw-text-[#00a3a3] tw-transition-colors tw-leading-none tw-font-medium">{{ block.settings.title }}</a>
+                    </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+          <div class="header-search__placeholder tw-flex-col tw-gap-2 tw-hidden tw-mt-6" data-search-placeholder>
+            <div class="tw-animate-pulse tw-w-full tw-h-4 tw-bg-gray-200 tw-rounded-xl"></div>
+            <div class="tw-animate-pulse tw-w-full tw-h-4 tw-bg-gray-200 tw-rounded-xl"></div>
+            <div class="tw-animate-pulse tw-w-full tw-h-4 tw-bg-gray-200 tw-rounded-xl"></div>
+          </div>
+          <div class="header-search__results" data-search-results></div>
+        </ul>
+      
+      </div>
+
+    </div> <!-- /.slide-panels -->
+  </div>

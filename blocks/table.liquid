@@ -1,0 +1,150 @@
+{%- liquid
+  assign table_show_border = block.settings.table_show_border
+  assign bg_color = block.settings.background_color
+  assign card_border_color = block.settings.card_border_color
+  assign card_border_radius = block.settings.card_border_radius | default: 12
+  assign card_padding = block.settings.card_padding
+  assign table_border_radius = block.settings.table_border_radius
+  assign table_min_width_mobile = block.settings.table_min_width_mobile
+-%}
+
+<style>
+  #table-block-{{ block.id }} {
+    {% if table_show_border %}
+      border: 1px solid {{ card_border_color }};
+      {% endif %}
+      border-radius: {{ card_border_radius }}px;
+      background-color: {{ bg_color }};
+      padding: {{ card_padding }}px;
+    }
+    #table-block-{{ block.id }} .table-block__table {
+      border-radius: {{ table_border_radius }}px;
+    }
+
+    @media(max-width: 1023px) {
+      #table-block-{{ block.id }} {
+        min-width: {{ table_min_width_mobile }};
+      }
+    }
+</style>
+<div class="table-block__wrapper" {{ block.shopify_attributes }}>
+  <div id="table-block-{{ block.id }}" class="tw-relative tw-overflow-x-auto tw-bg-neutral-primary-soft tw-shadow-xs tw-rounded-base tw-border tw-border-default">
+    <table class="table-block__table tw-w-full tw-text-sm tw-text-left rtl:tw-text-right tw-text-body tw-overflow-hidden">
+      <thead>
+        {% for thead in block.blocks -%}
+          {%- if thead.id contains 'table_header' %}{% render: thead, section: section, block: thead %}{% endif %}
+        {% endfor %}
+      </thead>
+      <tbody>
+        {% for tbody in block.blocks -%}
+          {%- if tbody.id contains 'table_row' %}{% render: tbody, section: section, block: tbody %}{% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Table",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Card settings"
+    },
+    {
+      "type": "text",
+      "id": "background_color",
+      "label": "Background color",
+      "info": "Leave blank to use transparent background"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_show_border",
+      "label": "Show border",
+      "default": false,
+      "info": "Toggle borders"
+    },
+    {
+      "type": "text",
+      "id": "card_border_color",
+      "label": "Border color",
+      "info": "Leave blank to use border color"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "card_padding",
+      "label": "Padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Table settings"
+    },
+    {
+      "type": "range",
+      "id": "table_border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "text",
+      "id": "table_min_width_mobile",
+      "label": "Min width (mobile)",
+      "info": "Leave blank to use default width"
+    }
+  ],
+  "blocks": [{ "type": "table-header" }, { "type": "table-row" }],
+  "presets": [
+    {
+      "name": "Table",
+      "settings": {
+        "background_color": "#FFF",
+        "card_show_border": true,
+        "card_border_color": "#E5E7EB",
+        "card_border_radius": 12,
+        "card_padding": 12,
+        "table_border_radius": 12
+      },
+      "blocks": [
+        { 
+          "type": "table-header",
+          "blocks": [
+            { "type": "subheading", "settings": { "text": "<p>Column 1</p>", "variant": "xl", "color": "#FFF" } },
+            { "type": "subheading", "settings": { "text": "<p>Column 2</p>", "variant": "xl", "color": "#FFF" } }
+          ]
+        },
+        { 
+          "type": "table-row",
+          "blocks": [
+            { "type": "body", "settings": { "text":  "<p>Body</p>", "variant": "md", "color": "#323e46" } },
+            { "type": "icon-text", "settings": { "text":  "<p>Icon text</p>" } }
+          ]
+        },
+        { 
+          "type": "table-row",
+          "blocks": [
+            { "type": "body", "settings": { "text":  "<p>Body</p>", "variant": "md", "color": "#323e46" } },
+            { "type": "icon-text", "settings": { "text":  "<p>Icon text</p>" } }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

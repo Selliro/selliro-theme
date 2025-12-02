@@ -1,0 +1,130 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+	"top_banner_YWV9gm": {
+      "type": "top-banner",
+      "name": "Top Banner",
+      "settings": {
+        "background_color": "#092846",
+        "promotional_text": "Need supplies? Reorder in minutes with myApp and get fast home delivery.",
+        "investor_relations_text": "Investor Relations",
+        "investor_relations_link": "",
+        "stock_symbol": "ACHO",
+        "stock_price": "$9.53",
+        "stock_change": "4.04%",
+        "stock_change_direction": "up",
+        "show_on_mobile": true
+      }
+    },
+    "header_jLVeek": {
+      "type": "header-copy",
+      "blocks": {
+        "trending_searches_zb9DzG": {
+          "type": "trending_searches",
+          "settings": {
+            "title": "Diabetes"
+          },
+          "blocks": {}
+        },
+        "trending_searches_TpYGyV": {
+          "type": "trending_searches",
+          "settings": {
+            "title": "Respiration services"
+          },
+          "blocks": {}
+        },
+        "trending_searches_Xg9JnK": {
+          "type": "trending_searches",
+          "settings": {
+            "title": "Breastpumps"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "trending_searches_zb9DzG",
+        "trending_searches_TpYGyV",
+        "trending_searches_Xg9JnK"
+      ],
+      "name": "Header",
+      "settings": {
+        "logo_image": "shopify://shop_images/image_10.png",
+        "show_bill_pay": true,
+        "bill_pay_label": "Bill Pay",
+        "bill_pay_link": "shopify://pages/contact",
+        "desktop_menu": "header",
+        "mobile_menu": "header",
+        "header_background": "#ffffff"
+      }
+    },
+    "megamenu_diK4JR": {
+      "type": "megamenu",
+      "blocks": {
+        "menu_group_KKiGrR": {
+          "type": "menu_group",
+          "settings": {
+            "title": "Services",
+            "menu": "customer-account-main-menu"
+          }
+        }
+      },
+      "block_order": [
+        "menu_group_KKiGrR"
+      ],
+      "name": "Megamenu",
+      "settings": {
+        "megamenu_id": "product-and-services",
+        "megamenu_title": "Product & Services",
+        "megamenu_type": "inline",
+        "side_image": "shopify://shop_images/image_53.png",
+        "show_divider": true
+      }
+    },
+    "megamenu_nPcwBA": {
+      "type": "megamenu",
+      "blocks": {
+        "menu_group_jXRBaW": {
+          "type": "menu_group",
+          "settings": {
+            "title": "For Patient",
+            "menu": "resources-for-patients"
+          }
+        },
+        "menu_group_9qqyBD": {
+          "type": "menu_group",
+          "settings": {
+            "title": "For Providers",
+            "menu": "main-menu"
+          }
+        }
+      },
+      "block_order": [
+        "menu_group_jXRBaW",
+        "menu_group_9qqyBD"
+      ],
+      "name": "Megamenu",
+      "settings": {
+        "megamenu_id": "resources",
+        "megamenu_title": "",
+        "megamenu_type": "condensed",
+        "show_divider": true
+      }
+    }
+  },
+  "order": [
+	"top_banner_YWV9gm",
+    "header_jLVeek",
+    "megamenu_diK4JR",
+    "megamenu_nPcwBA"
+  ]
+}

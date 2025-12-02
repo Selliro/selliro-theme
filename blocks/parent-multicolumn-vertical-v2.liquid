@@ -1,0 +1,142 @@
+{%- comment -%}
+  Column Card V2 Theme Block
+  Horizontal layout: Image left, Content right
+  Uses static blocks accessed through block collection by ID
+{%- endcomment -%}
+
+{%- liquid
+  assign cards_show_border = block.settings.cards_show_border | default: false
+  assign background_color = block.settings.background_color | default: '#ffffff'
+  assign image_max_width = block.settings.image_max_width | default: ''
+-%}
+
+<style>
+  #shopify-block-{{ block.id }} .multicolumn-card {
+    background-color: {{ background_color }};
+  }
+  {%- if image_max_width != blank -%}
+  #shopify-block-{{ block.id }} .multicolumn-card__image-wrapper {
+    max-width: {{ image_max_width }};
+  }
+  {%- endif -%}
+</style>
+
+<div id="shopify-block-{{ block.id }}" class="multicolumn-card 
+  {% if cards_show_border %} tw-border tw-border-slate-200{% endif %} 
+  tw-rounded-3xl tw-p-5 tw-grid
+  {% if block.settings.stack_on_mobile %} tw-grid-rows-[auto_1fr] md:tw-grid-rows-1 md:tw-grid-cols-[30%_1fr] {% else %} tw-grid-rows-1 tw-grid-cols-[30%_1fr] {% endif %} 
+   tw-h-full" {{ block.shopify_attributes }}>
+  {%- comment -%} Card Image (Left on desktop, Top on mobile) - Static block by ID {%- endcomment -%}
+  <div class="multicolumn-card__image-wrapper tw-w-full md:tw-w-full md:tw-h-full tw-overflow-hidden">
+    {%- content_for "block", type: "image-copy", id: "split-card-image" -%}
+  </div>
+  
+  {%- comment -%} Card Content (Right) - All other blocks (excluding static image) {%- endcomment -%}
+  <div class="multicolumn-card__content tw-flex tw-flex-col tw-h-full tw-min-w-0 tw-overflow-hidden">
+    {%- for nested_block in block.blocks -%}
+      {%- unless nested_block.id == 'split-card-image' -%}
+        {%- render nested_block, section: section -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Split card",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "cards_show_border",
+      "label": "Show card border",
+      "default": true,
+      "info": "Toggle border on this card"
+    },
+    {
+      "type": "checkbox",
+      "id": "stack_on_mobile",
+      "label": "Stack on mobile",
+      "default": true,
+      "info": "When enabled, image and content stack vertically on mobile. When disabled, they display side-by-side on all screen sizes."
+    },
+    {
+      "type": "text",
+      "id": "image_max_width",
+      "label": "Image max width",
+      "info": "Enter max width value (e.g., 200px, 30%, 150px). Applies to all screen sizes"
+    }
+  ],
+  "blocks": [
+    { "type": "image-copy" },
+    { "type": "caption" },
+    { "type": "heading" },
+    { "type": "subheading" },
+    { "type": "icon-text" },
+    { "type": "divider" },
+    { "type": "button-group" },
+    {"type": "spacer"}
+  ],
+  "presets": [
+    {
+      "name": "Split card",
+      "blocks": [
+        {
+          "type": "image-copy",
+          "static": true,
+          "id": "split-card-image",
+          "settings": {
+            "layout_type": "full"
+          }
+        },
+        {
+          "type": "caption",
+          "settings": {
+            "text": "ENGLISH",
+            "variant": "sm",
+            "color": "#323e46"
+          }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Download Your Welcome Guide",
+            "variant": "h2",
+            "color": "#000000"
+          }
+        },
+        {
+          "type": "subheading",
+          "settings": {
+            "text": "<p>From unboxing to everyday care, this guide answers common questions and helps you feel safe and confident using your equipment at home. Includes easy setup steps, cleaning tips, and how to reach your care team.</p>",
+            "variant": "md",
+            "color": "#323e46"
+          }
+        },
+        {
+          "type": "divider",
+          "settings": {
+            "color": "slate-200"
+          }
+        },
+        {
+          "type": "button-group",
+          "settings": {
+            "show_button_1": true,
+            "button_1_label": "Download Guide",
+            "button_1_link": "#",
+            "show_button_2": false,
+            "show_button_3": false
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

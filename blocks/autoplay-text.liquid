@@ -1,0 +1,46 @@
+<div class="autoplay-text tw-flex tw-flex-col tw-gap-1">
+    <div class="autoplay-text__heading">
+        {% render 'subheading', text: block.settings.heading, variant: 'base-medium', color: block.settings.heading_color %}
+    </div>
+    <div class="autoplay-text__subheading tw-transition-[opacity,max-height] tw-duration-300 tw-ease-in-out tw-overflow-hidden autoplay-text__subheading--hidden tw-opacity-0 tw-max-h-0 tw-m-0 tw-p-0">
+        {% render 'body', text: block.settings.subheading, variant: 'sm', color: block.settings.subheading_color %}
+    </div>
+</div>
+{% schema %}
+{
+  "name": "Autoplay Text",
+
+
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading", 
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "info": "Optional: hex color value (e.g., #ffffff)"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "subheading_color",
+      "label": "Subheading Color",
+      "info": "Optional: hex color value (e.g., #ffffff)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Autoplay Text",
+      "blocks": [
+      ]
+    }
+  ]
+}
+{% endschema %}

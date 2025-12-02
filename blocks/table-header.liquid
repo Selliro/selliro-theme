@@ -1,0 +1,44 @@
+<tr class="tw-bg-primary-700 tw-text-white table-header__color-scheme-{{ block.settings.color_scheme }}" {{ block.shopify_attributes }}>
+  {% for head in block.blocks %}
+    <th
+      scope="col"
+      class="tw-px-6 tw-py-3 tw-text-left tw-font-semibold tw-text-white {% if forloop.first %}tw-rounded-tl-base{% endif %}{% if forloop.last %} tw-rounded-tr-base{% endif %}"
+      style="width: {{ 100 |  divided_by: block.blocks.size | round }}%"
+    >
+      {% render head, section: section, block: head %}
+    </th>
+  {% endfor %}
+</tr>
+
+{% schema %}
+{
+  "name": "Table Header",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        }
+      ]
+    }
+  ],
+  "blocks": [{ "type": "heading" }, { "type": "subheading" }, { "type": "body" }, { "type": "icon-text" }],
+  "presets": [
+    {
+      "name": "Table header",
+      "blocks": [
+        { "type": "subheading", "settings": { "text": "<p>Column 1</p>", "variant": "xl", "color": "" } },
+        { "type": "subheading", "settings": { "text": "<p>Column 2</p>", "variant": "xl", "color": "" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

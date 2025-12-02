@@ -1,0 +1,145 @@
+{%- comment -%}
+  Parent Rich Text Theme Block
+  Wrapper block that renders nested rich text content blocks
+  Structure matches Figma: Two stacked wrappers with different gaps (20px and 40px)
+  Uses static blocks by ID for first wrapper, renders all other blocks in second wrapper
+{%- endcomment -%}
+
+{%- liquid
+  assign max_width = block.settings.max_width | default: ''
+  assign gap = block.settings.gap | default: ''
+  assign mobile_gap = block.settings.mobile_gap | default: ''
+-%}
+<style>
+  #shopify-block-{{ block.id }} .rich-text__content {
+    {% if gap != blank %}
+      gap: {{ mobile_gap }};
+    {% endif %}
+  }
+  
+  @media(min-width: 1024px) {
+    #shopify-block-{{ block.id }} {
+      {% if max_width != blank %}
+        max-width: {{ max_width }};
+      {% endif %}
+    }
+    #shopify-block-{{ block.id }} .rich-text__content {
+      {% if gap != blank %}
+        gap: {{ gap }};
+      {% endif %}
+    }
+  }
+
+</style>
+
+
+<div id="{{ block.id }}" class="rich-text__wrapper tw-h-full">
+  <div class="rich-text__content tw-flex tw-flex-col tw-gap-4 md:tw-gap-10 tw-items-start tw-h-full tw-justify-end tw-w-full">
+    {%- for nested_block in block.blocks -%}
+      <div class="rich-text__block rich-text__block--{{ nested_block.type }} tw-w-full">
+        {%- render nested_block, section: section -%}
+      </div>
+    {%- endfor -%}  
+  </div>
+</div>
+
+
+
+{% schema %}
+{
+  "name": "Rich Text Content",
+  "blocks": [
+    { "type": "caption" },
+    { "type": "heading" },
+    { "type": "body-text" },
+    { "type": "button-group" },
+    { "type": "button-icon-text" },
+    { "type": "divider" },
+    { "type": "image" },
+    { "type": "label-list" },
+    { "type": "spacer" }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "max_width",
+      "label": "Max width",
+      "info": "Enter max width value (e.g., 800px, 50%, 1200px)"
+    },
+    {
+      "type": "text",
+      "id": "gap",
+      "label": "Gap between blocks",
+      "info": "Enter gap value (e.g., 20px, 1.25rem, 32px). Leave blank to use default (20px)"
+    },
+    {
+      "type": "text",
+      "id": "mobile_gap",
+      "label": "Gap between blocks for mobile",
+      "info": "Enter gap value (e.g., 20px, 1.25rem, 32px). Leave blank to use default (20px)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich Text Content",
+      "blocks": [
+        {
+          "type": "caption",
+          "settings": {
+            "text": "Caption",
+            "variant": "sm",
+            "color": "#323e46"
+          }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Heading",
+            "variant": "h2",
+            "color": "#092846"
+          }
+        },
+        {
+          "type": "body-text",
+          "settings": {
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum augue a felis accumsan fermentum. Vivamus sit amet lorem eu lectus bibendum bibendum.</p>",
+            "variant": "md",
+            "color": "#323e46"
+          }
+        },
+        {
+          "type": "body-text",
+          "settings": {
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum augue a felis accumsan fermentum. Vivamus sit amet lorem eu lectus bibendum bibendum.</p>",
+            "variant": "md",
+            "color": "#323e46"
+          }
+        },
+        {
+          "type": "button-group",
+          "settings": {
+            "show_button_1": true,
+            "button_1_label": "Primary CTA",
+            "button_1_link": "#",
+            "show_button_2": true,
+            "button_2_label": "Secondary CTA",
+            "button_2_link": "#",
+            "button_2_color": "blue",
+            "show_button_3": true,
+            "button_3_label": "Tertiary CTA",
+            "button_3_link": "#"
+          }
+        },
+        {
+          "type": "spacer",
+          "settings": {
+            "mobile_height": "10",
+            "desktop_height": "20"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

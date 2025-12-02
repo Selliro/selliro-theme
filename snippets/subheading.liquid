@@ -1,0 +1,46 @@
+{%- comment -%}
+  Subheading Component
+  Unified subheading component with size-based variants
+  Supports: 'subheading-sm', 'subheading-md', 'subheading-lg'
+  
+  Accepts:
+  - text: Rich text string
+  - variant: String (optional, 'subheading-sm', 'subheading-md', 'subheading-lg', default: 'subheading-md')
+  - color: Hex color value (optional)
+  - max_width: String (optional, max width value e.g., '800px', '50%', '1200px')
+  - parent_class: String (optional, parent class prefix, default: 'subheading')
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- liquid
+  assign variant = variant | default: 'base'
+  assign parent_class = parent_class | default: 'subheading'
+  assign color = color | default: '#092846'
+  case variant
+    when 'base'
+      assign subheading_classes = parent_class | append: '__subheading tw-text-2xl !tw-font-bold !tw-leading-[110%] !tw-tracking-[-0.96px] !tw-break-words'
+    when 'base-medium'
+      assign subheading_classes = parent_class | append: '__subheading-medium tw-text-2xl !tw-font-medium !tw-leading-[110%] !tw-tracking-[-0.96px] !tw-break-words'
+    when 'xl'
+      assign subheading_classes = parent_class | append: '__subheading-xl tw-text-xl md:tw-text-2xl !tw-font-medium !tw-leading-[110%] !tw-tracking-[-0.8px] !tw-tracking-[-0.96px] !tw-break-words'
+  endcase
+  
+  assign subheading_style = ''
+  if color != blank
+    assign subheading_style = 'color: ' | append: color | append: ';'
+  endif
+  if max_width != blank
+    if subheading_style != blank
+      assign subheading_style = subheading_style | append: ' max-width: ' | append: max_width | append: ';'
+    else
+      assign subheading_style = 'max-width: ' | append: max_width | append: ';'
+    endif
+  endif
+-%}
+
+{%- if text != blank -%}
+  <div class="{{ subheading_classes }}"{% if subheading_style != blank %} style="{{ subheading_style }}"{% endif %} {{ block_shopify_attributes }}>
+    {{ text }}
+  </div>
+{%- endif -%}
+

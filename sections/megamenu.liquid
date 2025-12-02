@@ -1,0 +1,441 @@
+{%- comment -%}
+  Megamenu Section
+
+  Used together with the Header section:
+  - In each megamenu section, merchant sets an "ID".
+  - The same ID is referenced in the header menu item URL as: `#megamenu-{{ id }}`.
+  - On the page, JS (to be added later) will:
+      - Find the rendered megamenu section by `data-megamenu-id="{{ id }}"`.
+      - Move its inner content into the placeholder below the corresponding menu item.
+
+  Types:
+  - "Condensed":
+      - Blocks each have: Title + Link list.
+      - Left side: List of block titles.
+      - Right side: The selected block's links (vertical list).
+  - "Inline":
+      - Blocks each have: Link list.
+      - Left side: All block menus stacked.
+      - Right side: Optional image (set on the section).
+
+  This file only defines markup & structure; no interactive logic yet.
+{%- endcomment -%}
+
+{%- liquid
+  assign megamenu_type = section.settings.megamenu_type | default: 'condensed'
+  assign megamenu_id = section.settings.megamenu_id | strip
+  assign show_divider = section.settings.show_divider | default: true
+  assign side_image = section.settings.side_image
+-%}
+<style>
+  .child-links__megamenu a svg{
+      transition: transform 0.2s ease-in-out;
+  }
+  .child-links__megamenu a:hover svg{
+      transform: translateX(8px);
+  }
+</style>
+<section
+  id="{{ section.id }}"
+>
+  <div class="megamenu-section tw-w-full tw-py-6 !tw-hidden"
+    {% if megamenu_id != blank %}
+      data-megamenu-desktop-content=true
+      data-megamenu-section
+      data-megamenu-id="{{ megamenu_id | escape }}"
+    {% endif %}
+  >
+    <div class="section-container">
+      {%- if megamenu_id == blank -%}
+        <div class="tw-rounded-xl tw-border tw-border-dashed tw-border-[#d1d5db] tw-bg-[#f9fafb] tw-p-4 tw-text-xs tw-text-[#6b7280]">
+          <p class="tw-font-medium tw-text-[#374151] tw-mb-1">Megamenu not linked yet</p>
+          <p>
+            Enter a unique ID in this section's settings and use
+            <code class="tw-rounded tw-bg-white tw-px-1 tw-py-0.5 tw-border tw-border-[#e5e7eb] tw-text-[11px]">#megamenu-{{ 'your-id' }}</code>
+            as the URL of a header menu item to link this megamenu.
+          </p>
+        </div>
+      {%- endif -%}
+  
+      {%- if section.blocks.size == 0 -%}
+        <div class="tw-mt-4 tw-rounded-xl tw-border tw-border-dashed tw-border-[#d1d5db] tw-bg-[#f9fafb] tw-p-4 tw-text-xs tw-text-[#6b7280]">
+          Add one or more blocks to populate this megamenu.
+        </div>
+      {%- else -%}
+        {%- case megamenu_type -%}
+          {%- when 'condensed' -%}
+            <div class="megamenu--condensed tw-flex tw-flex-col lg:tw-flex-row tw-gap-6 tw-pb-16 tw-pt-8" data-nested-menu-parent>
+              {%- comment -%} Left: vertical list of block titles {%- endcomment -%}
+              <div class="tw-w-full lg:tw-w-[380px] tw-pr-0 lg:tw-pr-4 tw-pb-3 lg:tw-pb-0">
+                <ul class="tw-flex lg:tw-flex-col tw-gap-3">
+                  {%- for block in section.blocks -%}
+                    {%- if block.type == 'menu_group' -%}
+                      {%- assign is_active = forloop.first -%}
+                      <li {{ block.shopify_attributes }}>
+                        <button
+                          type="button"
+                          class="tw-w-full tw-text-left tw-text-xl tw-font-medium tw-rounded-full lg:tw-rounded-lg tw-px-3 tw-py-2 tw-flex tw-items-center tw-justify-between tw-gap-2 tw-text-[#011624] {% if is_active %}is-active{% endif %}"
+                          data-megamenu-tab="{{ block.id }}"
+                          aria-expanded="{% if is_active %}true{% else %}false{% endif %}"
+                        >
+                          <span>{{ block.settings.title | default: 'Menu group' }}</span>
+                        </button>
+                      </li>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              </div>
+  
+              {%- comment -%} Right: corresponding link list for each block {%- endcomment -%}
+              <div class="tw-flex-1 tw-min-w-0">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'menu_group' -%}
+                    {%- assign menu = block.settings.menu -%}
+                    {%- assign is_active = forloop.first -%}
+                    <div
+                      class="megamenu__panel {% if is_active %}is-active{% endif %}"
+                      data-nested-menu
+                      data-megamenu-panel="{{ block.id }}"
+                      {{ block.shopify_attributes }}
+                    >
+                      {%- if menu != blank and linklists[menu].links.size > 0 -%}
+                        <ul class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-4">
+                          {%- for link in linklists[menu].links -%}
+                            <li>
+                              <a
+                                href="{{ link.url }}"
+                                class="tw-text-xl tw-font-medium tw-text-[#071b2f] hover:tw-text-[#00a3a3] tw-transition-colors"
+                              >
+                                {{ link.title }}
+                              </a>
+                              {%- if link.links.size > 0 -%}
+                                <ul class="child-links__megamenu tw-mt-4 tw-flex tw-flex-col tw-gap-2">
+                                  {%- for child in link.links -%}
+                                    {%- assign is_page_link = false -%}
+                                    {%- if child.url contains '/pages' -%}
+                                      {%- assign is_page_link = true -%}
+                                    {%- endif -%}
+                                    <li> 
+                                      <a
+                                        href="{{ child.url }}"
+                                        class="{%- if child.url contains '/pages' -%} !tw-text-[16px] tw-font-bold tw-leading-[22.4px] tw-mt-2 {% endif %} tw-font-medium tw-text-sm tw-transition-colors {% if is_page_link %}tw-text-[#479F9E] hover:tw-text-[#479F9E]{% else %}tw-text-[#092846] hover:tw-text-[#00a3a3]{% endif %} tw-flex tw-items-center tw-gap-1"
+                                      >
+                                        {{ child.title }}
+                                        {%- if is_page_link -%}
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" class="tw-inline-block">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.30644 5.5C6.89223 5.5 6.55644 5.83579 6.55644 6.25C6.55644 6.66421 6.89223 7 7.30644 7H12.5669L5.5976 13.9693C5.30471 14.2622 5.30471 14.7371 5.5976 15.0299C5.89049 15.3228 6.36537 15.3228 6.65826 15.0299L13.6275 8.06069V13.3211C13.6275 13.7353 13.9633 14.0711 14.3775 14.0711C14.7917 14.0711 15.1275 13.7353 15.1275 13.3211V6.25C15.1275 6.14102 15.1043 6.03747 15.0625 5.94404C15.034 5.88021 14.9961 5.81955 14.9489 5.76414C14.8817 5.68521 14.7985 5.62038 14.7042 5.5747C14.6055 5.52684 14.4946 5.5 14.3775 5.5H7.30644Z" fill="#479F9E"/>
+                                          </svg>
+                                        {%- endif -%}
+                                      </a>
+                                    </li>
+                                  {%- endfor -%}
+                                </ul>
+                              {%- endif -%}
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- else -%}
+                        <p class="tw-text-xs tw-text-[#6b7280]">
+                          Select a link list for this block to display its links.
+                        </p>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+  
+          {%- when 'inline' -%}
+            <div class="megamenu--inline tw-flex tw-flex-col lg:tw-flex-row tw-gap-6 tw-py-8">
+              {%- comment -%} Left: all menus stacked inline {%- endcomment -%}
+              <div class="tw-flex-1 tw-min-w-0">
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'menu_group' -%}
+                    {%- assign menu = block.settings.menu -%}
+                    <div class="tw-mb-4 last:tw-mb-0" {{ block.shopify_attributes }}>
+                      {%- if menu != blank and linklists[menu].links.size > 0 -%}
+                        <ul class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-y-8">
+                          {%- for link in linklists[menu].links -%}
+                            <li>
+                              <a
+                                href="{{ link.url }}"
+                                class="tw-text-xl tw-font-medium tw-text-[#071b2f] tw-font-medium tw-text-[#071b2f] hover:tw-text-[#00a3a3] tw-transition-colors"
+                              >
+                                {{ link.title }}
+                              </a>
+                              {%- if link.links.size > 0 -%}
+                                <ul class="child-links__megamenu tw-mt-4 tw-flex tw-flex-col tw-gap-2">
+                                  {%- for child in link.links -%}
+                                    {%- assign is_page_link = false -%}
+                                    {%- if child.url contains '/pages' -%}
+                                      {%- assign is_page_link = true -%}
+                                    {%- endif -%}
+                                    <li>
+                                      <a
+                                        href="{{ child.url }}"
+                                        class="{%- if child.url contains '/pages' -%} !tw-text-[16px] tw-font-bold tw-leading-[22.4px] tw-mt-2 {% endif %} tw-font-medium tw-text-sm tw-transition-colors {% if is_page_link %}tw-text-[#479F9E] hover:tw-text-[#479F9E]{% else %}tw-text-[#092846] hover:tw-text-[#00a3a3]{% endif %} tw-flex tw-items-center tw-gap-1"
+                                      >
+                                        {{ child.title }}
+                                        {%- if is_page_link -%}
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" class="tw-inline-block">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.30644 5.5C6.89223 5.5 6.55644 5.83579 6.55644 6.25C6.55644 6.66421 6.89223 7 7.30644 7H12.5669L5.5976 13.9693C5.30471 14.2622 5.30471 14.7371 5.5976 15.0299C5.89049 15.3228 6.36537 15.3228 6.65826 15.0299L13.6275 8.06069V13.3211C13.6275 13.7353 13.9633 14.0711 14.3775 14.0711C14.7917 14.0711 15.1275 13.7353 15.1275 13.3211V6.25C15.1275 6.14102 15.1043 6.03747 15.0625 5.94404C15.034 5.88021 14.9961 5.81955 14.9489 5.76414C14.8817 5.68521 14.7985 5.62038 14.7042 5.5747C14.6055 5.52684 14.4946 5.5 14.3775 5.5H7.30644Z" fill="#479F9E"/>
+                                          </svg>
+                                        {%- endif -%}
+                                      </a>
+                                    </li>
+                                  {%- endfor -%}
+                                </ul>
+                              {%- endif -%}
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- else -%}
+                        <p class="tw-text-xs tw-text-[#6b7280]">
+                          Select a link list for this block to display its links.
+                        </p>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+  
+              {%- comment -%} Right: Optional side image {%- endcomment -%}
+              <div class="tw-w-full lg:tw-w-[412px] tw-flex tw-items-stretch">
+                {%- if side_image != blank -%}
+                  <div class="tw-relative tw-w-full tw-overflow-hidden tw-rounded-2xl">
+                    {%  render 'image',desktop_image: side_image, desktop_aspect_ratio: 0.88 , max_height: '100%' %}
+                  </div>
+                {%- else -%}
+                  <div class="tw-flex tw-h-full tw-w-full tw-items-center tw-justify-center tw-border tw-border-dashed tw-border-[#d1d5db] tw-bg-[#f9fafb] tw-text-xs tw-text-[#9ca3af] tw-p-4">
+                    Add a side image in the megamenu section settings to display it here.
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+        {%- endcase -%}
+  
+        {%- if show_divider -%}
+          <div class="tw-mt-4 tw-h-px tw-bg-gradient-to-r tw-from-transparent tw-via-[#e5e7eb] tw-to-transparent"></div>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+
+  
+  <div class="megamenu-section megamenu-section--mobile !tw-hidden"
+    data-megamenu-mobile-content="true"
+    data-megamenu-section
+    data-megamenu-id="{{ megamenu_id }}"
+  >
+    {% assign root_panel_id = 'megamenu-' | append: megamenu_id %}
+  
+    <!-- Root Megamenu Panel -->
+    <div data-slide-panel
+         class="slide-panel tw-absolute tw-inset-0 tw-bg-white tw-transition-transform tw-duration-300 tw-translate-x-full z-20"
+         data-panel-id="{{ root_panel_id }}"
+         aria-hidden="true"
+         data-panel-depth="1">
+  
+      <!-- Header -->
+      <div class="tw-flex tw-items-center tw-justify-between tw-border-b tw-border-[#e5e7eb] tw-px-5 tw-pb-3 tw-pt-3">
+        <span class="tw-text-[20px] tw-font-medium tw-leading-[1.1] tw-tracking-[-0.8px] tw-text-[#092846]">          {%  if section.settings.megamenu_title != blank %}
+          {{ section.settings.megamenu_title }}
+        {% else %}
+          {{ megamenu_id | replace: '-', ' ' | capitalize }}
+        {% endif %}</span>
+        <button type="button"
+          class="tw-inline-flex tw-h-8 tw-w-8 tw-items-center tw-justify-center tw-text-[#092846]"
+          aria-label="Back"
+          data-mobile-nav-back
+          data-panel-parent="root">
+          <span class="tw-relative tw-block tw-h-[2px] tw-w-4 tw-bg-transparent"><span class="tw-absolute tw-left-0 tw-top-1/2 tw-block tw-h-[2px] tw-w-4 tw-bg-[#092846] tw-rounded-sm tw--translate-y-1/2 tw--rotate-45"></span><span class="tw-absolute tw-left-0 tw-top-1/2 tw-block tw-h-[2px] tw-w-4 tw-bg-[#092846] tw-rounded-sm tw--translate-y-1/2 tw-rotate-45"></span></span>
+        </button>
+      </div>
+  
+      {%  if section.settings.megamenu_type == 'condensed' %}
+        <ul class="tw-flex tw-flex-col tw-gap-2">
+          {% for block in section.blocks %}
+            {% assign menu_handle = block.settings.menu %}
+            {% assign link_list = linklists[menu_handle].links %}
+            {% assign submenu_panel_id = root_panel_id | append: '-' | append: block.id  %}
+              <li class="tw-flex tw-items-center tw-justify-between tw-py-4 tw-px-5 tw-border-b tw-border-[#d9dde3] tw-bg-white hidden"
+                  data-panel-target="{{ submenu_panel_id }}"
+              >
+                <a href="#"
+                  class="tw-flex-1 tw-text-[20px] tw-tracking-[-0.8px] tw-font-medium tw-text-[#092846]">
+                  {{ block.settings.title }}
+                </a>
+                  <span class="tw-inline-flex tw-h-[28px] tw-w-[28px] tw-items-center tw-justify-center pointer-events-none" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+                      <path d="M11.2002 8.39766L16.8002 13.9977L11.2002 19.5977" stroke="#092846" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+              </li>
+          {% endfor %}
+        </ul>
+      {%  endif %}
+
+      {% if section.settings.megamenu_type == 'inline' %}
+        <ul class="tw-flex tw-flex-col tw-rounded-[16px] tw-overflow-hidden">
+          {% for block in section.blocks %}
+    
+            {% assign menu_handle = block.settings.menu %}
+            {% assign link_list = linklists[menu_handle].links %}
+    
+            {% if link_list.size > 0 %}
+              <li>  
+                <ul class="tw-flex tw-flex-col tw-gap-2">
+                  {% for link in link_list %}
+                    {% assign submenu_panel_id = root_panel_id | append: '-' | append: forloop.index %}
+    
+                    <li class="tw-flex tw-items-center tw-justify-between tw-py-4 tw-px-5 tw-border-b tw-border-[#d9dde3] last:tw-border-b-0 tw-bg-whitehidden"
+                      {% if link.links.size > 0 %}
+                        data-panel-target="{{ submenu_panel_id }}"
+                      {% endif %}
+                    >
+                      <a href="{{ link.url }}"
+                        class="tw-flex-1 tw-text-[16px] tw-font-medium tw-text-[#092846]">
+                        {{ link.title }}
+                      </a>
+    
+                      {% if link.links.size > 0 %}
+                        <span class="tw-inline-flex tw-h-[28px] tw-w-[28px] tw-items-center tw-justify-center pointer-events-none" aria-hidden="true">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+                            <path d="M11.2002 8.39766L16.8002 13.9977L11.2002 19.5977" stroke="#092846" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+                          </svg>
+                        </span>
+                      {% endif %}
+                    </li>
+                  {% endfor %}
+                </ul>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      {%  endif %}
+  
+  </div>
+    {% for block in section.blocks %}
+    {% assign menu_handle = block.settings.menu %}
+    {% assign link_list = linklists[menu_handle].links %}
+    {% assign megamenu_type = section.settings.megamenu_type %}
+    {%  if megamenu_type == 'condensed' %}
+      {% comment %} From first nav level  , since we are creating the root panel based on the block title  {% endcomment %}
+      {% assign submenu_panel_id = root_panel_id | append: '-' | append: block.id  %}
+      {% render 'mobile-nav-panel',
+        items: link_list,
+        parent_panel_id: root_panel_id,
+        panel_id: submenu_panel_id,
+        panel_title: block.settings.title,
+        current_level: 2
+      %}
+    {%  endif %}
+
+
+    {% comment %} from second level , since root takes care of the first level {% endcomment %}
+    {%  if megamenu_type == 'inline' %}
+        {% if link_list.size > 0 %}
+            {% for link in link_list %}
+              {% assign submenu_panel_id = root_panel_id | append: '-' | append: forloop.index %}
+              {% render 'mobile-nav-panel',
+                items: link.links,
+                parent_panel_id: root_panel_id,
+                panel_id: submenu_panel_id,
+                panel_title: link.title,
+                current_level: 2
+              %}
+            {% endfor %}
+          {% endif %} 
+    {%  endif %}
+  
+    {% endfor %}
+  </div>
+  
+  
+
+</section>
+
+{% schema %}
+{
+  "name": "Megamenu",
+  "tag": "section",
+  "class": "section megamenu-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "megamenu_id",
+      "label": "Megamenu ID",
+      "info": "Use this ID in a header menu item URL as #megamenu-{id} to link them."
+    },
+    {
+      "type": "text",
+      "id": "megamenu_title",
+      "label": "Megamenu Title",
+      "info": "This title will be displayed in the megamenu header for mobile."
+    },
+    {
+      "type": "select",
+      "id": "megamenu_type",
+      "label": "Layout type",
+      "default": "condensed",
+      "options": [
+        {
+          "value": "condensed",
+          "label": "Condensed"
+        },
+        {
+          "value": "inline",
+          "label": "Inline"
+        }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "side_image",
+      "label": "Side image (Inline layout)",
+      "info": "Shown on the right side when layout type is Inline."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show divider line below",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu_group",
+      "name": "Menu group",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Services"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "info": "Select the menu to display inside this group."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Megamenu",
+      "blocks": [
+        {
+          "type": "menu_group"
+        },
+        {
+          "type": "menu_group"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+

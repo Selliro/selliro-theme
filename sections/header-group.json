@@ -14,6 +14,34 @@
     "header_announcements_9jGBFp": {
       "type": "header-announcements",
       "blocks": {
+        "announcement_EURP7f": {
+          "type": "_announcement",
+          "name": "t:names.announcement",
+          "settings": {
+            "text": "Shop our latest arrivals!",
+            "link": "",
+            "font": "var(--font-body--family)",
+            "font_size": "0.75rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none"
+          },
+          "blocks": {}
+        },
+        "announcement_NBNfar": {
+          "type": "_announcement",
+          "name": "t:names.announcement",
+          "settings": {
+            "text": "Shop our latest arrivals! 2",
+            "link": "",
+            "font": "var(--font-body--family)",
+            "font_size": "0.75rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none"
+          },
+          "blocks": {}
+        },
         "announcement_BxgCk9": {
           "type": "_announcement",
           "settings": {
@@ -29,6 +57,8 @@
         }
       },
       "block_order": [
+        "announcement_EURP7f",
+        "announcement_NBNfar",
         "announcement_BxgCk9"
       ],
       "name": "t:names.announcement_bar",
@@ -36,7 +66,7 @@
         "speed": 5,
         "section_width": "page-width",
         "color_scheme": "scheme-1",
-        "divider_width": 1,
+        "divider_width": 2,
         "padding-block-start": 15,
         "padding-block-end": 15
       }

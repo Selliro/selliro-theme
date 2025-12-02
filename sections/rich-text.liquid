@@ -1,0 +1,122 @@
+{%- comment -%}
+  Rich Text Section
+  Flexible content section with text blocks, labels, and buttons
+  Mobile-first responsive design
+  Breakpoints: md-small (768px), md (1024px), lg (1200px)
+{%- endcomment -%}
+
+{%- liquid
+  assign background_color = section.settings.background_color | default: '#ffffff'
+  assign remove_mobile_padding = section.settings.remove_mobile_padding | default: false
+-%}
+
+<style>
+  #{{ section.id }} {
+    padding-top: {{ section.settings.add_top_padding_mobile }}px;
+    padding-bottom: {{ section.settings.add_bottom_padding_mobile }}px;
+  }
+  @media(min-width: 1024px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.add_top_padding_desktop }}px;
+      padding-bottom: {{ section.settings.add_bottom_padding_desktop }}px;
+    }
+  }
+</style>
+
+<div id="{{ section.id }}" class="rich-text-section tw-w-full" style="background-color: {{ background_color }};">
+  {%- if remove_mobile_padding -%}
+    <style>
+      @media(max-width: 767px) {
+        #{{ section.id }} .rich-text-section__container {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
+    </style>
+  {%- endif -%}
+  <div class="rich-text-section__container  section-container">
+    {%- comment -%} Base Container {%- endcomment -%}
+    <div class="rich-text-section__wrapper">
+        <div class="rich-text__grid tw-grid tw-grid-cols-1 md:tw-grid-cols-{{ section.settings.column_count }} tw-justify-between tw-gap-8">
+            {%- for block in section.blocks -%}
+            {%- if block.type == '@app' -%}
+                {%- render block -%}
+            {%- else -%}
+                {%- render block, section: section -%}
+            {%- endif -%}
+            {%- endfor -%}
+        </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Rich Text",
+  "tag": "section",
+  "class": "section rich-text-section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id":"column_count",
+      "label": "Column Count",
+      "default": "3",
+      "info": "Enter the number of columns to display"
+    },
+    {
+      "type": "checkbox",
+      "id": "remove_mobile_padding",
+      "label": "Remove container padding on mobile",
+      "info": "Removes left and right padding on screens below 768px",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "text",
+      "id": "add_top_padding_mobile",
+      "label": "Add top padding mobile",
+      "default": "44"
+    },
+    {
+      "type": "text",
+      "id": "add_bottom_padding_mobile",
+      "label": "Add bottom padding mobile",
+      "default": "44"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "text",
+      "id": "add_top_padding_desktop",
+      "label": "Add top padding Desktop",
+      "default": "96"
+    },
+    {
+      "type": "text",
+      "id": "add_bottom_padding_desktop",
+      "label": "Add bottom padding Desktop",
+      "default": "96"
+    }
+  ],
+  "blocks": [
+    { "type": "parent-rich-text" },
+    { "type": "parent-rich-text-v2" }
+  ],
+  "presets": [
+    {
+      "name": "Rich Text"
+    }
+  ]
+}
+{% endschema %}

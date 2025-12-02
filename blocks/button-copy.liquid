@@ -1,0 +1,48 @@
+{%- comment -%}
+  Button Theme Block
+  Global button component - variant set in presets
+{%- endcomment -%}
+
+{%- render 'button',
+  label: block.settings.label,
+  link: block.settings.link,
+  variant: block.settings.variant | default: 'primary',
+  secondary_color: block.settings.secondary_color | default: 'white',
+  block_shopify_attributes: block.shopify_attributes
+-%}
+
+{% schema %}
+{
+  "name": "Button",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "variant",
+      "label": "Variant",
+      "info": "Set in preset: primary, secondary, tertiary"
+    },
+    {
+      "type": "text",
+      "id": "secondary_color",
+      "label": "Secondary color",
+      "info": "Set in preset: white or blue (only for secondary variant)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Button"
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,76 @@
+{%- comment -%}
+  mobile-nav-panel.liquid
+  Usage:
+    {% render 'mobile-nav-panel', 
+      items: mylinks,
+      parent_panel_id: 'root',
+      panel_id: 'submenu-X-Y',
+      panel_title: 'title text'
+    %}
+  - items: Array of links at this level
+  - parent_panel_id: String ID for panel to return to with 'back' button
+  - panel_id: Unique for this panel ("root", "submenu-1", "submenu-1-4", etc)
+  - panel_title: Title string
+{%- endcomment -%}
+{% assign current_level = current_level | default: 1 %}
+<div data-slide-panel data-panel-depth="{{ current_level }}" class="slide-panel tw-absolute tw-inset-0 tw-bg-white tw-transition-transform tw-duration-300 tw-translate-x-full z-20" data-panel-id="{{ panel_id }}" aria-hidden="true">
+  <div class="tw-flex tw-items-center tw-justify-between tw-border-b tw-border-[#e5e7eb] tw-px-5 tw-pb-3 tw-pt-3">
+    <span class="tw-text-[20px] tw-font-medium tw-leading-[1.1] tw-tracking-[-0.8px] tw-text-[#092846]">{{ panel_title }}</span>
+    <button type="button"
+      class="tw-inline-flex tw-h-8 tw-w-8 tw-items-center tw-justify-center tw-text-[#092846]"
+      aria-label="Back"
+      data-mobile-nav-back
+      data-panel-parent="{{ parent_panel_id }}">
+      <span class="tw-relative tw-block tw-h-[2px] tw-w-4 tw-bg-transparent"><span class="tw-absolute tw-left-0 tw-top-1/2 tw-block tw-h-[2px] tw-w-4 tw-bg-[#092846] tw-rounded-sm tw--translate-y-1/2 tw--rotate-45"></span><span class="tw-absolute tw-left-0 tw-top-1/2 tw-block tw-h-[2px] tw-w-4 tw-bg-[#092846] tw-rounded-sm tw--translate-y-1/2 tw-rotate-45"></span></span>
+    </button>
+
+  </div>
+  <ul class="tw-flex tw-flex-col tw-rounded-[16px] tw-overflow-hidden">
+    {%- for item in items -%}
+        {%- assign is_page_link = false -%}
+        {%- if item.url contains '/pages' -%}
+          {%- assign is_page_link = true -%}
+        {%- endif -%}
+        <li class="tw-flex tw-items-center tw-justify-between tw-py-4 tw-px-5 tw-border-b tw-border-[#d9dde3] tw-bg-white"
+            {% if item.links.size > 0 %}
+              data-mobile-nav-open="submenu"
+              data-panel-target="{{ panel_id }}-{{ forloop.index }}"
+              data-mobile-nav-title="{{ item.title | escape }}"
+            {% endif %}
+        >
+          <a href="{{ item.url }}" class="tw-flex-1 {% if is_page_link %}!tw-text-[16px] tw-font-bold tw-leading-[22.4px] tw-text-[#358282] tw-flex tw-items-center {% else %}tw-text-[16px] tw-font-medium tw-leading-[1.1] tw-tracking-[-0.16px] tw-text-[#323E46] lg:tw-text-[#092846]{% endif %}"
+            data-mobile-nav-link
+          >
+            {{ item.title }}
+            {%- if is_page_link -%}
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" class="tw-inline-block">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.30644 5.5C6.89223 5.5 6.55644 5.83579 6.55644 6.25C6.55644 6.66421 6.89223 7 7.30644 7H12.5669L5.5976 13.9693C5.30471 14.2622 5.30471 14.7371 5.5976 15.0299C5.89049 15.3228 6.36537 15.3228 6.65826 15.0299L13.6275 8.06069V13.3211C13.6275 13.7353 13.9633 14.0711 14.3775 14.0711C14.7917 14.0711 15.1275 13.7353 15.1275 13.3211V6.25C15.1275 6.14102 15.1043 6.03747 15.0625 5.94404C15.034 5.88021 14.9961 5.81955 14.9489 5.76414C14.8817 5.68521 14.7985 5.62038 14.7042 5.5747C14.6055 5.52684 14.4946 5.5 14.3775 5.5H7.30644Z" fill="#479F9E"/>
+              </svg>
+            {%- endif -%}
+          </a>
+        
+          {% if item.links.size > 0 %}
+            <span class="tw-inline-flex tw-h-[28px] tw-w-[28px] tw-items-center tw-justify-center pointer-events-none" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M11.2002 8.39766L16.8002 13.9977L11.2002 19.5977" stroke="#092846" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          {% endif %}
+        </li>
+    {%- endfor -%}
+  </ul>
+
+</div>
+{%- for item in items -%}
+    {% if item.links.size > 0 %}
+    {%  assign submenu_panel_id = panel_id | append: '-' | append: forloop.index %}
+    {%  assign current_level = current_level | plus: 1 %}
+    {% render 'mobile-nav-panel',
+        items: item.links,
+        parent_panel_id: panel_id,
+        panel_id: submenu_panel_id,
+        panel_title: item.title,
+        current_level: current_level
+    %}
+    {% endif %}
+{%- endfor -%}

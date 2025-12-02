@@ -1,0 +1,43 @@
+{%- liquid
+  assign max_width = block.settings.max_width | default: ''
+-%}
+<style>
+  #shopify-block-{{ block.id }} .label-list {
+    {% if max_width != blank %}
+      max-width: {{ max_width }};
+    {% endif %}
+  }
+</style>
+
+<div id="shopify-block-{{ block.id }}" class="label-list tw-flex tw-flex-wrap tw-gap-2">
+  {%- for nested_block in block.blocks -%}
+    {%- render nested_block, section: section -%}
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "Label List",
+  "blocks": [
+    { "type": "label" }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "max_width",
+      "label": "Max width",
+      "info": "Enter max width value (e.g., 800px, 50%, 1200px). Applies to all screen sizes"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Label List",
+      "blocks": [
+        {
+          "type": "label"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,89 @@
+{%- comment -%}
+  Category List Card Theme Block
+  Card with heading, divider, label, and two-column list of category items
+  
+  Uses static blocks for heading and caption, dynamic blocks for icon-text items
+{%- endcomment -%}
+
+{%- liquid
+  assign cards_show_border = section.settings.cards_show_border | default: false
+-%}
+
+<div class="category-list-card{% if cards_show_border %} tw-border tw-border-slate-200{% endif %} tw-rounded-3xl tw-bg-white tw-p-4 tw-flex tw-flex-col tw-gap-4 tw-h-full" {{ block.shopify_attributes }}>
+  
+  {%- comment -%} Card Content {%- endcomment -%}
+  <div class="category-list-card__content tw-flex tw-flex-col tw-gap-4 tw-h-full tw-min-w-0 tw-overflow-hidden">
+    
+    {%- comment -%} Heading with Divider - Static blocks {%- endcomment -%}
+    <div class="category-list-card__header tw-flex tw-flex-col tw-gap-2">
+      {%- content_for "block", type: "heading", id: "category-list-heading" -%}
+      {%- content_for "block", type: "divider", id: "category-list-divider" -%}
+    </div>
+    
+    {%- comment -%} Label - Static block {%- endcomment -%}
+    {%- comment -%} Nested Theme Blocks (Category Items) - Two Column Layout - Dynamic blocks {%- endcomment -%}
+    {%- for nested_block in block.blocks -%}
+        {%- render nested_block, section: section -%}
+    {%- endfor -%}
+
+    
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Icon Text list card",
+  "blocks": [
+    { "type": "heading" },
+    { "type": "divider" },
+    { "type": "icon-text-list" }
+  ],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Icon Text list card",
+      "blocks": [
+        {
+          "type": "heading",
+          "static": true,
+          "id": "category-list-heading",
+          "settings": {
+            "text": "We offer Wound Care products in these categories",
+            "variant": "h3",
+            "color": "#000000"
+          }
+        },
+        {
+          "type": "divider",
+          "static": true,
+          "id": "category-list-divider",
+          "settings": {
+            "padding_top": 16,
+            "padding_bottom": 16,
+            "color": "slate-200"
+          }
+        },
+        {
+          "type": "icon-text-list",
+          "settings": {
+            "icon_text_count": "1",
+            "caption_text": "Icon Text List",
+            "caption_color": "#323e46"
+          },
+          "blocks": [
+            {
+              "type": "icon-text", 
+              "settings": {
+                "text_color": "#323e46",
+                "link_color": "#323e46",
+                "text": "<p>Icon Text</p>"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

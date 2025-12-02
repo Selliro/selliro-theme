@@ -1,0 +1,99 @@
+{%- comment -%}
+  Video Theme Block
+  Global video component using video.js
+{%- endcomment -%}
+
+{%- render 'video',
+  video_url: block.settings.video_url,
+  poster_image: block.settings.poster_image,
+  video_id: block.id,
+  autoplay: block.settings.autoplay | default: false,
+  controls: block.settings.controls | default: true,
+  loop: block.settings.loop | default: false,
+  muted: block.settings.muted | default: false,
+  aspect_ratio: block.settings.mobile_aspect_ratio | default: '16:9',
+  mobile_aspect_ratio: block.settings.mobile_aspect_ratio,
+  desktop_aspect_ratio: block.settings.desktop_aspect_ratio,
+  parent_class: 'video',
+  block_shopify_attributes: block.shopify_attributes
+-%}
+
+{% schema %}
+{
+  "name": "Video",
+  "settings": [
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "Enter the URL to your video file (e.g., https://example.com/video.mp4)"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster_image",
+      "label": "Poster image",
+      "info": "Thumbnail image shown before video plays"
+    },
+    {
+      "type": "header",
+      "content": "Aspect Ratio Settings"
+    },
+    {
+      "type": "select",
+      "id": "mobile_aspect_ratio",
+      "label": "Mobile aspect ratio",
+      "default": "16:9",
+      "options": [
+        { "value": "16:9", "label": "16:9 (1.7)" },
+        { "value": "2:1", "label": "2:1" }
+      ],
+      "info": "Aspect ratio for mobile devices (below 768px)"
+    },
+    {
+      "type": "select",
+      "id": "desktop_aspect_ratio",
+      "label": "Desktop aspect ratio",
+      "default": "2:1",
+      "options": [
+        { "value": "2:1", "label": "2:1" },
+        { "value": "16:9", "label": "16:9 (1.7)" }
+      ],
+      "info": "Aspect ratio for desktop devices (768px and above)"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": false,
+      "info": "Video will start playing automatically"
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "Show controls",
+      "default": true,
+      "info": "Show video player controls"
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop",
+      "default": false,
+      "info": "Video will loop continuously"
+    },
+    {
+      "type": "checkbox",
+      "id": "muted",
+      "label": "Muted",
+      "default": false,
+      "info": "Video will be muted by default"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ]
+}
+{% endschema %}
+

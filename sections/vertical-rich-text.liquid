@@ -1,0 +1,294 @@
+{%- comment -%}
+  Vertical Rich Text Section
+  Displays a header (caption, heading, subheading) followed by vertical cards
+  Uses parent-multicolumn-vertical-v2 blocks for cards
+{%- endcomment -%}
+
+{%- liquid
+  assign section_caption = section.settings.caption
+  assign section_heading = section.settings.heading
+  assign section_subheading = section.settings.subheading
+  assign button_label = section.settings.button_label
+  assign button_link = section.settings.button_link
+  assign background_color = section.settings.background_color | default: '#ffffff'
+  assign section_max_width = section.settings.section_max_width | default: ''
+  assign enable_grid = section.settings.enable_grid | default: false
+-%}
+
+<style>
+  #{{ section.id }} {
+    padding-top: {{ section.settings.add_top_padding_mobile }}px;
+    padding-bottom: {{ section.settings.add_bottom_padding_mobile }}px;
+  }
+  @media(min-width: 1024px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.add_top_padding_desktop }}px;
+      padding-bottom: {{ section.settings.add_bottom_padding_desktop }}px;
+    }
+  }
+  #{{ section.id }} .vertical-rich-text__body__text-base {
+  max-width: 694px;
+  }
+</style>
+{%- if section_max_width != blank -%}
+  <style>
+    #{{ section.id }} .vertical-rich-text-section__container {
+      max-width: {{ section_max_width }};
+    }
+  </style>
+{%- endif -%}
+
+<div id="{{ section.id }}" class="vertical-rich-text-section tw-w-full {{ section.settings.parent_class }}" style="background-color: {{ background_color }};">
+  <div class="section-container vertical-rich-text-section__container">
+    
+    {%- comment -%} Top Level Grid {%- endcomment -%}
+    <div class="vertical-rich-text-section__wrapper tw-grid tw-grid-cols-1 tw-gap-8 md:tw-gap-16">
+      
+      {%- comment -%} Header Section (Caption, Heading, Subheading, Button) - Flex Content {%- endcomment -%}
+      {%- liquid
+        assign has_button = false
+        if button_label != blank and button_link != blank
+          assign has_button = true
+        endif
+      -%}
+      {%- if section_caption != blank or section_heading != blank or section_subheading != blank or has_button -%}
+        <div class="vertical-rich-text-section__header tw-flex tw-flex-col tw-gap-4 tw-items-center"> 
+          
+          {%- comment -%} Caption {%- endcomment -%}
+          {%- if section_caption != blank -%}
+            <div class="vertical-rich-text-section__caption md:tw-mb-4">
+              {%- render 'caption',
+                text: section_caption,
+                color: section.settings.caption_color | default: '#323e46',
+                parent_class: 'vertical-rich-text'
+              -%}
+            </div>
+          {%- endif -%}
+          
+          {%- comment -%} Heading {%- endcomment -%}
+          {%- if section_heading != blank -%}
+            <div class="vertical-rich-text-section__heading tw-text-center">
+              {%- render 'heading',
+                text: section_heading,
+                variant: section.settings.heading_variant
+                color: section.settings.heading_color | default: '#092846',
+                parent_class: 'vertical-rich-text'
+              -%}
+            </div>
+          {%- endif -%}
+          
+          {%- comment -%} Subheading {%- endcomment -%}
+          {%- if section_subheading != blank -%}
+            <div class="vertical-rich-text-section__subheading tw-text-center">
+              {%- render 'body',
+                text: section_subheading,
+                variant: section.settings.subheading_variant
+                color: section.settings.subheading_color | default: '#323e46',
+                max_width: section.settings.subheading_max_width,
+                parent_class: 'vertical-rich-text vertical-rich-text__body'
+              -%}
+            </div>
+          {%- endif -%}
+          
+          {%- comment -%} Primary Button {%- endcomment -%}
+          {%- if button_label != blank and button_link != blank -%}
+            <div class="vertical-rich-text-section__button">
+              {%- render 'button',
+                label: button_label,
+                link: button_link,
+                variant: 'primary',
+                block_shopify_attributes: ''
+              -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      
+      {%- comment -%} Cards List (Vertical Stack on Mobile, Grid on Desktop if enabled) {%- endcomment -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="vertical-rich-text-section__cards tw-flex tw-flex-col {% if enable_grid %}md-small:tw-grid md-small:tw-grid-cols-3 md-small:tw-gap-5{% endif %} tw-gap-4">
+          {%- for block in section.blocks -%}
+            {%- if block.type == '@app' -%}
+              {%- render block %}
+            {%- else -%}
+              {%- render block, section: section %}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+      
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Vertical Rich Text",
+  "tag": "section",
+  "class": "vertical-rich-text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "parent_class",
+      "label": "Parent Class",
+      "info": "Optional parent class for the section"
+    },
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "section_max_width",
+      "label": "Section max width",
+      "info": "Enter max width value (e.g., 1200px, 80%, 1400px). Applies to all screen sizes"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_grid",
+      "label": "Enable desktop grid",
+      "default": true,
+      "info": "When enabled, cards display in a 3-column grid on desktop (768px+). When disabled, cards stack vertically on all screen sizes."
+    },
+    {
+      "type": "header",
+      "content": "Caption"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption",
+      "default": "Current Program Results"
+    },
+    {
+      "type": "text",
+      "id": "caption_color",
+      "label": "Caption color",
+      "info": "Optional: hex color value (e.g., #323e46)",
+      "default": "#323e46"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Unprecedented Respiratory Outcomes"
+    },
+    {
+      "type": "text",
+      "id": "heading_variant",
+      "label": "Heading variant",
+      "default": "h1",
+      "info": "Enter variant: h1, h2, h3, h4, h5"
+    },
+    {
+      "type": "text",
+      "id": "heading_color",
+      "label": "Heading color",
+      "info": "Optional: hex color value",
+      "default": "#092846"
+    },
+    {
+      "type": "header",
+      "content": "Subheading"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>AdaptHealth's outstanding respiratory care program has expanded with the Nexus software platform that transforms lives by reducing hospitalizations and improving quality of life. Every patient is automatically enrolled in the proven AdaptHealth Nexus program.</p>"
+    },
+    {
+      "type": "text",
+      "id": "subheading_variant",
+      "label": "Subheading variant",
+      "default": "md",
+      "info": "Enter variant: sm, md, lg, lg-bold"
+    },
+    {
+      "type": "text",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "info": "Optional: hex color value",
+      "default": "#323e46"
+    },
+    {
+      "type": "text",
+      "id": "subheading_max_width",
+      "label": "Subheading max width",
+      "info": "Enter max width value (e.g., 800px, 50%, 1200px). Applies to all screen sizes"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "text",
+      "id": "add_top_padding_mobile",
+      "label": "Add top padding mobile",
+      "default": "44"
+    },
+    {
+      "type": "text",
+      "id": "add_bottom_padding_mobile",
+      "label": "Add bottom padding mobile",
+      "default": "44"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "text",
+      "id": "add_top_padding_desktop",
+      "label": "Add top padding Desktop",
+      "default": "96"
+    },
+    {
+      "type": "text",
+      "id": "add_bottom_padding_desktop",
+      "label": "Add bottom padding Desktop",
+      "default": "96"
+    }
+  ],
+  "blocks": [
+    { "type": "parent-multicolumn-vertical-v2" },
+    { "type": "image" },
+    { "type": "column-card" }
+  ],
+  "presets": [
+    {
+      "name": "Vertical Rich Text",
+      "blocks": [
+        {
+          "type": "parent-multicolumn-vertical-v2"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

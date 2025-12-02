@@ -1,0 +1,47 @@
+{%- comment -%}
+  Testimonial Card Component
+  Displays a testimonial quote and author
+  
+  Accepts:
+  - quote: Rich text string (testimonial text)
+  - quote_color: Hex color value (optional, default: #323e46)
+  - author: String (author name)
+  - author_color: Hex color value (optional, default: #58605e)
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- liquid
+  assign quote = quote | default: ''
+  assign quote_color = quote_color | default: ''
+  assign author = author | default: ''
+  assign author_color = author_color | default: ''
+-%}
+
+{%- if quote != blank -%}
+  <div class="testimonial-card tw-justify-center  tw-bg-white tw-rounded-xl tw-shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.03)] tw-px-8 tw-py-4 tw-h-full tw-flex tw-flex-col tw-overflow-hidden" {{ block_shopify_attributes }}>
+    {%- comment -%} Quote Text {%- endcomment -%}
+    {%- if quote != blank -%}
+      <div class="testimonial-card__quote ">
+        {%  render 'body',
+          text: quote,
+          variant: 'lg',
+          color: quote_color,
+          parent_class: 'testimonial-card'
+        -%}
+      </div>
+    {%- endif -%}
+    
+    {%- comment -%} Author Name {%- endcomment -%}
+    {%- if author != blank -%}
+      <div class="testimonial-card__author tw-mt-3">
+        {%- render 'body',
+          text: author,
+          variant: 'lg',
+          color: author_color,
+          parent_class: 'testimonial-card'
+        -%}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+

@@ -1,0 +1,49 @@
+{%- comment -%}
+  Banner Divider Snippet
+  Renders a divider with optional padding and color
+  Supports different variants: 'default' (with padding) and 'simple' (border only)
+  
+  Accepts:
+  - variant: String (optional, 'default' or 'simple', default: 'default')
+  - padding_top: Number (pixels, default: 0, only for 'default' variant)
+  - padding_bottom: Number (pixels, default: 0, only for 'default' variant)
+  - color: Divider color (default: 'white-10' for default, 'slate-200' for simple)
+  - parent_class: String (optional, parent class prefix, default: 'divider')
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- liquid
+  assign variant = variant | default: 'default'
+  assign parent_class = parent_class | default: 'divider'
+  
+  if variant == 'simple'
+    assign padding_top = 0
+    assign padding_bottom = 0
+    assign color = color | default: 'slate-200'
+  else
+    assign padding_top = padding_top | default: 0
+    assign padding_bottom = padding_bottom | default: 0
+    assign color = color | default: 'white-10'
+  endif
+  
+  assign color_class = 'tw-border-white/10'
+  case color
+    when 'white-10'
+      assign color_class = 'tw-border-white/10'
+    when 'white-20'
+      assign color_class = 'tw-border-white/20'
+    when 'slate-200'
+      assign color_class = 'tw-border-slate-200'
+    when 'gray-200'
+      assign color_class = 'tw-border-gray-200'
+  endcase
+-%}
+
+{%- if variant == 'simple' -%}
+  <div class="{{ parent_class }}__divider tw-border-b {{ color_class }}" {{ block_shopify_attributes }}></div>
+{%- else -%}
+  <div class="banner-divider tw-w-full" style="padding-top: {{ padding_top }}px; padding-bottom: {{ padding_bottom }}px;" {{ block_shopify_attributes }}>
+    <hr class="banner-divider__line tw-border-t {{ color_class }} tw-border-0">
+  </div>
+{%- endif -%}
+

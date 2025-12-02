@@ -1,0 +1,290 @@
+{%- comment -%}
+  Tabs Section
+  Generic tabs component with two layout options:
+  1. Side-by-side: Tabs on left, content on right
+  2. Stacked: Tabs on top, content below
+{%- endcomment -%}
+
+{%- liquid
+  assign section_caption = section.settings.caption | default: ''
+  assign section_heading = section.settings.heading | default: 'Heading'
+  assign section_subheading = section.settings.subheading | default: ''
+  assign background_color = section.settings.background_color | default: '#ffffff'
+  assign layout = section.settings.layout | default: 'stacked'
+  assign add_top_padding = section.settings.add_top_padding | default: false
+  assign add_bottom_padding = section.settings.add_bottom_padding | default: false
+  assign tabs = section.blocks
+  assign parent_class = 'tabs-section'
+  assign text_alignment = section.settings.text_alignment | default: 'center'
+-%}
+
+<div
+  id="shopify-section-{{ section.id }}"
+  class="tabs-section tw-w-full tw-bg-white {% if add_top_padding %}section-padding-top{% endif %} {% if add_bottom_padding %}section-padding-bottom{% endif %}"
+  style="background-color: {{ background_color }};"
+  data-tabs-parent
+>
+  <div class="tabs-section__container section-container ">
+    {%- comment -%} Title Wrapper: Caption, Heading, Subheading - all in one div {%- endcomment -%}
+    {%- if section_caption != blank or section_heading != blank or section_subheading != blank -%}
+      <div class="tabs-section__title-wrapper tw-flex tw-flex-col tw-gap-4 md:tw-gap-5 tw-items-start tw-pb-4 md:tw-pb-8">
+        {%- if section_caption != blank -%}
+          {%- render 'caption', text: section_caption, color: '#323E46', parent_class: 'tabs-section' -%}
+        {%- endif -%}
+
+        {%- if section_heading != blank -%}
+          {%- render 'heading', text: section_heading, variant: 'h3', color: '#092846', parent_class: 'tabs-section' -%}
+        {%- endif -%}
+
+        {%- if section_subheading != blank -%}
+          {%- render 'body',
+            text: section_subheading,
+            variant: 'base-medium',
+            color: '#323E46',
+            parent_class: 'tabs-section'
+          -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Tabs Section {%- endcomment -%}
+    {%- if tabs.size > 0 -%}
+      <div class="tabs-section__wrapper tabs-section__wrapper--desktop tw-hidden md:tw-block">
+        {%- if layout == 'side-by-side' -%}
+          {%- comment -%} Side-by-side Layout: Grid with tabs on left, content on right {%- endcomment -%}
+          {%- comment -%} Mobile: flex column (stacked), Desktop: grid (side-by-side) {%- endcomment -%}
+          <div class="{{ parent_class }}__tabs-wrapper {{ parent_class }}__tabs-wrapper--side-by-side tw-flex tw-flex-col tw-gap-0 tw-isolate tw-relative tw-w-full md:tw-grid md:tw-grid-cols-[337px_1fr] md:tw-items-start">
+            {%- comment -%} Tabs Navigation (Left Side - Sticky) {%- endcomment -%}
+            <div class="{{ parent_class }}__tabs-container {{ parent_class }}__tabs-container--vertical tw-bg-white tw-static tw-content-stretch tw-flex tw-flex-col tw-gap-4 tw-items-start tw-overflow-clip tw-pl-0 tw-pr-0 tw-py-0 tw-shrink-0 tw-w-full md:tw-sticky md:tw-top-0 md:tw-pl-16 md:tw-pr-0 md:tw-w-[337px]">
+              <div
+                data-tab-list
+                class="{{ parent_class }}__tabs-list {{ parent_class }}__tabs-list--vertical tw-content-stretch tw-flex tw-flex-row tw-gap-2 tw-items-start tw-overflow-x-auto tw-relative tw-shrink-0 tw-w-full md:tw-flex-col md:tw-gap-4 md:tw-overflow-clip"
+              >
+                {% for tab in tabs %}
+                  {%- render 'tab', tab: tab, section: section, parent_class: parent_class, is_first: forloop.first, text_alignment: text_alignment -%}
+                {% endfor %}
+              </div>
+            </div>
+
+            {%- comment -%} Tab Panels (Right Side - Content Area) {%- endcomment -%}
+            <div class="{{ parent_class }}__panels-wrapper {{ parent_class }}__panels-wrapper--side-by-side tw-basis-0 tw-box-border tw-content-stretch tw-flex tw-grow tw-items-start tw-min-h-px tw-min-w-px tw-px-0 tw-pr-0 tw-py-0 tw-static tw-shrink-0 md:tw-relative md:tw-px-16">
+              {%  for block in section.blocks %}
+                <div data-tab-content-id="{{ block.settings.tab_id }}" id="tab-content-{{- block.settings.tab_id -}}"  class="{% unless forloop.first %}tw-hidden{% endunless %}"></div>
+              {% endfor %}
+            </div>
+          </div>
+        {%- else -%}
+          {%- comment -%} Stacked Layout: Tabs on top, content below {%- endcomment -%}
+          <div class="{{ parent_class }}__tabs-wrapper {{ parent_class }}__tabs-wrapper--stacked tw-flex tw-flex-col tw-gap-8 tw-isolate tw-relative tw-w-full">
+            {%- comment -%} Tabs Navigation with Swiper (Top) {%- endcomment -%}
+            <div
+              class="{{ parent_class }}__tabs-container {{ parent_class }}__tabs-container--horizontal tw-content-stretch tw-flex tw-items-center tw-relative tw-shrink-0 tw-w-full"
+              data-swiper-parent
+            >
+              <carousel-swiper class="carousel carousel--tabs tw-w-full">
+                <script type="application/json">
+                  {
+                    "slidesPerView": "1.9",
+                    "spaceBetween": 16,
+                    "navigation": false,
+                    "grabCursor": true,
+                    "freeMode": true,
+                    "breakpoints": {
+                      "768": {
+                        "slidesPerView": "{{ section.settings.slides_per_view }}",
+                        "spaceBetween": "16"
+                      }
+                    }
+                  }
+                </script>
+
+                <div class="swiper carousel__swiper">
+                  <div data-tab-list class="swiper-wrapper carousel__wrapper">
+                    {%- for tab in tabs -%}
+                      <div class="swiper-slide">
+                        {%- render 'tab', tab: tab, section: section, parent_class: parent_class, is_first: forloop.first, text_alignment: text_alignment -%}
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </carousel-swiper>
+            </div>
+
+            {%- comment -%} Tab Panels (Below Tabs) {%- endcomment -%}
+            <div class="{{ parent_class }}__panels-wrapper {{ parent_class }}__panels-wrapper--stacked tw-content-stretch tw-flex tw-flex-col tw-items-start tw-relative tw-shrink-0 tw-w-full">
+              {%  for block in section.blocks %}
+                <div data-tab-content-id="{{ block.settings.tab_id }}" id="tab-content-{{- block.settings.tab_id -}}"  class="{% unless forloop.first %}tw-hidden{% endunless %}"></div>
+              {% endfor %}
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="tabs-section__wrapper tabs-section__wrapper--mobile tw-block md:tw-hidden">
+        {%- comment -%} Stacked Layout: Tabs on top, content below {%- endcomment -%}
+        <div class="{{ parent_class }}__tabs-wrapper {{ parent_class }}__tabs-wrapper--stacked tw-flex tw-flex-col tw-gap-8 tw-isolate tw-relative tw-w-full">
+          {%- comment -%} Tabs Navigation with Swiper (Top) {%- endcomment -%}
+          <div
+            class="{{ parent_class }}__tabs-container {{ parent_class }}__tabs-container--horizontal tw-content-stretch tw-flex tw-items-center tw-relative tw-shrink-0 tw-w-full"
+            data-swiper-parent
+          >
+            <carousel-swiper class="carousel carousel--tabs tw-w-full">
+              <script type="application/json">
+                {
+                  "slidesPerView": "auto",
+                  "spaceBetween": 8,
+                  "navigation": false,
+                  "grabCursor": true,
+                  "freeMode": true
+                }
+              </script>
+
+              <div class="swiper carousel__swiper">
+                <div data-tab-list class="swiper-wrapper carousel__wrapper">
+                  {%- for tab in tabs -%}
+                    <div class="swiper-slide">
+                      {%- render 'tab', tab: tab, section: section, parent_class: parent_class, is_first: forloop.first, text_alignment: text_alignment -%}
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </carousel-swiper>
+          </div>
+
+          {%- comment -%} Tab Panels (Below Tabs) {%- endcomment -%}
+          <div class="{{ parent_class }}__panels-wrapper {{ parent_class }}__panels-wrapper--stacked tw-content-stretch tw-flex tw-flex-col tw-items-start tw-relative tw-shrink-0 tw-w-full">
+            {%  for block in section.blocks %}
+              <div data-tab-content-id="{{ block.settings.tab_id }}" id="tab-content-{{- block.settings.tab_id -}}"  class="{% unless forloop.first %}tw-hidden{% endunless %}"></div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Tabs",
+  "tag": "section",
+  "class": "section tabs-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption",
+      "default": "Caption"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "side-by-side",
+          "label": "Side by Side (Tabs Left, Content Right)"
+        },
+        {
+          "value": "stacked",
+          "label": "Stacked (Tabs Top, Content Below)"
+        }
+      ],
+      "default": "stacked"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "active_background_color",
+      "label": "Active tab background color",
+      "default": "#d4f0f0"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Tab text color",
+      "default": "#323E46"
+    },
+    {
+      "type": "color",
+      "id": "active_text_color",
+      "label": "Active tab text color",
+      "default": "#00786f"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "number",
+      "id": "slides_per_view",
+      "label": "Slides per view",
+      "default": 6
+    },
+    {
+      "type": "checkbox",
+      "id": "add_top_padding",
+      "label": "Add top padding",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "add_bottom_padding",
+      "label": "Add bottom padding",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_title",
+          "label": "Tab Title",
+          "default": "Tab"
+        },
+        {
+          "type": "image_picker",
+          "id": "tab_icon",
+          "label": "Tab Icon",
+          "info": "Optional:  icon for this tab"
+        },
+        {
+          "type": "text",
+          "id": "tab_id",
+          "label": "Tab ID",
+          "info": "Unique identifier for this tab content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tabs"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,180 @@
+{% doc %}
+  Form input field block using Flowbite styling.
+  Supports label, input field, error message, and required field indicator.
+
+  @example
+  {% content_for 'block', type: 'form-input-field', id: 'first-name' %}
+{% enddoc %}
+
+{%- liquid
+  assign label = block.settings.label | default: ''
+  assign placeholder = block.settings.placeholder | default: ''
+  assign field_name = block.settings.field_name | default: ''
+  assign required = block.settings.required | default: false
+  assign error_message = block.settings.error_message | default: ''
+  assign input_type = block.settings.input_type | default: 'text'
+-%}
+
+<div
+  id="shopify-block-{{ block.id }}"
+  class="form-input-field tw-flex tw-flex-col tw-gap-2 tw-w-full"
+  {{ block.shopify_attributes }}
+>
+  {%- if label != blank -%}
+    <label
+      for="input-{{ block.id }}"
+      class="tw-text-sm tw-font-medium tw-leading-[18px] tw-tracking-[-0.14px] tw-text-black tw-w-full"
+    >
+      {{ label }}
+      {%- if required -%}
+        <span class="tw-text-black-500" aria-label="required"> *</span>
+      {%- endif -%}
+    </label>
+  {%- endif -%}
+
+  <div class="tw-relative tw-w-full">
+    <input
+      data-input-type="{{ input_type }}"
+      type="{{ input_type }}"
+      id="input-{{ block.id }}"
+      name="{{ field_name }}"
+      placeholder="{{ placeholder }}"
+      {% if required %}required{% endif %}
+      class="tw-w-full tw-h-[42px] tw-border tw-border-slate-500 tw-rounded-xl tw-px-3 tw-py-2 tw-text-base tw-leading-[20px] tw-tracking-[-0.16px] tw-bg-white tw-text-body-text tw-outline-none focus:tw-border-slate-500 focus:tw-ring-1 focus:tw-ring-slate-500 disabled:tw-cursor-not-allowed disabled:tw-bg-[#EBEBEB] disabled:tw-text-text-muted placeholder:tw-text-slate-500"
+      aria-describedby="error-{{ block.id }}"
+    />
+  </div>
+
+  <div
+    id="error-{{ block.id }}"
+    class="tw-hidden tw-mt-2 tw-text-xs tw-leading-4 tw-text-red-500"
+    role="alert"
+    aria-live="polite"
+    data-error-message="{{ error_message | escape }}"
+  >
+    {{ error_message }}
+  </div>
+</div>
+
+{% stylesheet %}
+  .form-input-field {
+    gap: 8px;
+  }
+  
+  .form-input-field label {
+    display: block;
+  }
+  
+  .form-input-field input:focus {
+    outline: none;
+  }
+  
+  .form-input-field input::placeholder {
+    color: #62748e;
+  }
+  
+  .form-input-field input.error {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+  }
+  
+  .form-input-field input.error:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 1px #fef2f2, 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+  
+  .form-input-field [role="alert"].show {
+    display: block;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Input field",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Field settings"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "First name"
+    },
+    {
+      "type": "text",
+      "id": "field_name",
+      "label": "Field name",
+      "info": "The name attribute for the input field",
+      "default": "first_name"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Placeholder",
+      "default": "First name"
+    },
+    {
+      "type": "select",
+      "id": "input_type",
+      "label": "Input type",
+      "options": [
+        {
+          "value": "text",
+          "label": "Text"
+        },
+        {
+          "value": "email",
+          "label": "Email"
+        },
+        {
+          "value": "tel",
+          "label": "Phone"
+        },
+        {
+          "value": "number",
+          "label": "Number"
+        },
+        {
+          "value": "password",
+          "label": "Password"
+        }
+      ],
+      "default": "text"
+    },
+    {
+      "type": "checkbox",
+      "id": "required",
+      "label": "Required field",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Error message"
+    },
+    {
+      "type": "text",
+      "id": "error_message",
+      "label": "Default error message",
+      "default": "This field is required",
+      "info": "Default error message (xs font size, red color). Can be overridden dynamically via JavaScript validation."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Input field"
+    },
+    {
+      "name": "Input field (required)",
+      "settings": {
+        "label": "First name",
+        "field_name": "first_name",
+        "placeholder": "First name",
+        "required": true
+      }
+    }
+  ]
+}
+{% endschema %}
+

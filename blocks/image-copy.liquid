@@ -1,0 +1,91 @@
+{%- comment -%}
+  Image Theme Block
+  Global image component for cards and sections
+{%- endcomment -%}
+
+{%- render 'image',
+  desktop_image: block.settings.desktop_image,
+  mobile_image: block.settings.mobile_image,
+  image_id: block.id,
+  layout_type: block.settings.layout_type | default: 'icon',
+  icon_max_width: block.settings.icon_max_width,
+  desktop_aspect_ratio: block.settings.desktop_aspect_ratio,
+  mobile_aspect_ratio: block.settings.mobile_aspect_ratio,
+  icon_rounded: block.settings.icon_rounded,
+  parent_class: 'image',
+  block_shopify_attributes: block.shopify_attributes
+-%}
+
+{% schema %}
+{
+  "name": "Image",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout_type",
+      "label": "Layout type",
+      "options": [
+        {
+          "value": "icon",
+          "label": "Icon (centered, max width)"
+        },
+        {
+          "value": "full",
+          "label": "Full (fills container)"
+        }
+      ],
+      "default": "full",
+      "info": "Set in preset: 'icon' for icons, 'full' for background images"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop Image",
+      "info": "Recommended: 100x100px"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image",
+      "info": "Recommended: 100x100px",
+      "visible_if": "{{ block.settings.layout_type == 'full' }}"
+    },
+    {
+      "type": "text",
+      "id": "icon_max_width",
+      "label": "Icon max width",
+      "info": "Max width of the icon/image in pixels (e.g., 100)",
+      "default": "100",
+      "visible_if": "{{ block.settings.layout_type == 'icon' }}"
+    },
+    {
+      "type": "text",
+      "id": "desktop_aspect_ratio",
+      "label": "Desktop aspect ratio",
+      "info": "Aspect ratio of the icon/image (e.g., 1 for square, 1.5 for 3:2, 0.75 for 4:3)",
+      "default": "1"
+    },
+    {
+      "type": "text",
+      "id": "mobile_aspect_ratio",
+      "label": "Mobile aspect ratio",
+      "info": "Aspect ratio of the mobile image (e.g., 1 for square, 1.5 for 3:2, 0.75 for 4:3)",
+      "default": "2.37",
+      "visible_if": "{{ block.settings.layout_type == 'full' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "icon_rounded",
+      "label": "Icon rounded corners",
+      "default": true,
+      "info": "Enable rounded corners on the icon/image container"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image"
+    }
+  ]
+}
+{% endschema %}
+

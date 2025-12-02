@@ -1,0 +1,42 @@
+{%- comment -%}
+  Body Text Theme Block
+  Global body text component - variant set in presets
+{%- endcomment -%}
+
+{%- render 'body',
+  text: block.settings.text,
+  variant: block.settings.variant | default: 'lg',
+  color: block.settings.color,
+  block_shopify_attributes: block.shopify_attributes
+-%}
+
+{% schema %}
+{
+  "name": "Body Text",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Body text"
+    },
+    {
+      "type": "text",
+      "id": "variant",
+      "label": "Variant",
+      "info": "Set in preset: sm, md, lg"
+    },
+    {
+      "type": "text",
+      "id": "color",
+      "label": "Color",
+      "info": "Optional: hex color value (e.g., #ffffff)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Body Text"
+    }
+  ]
+}
+{% endschema %}
+

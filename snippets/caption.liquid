@@ -1,0 +1,42 @@
+{%- comment -%}
+  Caption Component
+  Unified caption component with size-based variants
+  Supports: 'caption-sm', 'caption-md', 'caption-h2'
+  
+  Accepts:
+  - text: String
+  - variant: String (optional, 'caption-sm', 'caption-md', 'caption-h2', default: 'caption-sm')
+  - color: Hex color value (optional)
+  - parent_class: String (optional, parent class prefix, default: 'caption')
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- liquid
+  assign variant = variant | default: 'decorative'
+  assign parent_class = parent_class | default: 'caption'
+  assign color = color | default: '#323E46'
+  
+  case variant
+    when 'decorative'
+      assign caption_classes = parent_class | append: '__caption-sm tw-text-decorative tw-font-bold tw-uppercase tw-tracking-[0.52px] tw-leading-[150%]'
+      assign caption_inner_classes = ''
+  endcase
+  
+  assign caption_style = ''
+  if color != blank
+    assign caption_style = 'color: ' | append: color | append: ';'
+  endif
+-%}
+
+{%- if text != blank -%}
+  {%- if variant == 'h2' -%}
+    <div class="{{ caption_classes }}" {{ block_shopify_attributes }}>
+      <h2 class="{{ caption_inner_classes }}"{% if caption_style != blank %} style="{{ caption_style }}"{% endif %}>{{ text }}</h2>
+    </div>
+  {%- else -%}
+    <div class="{{ caption_classes }}"{% if caption_style != blank %} style="{{ caption_style }}"{% endif %} {{ block_shopify_attributes }}>
+      {{ text }}
+    </div>
+  {%- endif -%}
+{%- endif -%}
+

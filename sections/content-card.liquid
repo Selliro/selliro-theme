@@ -1,0 +1,457 @@
+{%- comment -%}
+  Image Banner Section
+  
+  Flexible banner with:
+  - Background: Image, Color, or 50/50 Split
+  - Block-based content (breadcrumb, caption, heading, subheading, image, buttons)
+  - Left/Right positioning
+  - Responsive mobile/desktop images
+{%- endcomment -%}
+
+{%- liquid
+    assign background_type = section.settings.background_type | default: 'image'
+    assign background_color = section.settings.background_color | default: '#092846'
+    assign image_desktop = section.settings.image_desktop
+    assign image_mobile = section.settings.image_mobile
+    assign max_height = section.settings.max_height
+    assign max_height_mobile = section.settings.max_height_mobile
+  -%}
+  {% comment %} <style>
+    #{{section.id}}.content-card {
+      max-width: 1440px;
+      margin: auto;
+    }
+
+  </style> {% endcomment %}
+
+<style>
+  #{{ section.id }} .content-card__content-wrapper {
+    padding-top: {{ section.settings.add_top_padding_mobile }}px;
+    padding-bottom: {{ section.settings.add_bottom_padding_mobile }}px;
+  }
+  {% if section.settings.background_type == 'color' %}
+    #{{ section.id }} {
+      height: {{ max_height_mobile }}px;
+    }
+  {% endif %}
+  @media(min-width: 1024px) {
+    #{{ section.id }} .content-card__content-wrapper {
+      padding-top: {{ section.settings.add_top_padding_desktop }}px;
+      padding-bottom: {{ section.settings.add_bottom_padding_desktop }}px;
+    }
+    {% if section.settings.split_content %}
+      #{{ section.id }} .content-card__content > div:first-child {
+          width: {{ section.settings.left_column_width }}%;
+      }
+      #{{ section.id }} .content-card__content > div:last-child {
+          width: {{ 100 |  minus: section.settings.left_column_width }}%;
+      }
+    {% endif %}
+    {% if section.settings.background_type == 'color' %}
+      #{{ section.id }} {
+        height: {{ max_height }}px;
+      }
+    {% endif %}
+  }
+</style>
+
+{% capture section_content %}
+  {%- comment -%} Left Content Column {%- endcomment -%}
+  <div class="content-card__content-wrapper tw-absolute tw-inset-0 tw-h-full tw-flex
+    {% if section.settings.split_content %}tw-items-start md:tw-items-center{% else %}tw-items-{{section.settings.content_alignment}}{% endif %}
+  ">
+    <div class="section-container section-container--wide content-card__container tw-w-full{% if section.settings.split_content %} tw-h-full{% endif %}">
+      <div class="content-card__content tw-flex tw-justify-between tw-flex-col {% if section.settings.split_content %} tw-h-full 
+        md:tw-flex-row md:tw-items-{% if section.blocks.first.id contains 'parent_rich_text_' %}{{section.settings.right_column_content_alignment}}{% else %}{{section.settings.left_column_content_alignment}}{% endif %}{% endif %} tw-gap-8
+      ">
+        {% for block in section.blocks %}
+          <div class="content-card__block tw-items-{% if forloop.first %}{{section.settings.left_column_content_alignment}}{% else %}{{section.settings.right_column_content_alignment}}{% endif %}{% if block.id contains 'parent_rich_text_' %} md:tw-flex md:tw-h-full tw-overflow-hidden {% endif %}">
+            {% render block %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endcapture %}
+
+  <div id="{{section.id}}" class=" tw-relative tw-w-full tw-overflow-hidden"{% if max_height != blank and background_type == 'color' %} style="height: {{ max_height }}px; max-height: {{ max_height }}px;"{% endif %}>   
+
+  {%- comment -%} Background Layer {%- endcomment -%}
+    {%- case background_type -%}
+      
+      {%- when 'color' -%}
+        <div class="banner-layout-color__background tw-absolute tw-inset-0" style="background-color: {{ background_color }};"></div>
+      
+      {%- else -%}
+        {%- comment -%} Image Background {%- endcomment -%}
+        {%- render 'content-card-background-image', 
+          image_desktop: image_desktop,
+          image_mobile: image_mobile,
+          show_overlay: section.settings.show_overlay,
+          overlay_opacity: section.settings.overlay_opacity,
+          show_gradient_overlay: section.settings.show_gradient_overlay,
+          image_aspect_ratio: section.settings.image_aspect_ratio_desktop | plus:0,
+          image_aspect_ratio_mobile: section.settings.image_aspect_ratio_mobile | plus:0,
+        -%}
+    {%- endcase -%}
+
+    <div class="content-card__blocks">
+      {{ section_content }}
+    </div>
+
+  </div>
+
+{%  schema  %} 
+  {
+    "name": "Content card",
+    "tag": "section",
+    "class": "section content-card section-container-wide",
+    "max_blocks": 2,
+    "settings": [
+      {
+        "type": "header",
+        "content": "Background Settings"
+      },
+      {
+        "type": "select",
+        "id": "background_type",
+        "label": "Background type",
+        "default": "image",
+        "options": [
+          { "value": "image", "label": "Image" },
+          { "value": "color", "label": "Solid Color" },
+        ]
+      },
+      {
+        "type": "image_picker",
+        "id": "image_desktop",
+        "label": "Desktop Background Image",
+        "info": "Recommended: 1920x1080px"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_mobile",
+        "label": "Mobile Background Image",
+        "info": "Recommended: 750x1334px. Falls back to desktop if not set."
+      },
+      {
+        "type": "text",
+        "id": "background_color",
+        "label": "Background Color",
+        "default": "#092846"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_overlay",
+        "label": "Show solid overlay",
+        "default": false,
+        "info": "Dark overlay for better text readability"
+      },
+      {
+        "type": "range",
+        "id": "overlay_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "default": 10,
+        "label": "Overlay opacity",
+        "unit": "%"
+      },
+      {
+        "type": "text",
+        "id": "max_height",
+        "label": "Banner height",
+        "info": "Max height of the banner in pixels",
+        "default": "600",
+        "visible_if": "{{ section.settings.background_type == 'color' }}"
+      },
+      {
+        "type": "text",
+        "id": "max_height_mobile",
+        "label": "Banner height mobile",
+        "info": "Height of the banner in pixels for mobile",
+        "default": "600",
+        "visible_if": "{{ section.settings.background_type == 'color' }}"
+      },
+      {
+        "type": "text",
+        "id": "image_aspect_ratio_desktop",
+        "label": "Image aspect ratio (desktop)",
+        "info": "Enter a decimal, e.g., 1.8",
+        "default": "1.8",
+        "visible_if": "{{ section.settings.background_type == 'image' }}"
+      },
+      {
+        "type": "text",
+        "id": "image_aspect_ratio_mobile",
+        "label": "Image aspect ratio (mobile)",
+        "info": "Enter a decimal, e.g., 0.48",
+        "default": "0.48",
+        "visible_if": "{{ section.settings.background_type == 'image' }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_gradient_overlay",
+        "label": "Show gradient overlay",
+        "default": false,
+        "info": "Gradient from bottom to top"
+      },
+      {
+        "type": "header",
+        "content": "Content Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "split_content",
+        "label": "Split content",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "left_column_width",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "default": 40,
+        "label": "Left column width",
+        "unit": "%",
+        "visible_if": "{{ section.settings.split_content }}"
+      },
+      {
+        "type": "select",
+        "id": "left_column_content_alignment",
+        "label": "Left column content alignment",
+        "default": "start",
+        "options": [
+          { "value": "start", "label": "Top" },
+          { "value": "center", "label": "Center" },
+          { "value": "end", "label": "Bottom" }
+        ],
+        "visible_if": "{{ section.settings.split_content }}"
+      },
+      {
+        "type": "select",
+        "id": "right_column_content_alignment",
+        "label": "Right column content alignment",
+        "default": "end",
+        "options": [
+          { "value": "start", "label": "Top" },
+          { "value": "center", "label": "Center" },
+          { "value": "end", "label": "Bottom" }
+        ],
+        "visible_if": "{{ section.settings.split_content }}"
+      },
+      {
+        "type": "select",
+        "id": "content_alignment",
+        "label": "Content alignment",
+        "default": "start",
+        "options": [
+          { "value": "start", "label": "Top" },
+          { "value": "center", "label": "Center" },
+          { "value": "end", "label": "Bottom" }
+        ],
+        "visible_if": "{{ section.settings.split_content == false }}"
+      },
+      {
+        "type": "header",
+        "content": "Section padding"
+      },
+      {
+        "type": "text",
+        "id": "add_top_padding_mobile",
+        "label": "Add top padding Mobile",
+        "default": "16"
+      },
+      {
+        "type": "text",
+        "id": "add_bottom_padding_mobile",
+        "label": "Add bottom padding Mobile",
+        "default": "16"
+      },
+      {
+        "type": "text",
+        "id": "add_top_padding_desktop",
+        "label": "Add top padding Desktop",
+        "default": "32"
+      },
+      {
+        "type": "text",
+        "id": "add_bottom_padding_desktop",
+        "label": "Add bottom padding Desktop",
+        "default": "32"
+      }
+
+    ],
+    "blocks": [
+      {"type": "parent-rich-text"},
+      {"type": "content-card-content"},
+    ],
+    "presets": [
+      {
+        "name": "Content Card",
+        "settings": {
+          "image_desktop": "shopify://shop_images/placeholder-image.png"
+        },
+        "blocks": [
+          {
+            "type": "parent-rich-text", 
+            "settings": {
+              "gap": "12px",
+              "mobile_gap": "12px"
+            },
+            "blocks": [
+              {
+                "type": "heading",
+                "settings": {
+                  "text": "Heading",
+                  "variant": "h2",
+                  "color": "#092846"
+                }
+              },
+              {
+                "type": "body-text",
+                "settings": {
+                  "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum augue a felis accumsan fermentum. Vivamus sit amet lorem eu lectus bibendum bibendum.</p>",
+                  "variant": "md",
+                  "color": "#323e46"
+                }
+              },
+              {
+                "type": "button-group",
+                "settings": {
+                  "show_button_1": true,
+                  "button_1_label": "Primary CTA",
+                  "button_1_link": "#",
+                  "show_button_2": false,
+                  "button_2_label": "Secondary CTA",
+                  "button_2_link": "#",
+                  "button_2_color": "blue",
+                  "show_button_3": false,
+                  "button_3_label": "Tertiary CTA",
+                  "button_3_link": "#"
+                }
+              },
+            ]
+          },
+          {
+            "type": "content-card-content",
+            "blocks": [
+              {
+                "type": "parent-rich-text", 
+                "settings": {
+                  "gap": "12px",
+                  "mobile_gap": "12px"
+                },
+                "blocks": [
+                  {
+                    "type": "body-text",
+                    "settings": {
+                      "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum augue a felis accumsan fermentum. Vivamus sit amet lorem eu lectus bibendum bibendum.</p>",
+                      "variant": "md",
+                      "color": "#323e46"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "spacer-copy",
+                "settings": {
+                  "desktop_height": "12",
+                  "mobile_height": "8"
+                }
+              },
+              {
+                "type": "column-card-list",
+                "settings": {
+                  "column_count": 2,
+                  "enable_mobile_carousel": true,
+                  "slides_per_view": 1
+                },
+                "blocks": [
+                  {
+                    "type": "column-card",
+                    "settings": {"background_color": "#FFF"},
+                    "blocks": [
+                      { 
+                        "type": "subheading",
+                        "settings": {
+                          "text": "<p>Heading</p>",
+                          "variant": "xl"
+                        }
+                      },
+                      { 
+                        "type": "body",
+                        "settings": {
+                          "text": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut</p>"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column-card",
+                    "settings": {"background_color": "#FFF"},
+                    "blocks": [
+                      { 
+                        "type": "subheading",
+                        "settings": {
+                          "text": "<p>Heading</p>",
+                          "variant": "xl"
+                        }
+                      },
+                      { 
+                        "type": "body",
+                        "settings": {
+                          "text": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut</p>"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column-card",
+                    "settings": {"background_color": "#FFF"},
+                    "blocks": [
+                      { 
+                        "type": "subheading",
+                        "settings": {
+                          "text": "<p>Heading</p>",
+                          "variant": "xl"
+                        }
+                      },
+                      { 
+                        "type": "body",
+                        "settings": {
+                          "text": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut</p>"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "column-card",
+                    "settings": {"background_color": "#FFF"},
+                    "blocks": [
+                      { 
+                        "type": "subheading",
+                        "settings": {
+                          "text": "<p>Heading</p>",
+                          "variant": "xl"
+                        }
+                      },
+                      { 
+                        "type": "body",
+                        "settings": {
+                          "text": "<p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut</p>"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

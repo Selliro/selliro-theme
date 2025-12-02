@@ -1,0 +1,106 @@
+{%- comment -%}
+  Column Card Theme Block
+  Theme block version of multicolumn card that supports nested theme blocks
+  
+  This allows nesting icon-text and other theme blocks inside the card
+{%- endcomment -%}
+
+{%- liquid
+  assign card_background_color = section.settings.card_background_color
+  assign column_count = block.settings.column_count | default: 3
+-%}
+
+{%- case column_count -%}
+  {%- when 1 -%}
+    {%- assign grid_cols = 'tw-grid-cols-1 small:tw-grid-cols-1' -%}
+  {%- when 2 -%}
+    {%- assign grid_cols = 'tw-grid-cols-1 small:tw-grid-cols-2' -%}
+  {%- when 3 -%}
+    {%- assign grid_cols = 'tw-grid-cols-1 small:tw-grid-cols-3' -%}
+  {%- when 4 -%}
+    {%- assign grid_cols = 'tw-grid-cols-1 small:tw-grid-cols-4' -%}
+  {%- else -%}
+    {%- assign grid_cols = 'tw-grid-cols-1 small:tw-grid-cols-3' -%}
+{%- endcase -%}
+
+<div class="column-card-list tw-grid {{ grid_cols }} tw-gap-4 {% if block.settings.enable_mobile_carousel %}tw-hidden md:tw-grid{% endif %}">
+  {%- for nested_block in block.blocks -%}
+    {%- render nested_block, section: section, card_background_color: card_background_color %}
+  {%- endfor -%}
+</div>
+
+{% if block.settings.enable_mobile_carousel %}
+<carousel-swiper class="carousel carousel--column-card {% unless section.settings.split_content %}no-split{% endunless %} md:tw-hidden" {{ block.shopify_attributes }}>
+  <script type="application/json">
+    {
+      "slidesPerView": "{{ block.settings.slides_per_view }}",
+      "spaceBetween": 20,
+      "navigation": true,
+      "grabCursor": true
+    }
+  </script>
+  
+  <div class="swiper carousel__swiper">
+    <div class="swiper-wrapper carousel__wrapper">
+      {%- for nested_block in block.blocks -%}
+        <div class="swiper-slide carousel__slide tw-h-auto tw-flex">
+        {%- render nested_block, section: section, card_background_color: card_background_color %}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+  {%  render 'swiper-navigation' %}
+</carousel-swiper>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Column Card List",
+  "blocks": [
+    { "type": "column-card" }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "column_count",
+      "label": "Number of columns",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "info": "Number of columns in the grid layout"
+    },
+    {
+      "type": "header",
+      "content": "Carousel settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_carousel",
+      "label": "Carousel on mobile",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view",
+      "label": "Slides per view",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 1,
+      "visible_if": "{{ block.settings.enable_mobile_carousel }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Column Card List",
+      "blocks": [
+        {
+          "type": "column-card"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

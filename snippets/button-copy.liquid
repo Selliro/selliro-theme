@@ -1,0 +1,116 @@
+{%- comment -%}
+  Button Component
+  Unified button component with variant support
+  Supports: 'primary', 'secondary', 'tertiary'
+  
+  Accepts:
+  - label: String
+  - link: URL
+  - variant: String (optional, 'primary', 'secondary', 'tertiary', default: 'primary')
+  - secondary_color: String (optional, 'white' or 'blue', only for secondary variant, default: 'white')
+  - tertiary_color: String (optional, hex color code, only for tertiary variant, default: '#358282')
+  - tertiary_hover_color: String (optional, hex color code, only for tertiary variant)
+  - full_width: Boolean (optional, if true, button will take full width of container)
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- liquid
+  assign variant = variant | default: 'primary'
+  assign full_width = full_width | default: false
+  if button_id != blank
+    assign block_id = button_id | append: '-' | append: block.id
+  else
+    assign block_id = block.id
+  endif
+  
+  if full_width
+    assign flex_class = 'tw-flex tw-w-full'
+  else
+    assign flex_class = 'tw-inline-flex'
+  endif
+  
+  case variant
+    when 'secondary'
+      assign secondary_color = secondary_color | default: 'white'
+      if secondary_color == 'blue'
+        assign button_classes = flex_class | append: ' tw-items-center tw-justify-center tw-rounded-full tw-px-6 tw-py-3 tw-border tw-border-ah-navy tw-text-ah-navy hover:tw-bg-ah-navy hover:tw-text-white tw-font-bold tw-transition-colors tw-duration-300 tw-no-underline tw-text-base tw-min-h-[48px] tw-min-w-[100px]'
+      else
+        assign button_classes = flex_class | append: ' tw-items-center tw-justify-center tw-rounded-full tw-px-6 tw-py-3 tw-border tw-border-white tw-text-white hover:tw-bg-white hover:tw-text-ah-navy tw-font-bold tw-transition-colors tw-duration-300 tw-no-underline tw-text-base tw-min-h-[48px] tw-min-w-[100px]'
+      endif
+    when 'tertiary'
+      assign tertiary_color = tertiary_color | default: '#358282'
+      assign tertiary_hover_color = tertiary_hover_color | default: '#52C3C2'
+      assign button_classes = flex_class | append: ' tw-items-center tw-gap-0.5 tw-text-base tw-font-bold tw-transition-colors tw-no-underline'
+    else
+      assign button_classes = 'primary-btn ' | append: flex_class | append: ' tw-items-center tw-justify-center tw-rounded-full tw-px-6 tw-py-3 tw-bg-ah-navy tw-text-white tw-font-bold tw-transition-colors tw-duration-300 tw-no-underline tw-text-base tw-min-h-[48px] tw-min-w-[100px] tw-relative tw-overflow-hidden'
+  endcase
+-%}
+
+{%- if variant == 'primary' -%}
+<style>
+  .primary-btn {
+    position: relative;
+  }
+  .primary-btn span {
+    position: relative;
+    z-index: 1;
+    transition: color 0.3s ease-in-out;
+  }
+  .primary-btn::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: #52C3C2;
+    transition: height 0.3s ease-in-out;
+    z-index: 0;
+    border-radius: inherit;
+  }
+  .primary-btn:hover::before {
+    height: 100%;
+  }
+</style>
+{%- endif -%}
+
+{%- if variant == 'tertiary' and tertiary_color != blank -%}
+<style>
+  {%- if tertiary_hover_color != blank -%}
+  #{{block_id}}.tertiary-btn-hover:hover {
+    color: {{ tertiary_hover_color }} !important;
+  }
+  #{{block_id}}.tertiary-btn-hover:hover svg path {
+    fill: {{ tertiary_hover_color }} !important;
+  }
+  {%- endif -%}
+  #{{block_id}}.tertiary-btn-hover svg path {
+    fill: {{ tertiary_color }} !important;
+  }
+  #{{block_id}}.tertiary-btn-hover svg {
+    transition: transform 0.2s ease-in-out;
+  }
+  #{{block_id}}.tertiary-btn-hover:hover svg {
+    transform: translateX(8px);
+  }
+</style>
+{%- endif -%}
+
+{%- if label != blank and link != blank -%}
+  <a id="{{block_id}}"
+    href="{{ link }}" 
+    class="{{ button_classes}}
+    {% if variant == 'tertiary' and tertiary_color != blank %} tertiary-btn-hover{% endif %}
+     tw-tracking-[-0.16px]"
+    {% if variant == 'tertiary' and tertiary_color != blank %}style="color: {{ tertiary_color }};"{% endif %}
+    {% if link contains 'http' %}rel="noopener"{% endif %}
+    {{ block_shopify_attributes }}
+  >
+    <span class="tw-leading-[20px]">{{ label }}</span>
+    {%- if variant == 'tertiary' -%}
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.30644 5.5C6.89223 5.5 6.55644 5.83579 6.55644 6.25C6.55644 6.66421 6.89223 7 7.30644 7H12.5669L5.5976 13.9693C5.30471 14.2622 5.30471 14.7371 5.5976 15.0299C5.89049 15.3228 6.36537 15.3228 6.65826 15.0299L13.6275 8.06069V13.3211C13.6275 13.7353 13.9633 14.0711 14.3775 14.0711C14.7917 14.0711 15.1275 13.7353 15.1275 13.3211V6.25C15.1275 6.14102 15.1043 6.03747 15.0625 5.94404C15.034 5.88021 14.9961 5.81955 14.9489 5.76414C14.8817 5.68521 14.7985 5.62038 14.7042 5.5747C14.6055 5.52684 14.4946 5.5 14.3775 5.5H7.30644Z" fill="#358282"/>
+      </svg>
+    {%- endif -%}
+  </a>
+{%- endif -%}

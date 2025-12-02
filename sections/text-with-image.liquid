@@ -1,0 +1,400 @@
+{%- comment -%}
+  Text With Image Section
+  
+  Displays text content (caption, heading, description, buttons) alongside an image.
+  Responsive layout:
+  - Below 1200px: Column (image top, text bottom)
+  - From 1200px: Row (text left, image right)
+{%- endcomment -%}
+
+{%- liquid
+  assign desktop_image = section.settings.desktop_image
+  assign mobile_image = section.settings.mobile_image
+  assign layout_type = section.settings.layout_type | default: 'full'
+  assign icon_max_width = section.settings.icon_max_width
+  assign desktop_aspect_ratio = section.settings.desktop_aspect_ratio | default: '1.5'
+  assign mobile_aspect_ratio = section.settings.mobile_aspect_ratio | default: '2.37'
+  assign icon_rounded = section.settings.icon_rounded | default: true
+  assign flex_layout = section.settings.flex_layout | default: '50-50'
+  assign add_top_padding = section.settings.add_top_padding | default: false
+  assign add_bottom_padding = section.settings.add_bottom_padding | default: false
+  assign cards_show_border = section.settings.cards_show_border
+  assign background_color = section.settings.background_color
+  assign section_padding_top = section.settings.section_padding_top | default: false
+  assign section_padding_bottom = section.settings.section_padding_bottom | default: false
+  assign show_content_padding = section.settings.show_content_padding 
+  assign custom_content_width = section.settings.custom_content_width
+  assign video_url = section.settings.video_url
+  assign video_source = section.settings.video_source | default: 'cdn'
+  assign video_poster = section.settings.video_poster
+  assign video_desktop_aspect_ratio = section.settings.video_desktop_aspect_ratio | default: '1.19'
+  assign video_mobile_aspect_ratio = section.settings.video_mobile_aspect_ratio | default: '1.4'
+-%}
+
+<style>
+  /* Add border radius 12px to column-card elements in this section */
+  .text-with-image .image-with-text-columns .column-card {
+    border-radius: 12px;
+  }
+  .image-with-text__block  .autoplay-text__subheading .subheading__subheading-md{
+    padding-bottom: 20px;
+  }
+
+  .text-with-image__wrapper[data-flex-layout="49-51"] .text-with-image__content .image-with-text__block{
+      min-height: 430px;
+    }
+    .text-with-image .column-card{
+    padding: 0;
+  }
+    .text-with-image .image-with-text__block .column-card-list .column-card {
+    padding: 8px !important;
+  }
+
+  @media(min-width: 768px) {
+    .text-with-image__wrapper .image-with-text__block .column-card-list .column-card{
+      max-width: 200px;
+    }
+    .text-with-image__wrapper .image-with-text__block .column-card-list{
+      max-width: fit-content;
+    }
+  }
+  .text-with-image .text-with-image__content .column-card-list {
+    margin-bottom: 44px;
+  }
+
+  @media (min-width: 1024px) {
+    .text-with-image__wrapper[data-flex-layout="49-51"] .text-with-image__content .image-with-text__block{
+      min-height: 561px;
+    }
+    .text-with-image__wrapper[data-flex-layout="49-51"] .text-with-image__image,
+    .text-with-image__wrapper[data-flex-layout="49-51"] .text-with-image__video {
+      flex: 0 0 51%;
+      min-width: 0;
+    }
+    .text-with-image__wrapper[data-flex-layout="49-51"] .text-with-image__content {
+      flex: 0 0 49%;
+      min-width: 0;
+    }
+
+    .text-with-image .text-with-image__content .column-card-list {
+    margin-bottom: 0;
+  }
+    .text-with-image .image-with-text__block .column-card-list .column-card {
+      padding: 16px !important; 
+    }
+    {%- if custom_content_width != blank -%}
+      #{{section.id}} .text-with-image__content {
+      max-width: {{ custom_content_width }} !important;
+    }
+    {%- endif -%}
+    .text-with-image__content {
+      padding-left: 64px
+    }
+  }
+
+  {% if section.settings.max_height_mobile != blank %}
+    #{{section.id}} .text-with-image__wrapper {
+      height: {{ section.settings.max_height_mobile }}px;
+    }
+  {% endif %}
+
+  {% if section.settings.max_height_desktop != blank %}
+    @media (min-width: 1024px) {
+      #{{section.id}} .text-with-image__wrapper {
+        height: {{ section.settings.max_height_desktop }}px;
+      }
+    }
+  {% endif %}
+</style>
+<style>
+  @media(max-width: 1024px) {
+    .auto-text-section-wrapper .text-with-image__wrapper { 
+      gap: 16px !important;
+    }
+  }
+</style>
+
+
+  <div class="text-with-image__container {{ section.settings.parent_class }} {% if add_top_padding %} section-padding-top{% endif %} {% if add_bottom_padding %}section-padding-bottom{% endif %}" {% if background_color != blank %} style="background-color: {{ background_color }};"{% endif %}>
+    
+    <div id="{{section.id}}" class="text-with-image__wrapper
+     tw-flex tw-flex-col tw-gap-y-8 tw-gap-x-4 tw-items-center tw-justify-between md:tw-flex-row" 
+     data-flex-layout="{{ flex_layout }}"
+     >
+      <div class="text-with-image__image tw-w-full md:tw-order-2 {% if flex_layout == '50-50' %}md:tw-w-1/2{% elsif flex_layout == '40-60' %}md:tw-w-3/5{% endif %}">
+        {%- if desktop_image != blank -%}
+            {%- render 'image',
+              desktop_image: desktop_image,
+              mobile_image: mobile_image,
+              image_id: section.id,
+              layout_type: layout_type,
+              icon_max_width: icon_max_width,
+              desktop_aspect_ratio: desktop_aspect_ratio,
+              mobile_aspect_ratio: mobile_aspect_ratio,
+              icon_rounded: icon_rounded,
+              parent_class: 'text-with-image'
+            -%}
+          {%- elsif video_url != blank -%}
+              {%- render 'video',
+              video_url: video_url,
+              video_source: video_source,
+              fill: true,
+              poster_image: video_poster,
+              video_id: section.id,
+              autoplay:section.settings.video_autoplay,
+              controls: section.settings.video_controls,
+              loop: section.settings.video_loop,
+              muted: section.settings.video_muted,
+              parent_class: 'text-with-image',
+            -%}
+ 
+        {%- endif -%}
+      </div>
+      
+      <div id="{{section.id}}" class="tw-h-[-webkit-fill-available] text-with-image__content tw-w-full {% if flex_layout == '50-50' %}md:tw-w-1/2{% elsif flex_layout == '40-60' %}md:tw-w-2/5{% endif %} tw-flex tw-flex-col tw-px-[20px] {% if show_content_padding %} md:tw-py-[96px]{% endif %} {% if custom_content_width != blank %} data-custom-width='{{ custom_content_width }}'{% endif %}" >
+        <div class="image-with-text__block tw-gap-[32px] {% if cards_show_border %} tw-border tw-border-slate-200{% endif %} tw-flex tw-flex-col  tw-h-full">
+          {%- for block in section.blocks -%}
+            {%- if block.type == '@app' -%}
+              {%- render block %}
+            {%- else -%}
+              {%- render block, section: section %}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% schema %}
+{
+  "name": "Text With Image",
+  "tag": "section",
+  "class": "section text-with-image section-container-wide",
+  "settings": [
+    {
+      "type": "text",
+      "id": "parent_class",
+      "label": "Parent class",
+      "info": "Optional parent class for the section"
+    },
+    {
+      "type": "header",
+      "content": "Background Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "info": "Optional background color for the section"
+    },
+    {
+      "type": "header",
+      "content": "Image Settings"
+    },
+    {
+      "type": "select",
+      "id": "layout_type",
+      "label": "Layout type",
+      "options": [
+        {
+          "value": "icon",
+          "label": "Icon (centered, max width)"
+        },
+        {
+          "value": "full",
+          "label": "Full (fills container)"
+        }
+      ],
+      "default": "full",
+      "info": "Set in preset: 'icon' for icons, 'full' for background images"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop Image",
+      "info": "Recommended: 100x100px"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image",
+      "info": "Recommended: 100x100px",
+      "visible_if": "{{ section.settings.layout_type == 'full' }}"
+    },
+    {
+      "type": "text",
+      "id": "icon_max_width",
+      "label": "Icon max width",
+      "info": "Max width of the icon/image in pixels (e.g., 100)",
+      "default": "100",
+      "visible_if": "{{ section.settings.layout_type == 'icon' }}"
+    },
+    {
+      "type": "text",
+      "id": "desktop_aspect_ratio",
+      "label": "Desktop aspect ratio",
+      "info": "Aspect ratio of the icon/image (e.g., 1 for square, 1.5 for 3:2, 0.75 for 4:3)",
+      "default": "1.5"
+    },
+    {
+      "type": "text",
+      "id": "mobile_aspect_ratio",
+      "label": "Mobile aspect ratio",
+      "info": "Aspect ratio of the mobile image (e.g., 1 for square, 1.5 for 3:2, 0.75 for 4:3)",
+      "default": "2.37",
+      "visible_if": "{{ section.settings.layout_type == 'full' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "icon_rounded",
+      "label": "Icon rounded corners",
+      "default": true,
+      "info": "Enable rounded corners on the icon/image container"
+    },
+    {
+      "type": "header",
+      "content": "Video Settings"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "Video URL (CDN, YouTube, or Vimeo). Video will show if no image is set."
+    },
+    {
+      "type": "select",
+      "id": "video_source",
+      "label": "Video source",
+      "options": [
+        {
+          "value": "cdn",
+          "label": "CDN/Direct URL"
+        },
+        {
+          "value": "youtube",
+          "label": "YouTube"
+        },
+        {
+          "value": "vimeo",
+          "label": "Vimeo"
+        }
+      ],
+      "default": "cdn",
+      "info": "Select the video source type"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_poster",
+      "label": "Video poster image",
+      "info": "Optional poster/thumbnail image for the video"
+    },
+    {
+      "type": "header",
+      "content": "Player Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Autoplay",
+      "default": false,
+      "info": "Video will start playing automatically when page loads"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_controls",
+      "label": "Show controls",
+      "default": false,
+      "info": "Show video player controls (play, pause, volume, etc.)"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_loop",
+      "label": "Loop",
+      "default": false,
+      "info": "Video will loop continuously"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_muted",
+      "label": "Muted",
+      "default": false,
+      "info": "Video will be muted by default"
+    },
+    {
+      "type": "text",
+      "id": "max_height_desktop",
+      "label": "Video max height desktop",
+      "info": "Video max height desktop"
+    },
+    {
+      "type": "text",
+      "id": "max_height_mobile",
+      "label": "Video max height mobile",
+      "info": "Video max height mobile"
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "select",
+      "id": "flex_layout",
+      "label": "Flex Layout",
+      "default": "50-50",
+      "options": [
+        { "value": "50-50", "label": "50-50 (Equal Split)" },
+        { "value": "40-60", "label": "40-60 (Content 40%, Image 60%)" },
+        { "value": "49-51", "label": "49-51 (Content 49%, Image 51%)" }
+      ],
+      "info": "Choose the flex layout distribution for desktop view (1200px and above)"
+    },
+    {
+      "type": "text",
+      "id": "custom_content_width",
+      "label": "Custom content width (from 1200px)",
+      "info": "Custom width for content area on desktop (e.g., 500px, 50%, 600px). Leave blank to use flex layout widths."
+    },
+    {
+        "type": "checkbox",
+        "id": "add_top_padding",
+        "label": "Add top padding",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "add_bottom_padding",
+        "label": "Add bottom padding",
+        "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_content_padding",
+      "label": "Show padding top and bottom for content",
+      "default": false,
+      "info": "Adds xl:tw-py-20 padding to the content area on desktop"
+    }
+  ],
+ "blocks": [
+    { "type": "column-card"},
+    { "type": "column-card-list" },
+    { "type": "autoplay-text-wrapper" },
+    { "type": "icon-text" },
+    { "type": "icon-text-list"}
+  ],
+  "presets": [
+    {
+      "name": "Text With Image",
+      "blocks": [
+        { "type": "column-card", "settings": { "background_color": "#ffffff"} },
+        { "type": "column-card-list" ,"settings": { "column_count": 3 }, "blocks": [
+          { "type": "column-card", "settings": { "background_color": "#ffffff", "border_radius": 12 } },
+          { "type": "column-card", "settings": { "background_color": "#ffffff", "border_radius": 12 } },
+          { "type": "column-card", "settings": { "background_color": "#ffffff", "border_radius": 12 } }
+        ] }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

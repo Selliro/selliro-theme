@@ -1,0 +1,68 @@
+{%- comment -%}
+  Carousel Wrapper Snippet
+  Renders a Swiper carousel with blocks as slides
+  
+  Accepts:
+  - section_id: String (unique ID for this carousel instance)
+  - mobile_slides_per_view: String or Number
+  - desktop_slides_per_view: String or Number
+  - mobile_space_between: Number
+  - desktop_space_between: Number
+  - show_progress: Boolean (default: false)
+  - progress_color: String (Tailwind color class, default: 'tw-bg-slate-400')
+  - carousel_class: String (additional BEM classes)
+  - blocks: Array of block objects to render as slides
+{%- endcomment -%}
+
+{%- liquid
+  assign show_progress = show_progress | default: false
+  assign progress_color = progress_color | default: 'tw-bg-slate-400'
+  assign carousel_class = carousel_class | default: ''
+  assign direction = direction
+-%}
+<carousel-swiper class="carousel {{ carousel_class }}">
+  <script type="application/json">
+    {
+      "slidesPerView": "{{ mobile_slides_per_view }}",
+      {%  if mobile_space_between != blank %}
+      "spaceBetween": {{ mobile_space_between }},
+      {%  endif  %}
+      "centeredSlides": false,
+      "grabCursor": true,
+      "freeMode": false,
+      {%  if direction == 'vertical' %}
+        "direction": "vertical",
+      {%  endif  %}
+      "breakpoints": {
+        "768": {
+          "slidesPerView": "{{ tablet_slides_per_view  | default: '3.2' }}",
+          "spaceBetween": "{{ tablet_space_between | default: 32 }}"
+        },
+        "1200": {
+          "slidesPerView": "{{ desktop_slides_per_view }}"
+          {%  if desktop_space_between != blank %}
+          ,"spaceBetween": {{ desktop_space_between }}
+          {%  endif  %}
+        }
+      }{%- if show_progress -%},"progressBarSelector": ".carousel-progress__bar--{{ section_id }}"{%- endif -%}
+    }
+  </script>
+  
+  <div class="swiper carousel__swiper">
+    <div class="swiper-wrapper carousel__wrapper">
+      {%  assign slider_items = slider_items | split: '::slider-limiter' %}
+      {%- for slider_item in slider_items -%}
+        <div class="swiper-slide carousel__slide tw-h-auto">
+          {{ slider_item }}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+  
+  {%- if show_progress -%}
+    <div class="carousel-progress tw-mt-8 tw-w-full tw-h-[5px] tw-bg-slate-200 tw-rounded-full tw-overflow-hidden">
+      <div class="carousel-progress__bar carousel-progress__bar--{{ section_id }} {{ progress_color }} tw-h-full tw-rounded-full tw-transition-all tw-duration-300" style="width: 25%;"></div>
+    </div>
+  {%- endif -%}
+</carousel-swiper>
+
