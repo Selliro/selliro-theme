@@ -1,0 +1,131 @@
+{%- comment -%}
+  Header Desktop Menu
+  - Renders the main desktop navigation with support for:
+    - Regular items
+    - Nested menus (multi-level) when a link has children and is NOT a megamenu trigger
+    - Megamenu triggers when link URL contains #megamenu-{id}
+
+  Expected params:
+  - desktop_menu (linklist handle)
+{%- endcomment -%}
+
+{%- if desktop_menu != blank and linklists[desktop_menu].links.size > 0 -%}
+  <nav class="site-header__nav tw-hidden lg:tw-flex tw-flex-1 tw-items-center tw-justify-center">
+    <ul class="tw-flex tw-gap-6 tw-items-center">
+      {%- for link in linklists[desktop_menu].links -%}
+        {%- liquid
+          assign is_megamenu_trigger = false
+          if link.url contains '#megamenu-'
+            assign is_megamenu_trigger = true
+            assign megamenu_id = link.url | split: '#megamenu-' | last
+          endif
+        -%}
+        <li
+          class="site-header__nav-item tw-relative"
+          {% if is_megamenu_trigger %}
+            data-megamenu-trigger="{{ megamenu_id }}"
+          {% elsif link.links.size > 0 %}
+            data-nested-menu-parent
+            data-menu-toggle
+          {% endif %}
+        >
+          <a
+            href="{{ link.url }}"
+            class="
+            {%  if link.links.size > 0 and is_megamenu_trigger == false %}
+              site-header__nav--nested-menu-trigger
+            {% endif %}
+            site-header__nav-link tw-inline-flex tw-items-center tw-text-base tw-font-medium tw-text-[#323e46] hover:tw-text-[#00a3a3] tw-transition-colors"
+          >
+            <span>{{ link.title }}</span>
+            {%- if link.url contains '/all' -%}
+              <span class="tw-inline-flex tw-ml-1 tw-relative tw-mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12" fill="none">
+                  <path d="M5.7998 6.2H8.7998V8.9998H5.7998V11.9998H3V8.9998H0V6.2H3V3.2H5.7998V6.2Z" fill="#52C3C2"/>
+                  <path d="M13.4779 2.52246H16.0004V4.87695H13.4779V7.40039H11.1234V4.87695H8.59998V2.52246H11.1234V0H13.4779V2.52246Z" fill="#BCC332"/>
+                  </svg>
+
+              </span>
+            {%- elsif link.links.size > 0 or is_megamenu_trigger == true -%}
+              <span class="header-icon tw-inline-block tw-text-xs tw-text-[#6b7280]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M14 8L10 12L6 8" stroke="#092846" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            {%- endif -%}
+          </a>
+
+          {%- if link.links.size > 0 and is_megamenu_trigger == false -%}
+            <div
+              data-nested-menu
+              class="site-header__nested-menu  site-header__nav--nested-menu-panel tw-absolute tw-left-1/2 tw-top-full tw-z-[60] tw-mt-3 tw-w-[520px] lg:tw-w-max tw-max-w-[80vw] lg:tw-max-w-max tw--translate-x-1/2 tw-bg-white tw-shadow-lg tw-p-6 tw-hidden"
+            >
+              <div class="tw-grid tw-grid-cols-2 lg:tw-grid-cols-1 tw-gap-2">
+                {%- for child_link in link.links -%}
+                  <div class="tw-flex tw-flex-col tw-gap-1.5">
+                    <a
+                      href="{{ child_link.url }}"
+                      class="tw-text-sm tw-font-medium tw-text-[#092846] tw-font-medium tw-text-[#071b2f] hover:tw-text-[#00a3a3] tw-transition-colors"
+                    >
+                      {{ child_link.title }}
+                    </a>
+
+                    {%- if child_link.links.size > 0 -%}
+                      <ul class="tw-flex tw-flex-col tw-gap-1 tw-mt-1">
+                        {%- for grandchild in child_link.links -%}
+                          <li>
+                            <a
+                              href="{{ grandchild.url }}"
+                              class="tw-text-sm tw-text-[#092846] hover:tw-text-[#00a3a3] tw-transition-colors"
+                            >
+                              {{ grandchild.title }}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </nav>
+  {%- for link in linklists[desktop_menu].links -%}
+    {%- liquid
+      assign is_megamenu_trigger = false
+      if link.url contains '#megamenu-'
+        assign is_megamenu_trigger = true
+        assign megamenu_id = link.url | split: '#megamenu-' | last
+      endif
+    -%}
+    {%- if is_megamenu_trigger -%}
+      {%- liquid
+        assign megamenu_id = link.url | split: '#megamenu-' | last
+      -%}
+      <div
+        id="megamenu-{{ megamenu_id | escape }}"
+        class="
+          site-header__megamenu-placeholder
+          tw-absolute tw-left-1/2
+          tw-top-full tw-z-[60]
+          tw-w-full
+          tw--translate-x-1/2
+          tw-bg-white
+          tw-shadow-[0_18px_45px_rgba(15,23,42,0.1)]
+          tw-hidden
+          tw-overflow-hidden
+        "
+        data-megamenu-desktop
+        data-megamenu-id="{{ megamenu_id | escape }}"
+      >
+        <div class="tw-p-6 tw-text-xs tw-text-[#6b7280]">
+          Megamenu content for ID "{{ megamenu_id }}" will appear here once wired via JavaScript.
+        </div>
+      </div>
+    {%- endif -%}
+  {% endfor %}
+
+{%- endif -%}

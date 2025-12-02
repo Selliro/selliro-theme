@@ -1,0 +1,216 @@
+{%- comment -%}
+  Blog Posts Block
+  Renders blog posts as simple cards with image, title, and Read More button
+{%- endcomment -%}
+
+{%- liquid
+  assign selected_blog = section.settings.blog
+  assign posts_count = section.settings.posts_count | default: 3
+  assign grid_columns = section.settings.grid_columns | default: 3
+  assign enable_desktop_carousel = section.settings.enable_desktop_carousel | default: false
+  assign cards_show_border = section.settings.cards_show_border | default: false
+  
+  assign blog_object = null
+  if selected_blog != blank
+    assign blog_handle = selected_blog
+    assign blog_object = blogs[blog_handle]
+  endif
+  
+  assign grid_classes = 'tw-grid tw-grid-cols-1 tw-gap-5 md-small:tw-grid-cols-2 md:tw-grid-cols-3'
+  case grid_columns
+    when 1
+      assign grid_classes = grid_classes | append: ' lg:tw-grid-cols-1'
+    when 2
+      assign grid_classes = grid_classes | append: ' lg:tw-grid-cols-2'
+    when 3
+      assign grid_classes = grid_classes | append: ' lg:tw-grid-cols-3'
+    when 4
+      assign grid_classes = grid_classes | append: ' lg:tw-grid-cols-4'
+  endcase
+-%}
+   {%  liquid 
+      assign tertiary_color = tertiary_color | default: '#358282'
+      assign tertiary_hover_color = tertiary_hover_color | default: '#52C3C2'
+    %}
+
+<style>
+  .blog-posts__carousel .carousel__slide{
+    height: auto !important; 
+  }
+  #{{section.id}} .tertiary-btn-hover:hover {
+    color: {{ tertiary_hover_color }} !important;
+  }
+  #{{section.id}} .tertiary-btn-hover:hover svg path {
+    fill: {{ tertiary_hover_color }} !important;
+  }
+  #{{section.id}} .tertiary-btn-hover svg path {
+    fill: {{ tertiary_color }} !important;
+  }
+  #{{section.id}} .tertiary-btn-hover svg {
+    transition: transform 0.2s ease-in-out;
+  }
+  #{{section.id}} .tertiary-btn-hover:hover svg {
+    transform: translateX(8px);
+  }
+  
+  </style>
+
+{%- if blog_object != blank -%}
+  {%- comment -%} Carousel (Mobile always, Desktop if enabled) {%- endcomment -%}
+  <div class="blog-posts__carousel {% unless enable_desktop_carousel %}lg:tw-hidden{% endunless %}" {{ block.shopify_attributes }}>
+    <style>
+      #{{ block.id }} .carousel__nav-button.swiper-button-disabled,
+      #{{ block.id }} .carousel__nav-button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .blog-posts__carousel .blog-card__content .heading__blog_heading{
+        font-weight: 500;
+        line-height: 110%;
+      }
+    </style>
+    <carousel-swiper class="carousel carousel--blog-posts">
+      <script type="application/json">
+        {
+          "slidesPerView": "auto",
+          "spaceBetween": 32,
+          "centeredSlides": false,
+          "grabCursor": true,
+          "navigation": true,
+          "breakpoints": {
+            "1024": {
+              "slidesPerView": "{{ grid_columns }}",
+              "spaceBetween": 32
+            }
+          }
+        }
+      </script>
+
+      <div class="swiper carousel__swiper">
+        <div class="swiper-wrapper carousel__wrapper">
+          {%- for article in blog_object.articles limit: posts_count -%}
+            <div class="swiper-slide carousel__slide">
+              <div class="blog-card__wrapper tw-flex tw-flex-col tw-h-full tw-justify-between tw-gap-6">
+              {%- liquid
+                assign card_classes = 'blog-card tw-no-underline tw-text-inherit'
+                if cards_show_border
+                  assign card_classes = card_classes | append: ' tw-border tw-border-slate-200'
+                endif
+                assign card_classes = card_classes | append: ' tw-overflow-hidden  tw-bg-white'
+              -%}
+              <a href="{{ article.url }}" class="{{ card_classes }}">
+                {%- comment -%} Image (Article featured image) {%- endcomment -%}
+                <div class="blog-card__image tw-relative tw-w-full tw-overflow-hidden tw-rounded-[12px] tw-flex tw-flex-col tw-gap-4">
+                  {%- if article.image -%}
+                    {%- render 'image',
+                      desktop_image: article.image,
+                      mobile_image: article.image,
+                      image_id: article.id,
+                      layout_type: 'full',
+                      desktop_aspect_ratio: '1.8',
+                      mobile_aspect_ratio: '1.91',
+                      parent_class: 'blog-card',
+                      block_shopify_attributes: ''
+                    -%}
+                  {%- else -%}
+                    <div class="tw-w-full tw-h-[200px] tw-bg-slate-200"></div>
+                  {%- endif -%}
+                  
+                  {%- comment -%} Tag (First tag if available) {%- endcomment -%}
+                  {%- if article.tags.size > 0 -%}
+                    <div class="blog-card__tag tw-absolute tw-top-[18px] tw-left-[18px] md-small:tw-top-[24px] md-small:tw-left-[24px] tw-inline-flex tw-items-center tw-px-3 tw-py-1 tw-rounded-[5px] tw-text-sm tw-font-normal tw-bg-white tw-opacity[0.8] tw-backdrop-blur-sm" style="color: #092846;">
+                      {{ article.tags.first }}
+                    </div>
+                  {%- endif -%}
+                  <div class="blog-card__heading">
+                  {%- render 'subheading',
+                    text: article.title,
+                    variant: 'xl',
+                    color: '#000',
+                    block_shopify_attributes: ''
+                  -%}
+                  </div>
+                </div>
+                {%- comment -%} Content (Heading and Button below image) {%- endcomment -%}
+                  {%- render 'button',
+                    label: 'Read More',
+                    link: article.url,
+                    variant: 'tertiary',
+                    tertiary_color: '#007867',
+                    block_shopify_attributes: '',
+                    block: article
+                  -%}
+              </a>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      
+      {%- comment -%} Navigation Buttons Container (Created dynamically by carousel-swiper.js) {%- endcomment -%}
+    </carousel-swiper>
+  </div>
+  
+  {%- comment -%} Desktop Grid (Only if carousel disabled) {%- endcomment -%}
+  {%- unless enable_desktop_carousel -%}
+    <div class="blog-posts-grid tw-hidden lg:tw-grid {{ grid_classes }}">
+      {%- for article in blog_object.articles limit: posts_count -%}
+        {%- liquid
+          assign card_classes = 'blog-card tw-no-underline tw-text-inherit'
+          if cards_show_border
+            assign card_classes = card_classes | append: ' tw-border tw-border-slate-200'
+          endif
+          assign card_classes = card_classes | append: ' tw-overflow-hidden tw-h-full tw-flex tw-flex-col tw-bg-white'
+        -%}
+        <div class="{{ card_classes }}" onclick="window.location.href = '{{ article.url }}'" role="link" tabindex="0">
+          
+          {%- comment -%} Image (Article featured image) {%- endcomment -%}
+          <div class="blog-card__image tw-relative tw-w-full tw-overflow-hidden tw-rounded-[12px]">
+            {%- if article.image -%}
+              {%- render 'image',
+                desktop_image: article.image,
+                mobile_image: article.image,
+                image_id: article.id,
+                layout_type: 'full',
+                desktop_aspect_ratio: '1.8',
+                mobile_aspect_ratio: '1.91',
+                parent_class: 'blog-card',
+                block_shopify_attributes: ''
+              -%}
+            {%- else -%}
+              <div class="tw-w-full tw-h-[200px] tw-bg-slate-200"></div>
+            {%- endif -%}
+            
+            {%- comment -%} Tag (First tag if available) {%- endcomment -%}
+            {%- if article.tags.size > 0 -%}
+              <div class="blog-card__tag tw-absolute tw-top-[18px] tw-left-[18px] md-small:tw-top-[24px] md-small:tw-left-[24px] tw-inline-flex tw-items-center tw-px-3 tw-py-1 tw-rounded-[5px] tw-text-sm tw-font-normal tw-bg-white tw-opacity[0.8] tw-backdrop-blur-sm" style="color: #092846;">
+                {{ article.tags.first }}
+              </div>
+            {%- endif -%} 
+            <div class="blog-card__heading">
+            {%- render 'heading',
+              text: article.title,
+              variant: 'xl',
+                color: '#092846',
+                block_shopify_attributes: ''
+              -%}
+            </div>
+          </div>
+
+          {%- comment -%} Content (Heading and Button below image) {%- endcomment -%}
+          <div class="blog-card__content tw-pt-4 ">
+            {%- render 'button',
+              label: 'Read More',
+              link: article.url,
+              variant: 'tertiary',
+              block_shopify_attributes: '',
+              block: article
+            -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endunless -%}
+{%- endif -%}
+
+

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "theme-pull-dev": "shopify theme pull --environment demo_store_listing_theme_pull",
-    "serve-dev": "shopify theme dev --store=rani-st.myshopify.com --port=9292 --ignore=src/*.js --ignore=src/*.scss",
+    "serve-dev": "shopify theme dev --store=whispo-demo.myshopify.com --port=9292 --ignore=src/*.js --ignore=src/*.scss",
     "filter-files": "node files-build.js",
     "build-zip": "shopify theme package",
     "watch": "gulp build && gulp watch",

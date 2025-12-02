@@ -1,0 +1,32 @@
+{%- comment -%}
+  Email Signup Card Snippet
+  
+  Accepts:
+  - email_card_heading: String (e.g., "Join Our Mailing List")
+  - email_placeholder: String (e.g., "name@email.com")
+  - email_button_text: String (e.g., "Subscribe")
+  - email_form_action: URL (form submission endpoint)
+  - block_shopify_attributes: Block attributes for theme editor
+{%- endcomment -%}
+
+<div class="tw-bg-white tw-rounded-3xl tw-p-6 tw-shadow-xl" {{ block_shopify_attributes }}>
+  {%- if email_card_heading != blank -%}
+    <h3 class="tw-text-xl tw-font-bold tw-text-gray-900 tw-mb-5">{{ email_card_heading }}</h3>
+  {%- endif -%}
+  <form action="{{ email_form_action }}" method="post" class="tw-flex tw-flex-col sm:tw-flex-row tw-gap-3">
+    <input 
+      type="email" 
+      name="email" 
+      placeholder="{{ email_placeholder | default: 'name@email.com' }}" 
+      required
+      class="tw-flex-1 tw-px-5 tw-py-3 tw-border tw-border-gray-300 tw-rounded-2xl tw-text-base tw-text-gray-600 placeholder:tw-text-gray-400 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-transparent tw-min-w-0"
+    >
+    <button 
+      type="submit"
+      class="tw-px-7 tw-py-3 tw-bg-[#092846] tw-text-white tw-text-base tw-font-bold tw-rounded-2xl hover:tw-bg-[#0b2a42] tw-transition-colors tw-whitespace-nowrap tw-shrink-0"
+    >
+      {{ email_button_text | default: 'Subscribe' }}
+    </button>
+  </form>
+</div>
+

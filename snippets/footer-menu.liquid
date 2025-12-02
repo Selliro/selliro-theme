@@ -1,0 +1,48 @@
+{%- comment -%}
+  Footer Menu Snippet
+  Renders a single footer menu accordion item
+  
+  Accepts:
+  - menu: Linklist object
+  - menu_heading: String (optional, custom heading for the menu)
+  - menu_id: String (required, unique ID for the accordion)
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- if menu != blank and menu.links.size > 0 -%}
+  <div class="footer-menu tw-border-b tw-border-[#1b4a77]" {{ block_shopify_attributes }}>
+    <button 
+      data-accordion-target="footer-menu-{{ menu_id }}" 
+      aria-expanded="false" 
+      class="footer-menu__button tw-w-full tw-text-left tw-py-[15px] tw-font-bold tw-text-sm tw-leading-6 tw-tracking-wide tw-uppercase tw-text-white tw-flex tw-items-center tw-justify-between tw-relative"
+    >
+      <span class="footer-menu__title">{{ menu_heading | default: menu.title }}</span>
+      <svg class="footer-menu__icon tw-w-6 tw-h-6 tw-transition-transform tw-duration-300 tw-absolute tw-right-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </button>
+    <div id="footer-menu-{{ menu_id }}" hidden class="footer-menu__content tw-pb-4">
+      <ul class="footer-menu__links tw-flex tw-flex-col tw-gap-0">
+        {%- for link in menu.links -%}
+          <li class="footer-menu__item tw-h-8">
+            <a href="{{ link.url }}" class="footer-menu__link tw-text-sm tw-font-medium tw-leading-[18px] tw-tracking-[-0.14px] tw-text-white/80 hover:tw-text-white tw-transition-colors tw-py-[6px] tw-block">
+              {{ link.title }}
+            </a>
+            {%- if link.links.size > 0 -%}
+              <ul class="footer-menu__sublinks tw-flex tw-flex-col tw-gap-0 tw-mt-0 tw-ml-4">
+                {%- for child_link in link.links -%}
+                  <li class="footer-menu__subitem tw-h-8">
+                    <a href="{{ child_link.url }}" class="footer-menu__sublink tw-text-sm tw-font-medium tw-leading-[18px] tw-tracking-[-0.14px] tw-text-white/80 hover:tw-text-white tw-transition-colors tw-py-[6px] tw-block">
+                      {{ child_link.title }}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}
+

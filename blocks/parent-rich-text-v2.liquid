@@ -1,0 +1,50 @@
+{%- comment -%}
+  Parent Rich Text Theme Block
+  Wrapper block that renders nested rich text content blocks
+  Structure matches Figma: Two stacked wrappers with different gaps (20px and 40px)
+  Uses static blocks by ID for first wrapper, renders all other blocks in second wrapper
+{%- endcomment -%}
+
+<style>
+  #{{block.id}} .rich-text__wrapper {
+    padding: 0 20px;
+  }
+  @media(min-width: 768px) {
+    #{{block.id}} .rich-text__wrapper {
+      padding: 0 60px;
+    }
+
+  }
+</style>
+<div id="{{ block.id }}" class="rich-text__wrapper tw-h-full tw-relative">
+    <div class="rich-text__image">
+        {%- content_for "block", type: "image-copy", id: "rich-text-image" -%}
+      </div>
+      <div class="rich-text__content rich-text__content--v2 tw-absolute tw-inset-0 tw-flex tw-items-center tw-justify-left">
+        {%- for nested_block in block.blocks -%}
+            {%- render nested_block, section: section -%}
+        {%- endfor -%}
+      </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Overlay Content",
+  "blocks": [
+    { "type": "parent-rich-text" },
+    { "type": "image-copy" }
+  ],
+  "settings": [],
+  "presets": [
+    {
+      "name": "Overlay Content",
+      "blocks": [
+        { "type": "parent-rich-text" },
+        { "type": "image-copy", "static": true, "id": "rich-text-image", "settings": { "layout_type": "full" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

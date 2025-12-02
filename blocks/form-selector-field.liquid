@@ -1,0 +1,177 @@
+{% doc %}
+  Form selector field block using Flowbite styling.
+  Supports label, select field, error message, and required field indicator.
+
+  @example
+  {% content_for 'block', type: 'form-selector-field', id: 'state' %}
+{% enddoc %}
+
+{%- liquid
+  assign label = block.settings.label | default: ''
+  assign placeholder = block.settings.placeholder | default: 'Select an option'
+  assign field_name = block.settings.field_name | default: ''
+  assign required = block.settings.required | default: false
+  assign error_message = block.settings.error_message | default: ''
+  assign options = block.settings.options | default: ''
+-%}
+
+<div
+  id="shopify-block-{{ block.id }}"
+  class="form-selector-field tw-flex tw-flex-col tw-gap-2 tw-w-full"
+  {{ block.shopify_attributes }}
+>
+  {%- if label != blank -%}
+    <label
+      for="select-{{ block.id }}"
+      class="tw-text-sm tw-font-medium tw-leading-[18px] tw-tracking-[-0.14px] tw-text-black tw-w-full"
+    >
+      {{ label }}
+      {%- if required -%}
+        <span class="tw-text-black-500" aria-label="required"> *</span>
+      {%- endif -%}
+    </label>
+  {%- endif -%}
+
+  <div class="tw-relative tw-w-full">
+    <select
+      data-select-type="selector"
+      id="select-{{ block.id }}"
+      name="{{ field_name }}"
+      {% if required %}required{% endif %}
+      class="tw-w-full tw-h-[42px] tw-border tw-border-slate-500 tw-rounded-xl tw-px-3 tw-py-2 tw-pr-10 tw-text-base tw-leading-[20px] tw-tracking-[-0.16px] tw-bg-white tw-text-body-text tw-outline-none focus:tw-border-slate-500 focus:tw-ring-1 focus:tw-ring-slate-500 disabled:tw-cursor-not-allowed disabled:tw-bg-[#EBEBEB] disabled:tw-text-text-muted tw-appearance-none"
+      aria-describedby="error-{{ block.id }}"
+    >
+      <option value="" disabled selected>{{ placeholder }}</option>
+      {%- if options != blank -%}
+        {%- assign options_array = options | split: ',' -%}
+        {%- for option in options_array -%}
+          {%- assign option_parts = option | split: ':' -%}
+          {%- if option_parts.size == 2 -%}
+            <option value="{{ option_parts[0] | strip }}">{{ option_parts[1] | strip }}</option>
+          {%- else -%}
+            <option value="{{ option | strip }}">{{ option | strip }}</option>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </select>
+    <div class="tw-absolute tw-right-3 tw-top-1/2 tw-transform tw--translate-y-1/2 tw-pointer-events-none tw-w-5 tw-h-5 tw-flex tw-items-center tw-justify-center">
+      <svg class="tw-w-5 tw-h-5 tw-text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </div>
+  </div>
+
+  <div
+    id="error-{{ block.id }}"
+    class="tw-hidden tw-mt-2 tw-text-xs tw-leading-4 tw-text-red-500"
+    role="alert"
+    aria-live="polite"
+    data-error-message="{{ error_message | escape }}"
+  >
+    {{ error_message }}
+  </div>
+</div>
+
+{% stylesheet %}
+  .form-selector-field {
+    gap: 8px;
+  }
+  
+  .form-selector-field label {
+    display: block;
+  }
+  
+  .form-selector-field select:focus {
+    outline: none;
+  }
+  
+  .form-selector-field select option:disabled {
+    color: #62748e;
+  }
+  
+  .form-selector-field select.error {
+    border-color: #ef4444;
+    background-color: #fef2f2;
+  }
+  
+  .form-selector-field select.error:focus {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 1px #fef2f2, 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+  
+  .form-selector-field [role="alert"].show {
+    display: block;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Selector field",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Field settings"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "State"
+    },
+    {
+      "type": "text",
+      "id": "field_name",
+      "label": "Field name",
+      "info": "The name attribute for the select field",
+      "default": "state"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Placeholder",
+      "default": "Select an option",
+      "info": "Text shown when no option is selected"
+    },
+    {
+      "type": "textarea",
+      "id": "options",
+      "label": "Options",
+      "info": "Enter options separated by commas. Use format 'value:Label' for custom labels, or just the value for both. Example: 'AL:Alabama,AK:Alaska,CA:California' or 'Option 1,Option 2,Option 3'",
+      "default": "Option 1,Option 2,Option 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "required",
+      "label": "Required field",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Error message"
+    },
+    {
+      "type": "text",
+      "id": "error_message",
+      "label": "Default error message",
+      "default": "This field is required",
+      "info": "Default error message (xs font size, red color). Can be overridden dynamically via JavaScript validation."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Selector field"
+    },
+    {
+      "name": "Selector field (required)",
+      "settings": {
+        "label": "State",
+        "field_name": "state",
+        "placeholder": "Select an option",
+        "required": true,
+        "options": "AL:Alabama,AK:Alaska,AZ:Arizona,AR:Arkansas,CA:California,CO:Colorado,CT:Connecticut,DE:Delaware,FL:Florida,GA:Georgia"
+      }
+    }
+  ]
+}
+{% endschema %}
+

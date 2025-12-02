@@ -1,0 +1,285 @@
+{%- comment -%}
+  Top Banner Section
+  Horizontal banner with promotional text and investor relations/stock ticker
+  - Dark blue background
+  - Left: Promotional message
+  - Right: Investor Relations link, divider, stock ticker
+{%- endcomment -%}
+
+{%- liquid
+  assign background_color = section.settings.background_color | default: '#092846'
+  assign promotional_text = section.settings.promotional_text
+  assign investor_relations_text = section.settings.investor_relations_text | default: 'Investor Relations'
+  assign investor_relations_link = section.settings.investor_relations_link
+  assign stock_symbol = section.settings.stock_symbol | default: 'ACHO'
+  assign stock_price = section.settings.stock_price | default: '$9.53'
+  assign stock_change = section.settings.stock_change | default: '4.04%'
+  assign stock_change_direction = section.settings.stock_change_direction | default: 'up'
+  assign show_on_mobile = section.settings.show_on_mobile | default: true
+-%}
+
+<style>
+  @keyframes top-banner-marquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  #{{ section.id }} .top-banner__marquee-wrapper {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  #{{ section.id }} .top-banner__marquee-content {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: top-banner-marquee 30s linear infinite;
+  }
+
+  #{{ section.id }} .top-banner__marquee-content:hover {
+    animation-play-state: paused;
+  }
+
+  #{{ section.id }} .top-banner__marquee-fade {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 48px;
+    background: linear-gradient(to right, transparent, {{ background_color }});
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @media (min-width: 1024px) {
+    #{{ section.id }} .top-banner__marquee-wrapper {
+      display: none;
+    }
+  }
+</style>
+
+{%- if show_on_mobile or request.design_mode -%}
+  <div id="{{ section.id }}" class="top-banner tw-w-full" style="background-color: {{ background_color }};">
+    <div class="section-container tw-flex tw-items-center tw-justify-between tw-gap-4 tw-py-4 md:tw-py-0 tw-h-12 md:tw-h-[45px] tw-px-5 md:tw-px-16">
+      {%- comment -%} Promotional Text - Mobile: Marquee, Desktop: Static {%- endcomment -%}
+      <div class="top-banner__promo tw-flex tw-items-center tw-flex-1 tw-min-w-0">
+        {%- if promotional_text != blank -%}
+          {%- comment -%} Mobile: Marquee Text {%- endcomment -%}
+          <div class="top-banner__marquee-wrapper tw-w-full lg:tw-hidden">
+            <div class="top-banner__marquee-content">
+              <span class="tw-text-xs tw-font-medium tw-text-white tw-leading-[16px] tw-tracking-[-0.12px] tw-pr-8">
+                {{ promotional_text }}
+              </span>
+              <span class="tw-text-xs tw-font-medium tw-text-white tw-leading-[16px] tw-tracking-[-0.12px] tw-pr-8" aria-hidden="true">
+                {{ promotional_text }}
+              </span>
+            </div>
+            <div class="top-banner__marquee-fade"></div>
+          </div>
+          {%- comment -%} Desktop: Static Text {%- endcomment -%}
+          <p class="tw-hidden lg:tw-block tw-text-sm tw-font-medium tw-text-white tw-leading-[18px] tw-tracking-[-0.14px]">
+            {{ promotional_text }}
+          </p>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Desktop: Investor Relations & Stock Ticker {%- endcomment -%}
+      <div class="top-banner__nav tw-hidden lg:tw-flex tw-items-center tw-gap-4 tw-shrink-0">
+        {%- comment -%} Investor Relations Link {%- endcomment -%}
+        {%- if investor_relations_link != blank -%}
+          <a 
+            href="{{ investor_relations_link }}" 
+            class="top-banner__link tw-text-base tw-font-medium tw-text-white tw-leading-[20px] tw-tracking-[-0.16px] hover:tw-opacity-80 tw-transition-opacity tw-px-2.5"
+          >
+            {{ investor_relations_text }}
+          </a>
+        {%- else -%}
+          <span class="top-banner__link tw-text-base tw-font-medium tw-text-white tw-leading-[20px] tw-tracking-[-0.16px] tw-px-2.5">
+            {{ investor_relations_text }}
+          </span>
+        {%- endif -%}
+
+        {%- comment -%} Vertical Divider {%- endcomment -%}
+        <div class="top-banner__divider tw-h-4 tw-w-[2px] tw-bg-white tw-opacity-20 tw-shrink-0" aria-hidden="true"></div>
+
+        {%- comment -%} Stock Ticker {%- endcomment -%}
+        <div class="top-banner__stock tw-flex tw-items-center tw-gap-1 tw-px-2.5">
+          <span class="tw-text-base tw-font-medium tw-text-white tw-leading-[20px] tw-tracking-[-0.16px]">
+            {{ stock_symbol }} {{ stock_price }}
+          </span>
+          {%- if stock_change != blank -%}
+            <div class="tw-flex tw-items-center tw-gap-1">
+              {%- if stock_change_direction == 'up' -%}
+                <svg class="tw-w-3.5 tw-h-2.75 tw-text-green-500" fill="currentColor" viewBox="0 0 14 11" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 0L14 11H0L7 0Z" fill="currentColor"/>
+                </svg>
+                <span class="tw-text-base tw-font-medium tw-text-green-500 tw-leading-[20px] tw-tracking-[-0.16px]">
+                  {{ stock_change }}
+                </span>
+              {%- else -%}
+                <svg class="tw-w-3.5 tw-h-2.75 tw-text-red-500" fill="currentColor" viewBox="0 0 14 11" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 11L0 0H14L7 11Z" fill="currentColor"/>
+                </svg>
+                <span class="tw-text-base tw-font-medium tw-text-red-500 tw-leading-[20px] tw-tracking-[-0.16px]">
+                  {{ stock_change }}
+                </span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+{%- else -%}
+  <style>
+    @media (max-width: 1023px) {
+      #{{ section.id }} {
+        display: none;
+      }
+    }
+  </style>
+  <div id="{{ section.id }}" class="top-banner tw-w-full" style="background-color: {{ background_color }};">
+    <div class="section-container tw-flex tw-items-center tw-justify-between tw-gap-4 tw-py-0 tw-h-[45px]">
+      {%- comment -%} Left: Promotional Text {%- endcomment -%}
+      <div class="top-banner__promo tw-flex tw-items-center tw-flex-1 tw-min-w-0">
+        {%- if promotional_text != blank -%}
+          <p class="tw-text-sm tw-font-medium tw-text-white tw-leading-[18px] tw-tracking-[-0.14px]">
+            {{ promotional_text }}
+          </p>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Right: Investor Relations & Stock Ticker {%- endcomment -%}
+      <div class="top-banner__nav tw-flex tw-items-center tw-gap-4 tw-shrink-0">
+        {%- comment -%} Investor Relations Link {%- endcomment -%}
+        {%- if investor_relations_link != blank -%}
+          <a 
+            href="{{ investor_relations_link }}" 
+            class="top-banner__link tw-text-base tw-font-medium tw-text-white tw-leading-[20px] tw-tracking-[-0.16px] hover:tw-opacity-80 tw-transition-opacity tw-px-2.5"
+          >
+            {{ investor_relations_text }}
+          </a>
+        {%- else -%}
+          <span class="top-banner__link tw-text-base tw-font-medium tw-text-white tw-leading-[20px] tw-tracking-[-0.16px] tw-px-2.5">
+            {{ investor_relations_text }}
+          </span>
+        {%- endif -%}
+
+        {%- comment -%} Vertical Divider {%- endcomment -%}
+        <div class="top-banner__divider tw-h-4 tw-w-[2px] tw-bg-white tw-opacity-20 tw-shrink-0" aria-hidden="true"></div>
+
+        {%- comment -%} Stock Ticker {%- endcomment -%}
+        <div class="top-banner__stock tw-flex tw-items-center tw-gap-1 tw-px-2.5">
+          <span class="tw-text-base tw-font-medium tw-text-white tw-leading-[20px] tw-tracking-[-0.16px]">
+            {{ stock_symbol }} {{ stock_price }}
+          </span>
+          {%- if stock_change != blank -%}
+            <div class="tw-flex tw-items-center tw-gap-1">
+              {%- if stock_change_direction == 'up' -%}
+                <svg class="tw-w-3.5 tw-h-2.75 tw-text-green-500" fill="currentColor" viewBox="0 0 14 11" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 0L14 11H0L7 0Z" fill="currentColor"/>
+                </svg>
+                <span class="tw-text-base tw-font-medium tw-text-green-500 tw-leading-[20px] tw-tracking-[-0.16px]">
+                  {{ stock_change }}
+                </span>
+              {%- else -%}
+                <svg class="tw-w-3.5 tw-h-2.75 tw-text-red-500" fill="currentColor" viewBox="0 0 14 11" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 11L0 0H14L7 11Z" fill="currentColor"/>
+                </svg>
+                <span class="tw-text-base tw-font-medium tw-text-red-500 tw-leading-[20px] tw-tracking-[-0.16px]">
+                  {{ stock_change }}
+                </span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement Banner",
+  "tag": "section",
+  "class": "section top-banner-section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#092846"
+    },
+    {
+      "type": "text",
+      "id": "promotional_text",
+      "label": "Promotional text",
+      "default": "Need supplies? Reorder in minutes with myApp and get fast home delivery."
+    },
+    {
+      "type": "header",
+      "content": "Investor Relations"
+    },
+    {
+      "type": "text",
+      "id": "investor_relations_text",
+      "label": "Investor Relations text",
+      "default": "Investor Relations"
+    },
+    {
+      "type": "url",
+      "id": "investor_relations_link",
+      "label": "Investor Relations link"
+    },
+    {
+      "type": "header",
+      "content": "Stock Ticker"
+    },
+    {
+      "type": "text",
+      "id": "stock_symbol",
+      "label": "Stock symbol",
+      "default": "ACHO"
+    },
+    {
+      "type": "text",
+      "id": "stock_price",
+      "label": "Stock price",
+      "default": "$9.53"
+    },
+    {
+      "type": "text",
+      "id": "stock_change",
+      "label": "Price change percentage",
+      "default": "4.04%"
+    },
+    {
+      "type": "select",
+      "id": "stock_change_direction",
+      "label": "Change direction",
+      "default": "up",
+      "options": [
+        { "value": "up", "label": "Up (green)" },
+        { "value": "down", "label": "Down (red)" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_mobile",
+      "label": "Show on mobile",
+      "default": true,
+      "info": "Hide banner on mobile devices if unchecked"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Banner"
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,142 @@
+{%- comment -%}
+  Video Snippet
+  Renders a video.js player
+  Supports CDN, YouTube, and Vimeo videos
+  
+  Accepts:
+  - video_url: String (required, video URL)
+  - video_source: String (optional, 'cdn', 'youtube', 'vimeo', default: 'cdn')
+  - poster_image: Image object (optional, poster/thumbnail image)
+  - video_id: String (optional, unique ID for the video player)
+  - autoplay: Boolean (optional, default: false)
+  - controls: Boolean (optional, default: true)
+  - loop: Boolean (optional, default: false)
+  - muted: Boolean (optional, default: false)
+  - aspect_ratio: String (optional, aspect ratio like '16:9', default: '16:9')
+  - parent_class: String (optional, parent class prefix, default: 'video')
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- liquid
+  assign parent_class = parent_class | default: 'video'
+  assign video_id = video_id | default: 'video-player'
+  assign video_url = video_url | default: ''
+  assign video_source = video_source | default: 'cdn'
+  assign poster_image = poster_image | default: blank
+  assign autoplay = autoplay | default: false
+  assign controls = controls | default: false
+  assign loop = loop | default: false
+  assign muted = muted | default: false
+  assign fill = fill | default: false
+  assign mobile_aspect_ratio = mobile_aspect_ratio | default: aspect_ratio | default: '16:9'
+  assign desktop_aspect_ratio = desktop_aspect_ratio | default: aspect_ratio | default: '2:1'
+  assign player_id = parent_class | append: '-' | append: video_id
+-%}
+
+{%- if video_url != blank -%}
+  <div class="{{ parent_class }}__wrapper tw-w-full tw-relative video-wrapper" {{ block_shopify_attributes }}>
+    {%- if video_source == 'youtube' -%}
+      {%- comment -%} YouTube iframe embed {%- endcomment -%}
+      {%- liquid
+        assign youtube_id = video_url | split: 'watch?v=' | last | split: '&' | first
+        if video_url contains 'youtu.be/'
+          assign youtube_id = video_url | split: 'youtu.be/' | last | split: '?' | first
+        endif
+        assign youtube_embed_url = 'https://www.youtube.com/embed/' | append: youtube_id
+        if autoplay
+          assign youtube_embed_url = youtube_embed_url | append: '?autoplay=1'
+          if muted
+            assign youtube_embed_url = youtube_embed_url | append: '&mute=1'
+          endif
+          if loop
+            assign youtube_embed_url = youtube_embed_url | append: '&loop=1&playlist=' | append: youtube_id
+          endif
+          if controls == false
+            assign youtube_embed_url = youtube_embed_url | append: '&controls=0'
+          endif
+        else
+          if controls == false
+            assign youtube_embed_url = youtube_embed_url | append: '?controls=0'
+          endif
+        endif
+      -%}
+      <div class="video-embed-wrapper" style="position: relative; padding-bottom: 58.0%; height: 0; overflow: hidden; aspect-ratio: {{ aspect_ratio }};">
+        <iframe
+          src="{{ youtube_embed_url }}"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          class="tw-absolute tw-top-0 tw-left-0 tw-w-full tw-h-full"
+          style="aspect-ratio: {{ aspect_ratio }};"
+        ></iframe>
+      </div>
+    {%- elsif video_source == 'vimeo' -%}
+      {%- comment -%} Vimeo iframe embed {%- endcomment -%}
+      {%- liquid
+        assign vimeo_id = video_url | split: 'vimeo.com/' | last | split: '/' | first | split: '?' | first
+        assign vimeo_embed_url = 'https://player.vimeo.com/video/' | append: vimeo_id
+        if autoplay
+          assign vimeo_embed_url = vimeo_embed_url | append: '?autoplay=1'
+          if muted
+            assign vimeo_embed_url = vimeo_embed_url | append: '&muted=1'
+          endif
+          if loop
+            assign vimeo_embed_url = vimeo_embed_url | append: '&loop=1'
+          endif
+          if controls == false
+            assign vimeo_embed_url = vimeo_embed_url | append: '&controls=0'
+          endif
+        else
+          if controls == false
+            assign vimeo_embed_url = vimeo_embed_url | append: '?controls=0'
+          endif
+        endif
+      -%}
+      <div class="video-embed-wrapper" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; aspect-ratio: {{ aspect_ratio }};">
+        <iframe
+          src="{{ vimeo_embed_url }}"
+          frameborder="0"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+          class="tw-absolute tw-top-0 tw-left-0 tw-w-full tw-h-full"
+          style="aspect-ratio: {{ aspect_ratio }};"
+        ></iframe>
+      </div>
+    {%- else -%}
+      {%- comment -%} CDN/Direct video URL using video.js {%- endcomment -%}
+      <video-player
+        data-controls="{{ controls }}"
+        data-autoplay="{{ autoplay }}"
+        data-loop="{{ loop }}"
+        data-muted="{{ muted }}"
+        data-mobile-aspect-ratio="{{ mobile_aspect_ratio }}"
+        data-desktop-aspect-ratio="{{ desktop_aspect_ratio }}"
+        data-fill="{{ fill }}"
+      >
+        <video
+          id="{{ player_id }}"
+          class="video-js vjs-theme-forest tw-w-full tw-h-full tw-object-cover"
+          data-video-url="{{ video_url }}"
+          {% if poster_image != blank %}
+            poster="{{ poster_image | image_url: width: 1920 }}"
+          {% endif %}
+          {% if autoplay %}autoplay{% endif %}
+          {% if muted %}muted{% endif %}
+          {% if loop %}loop{% endif %}
+          {% if controls == false %}data-setup='{"controls": false}'{% else %}controls{% endif %}
+          preload="auto"
+          data-setup='{}'
+        >
+          <p class="vjs-no-js">
+            To view this video please enable JavaScript, and consider upgrading to a web browser that
+            <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>.
+          </p>
+        </video>
+        <div class="video-section__content tw-flex tw-items-center tw-absolute tw-left-1/2 tw-top-1/2 -tw-translate-x-1/2 -tw-translate-y-1/2 tw-h-full tw-z-[9999] tw-text-center tw-text-white tw-p-4">
+             <img src="https://cdn.shopify.com/s/files/1/0774/7682/3253/files/Group_12.svg?v=1763113956" alt="Video pause" class="tw-w-20 tw-h-20" width="80" height="80" />
+        </div>
+      </video-player>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+

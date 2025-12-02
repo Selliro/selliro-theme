@@ -1,0 +1,117 @@
+{% doc %}
+  Form block with outer container styling.
+  Supports nested form-row blocks for flexible form layouts.
+
+  @example
+  {% content_for 'block', type: 'form', id: 'contact-form' %}
+{% enddoc %}
+
+{%- liquid
+  assign padding = block.settings.padding | default: 20
+  assign border_radius = block.settings.border_radius | default: 24
+  assign gap = block.settings.gap | default: 20
+  assign background_color = block.settings.background_color | default: '#ffffff'
+-%}
+
+<div
+  id="shopify-block-{{ block.id }}"
+  data-form-id="{{ block.settings.form_id }}"
+  class="form-block"
+  style="
+    --padding: {{ padding }}px;
+    --border-radius: {{ border_radius }}px;
+    --gap: {{ gap }}px;
+    --background-color: {{ background_color }};
+  "
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+    <div class="form-block__submit">
+        <button data-form-submit type="submit" class="tw-w-full tw-h-[42px] tw-bg-ah-navy tw-text-white tw-rounded-xl tw-px-3 tw-py-2 tw-text-base tw-leading-[20px] tw-tracking-[-0.16px] tw-outline-none focus:tw-border-slate-500 focus:tw-ring-1 focus:tw-ring-slate-500 disabled:tw-cursor-not-allowed disabled:tw-bg-[#EBEBEB] disabled:tw-text-text-muted">
+            Submit
+        </button>
+    </div>
+</div>
+
+{% stylesheet %}
+  .form-block {
+    background-color: var(--background-color);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    width: 100%;
+    box-sizing: border-box;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Form",
+  "blocks": [
+    {
+      "type": "form-row"
+    }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "form_id",
+      "label": "Form ID",
+      "info": "The ID of the form",
+      "default": "contact-form"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "label": "Padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between rows",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Form"
+    }
+  ]
+}
+{% endschema %}
+

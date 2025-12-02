@@ -1,0 +1,38 @@
+<style>
+  #{{block.id}}.spacer {
+    height: 1px;
+    margin-top: {{ block.settings.mobile_height }}px;
+  }
+  @media(min-width: 768px) {
+    #{{block.id}}.spacer {
+      margin-top: {{ block.settings.desktop_height }}px;
+    }
+  }
+</style>
+<div id={{block.id}} class="spacer tw-block"></div>
+
+
+{% schema %}
+{
+  "name": "Spacer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "mobile_height",
+      "label": "Mobile height",
+      "default": "10"
+    },
+    {
+      "type": "text",
+      "id": "desktop_height",
+      "label": "Desktop height",
+      "default": "10"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Spacer"
+    }
+  ]
+}
+{% endschema %}

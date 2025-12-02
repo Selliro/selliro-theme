@@ -1,0 +1,123 @@
+{%- comment -%}
+  Autoplay Text Wrapper
+  Wraps multiple autoplay-text blocks
+{%- endcomment -%}
+{%- liquid
+  assign progress_bar_color = block.settings.progress_bar_color 
+  assign progress_bar_bg_color = block.settings.progress_bar_bg_color 
+  assign autoplay_delay = block.settings.autoplay_delay | default: 3000
+-%}
+<style>
+.autoplay-text-wrapper__item {
+  position: relative;
+  min-height: 50px; 
+}
+
+.autoplay-text__subheading {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), max-height 1s cubic-bezier(0.4, 0, 0.2, 1), padding-bottom 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.autoplay-text-wrapper__item--active .autoplay-text__subheading {
+  max-height: 200px;
+  opacity: 1;
+  padding-bottom: 20px;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.15s, max-height 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.15s, padding-bottom 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.15s;
+}
+
+.autoplay-text__subheading-medium {
+  transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.autoplay-text-wrapper__border-base {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  border: none;
+}
+.autoplay-text-wrapper__border-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  border: none;
+  transition: width 0.08s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#shopify-block-{{ block.id }} {
+  margin-top: auto;
+}
+</style>
+
+
+<div class="autoplay-text-wrapper tw-flex tw-flex-col tw-gap-5"
+     data-autoplay-delay="{{ autoplay_delay }}"
+     data-progress-color="{{ progress_bar_color }}"
+     data-progress-bg-color="{{ progress_bar_bg_color }}"
+      id="{{ section.id }}"
+     >
+    {%- for nested_block in block.blocks -%}
+        <div class="autoplay-text-wrapper__item tw-flex tw-flex-col tw-opacity-100 tw-transition-opacity tw-duration-500 tw-ease-in-out tw-cursor-pointer{% if forloop.first %} autoplay-text-wrapper__item--active{% endif %}" 
+             data-item-index="{{ forloop.index0 }}">
+             {%- render nested_block, section: section , block: block %}
+            <!-- Dark border base - always visible -->
+            <div class="autoplay-text-wrapper__border-base" style="background-color: {{ progress_bar_bg_color }};"></div>
+            <!-- Animated progress border -->
+            <div class="autoplay-text-wrapper__border-progress" style="width: {% if forloop.first %}100%{% else %}0%{% endif %}; background-color: {{ progress_bar_color }};"></div>
+        </div>
+    {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "Autoplay Text Wrapper",
+  "blocks": [
+    { "type": "autoplay-text" }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Autoplay Settings"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_delay",
+      "min": 1000,
+      "max": 9500,
+      "step": 500,
+      "default": 3000,
+      "label": "Autoplay delay (ms)",
+      "info": "Time between item transitions in milliseconds"
+    },
+    {
+      "type": "header",
+      "content": "Progress Bar"
+    },
+    {
+      "type": "color",
+      "id": "progress_bar_color",
+      "label": "Progress bar color",
+      "default": "#C8F060",
+      "info": "Color of the filled portion (default: light yellow-green)"
+    },
+    {
+      "type": "color",
+      "id": "progress_bar_bg_color",
+      "label": "Progress bar background color",
+      "default": "#5A4A5A",
+      "info": "Color of the unfilled portion (default: dark purple-brown)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Autoplay Text Wrapper",
+      "blocks": [
+      ]
+    }
+  ]
+}
+{% endschema %}

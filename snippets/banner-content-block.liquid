@@ -1,0 +1,113 @@
+{%- comment -%}
+  Banner Content Block Router
+  
+  Routes block types to their respective snippets.
+  
+  Accepts:
+  - block: Block object
+  - block_type: Block type
+  - block_settings: Block settings object
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+<div class="banner-content-block__wrapper" style="max-width: {{ max_width }};">
+
+  <style>
+
+
+    .banner-content-block__wrapper p {
+      opacity:0.75;
+    }
+    @media (min-width: 1024px) {
+      .banner-content-block__wrapper p {
+        opacity:1;
+      }
+    }
+  </style>
+{%- case block_type -%} 
+  
+  {%- when 'breadcrumb' -%}
+    {%- render 'breadcrumb',
+      icon_color: block_settings.icon_color,
+      text_color: block_settings.text_color,
+      home_text: block_settings.home_text,
+      home_link: block_settings.home_link,
+      current_text: block_settings.current_text,
+      block_shopify_attributes: block_shopify_attributes
+    -%}
+  
+  {%- when 'caption' -%}
+    {%- render 'caption',
+      text: block_settings.text,
+      color: block_settings.color,
+      block_shopify_attributes: block_shopify_attributes
+    -%}
+  
+  {%- when 'heading' -%}
+    {%- render 'heading',
+      text: block_settings.text,
+      variant: 'h1',
+      color: block_settings.color,
+      icon_image: block_settings.icon_image,
+      icon_max_width: block_settings.icon_max_width,
+      block_shopify_attributes: block_shopify_attributes
+    -%}
+  
+  {%- when 'subheading' -%}
+    {%- render 'body',
+      text: block_settings.text,
+      variant: 'base-medium',
+      color: block_settings.color,
+      max_width: block_settings.max_width,
+      block_shopify_attributes: block_shopify_attributes
+    -%}
+  
+  {%- when 'image' -%}
+    {%- render 'image',
+      parent_class: 'banner',
+      desktop_image: block_settings.desktop_image,
+      desktop_aspect_ratio: block_settings.desktop_aspect_ratio,
+      image_id: block.id,
+      layout_type: 'icon',
+      icon_max_width: block_settings.icon_max_width,
+      block_shopify_attributes: block_shopify_attributes
+    -%}
+  
+  {%- when 'button_group' -%}
+    {%- render 'button-group',
+      show_button_1: block_settings.show_button_1,
+      button_1_label: block_settings.button_1_label,
+      button_1_link: block_settings.button_1_link,
+      show_button_2: block_settings.show_button_2,
+      button_2_label: block_settings.button_2_label,
+      button_2_link: block_settings.button_2_link,
+      show_button_3: block_settings.show_button_3,
+      button_3_label: block_settings.button_3_label,
+      button_3_link: block_settings.button_3_link,
+      block_shopify_attributes: block_shopify_attributes
+    -%}
+  
+  {%- when 'stock_card' -%}
+    {%- render 'stock-card',
+      stock_symbol: block_settings.stock_symbol,
+      stock_exchange: block_settings.stock_exchange,
+      stock_price: block_settings.stock_price,
+      stock_change: block_settings.stock_change,
+      stock_change_direction: block_settings.stock_change_direction,
+      stock_market_cap: block_settings.stock_market_cap,
+      stock_volume: block_settings.stock_volume,
+      stock_timestamp: block_settings.stock_timestamp,
+      block_shopify_attributes: block_shopify_attributes
+    -%}
+  
+  {%- when 'email_card' -%}
+    {%- render 'email-card',
+      email_card_heading: block_settings.email_card_heading,
+      email_placeholder: block_settings.email_placeholder,
+      email_button_text: block_settings.email_button_text,
+      email_form_action: block_settings.email_form_action,
+      block_shopify_attributes: block_shopify_attributes
+    -%}
+  
+{%- endcase -%}
+</div>
+

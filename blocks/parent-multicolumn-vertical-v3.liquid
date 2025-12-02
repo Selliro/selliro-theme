@@ -1,0 +1,92 @@
+{%- comment -%}
+  Column Card V3 Theme Block
+  Background image layout with content overlaid and buttons
+  Uses static blocks accessed through block collection by ID
+{%- endcomment -%}
+
+{%- liquid
+  assign cards_show_border = section.settings.cards_show_border | default: true
+-%}
+
+<div class="multicolumn-card{% if cards_show_border %} tw-border tw-border-slate-200{% endif %} tw-rounded-3xl tw-bg-white tw-relative tw-overflow-hidden tw-h-full" {{ block.shopify_attributes }}>
+
+  {%- comment -%} Background Image (Relative positioning) - Static block by ID {%- endcomment -%}
+  <div class="tw-relative tw-w-full tw-h-full">
+    {%- content_for "block", type: "image-copy", id: "overlay-card-image" -%}
+  </div>
+  
+  {%- comment -%} Gradient Overlay {%- endcomment -%}
+  <div class="tw-absolute tw-inset-0 tw-bg-gradient-to-b tw-from-transparent tw-to-[rgba(82,195,194,0.39)] tw-pointer-events-none tw-z-[1]"></div>
+  
+  {%- comment -%} Card Content (Absolute positioning, overlaid above background) - All other blocks (excluding static image) {%- endcomment -%}
+  <div class="multicolumn-card__content tw-absolute tw-inset-0 tw-z-10 tw-flex tw-flex-col tw-gap-4 tw-p-4 tw-min-w-0 tw-overflow-hidden">
+    {%- for nested_block in block.blocks -%}
+      {%- unless nested_block.id == 'overlay-card-image' -%}
+        {%- render nested_block, section: section -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Overlay card",
+  "blocks": [
+    { "type": "image-copy" },
+    { "type": "heading" },
+    { "type": "subheading" },
+    { "type": "button-group" }
+  ],
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "⚠️ This card type only displays correctly in 1-2 column grids. In 3-4 column grids, it will render as a regular vertical card and cause design issues."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Overlay card",
+      "blocks": [
+        {
+          "type": "image-copy",
+          "static": true,
+          "id": "overlay-card-image",
+          "settings": {
+            "layout_type": "full"
+          }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Manage your supplies using myAPP",
+            "variant": "h2",
+            "color": "#000000"
+          }
+        },
+        {
+          "type": "subheading",
+          "settings": {
+            "text": "<p>Conveniently order, track, and manage supplies all at your fingertips with myAPP by AdaptHealth.</p>",
+            "variant": "md",
+            "color": "#323e46"
+          }
+        },
+        {
+          "type": "button-group",
+          "settings": {
+            "show_button_1": false,
+            "show_button_2": true,
+            "button_2_label": "Download myAPP",
+            "button_2_link": "#",
+            "button_2_color": "blue",
+            "show_button_3": true,
+            "button_3_label": "Learn More",
+            "button_3_link": "#"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

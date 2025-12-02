@@ -1,0 +1,423 @@
+{%- comment -%}
+  Footer Section
+  Mobile-first footer design with accordion menus
+  Uses snippets directly instead of blocks
+{%- endcomment -%}
+
+{%- liquid
+  assign background_color = section.settings.background_color | default: '#ffffff'
+  assign text_color = section.settings.text_color | default: '#323e46'
+-%}
+
+<style>
+  .footer-menu__button[aria-expanded="true"] .footer-menu__icon {
+    transform: rotate(180deg);
+  }
+</style>
+
+<footer id="shopify-section-{{ section.id }}" class="footer-section tw-w-full tw-pt-16 tw-pb-16" style="background-color: {{ background_color }}; color: {{ text_color }};">
+  <div class="footer-section__container section-container">
+    {%- comment -%} Main Footer Sections with 40px gaps {%- endcomment -%}
+    <div class="footer-section__wrapper tw-flex tw-flex-col tw-gap-10">
+      
+      {%- comment -%} Section 1: Image + Subheading {%- endcomment -%}
+      <div class="footer-section__image-subheading">
+        {%- comment -%} Logo {%- endcomment -%}
+        {%- if section.settings.logo != blank -%}
+          {%- render 'image',
+            desktop_image: section.settings.logo,
+            mobile_image: section.settings.logo,
+            image_id: section.id,
+            layout_type: 'icon',
+            icon_max_width: section.settings.logo_max_width | default: '145',
+            desktop_aspect_ratio: section.settings.logo_aspect_ratio | default: '6',
+            parent_class: 'footer-logo'
+          -%}
+        {%- endif -%}
+
+        {%- comment -%} Subheading {%- endcomment -%}
+        {%- if section.settings.subheading_text != blank -%}
+          <div class="footer-section__subheading tw-mt-4 tw-max-w-[269px]">
+            {%- render 'body',
+              text: section.settings.subheading_text,
+              variant: section.settings.subheading_variant | default: 'sm',
+              color: section.settings.subheading_color | default: '#ffffff',
+              max_width: section.settings.subheading_max_width,
+              parent_class: 'footer'
+            -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Section 2: Menu {%- endcomment -%}
+      {%- assign menu_blocks = section.blocks | where: 'type', 'menu' -%}
+      {%- if menu_blocks.size > 0 -%}
+        <div class="footer-section__menus">
+          {%- comment -%} Mobile: Accordion Menu (hidden on desktop) {%- endcomment -%}
+          <div class="footer-section__menus-mobile tw-w-full md:tw-hidden" data-accordion>
+            {%- for block in menu_blocks limit: 5 -%}
+              {%- assign menu = linklists[block.settings.menu] -%}
+              {%- render 'footer-menu',
+                menu: menu,
+                menu_heading: block.settings.heading,
+                menu_id: block.id,
+                block_shopify_attributes: block.shopify_attributes
+              -%}
+            {%- endfor -%}
+          </div>
+          
+          {%- comment -%} Desktop: Grid Menu (hidden on mobile) {%- endcomment -%}
+          <div class="footer-section__menus-desktop tw-hidden md:tw-grid md:tw-grid-cols-5 md:tw-gap-8 md:tw-w-full">
+            {%- for block in menu_blocks limit: 5 -%}
+              {%- assign menu = linklists[block.settings.menu] -%}
+              {%- render 'footer-menu-desktop',
+                menu: menu,
+                menu_heading: block.settings.heading,
+                block_shopify_attributes: block.shopify_attributes
+              -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Section 3: Heading + Subheading {%- endcomment -%}
+      <div class="footer-section__heading-subheading">
+        {%- comment -%} Heading {%- endcomment -%}
+        {%- if section.settings.heading_text != blank -%}
+          <div class="footer-section__heading">
+            {%- render 'caption',
+              text: section.settings.heading_text,
+              color: section.settings.heading_color,
+              parent_class: 'footer'
+            -%}
+          </div>
+        {%- endif -%}
+
+        {%- comment -%} Subheading After Heading {%- endcomment -%}
+        {%- if section.settings.subheading_after_text != blank -%}
+          <div class="footer-section__subheading-after tw-mt-4">
+            {%- render 'body',
+              text: section.settings.subheading_after_text,
+              variant: 'sm-medium',
+              color: section.settings.subheading_after_color,
+              max_width: section.settings.subheading_after_max_width,
+              parent_class: 'footer'
+            -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Section 4: Divider {%- endcomment -%}
+      {%- if section.settings.show_divider -%}
+        <div class="footer-section__divider">
+          {%- render 'divider',
+            variant: section.settings.divider_variant | default: 'simple',
+            color: section.settings.divider_color | default: 'slate-200',
+            parent_class: 'footer'
+          -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Section 5: Button (Language Selector) + Copyright + Social Links {%- endcomment -%}
+      <div class="footer-section__bottom tw-flex tw-flex-col tw-gap-8">
+        {%- comment -%} Mobile: Language Selector + Social Icons (Horizontal Row) | Desktop: All three in one row {%- endcomment -%}
+        <div class="footer-section__top-row tw-flex tw-flex-row tw-items-center tw-justify-between md:tw-justify-between tw-w-full">
+          {%- comment -%} Language Selector (Left) {%- endcomment -%}
+          {%- if section.settings.show_language_selector -%}
+            <div class="footer-section__language-selector">
+              {%- liquid
+                assign secondary_color = section.settings.language_button_color | default: 'white'
+                if secondary_color == 'blue'
+                  assign button_classes = 'tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-px-6 tw-py-3 tw-border tw-border-ah-navy tw-text-ah-navy hover:tw-bg-ah-navy hover:tw-text-white tw-font-bold tw-transition-colors tw-duration-300 tw-no-underline tw-text-base tw-min-h-[48px] tw-min-w-[100px]'
+                else
+                  assign button_classes = 'tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-px-6 tw-py-3 tw-border tw-border-white tw-text-white hover:tw-bg-white hover:tw-text-ah-navy tw-font-bold tw-transition-colors tw-duration-300 tw-no-underline tw-text-base tw-min-h-[48px] tw-min-w-[100px]'
+                endif
+              -%}
+              <button class="{{ button_classes }} tw-gap-2">
+                <span>{{ section.settings.language_text | default: 'English' }}</span>
+                <svg class="tw-w-4 tw-h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Copyright (Center - Desktop only, hidden on mobile) {%- endcomment -%}
+          {%- if section.settings.copyright_text != blank -%}
+            <div class="footer-section__copyright md:tw-block tw-hidden tw-text-white/80">
+              {%  render 'body', text: section.settings.copyright_text, variant: 'sm-medium', parent_class: 'footer-section__copyright' , color: '#CED4DA' %}
+            </div>
+          {%- endif -%}
+
+          {%- comment -%} Social Media Icons (Right) {%- endcomment -%}
+          {%- if section.settings.show_social_icons -%}
+            <div class="footer-section__social-icons tw-flex tw-items-center tw-gap-0 tw-justify-end">
+              {%- if section.settings.facebook_url != blank -%}
+                <a href="{{ section.settings.facebook_url }}" target="_blank" rel="noopener" class="footer-social__icon tw-flex tw-items-center tw-justify-center tw-p-[6px]">
+                  <img src="{{ 'facebook-svg.svg' | asset_url }}" alt="Facebook"  width="32" height="32" loading="lazy">
+                </a>
+              {%- endif -%}
+              {%- if section.settings.instagram_url != blank -%}
+                <a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener" class="footer-social__icon tw-flex tw-items-center tw-justify-center tw-p-[6px]">
+                  <img src="{{ 'instagram-svg.svg' | asset_url }}" alt="Instagram"  width="32" height="32" loading="lazy">
+                </a>
+              {%- endif -%}
+              {%- if section.settings.linkedin_url != blank -%}
+                <a href="{{ section.settings.linkedin_url }}" target="_blank" rel="noopener" class="footer-social__icon tw-flex tw-items-center tw-justify-center tw-p-[6px]">
+                  <img src="{{ 'linkedin-svg.svg' | asset_url }}" alt="LinkedIn"  width="32" height="32" loading="lazy">
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Copyright (Mobile only, centered below) {%- endcomment -%}
+        {%- if section.settings.copyright_text_mobile != blank -%}
+          <div class="footer-section__copyright-mobile md:tw-hidden tw-opacity-80 tw-text-center"> 
+            {%  render 'body', text: section.settings.copyright_text_mobile, color: '#ffffff', variant: 'sm-medium', parent_class: 'footer-section__copyright-mobile' %}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "footer",
+  "class": "section footer-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#002147"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "text",
+      "id": "logo_max_width",
+      "label": "Logo max width (px)",
+      "default": "200"
+    },
+    {
+      "type": "text",
+      "id": "logo_aspect_ratio",
+      "label": "Logo aspect ratio",
+      "default": "auto",
+      "info": "Leave as 'auto' or enter a number (e.g., 2.5)"
+    },
+    {
+      "type": "header",
+      "content": "Subheading"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading_text",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "subheading_variant",
+      "label": "Subheading variant",
+      "default": "md",
+      "info": "Enter variant: sm, md, lg, lg-bold"
+    },
+    {
+      "type": "text",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "info": "Optional: hex color value (e.g., #323e46)"
+    },
+    {
+      "type": "text",
+      "id": "subheading_max_width",
+      "label": "Subheading max width",
+      "info": "Enter max width value (e.g., 800px, 50%, 1200px). Applies to all screen sizes"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_variant",
+      "label": "Heading variant",
+      "default": "h3",
+      "info": "Enter variant: h1, h2, h3, h4, h5"
+    },
+    {
+      "type": "text",
+      "id": "heading_color",
+      "label": "Heading color",
+      "info": "Optional: hex color value"
+    },
+    {
+      "type": "header",
+      "content": "Subheading After Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading_after_text",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "subheading_after_variant",
+      "label": "Subheading variant",
+      "default": "md",
+      "info": "Enter variant: sm, md, lg, lg-bold"
+    },
+    {
+      "type": "text",
+      "id": "subheading_after_color",
+      "label": "Subheading color",
+      "info": "Optional: hex color value"
+    },
+    {
+      "type": "text",
+      "id": "subheading_after_max_width",
+      "label": "Subheading max width",
+      "info": "Enter max width value (e.g., 800px, 50%, 1200px). Applies to all screen sizes"
+    },
+    {
+      "type": "header",
+      "content": "Divider"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show divider",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "divider_variant",
+      "label": "Divider variant",
+      "default": "simple",
+      "info": "Enter variant: default, simple"
+    },
+    {
+      "type": "select",
+      "id": "divider_color",
+      "label": "Divider color",
+      "options": [
+        { "value": "white-10", "label": "White 10%" },
+        { "value": "white-20", "label": "White 20%" },
+        { "value": "slate-200", "label": "Slate 200" },
+        { "value": "gray-200", "label": "Gray 200" }
+      ],
+      "default": "slate-200"
+    },
+    {
+      "type": "header",
+      "content": "Language Selector & Social Icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_language_selector",
+      "label": "Show language selector",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "language_text",
+      "label": "Language text",
+      "default": "English"
+    },
+    {
+      "type": "text",
+      "id": "language_button_color",
+      "label": "Language button color",
+      "default": "white",
+      "info": "Enter color: white, blue"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_icons",
+      "label": "Show social media icons",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "linkedin_url",
+      "label": "LinkedIn URL"
+    },
+    {
+      "type": "header",
+      "content": "Copyright"
+    },
+    {
+      "type": "richtext",
+      "id": "copyright_text",
+      "label": "Copyright text",
+      "default": "<p>Copyright © 2025 AdaptHealth, LLC. All Rights Reserved.</p>"
+    },
+    {
+        "type": "richtext",
+        "id": "copyright_text_mobile",
+        "label": "Copyright text mobile",
+        "default": "<p>Copyright © 2025 AdaptHealth, LLC.<br>All Rights Reserved.</p>"
+      }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Footer Menu",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Menu heading",
+          "info": "If empty, menu title will be used"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer"
+    }
+  ]
+}
+{% endschema %}

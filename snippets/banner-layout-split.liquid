@@ -1,0 +1,156 @@
+{%- comment -%}
+  Banner Layout: 50/50 Split
+  
+  Split layout with color on left and image on right.
+  
+  Accepts:
+  - split_color: Background color for left side
+  - image_desktop: Desktop image object
+  - image_mobile: Mobile image object
+  - max_height: Maximum height in pixels
+  - section: Section object with blocks
+{%- endcomment -%}
+
+<div class="banner-layout-split tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-h-full">
+
+  {%- comment -%} Left: Color {%- endcomment -%}
+  <div class="banner-layout-split__side banner-layout-split__side--left tw-relative tw-order-2 md:tw-order-1" style="background-color: {{ split_color }};">
+    {%- comment -%} Left Content Column {%- endcomment -%}
+    <div class="banner-layout-split__content-wrapper tw-relative tw-h-full tw-flex-col-reverse md:tw-flex-row tw-items-end ">
+      <div class="section-container section-container--wide banner-layout-split__container tw-w-full tw-h-full"> 
+        <div class="banner-layout-split__content tw-flex tw-flex-col tw-gap-4 tw-w-full tw-border-b tw-border-white/10 tw-pt-5 tw-pb-11 md:tw-pb-16 tw-h-full tw-justify-end">
+          {%- for block in section.blocks -%}
+            {%- if block.settings.position == 'left' -%}
+              {%- render 'banner-content-block',
+                position: 'left',
+                block_type: block.type,
+                block_settings: block.settings,
+                block_shopify_attributes: block.shopify_attributes,
+                block: block,
+                max_width: '600px'
+              -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {%- comment -%} Right: Image {%- endcomment -%}
+  {%- if image_desktop != blank or image_mobile != blank -%}
+    <div class="banner-layout-split__side banner-layout-split__side--right tw-relative md:tw-order-2">
+      {%- comment -%} Desktop {%- endcomment -%}
+      {%- if image_desktop != blank -%}
+        <div class="banner-layout-split__image banner-layout-split__image--desktop tw-hidden md:tw-block tw-inset-0">
+          {%- render 'shopify-responsive-image',
+            image: image_desktop,
+            image_id: 'split-desktop',
+            image_aspect_ratio: image_aspect_ratio,
+            wrapper_class: 'tw-w-full tw-h-full',
+            image_class: 'tw-w-full tw-h-full tw-object-cover',
+            fill: true,
+            no_lazyload: true,
+            max_height: max_height
+          -%}
+        </div>
+      {%- endif -%}
+      
+      {%- comment -%} Mobile {%- endcomment -%}
+      {%- if image_mobile != blank -%}
+        <div class="banner-layout-split__image banner-layout-split__image--mobile md:tw-hidden tw-inset-0">
+          {%- render 'shopify-responsive-image',
+            image: image_mobile,
+            image_id: 'split-mobile',
+            image_aspect_ratio: image_aspect_ratio_mobile,
+            wrapper_class: 'tw-w-full tw-h-full',
+            image_class: 'tw-w-full tw-h-full tw-object-cover',
+            fill: true,
+            no_lazyload: true,
+            max_height: max_height
+          -%}
+        </div>
+      {%- elsif image_desktop != blank -%}
+        <div class="banner-layout-split__image banner-layout-split__image--mobile-fallback md:tw-hidden tw-inset-0">
+          {%- render 'shopify-responsive-image',
+            image: image_desktop,
+            image_id: 'split-mobile-fallback',
+            image_aspect_ratio: image_aspect_ratio_mobile,
+            wrapper_class: 'tw-w-full tw-h-full',
+            image_class: 'tw-w-full tw-h-full tw-object-cover',
+            fill: true,
+            no_lazyload: true,
+            max_height: max_height
+          -%}
+        </div>
+      {%- endif -%}
+      
+      {%- comment -%} Right Content Column {%- endcomment -%}
+      {%- assign has_right_content = false -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.position == 'right' -%}
+          {%- assign has_right_content = true -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+      
+      {%- if has_right_content -%}
+        <div class="banner-layout-split__content-wrapper banner-layout-split__content-wrapper--right tw-absolute tw-inset-0 tw-h-full tw-flex tw-items-end">
+          <div class="section-container section-container--wide banner-layout-split__container tw-w-full">
+            <div class="banner-layout-split__content tw-flex tw-flex-col tw-gap-10 tw-w-full tw-border-b tw-border-white/10 tw-pb-14">
+              {%- for block in section.blocks -%}
+                {%- if block.settings.position == 'right' -%}
+                  {%- render 'banner-content-block',
+                    position: 'right',
+                    block_type: block.type,
+                    block_settings: block.settings,
+                    block_shopify_attributes: block.shopify_attributes,
+                    block: block,
+                    max_width: '490px'
+                  -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div> 
+        </div>
+      {%- endif -%}
+    </div>
+  {%- else -%}
+    {%- comment -%} Right column fallback: Image placeholder when no image {%- endcomment -%}
+    <div class="banner-layout-split__side banner-layout-split__side--right banner-layout-split__side--placeholder tw-absolute tw-inset-0">
+      <div class="banner-layout-split__placeholder tw-inset-0">
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'tw-w-full tw-h-full tw-object-cover' }}
+      </div>
+      
+      {%- comment -%} Right Content Column (when no image) {%- endcomment -%}
+      {%- assign has_right_content = false -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.position == 'right' -%}
+          {%- assign has_right_content = true -%}
+          {%- break -%}
+        {%- endif -%}
+      {%- endfor -%}
+      
+      {%- if has_right_content -%}
+        <div class="banner-layout-split__content-wrapper banner-layout-split__content-wrapper--right tw-absolute tw-inset-0 tw-h-full tw-flex tw-items-end">
+          <div class="section-container section-container--wide banner-layout-split__container tw-w-full">
+            <div class="banner-layout-split__content tw-flex tw-flex-col tw-gap-10 tw-w-full tw-border-b tw-border-white/10 tw-pb-14">
+              {%- for block in section.blocks -%}
+                {%- if block.settings.position == 'right' -%}
+                  {%- render 'banner-content-block',
+                    position: 'right',
+                    block_type: block.type,
+                    block_settings: block.settings,
+                    block_shopify_attributes: block.shopify_attributes,
+                    block: block,
+                    max_width: '490px'
+                  -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>
+

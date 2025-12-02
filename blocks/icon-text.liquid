@@ -1,0 +1,134 @@
+{%- comment -%}
+  Icon Text Theme Block
+  Reusable theme block for displaying icon + text with optional link
+  
+  Settings extracted from multicolumn-horizontal section
+{%- endcomment -%}
+
+{%- render 'icon-text',
+  icon: block.settings.icon,
+  icon_position: block.settings.icon_position,
+  label: block.settings.label,
+  label_position: block.settings.label_position,
+  text: block.settings.text,
+  link: block.settings.link,
+  link_type: block.settings.link_type,
+  text_color: block.settings.text_color,
+  link_color: block.settings.link_color,
+  block_shopify_attributes: block.shopify_attributes,
+  icon_size: block.settings.icon_size,
+  font_variant: block.settings.font_variant
+-%}
+
+{% schema %}
+{
+  "name": "Icon Text",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "icon",
+      "label": "Icon",
+      "info": "Upload an icon image (SVG, PNG, etc.)"
+    },
+    {
+      "type": "select",
+      "id": "icon_size",
+      "label": "Icon size",
+      "default": "20px",
+      "options": [
+        { "value": "10px", "label": "10px" },
+        { "value": "20px", "label": "20px" },
+      ]
+    },
+    {
+      "type": "select",
+      "id": "font_variant",
+      "label": "Font variant",
+      "default": "base-medium",
+      "options": [
+        { "value": "base-medium", "label": "Base Medium" },
+        { "value": "base", "label": "Base" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "icon_position",
+      "label": "Icon position",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label"
+    },
+    {
+      "type": "select",
+      "id": "label_position",
+      "label": "Label position",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text/Link text",
+      "default": "<p>866-259-1414</p>"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link URL",
+      "info": "For phone/email: auto-generated from text above. For URLs: enter the full URL here (optional if text is a URL)"
+    },
+    {
+      "type": "select",
+      "id": "link_type",
+      "label": "Link type",
+      "default": "tel",
+      "options": [
+        { "value": "tel", "label": "Phone (tel:)" },
+        { "value": "mailto", "label": "Email (mailto:)" },
+        { "value": "url", "label": "URL (https://)" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Label color",
+      "default": "text-body",
+      "options": [
+        { "value": "text-body", "label": "Body text" },
+        { "value": "text-gray-600", "label": "Gray 600" },
+        { "value": "text-gray-700", "label": "Gray 700" },
+        { "value": "contrast-body", "label": "Contrast body" },
+        { "value": "white", "label": "White" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "text-teal",
+      "options": [
+        { "value": "text-body", "label": "Body text" },
+        { "value": "text-teal", "label": "Teal" },
+        { "value": "text-teal-600", "label": "Teal 600" },
+        { "value": "ah-teal", "label": "AH Teal" },
+        { "value": "text-gray-700", "label": "Gray 700" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icon Text"
+    }
+  ]
+}
+{% endschema %}

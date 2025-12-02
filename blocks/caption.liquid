@@ -1,0 +1,41 @@
+{%- comment -%}
+  Caption Theme Block
+  Global caption component - variant set in presets
+{%- endcomment -%}
+{%- render 'caption',
+  text: block.settings.text,
+  variant: block.settings.variant,
+  color: block.settings.color,
+  block_shopify_attributes: block.shopify_attributes
+-%}
+
+{% schema %}
+{
+  "name": "Caption",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Caption text"
+    },
+    {
+      "type": "text",
+      "id": "variant",
+      "label": "Variant",
+      "info": "Set in preset: sm, md, h2"
+    },
+    {
+      "type": "text",
+      "id": "color",
+      "label": "Color",
+      "info": "Optional: hex color value (e.g., #ffffff)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Caption"
+    }
+  ]
+}
+{% endschema %}
+

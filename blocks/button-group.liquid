@@ -1,0 +1,120 @@
+{%- comment -%}
+  Button Group Theme Block
+  Global button group component for cards and sections
+{%- endcomment -%}
+
+{%- render 'button-group',
+  show_button_1: block.settings.show_button_1,
+  button_1_label: block.settings.button_1_label,
+  button_1_link: block.settings.button_1_link,
+  show_button_2: block.settings.show_button_2,
+  button_2_label: block.settings.button_2_label,
+  button_2_link: block.settings.button_2_link,
+  button_2_color: block.settings.button_2_color,
+  show_button_3: block.settings.show_button_3,
+  button_3_label: block.settings.button_3_label,
+  button_3_link: block.settings.button_3_link,
+  button_3_color: block.settings.button_3_color,
+  button_3_hover_color: block.settings.button_3_hover_color,
+  block_shopify_attributes: block.shopify_attributes
+-%}
+
+{% schema %}
+{
+  "name": "Button Group",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Primary Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button_1",
+      "label": "Show primary button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "button_1_label",
+      "label": "Primary button label",
+      "default": "Primary Button"
+    },
+    {
+      "type": "url",
+      "id": "button_1_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "header",
+      "content": "Secondary Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button_2",
+      "label": "Show secondary button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Secondary button label",
+      "default": "Secondary Button"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "select",
+      "id": "button_2_color",
+      "label": "Secondary button color",
+      "default": "white",
+      "options": [
+        { "value": "white", "label": "White" },
+        { "value": "blue", "label": "Blue" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Tertiary Button (Link)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button_3",
+      "label": "Show tertiary button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_3_label",
+      "label": "Tertiary button label",
+      "default": "Learn more"
+    },
+    {
+      "type": "url",
+      "id": "button_3_link",
+      "label": "Tertiary button link"
+    },
+    {
+      "type": "text",
+      "id": "button_3_color",
+      "label": "Tertiary button color",
+      "default": "#358282",
+      "info": "Color for the tertiary button text (hex code)"
+    },
+    {
+      "type": "text",
+      "id": "button_3_hover_color",
+      "label": "Tertiary button hover color",
+      "info": "Color for the tertiary button text on hover (hex code). Leave blank to use default hover effect."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Button Group"
+    }
+  ]
+}
+{% endschema %}
+

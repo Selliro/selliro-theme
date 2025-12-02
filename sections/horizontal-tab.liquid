@@ -1,0 +1,145 @@
+{%- comment -%}
+  Horizontal Tab Section
+  Section for displaying horizontal tab cards with content and image
+  Layout: Flex container for cards
+  Desktop: Cards in grid or flex layout
+  Mobile: Stacked layout
+{%- endcomment -%}
+
+{%- liquid
+  assign add_top_padding = section.settings.add_top_padding | default: false
+  assign add_bottom_padding = section.settings.add_bottom_padding | default: false
+  assign padding_top = section.settings.padding_top | default: '44'
+  assign padding_bottom = section.settings.padding_bottom | default: '96'
+  assign padding_top_mobile = section.settings.padding_top_mobile | default: '44'
+  assign padding_bottom_mobile = section.settings.padding_bottom_mobile | default: '96'
+  assign background_color = section.settings.background_color | default: '#ffffff'
+  assign columns_desktop = section.settings.columns_desktop | default: 1
+  assign section_id = section.settings.section_id
+-%} 
+
+<style>
+  #{{ section.id }} {
+    background-color: {{ background_color }};
+    {% if padding_top_mobile %}
+      padding-top: {{ padding_top_mobile }}px;
+    {% endif %}
+    {% if padding_bottom_mobile %}
+      padding-bottom: {{ padding_bottom_mobile }}px;
+    {% endif %}
+  }
+  @media(min-width: 1200px) {
+    #{{ section.id }} {
+      {% if padding_top %}
+        padding-top: {{ padding_top }}px;
+      {% endif %}
+      {% if padding_bottom %}
+        padding-bottom: {{ padding_bottom }}px;
+      {% endif %}
+    }
+  }
+</style>
+
+<div id="{{ section_id }}" class="!tw-hidden horizontal-tab-section tw-w-full {% if add_top_padding %}section-padding-top{% endif %} {% if add_bottom_padding %}section-padding-bottom{% endif %}">
+  <div class="section-container horizontal-tab-section__container">
+    {%- comment -%} Cards Container {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      {%- liquid
+        assign grid_classes = 'tw-grid tw-grid-cols-1 tw-gap-5 md:tw-gap-8'
+        
+        case columns_desktop
+          when 1
+            assign grid_classes = grid_classes | append: ' lg:tw-grid-cols-1'
+          when 2
+            assign grid_classes = grid_classes | append: ' lg:tw-grid-cols-2'
+          when 3
+            assign grid_classes = grid_classes | append: ' lg:tw-grid-cols-3'
+        endcase
+      -%}
+      <div class="horizontal-tab-section__cards {{ grid_classes }}">
+        {%- for block in section.blocks -%}
+          {%- if block.type == '@app' -%}
+            {%- render block %}
+          {%- else -%}
+            {%- render block, section: section %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Horizontal Tab",
+  "tag": "section",
+  "class": "section horizontal-tab-section",
+  "settings": [
+    {
+      "type": "text",
+      "id":"section_id",
+      "label": "Section ID",
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns (desktop)",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 1,
+      "info": "Number of columns on desktop screens (1200px and above)"
+    },
+    {
+      "type": "header",
+      "content": "Padding Settings"
+    },
+    {
+      "type": "text",
+      "id": "padding_top",
+      "label": "padding top",
+    },
+    {
+      "type": "text",
+      "id": "padding_top_mobile",
+      "label": "padding top for mobile",
+      "default": "44"
+    },
+    {
+      "type": "text",
+      "id": "padding_bottom",
+      "label": "padding bottom",
+      "default": "96"
+    },
+    {
+      "type": "text",
+      "id": "padding_bottom_mobile",
+      "label": "padding bottom for mobile",
+      "default": "96"
+    }
+  ],
+  "blocks": [
+    { "type": "parent-horizontal-tab-content" }
+  ],
+  "presets": [
+    {
+      "name": "Horizontal Tab",
+      "blocks": [
+        {
+          "type": "parent-horizontal-tab-content"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

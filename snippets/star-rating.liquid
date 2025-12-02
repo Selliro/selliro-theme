@@ -1,0 +1,49 @@
+{% comment %} 
+  Star Rating Component
+  Reusable star rating component with configurable color and partial fill support
+  
+  Accepts:
+  - rating: Number (e.g., 4.8)
+  - star_color: Hex color value (optional, default: #52c3c2)
+  - parent_class: String (optional, parent class prefix, default: 'star-rating')
+  - block_shopify_attributes: Block attributes
+{% endcomment %}
+
+{%- liquid
+  assign star_color = star_color | default: '#52c3c2'
+  assign parent_class = parent_class | default: 'star-rating'
+  
+  assign rating_num = rating | default: 0 | plus: 0 | at_least: 0 | at_most: 5
+  assign full_stars = rating_num | floor
+  assign decimal_part = rating_num | modulo: 1
+  assign fill_percentage = decimal_part | times: 100
+  
+  if decimal_part > 0
+    assign has_partial_star = true
+    assign empty_stars = 4 | minus: full_stars
+  else
+    assign has_partial_star = false
+    assign empty_stars = 5 | minus: full_stars
+  endif
+-%}
+
+<div class="{{ parent_class }} tw-flex tw-gap-[4.519px] tw-items-center" {{ block_shopify_attributes }}>
+  {%- comment -%} Full Stars {%- endcomment -%}
+  {%- for i in (1..full_stars) -%}
+    <span class="{{ parent_class }}__star tw-text-[25.985px] tw-leading-none" style="color: {{ star_color }};">★</span>
+  {%- endfor -%}
+  
+  {%- comment -%} Partial Star (for ratings like 4.8, shows 80% fill) {%- endcomment -%}
+  {%- if has_partial_star -%}
+    <span class="{{ parent_class }}__star {{ parent_class }}__star--partial tw-text-[25.985px] tw-leading-none tw-relative tw-inline-block">
+      <span class="tw-text-[#DDDDDD] tw-block">★</span>
+      <span class="tw-absolute tw-left-0 tw-top-0 tw-overflow-hidden tw-whitespace-nowrap" style="width: {{ fill_percentage }}%; color: {{ star_color }};">★</span>
+    </span>
+  {%- endif -%}
+  
+  {%- comment -%} Empty Stars {%- endcomment -%}
+  {%- for i in (1..empty_stars) -%}
+    <span class="{{ parent_class }}__star {{ parent_class }}__star--empty tw-text-[25.985px] tw-leading-none tw-text-[#E2E8F0]">★</span>
+  {%- endfor -%}
+</div>
+

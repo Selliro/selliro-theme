@@ -1,0 +1,59 @@
+{%- comment -%}
+  Divider Theme Block
+  Global divider component for cards and sections
+{%- endcomment -%}
+
+{%- render 'divider',
+  variant: 'default',
+  padding_top: block.settings.padding_top,
+  padding_bottom: block.settings.padding_bottom,
+  color: block.settings.color,
+  parent_class: 'divider',
+  block_shopify_attributes: block.shopify_attributes
+-%}
+
+{% schema %}
+{
+  "name": "Divider",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 16,
+      "label": "Top padding",
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "default": 16,
+      "label": "Bottom padding",
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "Color",
+      "default": "slate-200",
+      "options": [
+        { "value": "white-10", "label": "White 10%" },
+        { "value": "white-20", "label": "White 20%" },
+        { "value": "slate-200", "label": "Slate 200" },
+        { "value": "gray-200", "label": "Gray 200" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Divider"
+    }
+  ]
+}
+{% endschema %}
+

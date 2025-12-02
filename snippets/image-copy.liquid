@@ -1,0 +1,91 @@
+{%- comment -%}
+  Image Snippet
+  Renders an image/icon for use within a card
+  Supports icon style and full image style
+  
+  Accepts:
+  - image: Image object
+  - image_id: Unique ID for the image
+  - layout_type: String (optional, 'icon' or 'full', default: 'icon')
+  - icon_max_width: String (optional, max width in pixels, only for 'icon' layout)
+  - icon_aspect_ratio: String (optional, aspect ratio, default: '1' for icon, '0.79' for full)
+  - icon_rounded: Boolean (optional, enable rounded corners, default: true, only for 'icon' layout)
+  - parent_class: String (optional, parent class prefix, default: 'image')
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- liquid
+  assign parent_class = parent_class | default: 'image'
+  assign layout_type = layout_type | default: 'full'
+  assign desktop_image = desktop_image | default: blank
+  assign mobile_image = mobile_image | default: blank
+  
+  if layout_type == 'full'
+    assign desktop_ar = desktop_aspect_ratio | default: '0.79' | plus: 0
+    assign mobile_ar = mobile_aspect_ratio | default: '2.37' | plus: 0
+  else
+    assign desktop_ar = desktop_aspect_ratio | default: '1' | plus: 0
+  endif
+
+-%}
+
+   
+
+{% if icon_rounded == true %}
+  <style>
+  @media(min-width: 768px) {
+    #{{block.id}} .icon_rounded_class {
+      border-radius: 12px;
+      border: 1px solid transparent;
+    }
+  }
+  </style>
+{% endif %}
+
+  {%- if layout_type == 'full' -%}
+    {%- comment -%} Full Image Layout (fills container) {%- endcomment -%}
+    <div id="{{block.id}}" class="{{ parent_class }}__image {{ parent_class }}__image--desktop tw-hidden md:tw-block" {{ block_shopify_attributes }}>
+      {%- render 'shopify-responsive-image',
+        image: desktop_image,
+        image_id: image_id,
+        image_aspect_ratio: desktop_ar,
+        wrapper_class: 'tw-w-full tw-h-full',
+        image_class: 'tw-w-full tw-h-full tw-object-cover icon_rounded_class',
+        fill: true
+        contain: contain
+      -%}
+    </div>
+    <div class="{{ parent_class }}__image {{ parent_class }}__image--mobile tw-block md:tw-hidden" {{ block_shopify_attributes }}>
+      {%- liquid
+        assign fallback_mobile_image = mobile_image
+        assign fallback_mobile_ar = mobile_ar
+        if mobile_image == blank
+          assign fallback_mobile_image = desktop_image
+          assign fallback_mobile_ar = desktop_ar
+        endif
+      -%}
+      {%- render 'shopify-responsive-image',
+        image: fallback_mobile_image,
+        image_id: image_id,
+        image_aspect_ratio: fallback_mobile_ar,
+        wrapper_class: 'tw-w-full tw-h-full',
+        image_class: 'tw-w-full tw-h-full tw-object-cover icon_rounded_class',
+        fill: true
+        contain: contain
+      -%}
+    </div>
+  {%- else -%}
+    {%- comment -%} Icon Layout (default style) {%- endcomment -%}
+    <div class="{{ parent_class }}__icon-wrapper">
+      <div class="{{ parent_class }}__icon {% if icon_rounded != false %} tw-rounded-xl{% endif %}"{% if icon_max_width != blank %} style="max-width: {{ icon_max_width }}px;"{% endif %} {{ block_shopify_attributes }}>
+        {%- render 'shopify-responsive-image',
+          image: desktop_image,
+          image_id: image_id,
+          image_aspect_ratio: desktop_aspect_ratio,
+          wrapper_class: 'tw-w-full tw-h-full tw-flex tw-items-center tw-justify-center',
+          cover: true
+        -%}
+      </div>
+    </div>
+  {%- endif -%}
+

@@ -1,0 +1,17 @@
+{%  if search.performed %}
+    {%  if search.results.size > 0 %}
+        <div class="tw-flex tw-flex-col tw-gap-4 tw-mt-6">
+            {% for result in search.results limit: 8 %}
+                <div class="tw-flex tw-flex-col tw-gap-2">
+                    <a href="{{ result.url}}" class="tw-text-sm tw-font-medium tw-text-[#323E46] tw-leading-none hover:tw-text-[#00a3a3] tw-transition-colors">{{ result.title }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    {%  else %}
+    <div class="tw-flex tw-flex-col tw-gap-2 tw-mt-4">
+      <div class="tw-flex tw-flex-col tw-gap-2">
+        <h2 class="tw-text-sm tw-font-medium tw-text-[#323E46]">{{ 'search.no_results' | t }}</h2>
+      </div>
+    </div>
+    {%  endif %}
+{%  endif %}

@@ -1,0 +1,130 @@
+{%- comment -%}
+  Icon Text Component
+  Reusable component for displaying icon + text with optional link
+  
+  Accepts:
+  - icon: String (optional)
+  - icon_position: String (optional - 'left' or 'right', default: 'left')
+  - label: String (optional - text before or after link, uses text_color)
+  - label_position: String (optional - 'left' or 'right', default: 'left')
+  - text: String or RichText (required - if link provided, this becomes the link text)
+  - link: String (optional - phone number, email, or URL)
+  - link_type: String (optional - 'tel', 'mailto', or 'url' - default: 'url')
+  - text_color: String (default: 'text-body')
+  - link_color: String (default: 'text-teal')
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- liquid
+  assign label = label | default: ''
+  assign text = text | default: ''
+  assign link = link | default: ''
+  assign link_type = link_type | default: 'url'
+  assign text_color = text_color | default: 'text-body'
+  assign link_color = link_color | default: 'text-teal'
+  assign icon_position = icon_position | default: 'left'
+  assign label_position = label_position | default: 'left'
+  assign icon_size = icon_size | default: '10px'
+  assign href = ''
+  assign has_link = false
+  assign text_plain = text | strip_html
+  assign font_variant = font_variant | default: 'base-medium'
+  
+  if link_type == 'tel' and text_plain != blank
+    assign href = 'tel:' | append: text_plain | replace: ' ', '' | replace: '-', '' | replace: '(', '' | replace: ')', ''
+    assign has_link = true
+  elsif link_type == 'mailto' and text_plain != blank
+    assign href = 'mailto:' | append: text_plain
+    assign has_link = true
+  elsif link_type == 'url'
+    if link != blank
+      if link contains 'http://' or link contains 'https://'
+        assign href = link
+      else
+        assign href = 'https://' | append: link
+      endif
+      assign has_link = true
+    elsif text_plain != blank
+      if text_plain contains 'http://' or text_plain contains 'https://'
+        assign href = text_plain
+      else
+        assign href = 'https://' | append: text_plain
+      endif
+      assign has_link = true
+    endif
+  endif
+  
+  assign text_color_class = 'tw-text-body-text'
+  case text_color
+    when 'text-body'
+      assign text_color_class = 'tw-text-body-text'
+    when 'text-gray-600'
+      assign text_color_class = 'tw-text-gray-600'
+    when 'text-gray-700'
+      assign text_color_class = 'tw-text-gray-700'
+    when 'contrast-body'
+      assign text_color_class = 'tw-text-white tw-opacity-80'
+    when 'text-white'
+      assign text_color_class = 'tw-text-white'
+  endcase
+  
+  assign link_color_class = 'tw-text-text-teal'
+  case link_color
+    when 'text-body'
+      assign link_color_class = 'tw-text-body-text'
+    when 'text-teal'
+      assign link_color_class = 'tw-text-text-teal'
+    when 'text-teal-600'
+      assign link_color_class = 'tw-text-text-teal-600'
+    when 'ah-teal'
+      assign link_color_class = 'tw-text-ah-teal'
+    when 'text-gray-700'
+      assign link_color_class = 'tw-text-gray-700'
+  endcase
+  
+  assign flex_direction = 'tw-flex-row'
+  if icon_position == 'right'
+    assign flex_direction = 'tw-flex-row-reverse'
+  endif
+-%}
+
+{%- if label != blank or text != blank -%}
+  <div class="icon-text tw-flex tw-items-center tw-gap-1 {{ flex_direction }}" {{ block_shopify_attributes }}>
+    {%- if icon != blank -%}
+      <img 
+        src="{{ icon | image_url: width: 40 }}" 
+        alt="{{ icon.alt | default: '' }}" 
+        class="tw-w-[{{ icon_size }}] tw-h-[{{ icon_size }}] tw-shrink-0" 
+        width="{{ icon_size }}" 
+        height="{{ icon_size }}"
+        loading="lazy"
+      >
+    {%- endif -%}
+    
+    {%- if label_position == 'left' and label != blank -%}
+      <span class="icon-text__label  {{ text_color_class }}">
+        {% render 'body', text: label, variant: font_variant, color: text_color, parent_class: 'icon-text__label' %}
+      </span>
+    {%- endif -%}
+    
+    {%- if has_link and text != blank -%}
+      <a 
+        href="{{ href }}"
+        class="icon-text__link {{ link_color_class }} tw-no-underline"
+      >
+        {% render 'body', text: text, variant: font_variant, color: text_color, parent_class: 'icon-text__text' %}
+      </a>
+    {%- elsif text != blank -%}
+        <div class="icon-text__text ">
+          {% render 'body', text: text, variant: font_variant, color: text_color, parent_class: 'icon-text__text' %}
+      </div>
+    {%- endif -%}
+    
+    {%- if label_position == 'right' and label != blank -%}
+      <span class="icon-text__label  {{ text_color_class }}">
+        {% render 'body', text: label, variant: font_variant, color: text_color, parent_class: 'icon-text__label' %}
+      </span>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+

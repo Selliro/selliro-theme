@@ -1,0 +1,29 @@
+{% comment %} 
+  Content card - content
+  Content block for Content Card section to manage left and right column
+{% endcomment %}
+
+{%- for nested_block in block.blocks -%}
+    <div class="rich-text__block rich-text__block--{{ nested_block.type }} tw-w-full">
+      {%- render nested_block, section: section, block: nested_block -%}
+    </div>
+    {%- endfor -%}  
+{% schema %}
+{
+  "name": "Content card - content",
+  "blocks": [
+    {"type": "parent-rich-text"},
+    {"type": "column-card-multicolumn"},
+    {"type": "column-card-carousel"},
+    {"type": "column-card-list"},
+    {"type": "table"},
+    {"type": "spacer"},
+    {"type": "spacer-copy"}
+  ],
+  "presets": [
+    {
+      "name": "Content card - content"
+    }
+  ]
+}
+{% endschema %}

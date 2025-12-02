@@ -1,0 +1,550 @@
+{%- comment -%}
+  Image Banner Section
+  
+  Flexible banner with:
+  - Background: Image, Color, or 50/50 Split
+  - Block-based content (breadcrumb, caption, heading, subheading, image, buttons)
+  - Left/Right positioning
+  - Responsive mobile/desktop images
+{%- endcomment -%}
+
+{%- liquid
+    assign background_type = section.settings.background_type | default: 'image'
+    assign background_color = section.settings.background_color | default: '#092846'
+    assign split_color = section.settings.split_color | default: '#ffffff'
+    assign image_desktop = section.settings.image_desktop
+    assign image_mobile = section.settings.image_mobile
+    assign max_height = section.settings.max_height
+  -%}
+  {% comment %} {% comment %} <style>
+    #{{section.id}}.image-banner-final {
+      max-width: 1440px;
+      margin: auto;
+    }
+
+  </style> {% endcomment %} {% endcomment %}
+  {% assign parent_class = section.settings.parent_class %}
+  <div id="{{section.id}}" class="image-banner-final 
+    {% if parent_class != blank %} {{ parent_class }} {% endif %}
+    tw-relative tw-w-full 
+    tw-overflow-hidden"{% if max_height != blank and background_type == 'color' %} style="height: {{ max_height }}px; max-height: {{ max_height }}px;
+    "{% endif %}>   
+
+  {%- comment -%} Background Layer {%- endcomment -%}
+    {%- case background_type -%}
+      
+      {%- when 'color' -%}
+        {%- render 'banner-layout-color',
+          background_color: background_color,
+          max_height: max_height,
+          section: section
+        -%}
+      
+      {%- when 'split' -%}
+        {%- render 'banner-layout-split',
+          split_color: split_color,
+          image_desktop: image_desktop,
+          image_mobile: image_mobile,
+          max_height: max_height,
+          image_aspect_ratio: section.settings.image_aspect_ratio_desktop,
+          image_aspect_ratio_mobile: section.settings.image_aspect_ratio_mobile,
+          section: section
+        -%}
+      
+      {%- else -%}
+        {%- comment -%} Image Background {%- endcomment -%}
+        {%- render 'banner-layout-image',
+          image_desktop: image_desktop,
+          image_mobile: image_mobile,
+          show_overlay: section.settings.show_overlay,
+          overlay_opacity: section.settings.overlay_opacity,
+          show_gradient_overlay: section.settings.show_gradient_overlay,
+          image_aspect_ratio: section.settings.image_aspect_ratio_desktop | plus:0,
+          image_aspect_ratio_mobile: section.settings.image_aspect_ratio_mobile | plus:0,
+          section: section
+        -%}
+    {%- endcase -%}
+  </div>
+  
+  {% schema %}
+  {
+    "name": "Image Banner",
+    "tag": "section",
+    "class": "section image-banner-final",
+    "settings": [
+      {
+        "type": "text",
+        "id": "parent_class",
+        "label": "Parent Class ?"
+      },
+      {
+        "type": "header",
+        "content": "Background Settings"
+      },
+      {
+        "type": "select",
+        "id": "background_type",
+        "label": "Background type",
+        "default": "image",
+        "options": [
+          { "value": "image", "label": "Image" },
+          { "value": "color", "label": "Solid Color" },
+          { "value": "split", "label": "50/50 Split" }
+        ]
+      },
+      {
+        "type": "image_picker",
+        "id": "image_desktop",
+        "label": "Desktop Background Image",
+        "info": "Recommended: 1920x1080px"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_mobile",
+        "label": "Mobile Background Image",
+        "info": "Recommended: 750x1334px. Falls back to desktop if not set."
+      },
+      {
+        "type": "text",
+        "id": "background_color",
+        "label": "Background Color",
+        "default": "#092846"
+      },
+      {
+        "type": "text",
+        "id": "split_color",
+        "label": "Split Background Color (Left Side)",
+        "default": "#ffffff",
+        "info": "Used only for 50/50 Split background",
+        "visible_if": "{{ section.settings.background_type == 'split' }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_overlay",
+        "label": "Show solid overlay",
+        "default": false,
+        "info": "Dark overlay for better text readability"
+      },
+      {
+        "type": "range",
+        "id": "overlay_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "default": 10,
+        "label": "Overlay opacity",
+        "unit": "%"
+      },
+      {
+        "type": "text",
+        "id": "max_height",
+        "label": "Max height",
+        "info": "Max height of the banner in pixels",
+        "visible_if": "{{ section.settings.background_type == 'color' }}"
+      },
+      {
+        "type": "text",
+        "id": "image_aspect_ratio_desktop",
+        "label": "Image aspect ratio (desktop)",
+        "info": "Enter a decimal, e.g., 1.8",
+        "default": "1.8",
+      },
+      {
+        "type": "text",
+        "id": "image_aspect_ratio_mobile",
+        "label": "Image aspect ratio (mobile)",
+        "info": "Enter a decimal, e.g., 0.48",
+        "default": "0.48",
+      },
+      {
+        "type": "checkbox",
+        "id": "show_gradient_overlay",
+        "label": "Show gradient overlay",
+        "default": false,
+        "info": "Gradient from bottom to top"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "breadcrumb",
+        "name": "Breadcrumb",
+        "limit": 2,
+        "settings": [
+          {
+            "type": "select",
+            "id": "position",
+            "label": "Position",
+            "default": "left",
+            "options": [
+              { "value": "left", "label": "Left Column" },
+              { "value": "right", "label": "Right Column" }
+            ],
+            "visible_if": "{{ section.settings.background_type != 'split' }}"
+          },
+          {
+            "type": "text",
+            "id": "icon_color",
+            "label": "Arrow icon color",
+            "default": "#000000"
+          },
+          {
+            "type": "text",
+            "id": "text_color",
+            "label": "Text color",
+            "default": "#00a3a3"
+          },
+          {
+            "type": "text",
+            "id": "home_text",
+            "label": "Breadcrumb Root link text",
+            "default": "HOME",
+            "info": "Custom text for the home link (default: HOME)"
+          },
+          {
+            "type": "url",
+            "id": "home_link",
+            "label": "Breadcrumb Root link URL",
+            "info": "Custom URL for the home link (leave blank for default home page)"
+          },
+          {
+            "type": "text",
+            "id": "current_text",
+            "label": "Current page text",
+            "info": "Custom text for current page (leave blank to use page title)"
+          }
+        ]
+      },
+      {
+        "type": "caption",
+        "name": "Caption",
+        "settings": [
+          {
+            "type": "select",
+            "id": "position",
+            "label": "Position",
+            "default": "left",
+            "options": [
+              { "value": "left", "label": "Left Column" },
+              { "value": "right", "label": "Right Column" }
+            ],
+            "visible_if": "{{ section.settings.background_type != 'split' }}"
+          },
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Caption text",
+            "default": "CAPTION"
+          },
+          {
+            "type": "text",
+            "id": "color",
+            "label": "Text color",
+            "default": "#ffffff"
+          }
+        ]
+      },
+      {
+        "type": "heading",
+        "name": "Heading",
+        "settings": [
+          {
+            "type": "select",
+            "id": "position",
+            "label": "Position",
+            "default": "left",
+            "options": [
+              { "value": "left", "label": "Left Column" },
+              { "value": "right", "label": "Right Column" }
+            ],
+            "visible_if": "{{ section.settings.background_type != 'split' }}"
+          },
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Heading text",
+            "default": "Heading"
+          },
+          {
+            "type": "text",
+            "id": "color",
+            "label": "Text color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "image_picker",
+            "id": "icon_image",
+            "label": "Icon Image",
+            "info": "Optional: Icon to display as superscript in the upper right corner",
+          },
+          {
+            "type": "text",
+            "id": "icon_max_width",
+            "label": "Icon Max Width",
+            "default": "20",
+            "info": "Optional: Max width in pixels for the icon (default: 20px)"
+          }
+        ]
+      },
+      {
+        "type": "subheading",
+        "name": "Subheading",
+        "settings": [
+          {
+            "type": "select",
+            "id": "position",
+            "label": "Position",
+            "default": "left",
+            "options": [
+              { "value": "left", "label": "Left Column" },
+              { "value": "right", "label": "Right Column" }
+            ],
+            "visible_if": "{{ section.settings.background_type != 'split' }}"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Subheading text",
+            "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+          },
+          {
+            "type": "text",
+            "id": "color",
+            "label": "Text color",
+            "default": "#ffffff"
+          }
+        ]
+      },
+      {
+        "type": "image",
+        "name": "Content Image",
+        "settings": [
+          {
+            "type": "select",
+            "id": "position",
+            "label": "Position",
+            "default": "left",
+            "options": [
+              { "value": "left", "label": "Left Column" },
+              { "value": "right", "label": "Right Column" }
+            ],
+            "visible_if": "{{ section.settings.background_type != 'split' }}"
+          },
+          {
+            "type": "image_picker",
+            "id": "desktop_image",
+            "label": "Image",
+            "info": "Recommended: 2:1 aspect ratio"
+          },
+          {
+            "type": "text",
+            "id": "icon_max_width",
+            "label": "Image width",
+            "info": "Max width of the image in pixels (e.g., 200)",
+            "default": "200"
+          },
+          {
+            "type": "text",
+            "id": "desktop_aspect_ratio",
+            "label": "Image aspect ratio",
+            "info": "Enter a decimal, e.g., 1 for square, 2 for 2:1",
+            "default": "1"
+          }
+        ]
+      },
+      {
+        "type": "button_group",
+        "name": "Button Group",
+        "settings": [
+          {
+            "type": "select",
+            "id": "position",
+            "label": "Position",
+            "default": "left",
+            "options": [
+              { "value": "left", "label": "Left Column" },
+              { "value": "right", "label": "Right Column" }
+            ],
+            "visible_if": "{{ section.settings.background_type != 'split' }}"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_button_1",
+            "label": "Show Primary Button",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "button_1_label",
+            "label": "Primary Button Label",
+            "default": "Primary Button"
+          },
+          {
+            "type": "url",
+            "id": "button_1_link",
+            "label": "Primary Button Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_button_2",
+            "label": "Show Secondary Button",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "button_2_label",
+            "label": "Secondary Button Label",
+            "default": "Secondary Button"
+          },
+          {
+            "type": "url",
+            "id": "button_2_link",
+            "label": "Secondary Button Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_button_3",
+            "label": "Show Tertiary Button",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "button_3_label",
+            "label": "Tertiary Button Label",
+            "default": "Learn More"
+          },
+          {
+            "type": "url",
+            "id": "button_3_link",
+            "label": "Tertiary Button Link"
+          }
+        ]
+      },
+      {
+        "type": "stock_card",
+        "name": "Stock Ticker Card",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id": "position",
+            "label": "Position",
+            "default": "right",
+            "options": [
+              { "value": "left", "label": "Left Column" },
+              { "value": "right", "label": "Right Column" }
+            ],
+            "visible_if": "{{ section.settings.background_type != 'split' }}"
+          },
+          {
+            "type": "text",
+            "id": "stock_symbol",
+            "label": "Stock symbol",
+            "default": "AHCO"
+          },
+          {
+            "type": "text",
+            "id": "stock_exchange",
+            "label": "Exchange",
+            "default": "NASDAQ"
+          },
+          {
+            "type": "text",
+            "id": "stock_price",
+            "label": "Stock price",
+            "default": "$9.53"
+          },
+          {
+            "type": "text",
+            "id": "stock_change",
+            "label": "Price change percentage",
+            "default": "3.04%"
+          },
+          {
+            "type": "select",
+            "id": "stock_change_direction",
+            "label": "Change direction",
+            "default": "up",
+            "options": [
+              { "value": "up", "label": "Up (green)" },
+              { "value": "down", "label": "Down (red)" }
+            ]
+          },
+          {
+            "type": "text",
+            "id": "stock_market_cap",
+            "label": "Market cap",
+            "default": "$1.277 B"
+          },
+          {
+            "type": "text",
+            "id": "stock_volume",
+            "label": "Volume",
+            "default": "888,201"
+          },
+          {
+            "type": "text",
+            "id": "stock_timestamp",
+            "label": "Timestamp",
+            "default": "Oct 3, 2025 4:00 PM ET"
+          }
+        ]
+      },
+      {
+        "type": "email_card",
+        "name": "Email Signup Card",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id": "position",
+            "label": "Position",
+            "default": "right",
+            "options": [
+              { "value": "left", "label": "Left Column" },
+              { "value": "right", "label": "Right Column" }
+            ],
+            "visible_if": "{{ section.settings.background_type != 'split' }}"
+          },
+          {
+            "type": "text",
+            "id": "email_card_heading",
+            "label": "Card heading",
+            "default": "Join Our Mailing List"
+          },
+          {
+            "type": "text",
+            "id": "email_placeholder",
+            "label": "Email placeholder text",
+            "default": "name@email.com"
+          },
+          {
+            "type": "text",
+            "id": "email_button_text",
+            "label": "Button text",
+            "default": "Subscribe"
+          },
+          {
+            "type": "url",
+            "id": "email_form_action",
+            "label": "Form action URL",
+            "info": "Where the form should submit to (e.g., Klaviyo, Mailchimp endpoint)"
+          }
+        ]
+      },
+    ],
+    "presets": [
+      {
+        "name": "Image Banner",
+        "blocks": [
+          { "type": "breadcrumb" },
+          { "type": "caption" },
+          { "type": "heading" },
+          { "type": "subheading" },
+          { "type": "button_group" }
+        ]
+      }
+    ]
+  }
+  {% endschema %}
+  
+  

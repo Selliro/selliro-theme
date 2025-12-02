@@ -1,0 +1,53 @@
+{%- comment -%}
+  Label Theme Block
+  Global label component with customizable colors
+{%- endcomment -%}
+
+{%- liquid
+  assign text = block.settings.text
+  assign background_color = block.settings.background_color | default: '#dddddd'
+  assign text_color = block.settings.text_color | default: '#58605E'
+  
+  assign label_classes = 'label__item tw-inline-flex tw-items-center tw-px-3 tw-py-1 tw-rounded-full'
+  assign label_style = 'background-color: ' | append: background_color | append: '; color: ' | append: text_color | append: ';'
+-%}
+
+{%- if text != blank -%}
+  <div class="{{ label_classes }}" style="{{ label_style }}" {{ block.shopify_attributes }}>
+    {% render 'body', text: text, color: text_color %}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Label",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Label text",
+      "default": "Label"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#dddddd",
+      "info": "Background color of the label"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#323e46",
+      "info": "Text color of the label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Label"
+    }
+  ]
+}
+{% endschema %}
+

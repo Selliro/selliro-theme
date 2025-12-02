@@ -1,0 +1,51 @@
+{%- comment -%}
+  Body Text Component
+  Unified body text component with size variants
+  Supports: 'sm', 'md', 'lg'
+
+  Accepts:
+  - text: Rich text string
+  - variant: String (optional, 'sm', 'md', 'lg', default: 'md')
+  - color: Hex color value (optional)
+  - parent_class: String (optional, parent class prefix, default: 'body')
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+<style>
+ .rich-text a:hover {
+  text-decoration: underline;
+}
+</style>
+{%- liquid
+  assign variant = variant | default: 'base'
+  assign parent_class = parent_class | default: 'body'
+  assign color = color | default: '#323E46'
+  
+  case variant
+    when 'base'
+      assign text_classes = parent_class | append: '__text-base tw-text-base tw-font-normal !tw-leading-[20px] !tw-break-words !tw-tracking-[-0.16px]'
+    when 'base-medium'
+      assign text_classes = parent_class | append: '__text-base-medium tw-text-base !tw-font-medium !tw-leading-[20px] !tw-break-words !tw-tracking-[-0.16px]'
+    when 'base-bold'
+      assign text_classes = parent_class | append: '__text-base-bold tw-text-base !tw-font-bold !tw-leading-[20px] !tw-break-words !tw-tracking-[-0.16px]'
+    when 'sm'
+      assign text_classes = parent_class | append: '__text-sm tw-text-sm !tw-font-normal !tw-leading-[18px] !tw-break-words !tw-tracking-[-0.14px]'
+    when 'sm-medium'
+      assign text_classes = parent_class | append: '__text-sm-medium tw-text-sm !tw-font-medium !tw-leading-[18px] !tw-break-words !tw-tracking-[-0.14px]'
+    when 'xs'
+      assign text_classes = parent_class | append: '__text-xs tw-text-xs md:tw-text-base !tw-font-norsmal !tw-leading-[16px] md:!tw-leading-[20px] !tw-break-words !tw-tracking-[-0.12px] md:!tw-tracking-[-0.16px]'
+     when 'lg'
+      assign text_classes = parent_class | append: '__text-md tw-text-lg !tw-font-medium !tw-leading-[110%] !tw-break-words !tw-tracking-[-0.72px]'
+  endcase
+  
+  assign text_style = ''
+  if color != blank
+    assign text_style = 'color: ' | append: color | append: ';'
+  endif
+-%}
+
+{%- if text != blank -%}
+  <div class="rich-text {{ text_classes }}"{% if text_style != blank %} style="{{ text_style }}"{% endif %} {{ block_shopify_attributes }}>
+    {{ text }}
+  </div>
+{%- endif -%}
+

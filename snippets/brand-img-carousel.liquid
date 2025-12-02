@@ -1,0 +1,57 @@
+{%- comment -%}
+  Brand Image Carousel Snippet
+  Builds slider items from blocks and renders carousel
+  
+  Accepts:
+  - blocks: Array of block objects
+  - section_id: String (unique ID for this carousel instance)
+  - mobile_slides_per_view: String or Number
+  - desktop_slides_per_view: String or Number
+  - mobile_space_between: Number
+  - desktop_space_between: Number
+  - desktop_aspect_ratio: String (aspect ratio for all desktop images)
+  - mobile_aspect_ratio: String (aspect ratio for all mobile images)
+  - show_progress: Boolean (default: false)
+  - progress_color: String (Tailwind color class, default: 'tw-bg-slate-400')
+  - carousel_class: String (additional BEM classes)
+{%- endcomment -%}
+
+
+
+{%- if blocks.size > 0 -%}
+    {%- assign slider_items = '' -%}
+    {%- for block in blocks -%}
+      {%- capture slider_item -%}
+        <div class="brand-image-card tw-flex tw-items-center tw-justify-center tw-rounded-xl tw-border tw-border-slate-200 tw-relative tw-overflow-hidden tw-h-full tw-p-2">
+          <div class="brand-image-card__image tw-w-full ">
+            {%- render 'image',
+              desktop_image: block.settings.desktop_image,
+              mobile_image: block.settings.mobile_image,
+              image_id: block.id,
+              layout_type: 'full',
+              desktop_aspect_ratio: desktop_aspect_ratio ,
+              mobile_aspect_ratio: mobile_aspect_ratio ,
+              parent_class: 'carousel-item',
+              contain: true
+            -%}
+          </div>
+        </div>
+      {%- endcapture -%}
+      {%- assign slider_items = slider_items | append: slider_item | append: '::slider-limiter' -%}
+    {%- endfor -%}
+    
+    <div class="brand-lists-section__carousel">
+      {%- render 'carousel-wrapper',
+        section_id: section_id,
+        mobile_slides_per_view: mobile_slides_per_view,
+        desktop_slides_per_view: desktop_slides_per_view,
+        mobile_space_between: mobile_space_between,
+        desktop_space_between: desktop_space_between,
+        show_progress: show_progress,
+        progress_color: progress_color,
+        carousel_class: carousel_class,
+        slider_items: slider_items
+      -%}
+    </div>
+  {%- endif -%}
+  

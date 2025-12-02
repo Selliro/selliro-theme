@@ -1,0 +1,411 @@
+{%- comment -%}
+  Horizontal Card V4 Theme Block
+  Background image card with overlay, plus icon, and overlaid text
+  Uses static block for image, dynamic blocks for content
+{%- endcomment -%}
+
+{%- liquid
+  assign cards_show_border = section.settings.cards_show_border | default: false
+-%}
+
+<style>
+  @media(max-width: 390px) {
+    .interactive-card__image .responsive-image__wrapper{
+      min-height:146px;
+    }
+  }
+</style>
+
+<style>
+  @media(min-width: 1024px){
+    /* Static content - always visible */
+    .overlay-card-content__static {
+      opacity: 1;
+      transition: opacity 0.3s ease-out;
+    }
+
+    /* Overlay content - hidden by default */
+    .overlay-card-content__overlay {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Show overlay content on hover and focus - let animate.css handle animation */
+    .horizontal-card-v4:hover .overlay-card-content__overlay,
+    .horizontal-card-v4:focus .overlay-card-content__overlay,
+    .horizontal-card-v4:focus-within .overlay-card-content__overlay {
+      pointer-events: auto;
+    }
+
+    /* When animate.css is animating, override opacity */
+    .overlay-card-content__overlay.animate__animated.animate__fadeInUp {
+      opacity: 1;
+    }
+
+    .overlay-card-content__overlay.animate__animated.animate__fadeOut {
+      opacity: 0;
+    }
+
+    /* Hide static content on hover and focus */
+    .horizontal-card-v4:hover .overlay-card-content__static,
+    .horizontal-card-v4:focus .overlay-card-content__static,
+    .horizontal-card-v4:focus-within .overlay-card-content__static {
+      opacity: 0;
+      transition: opacity 0.3s ease-out;
+    }
+
+    /* Background overlay animation */
+    .overlay-card__background-overlay {
+      transition: transform 0.5s ease-in, opacity 0.5s ease-in;
+    }
+
+    .horizontal-card-v4:hover .overlay-card__background-overlay,
+    .horizontal-card-v4:focus .overlay-card__background-overlay,
+    .horizontal-card-v4:focus-within .overlay-card__background-overlay {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Icon animations */
+    .overlay-card__icon-content--active {
+      transition: opacity 0.3s ease-out;
+    }
+
+    .overlay-card__icon-content--hover {
+      transition: opacity 0.3s ease-in;
+    }
+
+    .horizontal-card-v4:hover .overlay-card__icon-content--active,
+    .horizontal-card-v4:focus .overlay-card__icon-content--active,
+    .horizontal-card-v4:focus-within .overlay-card__icon-content--active {
+      opacity: 0;
+    }
+
+    .horizontal-card-v4:hover .overlay-card__icon-content--hover,
+    .horizontal-card-v4:focus .overlay-card__icon-content--hover,
+    .horizontal-card-v4:focus-within .overlay-card__icon-content--hover {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    function initCardAnimations() {
+      if (window.innerWidth < 1024) return;
+      
+      document.querySelectorAll('.horizontal-card-v4').forEach(card => {
+        const overlayContent = card.querySelector('.overlay-card-content__overlay');
+        if (!overlayContent) return;
+
+        let cleanupTimeout = null;
+        let isHovered = false;
+
+        // Remove any existing animation classes
+        overlayContent.classList.remove('animate__animated', 'animate__fadeInUp', 'animate__fadeIn', 'animate__fadeOut');
+
+        card.addEventListener('mouseenter', function() {
+          isHovered = true;
+          
+          // Clear any pending cleanup
+          if (cleanupTimeout) {
+            clearTimeout(cleanupTimeout);
+            cleanupTimeout = null;
+          }
+
+          // Remove fade out classes and add fade in for overlay
+          overlayContent.classList.remove('animate__fadeOut', 'animate__fadeIn');
+          // Force reflow to restart animation
+          void overlayContent.offsetWidth;
+          overlayContent.classList.add('animate__animated', 'animate__fadeInUp');
+        });
+
+        card.addEventListener('mouseleave', function() {
+          isHovered = false;
+          
+          // Clear any pending cleanup
+          if (cleanupTimeout) {
+            clearTimeout(cleanupTimeout);
+            cleanupTimeout = null;
+          }
+
+          // Fade out overlay content
+          overlayContent.classList.remove('animate__fadeInUp', 'animate__fadeIn');
+          void overlayContent.offsetWidth;
+          overlayContent.classList.add('animate__animated', 'animate__fadeOut');
+          
+          // Clean up classes after animation completes, but only if still not hovered
+          cleanupTimeout = setTimeout(() => {
+            if (!isHovered) {
+              overlayContent.classList.remove('animate__animated', 'animate__fadeOut');
+            }
+            cleanupTimeout = null;
+          }, 800);
+        });
+
+        // Keyboard events - same behavior as mouse events
+        // Use focusin/focusout to catch focus on card or any child element
+        card.addEventListener('focusin', function() {
+          isHovered = true;
+          
+          // Clear any pending cleanup
+          if (cleanupTimeout) {
+            clearTimeout(cleanupTimeout);
+            cleanupTimeout = null;
+          }
+
+          // Remove fade out classes and add fade in for overlay
+          overlayContent.classList.remove('animate__fadeOut', 'animate__fadeIn');
+          // Force reflow to restart animation
+          void overlayContent.offsetWidth;
+          overlayContent.classList.add('animate__animated', 'animate__fadeInUp');
+        });
+
+        card.addEventListener('focusout', function(ev) {
+          // Check if focus is moving to another element within the card
+          const relatedTarget = ev.relatedTarget;
+          if (relatedTarget && card.contains(relatedTarget)) {
+            // Focus is still within the card, don't hide overlay
+            return;
+          }
+
+          isHovered = false;
+          
+          // Clear any pending cleanup
+          if (cleanupTimeout) {
+            clearTimeout(cleanupTimeout);
+            cleanupTimeout = null;
+          }
+
+          // Fade out overlay content
+          overlayContent.classList.remove('animate__fadeInUp', 'animate__fadeIn');
+          void overlayContent.offsetWidth;
+          overlayContent.classList.add('animate__animated', 'animate__fadeOut');
+          
+          // Clean up classes after animation completes, but only if still not hovered
+          cleanupTimeout = setTimeout(() => {
+            if (!isHovered) {
+              overlayContent.classList.remove('animate__animated', 'animate__fadeOut');
+            }
+            cleanupTimeout = null;
+          }, 800);
+        });
+
+      
+
+      });
+    }
+
+    // Initialize on DOM ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCardAnimations);
+    } else {
+      initCardAnimations();
+    }
+
+    // Re-initialize for dynamically loaded content
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', initCardAnimations);
+    }
+  })();
+</script>
+
+<div class="horizontal-card-v4 group{% if cards_show_border %} tw-border tw-border-slate-200{% endif %} tw-rounded-xl tw-relative tw-overflow-hidden tw-h-full" tabindex="0" {{ block.shopify_attributes }}>
+  {%- comment -%} Background Image (Static block, relative positioning) {%- endcomment -%}
+    <div class="horizontal-card-v4__background tw-relative tw-w-full tw-h-full] overlay-card">
+      {%- render 'image', 
+        desktop_image: block.settings.overlay-card-image-desktop, 
+        mobile_image: block.settings.overlay-card-image-mobile, 
+        desktop_aspect_ratio: block.settings.overlay-card-image-desktop-aspect-ratio, 
+        mobile_aspect_ratio: block.settings.overlay-card-image-mobile-aspect-ratio,
+        parent_class: 'interactive-card'
+        -%}
+    </div>
+
+    {%- comment -%} Static Content (heading + subheading - always visible at bottom) {%- endcomment -%}
+    <div class="overlay-card-content__static 
+      tw-h-full 
+      tw-absolute tw-bottom-0 tw-left-0 
+      tw-right-0 tw-z-[4] 
+      tw-p-5 tw-text-white 
+      tw-flex tw-flex-col tw-gap-1 tw-justify-center md:tw-justify-end">
+      
+      {%- comment -%} Desktop Static Content {%- endcomment -%}
+      <div class="overlay-card-content overlay-card-content--desktop tw-hidden md:tw-block">
+        <div class="overlay-card-content__title-wrapper tw-flex tw-flex-col tw-gap-1">
+          {%- render 'subheading', text: block.settings.overlay-card-heading, variant: 'base-medium' , parent_class: "overlay-card-heading", color: '#ffffff' -%}
+          <div class="overlay-card-content__subheading-wrapper tw-opacity-75">
+            {%- render 'body', text: block.settings.overlay-card-subheading, variant: 'base' , parent_class: "overlay-card-subheading", color: '#ffffff' -%}
+          </div>
+        </div>
+      </div>
+
+      {%- comment -%} Mobile Static Content {%- endcomment -%}
+      <div class="overlay-card-content overlay-card-content--mobile tw-flex tw-flex-col tw-gap-4 md:tw-hidden">
+        <div class="overlay-card-content__title-wrapper tw-flex tw-flex-col tw-gap-1">
+          {%- render 'subheading', text: block.settings.overlay-card-heading, variant: 'base-medium' , parent_class: "overlay-card-heading", color: '#ffffff' -%}
+          <div class="overlay-card-content__subheading-wrapper tw-opacity-75">
+           {%- render 'body', text: block.settings.overlay-card-subheading, variant: 'base' , parent_class: "overlay-card-subheading", color: '#ffffff' -%}
+          </div>
+        </div>
+        <div class="overlay-card-content__button-wrapper">
+          {%  render 'button', tertiary_color: '#52C3C2', tertiary_hover_color:'#52C3C2',  label: block.settings.overlay-card-button-label, link: block.settings.overlay-card-button-link, variant: 'tertiary' , parent_class: "overlay-card-button" , button_id: "overlay-card-button-mobile" -%}
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} Overlay Content (button + body - appears on hover with animation) {%- endcomment -%}
+    <div class="overlay-card-content__overlay 
+      tw-h-full 
+      tw-absolute tw-top-0 tw-left-0 
+      tw-right-0 tw-z-[5] 
+      tw-p-5 tw-text-white 
+      tw-flex tw-flex-col tw-gap-5 tw-justify-start
+      tw-hidden md:tw-block
+      ">
+      
+      {%- comment -%} Desktop Overlay Content {%- endcomment -%}
+      <div class="overlay-card-content overlay-card-content--desktop tw-hidden md:tw-block">
+        <div class="overlay-card-content__inner tw-flex tw-flex-col tw-gap-5">
+          {%- comment -%} Include heading in overlay for desktop {%- endcomment -%}
+          <div class="overlay-card-content__title-wrapper tw-flex tw-flex-col tw-gap-1">
+            {%- render 'subheading', text: block.settings.overlay-card-heading, variant: 'base-medium' , parent_class: "overlay-card-heading", color: '#ffffff' -%}
+            <div class="overlay-card-content__subheading-wrapper tw-opacity-75">
+              {%- render 'body', text: block.settings.overlay-card-subheading, variant: 'base' , parent_class: "overlay-card-subheading", color: '#ffffff' -%}
+            </div>
+          </div>
+          <div class="overlay-card-content__button-wrapper">
+            {%  render 'button', tertiary_color: '#358282', tertiary_hover_color:'#52C3C2', label: block.settings.overlay-card-button-label, link: block.settings.overlay-card-button-link, variant: 'tertiary' , parent_class: "overlay-card-button" , button_id: "overlay-card-button-desktop" -%}  
+          </div>
+          <div class="overlay-card-content__body-wrapper tw-flex tw-flex-col tw-gap-5">
+            {%- render 'body', text: block.settings.overlay-card-body, variant: 'base' , parent_class: "overlay-card-body", color: '#ffffff' -%}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="overlay-card__background-overlay tw-absolute tw-opacity-75 tw-inset-0 tw-z-[3] md:tw-opacity-100 md:tw-translate-y-full tw-top-0"
+     style="background: rgb(9, 40, 70);"
+    ></div>
+
+
+    <div class="overlay-card__icon overlay-card__icon--desktop tw-hidden md:tw-block ">
+      <div class="overlay-card__icon-content 
+        overlay-card__icon-content--active 
+        tw-opacity-100 
+        tw-absolute tw-top-5 
+        tw-right-5 tw-z-[8] 
+        ">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
+              <rect width="30" height="30" rx="15" fill="white"/>
+              <rect x="14" y="15" width="2" height="8" fill="#092846"/>
+              <rect x="15" y="14" width="2" height="8" transform="rotate(90 15 14)" fill="#092846"/>
+              <rect x="14" y="7" width="2" height="8" fill="#092846"/>
+              <rect x="23" y="14" width="2" height="8" transform="rotate(90 23 14)" fill="#092846"/>
+              <rect x="14.6569" y="14" width="2" height="1.39876" transform="rotate(45 14.6569 14)" fill="#092846"/>
+          </svg>
+      </div>
+      <div class="overlay-card__icon-content 
+        overlay-card__icon-content--hover 
+        tw-absolute tw-top-5 
+        tw-right-5 tw-z-[8] 
+        tw-opacity-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <rect width="30" height="30" rx="15" fill="#52C3C2"/>
+          <rect x="19.4304" y="10" width="2" height="8" fill="#092846"/>
+          <rect x="20.4304" y="9" width="2" height="8" transform="rotate(90 20.4304 9)" fill="#092846"/>
+          <rect x="19.4304" y="9" width="2" height="1" fill="#092846"/>
+          <rect x="21.4304" y="9" width="2" height="1" transform="rotate(90 21.4304 9)" fill="#092846"/>
+          <rect x="20.0872" y="9" width="2" height="15.6797" transform="rotate(45 20.0872 9)" fill="#092846"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="overlay-card__icon overlay-card__icon--mobile tw-absolute tw-top-5 tw-right-5 tw-z-[8] tw-block md:tw-hidden">
+      <div class="overlay-card__icon-content ">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <rect width="30" height="30" rx="15" fill="#52C3C2"/>
+          <rect x="19.4304" y="10" width="2" height="8" fill="#092846"/>
+          <rect x="20.4304" y="9" width="2" height="8" transform="rotate(90 20.4304 9)" fill="#092846"/>
+          <rect x="19.4304" y="9" width="2" height="1" fill="#092846"/>
+          <rect x="21.4304" y="9" width="2" height="1" transform="rotate(90 21.4304 9)" fill="#092846"/>
+          <rect x="20.0872" y="9" width="2" height="15.6797" transform="rotate(45 20.0872 9)" fill="#092846"/>
+        </svg>
+      </div>
+    </div>
+
+  </div>
+
+
+{% schema %}
+{
+  "name": "Interactive overlay card",
+
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+       "type": "image_picker",
+       "id": "overlay-card-image-desktop",
+       "label": "Overlay card image (desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "overlay-card-image-mobile",
+      "label": "Overlay card image (mobile)"
+    },
+    {
+      "type": "text",
+      "id": "overlay-card-image-desktop-aspect-ratio",
+      "label": "Overlay card image (desktop) aspect ratio",
+      "default": "1"
+    },
+    {
+      "type": "text",
+      "id": "overlay-card-image-mobile-aspect-ratio",
+      "label": "Overlay card image (mobile) aspect ratio",
+      "default": "2.4"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "overlay-card-heading",
+      "label": "Overlay card heading",
+      "default": "Respiratory Care"
+    },
+    {
+      "type": "text",
+      "id": "overlay-card-subheading",
+      "label": "Overlay card subheading",
+      "default": "Breathing conditions with PAP therapy, oxygen, & ventilation."
+    },
+    {
+      "type": "richtext",
+      "id": "overlay-card-body",
+      "label": "Overlay card content"
+    },
+    {
+      "type": "url",
+      "id": "overlay-card-button-link",
+      "label": "Overlay card button link"
+    },
+    {
+      "type": "text",
+      "id": "overlay-card-button-label",
+      "label": "Overlay card button label",
+      "default": "Learn More"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Interactive overlay card"
+    }
+  ]
+}
+{% endschema %}
+

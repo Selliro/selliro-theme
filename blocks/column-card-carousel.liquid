@@ -1,0 +1,78 @@
+{%- comment -%}
+  Column Card - Carousel
+  Theme block version of Column card that is a carousel
+{%- endcomment -%}
+
+{%- liquid
+  assign card_background_color = section.settings.card_background_color
+-%}
+
+<carousel-swiper class="carousel carousel--column-card {% unless section.settings.split_content %}no-split{% endunless %}" {{ block.shopify_attributes }}>
+  <script type="application/json">
+    {
+      "slidesPerView": "{{ block.settings.slide_count_mobile }}",
+      "spaceBetween": 20,
+      "navigation": true,
+      "grabCursor": true,
+      "breakpoints": {
+        "768": {
+          "slidesPerView": "{{ block.settings.slide_count_desktop }}",
+          "spaceBetween": 20,
+          "slidesOffsetAfter": 64{% unless section.settings.split_content %},"slidesOffsetBefore": 64{% endunless %}
+        }
+      }
+    }
+  </script>
+  
+  <div class="swiper carousel__swiper">
+    <div class="swiper-wrapper carousel__wrapper">
+      {%- for nested_block in block.blocks -%}
+        <div class="swiper-slide carousel__slide tw-h-auto tw-flex">
+        {%- render nested_block, section: section, card_background_color: card_background_color %}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+  {%  render 'swiper-navigation' %}
+</carousel-swiper>
+
+{% schema %}
+{
+  "name": "Column Card - Carousel",
+  "blocks": [
+    { "type": "column-card" }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "slide_count_desktop",
+      "label": "Number of slides (desktop)",
+      "min": 1,
+      "max": 10,
+      "step": 0.5,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "slide_count_mobile",
+      "label": "Number of slides (mobile)",
+      "min": 1,
+      "max": 10,
+      "step": 0.5,
+      "default": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Column Card - Carousel",
+      "blocks": [
+        {"type": "column-card", "settings": { "background_color": "#ffffff", "border_radius": 12 }, "blocks": [{ "type": "icon-text", "name": "Icon Text" ,"settings": { "text":  "<p>Icon text</p>" } }]},
+        {"type": "column-card", "settings": { "background_color": "#ffffff", "border_radius": 12 }, "blocks": [{ "type": "icon-text", "name": "Icon Text" ,"settings": { "text":  "<p>Icon text</p>" } }]},
+        {"type": "column-card", "settings": { "background_color": "#ffffff", "border_radius": 12 }, "blocks": [{ "type": "icon-text", "name": "Icon Text" ,"settings": { "text":  "<p>Icon text</p>" } }]},
+        {"type": "column-card", "settings": { "background_color": "#ffffff", "border_radius": 12 }, "blocks": [{ "type": "icon-text", "name": "Icon Text" ,"settings": { "text":  "<p>Icon text</p>" } }]}
+      ]
+    }
+  ]
+}
+{% endschema %}
+

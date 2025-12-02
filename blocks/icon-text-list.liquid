@@ -1,0 +1,100 @@
+{%- comment -%}
+  Column Card Theme Block
+  Theme block version of multicolumn card that supports nested theme blocks
+  
+  This allows nesting icon-text and other theme blocks inside the card
+{%- endcomment -%}
+
+{%- liquid
+  assign icon_text_count = block.settings.icon_text_count
+-%}
+
+<style>
+  #{{block.id}} .icon-text img {
+    width: {{ block.settings.icon_size }} !important;
+    height: {{ block.settings.icon_size }} !important;
+  }
+</style>
+
+{%- comment -%} Build grid column classes based on setting {%- endcomment -%}
+{%- case icon_text_count -%}
+  {%- when "1" -%}
+    {%- assign grid_classes = 'tw-grid-cols-1 md-small:tw-grid-cols-1' -%}
+  {%- when "2" -%}
+    {%- assign grid_classes = 'tw-grid-cols-1 md-small:tw-grid-cols-2' -%}
+  {%- when "3" -%}
+    {%- assign grid_classes = 'tw-grid-cols-1 md-small:tw-grid-cols-3' -%}
+{%- endcase -%}
+
+<div class="icon-text-list__caption tw-mb-3"> 
+   {% render 'caption', text: block.settings.caption_text, color: block.settings.caption_color %}
+</div>
+<div id="{{block.id}}"class="icon-text-list tw-grid {{ grid_classes }} tw-gap-x-4 tw-gap-y-2">
+  {%- for nested_block in block.blocks -%}
+    {%- render nested_block, section: section %}
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "Icon Text List",
+  "blocks": [
+    { "type": "icon-text" }
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon_text_count",
+      "label": "Number of columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 columns"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        },
+        {
+          "value": "3",
+          "label": "3 columns"
+        }
+      ],
+      "default": "1",
+    },
+    {
+      "type": "select",
+      "id": "icon_size",
+      "label": "Icon size",
+      "default": "10px",
+      "options": [
+        { "value": "10px", "label": "10px" },
+        { "value": "20px", "label": "20px" },
+      ]
+    },
+    {
+      "type": "text",
+      "id": "caption_text",
+      "label": "Caption text",
+      "default": "Caption"
+    },
+    {
+      "type": "text",
+      "id": "caption_color",
+      "label": "Caption color",
+      "default": "#323e46"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icon Text List",
+      "blocks": [
+        {
+          "type": "icon-text",
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

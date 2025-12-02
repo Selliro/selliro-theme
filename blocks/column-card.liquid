@@ -1,0 +1,102 @@
+{%- comment -%}
+  Column Card Theme Block
+  Theme block version of multicolumn card that supports nested theme blocks
+
+  This allows nesting icon-text and other theme blocks inside the card
+{%- endcomment -%}
+
+{%- liquid
+  assign cards_show_border = block.settings.cards_show_border
+  assign bg_color = block.settings.background_color
+  assign border_color = block.settings.border_color
+  assign border_radius = block.settings.border_radius | default: 12
+-%}
+
+<style>
+  #column-card-{{ block.id }} {
+    {% if cards_show_border %}
+      border: 1px solid {{ border_color }};
+    {% endif %}
+    border-radius: {{ border_radius }}px;
+    background-color: {{ bg_color }};
+  }
+</style>
+
+<div
+  id="column-card-{{ block.id }}"
+  class="column-card tw-h-full {{ block.settings.parent_class }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="column-card__inner tw-flex tw-flex-col ">
+    {%- for nested_block in block.blocks -%}
+      {%- render nested_block, section: section %}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Column Card",
+  "blocks": [
+    { "type": "spacer" },
+    { "type": "image" },
+    { "type": "caption" },
+    { "type": "heading" },
+    { "type": "subheading" },
+    { "type": "body" },
+    { "type": "icon-text" },
+    { "type": "button-group" },
+    { "type": "divider" }
+  ],
+  "settings": [
+    {
+      "type": "text",
+      "id": "parent_class",
+      "label": "Parent Class",
+      "info": "Optional parent class for the card"
+    },
+    {
+      "type": "text",
+      "id": "background_color",
+      "label": "Card background color",
+      "info": "Leave blank to use transparent background"
+    },
+    {
+      "type": "text",
+      "id": "border_color",
+      "label": "Card border color",
+      "info": "Leave blank to use border color"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "cards_show_border",
+      "label": "Show card borders",
+      "default": false,
+      "info": "Toggle borders on this card"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Column Card",
+      "blocks": [
+        { "type": "image" },
+        { "type": "caption", "name": "Caption" ,"settings": { "text": "Caption", "variant": "sm", "color": "#323e46" } },
+        { "type": "heading", "name": "Heading" ,"settings": { "text": "Heading", "variant": "h2", "color": "#000000" } },
+        { "type": "subheading", "name": "Subheading" ,"settings": { "text":  "<p>Subheading</p>", "variant": "md", "color": "#323e46" } },
+        { "type": "icon-text", "name": "Icon Text" ,"settings": { "text":  "<p>Icon text</p>" } },
+        { "type": "button-group", "name": "Button Group" ,"settings": { "show_button_1": true, "button_1_label": "Button 1", "button_1_link": "#", "show_button_2": false, "show_button_3": false } },
+        { "type": "divider", "name": "Divider" ,"settings": { "color": "slate-200" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

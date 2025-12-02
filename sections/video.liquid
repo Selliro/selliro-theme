@@ -1,0 +1,200 @@
+{%- comment -%}
+  Video Section
+  Displays a video player using video.js
+  Supports CDN, YouTube, and Vimeo videos
+  
+  Breakpoints: md-small (768px), md (1024px), lg (1200px)
+{%- endcomment -%}
+
+{%- liquid
+  assign background_color = section.settings.background_color | default: '#ffffff'
+  assign is_full_width = section.settings.is_full_width | default: false
+-%}
+
+<style>
+  #{{ section.id }} {
+    padding-top: {{ section.settings.add_top_padding_mobile }}px;
+    padding-bottom: {{ section.settings.add_bottom_padding_mobile }}px;
+  }
+  @media(min-width: 1024px) {
+    #{{ section.id }} {
+      padding-top: {{ section.settings.add_top_padding_desktop }}px;
+      padding-bottom: {{ section.settings.add_bottom_padding_desktop }}px;
+    }
+  }
+
+  #{{ section.id }} .video-wrapper {
+    border-radius: 12px;
+   }
+   #{{ section.id }} .video-wrapper * {
+     border-radius: 12px;
+   }
+</style>
+
+<div id="{{ section.id }}" class="video-section tw-w-full" 
+   style="background-color: {{ background_color }};">
+  <div class="video-section__container {% unless is_full_width %} section-container {% endunless %}">
+    <div class="video-section__wrapper tw-w-full">
+      {%- render 'video',
+        video_url: section.settings.video_url,
+        video_source: section.settings.video_source | default: 'cdn',
+        poster_image: section.settings.poster_image,
+        video_id: section.id,
+        parent_class: 'video-section',
+        autoplay: section.settings.autoplay | default: false,
+        controls: section.settings.controls | default: true,
+        loop: section.settings.loop | default: false,
+        muted: section.settings.muted | default: false,
+        aspect_ratio: section.settings.mobile_aspect_ratio | default: '16:9',
+        mobile_aspect_ratio: section.settings.mobile_aspect_ratio,
+        desktop_aspect_ratio: section.settings.desktop_aspect_ratio
+      -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Video",
+  "tag": "section",
+  "class": "section video-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background Settings"
+    },
+    {
+       "type": "checkbox",
+       "id": "is_full_width",
+       "label": "Is full width ?",
+       "default": false
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Video Settings"
+    },
+    {
+      "type": "select",
+      "id": "video_source",
+      "label": "Video source",
+      "default": "cdn",
+      "options": [
+        { "value": "cdn", "label": "CDN (Direct Video URL)" },
+        { "value": "youtube", "label": "YouTube" },
+        { "value": "vimeo", "label": "Vimeo" }
+      ],
+      "info": "Select the source type for your video"
+    },
+    {
+      "type": "url",
+      "id": "video_url",
+      "label": "Video URL",
+      "info": "For CDN: Enter direct video URL (e.g., https://example.com/video.mp4). For YouTube/Vimeo: Enter full video URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID or https://vimeo.com/VIDEO_ID)"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster_image",
+      "label": "Thumbnail/Poster Image",
+      "info": "Optional: Image to display before the video plays"
+    },
+    {
+      "type": "header",
+      "content": "Aspect Ratio Settings"
+    },
+    {
+      "type": "select",
+      "id": "mobile_aspect_ratio",
+      "label": "Mobile aspect ratio",
+      "default": "16:9",
+      "options": [
+        { "value": "16:9", "label": "16:9 (1.7)" },
+        { "value": "2:1", "label": "2:1" }
+      ],
+      "info": "Aspect ratio for mobile devices (below 768px)"
+    },
+    {
+      "type": "select",
+      "id": "desktop_aspect_ratio",
+      "label": "Desktop aspect ratio",
+      "default": "16:9",
+      "options": [
+        { "value": "16:9", "label": "16:9 (1.7)" },
+        { "value": "2:1", "label": "2:1" }
+      ],
+      "info": "Aspect ratio for desktop devices (768px and above)"
+    },
+    {
+      "type": "header",
+      "content": "Player Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "controls",
+      "label": "Show controls",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay video",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "loop",
+      "label": "Loop video",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "muted",
+      "label": "Mute video",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "text",
+      "id": "add_top_padding_mobile",
+      "label": "Add top padding mobile",
+      "default": "44"
+    },
+    {
+      "type": "text",
+      "id": "add_bottom_padding_mobile",
+      "label": "Add bottom padding mobile",
+      "default": "44"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "text",
+      "id": "add_top_padding_desktop",
+      "label": "Add top padding Desktop",
+      "default": "96"
+    },
+    {
+      "type": "text",
+      "id": "add_bottom_padding_desktop",
+      "label": "Add bottom padding Desktop",
+      "default": "96"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ]
+}
+{% endschema %}
+

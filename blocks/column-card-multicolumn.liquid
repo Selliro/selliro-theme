@@ -1,0 +1,105 @@
+{%- comment -%}
+  Column Card Theme Block
+  Theme block version of column card that supports multiple columns inside a card
+
+  This allows nesting icon-text and other theme blocks inside the card
+{%- endcomment -%}
+
+{%- liquid
+  assign cards_show_border = block.settings.cards_show_border
+  assign bg_color = block.settings.background_color
+  assign border_color = block.settings.border_color
+  assign border_radius = block.settings.border_radius | default: 12
+-%}
+
+<style>
+  #column-card-multicolumn-{{ block.id }} {
+    {% if cards_show_border %}
+      border: 1px solid {{ border_color }};
+    {% endif %}
+    border-radius: {{ border_radius }}px;
+    background-color: {{ bg_color }};
+  }
+</style>
+
+<div
+  id="column-card-multicolumn-{{ block.id }}"
+  class="column-card-multicolumn tw-h-full"
+  {{ block.shopify_attributes }}
+>
+  <div class="column-card__inner tw-flex tw-flex-col tw-grid tw-grid-cols-1 md:tw-grid-cols-{{ block.settings.column_count | default: 2 }} tw-gap-1">
+    {%- for nested_block in block.blocks -%}
+      {%- render nested_block, section: section %}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Column Card",
+  "blocks": [
+    { "type": "spacer" },
+    { "type": "image" },
+    { "type": "caption" },
+    { "type": "heading" },
+    { "type": "subheading" },
+    { "type": "body" },
+    { "type": "icon-text" },
+    { "type": "button-group" },
+    { "type": "divider" }
+  ],
+  "settings": [
+    {
+      "type": "range",
+      "id": "column_count",
+      "min": 0,
+      "max": 3,
+      "step": 1,
+      "default": 2,
+      "label": "Column count"
+    },
+    {
+      "type": "text",
+      "id": "background_color",
+      "label": "Card background color",
+      "info": "Leave blank to use transparent background"
+    },
+    {
+      "type": "text",
+      "id": "border_color",
+      "label": "Card border color",
+      "info": "Leave blank to use border color"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "cards_show_border",
+      "label": "Show card borders",
+      "default": false,
+      "info": "Toggle borders on this card"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Column Card - multicolumn",
+      "blocks": [
+        { "type": "icon-text", "name": "Icon Text" ,"settings": { "text":  "<p>Icon text</p>" } },
+        { "type": "icon-text", "name": "Icon Text" ,"settings": { "text":  "<p>Icon text</p>" } },
+        { "type": "icon-text", "name": "Icon Text" ,"settings": { "text":  "<p>Icon text</p>" } },
+        { "type": "icon-text", "name": "Icon Text" ,"settings": { "text":  "<p>Icon text</p>" } },
+        { "type": "icon-text", "name": "Icon Text" ,"settings": { "text":  "<p>Icon text</p>" } },
+        { "type": "icon-text", "name": "Icon Text" ,"settings": { "text":  "<p>Icon text</p>" } },
+        { "type": "icon-text", "name": "Icon Text" ,"settings": { "text":  "<p>Icon text</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

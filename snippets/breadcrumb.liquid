@@ -1,0 +1,39 @@
+{%- comment -%}
+  Breadcrumb Component
+  Global breadcrumb component
+  
+  Accepts:
+  - icon_color: Hex color value for arrow icon (optional, default: '#000000')
+  - text_color: Hex color value for text (optional, default: '#00a3a3')
+  - parent_class: String (optional, parent class prefix, default: 'breadcrumb')
+  - home_text: String (optional, custom text for home link, default: 'HOME')
+  - home_link: URL (optional, custom URL for home link, default: routes.root_url)
+  - current_text: String (optional, custom text for current page, default: page_title)
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- liquid
+  assign parent_class = parent_class | default: 'breadcrumb'
+  assign icon_color = icon_color | default: '#000000'
+  assign text_color = text_color | default: '#00a3a3'
+  assign home_text = home_text | default: 'HOME'
+  assign home_link = home_link | default: routes.root_url
+  assign current_text = current_text | default: page_title
+-%}
+
+<nav class="{{ parent_class }} tw-flex tw-items-baseline tw-text-sm tw-flex-wrap" aria-label="Breadcrumb" {{ block_shopify_attributes }}>
+  <span class="{{ parent_class }}__icon tw-w-5 tw-h-5 tw-flex-shrink-0 tw-mr-1 tw-inline-flex tw-items-center tw-justify-center" style="color: {{ icon_color }};" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" width="6" height="10" viewBox="0 0 6 10" fill="none">
+      <path d="M5.06055 0.530334L1.06055 4.53033L5.06055 8.53033" stroke="#358282" stroke-width="1.5"/>
+    </svg>
+  </span>
+ <div class="tw-flex tw-items-left tw-flex-wrap tw-flex-col small:tw-flex-row">
+  {%- if request.page_type == 'index' -%}
+    <span class="{{ parent_class }}__current tw-uppercase tw-font-bold tw-tracking-wider" style="color: {{ icon_color }};" aria-current="page">{{ home_text }}</span>
+  {%- else -%}
+    <a href="{{ home_link }}" class="{{ parent_class }}__link hover:tw-opacity-80 tw-transition-opacity tw-uppercase tw-font-bold tw-tracking-wider tw-text-[13px] tw-tracking-[-0.52px]" style="color: {{ icon_color }};">{{ home_text }}<span class="{{ parent_class }}__separator tw-mx-[6px] md-small:tw-mx-2" style="color: {{ text_color }};" aria-hidden="true">/</span></a>
+    <span class="{{ parent_class }}__current tw-uppercase tw-font-bold tw-tracking-wider tw-text-[13px] tw-tracking-[-0.52px]" style="color: {{ text_color }};" aria-current="page">{{ current_text }}</span>
+  {%- endif -%}
+ </div>
+</nav>
+

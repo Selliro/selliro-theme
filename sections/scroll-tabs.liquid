@@ -1,0 +1,229 @@
+{%- comment -%}
+  Tabs Section
+  Generic tabs component with two layout options:
+  1. Side-by-side: Tabs on left, content on right
+  2. Stacked: Tabs on top, content below
+{%- endcomment -%}
+
+{%- liquid
+    assign tabs = section.blocks
+    assign parent_class = 'scroll-tabs-section'
+    assign text_alignment = section.settings.text_alignment | default: 'center'
+    assign text_color = section.settings.text_color | default: '#323E46'
+    assign active_text_color = section.settings.active_text_color | default: '#00786f'
+    assign active_background_color = section.settings.active_background_color | default: '#d4f0f0'
+  -%}
+  <style>
+    .{{ parent_class }}__carousel--desktop {
+     height: 100% !important;
+    }
+    .{{ parent_class }}__carousel--desktop .swiper {
+      height: 100% !important;
+    }
+
+    .{{ parent_class }}__tabs-list--mobile {
+        margin-right: -20px;
+    }
+    .{{ parent_class }}__tabs-list--mobile .swiper-slide {
+       max-width: fit-content !important;
+    }
+
+    .{{ parent_class }} .carousel__swiper {
+        position: sticky !important;
+        top: 120px !important;
+    }
+
+    /* Accessibility: Focus styles */
+    .{{ parent_class }}__tab-button:focus-visible {
+      outline: 2px solid #52c3c2;
+      outline-offset: 2px;
+    }
+
+    /* Screen reader only class */
+    .tw-sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+  </style>
+  <div
+    id="shopify-section-{{ section.id }}"
+    class="{{ parent_class }} tw-py-11 tw-pt-0 md:tw-py-24 tw-w-full 
+    tw-bg-white
+    "
+  >
+    <div class="{{ parent_class }}__container section-container">
+      {%  assign slider_items = '' %}
+      {%- for block in section.blocks -%}
+        {%- capture slider_item -%}
+            {%  assign tab = block %}
+            {%- render 'tab', disable_tabindex: true, tab: tab, section: section, parent_class: parent_class, is_first: forloop.first, text_alignment: text_alignment, text_color: text_color, active_text_color: active_text_color, active_background_color: active_background_color -%}
+        {%- endcapture -%}
+        {%- assign slider_items = slider_items | append: slider_item | append: '::slider-limiter' -%}
+      {%- endfor -%}
+  
+      {%- comment -%} Tabs Section {%- endcomment -%}
+      {%- if tabs.size > 0 -%}
+        <div class="{{ parent_class }}__wrapper">
+            <div class="{{ parent_class }}__tabs-container tw-relative tw-w-full md:tw-grid md:tw-grid-cols-[273px_1fr] md:tw-gap-16 md:tw-items-start">
+                {%- comment -%} Screen reader live region for announcements {%- endcomment -%}
+                <div class="tw-sr-only" role="status" aria-live="polite" aria-atomic="true" id="scroll-tabs-announcer-{{ section.id | replace: 'shopify-section-', '' }}"></div>
+                
+                {%- comment -%} Desktop Tabs List {%- endcomment -%}
+                <div class="{{ parent_class }}__tabs-list 
+                    {{ parent_class }}__tabs-list--desktop 
+                    {{ parent_class }}__tabs-list--vertical 
+                    tw-hidden md:tw-block tw-sticky tw-top-[120px]"
+                    aria-label="Desktop tab navigation"
+                    >
+                    {%- render 'carousel-wrapper',
+                        section_id: section.id,
+                        desktop_slides_per_view: 'auto',
+                        tablet_slides_per_view: 'auto',
+                        mobile_slides_per_view: "auto",
+                        direction: 'vertical',
+                        mobile_space_between: 16,
+                        tablet_space_between: 16,
+                        desktop_space_between: 16,
+                        carousel_class: parent_class | append: '__carousel--desktop',
+                        slider_items: slider_items
+                    -%}
+                </div>
+                {%- comment -%} Mobile Tabs List {%- endcomment -%}
+                <div class="{{ parent_class }}__tabs-list {{ parent_class }}__tabs-list--mobile 
+                    tw-block md:tw-hidden 
+                    tw-pb-8 
+                    tw-sticky 
+                    tw-top-[60px] 
+                    tw-bg-white 
+                    tw-z-10 
+                    tw-pt-11"
+                    aria-label="Mobile tab navigation">
+                    {%- render 'carousel-wrapper',
+                        section_id: section.id,
+                        desktop_slides_per_view: '1',
+                        mobile_slides_per_view: "auto",
+                        mobile_space_between: 16,
+                        desktop_space_between: 16,
+                        carousel_class: parent_class | append: '__carousel--mobile',
+                        slider_items: slider_items
+                    -%}
+                </div>
+                
+                {%- comment -%} Content Panels Wrapper {%- endcomment -%}
+                <div class="{{ parent_class }}__panels-wrapper tw-flex tw-flex-col tw-gap-16" aria-label="Tab content panels">
+                    {% for block in section.blocks %}
+                        <div 
+                            data-section-target="{{ block.settings.tab_id }}" 
+                            id="tab-content-{{- block.settings.tab_id -}}"
+                            role="tabpanel"
+                            aria-labelledby="tab-button-{{- block.settings.tab_id -}}"
+                            class="{{ parent_class }}__panel"
+                        ></div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+  
+  {% schema %}
+  {
+    "name": "Scroll Tabs",
+    "tag": "section",
+    "class": "section scroll-tabs-section",
+    "settings": [
+      {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background color",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "active_background_color",
+        "label": "Active tab background color",
+        "default": "#d4f0f0"
+      },
+      {
+        "type": "color",
+        "id": "text_color",
+        "label": "Tab text color",
+        "default": "#323E46"
+      },
+      {
+        "type": "color",
+        "id": "active_text_color",
+        "label": "Active tab text color",
+        "default": "#00786f"
+      },
+      {
+        "type": "select",
+        "id": "text_alignment",
+        "label": "Text alignment",
+        "options": [
+          { "value": "center", "label": "Center" },
+          { "value": "left", "label": "Left" }
+        ],
+        "default": "center"
+      },
+      {
+        "type": "number",
+        "id": "slides_per_view",
+        "label": "Slides per view",
+        "default": 6
+      },
+      {
+        "type": "checkbox",
+        "id": "add_top_padding",
+        "label": "Add top padding",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "add_bottom_padding",
+        "label": "Add bottom padding",
+        "default": false
+      }
+    ],
+    "blocks": [
+      {
+        "type": "tab",
+        "name": "Tab",
+        "settings": [
+          {
+            "type": "text",
+            "id": "tab_title",
+            "label": "Tab Title",
+            "default": "Tab"
+          },
+          {
+            "type": "image_picker",
+            "id": "tab_icon",
+            "label": "Tab Icon",
+            "info": "Optional:  icon for this tab"
+          },
+          {
+            "type": "text",
+            "id": "tab_id",
+            "label": "Tab ID",
+            "info": "Unique identifier for this tab content"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Scroll Tabs"
+      }
+    ]
+  }
+  {% endschema %}
+  

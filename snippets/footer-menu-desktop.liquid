@@ -1,0 +1,48 @@
+{%- comment -%}
+  Footer Menu Desktop Snippet
+  Renders a single footer menu for desktop (no accordion, always visible)
+  
+  Accepts:
+  - menu: Linklist object
+  - menu_heading: String (optional, custom heading for the menu)
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- if menu != blank and menu.links.size > 0 -%}
+  <div class="footer-menu-desktop tw-flex tw-flex-col tw-gap-4" {{ block_shopify_attributes }}>
+    {%- comment -%} Menu Heading {%- endcomment -%}
+    {%- assign display_heading = menu_heading | default: menu.title -%}
+    {%- if display_heading != blank -%}
+      <div class="footer-menu-desktop__heading">
+        {%- render 'caption',
+          text: display_heading,
+          color: '#ffffff',
+          parent_class: 'footer-menu-desktop'
+        -%}
+      </div>
+    {%- endif -%}
+    
+    {%- comment -%} Menu Links {%- endcomment -%}
+    <ul class="footer-menu-desktop__links tw-flex tw-flex-col tw-gap-0">
+      {%- for link in menu.links -%}
+        <li class="footer-menu-desktop__item tw-h-8">
+          <a href="{{ link.url }}" class="footer-menu-desktop__link tw-text-sm tw-font-medium tw-leading-[18px] tw-tracking-[-0.14px] tw-text-white/80 hover:tw-text-white tw-transition-colors tw-py-[6px] tw-block">
+            {{ link.title }}
+          </a>
+          {%- if link.links.size > 0 -%}
+            <ul class="footer-menu-desktop__sublinks tw-flex tw-flex-col tw-gap-0 tw-mt-0 tw-ml-4">
+              {%- for child_link in link.links -%}
+                <li class="footer-menu-desktop__subitem tw-h-8">
+                  <a href="{{ child_link.url }}" class="footer-menu-desktop__sublink tw-text-sm tw-font-medium tw-leading-[18px] tw-tracking-[-0.14px] tw-text-white/80 hover:tw-text-white tw-transition-colors tw-py-[6px] tw-block">
+                    {{ child_link.title }}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}
+

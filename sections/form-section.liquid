@@ -1,0 +1,178 @@
+{%- comment -%}
+  Form Section
+  Contact form section with heading, subheading, caption, and nested form blocks
+  Uses snippets for heading, subheading, caption, and form layout
+{%- endcomment -%}
+
+{%- liquid
+  assign background_color = section.settings.background_color | default: '#092846'
+  assign form_background_color = section.settings.form_background_color | default: '#ffffff'
+  assign form_padding = section.settings.form_padding | default: 20
+  assign form_border_radius = section.settings.form_border_radius | default: 24
+  assign top_padding_mobile = section.settings.add_top_padding_mobile | default: '44'
+  assign bottom_padding_mobile = section.settings.add_bottom_padding_mobile | default: '44'
+  assign top_padding_desktop = section.settings.add_top_padding_desktop | default: '96'
+  assign bottom_padding_desktop = section.settings.add_bottom_padding_desktop | default: '96'
+-%}
+
+<style>
+  #{{ section.id }}.form-section {
+    padding-top: {{ top_padding_mobile }}px;
+    padding-bottom: {{ bottom_padding_mobile }}px;
+  }
+  @media(min-width: 1024px) {
+    #{{ section.id }}.form-section {
+      padding-top: {{ top_padding_desktop }}px;
+      padding-bottom: {{ bottom_padding_desktop }}px;
+    }
+  }
+</style>
+
+<section
+  id="{{ section.id }}"
+  class="form-section"
+  {{ section.shopify_attributes }}
+>
+  {%- comment -%} Mobile Layout (default, hidden on md:) {%- endcomment -%}
+  <div class="md:tw-hidden">
+    {%- render 'form-layout-mobile',
+      background_color: background_color,
+      form_background_color: form_background_color,
+      form_padding: form_padding,
+      form_border_radius: form_border_radius,
+      caption: section.settings.caption,
+      heading: section.settings.heading,
+      subheading: section.settings.subheading,
+      section: section
+    -%}
+  </div>
+
+  {%- comment -%} Desktop Layout (hidden by default, shown on md:) {%- endcomment -%}
+  <div class="tw-hidden md:tw-block">
+    {%- render 'form-layout-desktop',
+      background_color: background_color,
+      form_background_color: form_background_color,
+      form_padding: form_padding,
+      form_border_radius: form_border_radius,
+      caption: section.settings.caption,
+      heading: section.settings.heading,
+      subheading: section.settings.subheading,
+      section: section
+    -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Form",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption",
+      "default": "GET IN TOUCH"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Contact the Sleep Team"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Send us a message. Our team will get in touch with you shortly.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Form Container"
+    },
+    {
+      "type": "color",
+      "id": "form_background_color",
+      "label": "Form background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "form_padding",
+      "label": "Form padding",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "form_border_radius",
+      "label": "Form border radius",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#092846"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "text",
+      "id": "add_top_padding_mobile",
+      "label": "Top padding (mobile)",
+      "default": "44"
+    },
+    {
+      "type": "text",
+      "id": "add_bottom_padding_mobile",
+      "label": "Bottom padding (mobile)",
+      "default": "44"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "text",
+      "id": "add_top_padding_desktop",
+      "label": "Top padding (desktop)",
+      "default": "96"
+    },
+    {
+      "type": "text",
+      "id": "add_bottom_padding_desktop",
+      "label": "Bottom padding (desktop)",
+      "default": "96"
+    }
+  ],
+  "blocks": [
+    { "type": "form" }
+  ],
+  "presets": [
+    {
+      "name": "Form",
+      "blocks": [
+        {
+          "type": "form"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

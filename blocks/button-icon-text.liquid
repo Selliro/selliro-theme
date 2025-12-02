@@ -1,0 +1,98 @@
+{%- comment -%}
+  Button Icon Text Theme Block
+  Hybrid block combining button and icon-text components
+  Uses snippet for rendering
+{%- endcomment -%}
+
+{%- liquid
+  assign button_label = ''
+  assign button_link = ''
+  assign button_variant = 'secondary'
+  assign button_secondary_color = 'white'
+  
+  for nested_block in block.blocks
+    if nested_block.type == 'button'
+      assign button_label = nested_block.settings.label
+      assign button_link = nested_block.settings.link
+      assign button_variant = nested_block.settings.variant | default: 'secondary'
+      assign button_secondary_color = nested_block.settings.secondary_color | default: 'white'
+      break
+    endif
+  endfor
+-%}
+
+{%- render 'button-icon-text',
+  button_label: button_label,
+  button_link: button_link,
+  button_variant: button_variant,
+  button_secondary_color: button_secondary_color,
+  block: block,
+  section: section,
+  block_shopify_attributes: block.shopify_attributes
+-%}
+
+{% schema %}
+{
+  "name": "Button Icon Text",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show divider",
+      "default": true,
+      "info": "Display the vertical divider between button and icon-text items"
+    }
+  ],
+  "blocks": [
+    { "type": "icon-text" }
+  ],
+  "presets": [
+    {
+      "name": "Button Icon Text",
+      "blocks": [
+        {
+          "type": "button",
+          "static": true,
+          "id": "primary-button",
+          "settings": {
+            "label": "Primary CTA",
+            "link": "#",
+            "variant": "primary"
+          }
+        },
+        {
+          "type": "icon-text",
+          "settings": {
+            "label": "Icon",
+            "text": "<p>text</p>",
+            "text_color": "text-teal",
+            "link_color": "text-body",
+            "font_variant": "base"
+          }
+        },
+        {
+          "type": "icon-text",
+          "settings": {
+            "label": "Icon",
+            "text": "<p>text</p>",
+            "text_color": "text-teal",
+            "link_color": "text-body",  
+            "font_variant": "base"
+          }
+        },
+        {
+          "type": "icon-text",
+          "settings": {
+            "label": "Icon",
+            "text": "<p>text</p>",
+            "text_color": "text-body",
+            "link_color": "text-teal",
+            "font_variant": "base"  
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

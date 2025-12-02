@@ -1,0 +1,56 @@
+{%- comment -%}
+  Button Group Snippet
+  Renders multiple buttons using the button component
+  
+  Accepts:
+  - show_button_1: Boolean
+  - button_1_label: String
+  - button_1_link: URL
+  - show_button_2: Boolean
+  - button_2_label: String
+  - button_2_link: URL
+  - button_2_color: String ('white' or 'blue', default: 'white')
+  - show_button_3: Boolean
+  - button_3_label: String
+  - button_3_link: URL
+  - button_3_color: String (hex color code, default: '#358282')
+  - button_3_hover_color: String (hex color code, optional)
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- liquid
+  assign button_2_color = button_2_color | default: 'white'
+-%}
+
+<div class="banner-button-group tw-flex tw-flex-wrap tw-gap-y-2 tw-gap-x-4 md-small:tw-gap-y-2 md-small:tw-gap-x-6 tw-items-center" {{ block_shopify_attributes }}>
+  {%- if show_button_1 and button_1_label != blank and button_1_link != blank -%}
+    {%- render 'button',
+      label: button_1_label,
+      link: button_1_link,
+      variant: 'primary',
+      block_shopify_attributes: ''
+    -%}
+  {%- endif -%}
+  
+  {%- if show_button_2 and button_2_label != blank and button_2_link != blank -%}
+    {%- render 'button',
+      label: button_2_label,
+      link: button_2_link,
+      variant: 'secondary',
+      secondary_color: button_2_color,
+      block_shopify_attributes: ''
+    -%}
+  {%- endif -%}
+  
+  {%- if show_button_3 and button_3_label != blank and button_3_link != blank -%}
+    {%- render 'button',
+      label: button_3_label,
+      link: button_3_link,
+      variant: 'tertiary',
+      tertiary_color: button_3_color,
+      tertiary_hover_color: button_3_hover_color,
+      block_shopify_attributes: ''
+    -%}
+  {%- endif -%}
+</div>
+

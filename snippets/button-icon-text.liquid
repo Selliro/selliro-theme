@@ -1,0 +1,78 @@
+{%- comment -%}
+  Button Icon Text Snippet
+  Renders a button with divider and icon-text items
+  Mobile-only: vertical layout (no divider on mobile)
+  
+  Accepts:
+  - button_label: Button label text
+  - button_link: Button link URL
+  - button_variant: Button variant (primary, secondary, default: secondary)
+  - button_secondary_color: Secondary button color (white or blue, default: white)
+  - icon_text_items: Array of icon-text items (optional, can also use nested blocks)
+  - block: Block object (optional, if provided will use block.blocks for icon-text items)
+  - section: Section object (required if using block)
+  - block_shopify_attributes: Block attributes
+{%- endcomment -%}
+
+{%- liquid
+  assign button_variant = button_variant | default: 'secondary'
+  assign button_secondary_color = button_secondary_color | default: 'white'
+-%}
+
+<div class="button-icontext-wrapper tw-flex tw-flex-col tw-items-start tw-gap-6" {{ block_shopify_attributes }}>
+  {%- comment -%} Render button {%- endcomment -%}
+  {%- if button_label != blank and button_link != blank -%}
+    <div class="button-icontext__block button-icontext__block--button">
+      {%- render 'button',
+        label: button_label,
+        link: button_link,
+        variant: button_variant,
+        secondary_color: button_secondary_color,
+        block_shopify_attributes: ''
+      -%}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Divider - hidden on mobile {%- endcomment -%}
+  <img 
+    src="{{ 'divider-vertical.svg' | asset_url }}" 
+    alt="" 
+    class="button-icontext-divider tw-hidden tw-h-[39px] tw-w-px tw-shrink-0" 
+    width="1" 
+    height="39"
+    loading="lazy"
+  >
+
+  {%- comment -%} Render icon-text items {%- endcomment -%}
+  <div class="button-icontext-items tw-flex tw-flex-col tw-gap-1 tw-shrink-0">
+    {%- if block != blank and block.blocks != blank -%}
+      {%- comment -%} Use nested blocks from block object (skip button blocks) {%- endcomment -%}
+      {%- for nested_block in block.blocks -%}
+        {%- unless nested_block.type == 'button' or nested_block.id == 'primary-button' -%}
+          <div class="button-icontext__block button-icontext__block--{{ nested_block.type }}">
+            {%- render nested_block, section: section -%}
+          </div>
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- elsif icon_text_items != blank -%}
+      {%- comment -%} Use provided icon_text_items array {%- endcomment -%}
+      {%- for item in icon_text_items -%}
+        <div class="button-icontext__block button-icontext__block--icon-text">
+          {%- render 'icon-text',
+            icon: item.icon,
+            label: item.label,
+            text: item.text,
+            link: item.link,
+            link_type: item.link_type,
+            text_color: item.text_color,
+            link_color: item.link_color,
+            icon_size: item.icon_size,
+            font_variant: item.font_variant,
+            block_shopify_attributes: ''
+          -%}
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</div>
+

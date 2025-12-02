@@ -1,0 +1,70 @@
+{%- comment -%}
+  Stock Ticker Card Snippet
+  
+  Accepts:
+  - stock_symbol: String (e.g., "AHCO")
+  - stock_exchange: String (e.g., "NASDAQ")
+  - stock_price: String (e.g., "$9.53")
+  - stock_change: String (e.g., "3.04%")
+  - stock_change_direction: "up" or "down"
+  - stock_market_cap: String (e.g., "$1.277 B")
+  - stock_volume: String (e.g., "888,201")
+  - stock_timestamp: String (e.g., "Oct 3, 2025 4:00 PM ET")
+  - block_shopify_attributes: Block attributes for theme editor
+{%- endcomment -%}
+
+<div class="tw-bg-white tw-rounded-3xl tw-p-4 tw-shadow-xl" {{ block_shopify_attributes }}>
+  <div class="tw-flex tw-gap-2 tw-items-start tw-w-full">
+    
+    <!-- Left Column -->
+    <div class="tw-flex tw-flex-col tw-gap-2 tw-flex-1 tw-min-w-0">
+      <!-- Symbol & Exchange -->
+      <div class="tw-flex tw-flex-col">
+        <div class="tw-text-2xl tw-font-medium tw-text-gray-900 tw-leading-tight">{{ stock_symbol }}</div>
+        <div class="tw-text-base tw-font-medium tw-text-gray-500 tw-leading-tight">{{ stock_exchange }}</div>
+      </div>
+      
+      <!-- Market Cap & Volume -->
+      <div class="tw-flex tw-flex-col tw-gap-1 tw-w-[145px]">
+        {%- if stock_market_cap != blank -%}
+          <div class="tw-flex tw-items-center tw-justify-between tw-w-full">
+            <span class="tw-text-sm tw-text-gray-500 tw-leading-tight">Market Cap</span>
+            <span class="tw-text-sm tw-font-medium tw-text-gray-900 tw-leading-tight">{{ stock_market_cap }}</span>
+          </div>
+        {%- endif -%}
+        {%- if stock_volume != blank -%}
+          <div class="tw-flex tw-items-center tw-justify-between tw-w-full">
+            <span class="tw-text-sm tw-text-gray-500 tw-leading-tight">Volume</span>
+            <span class="tw-text-sm tw-font-medium tw-text-gray-900 tw-leading-tight">{{ stock_volume }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+    
+    <!-- Right Column -->
+    <div class="tw-flex tw-flex-col tw-flex-1 tw-items-end tw-justify-between tw-min-w-0 tw-h-full">
+      <!-- Price & Change -->
+      <div class="tw-flex tw-flex-col tw-items-end">
+        <div class="tw-text-4xl tw-font-bold tw-text-gray-900 tw-leading-tight">{{ stock_price }}</div>
+        {%- if stock_change != blank -%}
+          <div class="tw-flex tw-items-center tw-gap-1">
+            {%- if stock_change_direction == 'up' -%}
+              <svg class="tw-w-3.5 tw-h-3 tw-text-green-700" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3l7 7h-4v7h-6v-7H3l7-7z"/></svg>
+              <span class="tw-text-base tw-font-medium tw-text-green-700 tw-leading-tight">{{ stock_change }}</span>
+            {%- else -%}
+              <svg class="tw-w-3.5 tw-h-3 tw-text-red-600" fill="currentColor" viewBox="0 0 20 20"><path d="M10 17l-7-7h4V3h6v7h4l-7 7z"/></svg>
+              <span class="tw-text-base tw-font-medium tw-text-red-600 tw-leading-tight">{{ stock_change }}</span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+      
+      <!-- Timestamp -->
+      {%- if stock_timestamp != blank -%}
+        <div class="tw-text-sm tw-text-gray-500 tw-text-right tw-leading-tight">{{ stock_timestamp }}</div>
+      {%- endif -%}
+    </div>
+    
+  </div>
+</div>
+
