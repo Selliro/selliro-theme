@@ -1,0 +1,382 @@
+{% comment %}
+  Ticker Duo Section
+  File: sections/ticker-duo.liquid
+{% endcomment %}
+
+{{ 'section-ticker-duo.css' | asset_url | stylesheet_tag }}
+
+<ticker-duo
+  class="ticker-duo section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  id="ticker-duo-{{ section.id }}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="ticker-duo__stack" style="gap: {{ section.settings.row_gap }}px;">
+    {%- for block in section.blocks -%}
+      <div
+        class="ticker-duo__row color-{{ block.settings.color_scheme }}"
+        style="--ticker-duration: {{ block.settings.speed }}s; padding-top: {{ block.settings.padding_top }}px; padding-bottom: {{ block.settings.padding_bottom }}px; transform: rotate({{ block.settings.rotation }}deg);"
+        data-base-duration="{{ block.settings.speed }}"
+        {{ block.shopify_attributes }}
+      >
+        <div class="ticker-duo__scroll">
+          <div class="ticker-duo__track{% if block.settings.direction == 'reverse' %} is-reverse{% endif %}">
+            {%- for i in (1..8) -%}
+              <div class="ticker-duo__group">
+                {%- if block.settings.text != blank -%}
+                  <span class="ticker-duo__text" style="{% render 'typography-style', settings: block.settings %}">{{ block.settings.text }}</span>
+                {%- endif -%}
+                {%- if block.settings.textarea != blank -%}
+                  <span class="ticker-duo__text ticker-duo__text--long" style="{% render 'typography-style', settings: block.settings %}">{{ block.settings.textarea }}</span>
+                {%- endif -%}
+                {%- if block.settings.icon != blank -%}
+                  <span class="ticker-duo__icon">
+                    {{ block.settings.icon | image_url: width: 48 | image_tag: loading: 'lazy' }}
+                  </span>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</ticker-duo>
+
+<script>
+  class TickerDuo extends HTMLElement {
+    connectedCallback() {
+      this.rows = Array.from(this.querySelectorAll('.ticker-duo__row'));
+      this.scrollWrappers = Array.from(this.querySelectorAll('.ticker-duo__scroll'));
+      if (!this.rows.length) return;
+
+      this.lastY = window.scrollY;
+      this.resetTimer = null;
+      this.targetMultiplier = 1;
+      this.currentMultiplier = 1;
+      this.rafId = null;
+
+      this.onScroll = this.onScroll.bind(this);
+      this.tick = this.tick.bind(this);
+
+      window.addEventListener('scroll', this.onScroll, { passive: true });
+      this.tick();
+    }
+
+    disconnectedCallback() {
+      window.removeEventListener('scroll', this.onScroll);
+      if (this.resetTimer) clearTimeout(this.resetTimer);
+      if (this.rafId) cancelAnimationFrame(this.rafId);
+    }
+
+    setSpeed(multiplier) {
+      this.rows.forEach((row) => {
+        const base = parseFloat(row.getAttribute('data-base-duration')) || 28;
+        const next = Math.max(3, base / multiplier);
+        // Set directly on the track element — this updates the running animation immediately.
+        // Setting only a CSS custom property (--ticker-duration) does NOT affect a running animation.
+        const track = row.querySelector('.ticker-duo__track');
+        if (track) track.style.animationDuration = next + 's';
+      });
+    }
+
+    onScroll() {
+      const delta = Math.abs(window.scrollY - this.lastY);
+      this.lastY = window.scrollY;
+      if (delta === 0) return;
+
+      this.targetMultiplier = Math.min(3.2, Math.max(1, delta / 25));
+      const shift = Math.min(28, delta * 0.3);
+      this.scrollWrappers.forEach((wrap, index) => {
+        const dir = index % 2 === 0 ? 1 : -1;
+        wrap.style.setProperty('--scroll-shift', (dir * shift) + 'px');
+      });
+
+      if (this.resetTimer) clearTimeout(this.resetTimer);
+      this.resetTimer = setTimeout(() => {
+        this.targetMultiplier = 1;
+        this.scrollWrappers.forEach((wrap) => {
+          wrap.style.setProperty('--scroll-shift', '0px');
+        });
+      }, 180);
+    }
+
+    tick() {
+      this.currentMultiplier += (this.targetMultiplier - this.currentMultiplier) * 0.09;
+      this.setSpeed(this.currentMultiplier);
+      this.rafId = requestAnimationFrame(this.tick);
+    }
+  }
+
+  if (!customElements.get('ticker-duo')) {
+    customElements.define('ticker-duo', TickerDuo);
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Ticker Duo",
+  "tag": "section",
+  "class": "section-ticker-duo",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "row_gap",
+      "label": "Row gap",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 6,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        { "value": "page-width", "label": "Page" },
+        { "value": "full-width", "label": "Full" }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ticker_row",
+      "name": "Ticker row",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "40% Off On Booking"
+        },
+        {
+          "type": "textarea",
+          "id": "textarea",
+          "label": "Textarea"
+        },
+        {
+          "type": "header",
+          "content": "t:content.typography"
+        },
+        {
+          "type": "select",
+          "id": "type_preset",
+          "label": "t:settings.preset",
+          "options": [
+            { "value": "rte", "label": "t:options.default" },
+            { "value": "paragraph", "label": "t:options.paragraph" },
+            { "value": "h1", "label": "t:options.h1" },
+            { "value": "h2", "label": "t:options.h2" },
+            { "value": "h3", "label": "t:options.h3" },
+            { "value": "h4", "label": "t:options.h4" },
+            { "value": "h5", "label": "t:options.h5" },
+            { "value": "h6", "label": "t:options.h6" },
+            { "value": "custom", "label": "t:options.custom" }
+          ],
+          "default": "rte",
+          "info": "t:info.edit_presets_in_theme_settings"
+        },
+        {
+          "type": "select",
+          "id": "font",
+          "label": "t:settings.font",
+          "options": [
+            { "value": "var(--font-body--family)", "label": "t:options.body" },
+            { "value": "var(--font-subheading--family)", "label": "t:options.subheading" },
+            { "value": "var(--font-heading--family)", "label": "t:options.heading" },
+            { "value": "var(--font-accent--family)", "label": "t:options.accent" }
+          ],
+          "default": "var(--font-body--family)",
+          "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+        },
+        {
+          "type": "select",
+          "id": "font_size",
+          "label": "t:settings.size",
+          "options": [
+            { "value": "", "label": "t:options.default" },
+            { "value": "0.625rem", "label": "10px" },
+            { "value": "0.75rem", "label": "12px" },
+            { "value": "0.875rem", "label": "14px" },
+            { "value": "1rem", "label": "16px" },
+            { "value": "1.125rem", "label": "18px" },
+            { "value": "1.25rem", "label": "20px" },
+            { "value": "1.5rem", "label": "24px" },
+            { "value": "2rem", "label": "32px" },
+            { "value": "2.5rem", "label": "40px" },
+            { "value": "3rem", "label": "48px" },
+            { "value": "3.5rem", "label": "56px" },
+            { "value": "4.5rem", "label": "72px" },
+            { "value": "5.5rem", "label": "88px" },
+            { "value": "7.5rem", "label": "120px" },
+            { "value": "9.5rem", "label": "152px" },
+            { "value": "11.5rem", "label": "184px" }
+          ],
+          "default": "1rem",
+          "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+        },
+        {
+          "type": "select",
+          "id": "line_height",
+          "label": "t:settings.line_height",
+          "options": [
+            { "value": "tight", "label": "t:options.tight" },
+            { "value": "normal", "label": "t:options.normal" },
+            { "value": "loose", "label": "t:options.loose" }
+          ],
+          "default": "normal",
+          "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+        },
+        {
+          "type": "select",
+          "id": "letter_spacing",
+          "label": "t:settings.letter_spacing",
+          "options": [
+            { "value": "tight", "label": "t:options.tight" },
+            { "value": "normal", "label": "t:options.normal" },
+            { "value": "loose", "label": "t:options.loose" }
+          ],
+          "default": "normal",
+          "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+        },
+        {
+          "type": "select",
+          "id": "case",
+          "label": "t:settings.case",
+          "options": [
+            { "value": "none", "label": "t:options.default" },
+            { "value": "uppercase", "label": "t:options.uppercase" }
+          ],
+          "default": "none",
+          "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+        },
+        {
+          "type": "select",
+          "id": "wrap",
+          "label": "t:settings.wrap",
+          "options": [
+            { "value": "pretty", "label": "t:options.pretty" },
+            { "value": "balance", "label": "t:options.balance" },
+            { "value": "nowrap", "label": "t:options.none" }
+          ],
+          "visible_if": "{{ block.settings.type_preset == 'custom' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "select",
+          "id": "direction",
+          "label": "Direction",
+          "options": [
+            { "value": "forward", "label": "Forward" },
+            { "value": "reverse", "label": "Reverse" }
+          ],
+          "default": "forward"
+        },
+        {
+          "type": "range",
+          "id": "speed",
+          "label": "Speed (seconds)",
+          "min": 10,
+          "max": 60,
+          "step": 1,
+          "default": 28,
+          "unit": "s"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "label": "Row padding top",
+          "min": 0,
+          "max": 40,
+          "step": 2,
+          "default": 6,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "label": "Row padding bottom",
+          "min": 0,
+          "max": 40,
+          "step": 2,
+          "default": 6,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "rotation",
+          "label": "Row rotation",
+          "min": -6,
+          "max": 6,
+          "step": 1,
+          "default": 0,
+          "unit": "deg"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Color scheme",
+          "default": "scheme-2"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ticker Duo",
+      "blocks": [
+        {
+          "type": "ticker_row",
+          "settings": {
+            "text": "40% Off On Booking",
+            "speed": 24,
+            "direction": "forward",
+            "color_scheme": "scheme-2"
+          }
+        },
+        {
+          "type": "ticker_row",
+          "settings": {
+            "text": "Face Mask  •  Cleanser  •  Hair Care  •  Sun Protection  •  Toner / Mist  •  Skin Care",
+            "speed": 32,
+            "direction": "reverse",
+            "color_scheme": "scheme-1"
+          }
+        }
+      ]
+    }
+  ],
+  "max_blocks": 2
+}
+{% endschema %}

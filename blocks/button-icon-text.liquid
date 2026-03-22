@@ -14,8 +14,15 @@
     if nested_block.type == 'button'
       assign button_label = nested_block.settings.label
       assign button_link = nested_block.settings.link
-      assign button_variant = nested_block.settings.variant | default: 'secondary'
-      assign button_secondary_color = nested_block.settings.secondary_color | default: 'white'
+      assign style_class = nested_block.settings.style_class | default: 'button-secondary'
+      if style_class == 'button'
+        assign button_variant = 'primary'
+      elsif style_class == 'button-secondary'
+        assign button_variant = 'secondary'
+      else
+        assign button_variant = 'secondary'
+      endif
+      assign button_secondary_color = 'white'
       break
     endif
   endfor
@@ -44,6 +51,7 @@
     }
   ],
   "blocks": [
+    { "type": "button" },
     { "type": "icon-text" }
   ],
   "presets": [
@@ -57,7 +65,7 @@
           "settings": {
             "label": "Primary CTA",
             "link": "#",
-            "variant": "primary"
+            "style_class": "button"
           }
         },
         {

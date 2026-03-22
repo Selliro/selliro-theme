@@ -1,16 +1,16 @@
 extends: theme-check:recommended
 
 exclude:
-  - node_modules/**
-  - src/**
-  - dev-url.txt
-  - assets/theme.css
+  node_modules/**: true
+  src/**: true
+  dev-url.txt: true
+  assets/theme.css: true
 
 enabled_checks:
-  - LiquidTag
-  - LiquidObject
-  - LiquidFilter
-  - PaginationSize
-  - RemoteAsset
-  - SchemaTranslations
-  - UnusedSnippet
+  LiquidTag: true
+  LiquidObject: true
+  LiquidFilter: true
+  PaginationSize: true
+  RemoteAsset: true
+  SchemaTranslations: true
+  UnusedSnippet: true
