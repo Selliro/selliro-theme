@@ -1,45 +1,69 @@
 {
-  "name": "Selliro",
+  "name": "shoptrade-Shopify-Development",
   "version": "1.0.0",
-  "description": "Some dependecies required for development",
-  "main": "index.js",
+  "description": "Shopify theme development tool.",
+  "private": true,
+  "main": "webpack.config.js",
+  "sideEffects": [
+    "*.css",
+    "*.scss",
+    "*.vue"
+  ],
   "scripts": {
-    "theme-pull-dev": "shopify theme pull --environment demo_store_listing_theme_pull",
-    "serve-dev": "shopify theme dev --store=whispo-demo.myshopify.com --port=9292 --ignore=src/*.js --ignore=src/*.scss",
-    "filter-files": "node files-build.js",
-    "build-zip": "shopify theme package",
-    "watch": "gulp build && gulp watch",
-    "build": "gulp build --production",
-    "start": "run-p serve-dev watch",
-    "gen-zip": "run-s build filter-files build-zip"
+    "build": "webpack",
+    "deploy": "webpack && shopify theme push",
+    "start": "NODE_ENV=development webpack --watch",
+    "shopify:push": "shopify theme push",
+    "shopify:pull": "shopify theme pull -o 'templates/*.json'"
   },
   "keywords": [
-    "sass",
-    "js-compiler"
+    "shopify",
+    "theme",
+    "webpack"
   ],
-  "devDependencies": {
-    "autoprefixer": "^10.4.20",
-    "browserslist": "^4.21.4",
-    "gulp": "^4.0.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-flatten": "^0.4.0",
-    "gulp-postcss": "^9.0.1",
-    "gulp-sass": "^5.1.0",
-    "gulp-sourcemaps": "^3.0.0",
-    "gulp-uglify": "^3.0.2",
-    "npm-run-all": "^4.1.5",
-    "sass": "^1.80.6",
-    "tailwindcss": "^3.4.14",
-    "yargs": "^17.7.2"
-  },
-  "browserslist": [
-    "> 1%"
-  ],
+  "author": "@jingleBaba",
+  "license": "ISC",
   "dependencies": {
-    "@ungap/custom-elements": "^1.3.0",
-    "instant.page": "5.2.0",
-    "motion": "11.17.0",
-    "swiper": "8.4.4"
+    "@headlessui/react": "^1.7.17",
+    "@shopify/cli": "^3.87.4",
+    "prop-types": "^15.8.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "swiper": "^10.3.1",
+    "video.js": "^8.23.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-react": "^7.22.5",
+    "@playwright/test": "^1.57.0",
+    "@videojs/themes": "^1.0.1",
+    "animate.css": "^4.1.1",
+    "autoprefixer": "^10.4.20",
+    "babel-loader": "^8.1.0",
+    "baseline-browser-mapping": "^2.9.14",
+    "css-loader": "^6.7.1",
+    "css-minimizer-webpack-plugin": "^6.0.0",
+    "dotenv": "^16.0.0",
+    "eslint": "^8.12.0",
+    "flowbite": "^4.0.0",
+    "glob": "^7.1.6",
+    "gsap": "^3.14.2",
+    "json-6": "^1.1.4",
+    "mini-css-extract-plugin": "^2.6.0",
+    "postcss": "^8.5.1",
+    "postcss-loader": "^6.2.1",
+    "postcss-preset-env": "^9.0.0",
+    "sass": "^1.63.6",
+    "sass-loader": "^12.6.0",
+    "skills": "^1.0.10",
+    "stylelint": "^14.6.1",
+    "stylelint-config-standard": "^25.0.0",
+    "tailwindcss": "^3.4.17",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-remove-empty-scripts": "^1.0.3",
+    "webpack-shell-plugin-next": "^2.2.2"
   }
 }
-

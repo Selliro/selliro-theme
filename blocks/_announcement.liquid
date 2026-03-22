@@ -3,58 +3,118 @@
 {%- assign block_settings = block.settings -%}
 {%- assign plain_text = block_settings.text | strip_newlines | strip_html | strip -%}
 {%- assign block_index = section.blocks | find_index: 'id', block.id -%}
+{%- assign is_marquee = false -%}
+{%- if section.settings.animation_style == 'marquee' -%}
+  {%- assign is_marquee = true -%}
+{%- endif -%}
+{%- assign show_announcement = false -%}
+{%- if plain_text != '' or block_settings.icon_image != blank -%}
+  {%- assign show_announcement = true -%}
+{%- endif -%}
 
-{%- unless plain_text == '' -%}
-  <slideshow-slide
-    ref="slides[]"
-    class="
-      announcement-bar__slide
-      text-block
-      text-block--{{ block.id }}
-      text-block--align-center
-      text-block--full-width
-      custom-typography
-      {% if block_settings.font_size != "" %}custom-font-size{% endif %}
-      {% if block_settings.weight != "" %}custom-font-weight{% endif %}
-    "
-    style="
-      {% render 'typography-style', settings: block_settings, preset: 'custom' %}
-      --width: 100%;
-      --text-align: center;
-      --line-height: 1;
-    "
-    {{ block.shopify_attributes }}
-    aria-hidden="{% if block_index == 0 %}false{% else %}true{% endif %}"
-  >
-    <p class="announcement-bar__text">
-      {{ block.settings.text }}
-    </p>
+{%- capture announcement_icon -%}
+  {%- if block_settings.icon_image != blank -%}
+    <span class="announcement-bar__icon" aria-hidden="true">
+      {{
+        block_settings.icon_image
+        | image_url: width: 60
+        | image_tag:
+          loading: 'lazy',
+          class: 'announcement-bar__icon-img',
+          alt: '',
+          widths: '40, 60',
+          sizes: '(max-width: 749px) 20px, 30px'
+      }}
+    </span>
+  {%- endif -%}
+{%- endcapture -%}
 
-    {% if block_settings.link != blank %}
-      <a
-        class="announcement-bar__link"
-        href="{{ block_settings.link }}"
-      >
-        <span class="visually-hidden">
-          {{ block_settings.text | strip_html }}
+{%- if show_announcement -%}
+  {%- if is_marquee -%}
+    <span
+      class="
+        announcement-bar__marquee-item
+        text-block
+        text-block--{{ block.id }}
+        text-block--align-center
+        custom-typography
+        {% if block_settings.font_size != "" %}custom-font-size{% endif %}
+        {% if block_settings.weight != "" %}custom-font-weight{% endif %}
+      "
+      style="
+        {% render 'typography-style', settings: block_settings, preset: 'custom' %}
+        --text-align: center;
+        --line-height: 1;
+      "
+      {{ block.shopify_attributes }}
+    >
+      {% if block_settings.link != blank %}
+        <a class="announcement-bar__marquee-link announcement-bar__inner" href="{{ block_settings.link }}">
+          {{ announcement_icon }}
+          {% if plain_text != '' %}
+            <span class="announcement-bar__text">{{ block.settings.text }}</span>
+          {% endif %}
+        </a>
+      {% else %}
+        <span class="announcement-bar__inner">
+          {{ announcement_icon }}
+          {% if plain_text != '' %}
+            <span class="announcement-bar__text">{{ block.settings.text }}</span>
+          {% endif %}
         </span>
-      </a>
-    {% endif %}
-  </slideshow-slide>
-{%- endunless -%}
+      {% endif %}
+    </span>
+  {%- else -%}
+    <slideshow-slide
+      ref="slides[]"
+      class="
+        announcement-bar__slide
+        text-block
+        text-block--{{ block.id }}
+        text-block--align-center
+        text-block--full-width
+        custom-typography
+        {% if block_settings.font_size != "" %}custom-font-size{% endif %}
+        {% if block_settings.weight != "" %}custom-font-weight{% endif %}
+      "
+      style="
+        {% render 'typography-style', settings: block_settings, preset: 'custom' %}
+        --width: 100%;
+        --text-align: center;
+        --line-height: 1;
+      "
+      {{ block.shopify_attributes }}
+      aria-hidden="{% if block_index == 0 %}false{% else %}true{% endif %}"
+    >
+      <div class="announcement-bar__inner">
+        {{ announcement_icon }}
+        {% if plain_text != '' %}
+          <p class="announcement-bar__text">
+            {{ block.settings.text }}
+          </p>
+        {% endif %}
+      </div>
+
+      {% if block_settings.link != blank %}
+        <a
+          class="announcement-bar__link"
+          href="{{ block_settings.link }}"
+        >
+          <span class="visually-hidden">
+            {%- assign sr_link_label = block_settings.text | strip_html -%}
+            {%- if sr_link_label != blank -%}
+              {{ sr_link_label }}
+            {%- else -%}
+              {{ 'accessibility.announcement_bar_link' | t }}
+            {%- endif -%}
+          </span>
+        </a>
+      {% endif %}
+    </slideshow-slide>
+  {%- endif -%}
+{%- endif -%}
 
 {% stylesheet %}
-  .text-block {
-    width: var(--width);
-    max-width: 100%;
-  }
-
-  .text-block > * {
-    width: var(--width);
-    max-width: var(--max-width, 100%);
-    text-align: var(--text-align);
-  }
-
   .text-block:not(.text-block--full-width).rte,
   .text-block:not(.text-block--full-width).paragraph {
     /* Safari doesn't support pretty, so fallback to balance */
@@ -123,6 +183,46 @@
   .text-block--align-right > * {
     margin-inline-start: auto;
   }
+
+  .announcement-bar__inner {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    max-width: 100%;
+  }
+
+  .announcement-bar__marquee-link.announcement-bar__inner {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .announcement-bar__icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .announcement-bar__icon {
+      width: 30px;
+      height: 30px;
+    }
+    .announcement-bar__inner {
+    gap: 32px;
+    }
+  }
+
+  .announcement-bar__icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    vertical-align: middle;
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -140,6 +240,15 @@
       "type": "url",
       "id": "link",
       "label": "t:settings.link"
+    },
+    {
+      "type": "header",
+      "content": "t:content.icon"
+    },
+    {
+      "type": "image_picker",
+      "id": "icon_image",
+      "label": "t:settings.image_icon"
     },
     {
       "type": "header",
@@ -165,6 +274,10 @@
         {
           "value": "var(--font-accent--family)",
           "label": "t:options.accent"
+        },
+        {
+          "value": "'Lato', sans-serif",
+          "label": "Lato"
         }
       ],
       "default": "var(--font-body--family)"
@@ -324,7 +437,11 @@
   ],
   "presets": [
     {
-      "name": "t:names.announcement"
+      "name": "t:names.announcement",
+      "settings": {
+        "font": "var(--font-subheading--family)",
+        "font_size": "0.75rem"
+      }
     }
   ]
 }

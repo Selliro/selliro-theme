@@ -827,6 +827,7 @@
     "enable_sticky_content": "Sticky content on desktop",
     "enable_video_looping": "Video looping",
     "enable_zoom": "Enable zoom",
+    "enable_marquee": "Marquee (infinite scroll)",
     "equal_columns": "Equal columns",
     "error_color": "Error",
     "expand_first_group": "Expand first group",

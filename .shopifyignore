@@ -1,13 +1,14 @@
-# This file contains a list of files that will be excluded from Shopify CLI
-# operations such as push, pull, dev, etc.
-#
-# Examples:
-#
-# Ignore a specific file:
-#   templates/product.json
-#
-# Ignore templates with a wildcard pattern:
-#   templates/*.json
-#
-# Ignore templates and sections with a regular expression:
-#   /(templates|sections)/.*\.json/
+Add all the files that you want to ignore while pushing to the shopify theme here
+
+.babelrc
+./*.js
+sampleenv
+package.json
+package-lock.json
+./scss
+./js
+templates/gift_card.liquid
+
+.cursor/.claude/*
+.claude/*
+.cursor/*
