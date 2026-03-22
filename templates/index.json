@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "hero_jVaWmY": {
       "type": "hero",
@@ -61,6 +62,11 @@
       "settings": {
         "media_type_1": "image",
         "media_type_2": "image",
+        "stack_media_on_mobile": false,
+        "custom_mobile_media": false,
+        "media_type_1_mobile": "image",
+        "media_type_2_mobile": "image",
+        "link": "",
         "open_in_new_tab": false,
         "content_direction": "column",
         "vertical_on_mobile": true,
@@ -277,10 +283,258 @@
         "padding-block-start": 48,
         "padding-block-end": 48
       }
+    },
+    "ticker_duo_UeLfnF": {
+      "type": "ticker-duo",
+      "blocks": {
+        "ticker_row_G9yKcm": {
+          "type": "ticker_row",
+          "settings": {
+            "text": "40% Off On Booking",
+            "textarea": "",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "1.5rem",
+            "line_height": "tight",
+            "letter_spacing": "tight",
+            "case": "none",
+            "wrap": "balance",
+            "icon": "shopify://shop_images/star.png",
+            "direction": "forward",
+            "speed": 24,
+            "padding_top": 24,
+            "padding_bottom": 24,
+            "rotation": 1,
+            "color_scheme": "scheme-2"
+          }
+        },
+        "ticker_row_inztn9": {
+          "type": "ticker_row",
+          "settings": {
+            "text": "Face Mask  •  Cleanser  •  Hair Care  •  Sun Protection  •  Toner / Mist  •  Skin Care",
+            "textarea": "",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "direction": "reverse",
+            "speed": 52,
+            "padding_top": 24,
+            "padding_bottom": 24,
+            "rotation": -1,
+            "color_scheme": "scheme-5"
+          }
+        }
+      },
+      "block_order": [
+        "ticker_row_G9yKcm",
+        "ticker_row_inztn9"
+      ],
+      "name": "Ticker Duo",
+      "settings": {
+        "padding_top": 44,
+        "padding_bottom": 44,
+        "row_gap": 6,
+        "section_width": "full-width",
+        "color_scheme": "scheme-3"
+      }
+    },
+    "featured_collection_grid_LHPfHM": {
+      "type": "featured-collection-grid",
+      "blocks": {
+        "product_card_aHVzPG": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "column": "left",
+            "position": "1",
+            "image": "shopify://shop_images/Grid-3-768x768.png",
+            "tag": "Bodycare",
+            "title": "Body Lotion",
+            "color_scheme": "scheme-4",
+            "description": "Faucibus a pellentesque sit amet\nporttitor eget dolor morbi non.",
+            "link": ""
+          }
+        },
+        "product_card_YfqGTe": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "column": "left",
+            "position": "2",
+            "image": "shopify://shop_images/Grid-4-768x461.png",
+            "tag": "Smooth",
+            "title": "Moisturizer",
+            "color_scheme": "scheme-4",
+            "description": "Urna porttitor rhoncus dolor purus non \nenim praesent elementum.",
+            "link": ""
+          }
+        },
+        "product_card_QkKgCr": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "column": "middle",
+            "position": "1",
+            "image": "shopify://shop_images/Grid-2-768x461.png",
+            "tag": "Organic",
+            "title": "Face Scrub",
+            "color_scheme": "scheme-4",
+            "description": "Bibendum neque egestas congue quisque \negestas diam in arcu cursus.",
+            "link": ""
+          }
+        },
+        "product_card_crEXxt": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "column": "middle",
+            "position": "2",
+            "image": "shopify://shop_images/Grid-1-768x768.png",
+            "tag": "Chemical Free",
+            "title": "Tooth Paste",
+            "color_scheme": "scheme-4",
+            "description": "A iaculis at erat pellentesque \nadipiscing commodo etiamat.",
+            "link": ""
+          }
+        },
+        "product_card_DMWRwt": {
+          "type": "product_card",
+          "settings": {
+            "product": "",
+            "column": "right",
+            "position": "1",
+            "image": "shopify://shop_images/high-angle-jar-bowl-with-salt.png",
+            "tag": "Natural",
+            "title": "Bathing Salts",
+            "color_scheme": "scheme-4",
+            "description": "Urna porttitor rhoncus dolor purus non \nenim praesent elementum.",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_card_aHVzPG",
+        "product_card_YfqGTe",
+        "product_card_QkKgCr",
+        "product_card_crEXxt",
+        "product_card_DMWRwt"
+      ],
+      "name": "Featured Collection Grid",
+      "settings": {
+        "data_source": "manual",
+        "collection": "automated-collection",
+        "title": "Shop by category",
+        "subtitle": "Only the best seller products added recently in our catalog",
+        "title_font_size": 40,
+        "subtitle_font_size": 16,
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "header_alignment": "center",
+        "tall_card_side": "right",
+        "card_gradient": "none",
+        "card_gradient_color": "#535353",
+        "card_gradient_color_tall": "#535353",
+        "card_body_alignment": "bottom",
+        "show_tag": true,
+        "tag_source": "product_type",
+        "show_description": true,
+        "description_length": 90,
+        "description_length_large": 120,
+        "color_scheme": "scheme-4"
+      }
+    },
+    "beauty_bundle_feature_RdWw6Q": {
+      "type": "beauty-bundle-feature",
+      "blocks": {
+        "item_69nP8w": {
+          "type": "item",
+          "settings": {
+            "hotspot_x": 31,
+            "hotspot_y": 52,
+            "image": "shopify://shop_images/Grid-2-768x461.png",
+            "title": "Face Cream",
+            "description": "A lightweight, deeply nourishing cream that hydrates and soothes.",
+            "price": "$100",
+            "rating": 5,
+            "link": ""
+          }
+        },
+        "item_DBRt88": {
+          "type": "item",
+          "settings": {
+            "hotspot_x": 50,
+            "hotspot_y": 71,
+            "image": "shopify://shop_images/Grid-1-768x768.png",
+            "title": "Body Lotion",
+            "description": "A lightweight, deeply nourishing cream that hydrates and soothes.",
+            "price": "$58",
+            "rating": 5,
+            "link": ""
+          }
+        },
+        "item_iH7jaV": {
+          "type": "item",
+          "settings": {
+            "hotspot_x": 65,
+            "hotspot_y": 62,
+            "image": "shopify://shop_images/Grid-3-768x768.png",
+            "title": "Face Cream",
+            "description": "A lightweight, deeply nourishing cream that hydrates and soothes.",
+            "price": "$100",
+            "rating": 5,
+            "link": ""
+          }
+        },
+        "item_AfnLjM": {
+          "type": "item",
+          "settings": {
+            "hotspot_x": 77,
+            "hotspot_y": 74,
+            "image": "shopify://shop_images/Grid-4-768x461.png",
+            "title": "Face Cream",
+            "description": "A lightweight, deeply nourishing cream that hydrates and soothes.",
+            "price": "$100",
+            "rating": 5,
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_69nP8w",
+        "item_DBRt88",
+        "item_iH7jaV",
+        "item_AfnLjM"
+      ],
+      "name": "Beauty Bundle Feature",
+      "settings": {
+        "image": "shopify://shop_images/Lookbook_left.png",
+        "image_position": "left",
+        "eyebrow": "Be yourself",
+        "heading": "Beauty Cream Bundles",
+        "subheading": "",
+        "show_rating": true,
+        "divider_style": "lines",
+        "max_items": 3,
+        "card_background": "#ffffff",
+        "card_radius": 14,
+        "button_label": "",
+        "button_link": "",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "section_width": "page-width",
+        "color_scheme": ""
+      }
     }
   },
   "order": [
     "hero_jVaWmY",
-    "product_list_fa6P9H"
+    "product_list_fa6P9H",
+    "ticker_duo_UeLfnF",
+    "featured_collection_grid_LHPfHM",
+    "beauty_bundle_feature_RdWw6Q"
   ]
 }

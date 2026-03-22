@@ -1,27 +1,8 @@
 {% liquid
   assign section_id = section.settings.custom_id | default: section.id
+  assign grid_columns = section.settings.grid_columns
   assign grid_gap = section.settings.grid_gap
   assign grid_gap_mobile = section.settings.grid_gap_mobile
-  assign use_figma_layout = section.settings.use_figma_layout
-
-  comment
-    Build ordered slots for Figma layout: 3 columns, 2 rows.
-    One block can "span 2 rows" (right column). Slots: (1,1), (2,1), (3,1-2 spanning), (1,2), (2,2).
-  endcomment
-  assign normal_blocks = ''
-  assign spanning_block = null
-  for block in section.blocks
-    if block.settings.span_2_rows
-      assign spanning_block = block
-    endif
-  endfor
-
-  assign normal_count = 0
-  for block in section.blocks
-    unless block.settings.span_2_rows
-      assign normal_count = normal_count | plus: 1
-    endunless
-  endfor
 %}
 
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
@@ -54,19 +35,11 @@
     line-height: 1.5;
   }
 
-  {% comment %} Simple grid (when Figma layout off or not enough blocks) {% endcomment %}
+  {% comment %} Dynamic grid: columns from section setting, each block uses grid-column/row span {% endcomment %}
   .shop-by-category-{{ section_id }} .category-grid {
     display: grid;
-    grid-template-columns: repeat(var(--columns-desktop, 3), 1fr);
-    gap: {{ grid_gap }}px;
-    margin-top: 40px;
-  }
-
-  {% comment %} Figma layout: 3 columns, 2 rows, one card spans 2 rows in column 3 {% endcomment %}
-  .shop-by-category-{{ section_id }} .category-grid--figma {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto auto;
+    grid-template-columns: repeat(var(--grid-columns, 3), 1fr);
+    grid-auto-rows: auto;
     gap: {{ grid_gap }}px;
     margin-top: 40px;
   }
@@ -99,7 +72,7 @@
     background-color: #f5f5f5;
   }
 
-  .shop-by-category-{{ section_id }} .category-card--span-2 .category-image-wrapper {
+  .shop-by-category-{{ section_id }} .category-card--row-span-2 .category-image-wrapper {
     height: 100%;
     min-height: 280px;
   }
@@ -115,7 +88,7 @@
     transform: scale(1.05);
   }
 
-  .shop-by-category-{{ section_id }} .category-card:not(.category-card--span-2) .category-image-wrapper {
+  .shop-by-category-{{ section_id }} .category-card:not(.category-card--row-span-2) .category-image-wrapper {
     height: {{ section.settings.image_height }}px;
   }
 
@@ -203,17 +176,16 @@
   }
 
   @media (max-width: 1024px) {
-    .shop-by-category-{{ section_id }} .category-grid--figma {
+    .shop-by-category-{{ section_id }} .category-grid {
       grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: auto;
     }
 
-    .shop-by-category-{{ section_id }} .category-grid--figma .category-card {
+    .shop-by-category-{{ section_id }} .category-card {
       grid-column: span 1 !important;
       grid-row: span 1 !important;
     }
 
-    .shop-by-category-{{ section_id }} .category-card--span-2 .category-image-wrapper {
+    .shop-by-category-{{ section_id }} .category-card--row-span-2 .category-image-wrapper {
       min-height: 200px;
       height: 200px;
     }
@@ -228,19 +200,18 @@
       font-size: {{ section.settings.heading_size_mobile }}px;
     }
 
-    .shop-by-category-{{ section_id }} .category-grid,
-    .shop-by-category-{{ section_id }} .category-grid--figma {
+    .shop-by-category-{{ section_id }} .category-grid {
       grid-template-columns: 1fr;
       gap: {{ grid_gap_mobile }}px;
     }
 
-    .shop-by-category-{{ section_id }} .category-grid--figma .category-card {
+    .shop-by-category-{{ section_id }} .category-card {
       grid-column: span 1 !important;
       grid-row: span 1 !important;
     }
 
-    .shop-by-category-{{ section_id }} .category-card:not(.category-card--span-2) .category-image-wrapper,
-    .shop-by-category-{{ section_id }} .category-card--span-2 .category-image-wrapper {
+    .shop-by-category-{{ section_id }} .category-card:not(.category-card--row-span-2) .category-image-wrapper,
+    .shop-by-category-{{ section_id }} .category-card--row-span-2 .category-image-wrapper {
       height: {{ section.settings.image_height_mobile }}px;
       min-height: unset;
     }
@@ -259,7 +230,7 @@
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
     --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
     --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
-    --columns-desktop: {{ section.settings.columns_desktop }};
+    --grid-columns: {{ section.settings.grid_columns }};
   "
 >
   <div class="section-header">
@@ -269,58 +240,26 @@
     {% endif %}
   </div>
 
-  {% if use_figma_layout and spanning_block != null and section.blocks.size >= 2 %}
-    {% comment %} Figma grid: 3 cols, 2 rows, one card spans column 3 rows 1-2 {% endcomment %}
-    {% assign slot_index = 0 %}
-    <div class="category-grid category-grid--figma">
-      {% for block in section.blocks %}
-        {% if block.settings.span_2_rows %}
-          {% comment %} Rendered after the 4 normal slots {% endcomment %}
-          {% continue %}
-        {% endif %}
-        {% assign slot_index = slot_index | plus: 1 %}
-        {% if slot_index == 1 %}
-          <a href="{% if block.settings.link != blank %}{{ block.settings.link }}{% else %}#{% endif %}" class="category-card layout--{{ block.settings.layout_style }} category-card--slot-1" style="grid-column: 1; grid-row: 1;" {{ block.shopify_attributes }}>
-            {% render 'shop-by-category-card', block: block, section: section %}
-          </a>
-        {% elsif slot_index == 2 %}
-          <a href="{% if block.settings.link != blank %}{{ block.settings.link }}{% else %}#{% endif %}" class="category-card layout--{{ block.settings.layout_style }} category-card--slot-2" style="grid-column: 2; grid-row: 1;" {{ block.shopify_attributes }}>
-            {% render 'shop-by-category-card', block: block, section: section %}
-          </a>
-        {% endif %}
-      {% endfor %}
-
-      {% comment %} Spanning card (column 3, rows 1-2) {% endcomment %}
-      <a href="{% if spanning_block.settings.link != blank %}{{ spanning_block.settings.link }}{% else %}#{% endif %}" class="category-card category-card--span-2 layout--{{ spanning_block.settings.layout_style }}" style="grid-column: 3; grid-row: 1 / -1;" {{ spanning_block.shopify_attributes }}>
-        {% render 'shop-by-category-card', block: spanning_block, section: section %}
+  <div class="category-grid">
+    {% for block in section.blocks %}
+      {% liquid
+        assign col_span = block.settings.column_span | default: 1
+        assign row_span = block.settings.row_span | default: '1'
+        assign row_span_num = row_span | plus: 0
+        if col_span > grid_columns
+          assign col_span = grid_columns
+        endif
+      %}
+      <a
+        href="{% if block.settings.link != blank %}{{ block.settings.link }}{% else %}#{% endif %}"
+        class="category-card layout--{{ block.settings.layout_style }}{% if row_span_num == 2 %} category-card--row-span-2{% endif %}"
+        style="grid-column: span {{ col_span }}; grid-row: span {{ row_span }};"
+        {{ block.shopify_attributes }}
+      >
+        {% render 'shop-by-category-card', block: block, section: section %}
       </a>
-
-      {% assign slot_index = 0 %}
-      {% for block in section.blocks %}
-        {% if block.settings.span_2_rows %}{% continue %}{% endif %}
-        {% assign slot_index = slot_index | plus: 1 %}
-        {% if slot_index == 3 %}
-          <a href="{% if block.settings.link != blank %}{{ block.settings.link }}{% else %}#{% endif %}" class="category-card layout--{{ block.settings.layout_style }} category-card--slot-3" style="grid-column: 1; grid-row: 2;" {{ block.shopify_attributes }}>
-            {% render 'shop-by-category-card', block: block, section: section %}
-          </a>
-        {% elsif slot_index == 4 %}
-          <a href="{% if block.settings.link != blank %}{{ block.settings.link }}{% else %}#{% endif %}" class="category-card layout--{{ block.settings.layout_style }} category-card--slot-4" style="grid-column: 2; grid-row: 2;" {{ block.shopify_attributes }}>
-            {% render 'shop-by-category-card', block: block, section: section %}
-          </a>
-        {% endif %}
-      {% endfor %}
-    </div>
-  {% else %}
-    {% comment %} Simple grid (all cards equal) {% endcomment %}
-    <div class="category-grid">
-      {% for block in section.blocks %}
-        {% assign card_link = block.settings.link %}
-        <a href="{% if card_link != blank %}{{ card_link }}{% else %}#{% endif %}" class="category-card layout--{{ block.settings.layout_style }}" {{ block.shopify_attributes }}>
-          {% render 'shop-by-category-card', block: block, section: section %}
-        </a>
-      {% endfor %}
-    </div>
-  {% endif %}
+    {% endfor %}
+  </div>
 </section>
 
 {% schema %}
@@ -332,13 +271,6 @@
     {
       "type": "header",
       "content": "Section layout"
-    },
-    {
-      "type": "checkbox",
-      "id": "use_figma_layout",
-      "label": "Use Figma grid layout",
-      "default": true,
-      "info": "3 columns, 2 rows, with one card spanning 2 rows (set 'Span 2 rows' on one block)"
     },
     {
       "type": "text",
@@ -488,13 +420,23 @@
     },
     {
       "type": "range",
+      "id": "grid_columns",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Grid columns",
+      "default": 3,
+      "info": "Number of columns. Each card can span 1 or more columns/rows via block settings."
+    },
+    {
+      "type": "range",
       "id": "grid_gap",
       "min": 0,
       "max": 50,
       "step": 5,
       "unit": "px",
       "label": "Grid gap",
-      "default": 24
+      "default": 25
     },
     {
       "type": "range",
@@ -504,17 +446,7 @@
       "step": 5,
       "unit": "px",
       "label": "Mobile grid gap",
-      "default": 16
-    },
-    {
-      "type": "range",
-      "id": "columns_desktop",
-      "min": 2,
-      "max": 6,
-      "step": 1,
-      "label": "Desktop columns (simple grid)",
-      "default": 3,
-      "info": "Used when Figma layout is off"
+      "default": 15
     },
     {
       "type": "header",
@@ -560,7 +492,7 @@
       "step": 20,
       "unit": "px",
       "label": "Mobile image height",
-      "default": 180
+      "default": 200
     },
     {
       "type": "select",
@@ -635,11 +567,33 @@
       "name": "Category card",
       "settings": [
         {
-          "type": "checkbox",
-          "id": "span_2_rows",
-          "label": "Span 2 rows",
-          "default": false,
-          "info": "Use on one card for Figma layout (tall right column)"
+          "type": "header",
+          "content": "Grid span"
+        },
+        {
+          "type": "range",
+          "id": "column_span",
+          "min": 1,
+          "max": 6,
+          "step": 1,
+          "label": "Column span",
+          "default": 1,
+          "info": "How many columns this card spans (max = section grid columns)"
+        },
+        {
+          "type": "select",
+          "id": "row_span",
+          "label": "Row span",
+          "options": [
+            { "value": "1", "label": "1 row" },
+            { "value": "2", "label": "2 rows" }
+          ],
+          "default": "1",
+          "info": "Use 2 rows for a taller featured card"
+        },
+        {
+          "type": "header",
+          "content": "Content"
         },
         {
           "type": "select",
@@ -711,12 +665,14 @@
       "settings": {
         "heading": "Shop By Category",
         "subheading": "Only the best seller products added recently in our catalog",
-        "use_figma_layout": true
+        "grid_columns": 3
       },
       "blocks": [
         {
           "type": "category",
           "settings": {
+            "column_span": 1,
+            "row_span": "1",
             "layout_style": "default",
             "badge_text": "BODYCARE",
             "badge_type": "bodycare",
@@ -728,6 +684,8 @@
         {
           "type": "category",
           "settings": {
+            "column_span": 1,
+            "row_span": "1",
             "layout_style": "default",
             "badge_text": "SMOOTH",
             "badge_type": "smooth",
@@ -739,7 +697,8 @@
         {
           "type": "category",
           "settings": {
-            "span_2_rows": true,
+            "column_span": 1,
+            "row_span": "2",
             "layout_style": "default",
             "badge_text": "NATURAL",
             "badge_type": "natural",
@@ -751,6 +710,8 @@
         {
           "type": "category",
           "settings": {
+            "column_span": 1,
+            "row_span": "1",
             "layout_style": "default",
             "badge_text": "ORGANIC",
             "badge_type": "organic",
@@ -762,6 +723,8 @@
         {
           "type": "category",
           "settings": {
+            "column_span": 1,
+            "row_span": "1",
             "layout_style": "default",
             "badge_text": "CHEMICAL FREE",
             "badge_type": "chemical-free",

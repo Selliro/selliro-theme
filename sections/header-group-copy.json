@@ -11,7 +11,7 @@
   "type": "header",
   "name": "Header group",
   "sections": {
-	"top_banner_YWV9gm": {
+    "top_banner_YWV9gm": {
       "type": "top-banner",
       "name": "Top Banner",
       "settings": {
@@ -33,22 +33,19 @@
           "type": "trending_searches",
           "settings": {
             "title": "Diabetes"
-          },
-          "blocks": {}
+          }
         },
         "trending_searches_TpYGyV": {
           "type": "trending_searches",
           "settings": {
             "title": "Respiration services"
-          },
-          "blocks": {}
+          }
         },
         "trending_searches_Xg9JnK": {
           "type": "trending_searches",
           "settings": {
             "title": "Breastpumps"
-          },
-          "blocks": {}
+          }
         }
       },
       "block_order": [
@@ -122,7 +119,7 @@
     }
   },
   "order": [
-	"top_banner_YWV9gm",
+    "top_banner_YWV9gm",
     "header_jLVeek",
     "megamenu_diK4JR",
     "megamenu_nPcwBA"

@@ -1,0 +1,276 @@
+/**
+ * Featured Collection Grid — Section Styles
+ * File: assets/section-featured-collection-grid.css
+ *
+ */
+
+/* ─── Section ───────────────────────────────────────────────── */
+.fc-section {
+    background-color: var(--color-background);
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+  
+  /* ─── Header / Subtitle ─────────────────────────────────────── */
+  .fc-section__header {    
+    padding: 26px 20px 18px;
+  }
+
+  .fc-section__title {
+    margin: 0 0 6px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-foreground);
+  }
+  
+  .fc-section__subtitle {
+    margin: 0; 
+    font-weight: 400;    
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
+  }
+  
+  /* ─── 3-Column Grid ─────────────────────────────────────────── */
+  .fc-grid {
+    display: grid;  
+    grid-template-rows: 1fr;
+    gap: 12px;    
+    margin: 0;
+    padding: 0;
+  }
+
+  .fc_left_section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* ─── Columns ───────────────────────────────────────────────── */
+  .fc-col {
+    display: flex;    
+    gap: 12px;
+  }
+  
+  .fc-col--left .fc-card--half:first-child { 
+    flex: 1 1 40%;
+  }
+  .fc-col--left .fc-card--half:last-child { 
+    flex: 1 1 60%;
+  }
+  .fc-col--middle .fc-card--half:first-child { 
+    flex: 1 1 60%;
+  }
+  .fc-col--middle .fc-card--half:last-child { 
+    flex: 1 1 40%;
+  }
+  .fc-col--right  { }
+  
+  /* ─── Card Base ─────────────────────────────────────────────── */
+.fc-card {
+  position: relative;
+  overflow: hidden;
+  background-color: #f0ece6; /* warm off-white fallback */
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+}
+
+.fc-card__link {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  text-indent: -9999px;
+}
+
+.fc-card__title a {
+  position: relative;
+  z-index: 4;
+}
+  
+  /* Half-height cards (left + middle) — equal height within column */
+  .fc-card--half {
+    flex: 1 1 0;
+    min-height: 295px;
+  }
+  
+  /* Tall card (right column) — full height */
+  .fc-card--tall {
+    flex: 1 1 100%;
+    min-height: 596px;
+  }
+  
+  /* ─── Card Image ─────────────────────────────────────────────── */
+  .fc-card__image-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  
+  .fc-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .fc-card:hover .fc-card__image {
+    transform: scale(1.04);
+  }
+  
+  /* Placeholder SVG fallback */
+  .fc-card__placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 15%;
+    opacity: 0.15;
+  }
+  
+  /* ─── Bottom gradient overlay (subtle, keeps text readable) ─── */
+  .fc-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    /* Lighter gradient — matches the image's soft fade at bottom */
+    background: linear-gradient(
+      to top,
+      rgba(245, 240, 234, 0.97) 0%,
+      rgba(245, 240, 234, 0.80) 20%,
+      rgba(245, 240, 234, 0.30) 45%,
+      transparent 65%
+    );
+  }
+  
+  /* Tall right card: gradient covers only the bottom ~35% */
+  .fc-card--tall::after {
+    background: linear-gradient(
+      to top,
+      rgba(240, 236, 228, 0.95) 0%,
+      rgba(240, 236, 228, 0.70) 18%,
+      rgba(240, 236, 228, 0.20) 38%,
+      transparent 55%
+    );
+  }
+  
+  /* ─── Card Body (text area) ─────────────────────────────────── */
+  .fc-card__body {
+    position: relative;
+    z-index: 2;
+    margin-top: auto;
+    padding: 18px 20px 20px;
+  }
+  
+  /* Tall card body: a bit more bottom padding */
+  .fc-card__body--tall {
+    padding: 22px 26px 26px;
+  }
+  
+  /* ─── Tag ────────────────────────────────────────────────────── */
+  .fc-card__tag {
+    margin: 0 0 4px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: #444444;
+    line-height: 1;
+  }
+  
+  /* ─── Title ──────────────────────────────────────────────────── */
+  .fc-card__title {
+    margin: 0 0 8px;
+    font-size: 27px;
+    font-weight: medium;
+    line-height: 1.2;
+    color: #111111;    
+  }
+  
+  .fc-card__title a {
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+  
+  .fc-card__title a:hover {
+    opacity: 0.7;
+  }
+  
+  /* ─── Description ─────────────────────────────────────────────── */
+  .fc-card__desc {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #333333;
+    max-width: 260px;
+  }
+  
+  .fc-card__body--tall .fc-card__desc {
+    max-width: 320px;
+  }
+  
+  /* ─── Responsive: Tablet (≤1024px) ──────────────────────────── */
+  @media screen and (max-width: 1024px) {
+    .fc-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 10px;
+    }
+
+    .fc-col--right {
+      grid-column: 1 / -1;
+    }
+
+    .fc-card--half {
+      min-height: 260px;
+    }
+  
+    .fc-card--tall {
+      min-height: 380px;
+    }
+  }
+  
+  /* ─── Responsive: Mobile (≤640px) ───────────────────────────── */
+@media screen and (max-width: 640px) {
+  .fc-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .fc-col--right {
+    grid-column: auto;
+  }
+
+  .fc-col {
+    flex-direction: column;
+  }
+
+  .fc-col--left .fc-card--half:first-child,
+  .fc-col--left .fc-card--half:last-child,
+  .fc-col--middle .fc-card--half:first-child,
+  .fc-col--middle .fc-card--half:last-child {
+    flex: 1 1 100%;
+  }
+
+  .fc_left_section {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+    .fc-card--half {
+      min-height: 240px;
+    }
+  
+    .fc-card--tall {
+      min-height: 300px;
+    }
+  
+    .fc-card__title {
+      font-size: 20px;
+    }
+  }

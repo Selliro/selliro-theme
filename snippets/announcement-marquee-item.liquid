@@ -1,0 +1,20 @@
+{% comment %}
+  Renders a single announcement for the header marquee.
+  Usage: {% render 'announcement-marquee-item', block: block %}
+{% endcomment %}
+{%- if block.settings.text != blank -%}
+  {%- assign block_settings = block.settings -%}
+  <div
+    class="marquee-content__item announcement-bar__border text-block custom-typography {% if block_settings.font_size != '' %}custom-font-size{% endif %} {% if block_settings.weight != '' %}custom-font-weight{% endif %}"
+    style="{% render 'typography-style', settings: block_settings, preset: 'custom' %}"
+    {{ block.shopify_attributes }}
+  >
+    <span class="announcement-bar__text">
+      {% if block_settings.link != blank %}
+        <a class="announcement-bar__link marquee-content__link" href="{{ block_settings.link }}">{{ block_settings.text }}</a>
+      {% else %}
+        {{ block_settings.text }}
+      {% endif %}
+    </span>
+  </div>
+{%- endif -%}

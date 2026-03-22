@@ -1,0 +1,767 @@
+{% comment %}
+  Featured Collection Grid Section
+  File: sections/featured-collection-grid.liquid
+{% endcomment %}
+
+<style>
+  .fc-section__title {
+    font-size: {{ section.settings.title_font_size }}px;
+  }
+  .fc-section__subtitle {
+    font-size: {{ section.settings.subtitle_font_size }}px;
+  }
+  .fc-section__header {
+    text-align: {{ section.settings.header_alignment }};
+  }
+
+  #fc-section-{{ section.id }} .fc-grid {
+    grid-template-columns: {% if section.settings.tall_card_side == 'left' %}2fr 3fr{% else %}3fr 2fr{% endif %};    
+  }
+  {% if section.settings.tall_card_side == 'left' %}
+  #fc-section-{{ section.id }} .fc_left_section {
+    grid-column: 2;
+  }
+  #fc-section-{{ section.id }} .fc-col--right {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  {% endif %}
+
+  #fc-section-{{ section.id }} .fc-card::after {
+    {% if section.settings.card_gradient == 'none' %}
+    background: transparent;
+    {% else %}
+    background: linear-gradient(
+      to top,
+      {{ section.settings.card_gradient_color | color_modify: 'alpha', 0.97 }} 0%,
+      {{ section.settings.card_gradient_color | color_modify: 'alpha', 0.80 }} 20%,
+      {{ section.settings.card_gradient_color | color_modify: 'alpha', 0.30 }} 45%,
+      transparent 65%
+    );
+    {% endif %}
+  }
+  
+  /* Tall card: gradient covers only the bottom ~35% */
+  #fc-section-{{ section.id }} .fc-card--tall::after {
+    {% if section.settings.card_gradient == 'none' %}
+    background: transparent;
+    {% else %}
+    background: linear-gradient(
+      to top,
+      {{ section.settings.card_gradient_color_tall | color_modify: 'alpha', 0.95 }} 0%,
+      {{ section.settings.card_gradient_color_tall | color_modify: 'alpha', 0.70 }} 18%,
+      {{ section.settings.card_gradient_color_tall | color_modify: 'alpha', 0.20 }} 38%,
+      transparent 55%
+    );
+    {% endif %}
+  }
+
+  #fc-section-{{ section.id }} .fc-card__body {
+    {% if section.settings.card_body_alignment == 'top' %}
+    margin-top: 0;
+    margin-bottom: auto;
+    {% else %}
+    margin-top: auto;
+    margin-bottom: 0;
+    {% endif %}
+  }
+
+  #fc-section-{{ section.id }} .fc-card__tag,
+  #fc-section-{{ section.id }} .fc-card__title,
+  #fc-section-{{ section.id }} .fc-card__title a,
+  #fc-section-{{ section.id }} .fc-card__desc {
+    color: var(--fc-card-text-color, inherit);
+  }
+
+  @media screen and (max-width: 1024px) {
+    #fc-section-{{ section.id }} .fc-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    #fc-section-{{ section.id }} .fc_left_section,
+    #fc-section-{{ section.id }} .fc-col--right {
+      grid-column: auto;
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    #fc-section-{{ section.id }} .fc-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+{{ 'section-featured-collection-grid.css' | asset_url | stylesheet_tag }}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="fc-section section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  id="fc-section-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  {%- liquid
+    assign max_products = 5
+    assign products = section.settings.collection.products | limit: max_products
+    assign use_manual = false
+    if section.settings.data_source == 'manual'
+      assign use_manual = true
+    endif
+  -%}
+
+  {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+    <div class="fc-section__header">
+      {%- if section.settings.title != blank -%}
+        <h3 class="fc-section__title">{{ section.settings.title }}</h3>
+      {%- endif -%}
+      {%- if section.settings.subtitle != blank -%}
+        <p class="fc-section__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="fc-grid">
+    <div class="fc_left_section">
+      {%- comment -%} ── LEFT COLUMN (2 stacked half cards) ── {%- endcomment -%}
+      <div class="fc-col fc-col--left">
+        {%- if use_manual -%}
+          {%- for i in (1..2) -%}
+            {%- assign pos = forloop.index | append: '' -%}
+            {%- for block in section.blocks -%}
+              {%- if block.settings.column == 'left' and block.settings.position == pos -%}
+                {%- assign block_product = block.settings.product -%}
+                <div class="fc-card fc-card--half color-{{ block.settings.color_scheme }}" style="{% if block.settings.card_bg_color != blank %}background-color: {{ block.settings.card_bg_color }};{% endif %}{% if block.settings.card_text_color != blank %}--fc-card-text-color: {{ block.settings.card_text_color }};{% endif %}" {{ block.shopify_attributes }}>
+                  {%- if block_product != blank -%}
+                    <a class="fc-card__link" href="{{ block_product.url }}" aria-label="{{ block_product.title }}"></a>
+                  {%- elsif block.settings.link != blank -%}
+                    <a class="fc-card__link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'View item' }}"></a>
+                  {%- endif -%}
+                  <div class="fc-card__image-wrap">
+                    {%- if block_product != blank and block_product.featured_image != blank -%}
+                      {{ block_product.featured_image | image_url: width: 800 | image_tag:
+                        loading: 'lazy',
+                        widths: '400, 600, 800',
+                        class: 'fc-card__image'
+                      }}
+                    {%- elsif block.settings.image != blank -%}
+                      {{ block.settings.image | image_url: width: 800 | image_tag:
+                        loading: 'lazy',
+                        widths: '400, 600, 800',
+                        class: 'fc-card__image'
+                      }}
+                    {%- else -%}
+                      {{ 'product-1' | placeholder_svg_tag: 'fc-card__placeholder' }}
+                    {%- endif -%}
+                  </div>
+                  <div class="fc-card__body">
+                    {%- if block.settings.tag != blank -%}
+                      <p class="fc-card__tag">{{ block.settings.tag }}</p>
+                    {%- elsif block_product != blank and block_product.type != blank -%}
+                      <p class="fc-card__tag">{{ block_product.type }}</p>
+                    {%- endif -%}
+                    <h3 class="fc-card__title">
+                      {%- if block_product != blank -%}
+                        <a href="{{ block_product.url }}">{{ block_product.title }}</a>
+                      {%- elsif block.settings.title != blank -%}
+                        {%- if block.settings.link != blank -%}
+                          <a href="{{ block.settings.link }}">{{ block.settings.title }}</a>
+                        {%- else -%}
+                          {{ block.settings.title }}
+                        {%- endif -%}
+                      {%- endif -%}
+                    </h3>
+                    {%- if block_product != blank -%}
+                      <p class="fc-card__desc">{{ block_product.description | strip_html | truncate: section.settings.description_length }}</p>
+                    {%- elsif block.settings.description != blank -%}
+                      <p class="fc-card__desc">{{ block.settings.description }}</p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (0..1) -%}
+            {%- assign product = products[i] -%}
+            <div class="fc-card fc-card--half">
+              {%- if product != blank -%}
+                <a class="fc-card__link" href="{{ product.url }}" aria-label="{{ product.title }}"></a>
+              {%- endif -%}
+              <div class="fc-card__image-wrap">
+                {%- if product != blank and product.featured_image != blank -%}
+                  {{ product.featured_image | image_url: width: 800 | image_tag:
+                    loading: 'lazy',
+                    widths: '400, 600, 800',
+                    class: 'fc-card__image'
+                  }}
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'fc-card__placeholder' }}
+                {%- endif -%}
+              </div>
+              <div class="fc-card__body">
+                {%- if section.settings.show_tag and product != blank -%}
+                  {%- assign tag_text = '' -%}
+                  {%- case section.settings.tag_source -%}
+                    {%- when 'product_type' -%}
+                      {%- assign tag_text = product.type -%}
+                    {%- when 'vendor' -%}
+                      {%- assign tag_text = product.vendor -%}
+                    {%- when 'collection_title' -%}
+                      {%- assign tag_text = section.settings.collection.title -%}
+                  {%- endcase -%}
+                  {%- if tag_text != blank -%}
+                    <p class="fc-card__tag">{{ tag_text }}</p>
+                  {%- endif -%}
+                {%- endif -%}
+                <h3 class="fc-card__title">
+                  {%- if product != blank -%}
+                    <a href="{{ product.url }}">{{ product.title }}</a>
+                  {%- else -%}
+                    Product Name
+                  {%- endif -%}
+                </h3>
+                {%- if section.settings.show_description -%}
+                  <p class="fc-card__desc">
+                    {%- if product != blank -%}
+                      {{ product.description | strip_html | truncate: section.settings.description_length }}
+                    {%- else -%}
+                      Faucibus a pellentesque sit amet porttitor eget dolor morbi non.
+                    {%- endif -%}
+                  </p>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ── MIDDLE COLUMN (2 stacked half cards) ── {%- endcomment -%}
+      <div class="fc-col fc-col--middle">
+        {%- if use_manual -%}
+          {%- for i in (1..2) -%}
+            {%- assign pos = forloop.index | append: '' -%}
+            {%- for block in section.blocks -%}
+              {%- if block.settings.column == 'middle' and block.settings.position == pos -%}
+                {%- assign block_product = block.settings.product -%}
+                <div class="fc-card fc-card--half color-{{ block.settings.color_scheme }}" style="{% if block.settings.card_bg_color != blank %}background-color: {{ block.settings.card_bg_color }};{% endif %}{% if block.settings.card_text_color != blank %}--fc-card-text-color: {{ block.settings.card_text_color }};{% endif %}" {{ block.shopify_attributes }}>
+                  {%- if block_product != blank -%}
+                    <a class="fc-card__link" href="{{ block_product.url }}" aria-label="{{ block_product.title }}"></a>
+                  {%- elsif block.settings.link != blank -%}
+                    <a class="fc-card__link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'View item' }}"></a>
+                  {%- endif -%}
+                  <div class="fc-card__image-wrap">
+                    {%- if block_product != blank and block_product.featured_image != blank -%}
+                      {{ block_product.featured_image | image_url: width: 800 | image_tag:
+                        loading: 'lazy',
+                        widths: '400, 600, 800',
+                        class: 'fc-card__image'
+                      }}
+                    {%- elsif block.settings.image != blank -%}
+                      {{ block.settings.image | image_url: width: 800 | image_tag:
+                        loading: 'lazy',
+                        widths: '400, 600, 800',
+                        class: 'fc-card__image'
+                      }}
+                    {%- else -%}
+                      {{ 'product-2' | placeholder_svg_tag: 'fc-card__placeholder' }}
+                    {%- endif -%}
+                  </div>
+                  <div class="fc-card__body">
+                    {%- if block.settings.tag != blank -%}
+                      <p class="fc-card__tag">{{ block.settings.tag }}</p>
+                    {%- elsif block_product != blank and block_product.type != blank -%}
+                      <p class="fc-card__tag">{{ block_product.type }}</p>
+                    {%- endif -%}
+                    <h3 class="fc-card__title">
+                      {%- if block_product != blank -%}
+                        <a href="{{ block_product.url }}">{{ block_product.title }}</a>
+                      {%- elsif block.settings.title != blank -%}
+                        {%- if block.settings.link != blank -%}
+                          <a href="{{ block.settings.link }}">{{ block.settings.title }}</a>
+                        {%- else -%}
+                          {{ block.settings.title }}
+                        {%- endif -%}
+                      {%- endif -%}
+                    </h3>
+                    {%- if block_product != blank -%}
+                      <p class="fc-card__desc">{{ block_product.description | strip_html | truncate: section.settings.description_length }}</p>
+                    {%- elsif block.settings.description != blank -%}
+                      <p class="fc-card__desc">{{ block.settings.description }}</p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (2..3) -%}
+            {%- assign product = products[i] -%}
+            <div class="fc-card fc-card--half">
+              {%- if product != blank -%}
+                <a class="fc-card__link" href="{{ product.url }}" aria-label="{{ product.title }}"></a>
+              {%- endif -%}
+              <div class="fc-card__image-wrap">
+                {%- if product != blank and product.featured_image != blank -%}
+                  {{ product.featured_image | image_url: width: 800 | image_tag:
+                    loading: 'lazy',
+                    widths: '400, 600, 800',
+                    class: 'fc-card__image'
+                  }}
+                {%- else -%}
+                  {{ 'product-2' | placeholder_svg_tag: 'fc-card__placeholder' }}
+                {%- endif -%}
+              </div>
+              <div class="fc-card__body">
+                {%- if section.settings.show_tag and product != blank -%}
+                  {%- assign tag_text = '' -%}
+                  {%- case section.settings.tag_source -%}
+                    {%- when 'product_type' -%}
+                      {%- assign tag_text = product.type -%}
+                    {%- when 'vendor' -%}
+                      {%- assign tag_text = product.vendor -%}
+                    {%- when 'collection_title' -%}
+                      {%- assign tag_text = section.settings.collection.title -%}
+                  {%- endcase -%}
+                  {%- if tag_text != blank -%}
+                    <p class="fc-card__tag">{{ tag_text }}</p>
+                  {%- endif -%}
+                {%- endif -%}
+                <h3 class="fc-card__title">
+                  {%- if product != blank -%}
+                    <a href="{{ product.url }}">{{ product.title }}</a>
+                  {%- else -%}
+                    Product Name
+                  {%- endif -%}
+                </h3>
+                {%- if section.settings.show_description -%}
+                  <p class="fc-card__desc">
+                    {%- if product != blank -%}
+                      {{ product.description | strip_html | truncate: section.settings.description_length }}
+                    {%- else -%}
+                      Urna porttitor rhoncus dolor purus non enim praesent elementum.
+                    {%- endif -%}
+                  </p>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} ── RIGHT COLUMN (1 tall full-height card) ── {%- endcomment -%}
+    <div class="fc-col fc-col--right">
+      {%- if use_manual -%}
+        {%- for block in section.blocks -%}
+          {%- if block.settings.column == 'right' -%}
+            {%- assign block_product = block.settings.product -%}
+            <div class="fc-card fc-card--tall color-{{ block.settings.color_scheme }}" style="{% if block.settings.card_bg_color != blank %}background-color: {{ block.settings.card_bg_color }};{% endif %}{% if block.settings.card_text_color != blank %}--fc-card-text-color: {{ block.settings.card_text_color }};{% endif %}" {{ block.shopify_attributes }}>
+              {%- if block_product != blank -%}
+                <a class="fc-card__link" href="{{ block_product.url }}" aria-label="{{ block_product.title }}"></a>
+              {%- elsif block.settings.link != blank -%}
+                <a class="fc-card__link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'View item' }}"></a>
+              {%- endif -%}
+              <div class="fc-card__image-wrap">
+                {%- if block_product != blank and block_product.featured_image != blank -%}
+                  {{ block_product.featured_image | image_url: width: 1400 | image_tag:
+                    loading: 'lazy',
+                    widths: '700, 1000, 1400',
+                    class: 'fc-card__image'
+                  }}
+                {%- elsif block.settings.image != blank -%}
+                  {{ block.settings.image | image_url: width: 1400 | image_tag:
+                    loading: 'lazy',
+                    widths: '700, 1000, 1400',
+                    class: 'fc-card__image'
+                  }}
+                {%- else -%}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'fc-card__placeholder' }}
+                {%- endif -%}
+              </div>
+              <div class="fc-card__body fc-card__body--tall">
+                {%- if block.settings.tag != blank -%}
+                  <p class="fc-card__tag">{{ block.settings.tag }}</p>
+                {%- elsif block_product != blank and block_product.type != blank -%}
+                  <p class="fc-card__tag">{{ block_product.type }}</p>
+                {%- endif -%}
+                <h3 class="fc-card__title">
+                  {%- if block_product != blank -%}
+                    <a href="{{ block_product.url }}">{{ block_product.title }}</a>
+                  {%- elsif block.settings.title != blank -%}
+                    {%- if block.settings.link != blank -%}
+                      <a href="{{ block.settings.link }}">{{ block.settings.title }}</a>
+                    {%- else -%}
+                      {{ block.settings.title }}
+                    {%- endif -%}
+                  {%- endif -%}
+                </h3>
+                {%- if block_product != blank -%}
+                  <p class="fc-card__desc">{{ block_product.description | strip_html | truncate: section.settings.description_length_large }}</p>
+                {%- elsif block.settings.description != blank -%}
+                  <p class="fc-card__desc">{{ block.settings.description }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- assign product = products[4] -%}
+        <div class="fc-card fc-card--tall">
+          {%- if product != blank -%}
+            <a class="fc-card__link" href="{{ product.url }}" aria-label="{{ product.title }}"></a>
+          {%- endif -%}
+          <div class="fc-card__image-wrap">
+            {%- if product != blank and product.featured_image != blank -%}
+              {{ product.featured_image | image_url: width: 1400 | image_tag:
+                loading: 'lazy',
+                widths: '700, 1000, 1400',
+                class: 'fc-card__image'
+              }}
+            {%- else -%}
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'fc-card__placeholder' }}
+            {%- endif -%}
+          </div>
+          <div class="fc-card__body fc-card__body--tall">
+            {%- if section.settings.show_tag and product != blank -%}
+              {%- assign tag_text = '' -%}
+              {%- case section.settings.tag_source -%}
+                {%- when 'product_type' -%}
+                  {%- assign tag_text = product.type -%}
+                {%- when 'vendor' -%}
+                  {%- assign tag_text = product.vendor -%}
+                {%- when 'collection_title' -%}
+                  {%- assign tag_text = section.settings.collection.title -%}
+              {%- endcase -%}
+              {%- if tag_text != blank -%}
+                <p class="fc-card__tag">{{ tag_text }}</p>
+              {%- endif -%}
+            {%- endif -%}
+            <h3 class="fc-card__title">
+              {%- if product != blank -%}
+                <a href="{{ product.url }}">{{ product.title }}</a>
+              {%- else -%}
+                Product Name
+              {%- endif -%}
+            </h3>
+            {%- if section.settings.show_description -%}
+              <p class="fc-card__desc">
+                {%- if product != blank -%}
+                  {{ product.description | strip_html | truncate: section.settings.description_length_large }}
+                {%- else -%}
+                  Urna porttitor rhoncus dolor purus non enim praesent elementum.
+                {%- endif -%}
+              </p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Collection Grid",
+  "tag": "section",
+  "class": "section-featured-collection-grid",
+  "settings": [
+    {
+      "type": "select",
+      "id": "data_source",
+      "label": "Content source",
+      "options": [
+        { "value": "collection", "label": "Collection (dynamic)" },
+        { "value": "manual", "label": "Manual blocks" }
+      ],
+      "default": "manual"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Featured Collections"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle / Tagline",
+      "default": "Only the best seller products added recently in our catalog"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Title font size",
+      "min": 16,
+      "max": 64,
+      "step": 1,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_font_size",
+      "label": "Subtitle font size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Header alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "tall_card_side",
+      "label": "Tall card side",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "select",
+      "id": "card_gradient",
+      "label": "Card gradient",
+      "options": [
+        { "value": "soft", "label": "Soft" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "soft"
+    },
+    {
+      "type": "color",
+      "id": "card_gradient_color",
+      "label": "Card gradient color (small cards)",
+      "default": "#f5f0ea"
+    },
+    {
+      "type": "color",
+      "id": "card_gradient_color_tall",
+      "label": "Card gradient color (tall card)",
+      "default": "#f0ece4"
+    },
+    {
+      "type": "select",
+      "id": "card_body_alignment",
+      "label": "Card content alignment",
+      "options": [
+        { "value": "bottom", "label": "Bottom" },
+        { "value": "top", "label": "Top" }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tag",
+      "label": "Show tag",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "tag_source",
+      "label": "Tag source",
+      "options": [
+        { "value": "product_type", "label": "Product type" },
+        { "value": "vendor", "label": "Vendor" },
+        { "value": "collection_title", "label": "Collection title" }
+      ],
+      "default": "product_type"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "description_length",
+      "label": "Description length (small cards)",
+      "min": 40,
+      "max": 160,
+      "step": 10,
+      "default": 90
+    },
+    {
+      "type": "range",
+      "id": "description_length_large",
+      "label": "Description length (large card)",
+      "min": 60,
+      "max": 220,
+      "step": 10,
+      "default": 120
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "Product Card",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "select",
+          "id": "column",
+          "label": "Column",
+          "options": [
+            { "value": "left",   "label": "Top (small cards)" },
+            { "value": "middle", "label": "Bottom (small cards)" },
+            { "value": "right",  "label": "Right (tall card)" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Row position (Left and Middle only)",
+          "options": [
+            { "value": "1", "label": "Left" },
+            { "value": "2", "label": "Right" }
+          ],
+          "default": "1"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Product Image"
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Tag label (e.g. BODYCARE)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Product Title",
+          "default": "Product Name"
+        },        
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "t:settings.color_scheme",
+          "default": "scheme-1"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Short Description"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collection Grid",
+      "settings": {
+        "data_source": "manual",
+        "tag_source": "product_type",
+        "show_tag": true,
+        "show_description": true
+      },
+      "blocks": [
+        {
+          "type": "product_card",
+          "settings": {
+            "column": "left",
+            "position": "1",
+            "tag": "BODYCARE",
+            "title": "Body Lotion",
+            "description": "Faucibus a pellentesque sit amet porttitor eget dolor morbi non."
+          }
+        },
+        {
+          "type": "product_card",
+          "settings": {
+            "column": "left",
+            "position": "2",
+            "tag": "ORGANIC",
+            "title": "Face Scrub",
+            "description": "Bibendum neque egestas congue quisque egestas diam in arcu cursus."
+          }
+        },
+        {
+          "type": "product_card",
+          "settings": {
+            "column": "middle",
+            "position": "1",
+            "tag": "SMOOTH",
+            "title": "Moisturizer",
+            "description": "Urna porttitor rhoncus dolor purus non enim praesent elementum."
+          }
+        },
+        {
+          "type": "product_card",
+          "settings": {
+            "column": "middle",
+            "position": "2",
+            "tag": "CHEMICAL FREE",
+            "title": "Tooth Paste",
+            "description": "A iaculis at erat pellentesque adipiscing commodo etiamat."
+          }
+        },
+        {
+          "type": "product_card",
+          "settings": {
+            "column": "right",
+            "position": "1",
+            "tag": "NATURAL",
+            "title": "Bathing Salts",
+            "description": "Urna porttitor rhoncus dolor purus non enim praesent elementum."
+          }
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5
+}
+{% endschema %}

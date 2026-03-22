@@ -1,0 +1,80 @@
+.ticker-duo {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  overflow: hidden;
+}
+
+.ticker-duo__stack {
+  display: grid;
+}
+
+.ticker-duo__row {
+  overflow: hidden;
+}
+
+.ticker-duo__scroll {
+  transform: translate3d(var(--scroll-shift, 0px), 0, 0);
+  transition: transform 0.2s ease;
+  will-change: transform;
+}
+
+.ticker-duo__track {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll var(--ticker-duration, 28s) linear infinite;
+  gap: 24px;
+}
+
+
+.ticker-duo__track.is-reverse {
+  animation-direction: reverse;
+}
+
+.ticker-duo__group {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.ticker-duo__text {
+  font-size: var(--font-size, 14px);
+  font-family: var(--font-family, inherit);
+  font-weight: var(--font-weight, 600);
+  line-height: var(--line-height, 1.2);
+  letter-spacing: var(--letter-spacing, 0.08em);
+  text-transform: var(--text-transform, uppercase);
+  text-wrap: var(--text-wrap, nowrap);
+  color: var(--color, inherit);
+}
+
+.ticker-duo__text--long {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.ticker-duo__icon img {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-duo__track {
+    animation: none;
+    transform: translateX(0);
+  }
+}
