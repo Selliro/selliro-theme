@@ -63,6 +63,7 @@
       ],
       "name": "t:names.announcement_bar",
       "settings": {
+        "animation_style": "marquee",
         "speed": 5,
         "section_width": "page-width",
         "color_scheme": "scheme-1",

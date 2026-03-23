@@ -1,6 +1,27 @@
 
 
-{% if section.blocks.size > 1 %}
+{% liquid
+  assign animation_style = section.settings.animation_style | default: 'slideshow'
+  assign is_marquee = false
+  if animation_style == 'marquee'
+    assign is_marquee = true
+  endif
+%}
+
+{% comment %}
+  Shopify allows only one {% content_for 'blocks' %} per section — capture once and reuse.
+{% endcomment %}
+{% capture announcement_blocks %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+
+{% if is_marquee %}
+  <script
+    src="{{ 'marquee.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+{% elsif section.blocks.size > 1 %}
   <script
     src="{{ 'announcement-bar.js' | asset_url }}"
     type="module"
@@ -10,32 +31,49 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <aside
-  class="announcement-bar spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  class="announcement-bar spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}{% if is_marquee %} announcement-bar--marquee{% endif %}"
   style="{% render 'spacing-padding', settings: section.settings %}; --border-bottom-width: {{ section.settings.divider_width }}px;"
 >
-  {% liquid
-    assign autoplay = false
-    assign show_arrows = false
-    if section.blocks.size > 1
-      assign autoplay = true
-      assign show_arrows = true
-    endif
-  %}
+  {% if is_marquee %}
+    <marquee-component
+      class="announcement-bar__marquee"
+      style="{% render 'spacing-style', settings: section.settings %} --marquee-direction: {{ section.settings.marquee_direction | default: 'normal' }}; --marquee-gap: 32px;"
+      data-speed-factor="{{ section.settings.speed | times: 2.5 | round }}"
+      data-movement-direction="{{ section.settings.marquee_direction | default: 'normal' }}"
+    >
+      <div class="marquee__wrapper announcement-bar__marquee-wrapper" ref="wrapper">
+        <div class="marquee__content" ref="content">
+          <div class="marquee__repeated-items announcement-bar__marquee-items" ref="marqueeItems[]">
+            {{ announcement_blocks }}
+          </div>
+        </div>
+      </div>
+    </marquee-component>
+  {% else %}
+    {% liquid
+      assign autoplay = false
+      assign show_arrows = false
+      if section.blocks.size > 1
+        assign autoplay = true
+        assign show_arrows = true
+      endif
+    %}
 
-  <announcement-bar-component
-    class="announcement-bar__slider"
-    {% if autoplay == true %}
-      autoplay="{{ section.settings.speed }}" aria-live="polite"
-    {% endif %}
-  >
-    {% if show_arrows %}
-      {% render 'slideshow-arrows', icon_style: 'chevron' %}
-    {% endif %}
+    <announcement-bar-component
+      class="announcement-bar__slider"
+      {% if autoplay == true %}
+        autoplay="{{ section.settings.speed }}" aria-live="polite"
+      {% endif %}
+    >
+      {% if show_arrows %}
+        {% render 'slideshow-arrows', icon_style: 'chevron' %}
+      {% endif %}
 
-    <div class="announcement-bar__slides">
-      {% content_for 'blocks' %}
-    </div>
-  </announcement-bar-component>
+      <div class="announcement-bar__slides">
+        {{ announcement_blocks }}
+      </div>
+    </announcement-bar-component>
+  {% endif %}
 </aside>
 
 {% stylesheet %}
@@ -68,6 +106,7 @@
 
   .announcement-bar__slide {
     transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    content-visibility: visible;
 
     &[aria-hidden='true'] {
       opacity: 0;
@@ -120,6 +159,61 @@
     position: absolute;
     inset: 0;
   }
+
+  .announcement-bar--marquee marquee-component {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .announcement-bar--marquee .marquee__wrapper {
+    display: flex;
+    width: fit-content;
+    white-space: nowrap;
+  }
+
+  .announcement-bar--marquee .marquee__content {
+    min-width: max-content;
+    display: flex;
+    align-items: center;
+  }
+
+  .announcement-bar--marquee .marquee__repeated-items {
+    min-width: max-content;
+    display: flex;
+    align-items: center;
+    gap: var(--marquee-gap, 2rem);
+  }
+
+  .announcement-bar--marquee .marquee__repeated-items > * {
+    flex-shrink: 0;
+    max-width: none;
+  }
+
+  .announcement-bar--marquee .announcement-bar__marquee-item {
+    white-space: nowrap;
+  }
+
+  .announcement-bar--marquee .announcement-bar__marquee-item .announcement-bar__text {
+    margin: 0;
+  }
+
+  .announcement-bar__slide .announcement-bar__inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .announcement-bar--marquee marquee-component:not([data-disabled]) .marquee__wrapper {
+      animation: announcement-marquee-motion var(--marquee-speed, 30s) linear infinite var(--marquee-direction, normal);
+    }
+  }
+
+  @keyframes announcement-marquee-motion {
+    to {
+      transform: translate3d(calc(-50% - (var(--marquee-gap, 2rem) / 2)), 0, 0);
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -135,9 +229,42 @@
   },
   "settings": [
     {
+      "type": "select",
+      "id": "animation_style",
+      "label": "t:settings.style",
+      "options": [
+        {
+          "value": "slideshow",
+          "label": "slideshow"
+        },
+        {
+          "value": "marquee",
+          "label": "marquee"
+        }
+      ],
+      "default": "slideshow"
+    },
+    {
+      "type": "select",
+      "id": "marquee_direction",
+      "label": "marquee direction",
+      "options": [
+        {
+          "value": "normal",
+          "label": "t:options.left"
+        },
+        {
+          "value": "reverse",
+          "label": "t:options.right"
+        }
+      ],
+      "default": "normal",
+      "visible_if": "{{ section.settings.animation_style == 'marquee' }}"
+    },
+    {
       "type": "range",
       "id": "speed",
-      "label": "t:settings.scroll_speed",
+      "label": "scroll_speed",
       "min": 2,
       "max": 10,
       "default": 5,

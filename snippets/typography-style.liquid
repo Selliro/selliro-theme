@@ -56,12 +56,14 @@
     {%- endif -%}
     {%- if settings.weight != blank -%}
       --font-weight: {{ settings.weight }};
-    {% else %}
+    {%- elsif settings.font contains 'var(--' -%}
       --font-weight: {{ settings.font | replace: 'family', 'weight' }};
+    {%- else -%}
+      --font-weight: 400;
     {%- endif -%}
     --font-family: {{ settings.font }};
     --text-transform: {{ settings.case }};
-    --text-wrap: {{ settings.wrap }};
+    --text-wrap: {{ settings.wrap | default: 'pretty' }};
     {% if settings.type_preset == 'custom' and settings.font_size == blank %}
       --line-height--display: var(--line-height--display-{{ settings.line_height }});
       --line-height--heading: var(--line-height--heading-{{ settings.line_height }});
