@@ -20,10 +20,12 @@
           "settings": {
             "text": "Shop our latest arrivals!",
             "link": "",
-            "font": "var(--font-body--family)",
-            "font_size": "0.75rem",
+            "icon_type": "custom",
+            "icon_image": "shopify://shop_images/transport_1.png",
+            "font": "'Lato', sans-serif",
+            "font_size": "0.875rem",
             "weight": "",
-            "letter_spacing": "normal",
+            "letter_spacing": "tight",
             "case": "none"
           },
           "blocks": {}
@@ -34,10 +36,12 @@
           "settings": {
             "text": "Shop our latest arrivals! 2",
             "link": "",
-            "font": "var(--font-body--family)",
-            "font_size": "0.75rem",
+            "icon_type": "custom",
+            "icon_image": "shopify://shop_images/price-tag_1.png",
+            "font": "'Lato', sans-serif",
+            "font_size": "0.875rem",
             "weight": "",
-            "letter_spacing": "normal",
+            "letter_spacing": "tight",
             "case": "none"
           },
           "blocks": {}
@@ -47,6 +51,23 @@
           "settings": {
             "text": "Welcome to our store",
             "link": "",
+            "icon_type": "none",
+            "icon_image": "shopify://shop_images/star.png",
+            "font": "'Lato', sans-serif",
+            "font_size": "0.875rem",
+            "weight": "",
+            "letter_spacing": "tight",
+            "case": "none"
+          },
+          "blocks": {}
+        },
+        "announcement_QF3LRE": {
+          "type": "_announcement",
+          "name": "t:names.announcement",
+          "settings": {
+            "text": "Shop our latest arrivals!",
+            "link": "",
+            "icon_type": "none",
             "font": "var(--font-subheading--family)",
             "font_size": "0.75rem",
             "weight": "",
@@ -59,14 +80,16 @@
       "block_order": [
         "announcement_EURP7f",
         "announcement_NBNfar",
-        "announcement_BxgCk9"
+        "announcement_BxgCk9",
+        "announcement_QF3LRE"
       ],
       "name": "t:names.announcement_bar",
       "settings": {
         "animation_style": "marquee",
-        "speed": 5,
-        "section_width": "page-width",
-        "color_scheme": "scheme-1",
+        "marquee_direction": "reverse",
+        "speed": 7,
+        "section_width": "full-width",
+        "color_scheme": "scheme-a4f0a109-a705-48c7-884e-8c6eba693441",
         "divider_width": 2,
         "padding-block-start": 15,
         "padding-block-end": 15
