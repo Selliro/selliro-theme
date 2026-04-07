@@ -23,35 +23,7 @@
 {%- endif -%}
 
 {%- capture announcement_icon -%}
-  {%- if announcement_icon_type == 'shipping' -%}
-    <span class="announcement-bar__icon" aria-hidden="true">
-      <svg
-        class="announcement-bar__icon-img icon-default"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 20 20"
-        aria-hidden="true"
-        focusable="false"
-      >
-        {%- render 'icon', icon: 'truck' -%}
-      </svg>
-    </span>
-  {%- elsif announcement_icon_type == 'discount' -%}
-    <span class="announcement-bar__icon" aria-hidden="true">
-      <svg
-        class="announcement-bar__icon-img icon-default"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 20 20"
-        aria-hidden="true"
-        focusable="false"
-      >
-        {%- render 'icon', icon: 'price_tag' -%}
-      </svg>
-    </span>
-  {%- elsif announcement_icon_type == 'custom' and announcement_custom_icon_valid -%}
+  {%- if announcement_icon_type == 'custom' and announcement_custom_icon_valid -%}
     <span class="announcement-bar__icon" aria-hidden="true">
       {{
         block_settings.icon_image
