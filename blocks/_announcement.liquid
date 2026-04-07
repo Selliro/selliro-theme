@@ -7,13 +7,23 @@
 {%- if section.settings.animation_style == 'marquee' -%}
   {%- assign is_marquee = true -%}
 {%- endif -%}
+{%- assign announcement_icon_type = block_settings.icon_type | default: 'none' -%}
+{%- liquid
+  assign announcement_custom_icon_valid = false
+  if announcement_icon_type == 'custom' and block_settings.icon_image != blank and block_settings.icon_image.width > 0
+    assign announcement_custom_icon_url = block_settings.icon_image | image_url: width: 60
+    if announcement_custom_icon_url != blank
+      assign announcement_custom_icon_valid = true
+    endif
+  endif
+-%}
 {%- assign show_announcement = false -%}
-{%- if plain_text != '' or block_settings.icon_image != blank -%}
+{%- if plain_text != '' or announcement_icon_type == 'custom' -%}
   {%- assign show_announcement = true -%}
 {%- endif -%}
 
 {%- capture announcement_icon -%}
-  {%- if block_settings.icon_image != blank -%}
+  {%- if announcement_icon_type == 'custom' and announcement_custom_icon_valid -%}
     <span class="announcement-bar__icon" aria-hidden="true">
       {{
         block_settings.icon_image
@@ -23,8 +33,28 @@
           class: 'announcement-bar__icon-img',
           alt: '',
           widths: '40, 60',
-          sizes: '(max-width: 749px) 20px, 30px'
+          sizes: '(max-width: 749px) 20px, 24px'
       }}
+    </span>
+  {%- elsif announcement_icon_type == 'custom' -%}
+    <span class="announcement-bar__icon" aria-hidden="true">
+      <svg
+        class="announcement-bar__icon-img announcement-bar__icon-placeholder"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <circle cx="8.5" cy="8.5" r="1.25" fill="currentColor" stroke="none" />
+        <path d="m21 15-3.086-3.086a.5.5 0 0 0-.707 0L6 21" />
+      </svg>
     </span>
   {%- endif -%}
 {%- endcapture -%}
@@ -65,6 +95,9 @@
       {% endif %}
     </span>
   {%- else -%}
+  {% if section.blocks.size > 1 and block_index == 0 %}
+    {% render 'slideshow-arrows', icon_style: 'chevron' %}
+  {% endif %}
     <slideshow-slide
       ref="slides[]"
       class="
@@ -200,28 +233,46 @@
 
   .announcement-bar__icon {
     flex-shrink: 0;
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   @media screen and (min-width: 750px) {
-    .announcement-bar__icon {
-      width: 30px;
-      height: 30px;
-    }
     .announcement-bar__inner {
-    gap: 32px;
+    gap: 16px;
     }
   }
 
   .announcement-bar__icon-img {
-    width: 100%;
-    height: 100%;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    display: block;
     object-fit: contain;
-    vertical-align: middle;
+  }
+  .top-banner__marquee-fade-right{
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 70px;
+    background: linear-gradient(to right, transparent, var(--color-background));
+    pointer-events: none;
+    z-index: 1;
+  } 
+  .top-banner__marquee-fade-left{
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 70px;
+    background: linear-gradient(to left, transparent, var(--color-background));
+    pointer-events: none;
+    z-index: 1;
   }
 {% endstylesheet %}
 
@@ -246,9 +297,26 @@
       "content": "t:content.icon"
     },
     {
+      "type": "select",
+      "id": "icon_type",
+      "label": "t:settings.icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "custom",
+          "label": "t:options.custom"
+        }
+      ],
+      "default": "none"
+    },
+    {
       "type": "image_picker",
       "id": "icon_image",
-      "label": "t:settings.image_icon"
+      "label": "t:settings.image_icon",
+      "info": "t:info.announcement_custom_icon"
     },
     {
       "type": "header",

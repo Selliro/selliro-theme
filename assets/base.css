@@ -3758,8 +3758,7 @@ slideshow-arrows {
   --cursor-previous: w-resize;
   --cursor-next: e-resize;
 
-  position: absolute;
-  inset: 0;
+  position: relative; 
   display: flex;
   z-index: var(--layer-heightened);
   pointer-events: none;
