@@ -1,0 +1,451 @@
+{% comment %}
+  Before / after image comparison with draggable divider and text column.
+{% endcomment %}
+
+{{ 'section-before-after-slider.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'before-after-slider.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign before_img = section.settings.before_image
+  assign after_img = section.settings.after_image
+  assign aspect_ratio = 0.8
+  if after_img != blank and after_img.aspect_ratio != blank and after_img.aspect_ratio > 0
+    assign aspect_ratio = after_img.aspect_ratio
+  elsif before_img != blank and before_img.aspect_ratio != blank and before_img.aspect_ratio > 0
+    assign aspect_ratio = before_img.aspect_ratio
+  endif
+  assign alt_before = 'accessibility.before_after_before_alt' | t
+  assign alt_after = 'accessibility.before_after_after_alt' | t
+  if before_img != blank and before_img.alt != blank
+    assign alt_before = before_img.alt
+  endif
+  if after_img != blank and after_img.alt != blank
+    assign alt_after = after_img.alt
+  endif
+  assign heading = section.settings.heading
+  assign show_content_enabled = true
+  if section.settings.show_content == false
+    assign show_content_enabled = false
+  endif
+  assign has_copy = false
+  if show_content_enabled
+    if heading != blank or section.settings.description != blank or section.settings.button_label != blank
+      assign has_copy = true
+    endif
+  endif
+  assign compare_sizes = '(min-width: 990px) 46vw, 100vw'
+  unless has_copy
+    assign compare_sizes = '(min-width: 990px) min(1200px, 100vw), 100vw'
+  endunless
+  assign aspect_for_frame = aspect_ratio
+  if has_copy
+    assign aspect_for_frame = aspect_ratio | times: 0.91
+    if aspect_for_frame < 0.42
+      assign aspect_for_frame = 0.42
+    endif
+  endif
+  assign show_labels = section.settings.show_image_labels
+  assign label_before = section.settings.before_label | strip
+  assign label_after = section.settings.after_label | strip
+  assign label_inset = section.settings.label_inset | default: 12
+  assign show_particles = section.settings.enable_particles
+-%}
+
+<section
+  class="before-after-slider color-{{ section.settings.color_scheme }}"
+  id="BeforeAfterSlider-{{ section.id }}"
+  {{ section.shopify_attributes }}
+  style="
+    --before-after-radius: {{ section.settings.image_radius }}px;
+    --before-after-pad-top: {{ section.settings.padding_top }}px;
+    --before-after-pad-bottom: {{ section.settings.padding_bottom }}px;
+    --before-after-aspect: {{ aspect_for_frame }} / 1;
+    --badge-inset: {{ label_inset }}px;
+    --particle-opacity: {{ section.settings.particle_opacity | divided_by: 100.0 }};
+    --particle-size: {{ section.settings.particle_size }}px;
+    --particle-speed: {{ section.settings.particle_speed }}s;
+  "
+  {% if show_content_enabled and heading != blank %}
+    aria-labelledby="BeforeAfterSlider-heading-{{ section.id }}"
+  {% else %}
+    aria-label="{{ 'accessibility.before_after_comparison' | t }}"
+  {% endif %}
+>
+  <div class="section-container">
+    <div
+      class="before-after-slider__inner{% if has_copy == false %} before-after-slider__inner--media-full{% elsif section.settings.layout == 'media_right' %} before-after-slider__inner--media-right{% endif %}"
+    >
+      <div class="before-after-slider__media">
+        <span id="BeforeAfterSlider-hint-{{ section.id }}" class="visually-hidden">
+          {{- 'accessibility.before_after_slider_help' | t -}}
+        </span>
+        <div
+          class="before-after-slider__viewport"
+          data-before-after-root
+          data-before-after-viewport
+          data-initial-position="{{ section.settings.initial_position }}"
+          data-i18n-before-visible="{{ 'accessibility.before_after_before_visible' | t | escape }}"
+          style="--before-after-split: {{ section.settings.initial_position }}%;"
+          role="region"
+          aria-label="{{ 'accessibility.before_after_comparison' | t }}"
+        >
+          <div class="before-after-slider__frame">
+            {%- if after_img != blank -%}
+              {{
+                after_img
+                | image_url: width: 1600
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '400, 600, 800, 1000, 1200, 1600',
+                  sizes: compare_sizes,
+                  alt: alt_after,
+                  class: 'before-after-slider__img before-after-slider__img--after'
+              }}
+            {%- else -%}
+              {% render 'before-after-placeholder-svg', modifier: 'after' %}
+            {%- endif -%}
+            {%- if show_labels and label_after != blank -%}
+              <span
+                class="before-after-slider__badge before-after-slider__badge--after before-after-slider__badge--v-{{ section.settings.after_label_vertical }} before-after-slider__badge--h-{{ section.settings.after_label_horizontal }}"
+                aria-hidden="true"
+              >
+                {{- label_after | escape -}}
+              </span>
+            {%- endif -%}
+            <div class="before-after-slider__clip">
+              {%- if before_img != blank -%}
+                {{
+                  before_img
+                  | image_url: width: 1600
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '400, 600, 800, 1000, 1200, 1600',
+                    sizes: compare_sizes,
+                    alt: alt_before,
+                    class: 'before-after-slider__img before-after-slider__img--before'
+                }}
+              {%- else -%}
+                {% render 'before-after-placeholder-svg', modifier: 'before' %}
+              {%- endif -%}
+              {%- if show_labels and label_before != blank -%}
+                <span
+                  class="before-after-slider__badge before-after-slider__badge--before before-after-slider__badge--v-{{ section.settings.before_label_vertical }} before-after-slider__badge--h-{{ section.settings.before_label_horizontal }}"
+                  aria-hidden="true"
+                >
+                  {{- label_before | escape -}}
+                </span>
+              {%- endif -%}
+            </div>
+            <div class="before-after-slider__divider" aria-hidden="true"></div>
+            {%- if show_particles -%}
+              <div class="before-after-slider__particles" aria-hidden="true"></div>
+            {%- endif -%}
+          </div>
+          <button
+            type="button"
+            class="before-after-slider__handle"
+            data-before-after-handle
+            role="slider"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="{{ section.settings.initial_position }}"
+            aria-label="{{ 'accessibility.before_after_slider' | t }}"
+            aria-describedby="BeforeAfterSlider-hint-{{ section.id }}"
+          >
+            <span class="before-after-slider__handle-icon" aria-hidden="true">
+              <span class="before-after-slider__handle-bar"></span>
+              <span class="before-after-slider__handle-bar"></span>
+              <span class="before-after-slider__handle-bar"></span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {%- if has_copy -%}
+        <div class="before-after-slider__copy">
+          {%- if heading != blank -%}
+            <h2 class="before-after-slider__heading" id="BeforeAfterSlider-heading-{{ section.id }}">
+              {{ heading | escape }}
+            </h2>
+          {%- endif -%}
+
+          {%- if section.settings.description != blank -%}
+            <div class="before-after-slider__description rte">{{ section.settings.description }}</div>
+          {%- endif -%}
+
+          {%- if section.settings.button_label != blank -%}
+            {%- if section.settings.button_link != blank -%}
+              <a
+                href="{{ section.settings.button_link }}"
+                class="before-after-slider__btn"
+              >
+                {{ section.settings.button_label | escape }}
+              </a>
+            {%- else -%}
+              <span class="before-after-slider__btn before-after-slider__btn--static">
+                {{ section.settings.button_label | escape }}
+              </span>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Before / after slider",
+  "tag": "section",
+  "class": "section before-after-slider-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "paragraph",
+      "content": "If either image is missing, a neutral placeholder icon appears in that half so the slider still works on the storefront and in the theme editor."
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Before image",
+      "info": "Shown in the clipped (before) half. Empty slots use a built-in placeholder."
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "After image",
+      "info": "Full frame behind the clip; match crop with the before image when both are set. Empty slots use a built-in placeholder."
+    },
+    {
+      "type": "range",
+      "id": "initial_position",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Starting slider position",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Image corner radius",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Image labels"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image_labels",
+      "label": "Show Before / After labels on images",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "Before label",
+      "default": "Before"
+    },
+    {
+      "type": "select",
+      "id": "before_label_vertical",
+      "label": "Before label — vertical",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "select",
+      "id": "before_label_horizontal",
+      "label": "Before label — horizontal",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "After label",
+      "default": "After"
+    },
+    {
+      "type": "select",
+      "id": "after_label_vertical",
+      "label": "After label — vertical",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "select",
+      "id": "after_label_horizontal",
+      "label": "After label — horizontal",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "range",
+      "id": "label_inset",
+      "min": 4,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Label inset from edges",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_content",
+      "label": "Show text column",
+      "default": true,
+      "info": "Turn off to hide the heading, description, and button and show only the comparison at full width."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Enough With Acne Ruling Your Life"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>In addition to diminishing the visibility of blemishes and blackheads, this cleanser also eliminates surplus oil and enhances the look of pores.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Explore sale"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Media position on large screens",
+      "options": [
+        { "value": "media_left", "label": "Media left" },
+        { "value": "media_right", "label": "Media right" }
+      ],
+      "default": "media_left"
+    },
+    {
+      "type": "header",
+      "content": "Visual effect"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_particles",
+      "label": "Enable abstract particles",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "particle_opacity",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "label": "Particle opacity",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "particle_size",
+      "min": 80,
+      "max": 260,
+      "step": 10,
+      "unit": "px",
+      "label": "Particle size",
+      "default": 150
+    },
+    {
+      "type": "range",
+      "id": "particle_speed",
+      "min": 8,
+      "max": 40,
+      "step": 1,
+      "unit": "s",
+      "label": "Particle movement speed",
+      "default": 22
+    },
+    {
+      "type": "header",
+      "content": "Color scheme"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "Before / after slider",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "show_content": true
+      }
+    }
+  ]
+}
+{% endschema %}

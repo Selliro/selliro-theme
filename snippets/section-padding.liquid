@@ -1,0 +1,38 @@
+{%- liquid
+  assign pt = section.settings.padding_top | default: 'm'
+  assign pb = section.settings.padding_bottom | default: 'm'
+  case pt
+    when 'no-indent'
+      assign pt_val = 0
+    when 'xs'
+      assign pt_val = 12
+    when 's'
+      assign pt_val = 24
+    when 'm'
+      assign pt_val = 36
+    when 'l'
+      assign pt_val = 60
+    else
+      assign pt_val = 36
+  endcase
+  case pb
+    when 'no-indent'
+      assign pb_val = 0
+    when 'xs'
+      assign pb_val = 12
+    when 's'
+      assign pb_val = 24
+    when 'm'
+      assign pb_val = 36
+    when 'l'
+      assign pb_val = 60
+    else
+      assign pb_val = 36
+  endcase
+-%}
+.section-{{ section.id }}-padding-top {
+  padding-top: {{ pt_val }}px;
+}
+.section-{{ section.id }}-padding-bottom {
+  padding-bottom: {{ pb_val }}px;
+}

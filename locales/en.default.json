@@ -123,6 +123,11 @@
     "sold_out": "Sold out",
     "payment_methods": "Payment methods"
   },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "All rights reserved."
+    }
+  },
   "blogs": {
     "article": {
       "comments_heading": {

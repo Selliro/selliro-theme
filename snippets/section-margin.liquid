@@ -1,0 +1,20 @@
+{%- liquid
+  assign mt = section.settings.margin_top | default: 'no-indent'
+  case mt
+    when 'no-indent'
+      assign mt_val = 0
+    when 'xs'
+      assign mt_val = 12
+    when 's'
+      assign mt_val = 24
+    when 'm'
+      assign mt_val = 36
+    when 'l'
+      assign mt_val = 60
+    else
+      assign mt_val = 0
+  endcase
+-%}
+.section-{{ section.id }}-margin {
+  margin-top: {{ mt_val }}px;
+}

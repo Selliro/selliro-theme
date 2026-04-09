@@ -1,33 +1,32 @@
 {% comment %}
-  Featured Collection Grid Section
-  File: sections/featured-collection-grid.liquid
+  Featured collection grid — asymmetric product layout (four small cards + one tall card).
 {% endcomment %}
 
 <style>
-  .fc-section__title {
+  .featured-collection-grid__title {
     font-size: {{ section.settings.title_font_size }}px;
   }
-  .fc-section__subtitle {
+  .featured-collection-grid__subtitle {
     font-size: {{ section.settings.subtitle_font_size }}px;
   }
-  .fc-section__header {
+  .featured-collection-grid__header {
     text-align: {{ section.settings.header_alignment }};
   }
 
-  #fc-section-{{ section.id }} .fc-grid {
-    grid-template-columns: {% if section.settings.tall_card_side == 'left' %}2fr 3fr{% else %}3fr 2fr{% endif %};    
+  #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__grid {
+    grid-template-columns: {% if section.settings.tall_card_side == 'left' %}2fr 3fr{% else %}3fr 2fr{% endif %};
   }
   {% if section.settings.tall_card_side == 'left' %}
-  #fc-section-{{ section.id }} .fc_left_section {
+  #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__cluster {
     grid-column: 2;
   }
-  #fc-section-{{ section.id }} .fc-col--right {
+  #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__col--right {
     grid-column: 1;
     grid-row: 1;
   }
   {% endif %}
 
-  #fc-section-{{ section.id }} .fc-card::after {
+  #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__card::after {
     {% if section.settings.card_gradient == 'none' %}
     background: transparent;
     {% else %}
@@ -40,9 +39,8 @@
     );
     {% endif %}
   }
-  
-  /* Tall card: gradient covers only the bottom ~35% */
-  #fc-section-{{ section.id }} .fc-card--tall::after {
+
+  #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__card--tall::after {
     {% if section.settings.card_gradient == 'none' %}
     background: transparent;
     {% else %}
@@ -56,7 +54,7 @@
     {% endif %}
   }
 
-  #fc-section-{{ section.id }} .fc-card__body {
+  #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__card-body {
     {% if section.settings.card_body_alignment == 'top' %}
     margin-top: 0;
     margin-bottom: auto;
@@ -66,25 +64,25 @@
     {% endif %}
   }
 
-  #fc-section-{{ section.id }} .fc-card__tag,
-  #fc-section-{{ section.id }} .fc-card__title,
-  #fc-section-{{ section.id }} .fc-card__title a,
-  #fc-section-{{ section.id }} .fc-card__desc {
-    color: var(--fc-card-text-color, inherit);
+  #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__card-tag,
+  #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__card-title,
+  #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__card-title a,
+  #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__card-desc {
+    color: var(--featured-collection-grid-card-text, inherit);
   }
 
   @media screen and (max-width: 1024px) {
-    #fc-section-{{ section.id }} .fc-grid {
+    #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__grid {
       grid-template-columns: 1fr 1fr;
     }
-    #fc-section-{{ section.id }} .fc_left_section,
-    #fc-section-{{ section.id }} .fc-col--right {
+    #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__cluster,
+    #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__col--right {
       grid-column: auto;
     }
   }
 
   @media screen and (max-width: 640px) {
-    #fc-section-{{ section.id }} .fc-grid {
+    #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__grid {
       grid-template-columns: 1fr;
     }
   }
@@ -94,8 +92,8 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <section
-  class="fc-section section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
-  id="fc-section-{{ section.id }}"
+  class="featured-collection-grid section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  id="FeaturedCollectionGrid-{{ section.id }}"
   data-section-id="{{ section.id }}"
   style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
 >
@@ -109,56 +107,56 @@
   -%}
 
   {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
-    <div class="fc-section__header">
+    <div class="featured-collection-grid__header">
       {%- if section.settings.title != blank -%}
-        <h3 class="fc-section__title">{{ section.settings.title }}</h3>
+        <h3 class="featured-collection-grid__title">{{ section.settings.title }}</h3>
       {%- endif -%}
       {%- if section.settings.subtitle != blank -%}
-        <p class="fc-section__subtitle">{{ section.settings.subtitle }}</p>
+        <p class="featured-collection-grid__subtitle">{{ section.settings.subtitle }}</p>
       {%- endif -%}
     </div>
   {%- endif -%}
 
-  <div class="fc-grid">
-    <div class="fc_left_section">
+  <div class="featured-collection-grid__grid">
+    <div class="featured-collection-grid__cluster">
       {%- comment -%} ── LEFT COLUMN (2 stacked half cards) ── {%- endcomment -%}
-      <div class="fc-col fc-col--left">
+      <div class="featured-collection-grid__col featured-collection-grid__col--left">
         {%- if use_manual -%}
           {%- for i in (1..2) -%}
             {%- assign pos = forloop.index | append: '' -%}
             {%- for block in section.blocks -%}
               {%- if block.settings.column == 'left' and block.settings.position == pos -%}
                 {%- assign block_product = block.settings.product -%}
-                <div class="fc-card fc-card--half color-{{ block.settings.color_scheme }}" style="{% if block.settings.card_bg_color != blank %}background-color: {{ block.settings.card_bg_color }};{% endif %}{% if block.settings.card_text_color != blank %}--fc-card-text-color: {{ block.settings.card_text_color }};{% endif %}" {{ block.shopify_attributes }}>
+                <div class="featured-collection-grid__card featured-collection-grid__card--half color-{{ block.settings.color_scheme }}" style="{% if block.settings.card_bg_color != blank %}background-color: {{ block.settings.card_bg_color }};{% endif %}{% if block.settings.card_text_color != blank %}--featured-collection-grid-card-text: {{ block.settings.card_text_color }};{% endif %}" {{ block.shopify_attributes }}>
                   {%- if block_product != blank -%}
-                    <a class="fc-card__link" href="{{ block_product.url }}" aria-label="{{ block_product.title }}"></a>
+                    <a class="featured-collection-grid__card-link" href="{{ block_product.url }}" aria-label="{{ block_product.title }}"></a>
                   {%- elsif block.settings.link != blank -%}
-                    <a class="fc-card__link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'View item' }}"></a>
+                    <a class="featured-collection-grid__card-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'View item' }}"></a>
                   {%- endif -%}
-                  <div class="fc-card__image-wrap">
+                  <div class="featured-collection-grid__card-image-wrap">
                     {%- if block_product != blank and block_product.featured_image != blank -%}
                       {{ block_product.featured_image | image_url: width: 800 | image_tag:
                         loading: 'lazy',
                         widths: '400, 600, 800',
-                        class: 'fc-card__image'
+                        class: 'featured-collection-grid__card-image'
                       }}
                     {%- elsif block.settings.image != blank -%}
                       {{ block.settings.image | image_url: width: 800 | image_tag:
                         loading: 'lazy',
                         widths: '400, 600, 800',
-                        class: 'fc-card__image'
+                        class: 'featured-collection-grid__card-image'
                       }}
                     {%- else -%}
-                      {{ 'product-1' | placeholder_svg_tag: 'fc-card__placeholder' }}
+                      {{ 'product-1' | placeholder_svg_tag: 'featured-collection-grid__card-placeholder' }}
                     {%- endif -%}
                   </div>
-                  <div class="fc-card__body">
+                  <div class="featured-collection-grid__card-body">
                     {%- if block.settings.tag != blank -%}
-                      <p class="fc-card__tag">{{ block.settings.tag }}</p>
+                      <p class="featured-collection-grid__card-tag">{{ block.settings.tag }}</p>
                     {%- elsif block_product != blank and block_product.type != blank -%}
-                      <p class="fc-card__tag">{{ block_product.type }}</p>
+                      <p class="featured-collection-grid__card-tag">{{ block_product.type }}</p>
                     {%- endif -%}
-                    <h3 class="fc-card__title">
+                    <h3 class="featured-collection-grid__card-title">
                       {%- if block_product != blank -%}
                         <a href="{{ block_product.url }}">{{ block_product.title }}</a>
                       {%- elsif block.settings.title != blank -%}
@@ -170,9 +168,9 @@
                       {%- endif -%}
                     </h3>
                     {%- if block_product != blank -%}
-                      <p class="fc-card__desc">{{ block_product.description | strip_html | truncate: section.settings.description_length }}</p>
+                      <p class="featured-collection-grid__card-desc">{{ block_product.description | strip_html | truncate: section.settings.description_length }}</p>
                     {%- elsif block.settings.description != blank -%}
-                      <p class="fc-card__desc">{{ block.settings.description }}</p>
+                      <p class="featured-collection-grid__card-desc">{{ block.settings.description }}</p>
                     {%- endif -%}
                   </div>
                 </div>
@@ -182,22 +180,22 @@
         {%- else -%}
           {%- for i in (0..1) -%}
             {%- assign product = products[i] -%}
-            <div class="fc-card fc-card--half">
+            <div class="featured-collection-grid__card featured-collection-grid__card--half">
               {%- if product != blank -%}
-                <a class="fc-card__link" href="{{ product.url }}" aria-label="{{ product.title }}"></a>
+                <a class="featured-collection-grid__card-link" href="{{ product.url }}" aria-label="{{ product.title }}"></a>
               {%- endif -%}
-              <div class="fc-card__image-wrap">
+              <div class="featured-collection-grid__card-image-wrap">
                 {%- if product != blank and product.featured_image != blank -%}
                   {{ product.featured_image | image_url: width: 800 | image_tag:
                     loading: 'lazy',
                     widths: '400, 600, 800',
-                    class: 'fc-card__image'
+                    class: 'featured-collection-grid__card-image'
                   }}
                 {%- else -%}
-                  {{ 'product-1' | placeholder_svg_tag: 'fc-card__placeholder' }}
+                  {{ 'product-1' | placeholder_svg_tag: 'featured-collection-grid__card-placeholder' }}
                 {%- endif -%}
               </div>
-              <div class="fc-card__body">
+              <div class="featured-collection-grid__card-body">
                 {%- if section.settings.show_tag and product != blank -%}
                   {%- assign tag_text = '' -%}
                   {%- case section.settings.tag_source -%}
@@ -209,10 +207,10 @@
                       {%- assign tag_text = section.settings.collection.title -%}
                   {%- endcase -%}
                   {%- if tag_text != blank -%}
-                    <p class="fc-card__tag">{{ tag_text }}</p>
+                    <p class="featured-collection-grid__card-tag">{{ tag_text }}</p>
                   {%- endif -%}
                 {%- endif -%}
-                <h3 class="fc-card__title">
+                <h3 class="featured-collection-grid__card-title">
                   {%- if product != blank -%}
                     <a href="{{ product.url }}">{{ product.title }}</a>
                   {%- else -%}
@@ -220,7 +218,7 @@
                   {%- endif -%}
                 </h3>
                 {%- if section.settings.show_description -%}
-                  <p class="fc-card__desc">
+                  <p class="featured-collection-grid__card-desc">
                     {%- if product != blank -%}
                       {{ product.description | strip_html | truncate: section.settings.description_length }}
                     {%- else -%}
@@ -235,43 +233,43 @@
       </div>
 
       {%- comment -%} ── MIDDLE COLUMN (2 stacked half cards) ── {%- endcomment -%}
-      <div class="fc-col fc-col--middle">
+      <div class="featured-collection-grid__col featured-collection-grid__col--middle">
         {%- if use_manual -%}
           {%- for i in (1..2) -%}
             {%- assign pos = forloop.index | append: '' -%}
             {%- for block in section.blocks -%}
               {%- if block.settings.column == 'middle' and block.settings.position == pos -%}
                 {%- assign block_product = block.settings.product -%}
-                <div class="fc-card fc-card--half color-{{ block.settings.color_scheme }}" style="{% if block.settings.card_bg_color != blank %}background-color: {{ block.settings.card_bg_color }};{% endif %}{% if block.settings.card_text_color != blank %}--fc-card-text-color: {{ block.settings.card_text_color }};{% endif %}" {{ block.shopify_attributes }}>
+                <div class="featured-collection-grid__card featured-collection-grid__card--half color-{{ block.settings.color_scheme }}" style="{% if block.settings.card_bg_color != blank %}background-color: {{ block.settings.card_bg_color }};{% endif %}{% if block.settings.card_text_color != blank %}--featured-collection-grid-card-text: {{ block.settings.card_text_color }};{% endif %}" {{ block.shopify_attributes }}>
                   {%- if block_product != blank -%}
-                    <a class="fc-card__link" href="{{ block_product.url }}" aria-label="{{ block_product.title }}"></a>
+                    <a class="featured-collection-grid__card-link" href="{{ block_product.url }}" aria-label="{{ block_product.title }}"></a>
                   {%- elsif block.settings.link != blank -%}
-                    <a class="fc-card__link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'View item' }}"></a>
+                    <a class="featured-collection-grid__card-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'View item' }}"></a>
                   {%- endif -%}
-                  <div class="fc-card__image-wrap">
+                  <div class="featured-collection-grid__card-image-wrap">
                     {%- if block_product != blank and block_product.featured_image != blank -%}
                       {{ block_product.featured_image | image_url: width: 800 | image_tag:
                         loading: 'lazy',
                         widths: '400, 600, 800',
-                        class: 'fc-card__image'
+                        class: 'featured-collection-grid__card-image'
                       }}
                     {%- elsif block.settings.image != blank -%}
                       {{ block.settings.image | image_url: width: 800 | image_tag:
                         loading: 'lazy',
                         widths: '400, 600, 800',
-                        class: 'fc-card__image'
+                        class: 'featured-collection-grid__card-image'
                       }}
                     {%- else -%}
-                      {{ 'product-2' | placeholder_svg_tag: 'fc-card__placeholder' }}
+                      {{ 'product-2' | placeholder_svg_tag: 'featured-collection-grid__card-placeholder' }}
                     {%- endif -%}
                   </div>
-                  <div class="fc-card__body">
+                  <div class="featured-collection-grid__card-body">
                     {%- if block.settings.tag != blank -%}
-                      <p class="fc-card__tag">{{ block.settings.tag }}</p>
+                      <p class="featured-collection-grid__card-tag">{{ block.settings.tag }}</p>
                     {%- elsif block_product != blank and block_product.type != blank -%}
-                      <p class="fc-card__tag">{{ block_product.type }}</p>
+                      <p class="featured-collection-grid__card-tag">{{ block_product.type }}</p>
                     {%- endif -%}
-                    <h3 class="fc-card__title">
+                    <h3 class="featured-collection-grid__card-title">
                       {%- if block_product != blank -%}
                         <a href="{{ block_product.url }}">{{ block_product.title }}</a>
                       {%- elsif block.settings.title != blank -%}
@@ -283,9 +281,9 @@
                       {%- endif -%}
                     </h3>
                     {%- if block_product != blank -%}
-                      <p class="fc-card__desc">{{ block_product.description | strip_html | truncate: section.settings.description_length }}</p>
+                      <p class="featured-collection-grid__card-desc">{{ block_product.description | strip_html | truncate: section.settings.description_length }}</p>
                     {%- elsif block.settings.description != blank -%}
-                      <p class="fc-card__desc">{{ block.settings.description }}</p>
+                      <p class="featured-collection-grid__card-desc">{{ block.settings.description }}</p>
                     {%- endif -%}
                   </div>
                 </div>
@@ -295,22 +293,22 @@
         {%- else -%}
           {%- for i in (2..3) -%}
             {%- assign product = products[i] -%}
-            <div class="fc-card fc-card--half">
+            <div class="featured-collection-grid__card featured-collection-grid__card--half">
               {%- if product != blank -%}
-                <a class="fc-card__link" href="{{ product.url }}" aria-label="{{ product.title }}"></a>
+                <a class="featured-collection-grid__card-link" href="{{ product.url }}" aria-label="{{ product.title }}"></a>
               {%- endif -%}
-              <div class="fc-card__image-wrap">
+              <div class="featured-collection-grid__card-image-wrap">
                 {%- if product != blank and product.featured_image != blank -%}
                   {{ product.featured_image | image_url: width: 800 | image_tag:
                     loading: 'lazy',
                     widths: '400, 600, 800',
-                    class: 'fc-card__image'
+                    class: 'featured-collection-grid__card-image'
                   }}
                 {%- else -%}
-                  {{ 'product-2' | placeholder_svg_tag: 'fc-card__placeholder' }}
+                  {{ 'product-2' | placeholder_svg_tag: 'featured-collection-grid__card-placeholder' }}
                 {%- endif -%}
               </div>
-              <div class="fc-card__body">
+              <div class="featured-collection-grid__card-body">
                 {%- if section.settings.show_tag and product != blank -%}
                   {%- assign tag_text = '' -%}
                   {%- case section.settings.tag_source -%}
@@ -322,10 +320,10 @@
                       {%- assign tag_text = section.settings.collection.title -%}
                   {%- endcase -%}
                   {%- if tag_text != blank -%}
-                    <p class="fc-card__tag">{{ tag_text }}</p>
+                    <p class="featured-collection-grid__card-tag">{{ tag_text }}</p>
                   {%- endif -%}
                 {%- endif -%}
-                <h3 class="fc-card__title">
+                <h3 class="featured-collection-grid__card-title">
                   {%- if product != blank -%}
                     <a href="{{ product.url }}">{{ product.title }}</a>
                   {%- else -%}
@@ -333,7 +331,7 @@
                   {%- endif -%}
                 </h3>
                 {%- if section.settings.show_description -%}
-                  <p class="fc-card__desc">
+                  <p class="featured-collection-grid__card-desc">
                     {%- if product != blank -%}
                       {{ product.description | strip_html | truncate: section.settings.description_length }}
                     {%- else -%}
@@ -349,41 +347,41 @@
     </div>
 
     {%- comment -%} ── RIGHT COLUMN (1 tall full-height card) ── {%- endcomment -%}
-    <div class="fc-col fc-col--right">
+    <div class="featured-collection-grid__col featured-collection-grid__col--right">
       {%- if use_manual -%}
         {%- for block in section.blocks -%}
           {%- if block.settings.column == 'right' -%}
             {%- assign block_product = block.settings.product -%}
-            <div class="fc-card fc-card--tall color-{{ block.settings.color_scheme }}" style="{% if block.settings.card_bg_color != blank %}background-color: {{ block.settings.card_bg_color }};{% endif %}{% if block.settings.card_text_color != blank %}--fc-card-text-color: {{ block.settings.card_text_color }};{% endif %}" {{ block.shopify_attributes }}>
+            <div class="featured-collection-grid__card featured-collection-grid__card--tall color-{{ block.settings.color_scheme }}" style="{% if block.settings.card_bg_color != blank %}background-color: {{ block.settings.card_bg_color }};{% endif %}{% if block.settings.card_text_color != blank %}--featured-collection-grid-card-text: {{ block.settings.card_text_color }};{% endif %}" {{ block.shopify_attributes }}>
               {%- if block_product != blank -%}
-                <a class="fc-card__link" href="{{ block_product.url }}" aria-label="{{ block_product.title }}"></a>
+                <a class="featured-collection-grid__card-link" href="{{ block_product.url }}" aria-label="{{ block_product.title }}"></a>
               {%- elsif block.settings.link != blank -%}
-                <a class="fc-card__link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'View item' }}"></a>
+                <a class="featured-collection-grid__card-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'View item' }}"></a>
               {%- endif -%}
-              <div class="fc-card__image-wrap">
+              <div class="featured-collection-grid__card-image-wrap">
                 {%- if block_product != blank and block_product.featured_image != blank -%}
                   {{ block_product.featured_image | image_url: width: 1400 | image_tag:
                     loading: 'lazy',
                     widths: '700, 1000, 1400',
-                    class: 'fc-card__image'
+                    class: 'featured-collection-grid__card-image'
                   }}
                 {%- elsif block.settings.image != blank -%}
                   {{ block.settings.image | image_url: width: 1400 | image_tag:
                     loading: 'lazy',
                     widths: '700, 1000, 1400',
-                    class: 'fc-card__image'
+                    class: 'featured-collection-grid__card-image'
                   }}
                 {%- else -%}
-                  {{ 'lifestyle-1' | placeholder_svg_tag: 'fc-card__placeholder' }}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'featured-collection-grid__card-placeholder' }}
                 {%- endif -%}
               </div>
-              <div class="fc-card__body fc-card__body--tall">
+              <div class="featured-collection-grid__card-body featured-collection-grid__card-body--tall">
                 {%- if block.settings.tag != blank -%}
-                  <p class="fc-card__tag">{{ block.settings.tag }}</p>
+                  <p class="featured-collection-grid__card-tag">{{ block.settings.tag }}</p>
                 {%- elsif block_product != blank and block_product.type != blank -%}
-                  <p class="fc-card__tag">{{ block_product.type }}</p>
+                  <p class="featured-collection-grid__card-tag">{{ block_product.type }}</p>
                 {%- endif -%}
-                <h3 class="fc-card__title">
+                <h3 class="featured-collection-grid__card-title">
                   {%- if block_product != blank -%}
                     <a href="{{ block_product.url }}">{{ block_product.title }}</a>
                   {%- elsif block.settings.title != blank -%}
@@ -395,9 +393,9 @@
                   {%- endif -%}
                 </h3>
                 {%- if block_product != blank -%}
-                  <p class="fc-card__desc">{{ block_product.description | strip_html | truncate: section.settings.description_length_large }}</p>
+                  <p class="featured-collection-grid__card-desc">{{ block_product.description | strip_html | truncate: section.settings.description_length_large }}</p>
                 {%- elsif block.settings.description != blank -%}
-                  <p class="fc-card__desc">{{ block.settings.description }}</p>
+                  <p class="featured-collection-grid__card-desc">{{ block.settings.description }}</p>
                 {%- endif -%}
               </div>
             </div>
@@ -405,22 +403,22 @@
         {%- endfor -%}
       {%- else -%}
         {%- assign product = products[4] -%}
-        <div class="fc-card fc-card--tall">
+        <div class="featured-collection-grid__card featured-collection-grid__card--tall">
           {%- if product != blank -%}
-            <a class="fc-card__link" href="{{ product.url }}" aria-label="{{ product.title }}"></a>
+            <a class="featured-collection-grid__card-link" href="{{ product.url }}" aria-label="{{ product.title }}"></a>
           {%- endif -%}
-          <div class="fc-card__image-wrap">
+          <div class="featured-collection-grid__card-image-wrap">
             {%- if product != blank and product.featured_image != blank -%}
               {{ product.featured_image | image_url: width: 1400 | image_tag:
                 loading: 'lazy',
                 widths: '700, 1000, 1400',
-                class: 'fc-card__image'
+                class: 'featured-collection-grid__card-image'
               }}
             {%- else -%}
-              {{ 'lifestyle-1' | placeholder_svg_tag: 'fc-card__placeholder' }}
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'featured-collection-grid__card-placeholder' }}
             {%- endif -%}
           </div>
-          <div class="fc-card__body fc-card__body--tall">
+          <div class="featured-collection-grid__card-body featured-collection-grid__card-body--tall">
             {%- if section.settings.show_tag and product != blank -%}
               {%- assign tag_text = '' -%}
               {%- case section.settings.tag_source -%}
@@ -432,10 +430,10 @@
                   {%- assign tag_text = section.settings.collection.title -%}
               {%- endcase -%}
               {%- if tag_text != blank -%}
-                <p class="fc-card__tag">{{ tag_text }}</p>
+                <p class="featured-collection-grid__card-tag">{{ tag_text }}</p>
               {%- endif -%}
             {%- endif -%}
-            <h3 class="fc-card__title">
+            <h3 class="featured-collection-grid__card-title">
               {%- if product != blank -%}
                 <a href="{{ product.url }}">{{ product.title }}</a>
               {%- else -%}
@@ -443,7 +441,7 @@
               {%- endif -%}
             </h3>
             {%- if section.settings.show_description -%}
-              <p class="fc-card__desc">
+              <p class="featured-collection-grid__card-desc">
                 {%- if product != blank -%}
                   {{ product.description | strip_html | truncate: section.settings.description_length_large }}
                 {%- else -%}
@@ -461,7 +459,7 @@
 
 {% schema %}
 {
-  "name": "Featured Collection Grid",
+  "name": "Featured collection grid",
   "tag": "section",
   "class": "section-featured-collection-grid",
   "settings": [
@@ -636,7 +634,7 @@
   "blocks": [
     {
       "type": "product_card",
-      "name": "Product Card",
+      "name": "Product card",
       "settings": [
         {
           "type": "product",
@@ -667,7 +665,7 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Product Image"
+          "label": "Product image"
         },
         {
           "type": "text",
@@ -677,7 +675,7 @@
         {
           "type": "text",
           "id": "title",
-          "label": "Product Title",
+          "label": "Product title",
           "default": "Product Name"
         },        
         {
@@ -689,7 +687,7 @@
         {
           "type": "textarea",
           "id": "description",
-          "label": "Short Description"
+          "label": "Short description"
         },
         {
           "type": "url",
@@ -701,7 +699,7 @@
   ],
   "presets": [
     {
-      "name": "Featured Collection Grid",
+      "name": "Featured collection grid",
       "settings": {
         "data_source": "manual",
         "tag_source": "product_type",

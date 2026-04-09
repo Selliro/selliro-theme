@@ -20,10 +20,9 @@
           "settings": {
             "text": "Shop our latest arrivals!",
             "link": "",
-            "icon_type": "custom",
             "icon_image": "shopify://shop_images/transport_1.png",
-            "font": "'Lato', sans-serif",
-            "font_size": "0.875rem",
+            "font": "var(--font-body--family)",
+            "font_size": "0.75rem",
             "weight": "",
             "letter_spacing": "tight",
             "case": "none"
@@ -36,10 +35,9 @@
           "settings": {
             "text": "Shop our latest arrivals! 2",
             "link": "",
-            "icon_type": "custom",
             "icon_image": "shopify://shop_images/price-tag_1.png",
-            "font": "'Lato', sans-serif",
-            "font_size": "0.875rem",
+            "font": "var(--font-body--family)",
+            "font_size": "0.75rem",
             "weight": "",
             "letter_spacing": "tight",
             "case": "none"
@@ -51,27 +49,11 @@
           "settings": {
             "text": "Welcome to our store",
             "link": "",
-            "icon_type": "none",
             "icon_image": "shopify://shop_images/star.png",
-            "font": "'Lato', sans-serif",
-            "font_size": "0.875rem",
-            "weight": "",
-            "letter_spacing": "tight",
-            "case": "none"
-          },
-          "blocks": {}
-        },
-        "announcement_QF3LRE": {
-          "type": "_announcement",
-          "name": "t:names.announcement",
-          "settings": {
-            "text": "Shop our latest arrivals!",
-            "link": "",
-            "icon_type": "none",
             "font": "var(--font-subheading--family)",
             "font_size": "0.75rem",
             "weight": "",
-            "letter_spacing": "normal",
+            "letter_spacing": "tight",
             "case": "none"
           },
           "blocks": {}
@@ -89,10 +71,10 @@
         "marquee_direction": "reverse",
         "speed": 7,
         "section_width": "full-width",
-        "color_scheme": "scheme-a4f0a109-a705-48c7-884e-8c6eba693441",
+        "color_scheme": "scheme-4",
         "divider_width": 2,
-        "padding-block-start": 15,
-        "padding-block-end": 15
+        "padding-block-start": 10,
+        "padding-block-end": 10
       }
     },
     "header_section": {
