@@ -283,6 +283,11 @@
       "placeholder_a11y": "Logo placeholder"
     }
   },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "All rights reserved."
+    }
+  },
   "blogs": {
     "article": {
       "comments_heading": {
