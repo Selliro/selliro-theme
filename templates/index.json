@@ -9,6 +9,307 @@
  */
 {
   "sections": {
+    "slideshow_AnCCTe": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_ca9DCF": {
+          "type": "_slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/slide_img_1.webp",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": true,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "group_4gH7KJ": {
+              "type": "group",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 14,
+                "width": "custom",
+                "custom_width": 50,
+                "width_mobile": "custom",
+                "custom_width_mobile": 85,
+                "height": "fit",
+                "custom_height": 100,
+                "inherit_color_scheme": false,
+                "color_scheme": "scheme-6",
+                "background_media": "none",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "link": "",
+                "open_in_new_tab": false,
+                "placeholder": "",
+                "padding-block-start": 48,
+                "padding-block-end": 48,
+                "padding-inline-start": 48,
+                "padding-inline-end": 48
+              },
+              "blocks": {
+                "text_nEmhqP": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>The Best Skin Serums for a Healthy Glow</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "3.5rem",
+                    "line_height": "tight",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground-heading)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_e6qQnQ": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Introducing our latest products, made especially for the season. Shop your favorites before they're gone!</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "custom",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1.125rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "button_6cDFC8": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop now",
+                    "link": "shopify://collections/all",
+                    "open_in_new_tab": false,
+                    "style_class": "button",
+                    "width": "fit-content",
+                    "custom_width": 100,
+                    "width_mobile": "fit-content",
+                    "custom_width_mobile": 100
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "text_nEmhqP",
+                "text_e6qQnQ",
+                "button_6cDFC8"
+              ]
+            }
+          },
+          "block_order": [
+            "group_4gH7KJ"
+          ]
+        },
+        "slide_mkVqxG": {
+          "type": "_slide",
+          "settings": {
+            "media_type_1": "image",
+            "image_1": "shopify://shop_images/slide_img_2.webp",
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "toggle_overlay": true,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "group_ed99WC": {
+              "type": "group",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "center",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 12,
+                "width": "custom",
+                "custom_width": 50,
+                "width_mobile": "custom",
+                "custom_width_mobile": 85,
+                "height": "fit",
+                "custom_height": 100,
+                "inherit_color_scheme": false,
+                "color_scheme": "scheme-6",
+                "background_media": "none",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "link": "",
+                "open_in_new_tab": false,
+                "placeholder": "",
+                "padding-block-start": 48,
+                "padding-block-end": 48,
+                "padding-inline-start": 48,
+                "padding-inline-end": 48
+              },
+              "blocks": {
+                "text_WDjK3L": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<h2>Bestsellers</h2>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_wErxcN": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Discover the bestsellers that have captured the hearts of our customers with their perfect blend of functionality and style.</p>",
+                    "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 20,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "button_3cdjfH": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop now",
+                    "link": "shopify://collections/all",
+                    "open_in_new_tab": false,
+                    "style_class": "button",
+                    "width": "fit-content",
+                    "custom_width": 100,
+                    "width_mobile": "fit-content",
+                    "custom_width_mobile": 100
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "text_WDjK3L",
+                "text_wErxcN",
+                "button_3cdjfH"
+              ]
+            }
+          },
+          "block_order": [
+            "group_ed99WC"
+          ]
+        }
+      },
+      "block_order": [
+        "slide_ca9DCF",
+        "slide_mkVqxG"
+      ],
+      "name": "t:names.slideshow",
+      "settings": {
+        "icons_style": "arrows_large",
+        "slideshow_controls_style": "dots",
+        "color_scheme": "",
+        "autoplay": false,
+        "autoplay_speed": 4,
+        "section_width": "full-width",
+        "slide_height": "medium",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
     "hero_jVaWmY": {
       "type": "hero",
       "blocks": {
@@ -58,6 +359,7 @@
         "text_YLPk4p",
         "button_H9gpTf"
       ],
+      "disabled": true,
       "name": "t:names.hero",
       "settings": {
         "media_type_1": "image",
@@ -263,6 +565,7 @@
           ]
         }
       },
+      "disabled": true,
       "name": "Featured collection",
       "settings": {
         "collection": "all",
@@ -282,6 +585,787 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 48,
         "padding-block-end": 48
+      }
+    },
+    "new_arrivals_showcase_6GTQmq": {
+      "type": "new-arrivals-showcase",
+      "blocks": {
+        "collection_tab_XBE6wc": {
+          "type": "collection_tab",
+          "settings": {
+            "label": "New Arrivals",
+            "collection": "moisturizer"
+          }
+        },
+        "collection_tab_rMcRQt": {
+          "type": "collection_tab",
+          "settings": {
+            "label": "Best Sellers",
+            "collection": "sunscreen"
+          }
+        }
+      },
+      "block_order": [
+        "collection_tab_XBE6wc",
+        "collection_tab_rMcRQt"
+      ],
+      "name": "New arrivals showcase",
+      "settings": {
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "product_layout": "slider",
+        "heading": "New Arrivals",
+        "subheading": "All our new arrivals in a exclusive brand selection",
+        "heading_scribble": "squiggle",
+        "heading_scribble_color": "#0a0a0a",
+        "tabs_a11y": "Collection tabs",
+        "tab_on_bg": "#2563eb",
+        "tab_on_text": "#ffffff",
+        "tab_off_bg": "#f0f0f0",
+        "tab_off_text": "#555555",
+        "show_promotion": true,
+        "promo_width_pct": 25,
+        "promo_image": "shopify://shop_images/young-woman-doing-her-morning-routine.png",
+        "promo_badge": "PROMOTION",
+        "promo_btn_text": "Shop sale",
+        "promo_url": "#",
+        "product_count": 12,
+        "new_window_days": 45,
+        "new_label": "New",
+        "image_hover_cta": "ADD TO CART",
+        "fallback_stars": 5,
+        "star_color": "#e6b800",
+        "cta_yellow": "#f5c518",
+        "demo_type": "FACE SERUMS",
+        "demo_title": "Mens daily serum",
+        "spv_mobile": 1.1,
+        "spv_desktop": 3.2,
+        "gap_mobile": 14,
+        "gap_desktop": 8,
+        "pad_top": 56,
+        "pad_bottom": 56
+      }
+    },
+    "section_cp3z68": {
+      "type": "section",
+      "blocks": {
+        "group_PjbMHA": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 16,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "link": "#",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "icon_TkqaNA": {
+              "type": "icon",
+              "settings": {
+                "icon": "none",
+                "image_upload": "shopify://shop_images/text_with_icon_img1.png",
+                "width": 80,
+                "link": "",
+                "open_in_new_tab": false
+              },
+              "blocks": {}
+            },
+            "group_bAgkmV": {
+              "type": "group",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 4,
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "custom_height": 100,
+                "inherit_color_scheme": true,
+                "color_scheme": "",
+                "background_media": "none",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "link": "",
+                "open_in_new_tab": false,
+                "placeholder": "",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "text_JrGbhn": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Natural Ingredients</p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "center",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_wQTFKx": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Praesent in nunc vel urna <br/>consequat mattis eget vel libero. <br/>Phasellus entesque</p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "center",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "text_JrGbhn",
+                "text_wQTFKx"
+              ]
+            }
+          },
+          "block_order": [
+            "icon_TkqaNA",
+            "group_bAgkmV"
+          ]
+        },
+        "group_x3HJWm": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 16,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "icon_kXm4ma": {
+              "type": "icon",
+              "settings": {
+                "icon": "heart",
+                "image_upload": "shopify://shop_images/text_with_icon_img2.png",
+                "width": 80,
+                "link": "",
+                "open_in_new_tab": false
+              },
+              "blocks": {}
+            },
+            "group_nkQABD": {
+              "type": "group",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 4,
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "custom_height": 100,
+                "inherit_color_scheme": true,
+                "color_scheme": "",
+                "background_media": "none",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "link": "",
+                "open_in_new_tab": false,
+                "placeholder": "",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "text_FEfyKQ": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Fragrance Free</p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "center",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_JYBH79": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Ahasellus entesque praesent in <br/>nunc vel urna consequat mattis <br/>eget vel libero.</p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "center",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "text_FEfyKQ",
+                "text_JYBH79"
+              ]
+            }
+          },
+          "block_order": [
+            "icon_kXm4ma",
+            "group_nkQABD"
+          ]
+        },
+        "group_P3QV9A": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 16,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "icon_DMPta3": {
+              "type": "icon",
+              "settings": {
+                "icon": "silhouette",
+                "image_upload": "shopify://shop_images/text_with_icon_img3.png",
+                "width": 80,
+                "link": "",
+                "open_in_new_tab": false
+              },
+              "blocks": {}
+            },
+            "group_nmacJK": {
+              "type": "group",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 4,
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "custom_height": 100,
+                "inherit_color_scheme": true,
+                "color_scheme": "",
+                "background_media": "none",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "link": "",
+                "open_in_new_tab": false,
+                "placeholder": "",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "text_HKtRD9": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Allergy Tested</p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "center",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_bCxyKx": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Nunc vel urna consequat praesent <br/>in mattis eget vel libero <br/>zhasellus entesque.</p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "center",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "text_HKtRD9",
+                "text_bCxyKx"
+              ]
+            }
+          },
+          "block_order": [
+            "icon_DMPta3",
+            "group_nmacJK"
+          ]
+        },
+        "group_6tptNT": {
+          "type": "group",
+          "settings": {
+            "content_direction": "column",
+            "vertical_on_mobile": true,
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "align_baseline": false,
+            "horizontal_alignment_flex_direction_column": "center",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 16,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "toggle_overlay": false,
+            "overlay_color": "#00000026",
+            "overlay_style": "solid",
+            "gradient_direction": "to top",
+            "link": "",
+            "open_in_new_tab": false,
+            "placeholder": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "icon_LNn7KC": {
+              "type": "icon",
+              "settings": {
+                "icon": "silhouette",
+                "image_upload": "shopify://shop_images/text_with_icon_img4.png",
+                "width": 80,
+                "link": "",
+                "open_in_new_tab": false
+              },
+              "blocks": {}
+            },
+            "group_rcyCCG": {
+              "type": "group",
+              "settings": {
+                "content_direction": "column",
+                "vertical_on_mobile": true,
+                "horizontal_alignment": "flex-start",
+                "vertical_alignment": "center",
+                "align_baseline": false,
+                "horizontal_alignment_flex_direction_column": "flex-start",
+                "vertical_alignment_flex_direction_column": "center",
+                "gap": 4,
+                "width": "fill",
+                "custom_width": 100,
+                "width_mobile": "fill",
+                "custom_width_mobile": 100,
+                "height": "fit",
+                "custom_height": 100,
+                "inherit_color_scheme": true,
+                "color_scheme": "",
+                "background_media": "none",
+                "video_position": "cover",
+                "background_image_position": "cover",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 0,
+                "toggle_overlay": false,
+                "overlay_color": "#00000026",
+                "overlay_style": "solid",
+                "gradient_direction": "to top",
+                "link": "",
+                "open_in_new_tab": false,
+                "placeholder": "",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {
+                "text_w7xCtm": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Paraben Free</p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "center",
+                    "type_preset": "h4",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                },
+                "text_dwaWiM": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Mattis eget vel libero praesent <br/>in nunc vel urna consequat <br/>ehasellus entesque</p>",
+                    "width": "100%",
+                    "max_width": "normal",
+                    "alignment": "center",
+                    "type_preset": "rte",
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "text_w7xCtm",
+                "text_dwaWiM"
+              ]
+            }
+          },
+          "block_order": [
+            "icon_LNn7KC",
+            "group_rcyCCG"
+          ]
+        }
+      },
+      "block_order": [
+        "group_PjbMHA",
+        "group_x3HJWm",
+        "group_P3QV9A",
+        "group_6tptNT"
+      ],
+      "name": "t:names.icons_with_text",
+      "settings": {
+        "content_direction": "row",
+        "vertical_on_mobile": true,
+        "horizontal_alignment": "flex-start",
+        "vertical_alignment": "center",
+        "align_baseline": false,
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "page-width",
+        "section_height": "",
+        "section_height_custom": 50,
+        "color_scheme": "",
+        "background_media": "none",
+        "video_position": "cover",
+        "background_image_position": "cover",
+        "border": "none",
+        "border_width": 1,
+        "border_opacity": 100,
+        "border_radius": 0,
+        "toggle_overlay": false,
+        "overlay_color": "#00000026",
+        "overlay_style": "solid",
+        "gradient_direction": "to top",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
+    },
+    "image_text_collage_bBArGe": {
+      "type": "image-text-collage",
+      "blocks": {
+        "feature_HnJpjx": {
+          "type": "feature",
+          "settings": {
+            "title": "Healthy & Soft"
+          }
+        },
+        "feature_Jdk3PU": {
+          "type": "feature",
+          "settings": {
+            "title": "Free from Sulfates"
+          }
+        },
+        "feature_Y8qJiX": {
+          "type": "feature",
+          "settings": {
+            "title": "No Parabens Added"
+          }
+        },
+        "feature_hjE68w": {
+          "type": "feature",
+          "settings": {
+            "title": "100% Plant-Powered"
+          }
+        }
+      },
+      "block_order": [
+        "feature_HnJpjx",
+        "feature_Jdk3PU",
+        "feature_Y8qJiX",
+        "feature_hjE68w"
+      ],
+      "name": "Image with text collage",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "pattern_opacity": 14,
+        "section_width": "page-width",
+        "media_position": "left",
+        "show_text_column": true,
+        "image_1": "shopify://shop_images/latest_arrivals_prodcut_1_V4.png",
+        "image_1_rotation": 5,
+        "image_1_inset_top": 0,
+        "image_1_inset_right": -1,
+        "image_1_inset_bottom": -1,
+        "image_1_inset_left": 11,
+        "image_1_width": 78,
+        "image_1_z_index": 3,
+        "image_2": "shopify://shop_images/69a21ede79ed03f3aba2f52e64f6068e82378261.png",
+        "image_2_rotation": -6,
+        "image_2_inset_top": 38,
+        "image_2_inset_right": -1,
+        "image_2_inset_bottom": -1,
+        "image_2_inset_left": 0,
+        "image_2_width": 44,
+        "image_2_z_index": 2,
+        "image_3": "shopify://shop_images/latest_arrivals_prodcut_4_V3.png",
+        "image_3_rotation": 4,
+        "image_3_inset_top": -1,
+        "image_3_inset_right": 36,
+        "image_3_inset_bottom": 0,
+        "image_3_inset_left": 50,
+        "image_3_width": 50,
+        "image_3_z_index": 3,
+        "image_radius": 16,
+        "show_subtitle": true,
+        "subtitle": "Pure and simple",
+        "heading": "Intensive Hair Serum for Radiant Shine & Lasting Strength",
+        "show_description": true,
+        "description": "<p>Our concentrated serum helps smooth the look of damage and adds luminous shine with plant-based actives you can feel good about.</p>",
+        "show_feature_grid": true,
+        "show_cta": true,
+        "button_label": "Explore sale",
+        "button_link": "",
+        "padding_top": 72,
+        "padding_bottom": 72
       }
     },
     "ticker_duo_UeLfnF": {
@@ -325,7 +1409,7 @@
             "padding_top": 24,
             "padding_bottom": 24,
             "rotation": -1,
-            "color_scheme": "scheme-5"
+            "color_scheme": "scheme-4"
           }
         }
       },
@@ -348,7 +1432,7 @@
         "product_card_aHVzPG": {
           "type": "product_card",
           "settings": {
-            "product": "",
+            "product": "luminous-balance-toner",
             "column": "left",
             "position": "1",
             "image": "shopify://shop_images/Grid-3-768x768.png",
@@ -362,10 +1446,10 @@
         "product_card_YfqGTe": {
           "type": "product_card",
           "settings": {
-            "product": "",
+            "product": "luxury-face-creams",
             "column": "left",
             "position": "2",
-            "image": "shopify://shop_images/Grid-4-768x461.png",
+            "image": "shopify://shop_images/Grid-4.jpg",
             "tag": "Smooth",
             "title": "Moisturizer",
             "color_scheme": "scheme-4",
@@ -376,7 +1460,7 @@
         "product_card_QkKgCr": {
           "type": "product_card",
           "settings": {
-            "product": "",
+            "product": "brightening-serum",
             "column": "middle",
             "position": "1",
             "image": "shopify://shop_images/Grid-2-768x461.png",
@@ -390,7 +1474,7 @@
         "product_card_crEXxt": {
           "type": "product_card",
           "settings": {
-            "product": "",
+            "product": "glass-skin-overnight-mask",
             "column": "middle",
             "position": "2",
             "image": "shopify://shop_images/Grid-1-768x768.png",
@@ -404,9 +1488,9 @@
         "product_card_DMWRwt": {
           "type": "product_card",
           "settings": {
-            "product": "",
+            "product": "comfort-matte-bullet-lipstick",
             "column": "right",
-            "position": "1",
+            "position": "2",
             "image": "shopify://shop_images/high-angle-jar-bowl-with-salt.png",
             "tag": "Natural",
             "title": "Bathing Salts",
@@ -444,7 +1528,38 @@
         "show_description": true,
         "description_length": 90,
         "description_length_large": 120,
-        "color_scheme": "scheme-4"
+        "color_scheme": "scheme-1"
+      }
+    },
+    "before_after_slider_CUEk9V": {
+      "type": "before-after-slider",
+      "name": "Before / after slider",
+      "settings": {
+        "before_image": "shopify://shop_images/before.webp",
+        "after_image": "shopify://shop_images/after.webp",
+        "initial_position": 50,
+        "image_radius": 16,
+        "show_image_labels": true,
+        "before_label": "Before",
+        "before_label_vertical": "top",
+        "before_label_horizontal": "left",
+        "after_label": "After",
+        "after_label_vertical": "bottom",
+        "after_label_horizontal": "right",
+        "label_inset": 12,
+        "show_content": false,
+        "heading": "Enough With Acne Ruling Your Life",
+        "description": "<p>In addition to diminishing the visibility of blemishes and blackheads, this cleanser also eliminates surplus oil and enhances the look of pores.</p>",
+        "button_label": "Explore sale",
+        "button_link": "",
+        "layout": "media_left",
+        "enable_particles": false,
+        "particle_opacity": 16,
+        "particle_size": 150,
+        "particle_speed": 22,
+        "color_scheme": "",
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     },
     "beauty_bundle_feature_RdWw6Q": {
@@ -528,13 +1643,182 @@
         "section_width": "page-width",
         "color_scheme": ""
       }
+    },
+    "faq_split_gallery_LpzKU4": {
+      "type": "faq-split-gallery",
+      "blocks": {
+        "faq_entry_kFzm8b": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Dermatologist Approved",
+            "answer": "<p>Formulated and reviewed with dermatologists so you can trust what you put on your skin every day.</p>"
+          }
+        },
+        "faq_entry_8Dwwtk": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Hypoallergenic Formula",
+            "answer": "<p>Designed to minimize the risk of irritation for sensitive skin.</p>"
+          }
+        },
+        "faq_entry_4hJpy3": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Eco-Friendly Ingredients",
+            "answer": "<p>We prioritize responsibly sourced ingredients and mindful packaging where possible.</p>"
+          }
+        },
+        "faq_entry_JWRUTt": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Suitable For All Skin Types",
+            "answer": "<p>Balanced for everyday use across normal, dry, and combination skin.</p>"
+          }
+        },
+        "faq_entry_wdc7TJ": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Works on every skin type",
+            "answer": "<p>Our routine is built to layer cleanly and absorb without heaviness.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_entry_kFzm8b",
+        "faq_entry_8Dwwtk",
+        "faq_entry_4hJpy3",
+        "faq_entry_JWRUTt",
+        "faq_entry_wdc7TJ"
+      ],
+      "name": "FAQ split gallery",
+      "settings": {
+        "title": "Frequently Asked Questions",
+        "color_scheme": "scheme-1",
+        "column_layout": "faq_left",
+        "swap_gallery_images": false,
+        "padding_top": 64,
+        "padding_bottom": 64,
+        "gallery_image_tall": "shopify://shop_images/young-woman-doing-her-morning-routine.png",
+        "gallery_image_front": "shopify://shop_images/young-beautiful-blonde-girl-cares-face-skin-with-moisturizer-front-mirror.png",
+        "image_radius": 16,
+        "image_scroll_parallax": 32,
+        "expand_first_item": true,
+        "allow_collapse_active": false
+      }
+    },
+    "client_trust_testimonials_D4AhAL": {
+      "type": "client-trust-testimonials",
+      "blocks": {
+        "testimonial_MnefiL": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Jenny W.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Absolutely love this product! My hair feels so much softer and healthier after just one week of use.</p>",
+            "product": "the-3p-fulfilled-snowboard",
+            "product_title": "Detangling Hair Spray",
+            "product_link": ""
+          }
+        },
+        "testimonial_76pLRD": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Marcus T.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Great quality and fast shipping. Will definitely order again.</p>",
+            "product": "",
+            "product_title": "Daily Serum",
+            "product_link": ""
+          }
+        },
+        "testimonial_p9BgGR": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Sarah L.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Finally found something that works for my sensitive skin. Highly recommend!</p>",
+            "product": "",
+            "product_title": "Gentle Cleanser",
+            "product_link": ""
+          }
+        },
+        "testimonial_ByiDH9": {
+          "type": "testimonial",
+          "settings": {
+            "name": "David R.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Clean ingredients and visible results. Worth every penny.</p>",
+            "product": "",
+            "product_title": "Night Cream",
+            "product_link": ""
+          }
+        },
+        "testimonial_zChWha": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Emma K.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Smells amazing and absorbs quickly. A staple in my routine now.</p>",
+            "product": "",
+            "product_title": "Body Oil",
+            "product_link": ""
+          }
+        },
+        "testimonial_9MF6mr": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Alex P.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Customer service was excellent and the product exceeded expectations.</p>",
+            "product": "",
+            "product_title": "Face Mist",
+            "product_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_MnefiL",
+        "testimonial_76pLRD",
+        "testimonial_p9BgGR",
+        "testimonial_ByiDH9",
+        "testimonial_zChWha",
+        "testimonial_9MF6mr"
+      ],
+      "name": "Client trust testimonials",
+      "settings": {
+        "section_width": "page-width",
+        "color_scheme": "scheme-2",
+        "heading": "Why Our Clients Trust Us",
+        "subheading": "",
+        "heading_alignment": "center",
+        "animation_duration": 36,
+        "layout_mode": "marquee",
+        "card_gap": 16,
+        "star_color": "#e6b800",
+        "card_background": "#ffffff",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
     }
   },
   "order": [
+    "slideshow_AnCCTe",
     "hero_jVaWmY",
     "product_list_fa6P9H",
+    "new_arrivals_showcase_6GTQmq",
+    "section_cp3z68",
+    "image_text_collage_bBArGe",
     "ticker_duo_UeLfnF",
     "featured_collection_grid_LHPfHM",
-    "beauty_bundle_feature_RdWw6Q"
+    "before_after_slider_CUEk9V",
+    "beauty_bundle_feature_RdWw6Q",
+    "faq_split_gallery_LpzKU4",
+    "client_trust_testimonials_D4AhAL"
   ]
 }

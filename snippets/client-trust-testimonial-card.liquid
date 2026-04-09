@@ -1,0 +1,105 @@
+{% comment %}
+  Single review card for the Client trust testimonials section.
+  @param block
+  @param star_color
+  @param [show_shopify_attributes] — pass true only once per block (mobile stack) so marquee duplicates do not repeat editor attributes
+{% endcomment %}
+{%- liquid
+  assign stars = block.settings.rating | default: 5 | plus: 0
+  if stars > 5
+    assign stars = 5
+  elsif stars < 1
+    assign stars = 5
+  endif
+  assign verified = block.settings.verified_label | default: 'Verified Buyer'
+  assign star_c = star_color | default: '#e6b800'
+
+  assign footer_title = block.settings.product_title
+  assign footer_url = block.settings.product_link
+  assign footer_image = block.settings.product_image
+  if block.settings.product != blank
+    assign linked_product = block.settings.product
+    if footer_title == blank
+      assign footer_title = linked_product.title
+    endif
+    if footer_url == blank
+      assign footer_url = linked_product.url
+    endif
+    if footer_image == blank and linked_product.featured_image != blank
+      assign footer_image = linked_product.featured_image
+    endif
+  endif
+-%}
+<article class="client-trust-testimonial-card"{% if show_shopify_attributes %} {{ block.shopify_attributes }}{% endif %}>
+  <div class="client-trust-testimonial-card__header">
+    <div class="client-trust-testimonial-card__avatar">
+      {%- if block.settings.avatar != blank -%}
+        {{
+          block.settings.avatar
+          | image_url: width: 120
+          | image_tag:
+            loading: 'lazy',
+            class: 'client-trust-testimonial-card__avatar-image',
+            widths: '60, 120',
+            alt: block.settings.name
+        }}
+      {%- else -%}
+        <span class="client-trust-testimonial-card__avatar-placeholder" aria-hidden="true">
+          <svg
+            class="client-trust-testimonial-card__avatar-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+          >
+            {%- render 'icon', icon: 'silhouette' -%}
+          </svg>
+        </span>
+      {%- endif -%}
+    </div>
+    <div class="client-trust-testimonial-card__identity">
+      {%- if block.settings.name != blank -%}
+        <p class="client-trust-testimonial-card__name">{{ block.settings.name | escape }}</p>
+      {%- endif -%}
+      {%- if verified != blank -%}
+        <p class="client-trust-testimonial-card__verified">{{ verified | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="client-trust-testimonial-card__stars" style="--client-trust-star-color: {{ star_c }};" aria-hidden="true">
+    {%- for i in (1..5) -%}
+      <span class="client-trust-testimonial-card__star{% if i <= stars %} is-active{% endif %}">★</span>
+    {%- endfor -%}
+  </div>
+  {%- if block.settings.quote != blank -%}
+    <div class="client-trust-testimonial-card__quote rte">{{ block.settings.quote }}</div>
+  {%- endif -%}
+  <hr class="client-trust-testimonial-card__divider" />
+  {%- if footer_title != blank or footer_image != blank -%}
+    <div class="client-trust-testimonial-card__product">
+      {%- if footer_url != blank -%}
+        <a class="client-trust-testimonial-card__product-link" href="{{ footer_url }}">
+      {%- endif -%}
+      {%- if footer_image != blank -%}
+        <div class="client-trust-testimonial-card__product-thumbnail">
+          {{
+            footer_image
+            | image_url: width: 120
+            | image_tag:
+              loading: 'lazy',
+              class: 'client-trust-testimonial-card__product-image',
+              widths: '60, 120',
+              alt: footer_title
+          }}
+        </div>
+      {%- endif -%}
+      {%- if footer_title != blank -%}
+        <span class="client-trust-testimonial-card__product-title">{{ footer_title | escape }}</span>
+      {%- endif -%}
+      {%- if footer_url != blank -%}
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</article>

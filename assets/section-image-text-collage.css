@@ -1,0 +1,357 @@
+/**
+ * Image collage + text — two columns, tilted photos, feature grid, color scheme.
+ */
+
+.img-text-collage {
+  position: relative;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  padding-top: var(--itc-pad-top, 64px);
+  padding-bottom: var(--itc-pad-bottom, 64px);
+  overflow: hidden;
+}
+
+.img-text-collage__pattern {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: var(--itc-pattern-opacity, 0.14);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.img-text-collage__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 56px);
+  align-items: center;
+}
+
+.img-text-collage__inner--media-right .img-text-collage__collage-wrap {
+  order: 2;
+}
+
+.img-text-collage__inner--media-right .img-text-collage__content {
+  order: 1;
+}
+
+@media (max-width: 989px) {
+  .img-text-collage__inner {
+    grid-template-columns: 1fr;
+    gap: clamp(32px, 6vw, 48px);
+  }
+
+  .img-text-collage__inner--media-right .img-text-collage__collage-wrap,
+  .img-text-collage__inner--media-right .img-text-collage__content {
+    order: unset;
+  }
+}
+
+/* --- Collage --- */
+.img-text-collage__collage-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 36rem;
+  margin-inline: auto;
+}
+
+.img-text-collage__collage-wrap--solo {
+  max-width: min(48rem, 100%);
+}
+
+.img-text-collage__inner--content-hidden .img-text-collage__collage-wrap {
+  max-width: 42rem;
+}
+
+@media (min-width: 990px) {
+  .img-text-collage__inner--content-hidden {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .img-text-collage__inner--content-hidden .img-text-collage__collage-wrap {
+    max-width: min(44rem, 100%);
+  }
+}
+
+.img-text-collage__stack {
+  position: relative;
+  width: 100%;
+  min-height: clamp(380px, 48vw, 520px);
+  margin-inline: auto;
+}
+
+.img-text-collage__stack--count-0 {
+  min-height: clamp(240px, 40vw, 380px);
+}
+
+/* One image: single hero fill */
+.img-text-collage__stack--count-1 {
+  aspect-ratio: var(--itc-solo-ar, 4 / 3);
+  min-height: clamp(280px, 55vw, 560px);
+}
+
+.img-text-collage__stack--count-1 > .img-text-collage__photo:only-child {
+  inset: 0;
+  width: 100% !important;
+  height: 100%;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  aspect-ratio: unset !important;
+  max-height: none;
+}
+
+/* Two images: slightly shorter stack; overlap from theme settings */
+.img-text-collage__stack--count-2 {
+  min-height: clamp(360px, 46vw, 500px);
+}
+
+.img-text-collage__photo {
+  position: absolute;
+  border-radius: var(--itc-img-radius, 16px);
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgb(var(--color-shadow-rgb) / 0.12);
+  background: rgb(var(--color-foreground-rgb) / 0.06);
+}
+
+.img-text-collage__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  vertical-align: middle;
+}
+
+.img-text-collage__photo--placeholder {
+  pointer-events: none;
+}
+
+.img-text-collage__img--placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  color: var(--color-foreground-muted);
+  opacity: 0.45;
+}
+
+.img-text-collage__img--placeholder path {
+  fill: currentColor;
+}
+
+/* Layer positions — vars set on .img-text-collage__stack (auto or % per side) */
+.img-text-collage__photo--1 {
+  width: var(--itc-p1-w, 78%);
+  top: var(--itc-p1-top);
+  right: var(--itc-p1-right);
+  bottom: var(--itc-p1-bottom);
+  left: var(--itc-p1-left);
+  z-index: var(--itc-p1-z, 3);
+  aspect-ratio: var(--itc-p1-ar, 4 / 3);
+  transform: rotate(var(--itc-p1-rot, 5deg));
+}
+
+.img-text-collage__photo--2 {
+  width: var(--itc-p2-w, 44%);
+  top: var(--itc-p2-top);
+  right: var(--itc-p2-right);
+  bottom: var(--itc-p2-bottom);
+  left: var(--itc-p2-left);
+  z-index: var(--itc-p2-z, 2);
+  aspect-ratio: var(--itc-p2-ar, 3 / 4);
+  transform: rotate(var(--itc-p2-rot, -6deg));
+}
+
+.img-text-collage__photo--3 {
+  width: var(--itc-p3-w, 50%);
+  top: var(--itc-p3-top);
+  right: var(--itc-p3-right);
+  bottom: var(--itc-p3-bottom);
+  left: var(--itc-p3-left);
+  z-index: var(--itc-p3-z, 1);
+  aspect-ratio: var(--itc-p3-ar, 3 / 4);
+  transform: rotate(var(--itc-p3-rot, 4deg));
+}
+
+/* --- Content --- */
+.img-text-collage__content {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2vw, 20px);
+  max-width: 32rem;
+}
+
+@media (min-width: 990px) {
+  .img-text-collage__inner:not(.img-text-collage__inner--content-hidden) .img-text-collage__content {
+    padding-left: clamp(0px, 2vw, 16px);
+  }
+
+  .img-text-collage__inner--media-right:not(.img-text-collage__inner--content-hidden) .img-text-collage__content {
+    padding-left: 0;
+    padding-right: clamp(0px, 2vw, 16px);
+  }
+}
+
+.img-text-collage__heading-group {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2vw, 20px);
+}
+
+.img-text-collage__subtitle {
+  margin: 0;
+  font-size: clamp(0.6875rem, 0.9vw, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-foreground-muted);
+}
+
+.img-text-collage__heading {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.8vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  color: var(--color-foreground-heading);
+}
+
+.img-text-collage__description {
+  margin: 0;
+  font-size: clamp(0.9375rem, 1.15vw, 1.0625rem);
+  line-height: 1.6;
+  color: var(--color-foreground);
+}
+
+.img-text-collage__description p {
+  margin: 0 0 0.75em;
+}
+
+.img-text-collage__description p:last-child {
+  margin-bottom: 0;
+}
+
+.img-text-collage__features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2.5vw, 24px) clamp(12px, 2vw, 20px);
+  margin-top: clamp(4px, 1vw, 8px);
+}
+
+.img-text-collage__feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+}
+
+.img-text-collage__feature-icon {
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 2.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgb(var(--color-border-rgb) / 0.85);
+  background: transparent;
+}
+
+.img-text-collage__feature-icon img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+}
+
+.img-text-collage__feature-label {
+  margin: 0;
+  padding-top: 0.35rem;
+  font-size: clamp(0.8125rem, 1vw, 0.9375rem);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-foreground-heading);
+}
+
+.img-text-collage__btn {
+  align-self: flex-start;
+  margin-top: clamp(8px, 1.5vw, 14px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--color-primary-button-text);
+  background-color: var(--color-primary-button-background);
+  border: 1px solid var(--color-primary-button-border);
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.img-text-collage__btn:hover {
+  color: var(--color-primary-button-hover-text);
+  background-color: var(--color-primary-button-hover-background);
+  border-color: var(--color-primary-button-hover-border);
+  box-shadow: 0 6px 20px rgb(var(--color-shadow-rgb) / 0.14);
+  transform: translateY(-1px);
+}
+
+.img-text-collage__btn:focus-visible {
+  outline: var(--focus-outline-width, 2px) solid currentcolor;
+  outline-offset: 3px;
+}
+
+.img-text-collage__placeholder {
+  margin: 0;
+  padding: 2rem;
+  text-align: center;
+  font-size: 0.9375rem;
+  color: var(--color-foreground-muted);
+  border: 1px dashed rgb(var(--color-border-rgb) / 0.5);
+  border-radius: 12px;
+}
+
+.img-text-collage__placeholder--stack {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  max-height: 12rem;
+  width: calc(100% - 3rem);
+  height: fit-content;
+}
+
+.img-text-collage__btn--static {
+  cursor: default;
+  pointer-events: none;
+}
+
+.img-text-collage__btn--static:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img-text-collage__btn {
+    transition: none;
+  }
+
+  .img-text-collage__btn:hover {
+    transform: none;
+  }
+}

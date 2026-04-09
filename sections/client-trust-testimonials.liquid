@@ -1,0 +1,563 @@
+{% comment %}
+  Client trust testimonials — three columns; outer columns scroll up, middle scrolls down.
+{% endcomment %}
+
+{{ 'section-client-trust-testimonials.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign star_c = section.settings.star_color | default: '#e6b800'
+  assign dur = section.settings.animation_duration | default: 45
+  assign layout_mode = section.settings.layout_mode | default: 'marquee'
+  assign heading_align = section.settings.heading_alignment | default: 'center'
+  if heading_align != 'left' and heading_align != 'center' and heading_align != 'right'
+    assign heading_align = 'center'
+  endif
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="section section--{{ section.settings.section_width }} client-trust-testimonials client-trust-testimonials--layout-{{ layout_mode }} color-{{ section.settings.color_scheme }}"
+  id="ClientTrustTestimonials-{{ section.id }}"
+  data-layout-mode="{{ layout_mode }}"
+  {{ section.shopify_attributes }}
+  style="
+    --client-trust-pad-top: {{ section.settings.padding_top }}px;
+    --client-trust-pad-bottom: {{ section.settings.padding_bottom }}px;
+    --client-trust-marquee-duration: {{ dur }}s;
+    --client-trust-card-gap: {{ section.settings.card_gap }}px;
+    --client-trust-card-bg: {{ section.settings.card_background }};
+  "
+>
+  <div class="client-trust-testimonials__inner section-container">
+    {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+      <header
+        class="client-trust-testimonials__header client-trust-testimonials__header--align-{{ heading_align }}"
+      >
+        {%- if section.settings.heading != blank -%}
+          <h2 class="client-trust-testimonials__title" id="ClientTrustTestimonials-heading-{{ section.id }}">
+            {{ section.settings.heading | escape }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <div class="client-trust-testimonials__subheading rte">{{ section.settings.subheading }}</div>
+        {%- endif -%}
+      </header>
+    {%- endif -%}
+
+    {%- if layout_mode == 'slider' -%}
+      <div class="client-trust-testimonials__slider-wrap">
+        <div
+          class="client-trust-testimonials__slider swiper"
+          data-client-trust-swiper
+          role="region"
+          aria-label="{{ section.settings.heading | default: 'Testimonials slider' | escape }}"
+        >
+          <div class="swiper-wrapper">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'testimonial' -%}
+                <div class="swiper-slide client-trust-testimonials__slider-slide" {{ block.shopify_attributes }}>
+                  {%- render 'client-trust-testimonial-card', block: block, star_color: star_c -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+        <div class="client-trust-testimonials__slider-toolbar">
+          {%- if section.settings.show_slider_dragger -%}
+            <div class="client-trust-testimonials__slider-scrollbar" aria-hidden="true">
+              <div class="client-trust-testimonials__slider-scrollbar-rail">
+                <div class="client-trust-testimonials__slider-scrollbar-thumb" data-client-trust-swiper-progress></div>
+              </div>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.show_slider_arrows -%}
+            <div class="client-trust-testimonials__slider-arrows">
+              <button
+                type="button"
+                class="client-trust-testimonials__slider-arrow client-trust-testimonials__slider-arrow--prev"
+                data-client-trust-swiper-prev
+                aria-label="{{ 'accessibility.slideshow_previous' | t }}"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="client-trust-testimonials__slider-arrow client-trust-testimonials__slider-arrow--next"
+                data-client-trust-swiper-next
+                aria-label="{{ 'accessibility.slideshow_next' | t }}"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- else -%}
+      {%- comment -%} Mobile: single column, block order, no marquee {%- endcomment -%}
+      <div class="client-trust-testimonials__mobile-stack">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'testimonial' -%}
+            {%- render 'client-trust-testimonial-card',
+              block: block,
+              star_color: star_c,
+              show_shopify_attributes: true
+            -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      <div
+        class="client-trust-testimonials__columns"
+        role="region"
+        aria-label="{{ section.settings.heading | default: 'Testimonials' | escape }}"
+      >
+        {%- comment -%} Column 1 — scroll up {%- endcomment -%}
+        <div class="client-trust-testimonials__column client-trust-testimonials__column--outer">
+          <div class="client-trust-testimonials__marquee">
+            <div class="client-trust-testimonials__marquee-track">
+              <div class="client-trust-testimonials__marquee-set">
+                {%- assign testimonial_slot = 0 -%}
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'testimonial' -%}
+                    {%- assign column_index = testimonial_slot | modulo: 3 -%}
+                    {%- if column_index == 0 -%}
+                      {%- render 'client-trust-testimonial-card', block: block, star_color: star_c -%}
+                    {%- endif -%}
+                    {%- assign testimonial_slot = testimonial_slot | plus: 1 -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              <div class="client-trust-testimonials__marquee-set" aria-hidden="true">
+                {%- assign testimonial_slot = 0 -%}
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'testimonial' -%}
+                    {%- assign column_index = testimonial_slot | modulo: 3 -%}
+                    {%- if column_index == 0 -%}
+                      {%- render 'client-trust-testimonial-card', block: block, star_color: star_c -%}
+                    {%- endif -%}
+                    {%- assign testimonial_slot = testimonial_slot | plus: 1 -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {%- comment -%} Column 2 — scroll down {%- endcomment -%}
+        <div class="client-trust-testimonials__column client-trust-testimonials__column--middle">
+          <div class="client-trust-testimonials__marquee">
+            <div class="client-trust-testimonials__marquee-track client-trust-testimonials__marquee-track--reverse">
+              <div class="client-trust-testimonials__marquee-set">
+                {%- assign testimonial_slot = 0 -%}
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'testimonial' -%}
+                    {%- assign column_index = testimonial_slot | modulo: 3 -%}
+                    {%- if column_index == 1 -%}
+                      {%- render 'client-trust-testimonial-card', block: block, star_color: star_c -%}
+                    {%- endif -%}
+                    {%- assign testimonial_slot = testimonial_slot | plus: 1 -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              <div class="client-trust-testimonials__marquee-set" aria-hidden="true">
+                {%- assign testimonial_slot = 0 -%}
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'testimonial' -%}
+                    {%- assign column_index = testimonial_slot | modulo: 3 -%}
+                    {%- if column_index == 1 -%}
+                      {%- render 'client-trust-testimonial-card', block: block, star_color: star_c -%}
+                    {%- endif -%}
+                    {%- assign testimonial_slot = testimonial_slot | plus: 1 -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {%- comment -%} Column 3 — scroll up {%- endcomment -%}
+        <div class="client-trust-testimonials__column client-trust-testimonials__column--outer">
+          <div class="client-trust-testimonials__marquee">
+            <div class="client-trust-testimonials__marquee-track">
+              <div class="client-trust-testimonials__marquee-set">
+                {%- assign testimonial_slot = 0 -%}
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'testimonial' -%}
+                    {%- assign column_index = testimonial_slot | modulo: 3 -%}
+                    {%- if column_index == 2 -%}
+                      {%- render 'client-trust-testimonial-card', block: block, star_color: star_c -%}
+                    {%- endif -%}
+                    {%- assign testimonial_slot = testimonial_slot | plus: 1 -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              <div class="client-trust-testimonials__marquee-set" aria-hidden="true">
+                {%- assign testimonial_slot = 0 -%}
+                {%- for block in section.blocks -%}
+                  {%- if block.type == 'testimonial' -%}
+                    {%- assign column_index = testimonial_slot | modulo: 3 -%}
+                    {%- if column_index == 2 -%}
+                      {%- render 'client-trust-testimonial-card', block: block, star_color: star_c -%}
+                    {%- endif -%}
+                    {%- assign testimonial_slot = testimonial_slot | plus: 1 -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{%- if layout_mode == 'slider' -%}
+  <script>
+    var clientTrustSectionId = 'ClientTrustTestimonials-{{ section.id }}';
+    var clientTrustGap = {{ section.settings.card_gap | default: 16 }};
+    var clientTrustShowArrows = {{ section.settings.show_slider_arrows | json }};
+    var clientTrustShowProgress = {{ section.settings.show_slider_dragger | json }};
+    var clientTrustMaxInitAttempts = 40;
+    var clientTrustInitRetryDelay = 120;
+
+    function updateClientTrustSliderProgress(swiper, progressEl) {
+      if (!progressEl) return;
+      var progress = typeof swiper.progress === 'number' && isFinite(swiper.progress) ? swiper.progress : 0;
+      var minFill = 0.08;
+      progressEl.style.transform = 'scaleX(' + (minFill + (1 - minFill) * progress) + ')';
+    }
+
+    function createClientTrustSwiper(sectionEl) {
+      var swiperEl = sectionEl.querySelector('[data-client-trust-swiper]');
+      if (!(swiperEl instanceof HTMLElement)) return;
+      if (swiperEl.dataset.swiperInitialized === 'true') return;
+
+      var prevEl = sectionEl.querySelector('[data-client-trust-swiper-prev]');
+      var nextEl = sectionEl.querySelector('[data-client-trust-swiper-next]');
+      var progressEl = sectionEl.querySelector('[data-client-trust-swiper-progress]');
+
+      new window.Swiper(swiperEl, {
+        slidesPerView: 1.08,
+        spaceBetween: clientTrustGap,
+        loop: false,
+        watchOverflow: true,
+        breakpoints: {
+          750: {
+            slidesPerView: 2,
+            spaceBetween: clientTrustGap
+          },
+          990: {
+            slidesPerView: 3,
+            spaceBetween: clientTrustGap
+          }
+        },
+        on: {
+          init: function (swiper) {
+            if (clientTrustShowProgress) updateClientTrustSliderProgress(swiper, progressEl);
+          },
+          progress: function (swiper) {
+            if (clientTrustShowProgress) updateClientTrustSliderProgress(swiper, progressEl);
+          },
+          slideChange: function (swiper) {
+            if (clientTrustShowProgress) updateClientTrustSliderProgress(swiper, progressEl);
+          },
+          resize: function (swiper) {
+            if (clientTrustShowProgress) updateClientTrustSliderProgress(swiper, progressEl);
+          }
+        },
+        navigation:
+          clientTrustShowArrows && prevEl && nextEl
+            ? {
+                prevEl: prevEl,
+                nextEl: nextEl
+              }
+            : undefined
+      });
+
+      swiperEl.dataset.swiperInitialized = 'true';
+    }
+
+    function initializeClientTrustSlider(attempt) {
+      var sectionEl = document.getElementById(clientTrustSectionId);
+      if (!sectionEl) return;
+
+      if (typeof window === 'undefined' || typeof window.Swiper !== 'function') {
+        if (attempt >= clientTrustMaxInitAttempts) return;
+        window.setTimeout(function () {
+          initializeClientTrustSlider(attempt + 1);
+        }, clientTrustInitRetryDelay);
+        return;
+      }
+
+      createClientTrustSwiper(sectionEl);
+    }
+
+    function onClientTrustSectionLoad(event) {
+      if (!event || !event.target) return;
+      if (!(event.target instanceof Element)) return;
+      if (event.target.id !== clientTrustSectionId) return;
+      initializeClientTrustSlider(0);
+    }
+
+    function bootClientTrustSlider() {
+      initializeClientTrustSlider(0);
+      document.addEventListener('shopify:section:load', onClientTrustSectionLoad);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bootClientTrustSlider, { once: true });
+    } else {
+      bootClientTrustSlider();
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Client trust testimonials",
+  "tag": "section",
+  "class": "section-client-trust-testimonials",
+  "settings": [
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why Our Clients Trust Us"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "animation_duration",
+      "min": 20,
+      "max": 90,
+      "step": 1,
+      "unit": "s",
+      "label": "Marquee loop duration",
+      "default": 45
+    },
+    {
+      "type": "select",
+      "id": "layout_mode",
+      "label": "Layout mode",
+      "options": [
+        { "value": "marquee", "label": "Marquee" },
+        { "value": "slider", "label": "Slider (Swiper)" }
+      ],
+      "default": "marquee"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_slider_arrows",
+      "label": "Show slider arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_slider_dragger",
+      "label": "Show slider dragger (scrollbar)",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "min": 8,
+      "max": 28,
+      "step": 2,
+      "unit": "px",
+      "label": "Space between cards",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#e6b800"
+    },
+    {
+      "type": "color",
+      "id": "card_background",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 56
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Customer review",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "avatar",
+          "label": "Profile photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Customer name",
+          "default": "Jenny W."
+        },
+        {
+          "type": "text",
+          "id": "verified_label",
+          "label": "Verified label",
+          "default": "Verified Buyer"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "label": "Star rating",
+          "default": 5
+        },
+        {
+          "type": "richtext",
+          "id": "quote",
+          "label": "Review text",
+          "default": "<p>Absolutely love this product! My hair feels so much softer and healthier after just one week of use.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Featured product"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "paragraph",
+          "content": "Choosing a product fills the name, image, and link automatically. Use the fields below only to override the storefront product."
+        },
+        {
+          "type": "image_picker",
+          "id": "product_image",
+          "label": "Product image (override)"
+        },
+        {
+          "type": "text",
+          "id": "product_title",
+          "label": "Product name (override)"
+        },
+        {
+          "type": "url",
+          "id": "product_link",
+          "label": "Product link (override)"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [
+    {
+      "name": "Client trust testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "name": "Jenny W.",
+            "quote": "<p>Absolutely love this product! My hair feels so much softer and healthier after just one week of use.</p>",
+            "product_title": "Detangling Hair Spray"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "name": "Marcus T.",
+            "quote": "<p>Great quality and fast shipping. Will definitely order again.</p>",
+            "product_title": "Daily Serum"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "name": "Sarah L.",
+            "quote": "<p>Finally found something that works for my sensitive skin. Highly recommend!</p>",
+            "product_title": "Gentle Cleanser"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "name": "David R.",
+            "quote": "<p>Clean ingredients and visible results. Worth every penny.</p>",
+            "product_title": "Night Cream"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "name": "Emma K.",
+            "quote": "<p>Smells amazing and absorbs quickly. A staple in my routine now.</p>",
+            "product_title": "Body Oil"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "name": "Alex P.",
+            "quote": "<p>Customer service was excellent and the product exceeded expectations.</p>",
+            "product_title": "Face Mist"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

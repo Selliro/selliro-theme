@@ -11,6 +11,10 @@
   "current": {
     "logo_height": 36,
     "logo_height_mobile": 28,
+    "social_facebook_link": "#",
+    "social_twitter_link": "#",
+    "social_instagram_link": "#",
+    "social_youtube_link": "#",
     "type_body_font": "dm_sans_n4",
     "type_subheading_font": "dm_sans_n4",
     "type_heading_font": "jost_n4",
@@ -197,7 +201,7 @@
       },
       "scheme-4": {
         "settings": {
-          "background": "#e1edf5",
+          "background": "#fad02c",
           "foreground_heading": "#000000",
           "foreground": "#000000cf",
           "primary": "#000000cf",

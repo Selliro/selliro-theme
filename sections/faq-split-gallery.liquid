@@ -1,0 +1,415 @@
+{% comment %}
+  FAQ with staggered image gallery — faq_entry blocks + section-level media.
+{% endcomment %}
+
+{{ 'section-faq-split-gallery.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'faq-split-gallery.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign title = section.settings.title
+  assign img_a = section.settings.gallery_image_tall
+  assign img_b = section.settings.gallery_image_front
+  assign expand_first = section.settings.expand_first_item
+  assign allow_collapse = section.settings.allow_collapse_active
+  assign gallery_first = false
+  if section.settings.column_layout == 'gallery_left'
+    assign gallery_first = true
+  endif
+  assign alt_a = title | default: 'Gallery image'
+  assign alt_b = title | default: 'Gallery image'
+  if img_a != blank and img_a.alt != blank
+    assign alt_a = img_a.alt
+  endif
+  if img_b != blank and img_b.alt != blank
+    assign alt_b = img_b.alt
+  endif
+  if section.settings.swap_gallery_images
+    assign left_image = img_b
+    assign right_image = img_a
+    assign left_alt = alt_b
+    assign right_alt = alt_a
+  else
+    assign left_image = img_a
+    assign right_image = img_b
+    assign left_alt = alt_a
+    assign right_alt = alt_b
+  endif
+
+  assign has_left_image = false
+  if left_image != blank
+    assign has_left_image = true
+  endif
+  assign has_right_image = false
+  if right_image != blank
+    assign has_right_image = true
+  endif
+  assign gallery_image_count = 0
+  if has_left_image
+    assign gallery_image_count = gallery_image_count | plus: 1
+  endif
+  if has_right_image
+    assign gallery_image_count = gallery_image_count | plus: 1
+  endif
+  assign show_gallery_column = false
+  if gallery_image_count > 0
+    assign show_gallery_column = true
+  endif
+  assign single_gallery_image = false
+  if gallery_image_count == 1
+    assign single_gallery_image = true
+  endif
+  if single_gallery_image
+    if has_left_image
+      assign solo_image = left_image
+      assign solo_alt = left_alt
+    else
+      assign solo_image = right_image
+      assign solo_alt = right_alt
+    endif
+  endif
+-%}
+
+<section
+  class="faq-split-gallery color-{{ section.settings.color_scheme }}"
+  id="FAQSplitGallery-{{ section.id }}"
+  {% if title != blank %}
+    aria-labelledby="FAQSplitGallery-heading-{{ section.id }}"
+  {% else %}
+    aria-label="{{ 'accessibility.faq_split_gallery' | t }}"
+  {% endif %}
+  style="
+    --fs-pad-top: {{ section.settings.padding_top }}px;
+    --fs-pad-bottom: {{ section.settings.padding_bottom }}px;
+    --fs-image-radius: {{ section.settings.image_radius }}px;
+    --faq-parallax-intensity: {{ section.settings.image_scroll_parallax }};
+  "
+>
+  <div class="section-container">
+    <div class="faq-split-gallery__inner{% if gallery_first %} faq-split-gallery__inner--media-first{% endif %}{% unless show_gallery_column %} faq-split-gallery__inner--faq-full{% endunless %}{% if single_gallery_image %} faq-split-gallery__inner--single-media{% endif %}">
+      <div class="faq-split-gallery__content">
+        {%- if title != blank -%}
+          <h2 class="faq-split-gallery__title" id="FAQSplitGallery-heading-{{ section.id }}">
+            {{ title | escape }}
+          </h2>
+        {%- endif -%}
+
+        <div
+          class="faq-split-gallery__accordion"
+          data-faq-split-root
+          data-allow-collapse="{% if allow_collapse %}true{% else %}false{% endif %}"
+          {% if title != blank %}
+            role="group"
+            aria-labelledby="FAQSplitGallery-heading-{{ section.id }}"
+          {% endif %}
+        >
+          {%- assign entry_index = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'faq_entry' -%}
+              {%- assign entry_index = entry_index | plus: 1 -%}
+              {%- assign is_open = false -%}
+              {%- if expand_first and entry_index == 1 -%}
+                {%- assign is_open = true -%}
+              {%- endif -%}
+              <div
+                class="faq-split-gallery__item{% if is_open %} is-open{% endif %}"
+                data-faq-item
+                {{ block.shopify_attributes }}
+              >
+                <button
+                  type="button"
+                  class="faq-split-gallery__trigger"
+                  data-faq-split-trigger
+                  id="FAQTrigger-{{ block.id }}"
+                  aria-expanded="{% if is_open %}true{% else %}false{% endif %}"
+                  aria-controls="FAQPanel-{{ block.id }}"
+                >
+                  <span class="visually-hidden faq-split-gallery__hint-expand">
+                    {{- 'accessibility.faq_expand_answer' | t -}}
+                  </span>
+                  <span class="visually-hidden faq-split-gallery__hint-collapse">
+                    {{- 'accessibility.faq_collapse_answer' | t -}}
+                  </span>
+                  <span class="faq-split-gallery__question">{{ block.settings.question | escape }}</span>
+                  <span class="faq-split-gallery__icon" aria-hidden="true">
+                    <svg
+                      class="faq-split-gallery__icon-svg faq-split-gallery__icon-svg--plus"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      focusable="false"
+                      aria-hidden="true"
+                    >
+                      {%- render 'icon', icon: 'faq-plus' -%}
+                    </svg>
+                    <svg
+                      class="faq-split-gallery__icon-svg faq-split-gallery__icon-svg--minus"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      focusable="false"
+                      aria-hidden="true"
+                    >
+                      {%- render 'icon', icon: 'faq-minus' -%}
+                    </svg>
+                  </span>
+                </button>
+                <div
+                  class="faq-split-gallery__panel"
+                  id="FAQPanel-{{ block.id }}"
+                  role="region"
+                  aria-labelledby="FAQTrigger-{{ block.id }}"
+                  {% unless is_open %}inert{% endunless %}
+                >
+                  <div class="faq-split-gallery__panel-inner">
+                    {%- if block.settings.answer != blank -%}
+                      <div class="faq-split-gallery__answer rte">{{ block.settings.answer }}</div>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {%- if show_gallery_column -%}
+        <div class="faq-split-gallery__media{% if single_gallery_image %} faq-split-gallery__media--single{% endif %}">
+          <div class="faq-split-gallery__media-stack{% if single_gallery_image %} faq-split-gallery__media-stack--single{% endif %}">
+            {%- if single_gallery_image -%}
+              <figure class="faq-split-gallery__figure faq-split-gallery__figure--single">
+                {{
+                  solo_image
+                  | image_url: width: 1600
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '400, 600, 800, 1000, 1200, 1600',
+                    sizes: '(min-width: 990px) 46vw, 100vw',
+                    alt: solo_alt,
+                    class: 'faq-split-gallery__img'
+                }}
+              </figure>
+            {%- else -%}
+              <figure class="faq-split-gallery__figure faq-split-gallery__figure--primary">
+                {{
+                  left_image
+                  | image_url: width: 900
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '360, 540, 720, 900',
+                    sizes: '(min-width: 990px) 22vw, 45vw',
+                    alt: left_alt,
+                    class: 'faq-split-gallery__img'
+                }}
+              </figure>
+              <figure class="faq-split-gallery__figure faq-split-gallery__figure--secondary">
+                {{
+                  right_image
+                  | image_url: width: 900
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '360, 540, 720, 900',
+                    sizes: '(min-width: 990px) 22vw, 45vw',
+                    alt: right_alt,
+                    class: 'faq-split-gallery__img'
+                }}
+              </figure>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FAQ split gallery",
+  "tag": "section",
+  "class": "section faq-split-gallery-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "column_layout",
+      "label": "FAQ and gallery position",
+      "options": [
+        {
+          "value": "faq_left",
+          "label": "FAQ left, gallery right"
+        },
+        {
+          "value": "gallery_left",
+          "label": "Gallery left, FAQ right"
+        }
+      ],
+      "default": "faq_left"
+    },
+    {
+      "type": "checkbox",
+      "id": "swap_gallery_images",
+      "label": "Swap left and right images",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 64
+    },
+    {
+      "type": "header",
+      "content": "Gallery images"
+    },
+    {
+      "type": "image_picker",
+      "id": "gallery_image_tall",
+      "label": "Left image",
+      "info": "Optional. Use one image to fill the gallery column, two for the side-by-side layout. Leave both empty for full-width FAQ only."
+    },
+    {
+      "type": "image_picker",
+      "id": "gallery_image_front",
+      "label": "Right image",
+      "info": "Optional. Add a second image for the staggered pair. If only this image is set, it fills the gallery column."
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Image corner radius",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "image_scroll_parallax",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Image scroll movement",
+      "default": 36,
+      "info": "Vertical translate (px) driven by scroll. Set to 0 to disable."
+    },
+    {
+      "type": "header",
+      "content": "Accordion behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "expand_first_item",
+      "label": "Open first question by default",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "allow_collapse_active",
+      "label": "Allow closing the active question (all can be closed)",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_entry",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Your question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Write a clear, helpful answer for your customers.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ split gallery",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "column_layout": "faq_left",
+        "swap_gallery_images": false,
+        "image_scroll_parallax": 36
+      },
+      "blocks": [
+        {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Dermatologist Approved",
+            "answer": "<p>Formulated and reviewed with dermatologists so you can trust what you put on your skin every day.</p>"
+          }
+        },
+        {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Hypoallergenic Formula",
+            "answer": "<p>Designed to minimize the risk of irritation for sensitive skin.</p>"
+          }
+        },
+        {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Eco-Friendly Ingredients",
+            "answer": "<p>We prioritize responsibly sourced ingredients and mindful packaging where possible.</p>"
+          }
+        },
+        {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Suitable For All Skin Types",
+            "answer": "<p>Balanced for everyday use across normal, dry, and combination skin.</p>"
+          }
+        },
+        {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Works on every skin type",
+            "answer": "<p>Our routine is built to layer cleanly and absorb without heaviness.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

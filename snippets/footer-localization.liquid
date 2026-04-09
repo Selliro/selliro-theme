@@ -1,0 +1,110 @@
+{%- doc -%}
+  Footer localization: language pill + country dropdown (globe + label) when both enabled.
+
+  @param {boolean} show_country
+  @param {boolean} show_language
+  @param {string} block_id - Unique id prefix (e.g. section.id)
+{%- enddoc -%}
+
+{%- liquid
+  assign country_label = localization.country.iso_code | upcase
+-%}
+
+{%- if show_language and show_country == false -%}
+  <div class="footer-main__localization-form-only">
+    {%- render 'localization-form',
+      show_country: false,
+      show_language: true,
+      localization_style: 'FooterLang',
+      block_id: block_id,
+      form_id: 'LocalizationForm-footer-' | append: block_id | append: '-lang'
+    -%}
+  </div>
+{%- elsif show_country and show_language == false -%}
+  <dropdown-localization-component class="footer-main__dropdown-localization footer-main__dropdown-localization--country">
+    <button
+      type="button"
+      class="footer-main__localization-toggle footer-main__localization-toggle--country button dropdown-localization__button localization-selector link link--text"
+      aria-expanded="false"
+      aria-controls="FooterLocPanel-country-{{ block_id }}"
+      ref="button"
+      on:click="/toggleSelector"
+    >
+      <span class="footer-main__globe" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M2 12h20M12 2a15 15 0 0 0 0 20M12 2a15 15 0 0 1 0 20"/>
+        </svg>
+      </span>
+      <span class="footer-main__country-label">{{ country_label }}</span>
+      <span class="visually-hidden">{{ 'accessibility.country_region' | t }}</span>
+      <span class="svg-wrapper icon-caret">
+        {{- 'icon-caret.svg' | inline_asset_content -}}
+      </span>
+    </button>
+    <div
+      id="FooterLocPanel-country-{{ block_id }}"
+      class="localization-wrapper right-bound color-{{ settings.popover_color_scheme }}"
+      hidden
+      ref="panel"
+    >
+      {%- render 'localization-form',
+        show_country: true,
+        show_language: false,
+        localization_style: 'dropdown',
+        block_id: block_id,
+        form_id: 'LocalizationForm-footer-' | append: block_id | append: '-country'
+      -%}
+    </div>
+  </dropdown-localization-component>
+{%- elsif show_country and show_language -%}
+  <div class="footer-main__localization-split">
+    <div class="footer-main__localization-pill footer-main__localization-pill--language">
+      {%- render 'localization-form',
+        show_country: false,
+        show_language: true,
+        localization_style: 'FooterLang',
+        block_id: block_id,
+        form_id: 'LocalizationForm-footer-' | append: block_id | append: '-lang'
+      -%}
+    </div>
+    <div class="footer-main__localization-pill footer-main__localization-pill--country">
+      <dropdown-localization-component class="footer-main__dropdown-localization footer-main__dropdown-localization--country">
+        <button
+          type="button"
+          class="footer-main__localization-toggle footer-main__localization-toggle--country button dropdown-localization__button localization-selector link link--text"
+          aria-expanded="false"
+          aria-controls="FooterLocPanel-country-{{ block_id }}"
+          ref="button"
+          on:click="/toggleSelector"
+        >
+          <span class="footer-main__globe" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M2 12h20M12 2a15 15 0 0 0 0 20M12 2a15 15 0 0 1 0 20"/>
+            </svg>
+          </span>
+          <span class="footer-main__country-label">{{ country_label }}</span>
+          <span class="visually-hidden">{{ 'accessibility.country_region' | t }}</span>
+          <span class="svg-wrapper icon-caret">
+            {{- 'icon-caret.svg' | inline_asset_content -}}
+          </span>
+        </button>
+        <div
+          id="FooterLocPanel-country-{{ block_id }}"
+          class="localization-wrapper right-bound color-{{ settings.popover_color_scheme }}"
+          hidden
+          ref="panel"
+        >
+          {%- render 'localization-form',
+            show_country: true,
+            show_language: false,
+            localization_style: 'dropdown',
+            block_id: block_id,
+            form_id: 'LocalizationForm-footer-' | append: block_id | append: '-country'
+          -%}
+        </div>
+      </dropdown-localization-component>
+    </div>
+  </div>
+{%- endif -%}

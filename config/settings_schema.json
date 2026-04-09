@@ -57,6 +57,35 @@
     ]
   },
   {
+    "name": "t:content.social_media",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "t:names.social_media_links"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook_link",
+        "label": "t:settings.social_facebook_link"
+      },
+      {
+        "type": "url",
+        "id": "social_twitter_link",
+        "label": "t:settings.social_twitter_link"
+      },
+      {
+        "type": "url",
+        "id": "social_instagram_link",
+        "label": "t:settings.social_instagram_link"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube_link",
+        "label": "t:settings.social_youtube_link"
+      }
+    ]
+  },
+  {
     "name": "t:names.colors",
     "settings": [
       {

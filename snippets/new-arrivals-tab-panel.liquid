@@ -1,0 +1,357 @@
+{% comment %}
+  New Arrivals Showcase — one tab: promo column + Swiper or CSS grid products.
+  @param block {block} — collection_tab or layout_placeholder
+  @param section {section}
+  @param tab_index {number}
+{% endcomment %}
+{%- liquid
+  assign collection = block.settings.collection
+  if block.type == 'layout_placeholder'
+    assign collection = blank
+  endif
+  assign na_promo_url = section.settings.promo_url
+  assign na_promo_url_blank = false
+  if na_promo_url == blank
+    assign na_promo_url_blank = true
+    assign na_promo_url = '#'
+  endif
+  assign show_promo = false
+  if section.settings.show_promotion
+    assign show_promo = true
+  endif
+  assign limit = section.settings.product_count | default: 12
+  assign accent = section.settings.cta_yellow | default: '#f5c518'
+  assign star_color = section.settings.star_color | default: '#e6b800'
+  assign new_days = section.settings.new_window_days | default: 45
+  assign now_ts = 'now' | date: '%s' | plus: 0
+
+  assign na_layout = section.settings.product_layout | default: 'slider'
+  assign na_use_grid = false
+  if na_layout == 'grid'
+    assign na_use_grid = true
+  endif
+  assign na_demo_slots = 4
+  if na_use_grid
+    assign na_demo_slots = 6
+  endif
+-%}
+<div
+  class="new-arrivals-showcase__panel{% if tab_index == 0 %} is-active{% endif %}{% if show_promo %} new-arrivals-showcase__panel--split{% endif %}"
+  data-new-arrivals-panel
+  role="tabpanel"
+  id="new-arrivals-panel-{{ section.id }}-{{ block.id }}"
+  aria-labelledby="new-arrivals-tab-{{ section.id }}-{{ block.id }}"
+  {% unless tab_index == 0 %}hidden{% endunless %}
+  {{ block.shopify_attributes }}
+>
+  <div class="new-arrivals-showcase__panel-inner{% if show_promo %} new-arrivals-showcase__panel-inner--split{% endif %}">
+    {%- if show_promo -%}
+      <aside class="new-arrivals-showcase__promo-aside" aria-label="{{ section.settings.promo_badge | escape }}">
+        {%- if na_use_grid -%}
+          <div class="new-arrivals-showcase__promo-sticky">
+        {%- endif -%}
+        <div class="new-arrivals-showcase__promo">
+          <a
+            class="new-arrivals-showcase__promo-media-link"
+            href="{{ na_promo_url }}"
+            {% if na_promo_url_blank %}aria-disabled="true"{% endif %}
+          >
+            <span class="new-arrivals-showcase__promo-label">{{ section.settings.promo_badge | escape }}</span>
+            <div class="new-arrivals-showcase__promo-picture">
+              {%- if section.settings.promo_image != blank -%}
+                {{
+                  section.settings.promo_image
+                  | image_url: width: 960
+                  | image_tag:
+                    loading: 'lazy',
+                    class: 'new-arrivals-showcase__promo-img',
+                    sizes: '(min-width: 990px) min(320px, 28vw), 92vw',
+                    widths: '400, 600, 960',
+                    alt: ''
+                }}
+              {%- else -%}
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'new-arrivals-showcase__promo-placeholder' }}
+              {%- endif -%}
+            </div>
+          </a>
+          <button
+            type="button"
+            class="new-arrivals-showcase__promo-btn"
+            style="--new-arrivals-cta: {{ accent }};"
+            {% if na_promo_url_blank %}
+              disabled
+              aria-disabled="true"
+            {% else %}
+              onclick="window.location.href = {{ section.settings.promo_url | json }}"
+            {% endif %}
+          >
+            {{ section.settings.promo_btn_text | escape }}
+          </button>
+        </div>
+        {%- if na_use_grid -%}
+          </div>
+        {%- endif -%}
+      </aside>
+    {%- endif -%}
+
+    <div class="new-arrivals-showcase__carousel{% if na_use_grid %} new-arrivals-showcase__carousel--mode-grid{% endif %}">
+      {%- if na_use_grid -%}
+        <div class="new-arrivals-showcase__grid" role="list">
+      {%- else -%}
+        <div class="new-arrivals-showcase__swiper swiper">
+          <div class="swiper-wrapper">
+      {%- endif -%}
+          {%- if collection != blank and collection.products_count > 0 -%}
+            {%- for product in collection.products limit: limit -%}
+              {%- liquid
+                assign is_new = false
+                assign created_ts = product.created_at | date: '%s' | plus: 0
+                assign age = now_ts | minus: created_ts
+                assign max_age = new_days | times: 86400
+                if age >= 0 and age < max_age
+                  assign is_new = true
+                endif
+                assign na_variant = false
+                for variant in product.variants
+                  if variant.available
+                    assign na_variant = variant
+                    break
+                  endif
+                endfor
+                assign na_qty = 1
+                if na_variant and na_variant.quantity_rule.min
+                  assign na_qty = na_variant.quantity_rule.min
+                endif
+                assign na_gallery_limit = 6
+                assign na_qv_url = product.url
+                if na_variant
+                  assign na_qv_url = na_variant.url
+                endif
+              -%}
+              <div class="{% if na_use_grid %}new-arrivals-showcase__grid-cell{% else %}swiper-slide new-arrivals-showcase__slide{% endif %}"{% if na_use_grid %} role="listitem"{% endif %}>
+                <new-arrivals-product-card class="new-arrivals-card{% if product.images.size > 1 %} new-arrivals-card--has-gallery{% endif %}">
+                  <div class="new-arrivals-card__inner">
+                    <div class="new-arrivals-card__media">
+                      <a
+                        class="new-arrivals-card__media-link"
+                        href="{{ product.url }}"
+                        aria-label="{{ product.title | escape }}"
+                      >
+                        <span class="new-arrivals-card__media-stack">
+                          {%- if product.featured_image != blank -%}
+                            {%- if product.images.size > 1 -%}
+                              <new-arrivals-product-gallery class="new-arrivals-card__gallery">
+                                <div class="new-arrivals-card__gallery-slides">
+                                  {%- for image in product.images limit: na_gallery_limit -%}
+                                    {%- assign img_alt = image.alt | default: product.title -%}
+                                    {%- liquid
+                                      assign na_gal_img_class = 'new-arrivals-card__gallery-img'
+                                      if forloop.first
+                                        assign na_gal_img_class = na_gal_img_class | append: ' is-active'
+                                      endif
+                                    -%}
+                                    <image-loader class="new-arrivals-card__gallery-slide">
+                                      {{
+                                        image
+                                        | image_url: width: 800
+                                        | image_tag:
+                                          loading: 'lazy',
+                                          class: na_gal_img_class,
+                                          sizes: '(min-width: 990px) 280px, 85vw',
+                                          widths: '200, 400, 600, 800',
+                                          alt: img_alt
+                                      }}
+                                    </image-loader>
+                                  {%- endfor -%}
+                                </div>
+                                <div class="new-arrivals-card__gallery-bar" aria-hidden="true">
+                                  {%- for image in product.images limit: na_gallery_limit -%}
+                                    <span
+                                      class="new-arrivals-card__gallery-bar-seg{% if forloop.first %} is-active{% endif %}"
+                                    ></span>
+                                  {%- endfor -%}
+                                </div>
+                              </new-arrivals-product-gallery>
+                            {%- else -%}
+                              {%- assign img_alt = product.featured_image.alt | default: product.title -%}
+                              <image-loader class="new-arrivals-card__primary-loader">
+                                {{
+                                  product.featured_image
+                                  | image_url: width: 800
+                                  | image_tag:
+                                    loading: 'lazy',
+                                    class: 'new-arrivals-card__img--primary',
+                                    sizes: '(min-width: 990px) 280px, 85vw',
+                                    widths: '200, 400, 600, 800',
+                                    alt: img_alt
+                                }}
+                              </image-loader>
+                            {%- endif -%}
+                          {%- else -%}
+                            {{ 'product-1' | placeholder_svg_tag: 'new-arrivals-card__img new-arrivals-card__img--placeholder new-arrivals-card__img--primary' }}
+                          {%- endif -%}
+                        </span>
+                        {%- if product.featured_image != blank and product.images.size <= 1 -%}
+                          <div class="new-arrivals-card__gallery-bar new-arrivals-card__gallery-bar--single" aria-hidden="true">
+                            <span class="new-arrivals-card__gallery-bar-seg is-active"></span>
+                          </div>
+                        {%- endif -%}
+                      </a>
+                      <button
+                        type="button"
+                        class="new-arrivals-card__quick-view"
+                        data-new-arrivals-quick-view
+                        data-na-quick-view-url="{{ na_qv_url | escape }}"
+                        data-product-title="{{ product.title | escape }}"
+                        {% if na_variant %}data-na-variant-id="{{ na_variant.id }}"{% endif %}
+                        aria-label="{{ 'content.quick_view' | t }}: {{ product.title | escape }}"
+                      >
+                        <span class="new-arrivals-card__quick-view-loader" aria-hidden="true"></span>
+                        <span class="svg-wrapper new-arrivals-card__quick-view-icon" aria-hidden="true">
+                          <svg
+                            class="icon icon-eye icon-sm"
+                            viewBox="0 0 20 20"
+                            stroke="currentColor"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            role="presentation"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              d="M18.3334 10C18.3334 12.0833 15.8334 16.6667 10 16.6667C4.16669 16.6667 1.66669 12.0833 1.66669 10C1.66669 7.91668 4.16669 3.33334 10 3.33334C15.8334 3.33334 18.3334 7.91668 18.3334 10Z"
+                            ></path>
+                            <path
+                              stroke-linecap="round"
+                              d="M12.5 10C12.5 11.3807 11.3807 12.5 10 12.5C8.61931 12.5 7.50002 11.3807 7.50002 10C7.50002 8.6193 8.61931 7.50001 10 7.50001C11.3807 7.50001 12.5 8.6193 12.5 10Z"
+                            ></path>
+                          </svg>
+                        </span>
+                      </button>
+                      <div class="new-arrivals-card__tags">
+                        {%- unless product.available -%}
+                          <span class="new-arrivals-card__tag new-arrivals-card__tag--soldout">{{ 'content.product_badge_sold_out' | t }}</span>
+                        {%- endunless -%}
+                        {%- if product.available and product.compare_at_price > product.price -%}
+                          <span class="new-arrivals-card__tag new-arrivals-card__tag--sale">{{ 'content.product_badge_sale' | t }}</span>
+                        {%- endif -%}
+                        {%- if product.available and is_new -%}
+                          <span class="new-arrivals-card__tag new-arrivals-card__tag--new">{{ section.settings.new_label | escape }}</span>
+                        {%- endif -%}
+                      </div>
+                      <div class="new-arrivals-card__quick-add">
+                        {%- if na_variant -%}
+                          <button
+                            type="button"
+                            class="new-arrivals-card__quick-add-btn"
+                            style="--new-arrivals-cta: {{ accent }}; --icon-stroke-width: 1.25px;"
+                            data-new-arrivals-add
+                            data-variant-id="{{ na_variant.id }}"
+                            data-product-id="{{ product.id }}"
+                            data-quantity="{{ na_qty }}"
+                          >
+                            <span class="svg-wrapper new-arrivals-card__quick-add-icon" aria-hidden="true">
+                              {{- 'icon-add-to-cart.svg' | inline_asset_content -}}
+                            </span>
+                            <span class="new-arrivals-card__quick-add-label">{{ section.settings.image_hover_cta | escape }}</span>
+                          </button>
+                        {%- else -%}
+                          <button type="button" class="new-arrivals-card__quick-add-btn" style="--new-arrivals-cta: {{ accent }};" disabled>
+                            <span class="new-arrivals-card__quick-add-label">{{ section.settings.image_hover_cta | escape }}</span>
+                          </button>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                    <div class="new-arrivals-card__body">
+                      {%- if product.type != blank -%}
+                        <p class="new-arrivals-card__type">{{ product.type | upcase }}</p>
+                      {%- endif -%}
+                      <h3 class="new-arrivals-card__title">
+                        <a href="{{ product.url }}">{{ product.title | escape }}</a>
+                      </h3>
+                      <div class="new-arrivals-card__prices">
+                        {%- if product.compare_at_price > product.price -%}
+                          <span class="new-arrivals-card__price new-arrivals-card__price--compare">{{ product.compare_at_price | money }}</span>
+                        {%- endif -%}
+                        <span class="new-arrivals-card__price new-arrivals-card__price--current">{{ product.price | money }}</span>
+                      </div>
+                      {%- liquid
+                        assign r = section.settings.fallback_stars | plus: 0
+                        assign rating_drop = product.metafields.reviews.rating.value
+                        if rating_drop != blank and rating_drop.rating != blank
+                          assign r = rating_drop.rating | plus: 0
+                        endif
+                        assign rf = r | floor
+                        if rf > 5
+                          assign rf = 5
+                        endif
+                      -%}
+                      <div class="new-arrivals-card__stars" style="--new-arrivals-star: {{ star_color }};" aria-hidden="true">
+                        {%- for si in (1..5) -%}
+                          <span class="new-arrivals-card__star{% if si <= rf %} is-on{% endif %}">★</span>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                  </div>
+                </new-arrivals-product-card>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for pi in (1..na_demo_slots) -%}
+              <div class="{% if na_use_grid %}new-arrivals-showcase__grid-cell{% else %}swiper-slide new-arrivals-showcase__slide{% endif %}"{% if na_use_grid %} role="listitem"{% endif %}>
+                <new-arrivals-product-card class="new-arrivals-card new-arrivals-card--sample">
+                  <div class="new-arrivals-card__inner">
+                    <div class="new-arrivals-card__media">
+                      <span class="new-arrivals-card__media-stack" aria-hidden="true">
+                        {{ 'product-1' | placeholder_svg_tag: 'new-arrivals-card__img new-arrivals-card__img--placeholder new-arrivals-card__img--primary' }}
+                      </span>
+                    </div>
+                    <div class="new-arrivals-card__body">
+                      <p class="new-arrivals-card__type">{{ section.settings.demo_type | escape }}</p>
+                      <h3 class="new-arrivals-card__title">{{ section.settings.demo_title | escape }}</h3>
+                      <div class="new-arrivals-card__prices">
+                        <span class="new-arrivals-card__price new-arrivals-card__price--compare">{{ 5800 | money }}</span>
+                        <span class="new-arrivals-card__price">{{ 3800 | money }}</span>
+                      </div>
+                      {%- assign df = section.settings.fallback_stars | floor | at_most: 5 -%}
+                      <div class="new-arrivals-card__stars" style="--new-arrivals-star: {{ star_color }};" aria-hidden="true">
+                        {%- for si in (1..5) -%}
+                          <span class="new-arrivals-card__star{% if si <= df %} is-on{% endif %}">★</span>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                  </div>
+                </new-arrivals-product-card>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+      {%- if na_use_grid -%}
+        </div>
+      {%- else -%}
+        </div>
+      </div>
+      {%- endif -%}
+
+      {%- unless na_use_grid -%}
+      <div class="new-arrivals-showcase__carousel-toolbar">
+        <div class="new-arrivals-showcase__scrollbar" aria-hidden="true">
+          <div class="new-arrivals-showcase__scrollbar-rail">
+            <div class="new-arrivals-showcase__scrollbar-thumb" data-new-arrivals-progress></div>
+          </div>
+        </div>
+        <div class="new-arrivals-showcase__carousel-arrows">
+          <button type="button" class="new-arrivals-showcase__carousel-arrow new-arrivals-showcase__carousel-arrow--prev" data-new-arrivals-prev aria-label="{{ 'accessibility.slideshow_previous' | t }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button type="button" class="new-arrivals-showcase__carousel-arrow new-arrivals-showcase__carousel-arrow--next" data-new-arrivals-next aria-label="{{ 'accessibility.slideshow_next' | t }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      {%- endunless -%}
+    </div>
+  </div>
+</div>

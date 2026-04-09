@@ -1,0 +1,75 @@
+{% comment %}
+  Decorative heading underlines for New arrivals showcase (Atlas-style scribbles).
+  @param {string} style - squiggle | wave | brush | double
+{% endcomment %}
+{%- liquid
+  assign scribble_style = style | default: 'squiggle'
+-%}
+{%- case scribble_style -%}
+  {%- when 'squiggle' -%}
+    <svg
+      class="new-arrivals-showcase__scribble-svg new-arrivals-showcase__scribble-svg--squiggle"
+      viewBox="-347 -30.1947 694 96.19"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="20"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        pathLength="1"
+        d="M-335,54 C-335,54 -171,-58 -194,-3 C-217,52 -224.1199951171875,73.552001953125 -127,11 C-68,-27 -137,50 -33,42 C31.43899917602539,37.042999267578125 147.14700317382812,-29.308000564575195 335,2"
+      />
+    </svg>
+  {%- when 'wave' -%}
+    <svg
+      class="new-arrivals-showcase__scribble-svg new-arrivals-showcase__scribble-svg--wave"
+      viewBox="0 0 320 56"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="14"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M8,36 C52,14 96,58 160,34 C224,10 268,48 312,28" />
+    </svg>
+  {%- when 'brush' -%}
+    <svg
+      class="new-arrivals-showcase__scribble-svg new-arrivals-showcase__scribble-svg--brush"
+      viewBox="0 0 340 72"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="22"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M12,44 C78,32 142,52 210,38 C248,30 288,34 328,40" />
+    </svg>
+  {%- when 'double' -%}
+    <svg
+      class="new-arrivals-showcase__scribble-svg new-arrivals-showcase__scribble-svg--double"
+      viewBox="0 0 320 64"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="10"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M10,22 C70,8 130,36 200,20 C240,10 280,18 310,14" />
+      <path pathLength="1" d="M14,42 C80,52 140,30 210,46 C250,54 290,44 306,48" />
+    </svg>
+{%- endcase -%}

@@ -1,0 +1,194 @@
+{% comment %}
+  Featured collection — one tab panel: optional left promo + Swiper product track.
+  @param collection @param section @param tab_index
+{% endcomment %}
+{%- liquid
+  assign show_promo = false
+  if tab_index == 0 and section.settings.show_promo_slide
+    assign show_promo = true
+  endif
+  assign limit = section.settings.products_limit | default: 12
+  assign yellow = section.settings.accent_yellow | default: '#f5c518'
+  assign star_c = section.settings.star_color | default: '#e6b800'
+  assign new_days = section.settings.new_badge_days | default: 45
+  assign now_ts = 'now' | date: '%s' | plus: 0
+-%}
+<div
+  class="fcc-panel{% if tab_index == 0 %} is-active{% endif %}{% if show_promo %} fcc-panel--with-promo{% endif %}"
+  data-fcc-panel
+  role="tabpanel"
+  id="fcc-panel-{{ section.id }}-{{ tab_index }}"
+  aria-labelledby="fcc-tab-{{ section.id }}-{{ tab_index }}"
+  {% unless tab_index == 0 %}hidden{% endunless %}
+>
+  <div class="fcc-panel__body{% if show_promo %} fcc-panel__body--split{% endif %}">
+    {%- if show_promo -%}
+      <aside class="fcc-panel__promo-col" aria-label="{{ section.settings.promo_badge | escape }}">
+        <a
+          class="fcc-promo"
+          href="{% if section.settings.promo_link != blank %}{{ section.settings.promo_link }}{% else %}#{% endif %}"
+          {% if section.settings.promo_link == blank %}aria-disabled="true"{% endif %}
+        >
+          <span class="fcc-promo__badge">{{ section.settings.promo_badge | escape }}</span>
+          <div class="fcc-promo__media">
+            {%- if section.settings.promo_image != blank -%}
+              {{
+                section.settings.promo_image
+                | image_url: width: 900
+                | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 280px, 90vw', widths: '400, 600, 900', class: 'fcc-promo__img', alt: ''
+              }}
+            {%- else -%}
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'fcc-promo__placeholder' }}
+            {%- endif -%}
+          </div>
+          <span class="fcc-promo__cta" style="--fcc-yellow: {{ yellow }};">{{ section.settings.promo_button_label | escape }}</span>
+        </a>
+      </aside>
+    {%- endif -%}
+
+    <div class="fcc-panel__track">
+      <div class="fcc-swiper swiper">
+        <div class="swiper-wrapper">
+          {%- if collection != blank and collection.products_count > 0 -%}
+            {%- for product in collection.products limit: limit -%}
+              {%- liquid
+                assign is_new = false
+                assign created_ts = product.created_at | date: '%s' | plus: 0
+                assign age = now_ts | minus: created_ts
+                assign max_age = new_days | times: 86400
+                if age >= 0 and age < max_age
+                  assign is_new = true
+                endif
+              -%}
+              <div class="swiper-slide fcc-slide">
+                <article class="fcc-card">
+                  <a class="fcc-card__link" href="{{ product.url }}" aria-label="{{ product.title | escape }}"></a>
+                  <div class="fcc-card__surface">
+                    <div class="fcc-card__media">
+                      {%- if product.featured_image != blank -%}
+                        {%- assign fcc_img_alt = product.featured_image.alt | default: product.title -%}
+                        {{
+                          product.featured_image
+                          | image_url: width: 600
+                          | image_tag:
+                            loading: 'lazy',
+                            class: 'fcc-card__img',
+                            sizes: '(min-width: 990px) 240px, 72vw',
+                            widths: '200, 400, 600',
+                            alt: fcc_img_alt
+                        }}
+                      {%- else -%}
+                        {{ 'product-1' | placeholder_svg_tag: 'fcc-card__img fcc-card__img--placeholder' }}
+                      {%- endif -%}
+                      <div class="fcc-card__badges">
+                        {%- unless product.available -%}
+                          <span class="fcc-badge fcc-badge--soldout">{{ 'content.product_badge_sold_out' | t }}</span>
+                        {%- endunless -%}
+                        {%- if product.available and is_new -%}
+                          <span class="fcc-badge fcc-badge--new">{{ section.settings.new_badge_label | default: 'New' | escape }}</span>
+                        {%- endif -%}
+                      </div>
+                      <a
+                        class="fcc-card__quick"
+                        href="{{ product.url }}"
+                        aria-label="{{ 'actions.add' | t }} — {{ product.title | escape }}"
+                      >
+                        <span class="fcc-card__quick-icon" aria-hidden="true">+</span>
+                      </a>
+                      <div class="fcc-card__hover">
+                        <span class="fcc-card__hover-btn" style="--fcc-yellow: {{ yellow }};">{{ section.settings.hover_cta_label | escape }}</span>
+                      </div>
+                    </div>
+                    <div class="fcc-card__info">
+                      {%- if product.type != blank -%}
+                        <p class="fcc-card__cat">{{ product.type | upcase }}</p>
+                      {%- endif -%}
+                      <h3 class="fcc-card__title">{{ product.title | escape }}</h3>
+                      <div class="fcc-card__price-row">
+                        {%- if product.compare_at_price > product.price -%}
+                          <span class="fcc-price fcc-price--compare">{{ product.compare_at_price | money }}</span>
+                        {%- endif -%}
+                        <span class="fcc-price">{{ product.price | money }}</span>
+                      </div>
+                      {%- liquid
+                        assign rating_val = section.settings.default_rating | plus: 0
+                        if product.metafields.reviews.rating.value.rating != blank
+                          assign rating_val = product.metafields.reviews.rating.value.rating | plus: 0
+                        endif
+                        assign full_stars = rating_val | floor
+                        if full_stars > 5
+                          assign full_stars = 5
+                        endif
+                      -%}
+                      <div class="fcc-stars" style="--fcc-star: {{ star_c }};" aria-hidden="true">
+                        {%- assign full = full_stars -%}
+                        {%- for i in (1..5) -%}
+                          <span class="fcc-star{% if i <= full %} is-full{% endif %}">★</span>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..4) -%}
+              <div class="swiper-slide fcc-slide">
+                <article class="fcc-card fcc-card--placeholder">
+                  <div class="fcc-card__surface">
+                    <div class="fcc-card__media">
+                      {{ 'product-1' | placeholder_svg_tag: 'fcc-card__img fcc-card__img--placeholder' }}
+                    </div>
+                    <div class="fcc-card__info">
+                      <p class="fcc-card__cat">{{ section.settings.placeholder_cat | escape }}</p>
+                      <h3 class="fcc-card__title">{{ section.settings.placeholder_title | escape }}</h3>
+                      <div class="fcc-card__price-row">
+                        <span class="fcc-price">{{ 1999 | money }}</span>
+                      </div>
+                      {%- assign ph_full = section.settings.default_rating | floor | at_most: 5 -%}
+                      <div class="fcc-stars" style="--fcc-star: {{ star_c }};" aria-hidden="true">
+                        {%- for star in (1..5) -%}
+                          <span class="fcc-star{% if star <= ph_full %} is-full{% endif %}">★</span>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="fcc-controls">
+        <div class="fcc-progress" aria-hidden="true">
+          <div class="fcc-progress__track">
+            <div class="fcc-progress__fill" data-fcc-progress-fill></div>
+          </div>
+        </div>
+        <div class="fcc-nav">
+          <button
+            type="button"
+            class="fcc-nav__btn fcc-nav__btn--prev"
+            data-fcc-prev
+            aria-label="{{ 'accessibility.slideshow_previous' | t }}"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="fcc-nav__btn fcc-nav__btn--next"
+            data-fcc-next
+            aria-label="{{ 'accessibility.slideshow_next' | t }}"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

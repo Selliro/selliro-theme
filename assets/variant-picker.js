@@ -60,9 +60,7 @@ export default class VariantPicker extends Component {
     this.dispatchEvent(new VariantSelectedEvent({ id: selectedOption.dataset.optionValueId ?? '' }));
 
     const isOnProductPage =
-      this.dataset.templateProductMatch === 'true' &&
-      !event.target.closest('product-card') &&
-      !event.target.closest('quick-add-dialog');
+      this.dataset.templateProductMatch === 'true' && !event.target.closest('product-card');
 
     // Morph the entire main content for combined listings child products, because changing the product
     // might also change other sections depending on recommendations, metafields, etc.

@@ -1,0 +1,34 @@
+{% comment %}
+  New Arrivals quick view drawer shell.
+  Content is injected by assets/new-arrivals-quick-view.js
+{% endcomment %}
+
+<div
+  id="new-arrivals-qv-drawer-{{ section.id }}"
+  class="na-qv-drawer"
+  data-na-qv-drawer
+  data-section-id="{{ section.id }}"
+  aria-hidden="true"
+>
+  <div class="na-qv-drawer__overlay" data-na-qv-close tabindex="-1"></div>
+  <aside
+    class="na-qv-drawer__panel color-{{ settings.drawer_color_scheme }}"
+    role="dialog"
+    aria-modal="true"
+    aria-label="{{ 'content.quick_view' | t }}"
+    tabindex="-1"
+  >
+    <header class="na-qv-drawer__header">
+      <h2 class="na-qv-drawer__heading h5">{{ 'content.quick_view' | t }}</h2>
+      <button
+        type="button"
+        class="na-qv-drawer__close button-unstyled"
+        data-na-qv-close
+        aria-label="{{ 'actions.close_dialog' | t }}"
+      >
+        <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+      </button>
+    </header>
+    <div class="na-qv-drawer__body" data-na-qv-content></div>
+  </aside>
+</div>
