@@ -1531,6 +1531,86 @@
         "color_scheme": "scheme-1"
       }
     },
+    "marquee_mfnK4d": {
+      "type": "marquee",
+      "blocks": {
+        "marquee_logo_ixACqr": {
+          "type": "marquee-logo",
+          "name": "Marquee logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-4_1.png",
+            "aspect_ratio": "4.5",
+            "max_height": 58,
+            "max_width": 232,
+            "link": ""
+          },
+          "blocks": {}
+        },
+        "marquee_logo_bVWEVM": {
+          "type": "marquee-logo",
+          "name": "Marquee logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-5_1.png",
+            "aspect_ratio": "4.5",
+            "max_height": 58,
+            "max_width": 262,
+            "link": ""
+          },
+          "blocks": {}
+        },
+        "marquee_logo_CLEGjB": {
+          "type": "marquee-logo",
+          "name": "Marquee logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-6_1.png",
+            "aspect_ratio": "4.5",
+            "max_height": 58,
+            "max_width": 262,
+            "link": ""
+          },
+          "blocks": {}
+        },
+        "marquee_logo_bP3eCV": {
+          "type": "marquee-logo",
+          "name": "Marquee logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-1_1.png",
+            "aspect_ratio": "4.5",
+            "max_height": 58,
+            "max_width": 262,
+            "link": ""
+          },
+          "blocks": {}
+        },
+        "marquee_logo_KGbMeD": {
+          "type": "marquee-logo",
+          "name": "Marquee logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-3_1.png",
+            "aspect_ratio": "4.5",
+            "max_height": 58,
+            "max_width": 262,
+            "link": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "marquee_logo_ixACqr",
+        "marquee_logo_bVWEVM",
+        "marquee_logo_CLEGjB",
+        "marquee_logo_bP3eCV",
+        "marquee_logo_KGbMeD"
+      ],
+      "name": "t:names.marquee_section",
+      "settings": {
+        "movement_direction": "normal",
+        "color_scheme": "scheme-2",
+        "padding-block-start": 24,
+        "padding-block-end": 24,
+        "gap_between_elements": 10
+      }
+    },
     "before_after_slider_CUEk9V": {
       "type": "before-after-slider",
       "name": "Before / after slider",
@@ -1799,6 +1879,8 @@
         "heading_alignment": "center",
         "animation_duration": 36,
         "layout_mode": "marquee",
+        "show_slider_arrows": true,
+        "show_slider_dragger": true,
         "card_gap": 16,
         "star_color": "#e6b800",
         "card_background": "#ffffff",
@@ -1816,6 +1898,7 @@
     "image_text_collage_bBArGe",
     "ticker_duo_UeLfnF",
     "featured_collection_grid_LHPfHM",
+    "marquee_mfnK4d",
     "before_after_slider_CUEk9V",
     "beauty_bundle_feature_RdWw6Q",
     "faq_split_gallery_LpzKU4",
