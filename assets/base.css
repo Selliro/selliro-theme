@@ -1396,7 +1396,7 @@ button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
 }
 
 .button-unstyled {
-  display: block;
+  display: absolute;
   padding: 0;
   background-color: inherit;
   color: inherit;
@@ -3359,6 +3359,15 @@ slideshow-container {
   container-type: inline-size;
 }
 
+/* Overlay arrows on media (out of flow so slides fill height; pointer-events:none passes drag to slides) */
+slideshow-component > slideshow-container > slideshow-arrows {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
 /*
  * Slideshow Controls
  */
@@ -3758,7 +3767,7 @@ slideshow-arrows {
   --cursor-previous: w-resize;
   --cursor-next: e-resize;
 
-  position: relative; 
+  position: relative;
   display: flex;
   z-index: var(--layer-heightened);
   pointer-events: none;
@@ -3820,8 +3829,9 @@ slideshow-arrows .slideshow-control.slideshow-control--style-none {
   opacity: 1;
 }
 
-:not(.media-gallery--carousel)
-  > :is(slideshow-component:hover, slideshow-component:focus-within):not(:has(slideshow-controls:hover))
+/* Descendant combinator: slideshow may sit under .section / wrappers, not only as direct child of :not() */
+.shopify-section:not(.media-gallery--carousel)
+  slideshow-component:is(:hover, :focus-within):not(:has(slideshow-controls:hover))
   > slideshow-container
   > slideshow-arrows
   .slideshow-control {

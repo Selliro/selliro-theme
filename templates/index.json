@@ -1536,7 +1536,7 @@
       "blocks": {
         "marquee_logo_ixACqr": {
           "type": "marquee-logo",
-          "name": "Marquee logo",
+          "name": "Brand logo",
           "settings": {
             "image": "shopify://shop_images/brand-4_1.png",
             "aspect_ratio": "4.5",
@@ -1548,7 +1548,7 @@
         },
         "marquee_logo_bVWEVM": {
           "type": "marquee-logo",
-          "name": "Marquee logo",
+          "name": "Brand logo",
           "settings": {
             "image": "shopify://shop_images/brand-5_1.png",
             "aspect_ratio": "4.5",
@@ -1560,7 +1560,7 @@
         },
         "marquee_logo_CLEGjB": {
           "type": "marquee-logo",
-          "name": "Marquee logo",
+          "name": "Brand logo",
           "settings": {
             "image": "shopify://shop_images/brand-6_1.png",
             "aspect_ratio": "4.5",
@@ -1572,7 +1572,7 @@
         },
         "marquee_logo_bP3eCV": {
           "type": "marquee-logo",
-          "name": "Marquee logo",
+          "name": "Brand logo",
           "settings": {
             "image": "shopify://shop_images/brand-1_1.png",
             "aspect_ratio": "4.5",
@@ -1584,7 +1584,7 @@
         },
         "marquee_logo_KGbMeD": {
           "type": "marquee-logo",
-          "name": "Marquee logo",
+          "name": "Brand logo",
           "settings": {
             "image": "shopify://shop_images/brand-3_1.png",
             "aspect_ratio": "4.5",
@@ -1604,8 +1604,11 @@
       ],
       "name": "t:names.marquee_section",
       "settings": {
+        "use_container": true,
+        "background_color": "#fad02c",
         "movement_direction": "normal",
-        "color_scheme": "scheme-2",
+        "show_fade": true,
+        "color_scheme": "scheme-58084d4c-a86e-4d0a-855e-a0966e5043f7",
         "padding-block-start": 24,
         "padding-block-end": 24,
         "gap_between_elements": 10

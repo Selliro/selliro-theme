@@ -74,9 +74,6 @@
 </aside>
 
 {% stylesheet %}
-  .announcement-bar {
-    /* border-block-end: var(--border-bottom-width) solid var(--color-border); */
-  }
 
   .announcement-bar__slider {
     display: flex;
@@ -100,10 +97,26 @@
     width: calc(100% - var(--button-size) * 2);
     max-width: 680px;
     margin-inline: auto;
+    position: relative;
+    min-height: var(--minimum-touch-target);
   }
 
   .announcement-bar__slides > * {
     grid-area: stack;
+  }
+
+  /* Absolutely overlay arrows so they align with slides and stay clickable (parent is positioning context) */
+  .announcement-bar__slides slideshow-arrows {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    box-sizing: border-box;
+  }
+
+  .announcement-bar__slides .announcement-bar__slide {
+    z-index: 0;
   }
 
   .announcement-bar__slide {

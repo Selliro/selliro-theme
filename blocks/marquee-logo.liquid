@@ -26,6 +26,8 @@
   class="marquee-logo-block"
   {% if image != blank %}
     style="--marquee-logo-max-height: {{ logo_max_h }}px; --marquee-logo-ar: {{ image_aspect_ratio }}; --marquee-logo-max-w: {{ logo_max_w }}px;"
+  {% else %}
+    style="--marquee-logo-max-height: {{ logo_max_h }}px; --marquee-logo-ar: 2.5; --marquee-logo-max-w: {{ logo_max_w }}px;"
   {% endif %}
   {{ block.shopify_attributes }}
 >
@@ -55,8 +57,22 @@
     {% else %}
       {{ logo_inner }}
     {% endif %}
-  {% elsif request.design_mode %}
-    <span class="marquee-logo-block__placeholder">Add an image</span>
+  {% else %}
+    <div class="marquee-logo-block__placeholder-inner">
+      <svg
+        class="marquee-logo-block__placeholder-icon"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <rect x="2.5" y="4.5" width="19" height="15" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.25"/>
+        <circle cx="8" cy="10" r="1.25" fill="currentColor"/>
+        <path d="M3 18 L9.5 11.5 L14 15.5 L21 8.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="visually-hidden">{{ 'blocks.marquee_logo.placeholder_a11y' | t }}</span>
+    </div>
   {% endif %}
 </div>
 
@@ -88,16 +104,41 @@
     object-fit: contain;
   }
 
-  .marquee-logo-block__placeholder {
-    opacity: 0.5;
+  .marquee-logo-block__placeholder-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    height: var(--marquee-logo-max-height, 58px);
+    width: min(
+      var(--marquee-logo-max-w, 320px),
+      max(2.5rem, calc(var(--marquee-logo-max-height, 72px) * var(--marquee-logo-ar, 2.5)))
+    );
+    max-width: 100%;
+    padding: 0.25rem;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-40));
+  }
+
+  .marquee-logo-block__placeholder-icon {
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  .marquee-logo-block__placeholder-hint {
     font-size: var(--font-size--small);
     white-space: nowrap;
+    opacity: 0.75;
+    line-height: 1.1;
+    text-align: center;
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Marquee logo",
+  "name": "Brand logo",
   "tag": null,
   "settings": [
     {
@@ -139,7 +180,7 @@
   ],
   "presets": [
     {
-      "name": "Marquee logo"
+      "name": "Brand logo"
     }
   ]
 }
