@@ -20,6 +20,7 @@
           "settings": {
             "text": "Shop our latest arrivals!",
             "link": "",
+            "icon_type": "custom",
             "icon_image": "shopify://shop_images/transport_1.png",
             "font": "var(--font-body--family)",
             "font_size": "0.75rem",
@@ -35,6 +36,7 @@
           "settings": {
             "text": "Shop our latest arrivals! 2",
             "link": "",
+            "icon_type": "custom",
             "icon_image": "shopify://shop_images/price-tag_1.png",
             "font": "var(--font-body--family)",
             "font_size": "0.75rem",
@@ -49,6 +51,7 @@
           "settings": {
             "text": "Welcome to our store",
             "link": "",
+            "icon_type": "custom",
             "icon_image": "shopify://shop_images/star.png",
             "font": "var(--font-subheading--family)",
             "font_size": "0.75rem",
@@ -62,8 +65,7 @@
       "block_order": [
         "announcement_EURP7f",
         "announcement_NBNfar",
-        "announcement_BxgCk9",
-        "announcement_QF3LRE"
+        "announcement_BxgCk9"
       ],
       "name": "t:names.announcement_bar",
       "settings": {
