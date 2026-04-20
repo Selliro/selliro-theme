@@ -17,9 +17,10 @@
         "logo_info": {
           "type": "logo_info",
           "settings": {
-            "logo": "shopify://shop_images/text_with_icon_img3.png",
-            "logo_2": "shopify://shop_images/text_with_icon_img4.png",
+            "logo": "shopify://shop_images/Footer_logo.svg",
+            "logo_2": "shopify://shop_images/Footer_logo.svg",
             "logo_width": 120,
+            "description": "Skincare powered by botanicals and backed by science—for healthy, radiant skin you can feel good about.",
             "copyright_show": true
           }
         },

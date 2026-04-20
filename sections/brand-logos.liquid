@@ -1,0 +1,298 @@
+{% comment %}
+  Brand logos — marquee with edge fades, or static row; blocks upload images and optional links.
+{% endcomment %}
+
+{{ 'section-brand-logos.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign pad_top = section.settings.padding_top | default: 48
+  assign pad_bottom = section.settings.padding_bottom | default: 48
+  assign logo_h = section.settings.logo_max_height | default: 56
+  assign logo_gap = section.settings.logo_gap | default: 28
+  assign layout_mode = section.settings.layout | default: 'marquee'
+  assign mobile_scroll = section.settings.mobile_scroll
+
+  assign justify_css = 'space-around'
+  case section.settings.logo_distribution
+    when 'space-between'
+      assign justify_css = 'space-between'
+    when 'center'
+      assign justify_css = 'center'
+    when 'evenly'
+      assign justify_css = 'space-evenly'
+    when 'start'
+      assign justify_css = 'flex-start'
+    when 'end'
+      assign justify_css = 'flex-end'
+    else
+      assign justify_css = 'space-around'
+  endcase
+
+  assign logo_count = 0
+  for block in section.blocks
+    if block.type == 'logo'
+      assign logo_count = logo_count | plus: 1
+    endif
+  endfor
+
+  assign marquee_duration = section.settings.marquee_speed | default: 45
+  assign edge_fade = section.settings.edge_fade_width | default: 80
+  assign pause_hover = section.settings.pause_on_hover
+
+  assign marquee_segments = section.settings.marquee_segments | default: 6
+  if marquee_segments < 2
+    assign marquee_segments = 2
+  endif
+  if marquee_segments > 12
+    assign marquee_segments = 12
+  endif
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="section section--{{ section.settings.section_width }} brand-logos color-{{ section.settings.color_scheme }}"
+  id="brand-logos-{{ section.id }}"
+  style="
+    --brand-logos-pad-top: {{ pad_top }}px;
+    --brand-logos-pad-bottom: {{ pad_bottom }}px;
+    --brand-logos-max-h: {{ logo_h }}px;
+    --brand-logos-gap: {{ logo_gap }}px;
+    --brand-logos-justify: {{ justify_css }};
+    --brand-logos-duration: {{ marquee_duration }}s;
+    --brand-logos-fade: {{ edge_fade }}px;
+    {% if layout_mode == 'marquee' %}
+      --brand-logos-marquee-segments: {{ marquee_segments }};
+    {% endif %}
+  "
+  {{ section.shopify_attributes }}
+>
+  <div class="brand-logos__inner section-container">
+    {%- if section.settings.heading != blank -%}
+      <header class="brand-logos__header">
+        <h2 class="brand-logos__title">{{ section.settings.heading | escape }}</h2>
+      </header>
+    {%- endif -%}
+
+    {%- if logo_count > 0 -%}
+      {%- if layout_mode == 'marquee' -%}
+        <div class="brand-logos__marquee{% if pause_hover %} brand-logos__marquee--pause-hover{% endif %}">
+          <div class="brand-logos__marquee-viewport">
+            <div class="brand-logos__track">
+              {%- render 'brand-logos-logo-row', section: section, marquee: true, marquee_segments: marquee_segments -%}
+            </div>
+          </div>
+        </div>
+      {%- else -%}
+        {%- render 'brand-logos-logo-row',
+          section: section,
+          marquee: false,
+          scroll_mobile: mobile_scroll,
+          duplicate: false
+        -%}
+      {%- endif -%}
+    {%- else -%}
+      <p class="brand-logos__empty">{{ 'sections.brand_logos.empty_state' | t }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:names.brand_logos",
+  "tag": "section",
+  "class": "section-brand-logos",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:settings.layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.section_width",
+      "options": [
+        { "value": "page-width", "label": "t:settings.page_width" },
+        { "value": "full-width", "label": "t:settings.full_width" }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:settings.padding_top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "t:settings.padding_bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "t:sections.brand-logos.settings.header_content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:settings.title",
+      "info": "t:sections.brand-logos.settings.heading_info"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.brand-logos.settings.layout",
+      "options": [
+        { "value": "marquee", "label": "t:sections.brand-logos.options.layout.marquee" },
+        { "value": "static", "label": "t:sections.brand-logos.options.layout.static" }
+      ],
+      "default": "marquee"
+    },
+    {
+      "type": "range",
+      "id": "marquee_speed",
+      "min": 15,
+      "max": 120,
+      "step": 5,
+      "unit": "s",
+      "label": "t:sections.brand-logos.settings.marquee_speed",
+      "default": 45,
+      "info": "t:sections.brand-logos.settings.marquee_speed_info",
+      "visible_if": "{{ section.settings.layout == 'marquee' }}"
+    },
+    {
+      "type": "range",
+      "id": "edge_fade_width",
+      "min": 32,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.brand-logos.settings.edge_fade_width",
+      "default": 80,
+      "info": "t:sections.brand-logos.settings.edge_fade_info",
+      "visible_if": "{{ section.settings.layout == 'marquee' }}"
+    },
+    {
+      "type": "range",
+      "id": "marquee_segments",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "t:sections.brand-logos.settings.marquee_segments",
+      "default": 6,
+      "info": "t:sections.brand-logos.settings.marquee_segments_info",
+      "visible_if": "{{ section.settings.layout == 'marquee' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "t:sections.brand-logos.settings.pause_on_hover",
+      "default": true,
+      "visible_if": "{{ section.settings.layout == 'marquee' }}"
+    },
+    {
+      "type": "range",
+      "id": "logo_max_height",
+      "min": 32,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.brand-logos.settings.logo_max_height",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "logo_gap",
+      "min": 8,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.brand-logos.settings.logo_gap",
+      "default": 28
+    },
+    {
+      "type": "select",
+      "id": "logo_distribution",
+      "label": "t:sections.brand-logos.settings.logo_distribution",
+      "options": [
+        { "value": "space-around", "label": "t:sections.brand-logos.options.distribution.space_around" },
+        { "value": "space-between", "label": "t:sections.brand-logos.options.distribution.space_between" },
+        { "value": "evenly", "label": "t:sections.brand-logos.options.distribution.evenly" },
+        { "value": "center", "label": "t:sections.brand-logos.options.distribution.center" }
+      ],
+      "default": "space-around",
+      "visible_if": "{{ section.settings.layout == 'static' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_scroll",
+      "label": "t:sections.brand-logos.settings.mobile_scroll",
+      "default": false,
+      "info": "t:sections.brand-logos.settings.mobile_scroll_info",
+      "visible_if": "{{ section.settings.layout == 'static' }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "t:sections.brand-logos.blocks.logo.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.brand-logos.blocks.logo.settings.image"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "t:sections.brand-logos.blocks.logo.settings.alt",
+          "info": "t:sections.brand-logos.blocks.logo.settings.alt_info"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.brand-logos.blocks.logo.settings.link"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_new_tab",
+          "label": "t:sections.brand-logos.blocks.logo.settings.open_new_tab",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [
+    {
+      "name": "t:names.brand_logos",
+      "settings": {
+        "layout": "marquee",
+        "marquee_segments": 6
+      },
+      "blocks": [
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

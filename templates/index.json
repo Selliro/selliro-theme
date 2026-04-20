@@ -625,7 +625,12 @@
         "tab_off_text": "#555555",
         "show_promotion": true,
         "promo_width_pct": 25,
-        "promo_image": "shopify://shop_images/young-woman-doing-her-morning-routine.png",
+        "promo_media_type": "video_upload",
+        "promo_video": "shopify://files/videos/product_video.mp4",
+        "promo_video_url": "",
+        "promo_video_autoplay": true,
+        "promo_video_loop": true,
+        "promo_video_controls": false,
         "promo_badge": "PROMOTION",
         "promo_btn_text": "Shop sale",
         "promo_url": "#",
@@ -1330,7 +1335,6 @@
         "section_width": "page-width",
         "media_position": "left",
         "show_text_column": true,
-        "image_1": "shopify://shop_images/latest_arrivals_prodcut_1_V4.png",
         "image_1_rotation": 5,
         "image_1_inset_top": 0,
         "image_1_inset_right": -1,
@@ -1776,7 +1780,7 @@
       "name": "FAQ split gallery",
       "settings": {
         "title": "Frequently Asked Questions",
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-2",
         "column_layout": "faq_left",
         "swap_gallery_images": false,
         "padding_top": 64,
@@ -1890,6 +1894,131 @@
         "padding_top": 56,
         "padding_bottom": 56
       }
+    },
+    "brand_logos_mNmXqd": {
+      "type": "brand-logos",
+      "blocks": {
+        "logo_g6MYwV": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-5_1.png",
+            "alt": "",
+            "link": "",
+            "open_new_tab": false
+          }
+        },
+        "logo_UqM3rw": {
+          "type": "logo",
+          "settings": {
+            "alt": "",
+            "link": "",
+            "open_new_tab": false
+          }
+        },
+        "logo_tJWmQk": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-3_1.png",
+            "alt": "",
+            "link": "",
+            "open_new_tab": false
+          }
+        },
+        "logo_RyYEm4": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-6_1.png",
+            "alt": "",
+            "link": "",
+            "open_new_tab": false
+          }
+        },
+        "logo_aYnHEm": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-4_1.png",
+            "alt": "",
+            "link": "",
+            "open_new_tab": false
+          }
+        },
+        "logo_99xzA4": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-1_1.png",
+            "alt": "",
+            "link": "",
+            "open_new_tab": false
+          }
+        },
+        "logo_nNAd4b": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/Logo_whispo.svg",
+            "alt": "",
+            "link": "",
+            "open_new_tab": false
+          }
+        },
+        "logo_HmdBEG": {
+          "type": "logo",
+          "settings": {
+            "alt": "",
+            "link": "",
+            "open_new_tab": false
+          }
+        }
+      },
+      "block_order": [
+        "logo_g6MYwV",
+        "logo_UqM3rw",
+        "logo_tJWmQk",
+        "logo_RyYEm4",
+        "logo_aYnHEm",
+        "logo_99xzA4",
+        "logo_nNAd4b",
+        "logo_HmdBEG"
+      ],
+      "name": "t:names.brand_logos",
+      "settings": {
+        "section_width": "page-width",
+        "color_scheme": "",
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "heading": "Brand Logos",
+        "layout": "marquee",
+        "marquee_speed": 45,
+        "edge_fade_width": 80,
+        "marquee_segments": 6,
+        "pause_on_hover": true,
+        "logo_max_height": 56,
+        "logo_gap": 28,
+        "logo_distribution": "space-around",
+        "mobile_scroll": false
+      }
+    },
+    "featured_blog_posts_8riExY": {
+      "type": "featured-blog-posts",
+      "name": "Featured blog posts",
+      "settings": {
+        "blog": "news",
+        "heading": "Latest Stories",
+        "layout_mode": "split",
+        "grid_columns": 3,
+        "mobile_columns": "1",
+        "carousel_card_min": 16,
+        "post_limit": 3,
+        "card_gap": 24,
+        "show_tags": true,
+        "show_excerpt": true,
+        "show_comments": true,
+        "show_view_all": true,
+        "view_all_text": "View All Posts",
+        "section_width": "page-width",
+        "color_scheme": "",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
@@ -1905,6 +2034,8 @@
     "before_after_slider_CUEk9V",
     "beauty_bundle_feature_RdWw6Q",
     "faq_split_gallery_LpzKU4",
-    "client_trust_testimonials_D4AhAL"
+    "client_trust_testimonials_D4AhAL",
+    "brand_logos_mNmXqd",
+    "featured_blog_posts_8riExY"
   ]
 }

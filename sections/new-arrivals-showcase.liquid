@@ -243,9 +243,66 @@
       "default": 26
     },
     {
+      "type": "select",
+      "id": "promo_media_type",
+      "label": "t:sections.new-arrivals-showcase.settings.promo_media_type.label",
+      "info": "t:sections.new-arrivals-showcase.settings.promo_media_type.info",
+      "options": [
+        {
+          "value": "image",
+          "label": "t:sections.new-arrivals-showcase.options.promo_media.image"
+        },
+        {
+          "value": "video_upload",
+          "label": "t:sections.new-arrivals-showcase.options.promo_media.video_upload"
+        },
+        {
+          "value": "video_embed",
+          "label": "t:sections.new-arrivals-showcase.options.promo_media.video_embed"
+        }
+      ],
+      "default": "image"
+    },
+    {
       "type": "image_picker",
       "id": "promo_image",
-      "label": "t:sections.new-arrivals-showcase.settings.promo_image"
+      "label": "t:sections.new-arrivals-showcase.settings.promo_image",
+      "visible_if": "{{ section.settings.promo_media_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "promo_video",
+      "label": "t:sections.new-arrivals-showcase.settings.promo_video",
+      "visible_if": "{{ section.settings.promo_media_type == 'video_upload' }}"
+    },
+    {
+      "type": "video_url",
+      "id": "promo_video_url",
+      "label": "t:sections.new-arrivals-showcase.settings.promo_video_url.label",
+      "info": "t:sections.new-arrivals-showcase.settings.promo_video_url.info",
+      "accept": ["youtube", "vimeo"],
+      "visible_if": "{{ section.settings.promo_media_type == 'video_embed' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "promo_video_autoplay",
+      "label": "t:sections.new-arrivals-showcase.settings.promo_video_autoplay",
+      "default": true,
+      "visible_if": "{{ section.settings.promo_media_type == 'video_upload' or section.settings.promo_media_type == 'video_embed' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "promo_video_loop",
+      "label": "t:sections.new-arrivals-showcase.settings.promo_video_loop",
+      "default": true,
+      "visible_if": "{{ section.settings.promo_media_type == 'video_upload' or section.settings.promo_media_type == 'video_embed' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "promo_video_controls",
+      "label": "t:sections.new-arrivals-showcase.settings.promo_video_controls",
+      "default": false,
+      "visible_if": "{{ section.settings.promo_media_type == 'video_upload' or section.settings.promo_media_type == 'video_embed' }}"
     },
     {
       "type": "text",

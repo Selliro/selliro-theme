@@ -315,6 +315,14 @@
     "blog_post_date": "Date",
     "blog_post_description": "An excerpt of your blog post's content"
   },
+  "sections": {
+    "brand_logos": {
+      "empty_state": "Add logo blocks and upload images to display brand marks."
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Add at least one collection tab to display products."
+    }
+  },
   "products": {
     "product": {
       "add_to_cart": "Add to cart",
