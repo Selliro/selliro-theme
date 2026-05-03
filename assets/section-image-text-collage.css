@@ -355,3 +355,75 @@
     transform: none;
   }
 }
+
+/* --- Rotating "Explore More" circular badge --- */
+.itc-badge {
+  position: absolute;
+  top: 50%;
+  left: 42%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: clamp(116px, 18%, 152px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #f2c419;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: default;
+}
+
+a.itc-badge {
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+a.itc-badge:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.itc-badge__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: #1a1a1a;
+  animation: itc-badge-spin 9s linear infinite;
+}
+
+.itc-badge__center {
+  position: relative;
+  z-index: 1;
+  width: 46%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.itc-badge__arrow {
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.05em;
+}
+
+@keyframes itc-badge-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .itc-badge__ring {
+    animation: none;
+  }
+}

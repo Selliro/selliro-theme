@@ -12,16 +12,34 @@
   --footer-main-muted: rgb(255 255 255 / 0.68);
   --footer-main-accent: #f5c518;
   position: relative;
+  z-index: 2;
   background: var(--footer-main-bg);
   color: var(--footer-main-fg);
-  border-radius: 0;
+  border-radius: 0 0 24px 24px;
   margin-top: 0;
 }
 
 .footer__content-bottom {
+  position: relative;
+  z-index: 1;
   width: 100%;
   border-radius: 0;
-  border-top: 1px solid rgb(255 255 255 / 0.08);
+  border-top: none;
+}
+
+/* Extends 24px upward (= border-radius of .footer-main) behind the rounded corners,
+   filling the transparent corner areas with the bottom bar's own background (#333). */
+.footer__content-bottom::before {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  inset-block-start: auto;
+  inset-block-end: 0;
+  inset-inline: 0;
+  width: 100%;
+  height: calc(100% + 24px);
+  background-color: #333333;
+  z-index: -1;
 }
 
 .footer__content-bottom .footer-main__inner {
@@ -425,11 +443,11 @@
 
 .footer-main__newsletter-title {
   margin: 0 0 0.85rem;
-  font-family: var(--font-body--family, system-ui, sans-serif);
-  font-size: clamp(0.875rem, 1.5vw, 1rem);
-  font-weight: 600;
-  line-height: 1.4;
-  letter-spacing: 0.02em;
+  font-family: var(--font-heading--family, system-ui, sans-serif);
+  font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
   color: var(--footer-main-fg);
 }
 
@@ -466,8 +484,10 @@
   color: rgb(255 255 255 / 0.55);
 }
 
+.footer-main__email-input:hover,
 .footer-main__email-input:focus {
   outline: none;
+  background: transparent;
 }
 
 .footer-main__subscribe-btn {
@@ -551,47 +571,47 @@
 .footer-main__social-link svg {
   width: 1rem;
   height: 1rem;
+  fill: currentColor;
+  color: #fff;
 }
 
-/* Scroll-into-view reveal + light parallax (--footer-parallax-y on .footer-reveal, applied to inner panels only — transform on the sticky element would break position:sticky) */
-.footer-reveal {
-  --footer-parallax-y: 0px;
-  position: sticky;
-  bottom: 0;
-  z-index: var(--layer-sticky, 8);
-  width: 100%;
+/* =====================================================
+   STICKY FOOTER REVEAL
+   Footer is fixed at viewport bottom (z-index 0).
+   Main content (z-index 1 + background) scrolls over it.
+   JS sets body padding-bottom = footer height so the
+   page stays fully scrollable and the footer is revealed
+   once all page content has scrolled away.
+   ===================================================== */
+.shopify-section-group-footer-group {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .footer-reveal:not(.footer-reveal--visible) .footer-main,
-  .footer-reveal:not(.footer-reveal--visible) .footer__content-bottom {
-    opacity: 0;
-    transform: translate3d(0, 36px, 0);
-  }
-
-  .footer-reveal.footer-reveal--visible .footer-main,
-  .footer-reveal.footer-reveal--visible .footer__content-bottom {
-    opacity: 1;
-    transform: translate3d(0, var(--footer-parallax-y, 0px), 0);
-    transition:
-      opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .footer-reveal.footer-reveal--visible .footer__content-bottom {
-    transition-delay: 0.1s;
-  }
+#MainContent {
+  position: relative;
+  z-index: 1;
+  background-color: var(--color-background, #fff);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .footer-reveal:not(.footer-reveal--visible) .footer-main,
-  .footer-reveal:not(.footer-reveal--visible) .footer__content-bottom {
-    opacity: 1;
-    transform: none;
-  }
+#header-group {
+  position: relative;
+  z-index: 10;
+}
 
-  .footer-reveal .footer-main,
-  .footer-reveal .footer__content-bottom {
-    transition: none;
-  }
+/* Disable reveal effect in the Shopify theme editor */
+.shopify-design-mode .shopify-section-group-footer-group {
+  position: static !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  width: auto !important;
+}
+
+.shopify-design-mode body {
+  padding-bottom: 0 !important;
 }

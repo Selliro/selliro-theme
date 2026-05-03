@@ -625,7 +625,12 @@
         "tab_off_text": "#555555",
         "show_promotion": true,
         "promo_width_pct": 25,
-        "promo_image": "shopify://shop_images/young-woman-doing-her-morning-routine.png",
+        "promo_media_type": "video_upload",
+        "promo_video": "shopify://files/videos/product_video.mp4",
+        "promo_video_url": "",
+        "promo_video_autoplay": true,
+        "promo_video_loop": true,
+        "promo_video_controls": false,
         "promo_badge": "PROMOTION",
         "promo_btn_text": "Shop sale",
         "promo_url": "#",
@@ -1330,7 +1335,7 @@
         "section_width": "page-width",
         "media_position": "left",
         "show_text_column": true,
-        "image_1": "shopify://shop_images/latest_arrivals_prodcut_1_V4.png",
+        "image_1": "shopify://shop_images/Rectangle_19739.png",
         "image_1_rotation": 5,
         "image_1_inset_top": 0,
         "image_1_inset_right": -1,
@@ -1531,89 +1536,6 @@
         "color_scheme": "scheme-1"
       }
     },
-    "marquee_mfnK4d": {
-      "type": "marquee",
-      "blocks": {
-        "marquee_logo_ixACqr": {
-          "type": "marquee-logo",
-          "name": "Brand logo",
-          "settings": {
-            "image": "shopify://shop_images/brand-4_1.png",
-            "aspect_ratio": "4.5",
-            "max_height": 58,
-            "max_width": 232,
-            "link": ""
-          },
-          "blocks": {}
-        },
-        "marquee_logo_bVWEVM": {
-          "type": "marquee-logo",
-          "name": "Brand logo",
-          "settings": {
-            "image": "shopify://shop_images/brand-5_1.png",
-            "aspect_ratio": "4.5",
-            "max_height": 58,
-            "max_width": 262,
-            "link": ""
-          },
-          "blocks": {}
-        },
-        "marquee_logo_CLEGjB": {
-          "type": "marquee-logo",
-          "name": "Brand logo",
-          "settings": {
-            "image": "shopify://shop_images/brand-6_1.png",
-            "aspect_ratio": "4.5",
-            "max_height": 58,
-            "max_width": 262,
-            "link": ""
-          },
-          "blocks": {}
-        },
-        "marquee_logo_bP3eCV": {
-          "type": "marquee-logo",
-          "name": "Brand logo",
-          "settings": {
-            "image": "shopify://shop_images/brand-1_1.png",
-            "aspect_ratio": "4.5",
-            "max_height": 58,
-            "max_width": 262,
-            "link": ""
-          },
-          "blocks": {}
-        },
-        "marquee_logo_KGbMeD": {
-          "type": "marquee-logo",
-          "name": "Brand logo",
-          "settings": {
-            "image": "shopify://shop_images/brand-3_1.png",
-            "aspect_ratio": "4.5",
-            "max_height": 58,
-            "max_width": 262,
-            "link": ""
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "marquee_logo_ixACqr",
-        "marquee_logo_bVWEVM",
-        "marquee_logo_CLEGjB",
-        "marquee_logo_bP3eCV",
-        "marquee_logo_KGbMeD"
-      ],
-      "name": "t:names.marquee_section",
-      "settings": {
-        "use_container": true,
-        "background_color": "#fad02c",
-        "movement_direction": "normal",
-        "show_fade": true,
-        "color_scheme": "scheme-58084d4c-a86e-4d0a-855e-a0966e5043f7",
-        "padding-block-start": 24,
-        "padding-block-end": 24,
-        "gap_between_elements": 10
-      }
-    },
     "before_after_slider_CUEk9V": {
       "type": "before-after-slider",
       "name": "Before / after slider",
@@ -1643,6 +1565,30 @@
         "color_scheme": "",
         "padding_top": 64,
         "padding_bottom": 64
+      }
+    },
+    "reveal_image_yFL9GW": {
+      "type": "reveal-image",
+      "name": "Reveal image",
+      "settings": {
+        "media_type": "image",
+        "image": "shopify://shop_images/high-angle-jar-bowl-with-salt.png",
+        "video_url": "",
+        "heading": "Discover the Collection",
+        "subheading": "Crafted with intention. Worn with purpose.",
+        "button_label": "Shop Now",
+        "button_url": "",
+        "button_style": "outline_light",
+        "section_height": "large",
+        "text_position": "center",
+        "text_vertical": "bottom",
+        "section_width": "full-width",
+        "border_radius": 0,
+        "overlay_opacity": 35,
+        "reveal_style": "clip_expand",
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "beauty_bundle_feature_RdWw6Q": {
@@ -1776,7 +1722,7 @@
       "name": "FAQ split gallery",
       "settings": {
         "title": "Frequently Asked Questions",
-        "color_scheme": "scheme-1",
+        "color_scheme": "scheme-2",
         "column_layout": "faq_left",
         "swap_gallery_images": false,
         "padding_top": 64,
@@ -1890,6 +1836,116 @@
         "padding_top": 56,
         "padding_bottom": 56
       }
+    },
+    "marquee_xXM4Hr": {
+      "type": "marquee",
+      "blocks": {
+        "marquee_logo_3KGgfn": {
+          "type": "marquee-logo",
+          "name": "Brand logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-1_1.png",
+            "aspect_ratio": "",
+            "max_height": 58,
+            "max_width": 262,
+            "link": ""
+          },
+          "blocks": {}
+        },
+        "marquee_logo_xiXdgQ": {
+          "type": "marquee-logo",
+          "name": "Brand logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-4_1.png",
+            "aspect_ratio": "",
+            "max_height": 58,
+            "max_width": 262,
+            "link": ""
+          },
+          "blocks": {}
+        },
+        "marquee_logo_bUPeWH": {
+          "type": "marquee-logo",
+          "name": "Brand logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-3_1.png",
+            "aspect_ratio": "",
+            "max_height": 58,
+            "max_width": 262,
+            "link": ""
+          },
+          "blocks": {}
+        },
+        "marquee_logo_Am6GCb": {
+          "type": "marquee-logo",
+          "name": "Brand logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-5_1.png",
+            "aspect_ratio": "",
+            "max_height": 58,
+            "max_width": 262,
+            "link": ""
+          },
+          "blocks": {}
+        },
+        "marquee_logo_tPPTnx": {
+          "type": "marquee-logo",
+          "name": "Brand logo",
+          "settings": {
+            "image": "shopify://shop_images/brand-6_1.png",
+            "aspect_ratio": "",
+            "max_height": 58,
+            "max_width": 262,
+            "link": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "marquee_logo_3KGgfn",
+        "marquee_logo_xiXdgQ",
+        "marquee_logo_bUPeWH",
+        "marquee_logo_Am6GCb",
+        "marquee_logo_tPPTnx"
+      ],
+      "name": "t:names.marquee_section",
+      "settings": {
+        "use_container": true,
+        "background_color": "#d4d4d4",
+        "movement_direction": "reverse",
+        "show_fade": true,
+        "color_scheme": "",
+        "padding-block-start": 24,
+        "padding-block-end": 24,
+        "gap_between_elements": 24
+      }
+    },
+    "featured_blog_posts_8riExY": {
+      "type": "featured-blog-posts",
+      "name": "Featured blog posts",
+      "settings": {
+        "blog": "news",
+        "heading": "Latest Stories",
+        "layout_mode": "carousel",
+        "grid_columns": 3,
+        "mobile_columns": "2",
+        "mobile_slides_per_view": "1.1",
+        "tablet_slides_per_view": "2.1",
+        "desktop_slides_per_view": "3",
+        "mobile_space_between": 16,
+        "carousel_card_min": 16,
+        "post_limit": 4,
+        "card_gap": 24,
+        "show_tags": true,
+        "show_excerpt": true,
+        "show_comments": true,
+        "show_view_all": true,
+        "view_all_text": "View All Posts",
+        "section_width": "page-width",
+        "color_scheme": "",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
@@ -1901,10 +1957,12 @@
     "image_text_collage_bBArGe",
     "ticker_duo_UeLfnF",
     "featured_collection_grid_LHPfHM",
-    "marquee_mfnK4d",
     "before_after_slider_CUEk9V",
+    "reveal_image_yFL9GW",
     "beauty_bundle_feature_RdWw6Q",
     "faq_split_gallery_LpzKU4",
-    "client_trust_testimonials_D4AhAL"
+    "client_trust_testimonials_D4AhAL",
+    "marquee_xXM4Hr",
+    "featured_blog_posts_8riExY"
   ]
 }

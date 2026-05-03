@@ -7,8 +7,8 @@
 .faq-split-gallery {
   padding-top: var(--fs-pad-top, 64px);
   padding-bottom: var(--fs-pad-bottom, 64px);
-  background-color: var(--color-background);
   color: var(--color-foreground);
+  background-color: transparent;
 }
 
 .faq-split-gallery__inner {

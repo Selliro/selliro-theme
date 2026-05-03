@@ -1,5 +1,5 @@
 /**
- * New Arrivals Showcase — tabbed Swipers (window.Swiper from fcc-swiper-bundle.min.js).
+ * New Arrivals Showcase — tabbed Swipers (window.Swiper from swiper-bundle.min.js).
  * Gallery scrub + indicators: new-arrivals-product-gallery (new-arrivals-components.js).
  */
 (function () {

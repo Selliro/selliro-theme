@@ -18,15 +18,14 @@
           "type": "_announcement",
           "name": "t:names.announcement",
           "settings": {
-            "text": "Shop our latest arrivals!",
+            "text": "Biggest Sale of the Year! Up to 60% OFF - BLACKFRIDAY",
             "link": "",
-            "icon_type": "custom",
-            "icon_image": "shopify://shop_images/transport_1.png",
+            "icon_type": "none",
             "font": "var(--font-body--family)",
-            "font_size": "0.75rem",
-            "weight": "",
-            "letter_spacing": "tight",
-            "case": "none"
+            "font_size": "0.875rem",
+            "weight": "700",
+            "letter_spacing": "normal",
+            "case": "uppercase"
           },
           "blocks": {}
         },
@@ -34,30 +33,44 @@
           "type": "_announcement",
           "name": "t:names.announcement",
           "settings": {
-            "text": "Shop our latest arrivals! 2",
+            "text": "",
             "link": "",
             "icon_type": "custom",
-            "icon_image": "shopify://shop_images/price-tag_1.png",
+            "icon_image": "shopify://shop_images/transport_1.png",
             "font": "var(--font-body--family)",
-            "font_size": "0.75rem",
-            "weight": "",
-            "letter_spacing": "tight",
-            "case": "none"
+            "font_size": "0.875rem",
+            "weight": "700",
+            "letter_spacing": "normal",
+            "case": "uppercase"
           },
           "blocks": {}
         },
         "announcement_BxgCk9": {
           "type": "_announcement",
           "settings": {
-            "text": "Welcome to our store",
+            "text": "Free shipping over $40",
+            "link": "",
+            "icon_type": "none",
+            "font": "var(--font-body--family)",
+            "font_size": "0.875rem",
+            "weight": "700",
+            "letter_spacing": "normal",
+            "case": "uppercase"
+          },
+          "blocks": {}
+        },
+        "announcement_pricetag": {
+          "type": "_announcement",
+          "settings": {
+            "text": "",
             "link": "",
             "icon_type": "custom",
-            "icon_image": "shopify://shop_images/star.png",
-            "font": "var(--font-subheading--family)",
-            "font_size": "0.75rem",
-            "weight": "",
-            "letter_spacing": "tight",
-            "case": "none"
+            "icon_image": "shopify://shop_images/price-tag_1.png",
+            "font": "var(--font-body--family)",
+            "font_size": "0.875rem",
+            "weight": "700",
+            "letter_spacing": "normal",
+            "case": "uppercase"
           },
           "blocks": {}
         }
@@ -65,16 +78,17 @@
       "block_order": [
         "announcement_EURP7f",
         "announcement_NBNfar",
-        "announcement_BxgCk9"
+        "announcement_BxgCk9",
+        "announcement_pricetag"
       ],
       "name": "t:names.announcement_bar",
       "settings": {
         "animation_style": "marquee",
-        "marquee_direction": "reverse",
+        "marquee_direction": "normal",
         "speed": 7,
         "section_width": "full-width",
         "color_scheme": "scheme-4",
-        "divider_width": 2,
+        "divider_width": 0,
         "padding-block-start": 10,
         "padding-block-end": 10
       }

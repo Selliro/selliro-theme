@@ -123,11 +123,6 @@
     "sold_out": "Sold out",
     "payment_methods": "Payment methods"
   },
-  "sections": {
-    "footer": {
-      "all_rights_reserved": "All rights reserved."
-    }
-  },
   "blogs": {
     "article": {
       "comments_heading": {
@@ -314,6 +309,14 @@
     "blog_post_author": "Author",
     "blog_post_date": "Date",
     "blog_post_description": "An excerpt of your blog post's content"
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "All rights reserved."
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Add at least one collection tab to display products."
+    }
   },
   "products": {
     "product": {

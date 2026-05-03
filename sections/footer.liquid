@@ -1,6 +1,27 @@
 {% comment %}theme-check-disable UndefinedObject{% endcomment %}
 {{ 'section-footer-main.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'footer-scroll-reveal.js' | asset_url }}" defer></script>
+
+<script>
+(function () {
+  if (document.documentElement.classList.contains('shopify-design-mode')) return;
+  var footer = document.querySelector('.shopify-section-group-footer-group');
+  if (!footer) return;
+
+  footer.style.setProperty('position', 'fixed', 'important');
+  footer.style.setProperty('bottom', '0', 'important');
+  footer.style.setProperty('left', '0', 'important');
+  footer.style.setProperty('right', '0', 'important');
+  footer.style.setProperty('width', '100%', 'important');
+  footer.style.setProperty('z-index', '0', 'important');
+
+  function syncPadding() {
+    document.body.style.paddingBottom = footer.offsetHeight + 'px';
+  }
+  syncPadding();
+  new ResizeObserver(syncPadding).observe(footer);
+
+})();
+</script>
 
 {% style %}
   {% render 'section-padding' %}
@@ -19,7 +40,6 @@
     endif
   endfor
 -%}
-<div class="footer-reveal" data-footer-reveal id="FooterReveal-{{ section.id }}">
 <div
   class="footer footer-section footer-main section-{{ section.id }}-padding-top section-{{ section.id }}-padding-bottom section-{{ section.id }}-margin"
   id="shopify-section-{{ section.id }}-footer-main"
@@ -270,7 +290,6 @@
       </div>
     </div>
   </div>
-</div>
 </div>
 
 {% stylesheet %}

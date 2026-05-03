@@ -34,6 +34,7 @@
   if na_use_grid
     assign na_demo_slots = 6
   endif
+  assign promo_media_type = section.settings.promo_media_type | default: 'image'
 -%}
 <div
   class="new-arrivals-showcase__panel{% if tab_index == 0 %} is-active{% endif %}{% if show_promo %} new-arrivals-showcase__panel--split{% endif %}"
@@ -51,6 +52,7 @@
           <div class="new-arrivals-showcase__promo-sticky">
         {%- endif -%}
         <div class="new-arrivals-showcase__promo">
+          {%- if promo_media_type == 'image' -%}
           <a
             class="new-arrivals-showcase__promo-media-link"
             href="{{ na_promo_url }}"
@@ -74,6 +76,68 @@
               {%- endif -%}
             </div>
           </a>
+          {%- else -%}
+          <div
+            class="new-arrivals-showcase__promo-media-link new-arrivals-showcase__promo-media-link--video"
+            {% if na_promo_url_blank %}aria-disabled="true"{% endif %}
+          >
+            <span class="new-arrivals-showcase__promo-label">{{ section.settings.promo_badge | escape }}</span>
+            <div class="new-arrivals-showcase__promo-picture new-arrivals-showcase__promo-picture--video">
+              {%- if promo_media_type == 'video_upload' and section.settings.promo_video != blank -%}
+                {%- liquid
+                  assign na_vid_muted = false
+                  if section.settings.promo_video_autoplay
+                    assign na_vid_muted = true
+                  endif
+                -%}
+                {{
+                  section.settings.promo_video
+                  | video_tag:
+                    poster: nil,
+                    image_size: '1920x',
+                    autoplay: section.settings.promo_video_autoplay,
+                    loop: section.settings.promo_video_loop,
+                    muted: na_vid_muted,
+                    controls: section.settings.promo_video_controls,
+                    playsinline: true,
+                    class: 'new-arrivals-showcase__promo-video'
+                }}
+              {%- elsif promo_media_type == 'video_embed' and section.settings.promo_video_url != blank -%}
+                {%- assign na_pv = section.settings.promo_video_url -%}
+                {%- assign na_pv_id = na_pv.external_id | default: na_pv.id -%}
+                {%- assign na_pv_host = na_pv.type | default: na_pv.host -%}
+                {%- if na_pv_host == 'youtube' -%}
+                  {{
+                    na_pv
+                    | external_video_url:
+                      autoplay: section.settings.promo_video_autoplay,
+                      loop: section.settings.promo_video_loop,
+                      playlist: na_pv_id,
+                      mute: '1',
+                      controls: section.settings.promo_video_controls,
+                      enablejsapi: true
+                    | external_video_tag: class: 'new-arrivals-showcase__promo-iframe'
+                  }}
+                {%- elsif na_pv_host == 'vimeo' -%}
+                  {{
+                    na_pv
+                    | external_video_url:
+                      autoplay: section.settings.promo_video_autoplay,
+                      loop: section.settings.promo_video_loop,
+                      muted: '1',
+                      controls: section.settings.promo_video_controls,
+                      api: true
+                    | external_video_tag: class: 'new-arrivals-showcase__promo-iframe'
+                  }}
+                {%- else -%}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'new-arrivals-showcase__promo-placeholder' }}
+                {%- endif -%}
+              {%- else -%}
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'new-arrivals-showcase__promo-placeholder' }}
+              {%- endif -%}
+            </div>
+          </div>
+          {%- endif -%}
           <button
             type="button"
             class="new-arrivals-showcase__promo-btn"

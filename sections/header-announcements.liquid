@@ -37,11 +37,10 @@
   {% if is_marquee %}
     <marquee-component
       class="announcement-bar__marquee"
-      style="{% render 'spacing-style', settings: section.settings %} --marquee-direction: {{ section.settings.marquee_direction | default: 'normal' }}; --marquee-gap: 32px;"
+      style="{% render 'spacing-style', settings: section.settings %} --marquee-direction: {{ section.settings.marquee_direction | default: 'normal' }}; --marquee-gap: 48px;"
       data-speed-factor="{{ section.settings.speed | times: 2.5 | round }}"
       data-movement-direction="{{ section.settings.marquee_direction | default: 'normal' }}"
     >
-    <div class="top-banner__marquee-fade-left"></div>
       <div class="marquee__wrapper announcement-bar__marquee-wrapper" ref="wrapper">
         <div class="marquee__content" ref="content">
           <div class="marquee__repeated-items announcement-bar__marquee-items" ref="marqueeItems[]">
@@ -49,7 +48,6 @@
           </div>
         </div>
       </div>
-      <div class="top-banner__marquee-fade-right"></div>
     </marquee-component>
   {% else %}
     {% liquid
@@ -74,6 +72,11 @@
 </aside>
 
 {% stylesheet %}
+
+  .announcement-bar {
+    background-color: var(--color-background) !important;
+    color: var(--color-foreground);
+  }
 
   .announcement-bar__slider {
     display: flex;

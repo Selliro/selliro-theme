@@ -231,6 +231,32 @@
               {% render 'img-text-collage-placeholder-svg' %}
             </div>
           {%- endif -%}
+
+          {%- assign badge_text = section.settings.badge_text | default: 'EXPLORE MORE ~ EXPLORE MORE ~ ' -%}
+          {%- if collage_image_count != 1 and section.settings.show_badge != false -%}
+            {%- if section.settings.button_link != blank -%}
+              <a class="itc-badge" href="{{ section.settings.button_link }}" aria-label="{{ badge_text | escape }}">
+            {%- else -%}
+              <div class="itc-badge" aria-hidden="true">
+            {%- endif -%}
+              <svg class="itc-badge__ring" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+                <defs>
+                  <path id="itc-ring-{{ section.id }}" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/>
+                </defs>
+                <circle cx="60" cy="60" r="35" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+                <text font-size="12.5" font-weight="700" letter-spacing="1">
+                  <textPath href="#itc-ring-{{ section.id }}" textLength="289" lengthAdjust="spacingAndGlyphs">{{ badge_text }}</textPath>
+                </text>
+              </svg>
+              <span class="itc-badge__center" aria-hidden="true">
+                <span class="itc-badge__arrow">&#x2192;</span>
+              </span>
+            {%- if section.settings.button_link != blank -%}
+              </a>
+            {%- else -%}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
         </div>
       </div>
 
@@ -692,6 +718,24 @@
       "type": "url",
       "id": "button_link",
       "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Explore badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show rotating badge",
+      "default": true,
+      "info": "Only visible when 2 or more collage images are set."
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge ring text",
+      "default": "EXPLORE MORE ~ EXPLORE MORE ~ ",
+      "info": "Repeat the phrase twice with a separator (e.g. ~) to fill the full ring."
     },
     {
       "type": "header",
