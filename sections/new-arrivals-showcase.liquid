@@ -43,7 +43,7 @@
         endif
       endfor
       assign nac_scribble = section.settings.heading_scribble | default: 'none'
-      if nac_scribble != 'squiggle' and nac_scribble != 'wave' and nac_scribble != 'brush' and nac_scribble != 'double'
+      if nac_scribble != 'squiggle' and nac_scribble != 'wave' and nac_scribble != 'brush' and nac_scribble != 'double' and nac_scribble != 'scribble_underline' and nac_scribble != 'hand_drawn' and nac_scribble != 'sketch' and nac_scribble != 'marker' and nac_scribble != 'zigzag' and nac_scribble != 'arc' and nac_scribble != 'dotted' and nac_scribble != 'erratic' and nac_scribble != 'ribbon'
         assign nac_scribble = 'none'
       endif
     -%}
@@ -182,7 +182,16 @@
         { "value": "squiggle", "label": "t:sections.new-arrivals-showcase.options.scribble.squiggle" },
         { "value": "wave", "label": "t:sections.new-arrivals-showcase.options.scribble.wave" },
         { "value": "brush", "label": "t:sections.new-arrivals-showcase.options.scribble.brush" },
-        { "value": "double", "label": "t:sections.new-arrivals-showcase.options.scribble.double" }
+        { "value": "double", "label": "t:sections.new-arrivals-showcase.options.scribble.double" },
+        { "value": "scribble_underline", "label": "t:sections.new-arrivals-showcase.options.scribble.scribble_underline" },
+        { "value": "hand_drawn", "label": "t:sections.new-arrivals-showcase.options.scribble.hand_drawn" },
+        { "value": "sketch", "label": "t:sections.new-arrivals-showcase.options.scribble.sketch" },
+        { "value": "marker", "label": "t:sections.new-arrivals-showcase.options.scribble.marker" },
+        { "value": "zigzag", "label": "t:sections.new-arrivals-showcase.options.scribble.zigzag" },
+        { "value": "arc", "label": "t:sections.new-arrivals-showcase.options.scribble.arc" },
+        { "value": "dotted", "label": "t:sections.new-arrivals-showcase.options.scribble.dotted" },
+        { "value": "erratic", "label": "t:sections.new-arrivals-showcase.options.scribble.erratic" },
+        { "value": "ribbon", "label": "t:sections.new-arrivals-showcase.options.scribble.ribbon" }
       ],
       "default": "none"
     },

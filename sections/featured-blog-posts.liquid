@@ -5,7 +5,7 @@
   assign show_tags = section.settings.show_tags
   assign show_comments = section.settings.show_comments
   assign show_view_all = section.settings.show_view_all
-  assign display_limit = section.settings.post_limit | default: 3
+  assign display_limit = section.settings.post_limit | default: 6
   assign grid_columns = section.settings.grid_columns | default: 3
   assign mobile_columns = section.settings.mobile_columns | default: 1
   assign carousel_card_min = section.settings.carousel_card_min | default: 16
@@ -40,64 +40,219 @@
       </h2>
       {% if show_view_all and source_blog != blank %}
         <a class="featured-blog-posts-v2__view-all" href="{{ source_blog.url }}">
-          {{ section.settings.view_all_text | default: 'View All Posts' | escape }}
-          <span aria-hidden="true">&#8250;</span>
+          <span class="featured-blog-posts-v2__view-all-label">
+            {{- section.settings.view_all_text | default: 'View All Posts' | escape -}}
+          </span>
+          <svg
+            class="featured-blog-posts-v2__view-all-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M9 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </a>
       {% endif %}
     </header>
 
     {% if layout_mode == 'carousel' %}
-      <div class="featured-blog-posts-v2__carousel" role="list">
-        {% if source_blog != blank and source_blog.articles_count > 0 %}
-          {% for article in source_blog.articles limit: display_limit %}
-            {% assign rendered_count = rendered_count | plus: 1 %}
-            <article class="featured-blog-posts-v2__card featured-blog-posts-v2__card--carousel" role="listitem">
-              <a class="featured-blog-posts-v2__card-link" href="{{ article.url }}">
-                <div class="featured-blog-posts-v2__media-wrap">
-                  <span class="featured-blog-posts-v2__date-ribbon">{{ article.published_at | date: '%b %d, %Y' | upcase }}</span>
-                  {% if article.image != blank %}
-                    {{
-                      article.image
-                      | image_url: width: 1100
-                      | image_tag:
-                        class: 'featured-blog-posts-v2__media',
-                        loading: 'lazy',
-                        widths: '420, 640, 860, 1100',
-                        sizes: '(min-width: 990px) 31vw, 84vw',
-                        alt: article.title
-                    }}
-                  {% else %}
-                    {{ 'blog-apparel-1' | placeholder_svg_tag: 'featured-blog-posts-v2__media featured-blog-posts-v2__media--placeholder' }}
-                  {% endif %}
-                </div>
-              </a>
-              {% if show_tags and article.tags.size > 0 %}
-                <ul class="featured-blog-posts-v2__tags" role="list">
-                  {% for tag in article.tags limit: 2 %}
-                    <li class="featured-blog-posts-v2__tag">#{{ tag | handleize }}</li>
-                  {% endfor %}
-                </ul>
+      {%- liquid
+        assign mobile_slides = section.settings.mobile_slides_per_view | default: '1.1'
+        assign tablet_slides = section.settings.tablet_slides_per_view | default: '2.1'
+        assign desktop_slides = section.settings.desktop_slides_per_view | default: '3'
+        assign mobile_space = section.settings.mobile_space_between | default: 16
+        assign desktop_space = section.settings.card_gap | default: 24
+        assign carousel_id = 'fbp-carousel-' | append: section.id
+      -%}
+      <div class="featured-blog-posts-v2__carousel-wrap">
+        <div
+          class="swiper featured-blog-posts-v2__carousel"
+          id="{{ carousel_id }}"
+          data-fbp-swiper
+          data-mobile-slides="{{ mobile_slides }}"
+          data-tablet-slides="{{ tablet_slides }}"
+          data-desktop-slides="{{ desktop_slides }}"
+          data-mobile-space="{{ mobile_space }}"
+          data-desktop-space="{{ desktop_space }}"
+        >
+          <div class="swiper-wrapper">
+              {% if source_blog != blank and source_blog.articles_count > 0 %}
+                {% for article in source_blog.articles limit: display_limit %}
+                  {% assign rendered_count = rendered_count | plus: 1 %}
+                  <div class="swiper-slide">
+                    <article class="featured-blog-posts-v2__card featured-blog-posts-v2__card--carousel">
+                      <a class="featured-blog-posts-v2__card-link" href="{{ article.url }}">
+                        <div class="featured-blog-posts-v2__media-wrap">
+                          {% if article.tags.size > 0 %}
+                            <span class="featured-blog-posts-v2__badge">{{ article.tags.first }}</span>
+                          {% endif %}
+                          {% if article.image != blank %}
+                            {{
+                              article.image
+                              | image_url: width: 1100
+                              | image_tag:
+                                class: 'featured-blog-posts-v2__media',
+                                loading: 'lazy',
+                                widths: '420, 640, 860, 1100',
+                                sizes: '(min-width: 1200px) 31vw, (min-width: 768px) 44vw, 88vw',
+                                alt: article.title
+                            }}
+                          {% else %}
+                            {{ 'blog-apparel-1' | placeholder_svg_tag: 'featured-blog-posts-v2__media featured-blog-posts-v2__media--placeholder' }}
+                          {% endif %}
+                        </div>
+                      </a>
+                      <div class="featured-blog-posts-v2__content">
+                        <div class="featured-blog-posts-v2__meta">
+                          <span>{{ article.published_at | date: '%b %d, %Y' }}</span>
+                          {% if show_comments %}<span>{{ article.comments_count }} Comments</span>{% endif %}
+                        </div>
+                        <h3 class="featured-blog-posts-v2__title">
+                          <a href="{{ article.url }}">{{ article.title }}</a>
+                        </h3>
+                        {% if show_excerpt %}
+                          <p class="featured-blog-posts-v2__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 18 }}</p>
+                        {% endif %}
+                        <a class="featured-blog-posts-v2__read-more" href="{{ article.url }}">Read more</a>
+                        {% if show_tags and article.tags.size > 0 %}
+                          <ul class="featured-blog-posts-v2__tags" role="list">
+                            {% for tag in article.tags limit: 2 %}
+                              <li class="featured-blog-posts-v2__tag">#{{ tag | handleize }}</li>
+                            {% endfor %}
+                          </ul>
+                        {% endif %}
+                      </div>
+                    </article>
+                  </div>
+                {% endfor %}
               {% endif %}
-            </article>
-          {% endfor %}
-        {% endif %}
 
-        {% assign missing = display_limit | minus: rendered_count %}
-        {% if missing > 0 %}
-          {% for i in (1..missing) %}
-            <article class="featured-blog-posts-v2__card featured-blog-posts-v2__card--carousel" role="listitem">
-              <div class="featured-blog-posts-v2__media-wrap">
-                <span class="featured-blog-posts-v2__date-ribbon">{{ 'now' | date: '%b %d, %Y' | upcase }}</span>
-                {{ 'blog-apparel-1' | placeholder_svg_tag: 'featured-blog-posts-v2__media featured-blog-posts-v2__media--placeholder' }}
-              </div>
-              <ul class="featured-blog-posts-v2__tags" role="list">
-                <li class="featured-blog-posts-v2__tag">#beauty forecast</li>
-                <li class="featured-blog-posts-v2__tag">#clean beauty</li>
-              </ul>
-            </article>
-          {% endfor %}
-        {% endif %}
+              {% assign missing = display_limit | minus: rendered_count %}
+              {% if missing > 0 %}
+                {% for i in (1..missing) %}
+                  <div class="swiper-slide">
+                    <article class="featured-blog-posts-v2__card featured-blog-posts-v2__card--carousel">
+                      <div class="featured-blog-posts-v2__media-wrap">
+                        <span class="featured-blog-posts-v2__badge">Skincare</span>
+                        {{ 'blog-apparel-1' | placeholder_svg_tag: 'featured-blog-posts-v2__media featured-blog-posts-v2__media--placeholder' }}
+                      </div>
+                      <div class="featured-blog-posts-v2__content">
+                        <div class="featured-blog-posts-v2__meta">
+                          <span>{{ 'now' | date: '%b %d, %Y' }}</span>
+                          {% if show_comments %}<span>0 Comments</span>{% endif %}
+                        </div>
+                        <h3 class="featured-blog-posts-v2__title">Top 5 Skincare Trends of 2025</h3>
+                        {% if show_excerpt %}
+                          <p class="featured-blog-posts-v2__excerpt">Explore the biggest beauty trends taking over this year and how to adopt them in your daily routine.</p>
+                        {% endif %}
+                        <span class="featured-blog-posts-v2__read-more">Read more</span>
+                        {% if show_tags %}
+                          <ul class="featured-blog-posts-v2__tags" role="list">
+                            <li class="featured-blog-posts-v2__tag">#beauty forecast</li>
+                            <li class="featured-blog-posts-v2__tag">#clean beauty</li>
+                          </ul>
+                        {% endif %}
+                      </div>
+                    </article>
+                  </div>
+                {% endfor %}
+              {% endif %}
+          </div>
+        </div>
+
+        <div class="featured-blog-posts-v2__carousel-toolbar">
+          <div class="featured-blog-posts-v2__scrollbar" aria-hidden="true">
+            <div class="featured-blog-posts-v2__scrollbar-rail">
+              <div class="featured-blog-posts-v2__scrollbar-thumb" data-fbp-progress></div>
+            </div>
+          </div>
+          <div class="featured-blog-posts-v2__carousel-arrows">
+            <button
+              type="button"
+              class="featured-blog-posts-v2__carousel-arrow featured-blog-posts-v2__carousel-arrow--prev"
+              data-fbp-prev
+              aria-label="{{ 'accessibility.slideshow_previous' | t }}"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="featured-blog-posts-v2__carousel-arrow featured-blog-posts-v2__carousel-arrow--next"
+              data-fbp-next
+              aria-label="{{ 'accessibility.slideshow_next' | t }}"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
+
+      <script>
+        (function () {
+          var root = document.getElementById('{{ carousel_id }}');
+          if (!root) return;
+
+          function updateThumb(inst, el) {
+            if (!el) return;
+            var p = typeof inst.progress === 'number' && isFinite(inst.progress) ? inst.progress : 0;
+            var lo = 0.08;
+            el.style.transform = 'scaleX(' + (lo + (1 - lo) * p) + ')';
+          }
+
+          function init() {
+            if (typeof Swiper === 'undefined' || root.dataset.fbpInitialized === '1') return;
+            root.dataset.fbpInitialized = '1';
+
+            var wrap = root.closest('.featured-blog-posts-v2__carousel-wrap');
+            var prev = wrap.querySelector('[data-fbp-prev]');
+            var next = wrap.querySelector('[data-fbp-next]');
+            var thumb = wrap.querySelector('[data-fbp-progress]');
+
+            new Swiper(root, {
+              slidesPerView: parseFloat(root.dataset.mobileSlides) || 1.1,
+              spaceBetween: parseInt(root.dataset.mobileSpace, 10) || 16,
+              grabCursor: true,
+              watchOverflow: true,
+              navigation: { prevEl: prev, nextEl: next },
+              breakpoints: {
+                768: {
+                  slidesPerView: parseFloat(root.dataset.tabletSlides) || 2.1,
+                  spaceBetween: parseInt(root.dataset.desktopSpace, 10) || 24
+                },
+                1024: {
+                  slidesPerView: parseFloat(root.dataset.desktopSlides) || 3,
+                  spaceBetween: parseInt(root.dataset.desktopSpace, 10) || 24
+                }
+              },
+              on: {
+                init: function (i) { updateThumb(i, thumb); },
+                progress: function (i) { updateThumb(i, thumb); },
+                resize: function (i) { updateThumb(i, thumb); }
+              }
+            });
+          }
+
+          if (typeof Swiper !== 'undefined') {
+            init();
+          } else {
+            document.addEventListener('DOMContentLoaded', init);
+            window.addEventListener('load', init);
+          }
+        })();
+      </script>
     {% elsif layout_mode == 'split' %}
       <div class="featured-blog-posts-v2__split">
         <div class="featured-blog-posts-v2__split-main">
@@ -286,8 +441,7 @@
 {% schema %}
 {
   "name": "Featured blog posts",
-  "tag": "section",
-  "class": "featured-blog-posts-v2",
+  "tag": "section",  
   "disabled_on": {
     "groups": ["header", "footer"]
   },
@@ -336,6 +490,39 @@
       "visible_if": "{{ section.settings.layout_mode == 'grid' }}"
     },
     {
+      "type": "text",
+      "id": "mobile_slides_per_view",
+      "label": "Slides per view (mobile)",
+      "default": "1.1",
+      "info": "Use decimals (e.g. 1.1) to peek the next slide.",
+      "visible_if": "{{ section.settings.layout_mode == 'carousel' }}"
+    },
+    {
+      "type": "text",
+      "id": "tablet_slides_per_view",
+      "label": "Slides per view (tablet)",
+      "default": "2.1",
+      "visible_if": "{{ section.settings.layout_mode == 'carousel' }}"
+    },
+    {
+      "type": "text",
+      "id": "desktop_slides_per_view",
+      "label": "Slides per view (desktop)",
+      "default": "3",
+      "visible_if": "{{ section.settings.layout_mode == 'carousel' }}"
+    },
+    {
+      "type": "range",
+      "id": "mobile_space_between",
+      "label": "Slide spacing (mobile)",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ section.settings.layout_mode == 'carousel' }}"
+    },
+    {
       "type": "range",
       "id": "carousel_card_min",
       "label": "Carousel card width",
@@ -351,9 +538,9 @@
       "id": "post_limit",
       "label": "Posts to show",
       "min": 3,
-      "max": 10,
+      "max": 12,
       "step": 1,
-      "default": 3,
+      "default": 6,
       "visible_if": "{{ section.settings.layout_mode != 'split' }}"
     },
     {

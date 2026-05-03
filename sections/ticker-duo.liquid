@@ -14,8 +14,7 @@
     {%- for block in section.blocks -%}
       <div
         class="ticker-duo__row color-{{ block.settings.color_scheme }}"
-        style="--ticker-duration: {{ block.settings.speed }}s; padding-top: {{ block.settings.padding_top }}px; padding-bottom: {{ block.settings.padding_bottom }}px; transform: rotate({{ block.settings.rotation }}deg);"
-        data-base-duration="{{ block.settings.speed }}"
+        style="padding-top: {{ block.settings.padding_top }}px; padding-bottom: {{ block.settings.padding_bottom }}px; transform: rotate({{ block.settings.rotation }}deg);"
         {{ block.shopify_attributes }}
       >
         <div class="ticker-duo__scroll">
@@ -45,64 +44,81 @@
 <script>
   class TickerDuo extends HTMLElement {
     connectedCallback() {
-      this.rows = Array.from(this.querySelectorAll('.ticker-duo__row'));
-      this.scrollWrappers = Array.from(this.querySelectorAll('.ticker-duo__scroll'));
-      if (!this.rows.length) return;
+      this.tracks = Array.from(this.querySelectorAll('.ticker-duo__track'));
+      if (!this.tracks.length) return;
 
-      this.lastY = window.scrollY;
-      this.resetTimer = null;
-      this.targetMultiplier = 1;
-      this.currentMultiplier = 1;
-      this.rafId = null;
+      // Clone groups until the track is at least 2.5× the viewport wide.
+      // Reason: at position p = -halfWidth the track's right edge must still
+      // be beyond the viewport right edge, which requires scrollWidth ≥ 2× viewport.
+      // We clone the original set at a time so the loop boundary always falls
+      // on an exact group boundary (no partial-group seam).
+      this.tracks.forEach(track => {
+        const origGroups = Array.from(track.querySelectorAll('.ticker-duo__group'));
+        if (!origGroups.length) return;
+        const minWidth = window.innerWidth * 2.5;
+        while (track.scrollWidth < minWidth) {
+          origGroups.forEach(g => track.appendChild(g.cloneNode(true)));
+        }
+      });
+
+      // Cache loop boundaries after cloning — scrollWidth won't change after this.
+      this.loopWidths = this.tracks.map(t => t.scrollWidth / 2);
+      this.positions  = this.tracks.map(() => 0);
+
+      const IDLE = 0.6;
+      this.idleSpeed     = IDLE;
+      this.velocity      = IDLE;
+      this.targetVelocity = IDLE;
+      this.lastScrollY   = window.scrollY;
+      this.rafId         = null;
 
       this.onScroll = this.onScroll.bind(this);
-      this.tick = this.tick.bind(this);
+      this.tick     = this.tick.bind(this);
 
       window.addEventListener('scroll', this.onScroll, { passive: true });
-      this.tick();
+      this.rafId = requestAnimationFrame(this.tick);
     }
 
     disconnectedCallback() {
       window.removeEventListener('scroll', this.onScroll);
-      if (this.resetTimer) clearTimeout(this.resetTimer);
       if (this.rafId) cancelAnimationFrame(this.rafId);
     }
 
-    setSpeed(multiplier) {
-      this.rows.forEach((row) => {
-        const base = parseFloat(row.getAttribute('data-base-duration')) || 28;
-        const next = Math.max(3, base / multiplier);
-        // Set directly on the track element — this updates the running animation immediately.
-        // Setting only a CSS custom property (--ticker-duration) does NOT affect a running animation.
-        const track = row.querySelector('.ticker-duo__track');
-        if (track) track.style.animationDuration = next + 's';
-      });
-    }
-
     onScroll() {
-      const delta = Math.abs(window.scrollY - this.lastY);
-      this.lastY = window.scrollY;
-      if (delta === 0) return;
+      const currentY = window.scrollY;
+      const delta    = currentY - this.lastScrollY;
+      this.lastScrollY = currentY;
 
-      this.targetMultiplier = Math.min(3.2, Math.max(1, delta / 25));
-      const shift = Math.min(28, delta * 0.3);
-      this.scrollWrappers.forEach((wrap, index) => {
-        const dir = index % 2 === 0 ? 1 : -1;
-        wrap.style.setProperty('--scroll-shift', (dir * shift) + 'px');
-      });
-
-      if (this.resetTimer) clearTimeout(this.resetTimer);
-      this.resetTimer = setTimeout(() => {
-        this.targetMultiplier = 1;
-        this.scrollWrappers.forEach((wrap) => {
-          wrap.style.setProperty('--scroll-shift', '0px');
-        });
-      }, 180);
+      // Upward scroll is clamped tighter (−1.5) than downward (+4) so a sudden
+      // scroll-up never causes a jarring fast reversal.
+      this.targetVelocity = Math.max(
+        this.idleSpeed - 1.5,
+        Math.min(this.idleSpeed + 4, this.idleSpeed + delta * 0.15)
+      );
     }
 
     tick() {
-      this.currentMultiplier += (this.targetMultiplier - this.currentMultiplier) * 0.09;
-      this.setSpeed(this.currentMultiplier);
+      // Decay target back toward idle each frame (~4 frames to settle).
+      this.targetVelocity += (this.idleSpeed - this.targetVelocity) * 0.25;
+
+      // Asymmetric lerp: ease in slowly when decelerating/reversing (scroll up)
+      // so it never snaps; ease in faster when accelerating (scroll down).
+      const lerp = this.targetVelocity < this.velocity ? 0.06 : 0.18;
+      this.velocity += (this.targetVelocity - this.velocity) * lerp;
+
+      this.tracks.forEach((track, i) => {
+        const dir = track.classList.contains('is-reverse') ? 1 : -1;
+        this.positions[i] += this.velocity * dir;
+
+        const halfWidth = this.loopWidths[i];
+        if (halfWidth > 0) {
+          let p = this.positions[i] % halfWidth;
+          if (p > 0) p -= halfWidth;
+          this.positions[i] = p;
+          track.style.transform = `translateX(${p}px)`;
+        }
+      });
+
       this.rafId = requestAnimationFrame(this.tick);
     }
   }

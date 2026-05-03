@@ -13,21 +13,13 @@
 }
 
 .ticker-duo__scroll {
-  transform: translate3d(var(--scroll-shift, 0px), 0, 0);
-  transition: transform 0.2s ease;
-  will-change: transform;
+  overflow: hidden;
 }
 
 .ticker-duo__track {
   display: flex;
   width: max-content;
-  animation: ticker-scroll var(--ticker-duration, 28s) linear infinite;
-  gap: 24px;
-}
-
-
-.ticker-duo__track.is-reverse {
-  animation-direction: reverse;
+  will-change: transform;
 }
 
 .ticker-duo__group {
@@ -38,6 +30,8 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   white-space: nowrap;
+  /* Owns trailing spacing so scrollWidth/2 lands exactly on group 5 — no seam on loop */
+  padding-right: 24px;
 }
 
 .ticker-duo__text {
@@ -63,18 +57,8 @@
   height: 20px;
 }
 
-@keyframes ticker-scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ticker-duo__track {
-    animation: none;
-    transform: translateX(0);
+    transform: translateX(0) !important;
   }
 }

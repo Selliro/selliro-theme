@@ -1,6 +1,6 @@
 {% comment %}
-  Decorative heading underlines for New arrivals showcase (Atlas-style scribbles).
-  @param {string} style - squiggle | wave | brush | double
+  Decorative heading underlines for New arrivals showcase.
+  @param {string} style - squiggle | wave | brush | double | scribble_underline | hand_drawn | sketch | marker | zigzag | arc | dotted | erratic | ribbon
 {% endcomment %}
 {%- liquid
   assign scribble_style = style | default: 'squiggle'
@@ -71,5 +71,150 @@
     >
       <path pathLength="1" d="M10,22 C70,8 130,36 200,20 C240,10 280,18 310,14" />
       <path pathLength="1" d="M14,42 C80,52 140,30 210,46 C250,54 290,44 306,48" />
+    </svg>
+  {%- when 'scribble_underline' -%}
+    <svg
+      class="new-arrivals-showcase__scribble-svg new-arrivals-showcase__scribble-svg--scribble-underline"
+      viewBox="0 0 340 72"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="8"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M6,50 C16,38 26,60 44,46 C62,32 68,62 90,48 C112,34 122,62 148,48 C174,34 186,62 214,48 C242,34 256,60 282,48 C308,36 320,56 334,48" />
+    </svg>
+  {%- when 'hand_drawn' -%}
+    <svg
+      class="new-arrivals-showcase__scribble-svg new-arrivals-showcase__scribble-svg--hand-drawn"
+      viewBox="0 0 340 44"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="11"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M6,28 C50,22 100,32 152,26 C196,21 240,30 286,26 C310,24 324,28 334,26" />
+    </svg>
+  {%- when 'sketch' -%}
+    <svg
+      class="new-arrivals-showcase__scribble-svg new-arrivals-showcase__scribble-svg--sketch"
+      viewBox="0 0 340 64"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="5"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M8,18 C100,14 220,22 332,16" />
+      <path pathLength="1" d="M10,32 C90,36 200,26 330,34" />
+      <path pathLength="1" d="M6,50 C100,46 220,52 332,48" />
+    </svg>
+  {%- when 'marker' -%}
+    <svg
+      class="new-arrivals-showcase__scribble-svg new-arrivals-showcase__scribble-svg--marker"
+      viewBox="0 0 340 48"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="24"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+      opacity="0.72"
+    >
+      <path pathLength="1" d="M14,30 C110,26 220,32 326,28" />
+    </svg>
+  {%- when 'zigzag' -%}
+    <svg
+      class="new-arrivals-showcase__scribble-svg new-arrivals-showcase__scribble-svg--zigzag"
+      viewBox="0 0 340 36"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="square"
+      stroke-linejoin="miter"
+      stroke-width="8"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M6,6 L38,30 L70,6 L102,30 L134,6 L166,30 L198,6 L230,30 L262,6 L294,30 L334,6" />
+    </svg>
+  {%- when 'arc' -%}
+    <svg
+      class="new-arrivals-showcase__scribble-svg new-arrivals-showcase__scribble-svg--arc"
+      viewBox="0 0 340 52"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="12"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M10,12 Q170,50 330,12" />
+    </svg>
+  {%- when 'dotted' -%}
+    <svg
+      class="new-arrivals-showcase__scribble-svg new-arrivals-showcase__scribble-svg--dotted"
+      viewBox="0 0 340 18"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="14"
+      stroke-dasharray="0 28"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M14,9 L326,9" />
+    </svg>
+  {%- when 'erratic' -%}
+    <svg
+      class="new-arrivals-showcase__scribble-svg new-arrivals-showcase__scribble-svg--erratic"
+      viewBox="0 0 340 80"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="6"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M6,58 C14,44 22,68 32,52 C42,36 50,70 62,50 C74,30 84,66 98,46 C112,26 122,64 138,44 C154,24 164,66 180,46 C196,26 208,64 224,44 C240,24 252,60 268,42 C282,24 296,56 312,40 C322,28 328,50 334,42" />
+    </svg>
+  {%- when 'ribbon' -%}
+    <svg
+      class="new-arrivals-showcase__scribble-svg new-arrivals-showcase__scribble-svg--ribbon"
+      viewBox="0 0 340 52"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="7"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M10,12 Q170,44 330,12" />
+      <path pathLength="1" d="M10,42 Q170,10 330,42" />
     </svg>
 {%- endcase -%}

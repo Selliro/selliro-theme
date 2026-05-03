@@ -5,6 +5,8 @@
 {{ 'section-faq-split-gallery.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'faq-split-gallery.js' | asset_url }}" defer></script>
 
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
 {%- liquid
   assign title = section.settings.title
   assign img_a = section.settings.gallery_image_tall
@@ -70,7 +72,7 @@
 -%}
 
 <section
-  class="faq-split-gallery color-{{ section.settings.color_scheme }}"
+  class="section faq-split-gallery color-{{ section.settings.color_scheme }}"
   id="FAQSplitGallery-{{ section.id }}"
   {% if title != blank %}
     aria-labelledby="FAQSplitGallery-heading-{{ section.id }}"
@@ -229,7 +231,7 @@
 {
   "name": "FAQ split gallery",
   "tag": "section",
-  "class": "section faq-split-gallery-section",
+  "class": "faq-split-gallery-section",
   "settings": [
     {
       "type": "text",
