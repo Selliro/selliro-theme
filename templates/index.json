@@ -1914,7 +1914,7 @@
       "name": "t:names.marquee_section",
       "settings": {
         "use_container": true,
-        "background_color": "#d4d4d4",
+        "background_color": "rgba(0,0,0,0)",
         "movement_direction": "reverse",
         "show_fade": true,
         "color_scheme": "",
