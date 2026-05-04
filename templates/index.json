@@ -9,6 +9,78 @@
  */
 {
   "sections": {
+    "custom_banner_YeXbn3": {
+      "type": "custom-banner",
+      "blocks": {
+        "slide_FF3yJ7": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "video_source_type": "youtube",
+            "video_url_youtube": "",
+            "video_url_vimeo": "",
+            "video_cdn_url": "",
+            "image_desktop": "shopify://shop_images/skincare.png",
+            "aspect_ratio_desktop": "2",
+            "aspect_ratio_mobile": "0.92",
+            "caption": "COSMETICS",
+            "caption_color": "#ffffff",
+            "caption_font_size": 18,
+            "heading": "Be kind to your skin, your skin reflect kindness towards you",
+            "heading_color": "#ffffff",
+            "heading_font_size": 62,
+            "subheading": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "subheading_color": "#ffffff",
+            "subheading_font_size": 16,
+            "button_label": "SHOP NOW",
+            "button_link": "",
+            "button_text_color": "#111111",
+            "button_font_size": 16
+          }
+        },
+        "slide_Gqr8Tw": {
+          "type": "slide",
+          "settings": {
+            "media_type": "image",
+            "video_source_type": "youtube",
+            "video_url_youtube": "",
+            "video_url_vimeo": "",
+            "video_cdn_url": "",
+            "image_desktop": "shopify://shop_images/product-blog.png",
+            "aspect_ratio_desktop": "2",
+            "aspect_ratio_mobile": "0.92",
+            "caption": "COSMETICS",
+            "caption_color": "#ffffff",
+            "caption_font_size": 16,
+            "heading": "Be kind to your skin, your skin reflect kindness towards you",
+            "heading_color": "#ffffff",
+            "heading_font_size": 62,
+            "subheading": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "subheading_color": "#ffffff",
+            "subheading_font_size": 18,
+            "button_label": "SHOP NOW",
+            "button_link": "",
+            "button_text_color": "#111111",
+            "button_font_size": 16
+          }
+        }
+      },
+      "block_order": [
+        "slide_FF3yJ7",
+        "slide_Gqr8Tw"
+      ],
+      "name": "Custom banner",
+      "settings": {
+        "video_autoplay": true,
+        "slideshow_mode": "autoplay",
+        "slideshow_speed": 5,
+        "aspect_ratio_desktop": "16/7",
+        "aspect_ratio_mobile": "4/5",
+        "color_scheme": "",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
     "slideshow_AnCCTe": {
       "type": "slideshow",
       "blocks": {
@@ -297,6 +369,7 @@
         "slide_ca9DCF",
         "slide_mkVqxG"
       ],
+      "disabled": true,
       "name": "t:names.slideshow",
       "settings": {
         "icons_style": "arrows_large",
@@ -1952,6 +2025,7 @@
     }
   },
   "order": [
+    "custom_banner_YeXbn3",
     "slideshow_AnCCTe",
     "hero_jVaWmY",
     "product_list_fa6P9H",
