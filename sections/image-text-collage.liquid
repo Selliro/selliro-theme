@@ -282,8 +282,18 @@
                 <p class="img-text-collage__subtitle">{{ section.settings.subtitle | escape }}</p>
               {%- endif -%}
               {%- if has_heading -%}
-                <h2 class="img-text-collage__heading" id="ImageTextCollage-heading-{{ section.id }}">
-                  {{ section.settings.heading | escape }}
+                {%- assign itc_decoration = section.settings.heading_decoration | default: 'none' -%}
+                <h2 class="img-text-collage__heading{% if itc_decoration != 'none' %} img-text-collage__heading--decorated{% endif %}" id="ImageTextCollage-heading-{{ section.id }}">
+                  {%- if itc_decoration != 'none' -%}
+                    <span class="img-text-collage__heading-inner">
+                      <span class="img-text-collage__heading-text">{{ section.settings.heading | escape }}</span>
+                      <span class="img-text-collage__heading-decoration">
+                        {%- render 'itc-heading-scribble', style: itc_decoration -%}
+                      </span>
+                    </span>
+                  {%- else -%}
+                    {{ section.settings.heading | escape }}
+                  {%- endif -%}
                 </h2>
               {%- endif -%}
             </div>
@@ -697,6 +707,42 @@
       "id": "heading",
       "label": "Heading",
       "default": "Intensive Hair Serum for Radiant Shine & Lasting Strength"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small",  "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large",  "label": "Large" },
+        { "value": "xlarge", "label": "Extra large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "heading_decoration",
+      "label": "Heading underline decoration",
+      "options": [
+        { "value": "none",    "label": "None" },
+        { "value": "squiggle","label": "Squiggle" },
+        { "value": "wave",    "label": "Wave" },
+        { "value": "brush",   "label": "Brush" },
+        { "value": "double",  "label": "Double" },
+        { "value": "zigzag",  "label": "Zigzag" },
+        { "value": "arc",     "label": "Arc" },
+        { "value": "dotted",  "label": "Dotted" },
+        { "value": "marker",  "label": "Marker" },
+        { "value": "sketch",  "label": "Sketch" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "color",
+      "id": "heading_decoration_color",
+      "label": "Decoration color",
+      "default": "#f5c518"
     },
     {
       "type": "checkbox",
