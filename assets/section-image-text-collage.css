@@ -215,12 +215,50 @@
 
 .img-text-collage__heading {
   margin: 0;
-  font-size: clamp(1.5rem, 2.8vw, 2.35rem);
+  font-size: var(--itc-heading-size, clamp(1.5rem, 2.8vw, 2.35rem));
   font-weight: 700;
   line-height: 1.12;
   letter-spacing: -0.025em;
   color: var(--color-foreground-heading);
 }
+
+/* Heading decoration (underline scribble) */
+.img-text-collage__heading-inner {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.img-text-collage__heading-text {
+  display: block;
+}
+
+.img-text-collage__heading-decoration {
+  display: block;
+  width: 100%;
+  margin-top: 0.12em;
+  line-height: 0;
+  color: var(--itc-decoration-color, currentColor);
+}
+
+.img-text-collage__scribble-svg {
+  display: block;
+  width: 100%;
+  height: 0.42em;
+  overflow: visible;
+}
+
+.img-text-collage__scribble-svg--squiggle { height: 0.48em; }
+.img-text-collage__scribble-svg--wave     { height: 0.38em; }
+.img-text-collage__scribble-svg--brush    { height: 0.44em; }
+.img-text-collage__scribble-svg--double   { height: 0.46em; }
+.img-text-collage__scribble-svg--zigzag   { height: 0.40em; }
+.img-text-collage__scribble-svg--arc      { height: 0.44em; }
+.img-text-collage__scribble-svg--dotted   { height: 0.28em; }
+.img-text-collage__scribble-svg--marker   { height: 0.40em; }
+.img-text-collage__scribble-svg--sketch   { height: 0.50em; }
 
 .img-text-collage__description {
   margin: 0;
