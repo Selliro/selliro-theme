@@ -327,9 +327,9 @@
   font-size: 0.9375rem;
   font-weight: 700;
   text-decoration: none;
-  color: var(--color-primary-button-text);
-  background-color: var(--color-primary-button-background);
-  border: 1px solid var(--color-primary-button-border);
+  color: var(--itc-btn-fg, var(--color-primary-button-text));
+  background-color: var(--itc-btn-bg, var(--color-primary-button-background));
+  border: 1px solid var(--itc-btn-bg, var(--color-primary-button-border));
   transition:
     color 0.2s ease,
     background-color 0.2s ease,
@@ -339,9 +339,9 @@
 }
 
 .img-text-collage__btn:hover {
-  color: var(--color-primary-button-hover-text);
-  background-color: var(--color-primary-button-hover-background);
-  border-color: var(--color-primary-button-hover-border);
+  color: var(--itc-btn-hover-fg, var(--color-primary-button-hover-text));
+  background-color: var(--itc-btn-hover-bg, var(--color-primary-button-hover-background));
+  border-color: var(--itc-btn-hover-bg, var(--color-primary-button-hover-border));
   box-shadow: 0 6px 20px rgb(var(--color-shadow-rgb) / 0.14);
   transform: translateY(-1px);
 }
