@@ -448,7 +448,7 @@ a.itc-badge:hover {
 .itc-badge__arrow {
   font-size: 1.5rem;
   line-height: 1;
-  color: #1a1a1a;
+  color: var(--itc-badge-fg, #1a1a1a);
   display: flex;
   align-items: center;
   justify-content: center;
