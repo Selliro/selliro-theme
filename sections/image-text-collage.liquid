@@ -125,6 +125,20 @@
     --itc-p1-rot: {{ section.settings.image_1_rotation }}deg;
     --itc-p2-rot: {{ section.settings.image_2_rotation }}deg;
     --itc-p3-rot: {{ section.settings.image_3_rotation }}deg;
+    --itc-btn-bg: {{ section.settings.btn_bg }};
+    --itc-btn-fg: {{ section.settings.btn_fg }};
+    --itc-btn-hover-bg: {{ section.settings.btn_hover_bg }};
+    --itc-btn-hover-fg: {{ section.settings.btn_fg }};
+    --itc-badge-bg: {{ section.settings.badge_bg }};
+    --itc-badge-fg: {{ section.settings.badge_fg }};
+    --itc-badge-size: {{ section.settings.badge_size }}%;
+    --itc-decoration-color: {{ section.settings.heading_decoration_color }};
+    {% case section.settings.heading_size %}
+      {% when 'small' %}--itc-heading-size: clamp(1.15rem, 2vw, 1.65rem);
+      {% when 'medium' %}--itc-heading-size: clamp(1.5rem, 2.8vw, 2.35rem);
+      {% when 'large' %}--itc-heading-size: clamp(1.85rem, 3.5vw, 3rem);
+      {% when 'xlarge' %}--itc-heading-size: clamp(2.25rem, 4.5vw, 3.75rem);
+    {% endcase %}
   "
   {% if has_heading and render_content %}
     aria-labelledby="ImageTextCollage-heading-{{ section.id }}"
