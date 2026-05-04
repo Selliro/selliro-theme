@@ -397,15 +397,15 @@
 /* --- Rotating "Explore More" circular badge --- */
 .itc-badge {
   position: absolute;
-  top: 50%;
-  left: 42%;
+  top: var(--itc-badge-top, 50%);
+  left: var(--itc-badge-left, 42%);
   transform: translate(-50%, -50%);
   z-index: 10;
-  width: clamp(116px, 18%, 152px);
+  width: clamp(100px, var(--itc-badge-size, 18%), 160px);
   aspect-ratio: 1;
   border-radius: 50%;
-  background: #f2c419;
-  color: #1a1a1a;
+  background: var(--itc-badge-bg, #f2c419);
+  color: var(--itc-badge-fg, #1a1a1a);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -427,7 +427,7 @@ a.itc-badge:hover {
   inset: 0;
   width: 100%;
   height: 100%;
-  fill: #1a1a1a;
+  fill: var(--itc-badge-fg, #1a1a1a);
   animation: itc-badge-spin 9s linear infinite;
 }
 
