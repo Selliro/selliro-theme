@@ -314,6 +314,9 @@
     "footer": {
       "all_rights_reserved": "All rights reserved."
     },
+    "image_text_collage": {
+      "section_aria_label": "Image with text collage"
+    },
     "new_arrivals_showcase": {
       "no_tabs": "Add at least one collection tab to display products."
     }
