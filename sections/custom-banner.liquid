@@ -26,7 +26,7 @@
   endfor
 
   assign slideshow_autoplay = false
-  if video_slide_count > 1 and section.settings.slideshow_mode == 'autoplay'
+  if has_multiple_slides and section.settings.slideshow_mode == 'autoplay'
     assign slideshow_autoplay = true
   endif
 %}
@@ -66,8 +66,8 @@
             endif
           %}
 
-          <slideshow-slide
-            class="custom-banner__slide"
+          <div
+            class="swiper-slide custom-banner__slide"
             {{ block.shopify_attributes }}
           >
             <div
@@ -80,7 +80,10 @@
               {% if has_video %}
                 {% if video_setting != blank %}
                   {% render 'video',
-                    video: video_setting,
+                    video_from_url: true,
+                    video: video_setting.id,
+                    video_type: video_setting.type,
+                    video_alt: image_alt,
                     section_id: section.id,
                     video_autoplay: section.settings.video_autoplay,
                     video_loop: section.settings.video_autoplay,
@@ -169,6 +172,8 @@
                     style="
                       --custom-banner-button-text-color: {{ block.settings.button_text_color }};
                       --custom-banner-button-font-size: {{ block.settings.button_font_size }}px;
+                      --custom-banner-button-background-color: {{ block.settings.button_background_color }};
+                      --custom-banner-button-border-color: {{ block.settings.button_border_color }};
                     "
                   >
                     {{ block.settings.button_label }}
@@ -176,10 +181,10 @@
                 {% endif %}
               </div>
             </div>
-          </slideshow-slide>
+          </div>
         {% endfor %}
       {% else %}
-        <slideshow-slide class="custom-banner__slide">
+        <div class="swiper-slide custom-banner__slide">
           <div
             class="custom-banner__media"
             style="
@@ -191,20 +196,44 @@
               {{ 'hero-apparel-1' | placeholder_svg_tag: 'custom-banner__placeholder-svg' }}
             </div>
           </div>
-        </slideshow-slide>
+        </div>
       {% endif %}
     {% endcapture %}
 
-    {% if has_multiple_slides and video_slide_count > 1 %}
-      {% render 'slideshow',
-        slides: slides,
-        slide_count: slide_count,
-        show_arrows: true,
-        icon_style: 'chevron',
-        class: 'custom-banner__slideshow',
-        autoplay: slideshow_autoplay,
-        autoplay_speed: section.settings.slideshow_speed
-      %}
+    {% if has_multiple_slides %}
+      <carousel-swiper class="carousel custom-banner__slideshow">
+        <script type="application/json">
+          {
+            "slidesPerView": 1,
+            "spaceBetween": 0,
+            "navigation": true,
+            "loop": {{ section.settings.enable_infinite_loop | json }}
+            {% if slideshow_autoplay %}
+              ,"autoplay": {
+                "delay": {{ section.settings.slideshow_speed | times: 1000 }},
+                "disableOnInteraction": false
+              }
+            {% endif %}
+          }
+        </script>
+        <div class="swiper custom-banner__swiper">
+          <div class="swiper-wrapper custom-banner__wrapper">
+            {{ slides }}
+          </div>
+        </div>
+        <div class="custom-banner__navigation">
+          <button type="button" class="custom-banner__nav-button carousel__nav-button--prev" aria-label="Previous slide">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M14.5 6.5L9 12L14.5 17.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button type="button" class="custom-banner__nav-button carousel__nav-button--next" aria-label="Next slide">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M9.5 6.5L15 12L9.5 17.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </carousel-swiper>
     {% else %}
       <div class="custom-banner__single-slide">
         {{ slides }}
@@ -267,7 +296,7 @@
     justify-content: center;
     align-items: flex-start;
     gap: 12px;
-    padding: 32px;
+    padding: 40px;
     color: rgb(var(--color-foreground-rgb));
     background: linear-gradient(90deg, rgb(0 0 0 / 42%) 0%, rgb(0 0 0 / 10%) 45%, transparent 75%);
     max-width: min(100%, 700px);
@@ -287,6 +316,7 @@
     letter-spacing: 0.12em;
     text-transform: uppercase;
     font-weight: 500;
+    font-family: "Lato", "sans-serif" ;
   }
 
   .custom-banner__heading {
@@ -303,26 +333,59 @@
   }
 
   .custom-banner__button {
-    color: var(--custom-banner-button-text-color, #111111);
+    color: var(--custom-banner-button-text-color, #000);
     font-size: var(--custom-banner-button-font-size, 16px);
+    background-color: var(--custom-banner-button-background-color, #FAD02C);
+    border-color: var(--custom-banner-button-border-color, #FAD02C);
     margin-top: 8px;
+    font-weight: 600;
+    padding: 15px 75px;
+    height: 52px;
+    border-radius: 100px;
+    border: 1px solid #FAD02C;
+    transition: all 0.3s ease;
+    &:hover {
+      background-color: #FFF;
+      color: #000;
+    }
   }
 
-  .custom-banner__slideshow slideshow-arrows {
+  .custom-banner__navigation {
     position: absolute;
-    inset-inline: 16px;
-    inset-block-start: 50%;
+    inset-inline: 0;
+    top: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 10px;
     transform: translateY(-50%);
     z-index: var(--layer-raised);
     pointer-events: none;
   }
 
-  .custom-banner__slideshow .slideshow-control {
+  .custom-banner__nav-button {
     pointer-events: auto;
-    width: 48px;
-    height: 48px;
-    background: rgb(255 255 255 / 92%);
+    width: 44px;
+    height: 44px;
+    border: 0;
     border-radius: 50%;
+    background: rgb(255 255 255 / 95%);
+    color: #092846;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+
+  .custom-banner__nav-button:hover {
+    transform: scale(1.04);
+    background: #ffffff;
+  }
+
+  .custom-banner__nav-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 
   @media screen and (max-width: 749px) {
@@ -331,7 +394,7 @@
     }
 
     .custom-banner__overlay {
-      padding: 24px;
+      padding: 15px;
       gap: 10px;
       max-width: 100%;
       justify-content: flex-end;
@@ -349,6 +412,15 @@
 
     .custom-banner__caption {
       font-size: calc(var(--custom-banner-caption-size, 14px) * 0.9);
+    }
+
+    .custom-banner__navigation {
+      padding-inline: 8px;
+    }
+
+    .custom-banner__nav-button {
+      width: 38px;
+      height: 38px;
     }
   }
 {% endstylesheet %}
@@ -544,6 +616,18 @@
           "step": 1,
           "unit": "px",
           "default": 16
+        },
+        {
+          "type": "color",
+          "id": "button_background_color",
+          "label": "Button background color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "button_border_color",
+          "label": "Button border color",
+          "default": "#ffffff"
         }
       ]
     }
@@ -580,6 +664,12 @@
         }
       ],
       "default": "autoplay"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_infinite_loop",
+      "label": "Enable infinite loop",
+      "default": false
     },
     {
       "type": "range",
