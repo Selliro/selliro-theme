@@ -1,0 +1,153 @@
+{% comment %}
+  Decorative heading underlines for Image Text Collage section.
+  @param {string} style - squiggle | wave | brush | double | zigzag | arc | dotted | marker | sketch
+{% endcomment %}
+{%- liquid
+  assign scribble_style = style | default: 'squiggle'
+-%}
+{%- case scribble_style -%}
+  {%- when 'squiggle' -%}
+    <svg
+      class="img-text-collage__scribble-svg img-text-collage__scribble-svg--squiggle"
+      viewBox="-347 -30.1947 694 96.19"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="20"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M-335,54 C-335,54 -171,-58 -194,-3 C-217,52 -224,73 -127,11 C-68,-27 -137,50 -33,42 C31,37 147,-29 335,2" />
+    </svg>
+  {%- when 'wave' -%}
+    <svg
+      class="img-text-collage__scribble-svg img-text-collage__scribble-svg--wave"
+      viewBox="0 0 320 56"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="14"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M8,36 C52,14 96,58 160,34 C224,10 268,48 312,28" />
+    </svg>
+  {%- when 'brush' -%}
+    <svg
+      class="img-text-collage__scribble-svg img-text-collage__scribble-svg--brush"
+      viewBox="0 0 340 72"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="22"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M12,44 C78,32 142,52 210,38 C248,30 288,34 328,40" />
+    </svg>
+  {%- when 'double' -%}
+    <svg
+      class="img-text-collage__scribble-svg img-text-collage__scribble-svg--double"
+      viewBox="0 0 320 64"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="10"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M10,22 C70,8 130,36 200,20 C240,10 280,18 310,14" />
+      <path pathLength="1" d="M14,42 C80,52 140,30 210,46 C250,54 290,44 306,48" />
+    </svg>
+  {%- when 'zigzag' -%}
+    <svg
+      class="img-text-collage__scribble-svg img-text-collage__scribble-svg--zigzag"
+      viewBox="0 0 340 36"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="square"
+      stroke-linejoin="miter"
+      stroke-width="8"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M6,6 L38,30 L70,6 L102,30 L134,6 L166,30 L198,6 L230,30 L262,6 L294,30 L334,6" />
+    </svg>
+  {%- when 'arc' -%}
+    <svg
+      class="img-text-collage__scribble-svg img-text-collage__scribble-svg--arc"
+      viewBox="0 0 340 52"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="12"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M10,12 Q170,50 330,12" />
+    </svg>
+  {%- when 'dotted' -%}
+    <svg
+      class="img-text-collage__scribble-svg img-text-collage__scribble-svg--dotted"
+      viewBox="0 0 340 18"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="14"
+      stroke-dasharray="0 28"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M14,9 L326,9" />
+    </svg>
+  {%- when 'marker' -%}
+    <svg
+      class="img-text-collage__scribble-svg img-text-collage__scribble-svg--marker"
+      viewBox="0 0 340 48"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="24"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+      opacity="0.72"
+    >
+      <path pathLength="1" d="M14,30 C110,26 220,32 326,28" />
+    </svg>
+  {%- when 'sketch' -%}
+    <svg
+      class="img-text-collage__scribble-svg img-text-collage__scribble-svg--sketch"
+      viewBox="0 0 340 64"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="5"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path pathLength="1" d="M8,18 C100,14 220,22 332,16" />
+      <path pathLength="1" d="M10,32 C90,36 200,26 330,34" />
+      <path pathLength="1" d="M6,50 C100,46 220,52 332,48" />
+    </svg>
+{%- endcase -%}

@@ -125,6 +125,20 @@
     --itc-p1-rot: {{ section.settings.image_1_rotation }}deg;
     --itc-p2-rot: {{ section.settings.image_2_rotation }}deg;
     --itc-p3-rot: {{ section.settings.image_3_rotation }}deg;
+    --itc-btn-bg: {{ section.settings.btn_bg }};
+    --itc-btn-fg: {{ section.settings.btn_fg }};
+    --itc-btn-hover-bg: {{ section.settings.btn_hover_bg }};
+    --itc-btn-hover-fg: {{ section.settings.btn_fg }};
+    --itc-badge-bg: {{ section.settings.badge_bg }};
+    --itc-badge-fg: {{ section.settings.badge_fg }};
+    --itc-badge-size: {{ section.settings.badge_size }}%;
+    --itc-decoration-color: {{ section.settings.heading_decoration_color }};
+    {% case section.settings.heading_size %}
+      {% when 'small' %}--itc-heading-size: clamp(1.15rem, 2vw, 1.65rem);
+      {% when 'medium' %}--itc-heading-size: clamp(1.5rem, 2.8vw, 2.35rem);
+      {% when 'large' %}--itc-heading-size: clamp(1.85rem, 3.5vw, 3rem);
+      {% when 'xlarge' %}--itc-heading-size: clamp(2.25rem, 4.5vw, 3.75rem);
+    {% endcase %}
   "
   {% if has_heading and render_content %}
     aria-labelledby="ImageTextCollage-heading-{{ section.id }}"
@@ -268,8 +282,18 @@
                 <p class="img-text-collage__subtitle">{{ section.settings.subtitle | escape }}</p>
               {%- endif -%}
               {%- if has_heading -%}
-                <h2 class="img-text-collage__heading" id="ImageTextCollage-heading-{{ section.id }}">
-                  {{ section.settings.heading | escape }}
+                {%- assign itc_decoration = section.settings.heading_decoration | default: 'none' -%}
+                <h2 class="img-text-collage__heading{% if itc_decoration != 'none' %} img-text-collage__heading--decorated{% endif %}" id="ImageTextCollage-heading-{{ section.id }}">
+                  {%- if itc_decoration != 'none' -%}
+                    <span class="img-text-collage__heading-inner">
+                      <span class="img-text-collage__heading-text">{{ section.settings.heading | escape }}</span>
+                      <span class="img-text-collage__heading-decoration">
+                        {%- render 'itc-heading-scribble', style: itc_decoration -%}
+                      </span>
+                    </span>
+                  {%- else -%}
+                    {{ section.settings.heading | escape }}
+                  {%- endif -%}
                 </h2>
               {%- endif -%}
             </div>
@@ -685,6 +709,42 @@
       "default": "Intensive Hair Serum for Radiant Shine & Lasting Strength"
     },
     {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "small",  "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large",  "label": "Large" },
+        { "value": "xlarge", "label": "Extra large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "heading_decoration",
+      "label": "Heading underline decoration",
+      "options": [
+        { "value": "none",    "label": "None" },
+        { "value": "squiggle","label": "Squiggle" },
+        { "value": "wave",    "label": "Wave" },
+        { "value": "brush",   "label": "Brush" },
+        { "value": "double",  "label": "Double" },
+        { "value": "zigzag",  "label": "Zigzag" },
+        { "value": "arc",     "label": "Arc" },
+        { "value": "dotted",  "label": "Dotted" },
+        { "value": "marker",  "label": "Marker" },
+        { "value": "sketch",  "label": "Sketch" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "color",
+      "id": "heading_decoration_color",
+      "label": "Decoration color",
+      "default": "#f5c518"
+    },
+    {
       "type": "checkbox",
       "id": "show_description",
       "label": "Show description",
@@ -721,6 +781,28 @@
     },
     {
       "type": "header",
+      "content": "Button style"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg",
+      "label": "Background",
+      "default": "#f5c518"
+    },
+    {
+      "type": "color",
+      "id": "btn_fg",
+      "label": "Text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_bg",
+      "label": "Hover background",
+      "default": "#ddb015"
+    },
+    {
+      "type": "header",
       "content": "Explore badge"
     },
     {
@@ -736,6 +818,28 @@
       "label": "Badge ring text",
       "default": "EXPLORE MORE ~ EXPLORE MORE ~ ",
       "info": "Repeat the phrase twice with a separator (e.g. ~) to fill the full ring."
+    },
+    {
+      "type": "color",
+      "id": "badge_bg",
+      "label": "Badge background",
+      "default": "#f2c419"
+    },
+    {
+      "type": "color",
+      "id": "badge_fg",
+      "label": "Badge text & icon color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "badge_size",
+      "label": "Badge size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "%",
+      "default": 18
     },
     {
       "type": "header",
