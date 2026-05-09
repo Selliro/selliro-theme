@@ -297,6 +297,7 @@
         "slide_ca9DCF",
         "slide_mkVqxG"
       ],
+      "disabled": true,
       "name": "t:names.slideshow",
       "settings": {
         "icons_style": "arrows_large",
@@ -306,6 +307,60 @@
         "autoplay_speed": 4,
         "section_width": "full-width",
         "slide_height": "medium",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "custom_banner_hyYynn": {
+      "type": "custom-banner",
+      "blocks": {
+        "slide_DpYznB": {
+          "type": "slide",
+          "settings": {
+            "media_type": "split_50_50",
+            "video_source_type": "youtube",
+            "video_cdn_url": "",
+            "aspect_ratio_desktop": "16/7",
+            "aspect_ratio_mobile": "4/5",
+            "split_side_type": "image",
+            "split_text_position": "left",
+            "split_text_background_color": "#1d3686",
+            "split_enable_gradient": false,
+            "split_side_text": "",
+            "split_side_image_desktop": "shopify://shop_images/skincare.png",
+            "split_side_video_source_type": "youtube",
+            "split_side_video_cdn_url": "",
+            "caption": "COSMETICS",
+            "caption_color": "#FFFFFF",
+            "caption_font_size": 16,
+            "heading": "Be kind to your skin, your skin reflect kindness towards you",
+            "heading_color": "#FFFFFF",
+            "heading_font_size": 38,
+            "subheading": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "subheading_color": "#FFFFFF",
+            "subheading_font_size": 18,
+            "button_label": "SHOP NOW",
+            "button_link": "",
+            "button_text_color": "#111111",
+            "button_font_size": 16,
+            "button_background_color": "#ffffff",
+            "button_border_color": "#ffffff"
+          }
+        }
+      },
+      "block_order": [
+        "slide_DpYznB"
+      ],
+      "name": "Custom banner",
+      "settings": {
+        "enable_container": false,
+        "video_autoplay": true,
+        "slideshow_mode": "autoplay",
+        "enable_infinite_loop": false,
+        "slideshow_speed": 5,
+        "aspect_ratio_desktop": "16/7",
+        "aspect_ratio_mobile": "4/5",
+        "color_scheme": "",
         "padding-block-start": 0,
         "padding-block-end": 0
       }
@@ -1363,14 +1418,23 @@
         "show_subtitle": true,
         "subtitle": "Pure and simple",
         "heading": "Intensive Hair Serum for Radiant Shine & Lasting Strength",
+        "heading_size": "medium",
+        "heading_decoration": "none",
+        "heading_decoration_color": "#f5c518",
         "show_description": true,
         "description": "<p>Our concentrated serum helps smooth the look of damage and adds luminous shine with plant-based actives you can feel good about.</p>",
         "show_feature_grid": true,
         "show_cta": true,
         "button_label": "Explore sale",
         "button_link": "",
+        "btn_bg": "#f5c518",
+        "btn_fg": "#111111",
+        "btn_hover_bg": "#ddb015",
         "show_badge": true,
         "badge_text": "EXPLORE MORE ~ EXPLORE MORE ~",
+        "badge_bg": "#f2c419",
+        "badge_fg": "#1a1a1a",
+        "badge_size": 18,
         "padding_top": 72,
         "padding_bottom": 72
       }
@@ -1954,6 +2018,7 @@
   },
   "order": [
     "slideshow_AnCCTe",
+    "custom_banner_hyYynn",
     "hero_jVaWmY",
     "product_list_fa6P9H",
     "new_arrivals_showcase_6GTQmq",
