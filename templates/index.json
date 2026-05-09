@@ -314,12 +314,49 @@
     "custom_banner_hyYynn": {
       "type": "custom-banner",
       "blocks": {
+        "slide_7PaYdt": {
+          "type": "slide",
+          "settings": {
+            "media_type": "video",
+            "video_source_type": "youtube",
+            "video_url_youtube": "https://www.youtube.com/watch?v=otej7WLdPh0",
+            "video_url_vimeo": "",
+            "video_cdn_url": "",
+            "aspect_ratio_desktop": "16/7",
+            "aspect_ratio_mobile": "4/5",
+            "split_side_type": "text",
+            "split_text_position": "left",
+            "split_text_background_color": "#000000",
+            "split_enable_gradient": false,
+            "split_side_text": "",
+            "split_side_video_source_type": "youtube",
+            "split_side_video_url_youtube": "",
+            "split_side_video_url_vimeo": "",
+            "split_side_video_cdn_url": "",
+            "caption": "COSMETICS",
+            "caption_color": "#ffffff",
+            "caption_font_size": 16,
+            "heading": "Be kind to your skin, your skin reflect kindness towards you",
+            "heading_color": "#ffffff",
+            "heading_font_size": 62,
+            "subheading": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "subheading_color": "#ffffff",
+            "subheading_font_size": 18,
+            "button_label": "SHOP NOW",
+            "button_link": "",
+            "button_text_color": "#111111",
+            "button_font_size": 16,
+            "button_background_color": "#ffffff",
+            "button_border_color": "#ffffff"
+          }
+        },
         "slide_DpYznB": {
           "type": "slide",
           "settings": {
-            "media_type": "split_50_50",
+            "media_type": "image",
             "video_source_type": "youtube",
             "video_cdn_url": "",
+            "image_desktop": "shopify://shop_images/skincare.png",
             "aspect_ratio_desktop": "16/7",
             "aspect_ratio_mobile": "4/5",
             "split_side_type": "image",
@@ -349,6 +386,7 @@
         }
       },
       "block_order": [
+        "slide_7PaYdt",
         "slide_DpYznB"
       ],
       "name": "Custom banner",
