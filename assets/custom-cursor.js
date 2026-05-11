@@ -29,13 +29,15 @@
   }
 
   function loop() {
+    innerX += (mouseX - innerX) * 0.38;
+    innerY += (mouseY - innerY) * 0.38;
     outerX += (mouseX - outerX) * 0.18;
     outerY += (mouseY - outerY) * 0.18;
 
-    inner.style.transform = 'translate(' + mouseX + 'px,' + mouseY + 'px)';
+    inner.style.transform = 'translate(' + innerX + 'px,' + innerY + 'px)';
     outer.style.transform = 'translate(' + outerX + 'px,' + outerY + 'px)';
 
-    rafId = requestAnimationFrame(loop);
+    requestAnimationFrame(loop);
   }
 
   document.addEventListener('mousemove', function (e) {
