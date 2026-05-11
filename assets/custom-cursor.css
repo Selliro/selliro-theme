@@ -30,10 +30,10 @@
 }
 
 .cursor-inner {
-  width: 12px;
-  height: 12px;
-  margin-left: -6px;
-  margin-top: -6px;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  margin-top: -5px;
   background-color: var(--theme-color1, #1a1a1a);
   z-index: 10000001;
   opacity: 1;
