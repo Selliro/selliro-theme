@@ -576,33 +576,41 @@
       "content": "Glass text panel"
     },
     {
-      "type": "color",
-      "id": "glass_bg_default",
-      "label": "Panel background (default)",
-      "default": "#ffffffd9",
-      "info": "Use rgba or a hex with opacity. Default: near-opaque white."
+      "type": "range",
+      "id": "glass_opacity_default",
+      "label": "Panel opacity (default)",
+      "min": 60,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 90,
+      "info": "How opaque the text panel is at rest. Lower = more image shows through."
     },
     {
       "type": "range",
       "id": "glass_blur_default",
       "label": "Blur (default)",
       "min": 0,
-      "max": 20,
+      "max": 12,
       "step": 1,
       "unit": "px",
       "default": 2
     },
     {
-      "type": "color",
-      "id": "glass_bg_hover",
-      "label": "Panel background (hover)",
-      "default": "#ffffff80",
-      "info": "Semi-transparent white reveals the image for the glass effect."
+      "type": "range",
+      "id": "glass_opacity_hover",
+      "label": "Panel opacity (on hover)",
+      "min": 10,
+      "max": 75,
+      "step": 5,
+      "unit": "%",
+      "default": 40,
+      "info": "Lower value = stronger glass effect — more image visible through the panel."
     },
     {
       "type": "range",
       "id": "glass_blur_hover",
-      "label": "Blur (hover)",
+      "label": "Blur (on hover)",
       "min": 4,
       "max": 32,
       "step": 2,
