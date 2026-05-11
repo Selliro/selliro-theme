@@ -107,19 +107,19 @@
     display: flex;
     flex-direction: column;
     text-align: {{ section.settings.content_alignment }};
-    background: {{ section.settings.glass_bg_default }};
-    border-top: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, {{ section.settings.glass_opacity_default | times: 0.01 }});
+    border-top: 1px solid rgba(255, 255, 255, 0.4);
     backdrop-filter: blur({{ section.settings.glass_blur_default }}px);
     -webkit-backdrop-filter: blur({{ section.settings.glass_blur_default }}px);
     transition:
-      background 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-      backdrop-filter 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-      -webkit-backdrop-filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      backdrop-filter 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+      -webkit-backdrop-filter 0.45s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   /* Glass effect on hover */
   .shop-by-category-{{ section_id }} .category-card:hover .category-content {
-    background: {{ section.settings.glass_bg_hover }};
+    background: rgba(255, 255, 255, {{ section.settings.glass_opacity_hover | times: 0.01 }});
     backdrop-filter: blur({{ section.settings.glass_blur_hover }}px) saturate(180%);
     -webkit-backdrop-filter: blur({{ section.settings.glass_blur_hover }}px) saturate(180%);
   }
