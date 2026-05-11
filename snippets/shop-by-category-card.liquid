@@ -1,5 +1,5 @@
 {% comment %}
-  Renders a single category card (image, badge, title, description, link).
+  Renders a single category card (image fills full card, glass text overlay).
   Used by sections/shop-by-category.liquid
   Required: block, section
 {% endcomment %}
@@ -10,12 +10,12 @@
       {% assign image = block.settings.image %}
       {% assign image_alt = image.alt | default: block.settings.title | escape %}
       <img
-        src="{{ image | image_url: width: 600 }}"
-        srcset="{{ image | image_url: width: 300 }} 300w, {{ image | image_url: width: 600 }} 600w"
+        src="{{ image | image_url: width: 800 }}"
+        srcset="{{ image | image_url: width: 400 }} 400w, {{ image | image_url: width: 800 }} 800w"
         alt="{{ image_alt }}"
         loading="lazy"
-        width="600"
-        height="{{ image.height | times: 600 | divided_by: image.width }}"
+        width="800"
+        height="{{ image.height | times: 800 | divided_by: image.width }}"
       >
     {% else %}
       <div class="image-placeholder">
@@ -27,25 +27,43 @@
         </svg>
       </div>
     {% endif %}
+
+    <div class="category-content">
+      {% if block.settings.badge_text != blank %}
+        <span class="category-badge badge-{{ block.settings.badge_type | default: 'neutral' }}">
+          {{ block.settings.badge_text }}
+        </span>
+      {% endif %}
+
+      {% if block.settings.title != blank %}
+        <h3 class="category-title">{{ block.settings.title }}</h3>
+      {% endif %}
+
+      {% if block.settings.description != blank %}
+        <p class="category-description">{{ block.settings.description }}</p>
+      {% endif %}
+
+      {% if block.settings.link_text != blank and block.settings.link != blank %}
+        <span class="category-link">{{ block.settings.link_text }}</span>
+      {% endif %}
+    </div>
+  </div>
+
+{% else %}
+  <div class="category-content category-content--text-only">
+    {% if block.settings.badge_text != blank %}
+      <span class="category-badge badge-{{ block.settings.badge_type | default: 'neutral' }}">
+        {{ block.settings.badge_text }}
+      </span>
+    {% endif %}
+    {% if block.settings.title != blank %}
+      <h3 class="category-title">{{ block.settings.title }}</h3>
+    {% endif %}
+    {% if block.settings.description != blank %}
+      <p class="category-description">{{ block.settings.description }}</p>
+    {% endif %}
+    {% if block.settings.link_text != blank and block.settings.link != blank %}
+      <span class="category-link">{{ block.settings.link_text }}</span>
+    {% endif %}
   </div>
 {% endif %}
-
-<div class="category-content">
-  {% if block.settings.badge_text != blank %}
-    <span class="category-badge badge-{{ block.settings.badge_type | default: 'neutral' }}">
-      {{ block.settings.badge_text }}
-    </span>
-  {% endif %}
-
-  {% if block.settings.title != blank %}
-    <h3 class="category-title">{{ block.settings.title }}</h3>
-  {% endif %}
-
-  {% if block.settings.description != blank %}
-    <p class="category-description">{{ block.settings.description }}</p>
-  {% endif %}
-
-  {% if block.settings.link_text != blank and block.settings.link != blank %}
-    <span class="category-link">{{ block.settings.link_text }}</span>
-  {% endif %}
-</div>
