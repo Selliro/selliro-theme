@@ -1,0 +1,86 @@
+/* Custom cursor — shown only on fine-pointer (non-touch) devices */
+
+
+.mouseCursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  visibility: hidden;
+  will-change: transform;
+}
+
+.cursor-outer {
+  width: 30px;
+  height: 30px;
+  margin-left: -15px;
+  margin-top: -15px;
+  border: 1px solid var(--theme-color1, #1a1a1a);
+  background-color: transparent;
+  box-sizing: border-box;
+  z-index: 10000000;
+  opacity: 0.34;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease,
+    margin 0.3s ease,
+    opacity 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.cursor-inner {
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  background-color: var(--theme-color1, #1a1a1a);
+  z-index: 10000001;
+  opacity: 1;
+  transition:
+    width 0.24s ease,
+    height 0.24s ease,
+    margin 0.24s ease,
+    opacity 0.24s ease;
+}
+
+/* Hover over interactive elements */
+.cursor-outer.is-hover {
+  width: 48px;
+  height: 48px;
+  margin-left: -24px;
+  margin-top: -24px;
+  opacity: 0.15;
+  background-color: var(--theme-color1, #1a1a1a);
+}
+
+.cursor-inner.is-hover {
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  margin-top: -3px;
+  opacity: 0.8;
+}
+
+/* Click */
+.cursor-outer.is-click {
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  margin-top: -10px;
+  opacity: 0.6;
+}
+
+.cursor-inner.is-click {
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+}
+
+/* Hide on touch / coarse devices entirely */
+@media (pointer: coarse) {
+  .mouseCursor {
+    display: none !important;
+  }
+}
