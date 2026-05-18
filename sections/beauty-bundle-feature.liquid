@@ -142,38 +142,6 @@
           </div>
         {%- endfor -%}
 
-        {%- assign bundle_ids = '' -%}
-        {%- for block in section.blocks -%}
-          {%- if block.settings.product != blank -%}
-            {%- assign bv = block.settings.product.selected_or_first_available_variant -%}
-            {%- if bv == blank or bv.id == blank or bv.id == 0 -%}
-              {%- assign bv = block.settings.product.variants | first -%}
-            {%- endif -%}
-            {%- if bv and bv.id > 0 -%}
-              {%- capture _vid -%}{{ bv.id }}{%- endcapture -%}
-              {%- if bundle_ids == '' -%}
-                {%- assign bundle_ids = _vid -%}
-              {%- else -%}
-                {%- assign bundle_ids = bundle_ids | append: ',' | append: _vid -%}
-              {%- endif -%}
-            {%- endif -%}
-          {%- endif -%}
-        {%- endfor -%}
-        {%- if bundle_ids != '' -%}
-          <div class="shop-the-look__bundle-row">
-            <button
-              type="button"
-              class="shop-the-look__bundle-btn"
-              data-variant-ids="{{ bundle_ids }}"
-              aria-label="Add all bundle items to cart"
-            >
-              <span class="shop-the-look__bundle-btn-idle">Add Bundle to Cart</span>
-              <span class="shop-the-look__bundle-btn-loading" hidden>Adding…</span>
-              <span class="shop-the-look__bundle-btn-done" hidden>&#10003; Added to Cart</span>
-              <span class="shop-the-look__bundle-btn-error" hidden>&#10007; Try Again</span>
-            </button>
-          </div>
-        {%- endif -%}
       </div>
 
       {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
