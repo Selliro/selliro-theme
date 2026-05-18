@@ -113,7 +113,10 @@
                     <h3 class="shop-the-look__item-title">{{ block_product.title }}</h3>
                   {%- elsif block.settings.title != blank -%}
                     <h3 class="shop-the-look__item-title">{{ block.settings.title }}</h3>
-                  {%- endif -%}                  
+                  {%- endif -%}
+                  {%- if block_product != blank or block.settings.link != blank -%}
+                    <span class="shop-the-look__item-arrow" aria-hidden="true">&#8594;</span>
+                  {%- endif -%}
                 </div>
                 {%- if block_product != blank and block_product.description != blank -%}
                   <p class="shop-the-look__item-desc">{{ block_product.description | strip_html | truncate: 120 }}</p>
