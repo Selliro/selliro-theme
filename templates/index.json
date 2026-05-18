@@ -1744,6 +1744,7 @@
         "item_69nP8w": {
           "type": "item",
           "settings": {
+            "product": "brightening-serum",
             "hotspot_x": 31,
             "hotspot_y": 52,
             "image": "shopify://shop_images/Grid-2-768x461.png",
@@ -1757,6 +1758,7 @@
         "item_DBRt88": {
           "type": "item",
           "settings": {
+            "product": "",
             "hotspot_x": 50,
             "hotspot_y": 71,
             "image": "shopify://shop_images/Grid-1-768x768.png",
@@ -1770,6 +1772,7 @@
         "item_iH7jaV": {
           "type": "item",
           "settings": {
+            "product": "glass-skin-overnight-mask",
             "hotspot_x": 65,
             "hotspot_y": 62,
             "image": "shopify://shop_images/Grid-3-768x768.png",
@@ -1783,6 +1786,7 @@
         "item_AfnLjM": {
           "type": "item",
           "settings": {
+            "product": "sun-cream-spf-protection",
             "hotspot_x": 77,
             "hotspot_y": 74,
             "image": "shopify://shop_images/Grid-4-768x461.png",
