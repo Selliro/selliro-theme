@@ -245,25 +245,42 @@
 
     onBundleClick() {
       var btn = this.bundleBtn;
-      var ids = (btn.dataset.variantIds || '').split(',').filter(Boolean);
+      var ids = (btn.dataset.variantIds || '')
+        .split(',')
+        .map(function(s) { return s.trim(); })
+        .filter(function(s) { return s && Number(s) > 0; });
       if (!ids.length) return;
 
-      var idle = btn.querySelector('.shop-the-look__bundle-btn-idle');
+      var idle    = btn.querySelector('.shop-the-look__bundle-btn-idle');
       var loading = btn.querySelector('.shop-the-look__bundle-btn-loading');
-      var done = btn.querySelector('.shop-the-look__bundle-btn-done');
+      var done    = btn.querySelector('.shop-the-look__bundle-btn-done');
+      var error   = btn.querySelector('.shop-the-look__bundle-btn-error');
+
+      function resetBtn() {
+        if (loading) loading.hidden = true;
+        if (idle) idle.hidden = false;
+        btn.disabled = false;
+      }
 
       btn.disabled = true;
       if (idle) idle.hidden = true;
       if (loading) loading.hidden = false;
 
-      var items = ids.map(function(id) { return { id: parseInt(id, 10), quantity: 1 }; });
+      var items = ids.map(function(id) { return { id: Number(id), quantity: 1 }; });
 
       fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({ items: items })
       })
-      .then(function(r) { return r.json(); })
+      .then(function(r) {
+        if (!r.ok) {
+          return r.json().then(function(err) {
+            throw new Error(err.description || err.message || 'Cart error ' + r.status);
+          });
+        }
+        return r.json();
+      })
       .then(function() {
         return fetch('/cart.js', { headers: { 'Accept': 'application/json' } });
       })
@@ -287,10 +304,20 @@
           btn.classList.remove('is-success');
         }, 2500);
       })
-      .catch(function() {
+      .catch(function(err) {
+        console.error('[Bundle] Add to cart failed:', err.message);
         if (loading) loading.hidden = true;
-        if (idle) idle.hidden = false;
-        btn.disabled = false;
+        if (error) {
+          error.hidden = false;
+          btn.classList.add('is-error');
+          setTimeout(function() {
+            error.hidden = true;
+            btn.classList.remove('is-error');
+            resetBtn();
+          }, 3000);
+        } else {
+          resetBtn();
+        }
       });
     }
   }

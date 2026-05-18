@@ -377,6 +377,10 @@
   background-color: #2e7d32;
 }
 
+.shop-the-look__bundle-btn.is-error {
+  background-color: #c62828;
+}
+
 @media screen and (max-width: 600px) {
   .shop-the-look__bundle-btn {
     width: 100%;
