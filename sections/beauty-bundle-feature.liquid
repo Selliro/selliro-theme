@@ -37,12 +37,47 @@
     </div>
 
     <div class="shop-the-look__content">
+      {%- assign bundle_ids = '' -%}
+      {%- for block in section.blocks -%}
+        {%- if block.settings.product != blank -%}
+          {%- assign bv = block.settings.product.selected_or_first_available_variant -%}
+          {%- if bv == blank or bv.id == blank or bv.id == 0 -%}
+            {%- assign bv = block.settings.product.variants | first -%}
+          {%- endif -%}
+          {%- if bv and bv.id > 0 -%}
+            {%- capture _vid -%}{{ bv.id }}{%- endcapture -%}
+            {%- if bundle_ids == '' -%}
+              {%- assign bundle_ids = _vid -%}
+            {%- else -%}
+              {%- assign bundle_ids = bundle_ids | append: ',' | append: _vid -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+
       {%- if section.settings.eyebrow != blank -%}
         <p class="shop-the-look__eyebrow">{{ section.settings.eyebrow }}</p>
       {%- endif -%}
-      {%- if section.settings.heading != blank -%}
-        <h2 class="shop-the-look__heading">{{ section.settings.heading }}</h2>
-      {%- endif -%}
+
+      <div class="shop-the-look__heading-row">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="shop-the-look__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if bundle_ids != '' -%}
+          <button
+            type="button"
+            class="shop-the-look__bundle-btn"
+            data-variant-ids="{{ bundle_ids }}"
+            aria-label="Add all bundle items to cart"
+          >
+            <span class="shop-the-look__bundle-btn-idle">Add Bundle to Cart</span>
+            <span class="shop-the-look__bundle-btn-loading" hidden>Adding…</span>
+            <span class="shop-the-look__bundle-btn-done" hidden>&#10003; Added to Cart</span>
+            <span class="shop-the-look__bundle-btn-error" hidden>&#10007; Try Again</span>
+          </button>
+        {%- endif -%}
+      </div>
+
       {%- if section.settings.subheading != blank -%}
         <p class="shop-the-look__subheading">{{ section.settings.subheading }}</p>
       {%- endif -%}
