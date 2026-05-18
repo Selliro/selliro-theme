@@ -111,6 +111,9 @@
         {%- for block in section.blocks -%}
           {%- if block.settings.product != blank -%}
             {%- assign bv = block.settings.product.selected_or_first_available_variant -%}
+            {%- if bv == blank or bv.id == blank or bv.id == 0 -%}
+              {%- assign bv = block.settings.product.variants | first -%}
+            {%- endif -%}
             {%- if bv and bv.id > 0 -%}
               {%- capture _vid -%}{{ bv.id }}{%- endcapture -%}
               {%- if bundle_ids == '' -%}
