@@ -192,19 +192,6 @@
   -webkit-box-orient: vertical;
 }
 
-.shop-the-look__item-arrow {
-  font-size: 15px;
-  color: rgb(var(--color-foreground-rgb) / 0.35);
-  flex-shrink: 0;
-  transition: transform 0.2s ease, color 0.2s ease;
-  line-height: 1;
-}
-
-.shop-the-look__item-card:hover .shop-the-look__item-arrow {
-  color: rgb(var(--color-foreground-rgb) / 0.8);
-  transform: translateX(4px);
-}
-
 .shop-the-look__rating {
   display: inline-flex;
   gap: 2px;
