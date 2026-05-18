@@ -106,6 +106,36 @@
             </div>
           </div>
         {%- endfor -%}
+
+        {%- liquid
+          assign bundle_ids = ''
+          for block in section.blocks
+            if block.settings.product != blank
+              assign bv = block.settings.product.selected_or_first_available_variant
+              if bv
+                if bundle_ids == ''
+                  assign bundle_ids = bv.id | prepend: ''
+                else
+                  assign bundle_ids = bundle_ids | append: ',' | append: bv.id
+                endif
+              endif
+            endif
+          endfor
+        -%}
+        {%- if bundle_ids != '' -%}
+          <div class="shop-the-look__bundle-row">
+            <button
+              type="button"
+              class="shop-the-look__bundle-btn"
+              data-variant-ids="{{ bundle_ids }}"
+              aria-label="Add all bundle items to cart"
+            >
+              <span class="shop-the-look__bundle-btn-idle">Add Bundle to Cart</span>
+              <span class="shop-the-look__bundle-btn-loading" hidden>Adding…</span>
+              <span class="shop-the-look__bundle-btn-done" hidden>&#10003; Added to Cart</span>
+            </button>
+          </div>
+        {%- endif -%}
       </div>
 
       {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
@@ -121,42 +151,52 @@
       this.hotspots = Array.from(this.querySelectorAll('.shop-the-look__hotspot'));
       this.items = Array.from(this.querySelectorAll('.shop-the-look__item'));
 
-      if (!this.hotspots.length || !this.items.length) return;
-
       this.onHotspotEnter = this.onHotspotEnter.bind(this);
       this.onHotspotLeave = this.onHotspotLeave.bind(this);
       this.onItemEnter = this.onItemEnter.bind(this);
       this.onItemLeave = this.onItemLeave.bind(this);
+      this.onBundleClick = this.onBundleClick.bind(this);
 
-      this.hotspots.forEach((hotspot) => {
-        hotspot.addEventListener('mouseenter', this.onHotspotEnter);
-        hotspot.addEventListener('focus', this.onHotspotEnter);
-        hotspot.addEventListener('mouseleave', this.onHotspotLeave);
-        hotspot.addEventListener('blur', this.onHotspotLeave);
-      });
+      if (this.hotspots.length && this.items.length) {
+        this.hotspots.forEach((hotspot) => {
+          hotspot.addEventListener('mouseenter', this.onHotspotEnter);
+          hotspot.addEventListener('focus', this.onHotspotEnter);
+          hotspot.addEventListener('mouseleave', this.onHotspotLeave);
+          hotspot.addEventListener('blur', this.onHotspotLeave);
+        });
 
-      this.items.forEach((item) => {
-        item.addEventListener('mouseenter', this.onItemEnter);
-        item.addEventListener('focusin', this.onItemEnter);
-        item.addEventListener('mouseleave', this.onItemLeave);
-        item.addEventListener('focusout', this.onItemLeave);
-      });
+        this.items.forEach((item) => {
+          item.addEventListener('mouseenter', this.onItemEnter);
+          item.addEventListener('focusin', this.onItemEnter);
+          item.addEventListener('mouseleave', this.onItemLeave);
+          item.addEventListener('focusout', this.onItemLeave);
+        });
+      }
+
+      this.bundleBtn = this.querySelector('.shop-the-look__bundle-btn');
+      if (this.bundleBtn) {
+        this.bundleBtn.addEventListener('click', this.onBundleClick);
+      }
     }
 
     disconnectedCallback() {
-      if (!this.hotspots || !this.items) return;
-      this.hotspots.forEach((hotspot) => {
-        hotspot.removeEventListener('mouseenter', this.onHotspotEnter);
-        hotspot.removeEventListener('focus', this.onHotspotEnter);
-        hotspot.removeEventListener('mouseleave', this.onHotspotLeave);
-        hotspot.removeEventListener('blur', this.onHotspotLeave);
-      });
-      this.items.forEach((item) => {
-        item.removeEventListener('mouseenter', this.onItemEnter);
-        item.removeEventListener('focusin', this.onItemEnter);
-        item.removeEventListener('mouseleave', this.onItemLeave);
-        item.removeEventListener('focusout', this.onItemLeave);
-      });
+      if (this.hotspots && this.items) {
+        this.hotspots.forEach((hotspot) => {
+          hotspot.removeEventListener('mouseenter', this.onHotspotEnter);
+          hotspot.removeEventListener('focus', this.onHotspotEnter);
+          hotspot.removeEventListener('mouseleave', this.onHotspotLeave);
+          hotspot.removeEventListener('blur', this.onHotspotLeave);
+        });
+        this.items.forEach((item) => {
+          item.removeEventListener('mouseenter', this.onItemEnter);
+          item.removeEventListener('focusin', this.onItemEnter);
+          item.removeEventListener('mouseleave', this.onItemLeave);
+          item.removeEventListener('focusout', this.onItemLeave);
+        });
+      }
+      if (this.bundleBtn) {
+        this.bundleBtn.removeEventListener('click', this.onBundleClick);
+      }
     }
 
     clearActive() {
@@ -201,6 +241,46 @@
 
     onItemLeave() {
       this.clearActive();
+    }
+
+    onBundleClick() {
+      var btn = this.bundleBtn;
+      var ids = (btn.dataset.variantIds || '').split(',').filter(Boolean);
+      if (!ids.length) return;
+
+      var idle = btn.querySelector('.shop-the-look__bundle-btn-idle');
+      var loading = btn.querySelector('.shop-the-look__bundle-btn-loading');
+      var done = btn.querySelector('.shop-the-look__bundle-btn-done');
+
+      btn.disabled = true;
+      if (idle) idle.hidden = true;
+      if (loading) loading.hidden = false;
+
+      var items = ids.map(function(id) { return { id: parseInt(id, 10), quantity: 1 }; });
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ items: items })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function() {
+        if (loading) loading.hidden = true;
+        if (done) done.hidden = false;
+        btn.classList.add('is-success');
+        document.dispatchEvent(new CustomEvent('cart:refresh', { bubbles: true }));
+        setTimeout(function() {
+          if (done) done.hidden = true;
+          if (idle) idle.hidden = false;
+          btn.disabled = false;
+          btn.classList.remove('is-success');
+        }, 2500);
+      })
+      .catch(function() {
+        if (loading) loading.hidden = true;
+        if (idle) idle.hidden = false;
+        btn.disabled = false;
+      });
     }
   }
 
@@ -340,6 +420,12 @@
       "type": "item",
       "name": "Bundle item",
       "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Link a product to enable 'Add Bundle to Cart'"
+        },
         {
           "type": "range",
           "id": "hotspot_x",

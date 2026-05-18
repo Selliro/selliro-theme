@@ -328,3 +328,57 @@
 .shop-the-look__item {
   transition: opacity 0.2s ease;
 }
+
+/* Bundle add-to-cart row */
+.shop-the-look__bundle-row {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 14px;
+  position: sticky;
+  bottom: 0;
+  background: var(--color-background);
+  z-index: 3;
+}
+
+.shop-the-look__bundle-btn {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 20px;
+  border-radius: 999px;
+  border: none;
+  background: var(--color-foreground);
+  color: var(--color-background);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.3s ease;
+}
+
+.shop-the-look__bundle-btn:hover:not(:disabled) {
+  opacity: 0.82;
+  transform: translateY(-1px);
+}
+
+.shop-the-look__bundle-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.shop-the-look__bundle-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.shop-the-look__bundle-btn.is-success {
+  background-color: #2e7d32;
+}
+
+@media screen and (max-width: 600px) {
+  .shop-the-look__bundle-btn {
+    width: 100%;
+  }
+}

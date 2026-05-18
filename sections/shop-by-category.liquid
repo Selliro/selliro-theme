@@ -74,11 +74,12 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1), filter 0.45s ease;
   }
 
   .shop-by-category-{{ section_id }} .category-card:hover .category-image-wrapper img {
-    transform: scale(1.07);
+    transform: scale(1.1);
+    filter: blur({{ section.settings.glass_blur_hover }}px);
   }
 
   /* Image placeholder for missing images */
@@ -108,20 +109,13 @@
     flex-direction: column;
     text-align: {{ section.settings.content_alignment }};
     background: rgba(255, 255, 255, {{ section.settings.glass_opacity_default | times: 0.01 }});
-    border-top: 1px solid rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur({{ section.settings.glass_blur_default }}px);
-    -webkit-backdrop-filter: blur({{ section.settings.glass_blur_default }}px);
-    transition:
-      background 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-      backdrop-filter 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-      -webkit-backdrop-filter 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    transition: background 0.45s ease;
   }
 
-  /* Glass effect on hover */
+  /* Glass effect on hover: image blurs behind semi-transparent panel */
   .shop-by-category-{{ section_id }} .category-card:hover .category-content {
     background: rgba(255, 255, 255, {{ section.settings.glass_opacity_hover | times: 0.01 }});
-    backdrop-filter: blur({{ section.settings.glass_blur_hover }}px) saturate(180%);
-    -webkit-backdrop-filter: blur({{ section.settings.glass_blur_hover }}px) saturate(180%);
   }
 
   /* Text-only card */
@@ -583,18 +577,18 @@
       "max": 100,
       "step": 5,
       "unit": "%",
-      "default": 90,
+      "default": 85,
       "info": "How opaque the text panel is at rest. Lower = more image shows through."
     },
     {
       "type": "range",
       "id": "glass_blur_default",
-      "label": "Blur (default)",
+      "label": "Image blur (default)",
       "min": 0,
       "max": 12,
       "step": 1,
       "unit": "px",
-      "default": 2
+      "default": 0
     },
     {
       "type": "range",
@@ -604,18 +598,18 @@
       "max": 75,
       "step": 5,
       "unit": "%",
-      "default": 40,
+      "default": 30,
       "info": "Lower value = stronger glass effect — more image visible through the panel."
     },
     {
       "type": "range",
       "id": "glass_blur_hover",
-      "label": "Blur (on hover)",
-      "min": 4,
-      "max": 32,
+      "label": "Image blur (on hover)",
+      "min": 0,
+      "max": 20,
       "step": 2,
       "unit": "px",
-      "default": 16
+      "default": 8
     }
   ],
   "blocks": [
