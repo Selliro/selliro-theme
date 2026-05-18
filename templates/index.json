@@ -1758,10 +1758,9 @@
         "item_DBRt88": {
           "type": "item",
           "settings": {
-            "product": "",
+            "product": "rewind-concealer",
             "hotspot_x": 50,
             "hotspot_y": 71,
-            "image": "shopify://shop_images/Grid-1-768x768.png",
             "title": "Body Lotion",
             "description": "A lightweight, deeply nourishing cream that hydrates and soothes.",
             "price": "$58",
