@@ -265,10 +265,21 @@
       })
       .then(function(r) { return r.json(); })
       .then(function() {
+        return fetch('/cart.js', { headers: { 'Accept': 'application/json' } });
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(cartData) {
         if (loading) loading.hidden = true;
         if (done) done.hidden = false;
         btn.classList.add('is-success');
-        document.dispatchEvent(new CustomEvent('cart:refresh', { bubbles: true }));
+
+        var evt = new Event('cart:update', { bubbles: true });
+        evt.detail = {
+          resource: cartData,
+          data: { itemCount: cartData.item_count, source: 'bundle' }
+        };
+        document.dispatchEvent(evt);
+
         setTimeout(function() {
           if (done) done.hidden = true;
           if (idle) idle.hidden = false;
