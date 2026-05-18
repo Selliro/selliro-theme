@@ -104,6 +104,31 @@
                     <h3 class="shop-the-look__item-title">{{ block.settings.title }}</h3>
                   {%- endif -%}
                 </div>
+                {%- if block_product != blank and block_product.variants.size > 1 -%}
+                  <div class="shop-the-look__variant-wrapper">
+                    <select class="shop-the-look__variant-select" aria-label="Select variant for {{ block_product.title | escape }}">
+                      {%- for variant in block_product.variants -%}
+                        <option
+                          value="{{ variant.id }}"
+                          {% unless variant.available %}disabled{% endunless %}
+                        >
+                          {%- if block_product.options.size == 1 -%}
+                            {{ block_product.options.first }}: {{ variant.option1 }}
+                          {%- else -%}
+                            {{ variant.title }}
+                          {%- endif -%}
+                        </option>
+                      {%- endfor -%}
+                    </select>
+                    <span class="shop-the-look__variant-chevron" aria-hidden="true">
+                      <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  </div>
+                {%- elsif block_product != blank and block_product.variants.size == 1 -%}
+                  <input type="hidden" class="shop-the-look__variant-select" value="{{ block_product.variants.first.id }}">
+                {%- endif -%}
                 {%- if block_product != blank and block_product.description != blank -%}
                   <p class="shop-the-look__item-desc">{{ block_product.description | strip_html | truncate: 120 }}</p>
                 {%- elsif block.settings.description != blank -%}
