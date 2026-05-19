@@ -191,6 +191,8 @@
       this.onItemEnter = this.onItemEnter.bind(this);
       this.onItemLeave = this.onItemLeave.bind(this);
       this.onBundleClick = this.onBundleClick.bind(this);
+      this.onDropdownClick = this.onDropdownClick.bind(this);
+      this.onDocumentClick = this.onDocumentClick.bind(this);
 
       if (this.hotspots.length && this.items.length) {
         this.hotspots.forEach((hotspot) => {
@@ -212,6 +214,11 @@
       if (this.bundleBtn) {
         this.bundleBtn.addEventListener('click', this.onBundleClick);
       }
+
+      if (this.querySelector('.stl-dropdown')) {
+        this.addEventListener('click', this.onDropdownClick);
+        document.addEventListener('click', this.onDocumentClick);
+      }
     }
 
     disconnectedCallback() {
@@ -232,6 +239,8 @@
       if (this.bundleBtn) {
         this.bundleBtn.removeEventListener('click', this.onBundleClick);
       }
+      this.removeEventListener('click', this.onDropdownClick);
+      document.removeEventListener('click', this.onDocumentClick);
     }
 
     clearActive() {
