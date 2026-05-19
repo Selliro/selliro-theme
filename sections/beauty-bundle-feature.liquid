@@ -103,6 +103,11 @@
                   {%- elsif block.settings.title != blank -%}
                     <h3 class="shop-the-look__item-title">{{ block.settings.title }}</h3>
                   {%- endif -%}
+                  {%- if block_product != blank -%}
+                    <span class="shop-the-look__item-price">{{ block_product.price | money }}</span>
+                  {%- elsif block.settings.price != blank -%}
+                    <span class="shop-the-look__item-price">{{ block.settings.price }}</span>
+                  {%- endif -%}
                 </div>
                 {%- if block_product != blank -%}
                   {%- assign bv_count = block_product.variants.size | plus: 0 -%}
@@ -138,11 +143,6 @@
                   <p class="shop-the-look__item-desc">{{ block_product.description | strip_html | truncate: 120 }}</p>
                 {%- elsif block.settings.description != blank -%}
                   <p class="shop-the-look__item-desc">{{ block.settings.description }}</p>
-                {%- endif -%}
-                {%- if block_product != blank -%}
-                  <span class="shop-the-look__item-price">{{ block_product.price | money }}</span>
-                {%- elsif block.settings.price != blank -%}
-                  <span class="shop-the-look__item-price">{{ block.settings.price }}</span>
                 {%- endif -%}
                 {%- if section.settings.show_rating and block.settings.rating > 0 -%}
                   <div class="shop-the-look__rating" aria-label="Rating: {{ block.settings.rating }} out of 5">
