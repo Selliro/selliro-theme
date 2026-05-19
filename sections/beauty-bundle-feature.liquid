@@ -104,30 +104,35 @@
                     <h3 class="shop-the-look__item-title">{{ block.settings.title }}</h3>
                   {%- endif -%}
                 </div>
-                {%- if block_product != blank and block_product.variants.size > 1 -%}
-                  <div class="shop-the-look__variant-wrapper">
-                    <select class="shop-the-look__variant-select" aria-label="Select variant for {{ block_product.title | escape }}">
-                      {%- for variant in block_product.variants -%}
-                        <option
-                          value="{{ variant.id }}"
-                          {% unless variant.available %}disabled{% endunless %}
-                        >
-                          {%- if block_product.options.size == 1 -%}
-                            {{ block_product.options.first }}: {{ variant.option1 }}
-                          {%- else -%}
-                            {{ variant.title }}
-                          {%- endif -%}
-                        </option>
-                      {%- endfor -%}
-                    </select>
-                    <span class="shop-the-look__variant-chevron" aria-hidden="true">
-                      <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                    </span>
-                  </div>
-                {%- elsif block_product != blank and block_product.variants.size == 1 -%}
-                  <input type="hidden" class="shop-the-look__variant-select" value="{{ block_product.variants.first.id }}">
+                {%- if block_product != blank -%}
+                  {%- assign bv_count = block_product.variants.size | plus: 0 -%}
+                  {%- assign first_bv = block_product.selected_or_first_available_variant -%}
+                  {%- if first_bv == blank -%}{%- assign first_bv = block_product.variants | first -%}{%- endif -%}
+                  {%- if bv_count > 1 -%}
+                    <div class="shop-the-look__variant-wrapper">
+                      <select class="shop-the-look__variant-select" aria-label="Select variant for {{ block_product.title | escape }}">
+                        {%- for variant in block_product.variants -%}
+                          <option
+                            value="{{ variant.id }}"
+                            {% unless variant.available %}disabled{% endunless %}
+                          >
+                            {%- if block_product.options.size == 1 -%}
+                              {{ block_product.options.first }}: {{ variant.option1 }}
+                            {%- else -%}
+                              {{ variant.title }}
+                            {%- endif -%}
+                          </option>
+                        {%- endfor -%}
+                      </select>
+                      <span class="shop-the-look__variant-chevron" aria-hidden="true">
+                        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      </span>
+                    </div>
+                  {%- elsif first_bv != blank -%}
+                    <input type="hidden" class="shop-the-look__variant-select" value="{{ first_bv.id }}">
+                  {%- endif -%}
                 {%- endif -%}
                 {%- if block_product != blank and block_product.description != blank -%}
                   <p class="shop-the-look__item-desc">{{ block_product.description | strip_html | truncate: 120 }}</p>
@@ -265,11 +270,16 @@
 
     onBundleClick() {
       var btn = this.bundleBtn;
-      var ids = (btn.dataset.variantIds || '')
-        .split(',')
-        .map(function(s) { return s.trim(); })
-        .filter(function(s) { return s && Number(s) > 0; });
-      if (!ids.length) return;
+      if (!btn) return;
+      var selects = Array.from(this.querySelectorAll('.shop-the-look__variant-select'));
+      var items = selects
+        .map(function(el) { return { id: Number(el.value), quantity: 1 }; })
+        .filter(function(item) { return item.id > 0; });
+      console.log('[Bundle] selects:', selects.length, 'items:', items);
+      if (!items.length) {
+        console.warn('[Bundle] No variant selects found — check that products are linked in section settings.');
+        return;
+      }
 
       var idle    = btn.querySelector('.shop-the-look__bundle-btn-idle');
       var loading = btn.querySelector('.shop-the-look__bundle-btn-loading');
@@ -285,8 +295,6 @@
       btn.disabled = true;
       if (idle) idle.hidden = true;
       if (loading) loading.hidden = false;
-
-      var items = ids.map(function(id) { return { id: Number(id), quantity: 1 }; });
 
       fetch('/cart/add.js', {
         method: 'POST',
