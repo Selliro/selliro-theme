@@ -287,16 +287,67 @@
       this.clearActive();
     }
 
+    closeAllDropdowns() {
+      this.querySelectorAll('.stl-dropdown').forEach(function(dd) {
+        var trigger = dd.querySelector('.stl-dropdown__trigger');
+        var list = dd.querySelector('.stl-dropdown__list');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+        if (list) list.hidden = true;
+      });
+    }
+
+    onDropdownClick(e) {
+      var trigger = e.target.closest('.stl-dropdown__trigger');
+      var option  = e.target.closest('.stl-dropdown__option');
+
+      if (trigger) {
+        e.stopPropagation();
+        var dd = trigger.closest('.stl-dropdown');
+        var list = dd.querySelector('.stl-dropdown__list');
+        var isOpen = trigger.getAttribute('aria-expanded') === 'true';
+        this.closeAllDropdowns();
+        if (!isOpen) {
+          trigger.setAttribute('aria-expanded', 'true');
+          list.hidden = false;
+        }
+        return;
+      }
+
+      if (option) {
+        e.stopPropagation();
+        if (option.getAttribute('aria-disabled') === 'true') return;
+        var dd = option.closest('.stl-dropdown');
+        var labelEl = dd.querySelector('.stl-dropdown__label');
+        dd.dataset.selected = option.dataset.variantId;
+        if (labelEl) labelEl.textContent = option.dataset.label;
+        dd.querySelectorAll('.stl-dropdown__option').forEach(function(o) {
+          o.classList.toggle('is-selected', o === option);
+        });
+        this.closeAllDropdowns();
+      }
+    }
+
+    onDocumentClick() {
+      this.closeAllDropdowns();
+    }
+
     onBundleClick() {
       var btn = this.bundleBtn;
       if (!btn) return;
-      var selects = Array.from(this.querySelectorAll('.shop-the-look__variant-select'));
-      var items = selects
-        .map(function(el) { return { id: Number(el.value), quantity: 1 }; })
-        .filter(function(item) { return item.id > 0; });
-      console.log('[Bundle] selects:', selects.length, 'items:', items);
+
+      var items = [];
+      this.querySelectorAll('.stl-dropdown[data-selected]').forEach(function(dd) {
+        var id = Number(dd.dataset.selected);
+        if (id > 0) items.push({ id: id, quantity: 1 });
+      });
+      this.querySelectorAll('input.stl-variant-id').forEach(function(inp) {
+        var id = Number(inp.value);
+        if (id > 0) items.push({ id: id, quantity: 1 });
+      });
+
+      console.log('[Bundle] items to add:', JSON.stringify(items));
       if (!items.length) {
-        console.warn('[Bundle] No variant selects found — check that products are linked in section settings.');
+        console.warn('[Bundle] No products linked — check section settings.');
         return;
       }
 
