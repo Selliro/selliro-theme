@@ -92,6 +92,73 @@
             endif
           %}
 
+          {%- capture block_content -%}
+            {% if block.settings.caption != blank %}
+              <p
+                class="custom-banner__caption"
+                style="
+                  --custom-banner-caption-color: {{ block.settings.caption_color }};
+                  --custom-banner-caption-size: {{ block.settings.caption_font_size }}px;
+                "
+              >
+                {{ block.settings.caption }}
+              </p>
+            {% endif %}
+
+            {% if block.settings.heading != blank %}
+              <h2
+                class="custom-banner__heading"
+                style="
+                  --custom-banner-heading-color: {{ block.settings.heading_color }};
+                  --custom-banner-heading-size: {{ block.settings.heading_font_size }}px;
+                "
+              >
+                {{ block.settings.heading }}
+              </h2>
+            {% endif %}
+
+            {% if block.settings.subheading != blank %}
+              <p
+                class="custom-banner__subheading"
+                style="
+                  --custom-banner-subheading-color: {{ block.settings.subheading_color }};
+                  --custom-banner-subheading-size: {{ block.settings.subheading_font_size }}px;
+                "
+              >
+                {{ block.settings.subheading }}
+              </p>
+            {% endif %}
+
+            {% if block.settings.button_label != blank and block.settings.button_link != blank or block.settings.secondary_button_label != blank and block.settings.secondary_button_link != blank %}
+             <div class="custom-banner__buttons">
+              <a
+              href="{{ block.settings.button_link }}"
+              class="button custom-banner__button"
+              style="
+                --custom-banner-button-text-color: {{ block.settings.button_text_color }};
+                --custom-banner-button-font-size: {{ block.settings.button_font_size }}px;
+                --custom-banner-button-background-color: {{ block.settings.button_background_color }};
+                --custom-banner-button-border-color: {{ block.settings.button_border_color }};
+              "
+            >
+              {{ block.settings.button_label }}
+            </a>
+            <a
+              href="{{ block.settings.secondary_button_link }}"
+              class="button custom-banner__button"
+              style="
+                --custom-banner-button-text-color: {{ block.settings.button_text_color }};
+                --custom-banner-button-font-size: {{ block.settings.button_font_size }}px;
+                --custom-banner-button-background-color: {{ block.settings.button_background_color }};
+                --custom-banner-button-border-color: {{ block.settings.button_border_color }};
+              "
+            >
+              {{ block.settings.secondary_button_label }}
+            </a>
+             </div>
+            {% endif %}
+          {%- endcapture -%}
+
           <div
             class="swiper-slide custom-banner__slide"
             {{ block.shopify_attributes }}
@@ -110,56 +177,7 @@
                     style="--custom-banner-split-text-bg: {{ block.settings.split_text_background_color }};"
                   >
                     <div class="custom-banner__split-overlay">
-                      {% if block.settings.caption != blank %}
-                        <p
-                          class="custom-banner__caption"
-                          style="
-                            --custom-banner-caption-color: {{ block.settings.caption_color }};
-                            --custom-banner-caption-size: {{ block.settings.caption_font_size }}px;
-                          "
-                        >
-                          {{ block.settings.caption }}
-                        </p>
-                      {% endif %}
-
-                      {% if block.settings.heading != blank %}
-                        <h2
-                          class="custom-banner__heading"
-                          style="
-                            --custom-banner-heading-color: {{ block.settings.heading_color }};
-                            --custom-banner-heading-size: {{ block.settings.heading_font_size }}px;
-                          "
-                        >
-                          {{ block.settings.heading }}
-                        </h2>
-                      {% endif %}
-
-                      {% if block.settings.subheading != blank %}
-                        <p
-                          class="custom-banner__subheading"
-                          style="
-                            --custom-banner-subheading-color: {{ block.settings.subheading_color }};
-                            --custom-banner-subheading-size: {{ block.settings.subheading_font_size }}px;
-                          "
-                        >
-                          {{ block.settings.subheading }}
-                        </p>
-                      {% endif %}
-
-                      {% if block.settings.button_label != blank and block.settings.button_link != blank %}
-                        <a
-                          href="{{ block.settings.button_link }}"
-                          class="button custom-banner__button"
-                          style="
-                            --custom-banner-button-text-color: {{ block.settings.button_text_color }};
-                            --custom-banner-button-font-size: {{ block.settings.button_font_size }}px;
-                            --custom-banner-button-background-color: {{ block.settings.button_background_color }};
-                            --custom-banner-button-border-color: {{ block.settings.button_border_color }};
-                          "
-                        >
-                          {{ block.settings.button_label }}
-                        </a>
-                      {% endif %}
+                      {{ block_content }}
                     </div>
                   </div>
 
@@ -272,58 +290,25 @@
               {% endif %}
 
               {% unless is_split_layout %}
-                <div class="custom-banner__overlay">
-                  {% if block.settings.caption != blank %}
-                    <p
-                      class="custom-banner__caption"
-                      style="
-                        --custom-banner-caption-color: {{ block.settings.caption_color }};
-                        --custom-banner-caption-size: {{ block.settings.caption_font_size }}px;
-                      "
-                    >
-                      {{ block.settings.caption }}
-                    </p>
-                  {% endif %}
-
-                  {% if block.settings.heading != blank %}
-                    <h2
-                      class="custom-banner__heading"
-                      style="
-                        --custom-banner-heading-color: {{ block.settings.heading_color }};
-                        --custom-banner-heading-size: {{ block.settings.heading_font_size }}px;
-                      "
-                    >
-                      {{ block.settings.heading }}
-                    </h2>
-                  {% endif %}
-
-                  {% if block.settings.subheading != blank %}
-                    <p
-                      class="custom-banner__subheading"
-                      style="
-                        --custom-banner-subheading-color: {{ block.settings.subheading_color }};
-                        --custom-banner-subheading-size: {{ block.settings.subheading_font_size }}px;
-                      "
-                    >
-                      {{ block.settings.subheading }}
-                    </p>
-                  {% endif %}
-
-                  {% if block.settings.button_label != blank and block.settings.button_link != blank %}
-                    <a
-                      href="{{ block.settings.button_link }}"
-                      class="button custom-banner__button"
-                      style="
-                        --custom-banner-button-text-color: {{ block.settings.button_text_color }};
-                        --custom-banner-button-font-size: {{ block.settings.button_font_size }}px;
-                        --custom-banner-button-background-color: {{ block.settings.button_background_color }};
-                        --custom-banner-button-border-color: {{ block.settings.button_border_color }};
-                      "
-                    >
-                      {{ block.settings.button_label }}
-                    </a>
-                  {% endif %}
-                </div>
+                {% assign block_content_stripped = block_content | strip %}
+                {% if block_content_stripped != blank %}
+                  {% liquid
+                    assign alignment = block.settings.text_alignment | default: 'left'
+                    assign bg_color = block.settings.text_bg_color | default: '#000000'
+                    assign bg_opacity = block.settings.text_bg_opacity | default: 50
+                    assign bg_opacity_decimal = bg_opacity | divided_by: 100.0
+                  %}
+                  <div
+                    class="custom-banner__overlay custom-banner__overlay--{{ alignment }}"
+                    style="
+                      --custom-banner-text-bg: {{ bg_color }};
+                      --custom-banner-text-bg-opacity: {{ bg_opacity_decimal }};
+                      --custom-banner-overlay-max-width: {{ block.settings.overlay_max_width }}px;
+                    "
+                  >
+                    {{ block_content }}
+                  </div>
+                {% endif %}
               {% endunless %}
             </div>
           </div>
@@ -397,6 +382,18 @@
     width: 100%;
   }
 
+  .custom-banner__swiper .swiper-wrapper {
+    align-items: stretch;
+  }
+
+  .custom-banner__swiper .swiper-slide {
+    height: auto;
+  }
+
+  .custom-banner__slide .custom-banner__media {
+    height: 100%;
+  }
+
   .custom-banner__slideshow {
     display: block;
     position: relative;
@@ -441,7 +438,7 @@
   .custom-banner__split {
     display: flex;
     min-height: 0;
-    height: auto;
+    height: inherit;
     width: 100%;
   }
 
@@ -509,18 +506,17 @@
   }
 
   .custom-banner__overlay {
-    position: absolute;
+    position: relative;
     inset: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
     gap: 12px;
     padding: 40px;
     color: rgb(var(--color-foreground-rgb));
-    background: linear-gradient(90deg, rgb(0 0 0 / 42%) 0%, rgb(0 0 0 / 10%) 45%, transparent 75%);
-    max-width: min(100%, 700px);
+    background: color-mix(in srgb, var(--custom-banner-text-bg, #000000) calc(var(--custom-banner-text-bg-opacity, 0.5) * 100%), transparent);
     z-index: var(--layer-flat);
+    max-height: max-content;
   }
 
   .custom-banner__caption,
@@ -543,13 +539,17 @@
     color: var(--custom-banner-heading-color, #ffffff);
     font-size: var(--custom-banner-heading-size, 54px);
     line-height: 1.05;
-    font-weight: 600;
+    font-weight: 500;
+    font-family: "Outfit", sans-serif;
+    letter-spacing: -1px;
   }
 
   .custom-banner__subheading {
     color: var(--custom-banner-subheading-color, #ffffff);
     font-size: var(--custom-banner-subheading-size, 18px);
     line-height: 1.5;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
   }
 
   .custom-banner__button {
@@ -608,6 +608,41 @@
     cursor: not-allowed;
   }
 
+  @media screen and (min-width: 1024px) {
+    .custom-banner__overlay {
+      position: absolute;
+      max-width: var(--custom-banner-overlay-max-width, 650px);
+      border-radius: 30px;
+      max-height: 425px;
+    }
+
+    .custom-banner__overlay--left {
+    align-items: flex-start;
+    text-align: left;
+    margin: auto auto auto 80px;
+  }
+
+  @media(min-width: 1440px){
+    .custom-banner__buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+  }
+
+  .custom-banner__overlay--center {
+    align-items: center;
+    text-align: center;
+    margin: auto;
+  }
+
+  .custom-banner__overlay--right {
+    align-items: flex-end;
+    text-align: right;
+    margin: auto 60px auto auto;
+  }
+  }
+
   @media screen and (max-width: 749px) {
     .custom-banner__media:not(.custom-banner__media--split) {
       aspect-ratio: var(--custom-banner-aspect-ratio-mobile, 4/5);
@@ -618,7 +653,8 @@
       gap: 10px;
       max-width: 100%;
       justify-content: flex-end;
-      background: linear-gradient(180deg, transparent 30%, rgb(0 0 0 / 58%) 100%);
+      border-radius: 0;
+      /* background: linear-gradient(180deg, transparent 30%, rgb(0 0 0 / 58%) 100%); */
     }
 
     .custom-banner__heading {
@@ -634,10 +670,6 @@
       font-size: calc(var(--custom-banner-caption-size, 14px) * 0.9);
     }
 
-    .custom-banner__navigation {
-      padding-inline: 8px;
-    }
-
     .custom-banner__nav-button {
       width: 38px;
       height: 38px;
@@ -651,6 +683,17 @@
     .custom-banner__split-overlay,
     .custom-banner__split-text {
       padding: 28px 20px;
+    }
+
+  }
+
+  @media(max-width: 1023px){
+    .custom-banner__navigation {
+      display: none;
+    }
+    .custom-banner__buttons{
+      flex-direction: column;
+      gap: 10px;
     }
   }
 {% endstylesheet %}
@@ -803,7 +846,7 @@
           "type": "color",
           "id": "split_text_background_color",
           "label": "Text side background color",
-          "default": "#000000",
+          "default": "#F5F5F5",
           "visible_if": "{{ block.settings.media_type == 'split_50_50' }}"
         },
         {
@@ -817,6 +860,7 @@
           "type": "richtext",
           "id": "split_side_text",
           "label": "Right side text",
+          "default": "<p>Add your right side content here.</p>",
           "visible_if": "{{ block.settings.media_type == 'split_50_50' and block.settings.split_side_type == 'text' }}"
         },
         {
@@ -875,6 +919,52 @@
         {
           "type": "header",
           "content": "Content"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "color",
+          "id": "text_bg_color",
+          "label": "Text background color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "text_bg_opacity",
+          "label": "Text background opacity",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 50
+        },
+        {
+          "type": "range",
+          "id": "overlay_max_width",
+          "label": "Overlay max width",
+          "min": 500,
+          "max": 700,
+          "step": 10,
+          "unit": "px",
+          "default": 650
         },
         {
           "type": "text",
@@ -945,13 +1035,24 @@
         {
           "type": "text",
           "id": "button_label",
-          "label": "Button label",
+          "label": "Primary button label",
           "default": "SHOP NOW"
         },
         {
           "type": "url",
           "id": "button_link",
-          "label": "Button link"
+          "label": "Primary Button link"
+        },
+        {
+          "type": "text",
+          "id": "secondary_button_label",
+          "label": "Secondary button label",
+          "default": "SHOP NOW"
+        },
+        {
+          "type": "url",
+          "id": "secondary_button_link",
+          "label": "Secondary button link"
         },
         {
           "type": "color",
