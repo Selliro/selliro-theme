@@ -55,12 +55,14 @@
   {%- if p1l < 0 -%}--itc-p1-left:auto;{%- else -%}--itc-p1-left:{{ p1l }}%;{%- endif -%}
   --itc-p1-w:{{ section.settings.image_1_width | default: 56 }}%;
   {%- if p1h < 0 -%}--itc-p1-h:auto;--itc-p1-ar:4/3;--itc-p1-ar2:3/4;{%- else -%}--itc-p1-h:{{ p1h }}%;--itc-p1-ar:auto;--itc-p1-ar2:auto;{%- endif -%}
+  --itc-p1-z:{{ section.settings.image_1_zindex | default: 2 }};
   {%- if p2t < 0 -%}--itc-p2-top:auto;{%- else -%}--itc-p2-top:{{ p2t }}%;{%- endif -%}
   {%- if p2r < 0 -%}--itc-p2-right:auto;{%- else -%}--itc-p2-right:{{ p2r }}%;{%- endif -%}
   {%- if p2b < 0 -%}--itc-p2-bottom:auto;{%- else -%}--itc-p2-bottom:{{ p2b }}%;{%- endif -%}
   {%- if p2l < 0 -%}--itc-p2-left:auto;{%- else -%}--itc-p2-left:{{ p2l }}%;{%- endif -%}
   --itc-p2-w:{{ section.settings.image_2_width | default: 68 }}%;
   {%- if p2h < 0 -%}--itc-p2-h:auto;--itc-p2-ar:2/3;--itc-p2-ar2:3/4;{%- else -%}--itc-p2-h:{{ p2h }}%;--itc-p2-ar:auto;--itc-p2-ar2:auto;{%- endif -%}
+  --itc-p2-z:{{ section.settings.image_2_zindex | default: 3 }};
   {%- if p3t < 0 -%}--itc-p3-top:auto;{%- else -%}--itc-p3-top:{{ p3t }}%;{%- endif -%}
   {%- if p3r < 0 -%}--itc-p3-right:auto;{%- else -%}--itc-p3-right:{{ p3r }}%;{%- endif -%}
   {%- if p3b < 0 -%}--itc-p3-bottom:auto;{%- else -%}--itc-p3-bottom:{{ p3b }}%;{%- endif -%}
