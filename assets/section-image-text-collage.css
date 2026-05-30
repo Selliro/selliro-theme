@@ -363,6 +363,7 @@ a.itc-badge:hover {
   inset: 0;
   width: 100%;
   height: 100%;
+  padding: 6px;
   fill: var(--itc-badge-fg, #1a1a1a);
   animation: itc-spin 10s linear infinite;
 }
