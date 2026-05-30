@@ -142,7 +142,7 @@
   left: var(--itc-p2-left, 0);
   transform: rotate(var(--itc-rot2, 4deg));
   aspect-ratio: var(--itc-p2-ar, 2 / 3);
-  z-index: 3;
+  z-index: var(--itc-p2-z, 3);
 }
 
 /* Bottom-right photo — portrait */
@@ -155,7 +155,7 @@
   left: var(--itc-p3-left, auto);
   transform: rotate(var(--itc-rot3, -3deg));
   aspect-ratio: var(--itc-p3-ar, 3 / 4);
-  z-index: 2;
+  z-index: var(--itc-p3-z, 2);
 }
 
 /* ── Shared photo frame ── */
