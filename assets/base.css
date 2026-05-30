@@ -4307,3 +4307,18 @@ text-component {
     font-size: max(1rem, 100%);
   }
 }
+
+body .blur-div {
+  backdrop-filter: blur(10px);
+  bottom: 0;
+  flex: none;
+  height: 100px;
+  left: 0;
+  mask: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%) add;
+  -webkit-mask: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%) add;
+  overflow: visible;
+  position: fixed;
+  right: 0;
+  pointer-events: none;
+  z-index: 999;
+}
