@@ -93,20 +93,22 @@
 }
 
 .itc__stack--2 .itc__photo--1 {
-  width: 60%;
+  width: var(--itc-p1-w, 60%);
+  height: var(--itc-p1-h, auto);
   top: 0;
   right: 0;
   transform: rotate(var(--itc-rot1, 5deg));
-  aspect-ratio: 3 / 4;
+  aspect-ratio: var(--itc-p1-ar2, 3 / 4);
   z-index: 2;
 }
 
 .itc__stack--2 .itc__photo--2 {
-  width: 62%;
+  width: var(--itc-p2-w, 62%);
+  height: var(--itc-p2-h, auto);
   bottom: 0;
   left: 0;
   transform: rotate(var(--itc-rot2, -4deg));
-  aspect-ratio: 3 / 4;
+  aspect-ratio: var(--itc-p2-ar2, 3 / 4);
   z-index: 1;
 }
 
