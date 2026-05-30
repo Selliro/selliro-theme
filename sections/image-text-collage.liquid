@@ -93,6 +93,8 @@
     --itc-badge-bg: {{ section.settings.badge_bg | default: '#f2c419' }};
     --itc-badge-fg: {{ section.settings.badge_fg | default: '#1a1a1a' }};
     --itc-badge-size: {{ section.settings.badge_size | default: 18 }}%;
+    --itc-badge-top: {{ section.settings.badge_top | default: 50 }}%;
+    --itc-badge-left: {{ section.settings.badge_left | default: 44 }}%;
     {% case section.settings.heading_size %}
       {% when 'small'  %}--itc-heading-size: clamp(1.15rem, 2vw, 1.65rem);
       {% when 'medium' %}--itc-heading-size: clamp(1.5rem, 2.8vw, 2.35rem);

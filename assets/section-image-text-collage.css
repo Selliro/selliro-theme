@@ -333,8 +333,8 @@
    ══════════════════════════════════════════ */
 .itc-badge {
   position: absolute;
-  top: 50%;
-  left: 44%;
+  top: var(--itc-badge-top, 50%);
+  left: var(--itc-badge-left, 44%);
   transform: translate(-50%, -50%);
   z-index: 10;
   width: clamp(90px, var(--itc-badge-size, 18%), 150px);
