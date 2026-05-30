@@ -1516,6 +1516,8 @@
         "badge_bg": "#f2c419",
         "badge_fg": "#1a1a1a",
         "badge_size": 23,
+        "badge_top": 58,
+        "badge_left": 80,
         "padding_top": 72,
         "padding_bottom": 72
       }
