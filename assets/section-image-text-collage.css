@@ -117,34 +117,40 @@
   height: clamp(420px, 54vw, 570px);
 }
 
-/* Top photo — portrait, top-right */
+/* Top-right photo — landscape */
 .itc__stack--3 .itc__photo--1 {
-  width: 54%;
-  top: 0;
-  right: 0;
-  transform: rotate(var(--itc-rot1, 5deg));
-  aspect-ratio: 3 / 4;
+  width: var(--itc-p1-w, 56%);
+  top: var(--itc-p1-top, 0);
+  right: var(--itc-p1-right, 0);
+  bottom: var(--itc-p1-bottom, auto);
+  left: var(--itc-p1-left, auto);
+  transform: rotate(var(--itc-rot1, -4deg));
+  aspect-ratio: 4 / 3;
+  z-index: 1;
+}
+
+/* Main center-left photo — large portrait */
+.itc__stack--3 .itc__photo--2 {
+  width: var(--itc-p2-w, 68%);
+  top: var(--itc-p2-top, 28%);
+  right: var(--itc-p2-right, auto);
+  bottom: var(--itc-p2-bottom, auto);
+  left: var(--itc-p2-left, 0);
+  transform: rotate(var(--itc-rot2, 4deg));
+  aspect-ratio: 2 / 3;
   z-index: 3;
 }
 
-/* Main photo — portrait, center-left, largest */
-.itc__stack--3 .itc__photo--2 {
-  width: 60%;
-  top: 22%;
-  left: 0;
-  transform: rotate(var(--itc-rot2, -6deg));
+/* Bottom-right photo — portrait */
+.itc__stack--3 .itc__photo--3 {
+  width: var(--itc-p3-w, 48%);
+  top: var(--itc-p3-top, auto);
+  right: var(--itc-p3-right, 3%);
+  bottom: var(--itc-p3-bottom, 0);
+  left: var(--itc-p3-left, auto);
+  transform: rotate(var(--itc-rot3, -3deg));
   aspect-ratio: 3 / 4;
   z-index: 2;
-}
-
-/* Bottom photo — portrait, bottom-right */
-.itc__stack--3 .itc__photo--3 {
-  width: 50%;
-  bottom: 0;
-  right: 5%;
-  transform: rotate(var(--itc-rot3, 4deg));
-  aspect-ratio: 3 / 4;
-  z-index: 1;
 }
 
 /* ── Shared photo frame ── */
