@@ -368,7 +368,7 @@ a.itc-badge:hover {
 }
 
 .itc-badge__ring text {
-  font-family: var(--font-body-family, var(--font-heading-family, inherit));
+  font-family: var(--font-h2--family);
 }
 
 .itc-badge__center {
