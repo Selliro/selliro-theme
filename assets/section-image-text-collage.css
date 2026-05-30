@@ -163,6 +163,7 @@
   position: absolute;
   border-radius: var(--itc-img-radius, 16px);
   overflow: hidden;
+  background-color: #ffffff;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
