@@ -126,7 +126,7 @@
   bottom: var(--itc-p1-bottom, auto);
   left: var(--itc-p1-left, auto);
   transform: rotate(var(--itc-rot1, -4deg));
-  aspect-ratio: 4 / 3;
+  aspect-ratio: var(--itc-p1-ar, 4 / 3);
   z-index: 1;
 }
 
@@ -139,7 +139,7 @@
   bottom: var(--itc-p2-bottom, auto);
   left: var(--itc-p2-left, 0);
   transform: rotate(var(--itc-rot2, 4deg));
-  aspect-ratio: 2 / 3;
+  aspect-ratio: var(--itc-p2-ar, 2 / 3);
   z-index: 3;
 }
 
@@ -152,7 +152,7 @@
   bottom: var(--itc-p3-bottom, 0);
   left: var(--itc-p3-left, auto);
   transform: rotate(var(--itc-rot3, -3deg));
-  aspect-ratio: 3 / 4;
+  aspect-ratio: var(--itc-p3-ar, 3 / 4);
   z-index: 2;
 }
 
