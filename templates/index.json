@@ -15,11 +15,11 @@
         "slide_FF3yJ7": {
           "type": "slide",
           "settings": {
-            "media_type": "image",
-            "video_source_type": "youtube",
+            "media_type": "video",
+            "video_source_type": "cdn",
             "video_url_youtube": "",
             "video_url_vimeo": "",
-            "video_cdn_url": "",
+            "video_cdn_url": "https://cdn.shopify.com/videos/c/o/v/e8180474765d4be4a48837cb9cd38e0f.mp4",
             "image_desktop": "shopify://shop_images/skincare.png",
             "image_mobile": "shopify://shop_images/Rectangle_19753.png",
             "aspect_ratio_desktop": "2",
