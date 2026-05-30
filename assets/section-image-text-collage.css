@@ -120,6 +120,7 @@
 /* Top-right photo — landscape */
 .itc__stack--3 .itc__photo--1 {
   width: var(--itc-p1-w, 56%);
+  height: var(--itc-p1-h, auto);
   top: var(--itc-p1-top, 0);
   right: var(--itc-p1-right, 0);
   bottom: var(--itc-p1-bottom, auto);
@@ -132,6 +133,7 @@
 /* Main center-left photo — large portrait */
 .itc__stack--3 .itc__photo--2 {
   width: var(--itc-p2-w, 68%);
+  height: var(--itc-p2-h, auto);
   top: var(--itc-p2-top, 28%);
   right: var(--itc-p2-right, auto);
   bottom: var(--itc-p2-bottom, auto);
