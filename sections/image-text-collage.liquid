@@ -1,154 +1,69 @@
-{% comment %}
-  Image collage (1–3 images: solo / two-layer / three-layer) + text column. Per-image inset %, width, z-index, tilt. Color scheme.
-{% endcomment %}
+{% comment %}Image Text Collage — stacked photo collage + text column{% endcomment %}
 
 {{ 'section-image-text-collage.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
-  assign show_text_column = true
-  if section.settings.show_text_column == false
-    assign show_text_column = false
+  assign img1 = section.settings.image_1
+  assign img2 = section.settings.image_2
+  assign img3 = section.settings.image_3
+
+  assign img_count = 0
+  if img1 != blank
+    assign img_count = img_count | plus: 1
+  endif
+  if img2 != blank
+    assign img_count = img_count | plus: 1
+  endif
+  if img3 != blank
+    assign img_count = img_count | plus: 1
   endif
 
-  assign has_heading = false
-  if section.settings.heading != blank
-    assign has_heading = true
+  assign stack_mode = img_count
+  if stack_mode == 0
+    assign stack_mode = 3
   endif
 
-  assign has_any_content = false
-  if section.settings.show_subtitle and section.settings.subtitle != blank
-    assign has_any_content = true
-  endif
-  if has_heading
-    assign has_any_content = true
-  endif
-  if section.settings.show_description and section.settings.description != blank
-    assign has_any_content = true
-  endif
   assign has_feature_blocks = false
   for block in section.blocks
     if block.type == 'feature'
       assign has_feature_blocks = true
     endif
   endfor
-  if section.settings.show_feature_grid and has_feature_blocks
-    assign has_any_content = true
-  endif
-  if section.settings.show_cta and section.settings.button_label != blank
-    assign has_any_content = true
-  endif
-
-  assign render_content = false
-  if show_text_column and has_any_content
-    assign render_content = true
-  endif
-
-  assign img_sizes = '(min-width: 990px) 42vw, 90vw'
-  unless render_content
-    assign img_sizes = '(min-width: 990px) min(800px, 90vw), 90vw'
-  endunless
-
-  assign collage_image_count = 0
-  if section.settings.image_1 != blank
-    assign collage_image_count = collage_image_count | plus: 1
-  endif
-  if section.settings.image_2 != blank
-    assign collage_image_count = collage_image_count | plus: 1
-  endif
-  if section.settings.image_3 != blank
-    assign collage_image_count = collage_image_count | plus: 1
-  endif
-
-  assign stack_count_for_class = collage_image_count
-  if collage_image_count == 0
-    assign stack_count_for_class = 3
-  endif
-
-  assign solo_aspect = '4 / 3'
-  if collage_image_count == 1
-    if section.settings.image_1 != blank and section.settings.image_1.aspect_ratio != blank and section.settings.image_1.aspect_ratio > 0
-      assign solo_aspect = section.settings.image_1.aspect_ratio | append: ' / 1'
-    elsif section.settings.image_2 != blank and section.settings.image_2.aspect_ratio != blank and section.settings.image_2.aspect_ratio > 0
-      assign solo_aspect = section.settings.image_2.aspect_ratio | append: ' / 1'
-    elsif section.settings.image_3 != blank and section.settings.image_3.aspect_ratio != blank and section.settings.image_3.aspect_ratio > 0
-      assign solo_aspect = section.settings.image_3.aspect_ratio | append: ' / 1'
-    endif
-  endif
-
 -%}
-{%- capture collage_position_vars -%}
-  {%- liquid
-    assign i1t = section.settings.image_1_inset_top | default: 0
-    assign i1r = section.settings.image_1_inset_right | default: -1
-    assign i1b = section.settings.image_1_inset_bottom | default: -1
-    assign i1l = section.settings.image_1_inset_left | default: 11
-    assign i2t = section.settings.image_2_inset_top | default: 38
-    assign i2r = section.settings.image_2_inset_right | default: -1
-    assign i2b = section.settings.image_2_inset_bottom | default: -1
-    assign i2l = section.settings.image_2_inset_left | default: 0
-    assign i3t = section.settings.image_3_inset_top | default: -1
-    assign i3r = section.settings.image_3_inset_right | default: -1
-    assign i3b = section.settings.image_3_inset_bottom | default: 0
-    assign i3l = section.settings.image_3_inset_left | default: 24
-  -%}
-  {%- if i1t < 0 -%}--itc-p1-top: auto;{%- else -%}--itc-p1-top: {{ i1t }}%;{%- endif -%}
-  {%- if i1r < 0 -%}--itc-p1-right: auto;{%- else -%}--itc-p1-right: {{ i1r }}%;{%- endif -%}
-  {%- if i1b < 0 -%}--itc-p1-bottom: auto;{%- else -%}--itc-p1-bottom: {{ i1b }}%;{%- endif -%}
-  {%- if i1l < 0 -%}--itc-p1-left: auto;{%- else -%}--itc-p1-left: {{ i1l }}%;{%- endif -%}
-  --itc-p1-w: {{ section.settings.image_1_width | default: 78 }}%;
-  --itc-p1-z: {{ section.settings.image_1_z_index | default: 3 }};
-  {%- if i2t < 0 -%}--itc-p2-top: auto;{%- else -%}--itc-p2-top: {{ i2t }}%;{%- endif -%}
-  {%- if i2r < 0 -%}--itc-p2-right: auto;{%- else -%}--itc-p2-right: {{ i2r }}%;{%- endif -%}
-  {%- if i2b < 0 -%}--itc-p2-bottom: auto;{%- else -%}--itc-p2-bottom: {{ i2b }}%;{%- endif -%}
-  {%- if i2l < 0 -%}--itc-p2-left: auto;{%- else -%}--itc-p2-left: {{ i2l }}%;{%- endif -%}
-  --itc-p2-w: {{ section.settings.image_2_width | default: 44 }}%;
-  --itc-p2-z: {{ section.settings.image_2_z_index | default: 2 }};
-  {%- if i3t < 0 -%}--itc-p3-top: auto;{%- else -%}--itc-p3-top: {{ i3t }}%;{%- endif -%}
-  {%- if i3r < 0 -%}--itc-p3-right: auto;{%- else -%}--itc-p3-right: {{ i3r }}%;{%- endif -%}
-  {%- if i3b < 0 -%}--itc-p3-bottom: auto;{%- else -%}--itc-p3-bottom: {{ i3b }}%;{%- endif -%}
-  {%- if i3l < 0 -%}--itc-p3-left: auto;{%- else -%}--itc-p3-left: {{ i3l }}%;{%- endif -%}
-  --itc-p3-w: {{ section.settings.image_3_width | default: 50 }}%;
-  --itc-p3-z: {{ section.settings.image_3_z_index | default: 1 }};
-  --itc-solo-ar: {{ solo_aspect }};
-{%- endcapture -%}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
 <section
-  class="section section--{{ section.settings.section_width | default: 'page-width' }} img-text-collage color-{{ section.settings.color_scheme }}"
+  class="itc section section--{{ section.settings.section_width | default: 'page-width' }} color-{{ section.settings.color_scheme }}"
   id="ImageTextCollage-{{ section.id }}"
   {{ section.shopify_attributes }}
   style="
-    --itc-pad-top: {{ section.settings.padding_top }}px;
-    --itc-pad-bottom: {{ section.settings.padding_bottom }}px;
-    --itc-img-radius: {{ section.settings.image_radius }}px;
-    --itc-pattern-opacity: {{ section.settings.pattern_opacity | times: 0.01 }};
-    --itc-p1-rot: {{ section.settings.image_1_rotation }}deg;
-    --itc-p2-rot: {{ section.settings.image_2_rotation }}deg;
-    --itc-p3-rot: {{ section.settings.image_3_rotation }}deg;
-    --itc-btn-bg: {{ section.settings.btn_bg }};
-    --itc-btn-fg: {{ section.settings.btn_fg }};
-    --itc-btn-hover-bg: {{ section.settings.btn_hover_bg }};
-    --itc-btn-hover-fg: {{ section.settings.btn_fg }};
-    --itc-badge-bg: {{ section.settings.badge_bg }};
-    --itc-badge-fg: {{ section.settings.badge_fg }};
-    --itc-badge-size: {{ section.settings.badge_size }}%;
-    --itc-decoration-color: {{ section.settings.heading_decoration_color }};
+    padding-top: {{ section.settings.padding_top | default: 72 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | default: 72 }}px;
+    --itc-pattern-opacity: {{ section.settings.pattern_opacity | default: 14 | times: 0.01 }};
+    --itc-img-radius: {{ section.settings.image_radius | default: 16 }}px;
+    --itc-rot1: {{ section.settings.image_1_rotation | default: 5 }}deg;
+    --itc-rot2: {{ section.settings.image_2_rotation | default: -6 }}deg;
+    --itc-rot3: {{ section.settings.image_3_rotation | default: 4 }}deg;
+    --itc-btn-bg: {{ section.settings.btn_bg | default: '#f5c518' }};
+    --itc-btn-fg: {{ section.settings.btn_fg | default: '#111111' }};
+    --itc-btn-hover-bg: {{ section.settings.btn_hover_bg | default: '#ddb015' }};
+    --itc-badge-bg: {{ section.settings.badge_bg | default: '#f2c419' }};
+    --itc-badge-fg: {{ section.settings.badge_fg | default: '#1a1a1a' }};
+    --itc-badge-size: {{ section.settings.badge_size | default: 18 }}%;
     {% case section.settings.heading_size %}
-      {% when 'small' %}--itc-heading-size: clamp(1.15rem, 2vw, 1.65rem);
+      {% when 'small'  %}--itc-heading-size: clamp(1.15rem, 2vw, 1.65rem);
       {% when 'medium' %}--itc-heading-size: clamp(1.5rem, 2.8vw, 2.35rem);
-      {% when 'large' %}--itc-heading-size: clamp(1.85rem, 3.5vw, 3rem);
+      {% when 'large'  %}--itc-heading-size: clamp(1.85rem, 3.5vw, 3rem);
       {% when 'xlarge' %}--itc-heading-size: clamp(2.25rem, 4.5vw, 3.75rem);
+      {% else           %}--itc-heading-size: clamp(1.5rem, 2.8vw, 2.35rem);
     {% endcase %}
   "
-  {% if has_heading and render_content %}
-    aria-labelledby="ImageTextCollage-heading-{{ section.id }}"
-  {% else %}
-    aria-label="{{ 'sections.image_text_collage.section_aria_label' | t }}"
-  {% endif %}
 >
+
   {%- if section.settings.pattern_image != blank -%}
     <div
-      class="img-text-collage__pattern force-full-width"
+      class="itc__pattern force-full-width"
       style="background-image: url('{{ section.settings.pattern_image | image_url: width: 2000 }}');"
       role="presentation"
       aria-hidden="true"
@@ -156,98 +71,65 @@
   {%- endif -%}
 
   <div class="section-container">
-    <div
-      class="img-text-collage__inner{% if section.settings.media_position == 'right' %} img-text-collage__inner--media-right{% endif %}{% unless render_content %} img-text-collage__inner--content-hidden{% endunless %}"
-    >
-      <div class="img-text-collage__collage-wrap{% if collage_image_count == 1 %} img-text-collage__collage-wrap--solo{% endif %}">
-        <div
-          class="img-text-collage__stack img-text-collage__stack--count-{{ stack_count_for_class }}"
-          style="{{ collage_position_vars | strip }}"
-        >
-          {%- liquid
-            assign fallback_alt = section.settings.heading | default: 'Image'
-            assign alt_1 = fallback_alt
-            if section.settings.image_1 != blank and section.settings.image_1.alt != blank
-              assign alt_1 = section.settings.image_1.alt
-            endif
-            assign alt_2 = fallback_alt
-            if section.settings.image_2 != blank and section.settings.image_2.alt != blank
-              assign alt_2 = section.settings.image_2.alt
-            endif
-            assign alt_3 = fallback_alt
-            if section.settings.image_3 != blank and section.settings.image_3.alt != blank
-              assign alt_3 = section.settings.image_3.alt
-            endif
-          -%}
-          {%- if section.settings.image_1 != blank -%}
-            <div class="img-text-collage__photo img-text-collage__photo--1">
-              {{
-                section.settings.image_1
-                | image_url: width: 1200
+    <div class="itc__inner{% if section.settings.media_position == 'right' %} itc__inner--reversed{% endif %}">
+
+      {%- comment -%}─── COLLAGE COLUMN ───{%- endcomment -%}
+      <div class="itc__collage-wrap{% if stack_mode == 1 %} itc__collage-wrap--solo{% endif %}">
+        <div class="itc__stack itc__stack--{{ stack_mode }}">
+
+          {%- if img1 != blank -%}
+            <div class="itc__photo itc__photo--1">
+              {{ img1 | image_url: width: 1000
                 | image_tag:
                   loading: 'lazy',
-                  widths: '400, 600, 800, 1000, 1200',
-                  sizes: img_sizes,
-                  alt: alt_1,
-                  class: 'img-text-collage__img'
+                  widths: '400, 600, 800, 1000',
+                  sizes: '(min-width: 990px) 26vw, 55vw',
+                  alt: img1.alt | default: section.settings.heading | default: '',
+                  class: 'itc__img'
               }}
             </div>
-          {%- elsif collage_image_count != 1 -%}
-            <div
-              class="img-text-collage__photo img-text-collage__photo--1 img-text-collage__photo--placeholder"
-              data-placeholder="true"
-              aria-hidden="true"
-            >
-              {% render 'img-text-collage-placeholder-svg' %}
-            </div>
-          {%- endif -%}
-          {%- if section.settings.image_2 != blank -%}
-            <div class="img-text-collage__photo img-text-collage__photo--2">
-              {{
-                section.settings.image_2
-                | image_url: width: 900
-                | image_tag:
-                  loading: 'lazy',
-                  widths: '300, 450, 600, 750, 900',
-                  sizes: img_sizes,
-                  alt: alt_2,
-                  class: 'img-text-collage__img'
-              }}
-            </div>
-          {%- elsif collage_image_count != 1 -%}
-            <div
-              class="img-text-collage__photo img-text-collage__photo--2 img-text-collage__photo--placeholder"
-              data-placeholder="true"
-              aria-hidden="true"
-            >
-              {% render 'img-text-collage-placeholder-svg' %}
-            </div>
-          {%- endif -%}
-          {%- if section.settings.image_3 != blank -%}
-            <div class="img-text-collage__photo img-text-collage__photo--3">
-              {{
-                section.settings.image_3
-                | image_url: width: 900
-                | image_tag:
-                  loading: 'lazy',
-                  widths: '300, 450, 600, 750, 900',
-                  sizes: img_sizes,
-                  alt: alt_3,
-                  class: 'img-text-collage__img'
-              }}
-            </div>
-          {%- elsif collage_image_count != 1 -%}
-            <div
-              class="img-text-collage__photo img-text-collage__photo--3 img-text-collage__photo--placeholder"
-              data-placeholder="true"
-              aria-hidden="true"
-            >
-              {% render 'img-text-collage-placeholder-svg' %}
+          {%- elsif stack_mode >= 2 -%}
+            <div class="itc__photo itc__photo--1 itc__photo--placeholder" aria-hidden="true">
+              {{ 'image' | placeholder_svg_tag: 'itc__img itc__img--ph' }}
             </div>
           {%- endif -%}
 
-          {%- assign badge_text = section.settings.badge_text | default: 'EXPLORE MORE ~ EXPLORE MORE ~ ' -%}
-          {%- if collage_image_count != 1 and section.settings.show_badge != false -%}
+          {%- if img2 != blank -%}
+            <div class="itc__photo itc__photo--2">
+              {{ img2 | image_url: width: 900
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '300, 500, 700, 900',
+                  sizes: '(min-width: 990px) 22vw, 45vw',
+                  alt: img2.alt | default: section.settings.heading | default: '',
+                  class: 'itc__img'
+              }}
+            </div>
+          {%- elsif stack_mode >= 2 -%}
+            <div class="itc__photo itc__photo--2 itc__photo--placeholder" aria-hidden="true">
+              {{ 'image' | placeholder_svg_tag: 'itc__img itc__img--ph' }}
+            </div>
+          {%- endif -%}
+
+          {%- if img3 != blank -%}
+            <div class="itc__photo itc__photo--3">
+              {{ img3 | image_url: width: 900
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '300, 500, 700, 900',
+                  sizes: '(min-width: 990px) 20vw, 40vw',
+                  alt: img3.alt | default: section.settings.heading | default: '',
+                  class: 'itc__img'
+              }}
+            </div>
+          {%- elsif stack_mode >= 2 -%}
+            <div class="itc__photo itc__photo--3 itc__photo--placeholder" aria-hidden="true">
+              {{ 'image' | placeholder_svg_tag: 'itc__img itc__img--ph' }}
+            </div>
+          {%- endif -%}
+
+          {%- if stack_mode >= 2 and section.settings.show_badge != false -%}
+            {%- assign badge_text = section.settings.badge_text | default: 'EXPLORE MORE ~ EXPLORE MORE ~ ' -%}
             {%- if section.settings.button_link != blank -%}
               <a class="itc-badge" href="{{ section.settings.button_link }}" aria-label="{{ badge_text | escape }}">
             {%- else -%}
@@ -271,79 +153,69 @@
               </div>
             {%- endif -%}
           {%- endif -%}
+
         </div>
       </div>
 
-      {%- if render_content -%}
-        <div class="img-text-collage__content">
-          {%- if section.settings.show_subtitle and section.settings.subtitle != blank or has_heading -%}
-            <div class="img-text-collage__heading-group">
-              {%- if section.settings.show_subtitle and section.settings.subtitle != blank -%}
-                <p class="img-text-collage__subtitle">{{ section.settings.subtitle | escape }}</p>
-              {%- endif -%}
-              {%- if has_heading -%}
-                {%- assign itc_decoration = section.settings.heading_decoration | default: 'none' -%}
-                <h2 class="img-text-collage__heading{% if itc_decoration != 'none' %} img-text-collage__heading--decorated{% endif %}" id="ImageTextCollage-heading-{{ section.id }}">
-                  {%- if itc_decoration != 'none' -%}
-                    <span class="img-text-collage__heading-inner">
-                      <span class="img-text-collage__heading-text">{{ section.settings.heading | escape }}</span>
-                      <span class="img-text-collage__heading-decoration">
-                        {%- render 'itc-heading-scribble', style: itc_decoration -%}
-                      </span>
-                    </span>
-                  {%- else -%}
-                    {{ section.settings.heading | escape }}
-                  {%- endif -%}
-                </h2>
-              {%- endif -%}
-            </div>
-          {%- endif -%}
+      {%- comment -%}─── CONTENT COLUMN ───{%- endcomment -%}
+      <div class="itc__content">
 
-          {%- if section.settings.show_description and section.settings.description != blank -%}
-            <div class="img-text-collage__description rte">{{ section.settings.description }}</div>
-          {%- endif -%}
+        {%- if section.settings.show_subtitle and section.settings.subtitle != blank or section.settings.heading != blank -%}
+          <div class="itc__heading-group">
+            {%- if section.settings.show_subtitle and section.settings.subtitle != blank -%}
+              <p class="itc__eyebrow">{{ section.settings.subtitle | escape }}</p>
+            {%- endif -%}
+            {%- if section.settings.heading != blank -%}
+              <h2 class="itc__heading" id="ImageTextCollage-heading-{{ section.id }}">
+                {{- section.settings.heading | escape -}}
+              </h2>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
 
-          {%- if section.settings.show_feature_grid -%}
-            <div class="img-text-collage__features" role="list">
-              {%- for block in section.blocks -%}
-                {%- if block.type == 'feature' -%}
-                  <div class="img-text-collage__feature" role="listitem" {{ block.shopify_attributes }}>
-                    <div class="img-text-collage__feature-icon{% if block.settings.icon != blank %} has-icon{% endif %}">
-                      {%- if block.settings.icon != blank -%}
-                        {{
-                          block.settings.icon
-                          | image_url: width: 120
-                          | image_tag:
-                            loading: 'lazy',
-                            widths: '60, 90, 120',
-                            sizes: '48px',
-                            alt: block.settings.title,
-                            class: 'img-text-collage__feature-img'
-                        }}
-                      {%- endif -%}
-                    </div>
-                    {%- if block.settings.title != blank -%}
-                      <p class="img-text-collage__feature-label">{{ block.settings.title | escape }}</p>
+        {%- if section.settings.show_description and section.settings.description != blank -%}
+          <div class="itc__description rte">{{ section.settings.description }}</div>
+        {%- endif -%}
+
+        {%- if section.settings.show_feature_grid and has_feature_blocks -%}
+          <div class="itc__features" role="list">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'feature' -%}
+                <div class="itc__feature" role="listitem" {{ block.shopify_attributes }}>
+                  <div class="itc__feature-icon{% if block.settings.icon != blank %} has-icon{% endif %}">
+                    {%- if block.settings.icon != blank -%}
+                      {{ block.settings.icon | image_url: width: 120
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '60, 90, 120',
+                          sizes: '48px',
+                          alt: block.settings.title,
+                          class: 'itc__feature-img'
+                      }}
                     {%- endif -%}
                   </div>
-                {%- endif -%}
-              {%- endfor -%}
-            </div>
-          {%- endif -%}
+                  {%- if block.settings.title != blank -%}
+                    <p class="itc__feature-label">{{ block.settings.title | escape }}</p>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
 
-          {%- if section.settings.show_cta and section.settings.button_label != blank -%}
-            {%- if section.settings.button_link != blank -%}
-              <a href="{{ section.settings.button_link }}" class="img-text-collage__btn">
-                {{ section.settings.button_label | escape }}
-              </a>
-            {%- else -%}
-              <span class="img-text-collage__btn img-text-collage__btn--static">
-                {{ section.settings.button_label | escape }}
-              </span>
-            {%- endif -%}
+        {%- if section.settings.show_cta and section.settings.button_label != blank -%}
+          {%- if section.settings.button_link != blank -%}
+            <a href="{{ section.settings.button_link }}" class="itc__btn">
+              {{- section.settings.button_label | escape -}}
+            </a>
+          {%- else -%}
+            <span class="itc__btn itc__btn--static">
+              {{- section.settings.button_label | escape -}}
+            </span>
           {%- endif -%}
-        </div>
-      {%- endif -%}
+        {%- endif -%}
+
+      </div>
     </div>
   </div>
 </section>
@@ -355,363 +227,41 @@
   "class": "image-text-collage-section",
   "max_blocks": 8,
   "settings": [
+    { "type": "header", "content": "Color" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+
+    { "type": "header", "content": "Background pattern" },
+    { "type": "image_picker", "id": "pattern_image", "label": "Decorative pattern", "info": "Optional full-width background texture (e.g. floral). Tile or full-cover." },
+    { "type": "range", "id": "pattern_opacity", "min": 4, "max": 40, "step": 2, "unit": "%", "label": "Pattern visibility", "default": 14 },
+
+    { "type": "header", "content": "Layout" },
     {
-      "type": "header",
-      "content": "Color"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:settings.color_scheme",
-      "default": "scheme-1"
-    },
-    {
-      "type": "header",
-      "content": "Background"
-    },
-    {
-      "type": "image_picker",
-      "id": "pattern_image",
-      "label": "Decorative pattern",
-      "info": "Optional full-width background texture (e.g. floral). Uses color scheme background behind it."
-    },
-    {
-      "type": "range",
-      "id": "pattern_opacity",
-      "min": 4,
-      "max": 40,
-      "step": 2,
-      "unit": "%",
-      "label": "Pattern visibility",
-      "default": 14
-    },
-    {
-      "type": "header",
-      "content": "Layout"
-    },
-    {
-      "type": "select",
-      "id": "section_width",
-      "label": "Section width",
-      "options": [
-        { "value": "page-width", "label": "Page width" },
-        { "value": "full-width", "label": "Full width" }
-      ],
+      "type": "select", "id": "section_width", "label": "Section width",
+      "options": [{ "value": "page-width", "label": "Page width" }, { "value": "full-width", "label": "Full width" }],
       "default": "page-width"
     },
     {
-      "type": "select",
-      "id": "media_position",
-      "label": "Collage position on large screens",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "right", "label": "Right" }
-      ],
+      "type": "select", "id": "media_position", "label": "Collage side",
+      "options": [{ "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }],
       "default": "left"
     },
+
+    { "type": "header", "content": "Images" },
+    { "type": "paragraph", "content": "1 image → fills column. 2 images → offset overlap. 3 images → stacked rotating collage." },
+    { "type": "image_picker", "id": "image_1", "label": "Image 1", "info": "Top photo in the 3-image stack." },
+    { "type": "range", "id": "image_1_rotation", "min": -12, "max": 12, "step": 1, "unit": "deg", "label": "Image 1 tilt", "default": 5 },
+    { "type": "image_picker", "id": "image_2", "label": "Image 2", "info": "Main center photo in the 3-image stack." },
+    { "type": "range", "id": "image_2_rotation", "min": -12, "max": 12, "step": 1, "unit": "deg", "label": "Image 2 tilt", "default": -6 },
+    { "type": "image_picker", "id": "image_3", "label": "Image 3", "info": "Bottom photo in the 3-image stack." },
+    { "type": "range", "id": "image_3_rotation", "min": -12, "max": 12, "step": 1, "unit": "deg", "label": "Image 3 tilt", "default": 4 },
+    { "type": "range", "id": "image_radius", "min": 0, "max": 32, "step": 2, "unit": "px", "label": "Image corner radius", "default": 16 },
+
+    { "type": "header", "content": "Text" },
+    { "type": "checkbox", "id": "show_subtitle", "label": "Show eyebrow text", "default": true },
+    { "type": "text", "id": "subtitle", "label": "Eyebrow text", "default": "Pure and simple" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Intensive Hair Serum for Radiant Shine & Lasting Strength" },
     {
-      "type": "checkbox",
-      "id": "show_text_column",
-      "label": "Show text column",
-      "default": true,
-      "info": "Turn off to show only the image collage at full width."
-    },
-    {
-      "type": "header",
-      "content": "Collage images"
-    },
-    {
-      "type": "paragraph",
-      "content": "Use Image 1–3 to build the collage. Empty slots show a built-in image icon on the live store and in the theme editor (except when only one image is set, so the solo layout stays full-bleed). Inset % controls position; −1 on a side means Auto."
-    },
-    {
-      "type": "image_picker",
-      "id": "image_1",
-      "label": "Image 1",
-      "info": "With 3 images, usually the wide top layer. Suggested: landscape. Empty slots show the section image placeholder."
-    },
-    {
-      "type": "range",
-      "id": "image_1_rotation",
-      "min": -12,
-      "max": 12,
-      "step": 1,
-      "unit": "deg",
-      "label": "Image 1 tilt",
-      "default": 5
-    },
-    {
-      "type": "header",
-      "content": "Image 1 — position & depth"
-    },
-    {
-      "type": "range",
-      "id": "image_1_inset_top",
-      "min": -1,
-      "max": 90,
-      "step": 1,
-      "unit": "%",
-      "label": "From top",
-      "default": 0,
-      "info": "−1 = Auto"
-    },
-    {
-      "type": "range",
-      "id": "image_1_inset_right",
-      "min": -1,
-      "max": 90,
-      "step": 1,
-      "unit": "%",
-      "label": "From right",
-      "default": -1,
-      "info": "−1 = Auto"
-    },
-    {
-      "type": "range",
-      "id": "image_1_inset_bottom",
-      "min": -1,
-      "max": 90,
-      "step": 1,
-      "unit": "%",
-      "label": "From bottom",
-      "default": -1,
-      "info": "−1 = Auto"
-    },
-    {
-      "type": "range",
-      "id": "image_1_inset_left",
-      "min": -1,
-      "max": 90,
-      "step": 1,
-      "unit": "%",
-      "label": "From left",
-      "default": 11,
-      "info": "−1 = Auto"
-    },
-    {
-      "type": "range",
-      "id": "image_1_width",
-      "min": 25,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "label": "Width",
-      "default": 78
-    },
-    {
-      "type": "range",
-      "id": "image_1_z_index",
-      "min": 1,
-      "max": 15,
-      "step": 1,
-      "label": "Stack order (z-index)",
-      "default": 3,
-      "info": "Higher draws on top of lower layers."
-    },
-    {
-      "type": "image_picker",
-      "id": "image_2",
-      "label": "Image 2",
-      "info": "With 3 images, usually middle-left. Suggested: portrait. Empty slots show the section image placeholder."
-    },
-    {
-      "type": "range",
-      "id": "image_2_rotation",
-      "min": -12,
-      "max": 12,
-      "step": 1,
-      "unit": "deg",
-      "label": "Image 2 tilt",
-      "default": -6
-    },
-    {
-      "type": "header",
-      "content": "Image 2 — position & depth"
-    },
-    {
-      "type": "range",
-      "id": "image_2_inset_top",
-      "min": -1,
-      "max": 90,
-      "step": 1,
-      "unit": "%",
-      "label": "From top",
-      "default": 38,
-      "info": "−1 = Auto"
-    },
-    {
-      "type": "range",
-      "id": "image_2_inset_right",
-      "min": -1,
-      "max": 90,
-      "step": 1,
-      "unit": "%",
-      "label": "From right",
-      "default": -1,
-      "info": "−1 = Auto"
-    },
-    {
-      "type": "range",
-      "id": "image_2_inset_bottom",
-      "min": -1,
-      "max": 90,
-      "step": 1,
-      "unit": "%",
-      "label": "From bottom",
-      "default": -1,
-      "info": "−1 = Auto"
-    },
-    {
-      "type": "range",
-      "id": "image_2_inset_left",
-      "min": -1,
-      "max": 90,
-      "step": 1,
-      "unit": "%",
-      "label": "From left",
-      "default": 0,
-      "info": "−1 = Auto"
-    },
-    {
-      "type": "range",
-      "id": "image_2_width",
-      "min": 25,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "label": "Width",
-      "default": 44
-    },
-    {
-      "type": "range",
-      "id": "image_2_z_index",
-      "min": 1,
-      "max": 15,
-      "step": 1,
-      "label": "Stack order (z-index)",
-      "default": 2,
-      "info": "Higher draws on top of lower layers."
-    },
-    {
-      "type": "image_picker",
-      "id": "image_3",
-      "label": "Image 3",
-      "info": "With 3 images, usually bottom layer. Suggested: portrait. Empty slots show the section image placeholder."
-    },
-    {
-      "type": "range",
-      "id": "image_3_rotation",
-      "min": -12,
-      "max": 12,
-      "step": 1,
-      "unit": "deg",
-      "label": "Image 3 tilt",
-      "default": 4
-    },
-    {
-      "type": "header",
-      "content": "Image 3 — position & depth"
-    },
-    {
-      "type": "range",
-      "id": "image_3_inset_top",
-      "min": -1,
-      "max": 90,
-      "step": 1,
-      "unit": "%",
-      "label": "From top",
-      "default": -1,
-      "info": "−1 = Auto"
-    },
-    {
-      "type": "range",
-      "id": "image_3_inset_right",
-      "min": -1,
-      "max": 90,
-      "step": 1,
-      "unit": "%",
-      "label": "From right",
-      "default": -1,
-      "info": "−1 = Auto"
-    },
-    {
-      "type": "range",
-      "id": "image_3_inset_bottom",
-      "min": -1,
-      "max": 90,
-      "step": 1,
-      "unit": "%",
-      "label": "From bottom",
-      "default": 0,
-      "info": "−1 = Auto"
-    },
-    {
-      "type": "range",
-      "id": "image_3_inset_left",
-      "min": -1,
-      "max": 90,
-      "step": 1,
-      "unit": "%",
-      "label": "From left",
-      "default": 24,
-      "info": "−1 = Auto"
-    },
-    {
-      "type": "range",
-      "id": "image_3_width",
-      "min": 25,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "label": "Width",
-      "default": 50
-    },
-    {
-      "type": "range",
-      "id": "image_3_z_index",
-      "min": 1,
-      "max": 15,
-      "step": 1,
-      "label": "Stack order (z-index)",
-      "default": 1,
-      "info": "Higher draws on top of lower layers."
-    },
-    {
-      "type": "range",
-      "id": "image_radius",
-      "min": 0,
-      "max": 32,
-      "step": 2,
-      "unit": "px",
-      "label": "Image corner radius",
-      "default": 16
-    },
-    {
-      "type": "header",
-      "content": "Text column"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_subtitle",
-      "label": "Show subtitle",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "subtitle",
-      "label": "Subtitle",
-      "default": "Pure and simple"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Intensive Hair Serum for Radiant Shine & Lasting Strength"
-    },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "label": "Heading size",
+      "type": "select", "id": "heading_size", "label": "Heading size",
       "options": [
         { "value": "small",  "label": "Small" },
         { "value": "medium", "label": "Medium" },
@@ -720,168 +270,39 @@
       ],
       "default": "medium"
     },
+    { "type": "checkbox", "id": "show_description", "label": "Show description", "default": true },
     {
-      "type": "select",
-      "id": "heading_decoration",
-      "label": "Heading underline decoration",
-      "options": [
-        { "value": "none",    "label": "None" },
-        { "value": "squiggle","label": "Squiggle" },
-        { "value": "wave",    "label": "Wave" },
-        { "value": "brush",   "label": "Brush" },
-        { "value": "double",  "label": "Double" },
-        { "value": "zigzag",  "label": "Zigzag" },
-        { "value": "arc",     "label": "Arc" },
-        { "value": "dotted",  "label": "Dotted" },
-        { "value": "marker",  "label": "Marker" },
-        { "value": "sketch",  "label": "Sketch" }
-      ],
-      "default": "none"
-    },
-    {
-      "type": "color",
-      "id": "heading_decoration_color",
-      "label": "Decoration color",
-      "default": "#f5c518"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_description",
-      "label": "Show description",
-      "default": true
-    },
-    {
-      "type": "richtext",
-      "id": "description",
-      "label": "Description",
+      "type": "richtext", "id": "description", "label": "Description",
       "default": "<p>Our concentrated serum helps smooth the look of damage and adds luminous shine with plant-based actives you can feel good about.</p>"
     },
-    {
-      "type": "checkbox",
-      "id": "show_feature_grid",
-      "label": "Show feature icons",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_cta",
-      "label": "Show button",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "button_label",
-      "label": "Button label",
-      "default": "Explore sale"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button link"
-    },
-    {
-      "type": "header",
-      "content": "Button style"
-    },
-    {
-      "type": "color",
-      "id": "btn_bg",
-      "label": "Background",
-      "default": "#f5c518"
-    },
-    {
-      "type": "color",
-      "id": "btn_fg",
-      "label": "Text color",
-      "default": "#111111"
-    },
-    {
-      "type": "color",
-      "id": "btn_hover_bg",
-      "label": "Hover background",
-      "default": "#ddb015"
-    },
-    {
-      "type": "header",
-      "content": "Explore badge"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_badge",
-      "label": "Show rotating badge",
-      "default": true,
-      "info": "Only visible when 2 or more collage images are set."
-    },
-    {
-      "type": "text",
-      "id": "badge_text",
-      "label": "Badge ring text",
-      "default": "EXPLORE MORE ~ EXPLORE MORE ~ ",
-      "info": "Repeat the phrase twice with a separator (e.g. ~) to fill the full ring."
-    },
-    {
-      "type": "color",
-      "id": "badge_bg",
-      "label": "Badge background",
-      "default": "#f2c419"
-    },
-    {
-      "type": "color",
-      "id": "badge_fg",
-      "label": "Badge text & icon color",
-      "default": "#1a1a1a"
-    },
-    {
-      "type": "range",
-      "id": "badge_size",
-      "label": "Badge size",
-      "min": 12,
-      "max": 28,
-      "step": 1,
-      "unit": "%",
-      "default": 18
-    },
-    {
-      "type": "header",
-      "content": "Spacing"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "label": "Padding top",
-      "default": 72
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 120,
-      "step": 4,
-      "unit": "px",
-      "label": "Padding bottom",
-      "default": 72
-    }
+    { "type": "checkbox", "id": "show_feature_grid", "label": "Show feature icons", "default": true },
+    { "type": "checkbox", "id": "show_cta", "label": "Show button", "default": true },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Explore sale" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+
+    { "type": "header", "content": "Button style" },
+    { "type": "color", "id": "btn_bg", "label": "Background", "default": "#f5c518" },
+    { "type": "color", "id": "btn_fg", "label": "Text color", "default": "#111111" },
+    { "type": "color", "id": "btn_hover_bg", "label": "Hover background", "default": "#ddb015" },
+
+    { "type": "header", "content": "Explore badge" },
+    { "type": "checkbox", "id": "show_badge", "label": "Show rotating badge", "default": true, "info": "Visible with 2 or 3 images." },
+    { "type": "text", "id": "badge_text", "label": "Badge text", "default": "EXPLORE MORE ~ EXPLORE MORE ~ ", "info": "Repeat twice with a separator to fill the ring." },
+    { "type": "color", "id": "badge_bg", "label": "Badge background", "default": "#f2c419" },
+    { "type": "color", "id": "badge_fg", "label": "Badge text & icon color", "default": "#1a1a1a" },
+    { "type": "range", "id": "badge_size", "label": "Badge size", "min": 12, "max": 28, "step": 1, "unit": "%", "default": 18 },
+
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding top", "default": 72 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding bottom", "default": 72 }
   ],
   "blocks": [
     {
       "type": "feature",
-      "name": "Feature",
+      "name": "Feature icon",
       "settings": [
-        {
-          "type": "image_picker",
-          "id": "icon",
-          "label": "Icon"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Label",
-          "default": "Healthy & soft"
-        }
+        { "type": "image_picker", "id": "icon", "label": "Icon image" },
+        { "type": "text", "id": "title", "label": "Label", "default": "Healthy & soft" }
       ]
     }
   ],
@@ -892,7 +313,6 @@
         "color_scheme": "scheme-1",
         "section_width": "page-width",
         "media_position": "left",
-        "show_text_column": true,
         "subtitle": "Pure and simple",
         "heading": "Intensive Hair Serum for Radiant Shine & Lasting Strength",
         "show_subtitle": true,
@@ -902,22 +322,10 @@
         "button_label": "Explore sale"
       },
       "blocks": [
-        {
-          "type": "feature",
-          "settings": { "title": "Healthy & Soft" }
-        },
-        {
-          "type": "feature",
-          "settings": { "title": "Free from Sulfates" }
-        },
-        {
-          "type": "feature",
-          "settings": { "title": "No Parabens Added" }
-        },
-        {
-          "type": "feature",
-          "settings": { "title": "100% Plant-Powered" }
-        }
+        { "type": "feature", "settings": { "title": "Healthy & Soft" } },
+        { "type": "feature", "settings": { "title": "Free from Sulfates" } },
+        { "type": "feature", "settings": { "title": "No Parabens Added" } },
+        { "type": "feature", "settings": { "title": "100% Plant-Powered" } }
       ]
     }
   ]
