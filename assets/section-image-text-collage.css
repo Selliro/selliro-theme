@@ -168,6 +168,15 @@
   object-fit: cover;
 }
 
+.itc__photo--1 img,
+.itc__photo--2 img,
+.itc__photo--3 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .itc__img--ph {
   display: block;
   width: 100%;
