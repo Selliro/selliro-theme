@@ -4357,22 +4357,23 @@ text-component {
 }
 
 /* ── Slideshow hero: push arrows inward so they don't sit flush on the content ── */
-.container-background-image slideshow-component > slideshow-container > slideshow-arrows {
+.container-background-image slideshow-arrows {
   padding-inline: clamp(16px, 2.5vw, 36px);
 }
 
 /* ── Slideshow hero: glass card effect on content group blocks ── */
-.container-background-image .slide__content .group-block {
+.container-background-image .group-block {
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   background-color: rgba(0, 0, 0, 0.32) !important;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 20px;
+  overflow: hidden;
 }
 
 /* ── Ensure text inside glass card is white ── */
-.container-background-image .slide__content .group-block,
-.container-background-image .slide__content .group-block * {
+.container-background-image .group-block,
+.container-background-image .group-block * {
   color: #ffffff !important;
 }
 
