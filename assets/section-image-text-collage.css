@@ -367,6 +367,10 @@ a.itc-badge:hover {
   animation: itc-spin 10s linear infinite;
 }
 
+.itc-badge__ring text {
+  font-family: var(--font-body-family, var(--font-heading-family, inherit));
+}
+
 .itc-badge__center {
   position: relative;
   z-index: 1;
