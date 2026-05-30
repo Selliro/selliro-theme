@@ -297,8 +297,11 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  border: 1px solid rgb(var(--color-border-rgb) / 0.85);
   background: transparent;
+}
+
+.img-text-collage__feature-icon.has-icon {
+  border: 1px solid rgb(var(--color-border-rgb) / 0.85);
 }
 
 .img-text-collage__feature-icon img {
