@@ -104,7 +104,6 @@
     {% endcase %}
   "
 >
-
   {%- if section.settings.pattern_image != blank -%}
     <div
       class="itc__pattern force-full-width"
@@ -116,20 +115,21 @@
 
   <div class="section-container">
     <div class="itc__inner{% if section.settings.media_position == 'right' %} itc__inner--reversed{% endif %}">
-
       {%- comment -%}─── COLLAGE COLUMN ───{%- endcomment -%}
       <div class="itc__collage-wrap{% if stack_mode == 1 %} itc__collage-wrap--solo{% endif %}">
         <div class="itc__stack itc__stack--{{ stack_mode }}">
-
           {%- if img1 != blank -%}
             <div class="itc__photo itc__photo--1">
-              {{ img1 | image_url: width: 1000
+              {{
+                img1
+                | image_url: width: 1000
                 | image_tag:
                   loading: 'lazy',
                   widths: '400, 600, 800, 1000',
                   sizes: '(min-width: 990px) 26vw, 55vw',
-                  alt: img1.alt | default: section.settings.heading | default: '',
-                  class: 'itc__img'
+                  alt: img1.alt
+                | default: section.settings.heading
+                | default: '', class: 'itc__img'
               }}
             </div>
           {%- elsif stack_mode >= 2 -%}
@@ -140,13 +140,16 @@
 
           {%- if img2 != blank -%}
             <div class="itc__photo itc__photo--2">
-              {{ img2 | image_url: width: 900
+              {{
+                img2
+                | image_url: width: 900
                 | image_tag:
                   loading: 'lazy',
                   widths: '300, 500, 700, 900',
                   sizes: '(min-width: 990px) 22vw, 45vw',
-                  alt: img2.alt | default: section.settings.heading | default: '',
-                  class: 'itc__img'
+                  alt: img2.alt
+                | default: section.settings.heading
+                | default: '', class: 'itc__img'
               }}
             </div>
           {%- elsif stack_mode >= 2 -%}
@@ -157,13 +160,16 @@
 
           {%- if img3 != blank -%}
             <div class="itc__photo itc__photo--3">
-              {{ img3 | image_url: width: 900
+              {{
+                img3
+                | image_url: width: 900
                 | image_tag:
                   loading: 'lazy',
                   widths: '300, 500, 700, 900',
                   sizes: '(min-width: 990px) 20vw, 40vw',
-                  alt: img3.alt | default: section.settings.heading | default: '',
-                  class: 'itc__img'
+                  alt: img3.alt
+                | default: section.settings.heading
+                | default: '', class: 'itc__img'
               }}
             </div>
           {%- elsif stack_mode >= 2 -%}
@@ -179,36 +185,37 @@
             {%- else -%}
               <div class="itc-badge" aria-hidden="true">
             {%- endif -%}
-              <svg class="itc-badge__ring" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
-                <defs>
-                  <path id="itc-ring-{{ section.id }}" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/>
-                </defs>
-                <circle cx="60" cy="60" r="35" fill="none" stroke="#ffffff" stroke-width="10" opacity="1"/>
-                <text font-size="12.5" font-weight="700" letter-spacing="1">
-                  <textPath href="#itc-ring-{{ section.id }}" textLength="289" lengthAdjust="spacingAndGlyphs">{{ badge_text }}</textPath>
-                </text>
-              </svg>
-              <span class="itc-badge__center" aria-hidden="true">
-                <span class="itc-badge__arrow">
-                  <svg width="26" height="15" viewBox="0 0 26 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M24.7522 7.81408C25.1286 7.40987 25.106 6.7771 24.7018 6.40077L18.1147 0.268001C17.7105 -0.108337 17.0777 -0.0857379 16.7014 0.318476C16.3251 0.72269 16.3477 1.35545 16.7519 1.73179L22.607 7.18314L17.1557 13.0383C16.7794 13.4425 16.802 14.0753 17.2062 14.4516C17.6104 14.8279 18.2431 14.8053 18.6195 14.4011L24.7522 7.81408ZM0.0356445 7.98926L0.0713361 8.98862L24.056 8.13202L24.0204 7.13266L23.9847 6.1333L-4.69983e-05 6.98989L0.0356445 7.98926Z" fill="black"/>
-                  </svg>
-                </span>
+            <svg class="itc-badge__ring" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+              <defs>
+                <path id="itc-ring-{{ section.id }}" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/>
+              </defs>
+              <circle cx="60" cy="60" r="35" fill="none" stroke="#ffffff" stroke-width="10" opacity="1"/>
+              <text font-size="12.5" font-weight="700" letter-spacing="1">
+                <textPath href="#itc-ring-{{ section.id }}" textLength="289" lengthAdjust="spacingAndGlyphs">{{ badge_text }}</textPath>
+              </text>
+            </svg>
+            <span class="itc-badge__center" aria-hidden="true">
+              <span class="itc-badge__arrow">
+                <svg width="26" height="15" viewBox="0 0 26 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M24.7522 7.81408C25.1286 7.40987 25.106 6.7771 24.7018 6.40077L18.1147 0.268001C17.7105 -0.108337 17.0777 -0.0857379 16.7014 0.318476C16.3251 0.72269 16.3477 1.35545 16.7519 1.73179L22.607 7.18314L17.1557 13.0383C16.7794 13.4425 16.802 14.0753 17.2062 14.4516C17.6104 14.8279 18.2431 14.8053 18.6195 14.4011L24.7522 7.81408ZM0.0356445 7.98926L0.0713361 8.98862L24.056 8.13202L24.0204 7.13266L23.9847 6.1333L-4.69983e-05 6.98989L0.0356445 7.98926Z" fill="black"/>
+                </svg>
               </span>
+            </span>
             {%- if section.settings.button_link != blank -%}
               </a>
             {%- else -%}
               </div>
             {%- endif -%}
           {%- endif -%}
-
         </div>
       </div>
 
       {%- comment -%}─── CONTENT COLUMN ───{%- endcomment -%}
       <div class="itc__content">
-
-        {%- if section.settings.show_subtitle and section.settings.subtitle != blank or section.settings.heading != blank -%}
+        {%- if section.settings.show_subtitle
+          and section.settings.subtitle != blank
+          or section.settings.heading != blank
+        -%}
           <div class="itc__heading-group">
             {%- if section.settings.show_subtitle and section.settings.subtitle != blank -%}
               <p class="itc__eyebrow">{{ section.settings.subtitle | escape }}</p>
@@ -232,7 +239,9 @@
                 <div class="itc__feature" role="listitem" {{ block.shopify_attributes }}>
                   {%- if block.settings.icon != blank -%}
                     <div class="itc__feature-icon has-icon">
-                      {{ block.settings.icon | image_url: width: 120
+                      {{
+                        block.settings.icon
+                        | image_url: width: 120
                         | image_tag:
                           loading: 'lazy',
                           widths: '60, 90, 120',
@@ -262,7 +271,6 @@
             </span>
           {%- endif -%}
         {%- endif -%}
-
       </div>
     </div>
   </div>
@@ -279,76 +287,334 @@
     { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
 
     { "type": "header", "content": "Background pattern" },
-    { "type": "image_picker", "id": "pattern_image", "label": "Decorative pattern", "info": "Optional full-width background texture (e.g. floral). Tile or full-cover." },
-    { "type": "range", "id": "pattern_opacity", "min": 4, "max": 40, "step": 2, "unit": "%", "label": "Pattern visibility", "default": 14 },
+    {
+      "type": "image_picker",
+      "id": "pattern_image",
+      "label": "Decorative pattern",
+      "info": "Optional full-width background texture (e.g. floral). Tile or full-cover."
+    },
+    {
+      "type": "range",
+      "id": "pattern_opacity",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "unit": "%",
+      "label": "Pattern visibility",
+      "default": 14
+    },
 
     { "type": "header", "content": "Layout" },
     {
-      "type": "select", "id": "section_width", "label": "Section width",
-      "options": [{ "value": "page-width", "label": "Page width" }, { "value": "full-width", "label": "Full width" }],
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        { "value": "page-width", "label": "Page width" },
+        { "value": "full-width", "label": "Full width" }
+      ],
       "default": "page-width"
     },
     {
-      "type": "select", "id": "media_position", "label": "Collage side",
-      "options": [{ "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }],
+      "type": "select",
+      "id": "media_position",
+      "label": "Collage side",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
       "default": "left"
     },
 
     { "type": "header", "content": "Images" },
-    { "type": "paragraph", "content": "1 image → fills column. 2 images → offset overlap. 3 images → stacked collage. Position values: −1 = Auto (ignored)." },
+    {
+      "type": "paragraph",
+      "content": "1 image → fills column. 2 images → offset overlap. 3 images → stacked collage. Position values: −1 = Auto (ignored)."
+    },
 
     { "type": "image_picker", "id": "image_1", "label": "Image 1", "info": "Top-right photo." },
-    { "type": "range", "id": "image_1_width", "min": 20, "max": 100, "step": 1, "unit": "%", "label": "Image 1 — width", "default": 56 },
-    { "type": "range", "id": "image_1_height", "min": -1, "max": 99, "step": 1, "unit": "%", "label": "Image 1 — height (−1 = auto)", "default": -1 },
-    { "type": "range", "id": "image_1_zindex", "min": 1, "max": 10, "step": 1, "label": "Image 1 — z-index (layer order)", "default": 2 },
-    { "type": "range", "id": "image_1_rotation", "min": -15, "max": 15, "step": 1, "unit": "deg", "label": "Image 1 — rotation", "default": -4 },
+    {
+      "type": "range",
+      "id": "image_1_width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Image 1 — width",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "image_1_height",
+      "min": -1,
+      "max": 99,
+      "step": 1,
+      "unit": "%",
+      "label": "Image 1 — height (−1 = auto)",
+      "default": -1
+    },
+    {
+      "type": "range",
+      "id": "image_1_zindex",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "label": "Image 1 — z-index (layer order)",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "image_1_rotation",
+      "min": -15,
+      "max": 15,
+      "step": 1,
+      "unit": "deg",
+      "label": "Image 1 — rotation",
+      "default": -4
+    },
     { "type": "header", "content": "Image 1 — position" },
-    { "type": "range", "id": "image_1_top", "min": -1, "max": 80, "step": 1, "unit": "%", "label": "From top (−1 = auto)", "default": 0 },
-    { "type": "range", "id": "image_1_right", "min": -1, "max": 80, "step": 1, "unit": "%", "label": "From right (−1 = auto)", "default": 0 },
-    { "type": "range", "id": "image_1_bottom", "min": -1, "max": 80, "step": 1, "unit": "%", "label": "From bottom (−1 = auto)", "default": -1 },
-    { "type": "range", "id": "image_1_left", "min": -1, "max": 80, "step": 1, "unit": "%", "label": "From left (−1 = auto)", "default": -1 },
+    {
+      "type": "range",
+      "id": "image_1_top",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "From top (−1 = auto)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_1_right",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "From right (−1 = auto)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_1_bottom",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "From bottom (−1 = auto)",
+      "default": -1
+    },
+    {
+      "type": "range",
+      "id": "image_1_left",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "From left (−1 = auto)",
+      "default": -1
+    },
 
     { "type": "image_picker", "id": "image_2", "label": "Image 2", "info": "Main center-left photo (largest)." },
-    { "type": "range", "id": "image_2_width", "min": 20, "max": 100, "step": 1, "unit": "%", "label": "Image 2 — width", "default": 68 },
-    { "type": "range", "id": "image_2_height", "min": -1, "max": 99, "step": 1, "unit": "%", "label": "Image 2 — height (−1 = auto)", "default": -1 },
-    { "type": "range", "id": "image_2_zindex", "min": 1, "max": 10, "step": 1, "label": "Image 2 — z-index (layer order)", "default": 3 },
-    { "type": "range", "id": "image_2_rotation", "min": -15, "max": 15, "step": 1, "unit": "deg", "label": "Image 2 — rotation", "default": 4 },
+    {
+      "type": "range",
+      "id": "image_2_width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Image 2 — width",
+      "default": 68
+    },
+    {
+      "type": "range",
+      "id": "image_2_height",
+      "min": -1,
+      "max": 99,
+      "step": 1,
+      "unit": "%",
+      "label": "Image 2 — height (−1 = auto)",
+      "default": -1
+    },
+    {
+      "type": "range",
+      "id": "image_2_zindex",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "label": "Image 2 — z-index (layer order)",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "image_2_rotation",
+      "min": -15,
+      "max": 15,
+      "step": 1,
+      "unit": "deg",
+      "label": "Image 2 — rotation",
+      "default": 4
+    },
     { "type": "header", "content": "Image 2 — position" },
-    { "type": "range", "id": "image_2_top", "min": -1, "max": 80, "step": 1, "unit": "%", "label": "From top (−1 = auto)", "default": 28 },
-    { "type": "range", "id": "image_2_right", "min": -1, "max": 80, "step": 1, "unit": "%", "label": "From right (−1 = auto)", "default": -1 },
-    { "type": "range", "id": "image_2_bottom", "min": -1, "max": 80, "step": 1, "unit": "%", "label": "From bottom (−1 = auto)", "default": -1 },
-    { "type": "range", "id": "image_2_left", "min": -1, "max": 80, "step": 1, "unit": "%", "label": "From left (−1 = auto)", "default": 0 },
+    {
+      "type": "range",
+      "id": "image_2_top",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "From top (−1 = auto)",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "image_2_right",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "From right (−1 = auto)",
+      "default": -1
+    },
+    {
+      "type": "range",
+      "id": "image_2_bottom",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "From bottom (−1 = auto)",
+      "default": -1
+    },
+    {
+      "type": "range",
+      "id": "image_2_left",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "From left (−1 = auto)",
+      "default": 0
+    },
 
     { "type": "image_picker", "id": "image_3", "label": "Image 3", "info": "Bottom-right photo." },
-    { "type": "range", "id": "image_3_width", "min": 20, "max": 100, "step": 1, "unit": "%", "label": "Image 3 — width", "default": 48 },
-    { "type": "range", "id": "image_3_height", "min": -1, "max": 99, "step": 1, "unit": "%", "label": "Image 3 — height (−1 = auto)", "default": -1 },
-    { "type": "range", "id": "image_3_zindex", "min": 1, "max": 10, "step": 1, "label": "Image 3 — z-index (layer order)", "default": 2 },
-    { "type": "range", "id": "image_3_rotation", "min": -15, "max": 15, "step": 1, "unit": "deg", "label": "Image 3 — rotation", "default": -3 },
+    {
+      "type": "range",
+      "id": "image_3_width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Image 3 — width",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "image_3_height",
+      "min": -1,
+      "max": 99,
+      "step": 1,
+      "unit": "%",
+      "label": "Image 3 — height (−1 = auto)",
+      "default": -1
+    },
+    {
+      "type": "range",
+      "id": "image_3_zindex",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "label": "Image 3 — z-index (layer order)",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "image_3_rotation",
+      "min": -15,
+      "max": 15,
+      "step": 1,
+      "unit": "deg",
+      "label": "Image 3 — rotation",
+      "default": -3
+    },
     { "type": "header", "content": "Image 3 — position" },
-    { "type": "range", "id": "image_3_top", "min": -1, "max": 80, "step": 1, "unit": "%", "label": "From top (−1 = auto)", "default": -1 },
-    { "type": "range", "id": "image_3_right", "min": -1, "max": 80, "step": 1, "unit": "%", "label": "From right (−1 = auto)", "default": 3 },
-    { "type": "range", "id": "image_3_bottom", "min": -1, "max": 80, "step": 1, "unit": "%", "label": "From bottom (−1 = auto)", "default": 0 },
-    { "type": "range", "id": "image_3_left", "min": -1, "max": 80, "step": 1, "unit": "%", "label": "From left (−1 = auto)", "default": -1 },
+    {
+      "type": "range",
+      "id": "image_3_top",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "From top (−1 = auto)",
+      "default": -1
+    },
+    {
+      "type": "range",
+      "id": "image_3_right",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "From right (−1 = auto)",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "image_3_bottom",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "From bottom (−1 = auto)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_3_left",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "unit": "%",
+      "label": "From left (−1 = auto)",
+      "default": -1
+    },
 
-    { "type": "range", "id": "image_radius", "min": 0, "max": 32, "step": 2, "unit": "px", "label": "Image corner radius", "default": 16 },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Image corner radius",
+      "default": 16
+    },
 
     { "type": "header", "content": "Text" },
     { "type": "checkbox", "id": "show_subtitle", "label": "Show eyebrow text", "default": true },
     { "type": "text", "id": "subtitle", "label": "Eyebrow text", "default": "Pure and simple" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Intensive Hair Serum for Radiant Shine & Lasting Strength" },
     {
-      "type": "select", "id": "heading_size", "label": "Heading size",
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Intensive Hair Serum for Radiant Shine & Lasting Strength"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
       "options": [
-        { "value": "small",  "label": "Small" },
+        { "value": "small", "label": "Small" },
         { "value": "medium", "label": "Medium" },
-        { "value": "large",  "label": "Large" },
+        { "value": "large", "label": "Large" },
         { "value": "xlarge", "label": "Extra large" }
       ],
       "default": "medium"
     },
     { "type": "checkbox", "id": "show_description", "label": "Show description", "default": true },
     {
-      "type": "richtext", "id": "description", "label": "Description",
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
       "default": "<p>Our concentrated serum helps smooth the look of damage and adds luminous shine with plant-based actives you can feel good about.</p>"
     },
     { "type": "checkbox", "id": "show_feature_grid", "label": "Show feature icons", "default": true },
@@ -362,17 +628,74 @@
     { "type": "color", "id": "btn_hover_bg", "label": "Hover background", "default": "#ddb015" },
 
     { "type": "header", "content": "Explore badge" },
-    { "type": "checkbox", "id": "show_badge", "label": "Show rotating badge", "default": true, "info": "Visible with 2 or 3 images." },
-    { "type": "text", "id": "badge_text", "label": "Badge text", "default": "EXPLORE MORE ~ EXPLORE MORE ~ ", "info": "Repeat twice with a separator to fill the ring." },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show rotating badge",
+      "default": true,
+      "info": "Visible with 2 or 3 images."
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "EXPLORE MORE ~ EXPLORE MORE ~ ",
+      "info": "Repeat twice with a separator to fill the ring."
+    },
     { "type": "color", "id": "badge_bg", "label": "Badge background", "default": "#f2c419" },
     { "type": "color", "id": "badge_fg", "label": "Badge text & icon color", "default": "#1a1a1a" },
-    { "type": "range", "id": "badge_size", "label": "Badge size", "min": 12, "max": 28, "step": 1, "unit": "%", "default": 18 },
-    { "type": "range", "id": "badge_top", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Badge — from top", "default": 50 },
-    { "type": "range", "id": "badge_left", "min": 0, "max": 100, "step": 1, "unit": "%", "label": "Badge — from left", "default": 44 },
+    {
+      "type": "range",
+      "id": "badge_size",
+      "label": "Badge size",
+      "min": 12,
+      "max": 28,
+      "step": 1,
+      "unit": "%",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "badge_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Badge — from top",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "badge_left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Badge — from left",
+      "default": 44
+    },
 
     { "type": "header", "content": "Spacing" },
-    { "type": "range", "id": "padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding top", "default": 72 },
-    { "type": "range", "id": "padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "label": "Padding bottom", "default": 72 }
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 72
+    }
   ],
   "blocks": [
     {
