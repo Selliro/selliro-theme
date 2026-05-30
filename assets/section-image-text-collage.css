@@ -99,7 +99,7 @@
   right: 0;
   transform: rotate(var(--itc-rot1, 5deg));
   aspect-ratio: var(--itc-p1-ar2, 3 / 4);
-  z-index: 2;
+  z-index: var(--itc-p1-z, 2);
 }
 
 .itc__stack--2 .itc__photo--2 {
@@ -109,7 +109,7 @@
   left: 0;
   transform: rotate(var(--itc-rot2, -4deg));
   aspect-ratio: var(--itc-p2-ar2, 3 / 4);
-  z-index: 1;
+  z-index: var(--itc-p2-z, 1);
 }
 
 /* ──────────────────────────────────────────
@@ -129,7 +129,7 @@
   left: var(--itc-p1-left, auto);
   transform: rotate(var(--itc-rot1, -4deg));
   aspect-ratio: var(--itc-p1-ar, 4 / 3);
-  z-index: 1;
+  z-index: var(--itc-p1-z, 1);
 }
 
 /* Main center-left photo — large portrait */
