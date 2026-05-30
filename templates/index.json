@@ -1434,6 +1434,7 @@
         "feature_HnJpjx": {
           "type": "feature",
           "settings": {
+            "icon": "shopify://shop_images/svgviewer-png-output_1.png",
             "title": "Healthy & Soft"
           }
         },
