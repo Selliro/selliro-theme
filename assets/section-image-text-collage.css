@@ -146,6 +146,7 @@
 /* Bottom-right photo — portrait */
 .itc__stack--3 .itc__photo--3 {
   width: var(--itc-p3-w, 48%);
+  height: var(--itc-p3-h, auto);
   top: var(--itc-p3-top, auto);
   right: var(--itc-p3-right, 3%);
   bottom: var(--itc-p3-bottom, 0);
