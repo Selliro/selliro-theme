@@ -31,6 +31,31 @@
   endif
 %}
 
+{% style %}
+  /* ── Glass card on slide group blocks ── */
+  .shopify-section-{{ section.id }} slideshow-slide .slide__content {
+    background-color: transparent !important;
+  }
+  .shopify-section-{{ section.id }} .group-block {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    background-color: rgba(0, 0, 0, 0.38) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .shopify-section-{{ section.id }} .group-block,
+  .shopify-section-{{ section.id }} .group-block * {
+    color: #ffffff !important;
+  }
+  /* ── Move arrows to bottom so they don't overlap content ── */
+  .shopify-section-{{ section.id }} slideshow-arrows {
+    align-items: flex-end !important;
+    padding-inline: clamp(20px, 3vw, 48px) !important;
+    padding-block-end: 28px !important;
+  }
+{% endstyle %}
+
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
   class="spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} disable-section-top-offset"
