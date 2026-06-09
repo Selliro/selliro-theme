@@ -656,17 +656,9 @@
       background: linear-gradient(180deg, transparent 30%, rgb(0 0 0 / 58%) 100%);
     }
     .custom-banner__overlay-inner {
-      max-width: 100%;
       padding-block: 15px;
-      padding-inline: 50px; /* 38px mobile arrow + 12px gap */
+      padding-inline: max(var(--page-margin, 16px), 50px); /* 38px mobile arrow + 12px */
       gap: 10px;
-      align-items: flex-start;
-    }
-    .custom-banner__overlay--align-center .custom-banner__overlay-inner {
-      align-items: center;
-    }
-    .custom-banner__overlay--align-right .custom-banner__overlay-inner {
-      align-items: flex-end;
     }
 
     .custom-banner__heading {
