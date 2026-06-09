@@ -511,19 +511,51 @@
     order: 1;
   }
 
+  /* ── Overlay: full-slide flex shell ── */
   .custom-banner__overlay {
     position: absolute;
     inset: 0;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 40px 40px 40px 60px;
-    color: rgb(var(--color-foreground-rgb));
-    background: linear-gradient(90deg, rgb(0 0 0 / 42%) 0%, rgb(0 0 0 / 10%) 45%, transparent 75%);
-    max-width: min(100%, 700px);
+    align-items: center;
     z-index: var(--layer-flat);
+    color: rgb(var(--color-foreground-rgb));
+  }
+
+  /* ── Alignment variants ── */
+  .custom-banner__overlay--align-left {
+    justify-content: flex-start;
+    background: linear-gradient(90deg, rgb(0 0 0 / 52%) 0%, rgb(0 0 0 / 18%) 50%, transparent 80%);
+  }
+  .custom-banner__overlay--align-center {
+    justify-content: center;
+    background: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 48%) 30%, rgb(0 0 0 / 48%) 70%, transparent 100%);
+  }
+  .custom-banner__overlay--align-right {
+    justify-content: flex-end;
+    background: linear-gradient(270deg, rgb(0 0 0 / 52%) 0%, rgb(0 0 0 / 18%) 50%, transparent 80%);
+  }
+
+  /* ── Inner content container: bounded width with arrow clearance ── */
+  .custom-banner__overlay-inner {
+    width: 100%;
+    max-width: 620px;
+    padding-block: 40px;
+    padding-inline: 60px; /* 44px arrow button + 16px gap on each side */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .custom-banner__overlay--align-center .custom-banner__overlay-inner {
+    align-items: center;
+    text-align: center;
+    max-width: 780px;
+  }
+
+  .custom-banner__overlay--align-right .custom-banner__overlay-inner {
+    align-items: flex-end;
+    text-align: right;
   }
 
   .custom-banner__caption,
