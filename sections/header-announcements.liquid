@@ -31,7 +31,7 @@
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <aside
-  class="announcement-bar spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}{% if is_marquee %} announcement-bar--marquee{% endif %}"
+  class="announcement-bar spacing-style {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}{% if is_marquee %} announcement-bar--marquee{% endif %}"
   style="{% render 'spacing-padding', settings: section.settings %}; --border-bottom-width: {{ section.settings.divider_width }}px;"
 >
   {% if is_marquee %}
