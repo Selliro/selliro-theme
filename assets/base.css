@@ -4401,3 +4401,8 @@ body .blur-div {
   padding-left: 1.25rem;
   width: 100%;
 }
+
+/* ── Full-width utility container ── */
+.full-width {
+  width: 100%;
+}
