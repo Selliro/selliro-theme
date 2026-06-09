@@ -47,7 +47,7 @@
   <div
     class="footer__content-top color-{{ section.settings.color_scheme }}{% if section.settings.enable_border_bottom %} section_border_bottom{% endif %}"
   >
-    <div class="page-width footer__page-width">
+    <div class="section section--page-width footer__page-width">
     {%- if section.blocks.size > 0 -%}
       <div class="footer-main__inner">
         <div class="footer-main__grid footer-main__grid--blocks">
@@ -245,7 +245,7 @@
   class="footer__content-bottom color-{{ section.settings.color_scheme_bottom }} background footer-section footer-section--bottom section-{{ section.id }}-padding-bottom"
   id="shopify-section-{{ section.id }}-footer-bottom"
 >
-  <div class="page-width footer__page-width">
+  <div class="section section--page-width footer__page-width">
     <div class="footer-main__inner">
       <div class="footer-main__bottom-bar">
         {%- if footer_show_copyright -%}
