@@ -4391,3 +4391,11 @@ body .blur-div {
   pointer-events: none;
   z-index: 999;
 }
+
+/* ── Page-width utility container ── */
+.page-width {
+  max-width: calc(var(--page-width) + 40px);
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%;
+}
