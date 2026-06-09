@@ -17,16 +17,20 @@
     --new-arrivals-cta: {{ section.settings.cta_yellow }};
     --new-arrivals-promo-width: {{ section.settings.promo_width_pct }}%;
   }
+  /* section-background needs a positioned parent since we removed the .section class */
+  .shopify-section:has(#new-arrivals-{{ section.id }}) {
+    position: relative;
+  }
 {% endstyle %}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <section
-  class="section section--{{ section.settings.section_width }} new-arrivals-showcase color-{{ section.settings.color_scheme }}"
+  class="{{ section.settings.section_width }} new-arrivals-showcase color-{{ section.settings.color_scheme }}"
   id="new-arrivals-{{ section.id }}"
   {{ section.shopify_attributes }}
 >
   <div
-    class="new-arrivals-showcase__inner page-width{% if section.settings.product_layout == 'grid' %} new-arrivals-showcase__inner--layout-grid{% endif %}"
+    class="new-arrivals-showcase__inner{% if section.settings.product_layout == 'grid' %} new-arrivals-showcase__inner--layout-grid{% endif %}"
     data-new-arrivals-root
     data-new-arrivals-qv-id="new-arrivals-qv-drawer-{{ section.id }}"
     data-new-arrivals-layout="{{ section.settings.product_layout | default: 'slider' }}"
