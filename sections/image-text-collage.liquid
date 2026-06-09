@@ -75,7 +75,7 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 
 <section
-  class="itc section section--{{ section.settings.section_width | default: 'page-width' }} color-{{ section.settings.color_scheme }}"
+  class="itc {{ section.settings.section_width | default: 'page-width' }} color-{{ section.settings.color_scheme }}"
   id="ImageTextCollage-{{ section.id }}"
   {{ section.shopify_attributes }}
   style="
