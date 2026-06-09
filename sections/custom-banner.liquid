@@ -649,11 +649,26 @@
     }
 
     .custom-banner__overlay {
-      padding: 15px;
-      gap: 10px;
-      max-width: 100%;
-      justify-content: flex-end;
+      align-items: flex-end;
+    }
+    .custom-banner__overlay--align-left,
+    .custom-banner__overlay--align-center,
+    .custom-banner__overlay--align-right {
+      justify-content: center;
       background: linear-gradient(180deg, transparent 30%, rgb(0 0 0 / 58%) 100%);
+    }
+    .custom-banner__overlay-inner {
+      max-width: 100%;
+      padding-block: 15px;
+      padding-inline: 50px; /* 38px mobile arrow + 12px gap */
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .custom-banner__overlay--align-center .custom-banner__overlay-inner {
+      align-items: center;
+    }
+    .custom-banner__overlay--align-right .custom-banner__overlay-inner {
+      align-items: flex-end;
     }
 
     .custom-banner__heading {
