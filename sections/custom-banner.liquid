@@ -272,57 +272,60 @@
               {% endif %}
 
               {% unless is_split_layout %}
-                <div class="custom-banner__overlay">
-                  {% if block.settings.caption != blank %}
-                    <p
-                      class="custom-banner__caption"
-                      style="
-                        --custom-banner-caption-color: {{ block.settings.caption_color }};
-                        --custom-banner-caption-size: {{ block.settings.caption_font_size }}px;
-                      "
-                    >
-                      {{ block.settings.caption }}
-                    </p>
-                  {% endif %}
+                {%- assign align = block.settings.content_alignment | default: 'left' -%}
+                <div class="custom-banner__overlay custom-banner__overlay--align-{{ align }}">
+                  <div class="custom-banner__overlay-inner">
+                    {% if block.settings.caption != blank %}
+                      <p
+                        class="custom-banner__caption"
+                        style="
+                          --custom-banner-caption-color: {{ block.settings.caption_color }};
+                          --custom-banner-caption-size: {{ block.settings.caption_font_size }}px;
+                        "
+                      >
+                        {{ block.settings.caption }}
+                      </p>
+                    {% endif %}
 
-                  {% if block.settings.heading != blank %}
-                    <h2
-                      class="custom-banner__heading"
-                      style="
-                        --custom-banner-heading-color: {{ block.settings.heading_color }};
-                        --custom-banner-heading-size: {{ block.settings.heading_font_size }}px;
-                      "
-                    >
-                      {{ block.settings.heading }}
-                    </h2>
-                  {% endif %}
+                    {% if block.settings.heading != blank %}
+                      <h2
+                        class="custom-banner__heading"
+                        style="
+                          --custom-banner-heading-color: {{ block.settings.heading_color }};
+                          --custom-banner-heading-size: {{ block.settings.heading_font_size }}px;
+                        "
+                      >
+                        {{ block.settings.heading }}
+                      </h2>
+                    {% endif %}
 
-                  {% if block.settings.subheading != blank %}
-                    <p
-                      class="custom-banner__subheading"
-                      style="
-                        --custom-banner-subheading-color: {{ block.settings.subheading_color }};
-                        --custom-banner-subheading-size: {{ block.settings.subheading_font_size }}px;
-                      "
-                    >
-                      {{ block.settings.subheading }}
-                    </p>
-                  {% endif %}
+                    {% if block.settings.subheading != blank %}
+                      <p
+                        class="custom-banner__subheading"
+                        style="
+                          --custom-banner-subheading-color: {{ block.settings.subheading_color }};
+                          --custom-banner-subheading-size: {{ block.settings.subheading_font_size }}px;
+                        "
+                      >
+                        {{ block.settings.subheading }}
+                      </p>
+                    {% endif %}
 
-                  {% if block.settings.button_label != blank and block.settings.button_link != blank %}
-                    <a
-                      href="{{ block.settings.button_link }}"
-                      class="button custom-banner__button"
-                      style="
-                        --custom-banner-button-text-color: {{ block.settings.button_text_color }};
-                        --custom-banner-button-font-size: {{ block.settings.button_font_size }}px;
-                        --custom-banner-button-background-color: {{ block.settings.button_background_color }};
-                        --custom-banner-button-border-color: {{ block.settings.button_border_color }};
-                      "
-                    >
-                      {{ block.settings.button_label }}
-                    </a>
-                  {% endif %}
+                    {% if block.settings.button_label != blank and block.settings.button_link != blank %}
+                      <a
+                        href="{{ block.settings.button_link }}"
+                        class="button custom-banner__button"
+                        style="
+                          --custom-banner-button-text-color: {{ block.settings.button_text_color }};
+                          --custom-banner-button-font-size: {{ block.settings.button_font_size }}px;
+                          --custom-banner-button-background-color: {{ block.settings.button_background_color }};
+                          --custom-banner-button-border-color: {{ block.settings.button_border_color }};
+                        "
+                      >
+                        {{ block.settings.button_label }}
+                      </a>
+                    {% endif %}
+                  </div>
                 </div>
               {% endunless %}
             </div>
