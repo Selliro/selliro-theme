@@ -26,7 +26,7 @@
   {{ section.shopify_attributes }}
 >
   <div
-    class="new-arrivals-showcase__inner{% if section.settings.product_layout == 'grid' %} new-arrivals-showcase__inner--layout-grid{% endif %}"
+    class="new-arrivals-showcase__inner page-width{% if section.settings.product_layout == 'grid' %} new-arrivals-showcase__inner--layout-grid{% endif %}"
     data-new-arrivals-root
     data-new-arrivals-qv-id="new-arrivals-qv-drawer-{{ section.id }}"
     data-new-arrivals-layout="{{ section.settings.product_layout | default: 'slider' }}"
