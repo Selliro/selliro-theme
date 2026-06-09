@@ -4397,5 +4397,7 @@ body .blur-div {
   max-width: calc(var(--page-width) + 40px);
   margin-right: auto;
   margin-left: auto;
+  padding-right: 1.25rem;
+  padding-left: 1.25rem;
   width: 100%;
 }
