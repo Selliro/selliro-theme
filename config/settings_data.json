@@ -83,12 +83,11 @@
     "variant_button_width": "equal-width-buttons",
     "content_for_index": [],
     "blocks": {
-      "11992935536811782236": {
-        "type": "shopify://apps/bundleboost/blocks/app-embed/019f0a37-135c-7e17-9464-71d40c2c4259",
+      "1530068250781986104": {
+        "type": "shopify://apps/fbp-fast-bundle/blocks/fast_bundle/9e87fbe2-9041-4c23-acf5-322413994cef",
         "disabled": false,
         "settings": {
-          "api_url": "https://fool-speculate-pumice.ngrok-free.dev",
-          "enabled": true
+          "home": false
         }
       }
     },
