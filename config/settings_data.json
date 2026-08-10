@@ -83,11 +83,11 @@
     "variant_button_width": "equal-width-buttons",
     "content_for_index": [],
     "blocks": {
-      "1530068250781986104": {
-        "type": "shopify://apps/fbp-fast-bundle/blocks/fast_bundle/9e87fbe2-9041-4c23-acf5-322413994cef",
+      "477222248126810472": {
+        "type": "shopify://apps/bundleboost/blocks/app-embed/019f79f1-ee0e-7545-a2d7-ad08a7ef81b9",
         "disabled": false,
         "settings": {
-          "home": false
+          "api_url": "https://bundleboost-app.onrender.com"
         }
       }
     },
