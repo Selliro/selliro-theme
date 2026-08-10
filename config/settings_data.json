@@ -83,8 +83,8 @@
     "variant_button_width": "equal-width-buttons",
     "content_for_index": [],
     "blocks": {
-      "477222248126810472": {
-        "type": "shopify://apps/bundleboost/blocks/app-embed/019f79f1-ee0e-7545-a2d7-ad08a7ef81b9",
+      "4137089995462709539": {
+        "type": "shopify://apps/bundleboost/blocks/app-embed/019feb2a-bd81-7c1c-a3ce-031f83981337",
         "disabled": false,
         "settings": {
           "api_url": "https://bundleboost-app.onrender.com"
