@@ -3,15 +3,7 @@
   Global heading component - variant set in presets
 {%- endcomment -%}
 
-{%- render 'heading',
-  text: block.settings.text,
-  variant: block.settings.variant | default: 'h3',
-  color: block.settings.color,
-  icon_image: block.settings.icon_image,
-  icon_max_width: block.settings.icon_max_width,
-  block_shopify_attributes: block.shopify_attributes,
-  block: block
--%}
+{%- render 'heading', text: block.settings.text, variant: block.settings.variant, default: 'h3', color: block.settings.color, icon_image: block.settings.icon_image, icon_max_width: block.settings.icon_max_width, block_shopify_attributes: block.shopify_attributes, block: block -%}
 
 {% schema %}
 {
@@ -56,3 +48,25 @@
 }
 {% endschema %}
 
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'heading',
+      text: block.settings.text,
+      variant: block.settings.variant | default: 'h3',
+      color: block.settings.color,
+      icon_image: block.settings.icon_image,
+      icon_max_width: block.settings.icon_max_width,
+      block_shopify_attributes: block.shopify_attributes,
+      block: block
+    -%}
+  to: "{%- render 'heading', text: block.settings.text, variant: block.settings.variant,
+    default: 'h3', color: block.settings.color, icon_image: block.settings.icon_image,
+    icon_max_width: block.settings.icon_max_width, block_shopify_attributes: block.shopify_attributes,
+    block: block -%}"
+  position: 110..390
+{% endcomment %}

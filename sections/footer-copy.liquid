@@ -24,27 +24,13 @@
       <div class="footer-section__image-subheading">
         {%- comment -%} Logo {%- endcomment -%}
         {%- if section.settings.logo != blank -%}
-          {%- render 'image',
-            desktop_image: section.settings.logo,
-            mobile_image: section.settings.logo,
-            image_id: section.id,
-            layout_type: 'icon',
-            icon_max_width: section.settings.logo_max_width | default: '145',
-            desktop_aspect_ratio: section.settings.logo_aspect_ratio | default: '6',
-            parent_class: 'footer-logo'
-          -%}
+          {%- render 'image', desktop_image: section.settings.logo, mobile_image: section.settings.logo, image_id: section.id, layout_type: 'icon', icon_max_width: section.settings.logo_max_width, default: '6', desktop_aspect_ratio: section.settings.logo_aspect_ratio, parent_class: 'footer-logo' -%}
         {%- endif -%}
 
         {%- comment -%} Subheading {%- endcomment -%}
         {%- if section.settings.subheading_text != blank -%}
           <div class="footer-section__subheading tw-mt-4 tw-max-w-[269px]">
-            {%- render 'body',
-              text: section.settings.subheading_text,
-              variant: section.settings.subheading_variant | default: 'sm',
-              color: section.settings.subheading_color | default: '#ffffff',
-              max_width: section.settings.subheading_max_width,
-              parent_class: 'footer'
-            -%}
+            {%- render 'body', text: section.settings.subheading_text, variant: section.settings.subheading_variant, default: '#ffffff', color: section.settings.subheading_color, max_width: section.settings.subheading_max_width, parent_class: 'footer' -%}
           </div>
         {%- endif -%}
       </div>
@@ -110,11 +96,7 @@
       {%- comment -%} Section 4: Divider {%- endcomment -%}
       {%- if section.settings.show_divider -%}
         <div class="footer-section__divider">
-          {%- render 'divider',
-            variant: section.settings.divider_variant | default: 'simple',
-            color: section.settings.divider_color | default: 'slate-200',
-            parent_class: 'footer'
-          -%}
+          {%- render 'divider', variant: section.settings.divider_variant, default: 'slate-200', color: section.settings.divider_color, parent_class: 'footer' -%}
         </div>
       {%- endif -%}
 
@@ -421,3 +403,46 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'image',
+                desktop_image: section.settings.logo,
+                mobile_image: section.settings.logo,
+                image_id: section.id,
+                layout_type: 'icon',
+                icon_max_width: section.settings.logo_max_width | default: '145',
+                desktop_aspect_ratio: section.settings.logo_aspect_ratio | default: '6',
+                parent_class: 'footer-logo'
+              -%}
+  to: "{%- render 'image', desktop_image: section.settings.logo, mobile_image: section.settings.logo,
+    image_id: section.id, layout_type: 'icon', icon_max_width: section.settings.logo_max_width,
+    default: '6', desktop_aspect_ratio: section.settings.logo_aspect_ratio, parent_class:
+    'footer-logo' -%}"
+  position: 1054..1344
+- from: |-
+    {%- render 'body',
+                  text: section.settings.subheading_text,
+                  variant: section.settings.subheading_variant | default: 'sm',
+                  color: section.settings.subheading_color | default: '#ffffff',
+                  max_width: section.settings.subheading_max_width,
+                  parent_class: 'footer'
+                -%}
+  to: "{%- render 'body', text: section.settings.subheading_text, variant: section.settings.subheading_variant,
+    default: '#ffffff', color: section.settings.subheading_color, max_width: section.settings.subheading_max_width,
+    parent_class: 'footer' -%}"
+  position: 1571..1814
+- from: |-
+    {%- render 'divider',
+                variant: section.settings.divider_variant | default: 'simple',
+                color: section.settings.divider_color | default: 'slate-200',
+                parent_class: 'footer'
+              -%}
+  to: "{%- render 'divider', variant: section.settings.divider_variant, default: 'slate-200',
+    color: section.settings.divider_color, parent_class: 'footer' -%}"
+  position: 4539..4691
+{% endcomment %}

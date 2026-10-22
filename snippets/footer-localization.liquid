@@ -12,13 +12,7 @@
 
 {%- if show_language and show_country == false -%}
   <div class="footer-main__localization-form-only">
-    {%- render 'localization-form',
-      show_country: false,
-      show_language: true,
-      localization_style: 'FooterLang',
-      block_id: block_id,
-      form_id: 'LocalizationForm-footer-' | append: block_id | append: '-lang'
-    -%}
+    {%- render 'localization-form', show_country: false, show_language: true, localization_style: 'FooterLang', block_id: block_id, form_id: 'LocalizationForm-footer-', append: '-lang' -%}
   </div>
 {%- elsif show_country and show_language == false -%}
   <dropdown-localization-component class="footer-main__dropdown-localization footer-main__dropdown-localization--country">
@@ -48,25 +42,13 @@
       hidden
       ref="panel"
     >
-      {%- render 'localization-form',
-        show_country: true,
-        show_language: false,
-        localization_style: 'dropdown',
-        block_id: block_id,
-        form_id: 'LocalizationForm-footer-' | append: block_id | append: '-country'
-      -%}
+      {%- render 'localization-form', show_country: true, show_language: false, localization_style: 'dropdown', block_id: block_id, form_id: 'LocalizationForm-footer-', append: '-country' -%}
     </div>
   </dropdown-localization-component>
 {%- elsif show_country and show_language -%}
   <div class="footer-main__localization-split">
     <div class="footer-main__localization-pill footer-main__localization-pill--language">
-      {%- render 'localization-form',
-        show_country: false,
-        show_language: true,
-        localization_style: 'FooterLang',
-        block_id: block_id,
-        form_id: 'LocalizationForm-footer-' | append: block_id | append: '-lang'
-      -%}
+      {%- render 'localization-form', show_country: false, show_language: true, localization_style: 'FooterLang', block_id: block_id, form_id: 'LocalizationForm-footer-', append: '-lang' -%}
     </div>
     <div class="footer-main__localization-pill footer-main__localization-pill--country">
       <dropdown-localization-component class="footer-main__dropdown-localization footer-main__dropdown-localization--country">
@@ -96,15 +78,64 @@
           hidden
           ref="panel"
         >
-          {%- render 'localization-form',
+          {%- render 'localization-form', show_country: true, show_language: false, localization_style: 'dropdown', block_id: block_id, form_id: 'LocalizationForm-footer-', append: '-country' -%}
+        </div>
+      </dropdown-localization-component>
+    </div>
+  </div>
+{%- endif -%}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'localization-form',
+          show_country: false,
+          show_language: true,
+          localization_style: 'FooterLang',
+          block_id: block_id,
+          form_id: 'LocalizationForm-footer-' | append: block_id | append: '-lang'
+        -%}
+  to: "{%- render 'localization-form', show_country: false, show_language: true, localization_style:
+    'FooterLang', block_id: block_id, form_id: 'LocalizationForm-footer-', append:
+    '-lang' -%}"
+  position: 436..620
+- from: |-
+    {%- render 'localization-form',
             show_country: true,
             show_language: false,
             localization_style: 'dropdown',
             block_id: block_id,
             form_id: 'LocalizationForm-footer-' | append: block_id | append: '-country'
           -%}
-        </div>
-      </dropdown-localization-component>
-    </div>
-  </div>
-{%- endif -%}
+  to: "{%- render 'localization-form', show_country: true, show_language: false, localization_style:
+    'dropdown', block_id: block_id, form_id: 'LocalizationForm-footer-', append: '-country'
+    -%}"
+  position: 1976..2161
+- from: |-
+    {%- render 'localization-form',
+            show_country: false,
+            show_language: true,
+            localization_style: 'FooterLang',
+            block_id: block_id,
+            form_id: 'LocalizationForm-footer-' | append: block_id | append: '-lang'
+          -%}
+  to: "{%- render 'localization-form', show_country: false, show_language: true, localization_style:
+    'FooterLang', block_id: block_id, form_id: 'LocalizationForm-footer-', append:
+    '-lang' -%}"
+  position: 2399..2583
+- from: |-
+    {%- render 'localization-form',
+                show_country: true,
+                show_language: false,
+                localization_style: 'dropdown',
+                block_id: block_id,
+                form_id: 'LocalizationForm-footer-' | append: block_id | append: '-country'
+              -%}
+  to: "{%- render 'localization-form', show_country: true, show_language: false, localization_style:
+    'dropdown', block_id: block_id, form_id: 'LocalizationForm-footer-', append: '-country'
+    -%}"
+  position: 4088..4273
+{% endcomment %}

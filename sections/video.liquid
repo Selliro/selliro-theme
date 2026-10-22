@@ -35,20 +35,7 @@
    style="background-color: {{ background_color }};">
   <div class="video-section__container {% unless is_full_width %} section-container {% endunless %}">
     <div class="video-section__wrapper tw-w-full">
-      {%- render 'video',
-        video_url: section.settings.video_url,
-        video_source: section.settings.video_source | default: 'cdn',
-        poster_image: section.settings.poster_image,
-        video_id: section.id,
-        parent_class: 'video-section',
-        autoplay: section.settings.autoplay | default: false,
-        controls: section.settings.controls | default: true,
-        loop: section.settings.loop | default: false,
-        muted: section.settings.muted | default: false,
-        aspect_ratio: section.settings.mobile_aspect_ratio | default: '16:9',
-        mobile_aspect_ratio: section.settings.mobile_aspect_ratio,
-        desktop_aspect_ratio: section.settings.desktop_aspect_ratio
-      -%}
+      {%- render 'video', video_url: section.settings.video_url, video_source: section.settings.video_source, default: '16:9', poster_image: section.settings.poster_image, video_id: section.id, parent_class: 'video-section', autoplay: section.settings.autoplay, controls: section.settings.controls, loop: section.settings.loop, muted: section.settings.muted, aspect_ratio: section.settings.mobile_aspect_ratio, mobile_aspect_ratio: section.settings.mobile_aspect_ratio, desktop_aspect_ratio: section.settings.desktop_aspect_ratio -%}
     </div>
   </div>
 </div>
@@ -198,3 +185,32 @@
 }
 {% endschema %}
 
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'video',
+            video_url: section.settings.video_url,
+            video_source: section.settings.video_source | default: 'cdn',
+            poster_image: section.settings.poster_image,
+            video_id: section.id,
+            parent_class: 'video-section',
+            autoplay: section.settings.autoplay | default: false,
+            controls: section.settings.controls | default: true,
+            loop: section.settings.loop | default: false,
+            muted: section.settings.muted | default: false,
+            aspect_ratio: section.settings.mobile_aspect_ratio | default: '16:9',
+            mobile_aspect_ratio: section.settings.mobile_aspect_ratio,
+            desktop_aspect_ratio: section.settings.desktop_aspect_ratio
+          -%}
+  to: "{%- render 'video', video_url: section.settings.video_url, video_source: section.settings.video_source,
+    default: '16:9', poster_image: section.settings.poster_image, video_id: section.id,
+    parent_class: 'video-section', autoplay: section.settings.autoplay, controls:
+    section.settings.controls, loop: section.settings.loop, muted: section.settings.muted,
+    aspect_ratio: section.settings.mobile_aspect_ratio, mobile_aspect_ratio: section.settings.mobile_aspect_ratio,
+    desktop_aspect_ratio: section.settings.desktop_aspect_ratio -%}"
+  position: 1170..1697
+{% endcomment %}

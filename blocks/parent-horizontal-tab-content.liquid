@@ -29,17 +29,7 @@
     {%- comment -%} Full Image - First on mobile, Left on desktop (1024px+) {%- endcomment -%}
     {%- if content_image != blank or content_image_mobile != blank -%}
       <div class="horizontal-tabs__panel-image  tw-w-full tw-min-h-[200px] tw-rounded-[12px] lg:tw-max-w-[400px]">
-        {%- render 'image',
-          desktop_image: content_image,
-          mobile_image: content_image_mobile,
-          image_id: block.id | append: '-image',  
-          layout_type: 'full',
-          desktop_aspect_ratio: '1',
-          mobile_aspect_ratio: '1.75',
-          icon_rounded: true,
-          parent_class: 'horizontal-tabs',
-          block_shopify_attributes: ''
-        -%}
+        {%- render 'image', desktop_image: content_image, mobile_image: content_image_mobile, image_id: block.id, append: '-image', layout_type: 'full', desktop_aspect_ratio: '1', mobile_aspect_ratio: '1.75', icon_rounded: true, parent_class: 'horizontal-tabs', block_shopify_attributes: '' -%}
       </div>
     {%- endif -%}
 
@@ -48,18 +38,7 @@
       {%- comment -%} Mini Icon - Small icon image {%- endcomment -%}
       {%- if mini_icon != blank -%}
         <div class="horizontal-tabs__panel-mini-icon tw-shrink-0 tw-flex-shrink-0">
-          {%- render 'image',
-            desktop_image: mini_icon,
-            mobile_image: mini_icon,
-            image_id: block.id | append: '-mini-icon',
-            layout_type: 'icon',
-            desktop_aspect_ratio: '1.36',
-            mobile_aspect_ratio: '1.36',
-            icon_max_width: '26',
-            parent_class: 'horizontal-tabs-mini-icon',
-            block_shopify_attributes: ''
-          
-          -%}
+          {%- render 'image', desktop_image: mini_icon, mobile_image: mini_icon, image_id: block.id, append: '-mini-icon', layout_type: 'icon', desktop_aspect_ratio: '1.36', mobile_aspect_ratio: '1.36', icon_max_width: '26', parent_class: 'horizontal-tabs-mini-icon', block_shopify_attributes: '' -%}
         </div>
       {%- endif -%}
 
@@ -225,3 +204,30 @@
 }
 {% endschema %}
 
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'image',\n          desktop_image: content_image,\n          mobile_image:
+    content_image_mobile,\n          image_id: block.id | append: '-image',  \n          layout_type:
+    'full',\n          desktop_aspect_ratio: '1',\n          mobile_aspect_ratio:
+    '1.75',\n          icon_rounded: true,\n          parent_class: 'horizontal-tabs',\n
+    \         block_shopify_attributes: ''\n        -%}"
+  to: "{%- render 'image', desktop_image: content_image, mobile_image: content_image_mobile,
+    image_id: block.id, append: '-image', layout_type: 'full', desktop_aspect_ratio:
+    '1', mobile_aspect_ratio: '1.75', icon_rounded: true, parent_class: 'horizontal-tabs',
+    block_shopify_attributes: '' -%}"
+  position: 1508..1794
+- from: "{%- render 'image',\n            desktop_image: mini_icon,\n            mobile_image:
+    mini_icon,\n            image_id: block.id | append: '-mini-icon',\n            layout_type:
+    'icon',\n            desktop_aspect_ratio: '1.36',\n            mobile_aspect_ratio:
+    '1.36',\n            icon_max_width: '26',\n            parent_class: 'horizontal-tabs-mini-icon',\n
+    \           block_shopify_attributes: ''\n          \n          -%}"
+  to: "{%- render 'image', desktop_image: mini_icon, mobile_image: mini_icon, image_id:
+    block.id, append: '-mini-icon', layout_type: 'icon', desktop_aspect_ratio: '1.36',
+    mobile_aspect_ratio: '1.36', icon_max_width: '26', parent_class: 'horizontal-tabs-mini-icon',
+    block_shopify_attributes: '' -%}"
+  position: 2182..2472
+{% endcomment %}
