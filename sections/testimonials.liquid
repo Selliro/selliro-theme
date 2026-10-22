@@ -82,11 +82,7 @@
                 {{ rating_value }}
               </div>
               
-              {%- render 'star-rating',
-                rating: rating_value | plus: 0,
-                star_color: section.settings.star_color | default: '#52c3c2',
-                parent_class: 'testimonials'
-              -%}
+              {%- render 'star-rating', rating: rating_value, plus: 0, star_color: section.settings.star_color, default: '#52c3c2', parent_class: 'testimonials' -%}
             </div>
             
             {%- comment -%} Rating Description {%- endcomment -%}
@@ -316,3 +312,19 @@
 }
 {% endschema %}
 
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'star-rating',
+                    rating: rating_value | plus: 0,
+                    star_color: section.settings.star_color | default: '#52c3c2',
+                    parent_class: 'testimonials'
+                  -%}
+  to: "{%- render 'star-rating', rating: rating_value, plus: 0, star_color: section.settings.star_color,
+    default: '#52c3c2', parent_class: 'testimonials' -%}"
+  position: 3460..3610
+{% endcomment %}

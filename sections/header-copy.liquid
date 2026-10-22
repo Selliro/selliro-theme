@@ -41,14 +41,7 @@
       <div class="site-header__logo tw-flex tw-items-center">
         {%- if logo_image != blank -%}
           <a href="{{ routes.root_url }}" class="tw-w-[145px]">
-            {%- render 'shopify-responsive-image',
-              image: logo_image,
-              image_id: section.id | append: '-logo-desktop',
-              image_aspect_ratio: 6.04,
-              wrapper_class: 'tw-w-full tw-h-full tw-w-[145px]',
-              image_class: 'tw-w-full tw-h-full tw-object-contain',
-              contain: true
-            -%}
+            {%- render 'shopify-responsive-image', image: logo_image, image_id: section.id, append: '-logo-desktop', image_aspect_ratio: 6.04, wrapper_class: 'tw-w-full tw-h-full tw-w-[145px]', image_class: 'tw-w-full tw-h-full tw-object-contain', contain: true -%}
           </a>
         {%- else -%}
           <a href="{{ routes.root_url }}" class="tw-text-lg tw-font-semibold tw-text-[#071b2f]">
@@ -276,3 +269,24 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'shopify-responsive-image',
+                  image: logo_image,
+                  image_id: section.id | append: '-logo-desktop',
+                  image_aspect_ratio: 6.04,
+                  wrapper_class: 'tw-w-full tw-h-full tw-w-[145px]',
+                  image_class: 'tw-w-full tw-h-full tw-object-contain',
+                  contain: true
+                -%}
+  to: "{%- render 'shopify-responsive-image', image: logo_image, image_id: section.id,
+    append: '-logo-desktop', image_aspect_ratio: 6.04, wrapper_class: 'tw-w-full tw-h-full
+    tw-w-[145px]', image_class: 'tw-w-full tw-h-full tw-object-contain', contain:
+    true -%}"
+  position: 1854..2107
+{% endcomment %}

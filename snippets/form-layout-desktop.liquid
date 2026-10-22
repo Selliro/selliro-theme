@@ -59,13 +59,7 @@
       {%- comment -%} First: Body snippet {%- endcomment -%}
       {%- for block in section.blocks -%}
         {%- if block.settings.position == 'right' and block.type == 'body' -%}
-          {%- render 'body',
-            text: block.settings.text,
-            variant: block.settings.variant | default: 'lg',
-            color: block.settings.color | default: 'rgba(255,255,255,0.8)',
-            parent_class: 'form-layout',
-            block_shopify_attributes: block.shopify_attributes
-          -%}
+          {%- render 'body', text: block.settings.text, variant: block.settings.variant, default: 'rgba(255,255,255,0.8)', color: block.settings.color, parent_class: 'form-layout', block_shopify_attributes: block.shopify_attributes -%}
         {%- endif -%}
       {%- endfor -%}
 
@@ -150,3 +144,22 @@
     box-sizing: border-box;
   }
 {% endstylesheet %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'body',
+                text: block.settings.text,
+                variant: block.settings.variant | default: 'lg',
+                color: block.settings.color | default: 'rgba(255,255,255,0.8)',
+                parent_class: 'form-layout',
+                block_shopify_attributes: block.shopify_attributes
+              -%}
+  to: "{%- render 'body', text: block.settings.text, variant: block.settings.variant,
+    default: 'rgba(255,255,255,0.8)', color: block.settings.color, parent_class: 'form-layout',
+    block_shopify_attributes: block.shopify_attributes -%}"
+  position: 2497..2722
+{% endcomment %}

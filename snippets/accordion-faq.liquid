@@ -60,15 +60,7 @@
           {%- if image_max_width != blank -%}
             <div style="max-width: {{ image_max_width }};">
           {%- endif -%}
-          {%- render 'image',
-            desktop_image: content_image,
-            mobile_image: block.settings.content_image_mobile | default: content_image,
-            image_id: block.id | append: '-image',
-            layout_type: 'full',
-            desktop_aspect_ratio: block.settings.image_aspect_ratio | default: '0.79',
-            mobile_aspect_ratio: block.settings.image_aspect_ratio_mobile | default: '2.37',
-            parent_class: 'faq-section__accordion'
-          -%}
+          {%- render 'image', desktop_image: content_image, mobile_image: block.settings.content_image_mobile, default: '2.37', image_id: block.id, append: '-image', layout_type: 'full', desktop_aspect_ratio: block.settings.image_aspect_ratio, mobile_aspect_ratio: block.settings.image_aspect_ratio_mobile, parent_class: 'faq-section__accordion' -%}
           {%- if image_max_width != blank -%}
             </div>
           {%- endif -%}
@@ -78,3 +70,25 @@
   </div>
 {%- endif -%}
 
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'image',
+                desktop_image: content_image,
+                mobile_image: block.settings.content_image_mobile | default: content_image,
+                image_id: block.id | append: '-image',
+                layout_type: 'full',
+                desktop_aspect_ratio: block.settings.image_aspect_ratio | default: '0.79',
+                mobile_aspect_ratio: block.settings.image_aspect_ratio_mobile | default: '2.37',
+                parent_class: 'faq-section__accordion'
+              -%}
+  to: "{%- render 'image', desktop_image: content_image, mobile_image: block.settings.content_image_mobile,
+    default: '2.37', image_id: block.id, append: '-image', layout_type: 'full', desktop_aspect_ratio:
+    block.settings.image_aspect_ratio, mobile_aspect_ratio: block.settings.image_aspect_ratio_mobile,
+    parent_class: 'faq-section__accordion' -%}"
+  position: 3764..4103
+{% endcomment %}

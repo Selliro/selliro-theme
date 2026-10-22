@@ -51,23 +51,14 @@
           {%- comment -%} Caption {%- endcomment -%}
           {%- if section_caption != blank -%}
             <div class="faq-section__caption tw-w-full">
-              {%- render 'caption',
-                text: section_caption,
-                color: section.settings.caption_color | default: '#323e46',
-                parent_class: 'faq-section'
-              -%}
+              {%- render 'caption', text: section_caption, color: section.settings.caption_color, default: '#323e46', parent_class: 'faq-section' -%}
             </div>
           {%- endif -%}
           
           {%- comment -%} Heading {%- endcomment -%}
           {%- if section_heading != blank -%}
             <div class="faq-section__heading tw-w-full">
-              {%- render 'heading',
-                text: section_heading,
-                variant: 'h3',
-                color: section.settings.heading_color | default: '#092846',
-                parent_class: 'faq-section'
-              -%}
+              {%- render 'heading', text: section_heading, variant: 'h3', color: section.settings.heading_color, default: '#092846', parent_class: 'faq-section' -%}
             </div>
           {%- endif -%}
           
@@ -268,3 +259,29 @@
 }
 {% endschema %}
 
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'caption',
+                    text: section_caption,
+                    color: section.settings.caption_color | default: '#323e46',
+                    parent_class: 'faq-section'
+                  -%}
+  to: "{%- render 'caption', text: section_caption, color: section.settings.caption_color,
+    default: '#323e46', parent_class: 'faq-section' -%}"
+  position: 2150..2285
+- from: |-
+    {%- render 'heading',
+                    text: section_heading,
+                    variant: 'h3',
+                    color: section.settings.heading_color | default: '#092846',
+                    parent_class: 'faq-section'
+                  -%}
+  to: "{%- render 'heading', text: section_heading, variant: 'h3', color: section.settings.heading_color,
+    default: '#092846', parent_class: 'faq-section' -%}"
+  position: 2510..2660
+{% endcomment %}

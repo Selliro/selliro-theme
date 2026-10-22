@@ -57,36 +57,21 @@
           {%- comment -%} Caption {%- endcomment -%}
           {%- if section_caption != blank -%}
             <div class="vertical-rich-text-section__caption md:tw-mb-4">
-              {%- render 'caption',
-                text: section_caption,
-                color: section.settings.caption_color | default: '#323e46',
-                parent_class: 'vertical-rich-text'
-              -%}
+              {%- render 'caption', text: section_caption, color: section.settings.caption_color, default: '#323e46', parent_class: 'vertical-rich-text' -%}
             </div>
           {%- endif -%}
           
           {%- comment -%} Heading {%- endcomment -%}
           {%- if section_heading != blank -%}
             <div class="vertical-rich-text-section__heading tw-text-center">
-              {%- render 'heading',
-                text: section_heading,
-                variant: section.settings.heading_variant
-                color: section.settings.heading_color | default: '#092846',
-                parent_class: 'vertical-rich-text'
-              -%}
+              {%- render 'heading', text: section_heading, variant: section.settings.heading_variant, color: section.settings.heading_color, default: '#092846', parent_class: 'vertical-rich-text' -%}
             </div>
           {%- endif -%}
           
           {%- comment -%} Subheading {%- endcomment -%}
           {%- if section_subheading != blank -%}
             <div class="vertical-rich-text-section__subheading tw-text-center">
-              {%- render 'body',
-                text: section_subheading,
-                variant: section.settings.subheading_variant
-                color: section.settings.subheading_color | default: '#323e46',
-                max_width: section.settings.subheading_max_width,
-                parent_class: 'vertical-rich-text vertical-rich-text__body'
-              -%}
+              {%- render 'body', text: section_subheading, variant: section.settings.subheading_variant, color: section.settings.subheading_color, default: '#323e46', max_width: section.settings.subheading_max_width, parent_class: 'vertical-rich-text vertical-rich-text__body' -%}
             </div>
           {%- endif -%}
           
@@ -292,3 +277,42 @@
 }
 {% endschema %}
 
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'caption',
+                    text: section_caption,
+                    color: section.settings.caption_color | default: '#323e46',
+                    parent_class: 'vertical-rich-text'
+                  -%}
+  to: "{%- render 'caption', text: section_caption, color: section.settings.caption_color,
+    default: '#323e46', parent_class: 'vertical-rich-text' -%}"
+  position: 2458..2600
+- from: |-
+    {%- render 'heading',
+                    text: section_heading,
+                    variant: section.settings.heading_variant
+                    color: section.settings.heading_color | default: '#092846',
+                    parent_class: 'vertical-rich-text'
+                  -%}
+  to: "{%- render 'heading', text: section_heading, variant: section.settings.heading_variant,
+    color: section.settings.heading_color, default: '#092846', parent_class: 'vertical-rich-text'
+    -%}"
+  position: 2845..3030
+- from: |-
+    {%- render 'body',
+                    text: section_subheading,
+                    variant: section.settings.subheading_variant
+                    color: section.settings.subheading_color | default: '#323e46',
+                    max_width: section.settings.subheading_max_width,
+                    parent_class: 'vertical-rich-text vertical-rich-text__body'
+                  -%}
+  to: "{%- render 'body', text: section_subheading, variant: section.settings.subheading_variant,
+    color: section.settings.subheading_color, default: '#323e46', max_width: section.settings.subheading_max_width,
+    parent_class: 'vertical-rich-text vertical-rich-text__body' -%}"
+  position: 3284..3550
+{% endcomment %}

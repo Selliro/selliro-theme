@@ -3,20 +3,7 @@
   Global video component using video.js
 {%- endcomment -%}
 
-{%- render 'video',
-  video_url: block.settings.video_url,
-  poster_image: block.settings.poster_image,
-  video_id: block.id,
-  autoplay: block.settings.autoplay | default: false,
-  controls: block.settings.controls | default: true,
-  loop: block.settings.loop | default: false,
-  muted: block.settings.muted | default: false,
-  aspect_ratio: block.settings.mobile_aspect_ratio | default: '16:9',
-  mobile_aspect_ratio: block.settings.mobile_aspect_ratio,
-  desktop_aspect_ratio: block.settings.desktop_aspect_ratio,
-  parent_class: 'video',
-  block_shopify_attributes: block.shopify_attributes
--%}
+{%- render 'video', video_url: block.settings.video_url, poster_image: block.settings.poster_image, video_id: block.id, autoplay: block.settings.autoplay, default: '16:9', controls: block.settings.controls, loop: block.settings.loop, muted: block.settings.muted, aspect_ratio: block.settings.mobile_aspect_ratio, mobile_aspect_ratio: block.settings.mobile_aspect_ratio, desktop_aspect_ratio: block.settings.desktop_aspect_ratio, parent_class: 'video', block_shopify_attributes: block.shopify_attributes -%}
 
 {% schema %}
 {
@@ -97,3 +84,32 @@
 }
 {% endschema %}
 
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'video',
+      video_url: block.settings.video_url,
+      poster_image: block.settings.poster_image,
+      video_id: block.id,
+      autoplay: block.settings.autoplay | default: false,
+      controls: block.settings.controls | default: true,
+      loop: block.settings.loop | default: false,
+      muted: block.settings.muted | default: false,
+      aspect_ratio: block.settings.mobile_aspect_ratio | default: '16:9',
+      mobile_aspect_ratio: block.settings.mobile_aspect_ratio,
+      desktop_aspect_ratio: block.settings.desktop_aspect_ratio,
+      parent_class: 'video',
+      block_shopify_attributes: block.shopify_attributes
+    -%}
+  to: "{%- render 'video', video_url: block.settings.video_url, poster_image: block.settings.poster_image,
+    video_id: block.id, autoplay: block.settings.autoplay, default: '16:9', controls:
+    block.settings.controls, loop: block.settings.loop, muted: block.settings.muted,
+    aspect_ratio: block.settings.mobile_aspect_ratio, mobile_aspect_ratio: block.settings.mobile_aspect_ratio,
+    desktop_aspect_ratio: block.settings.desktop_aspect_ratio, parent_class: 'video',
+    block_shopify_attributes: block.shopify_attributes -%}"
+  position: 96..602
+{% endcomment %}
