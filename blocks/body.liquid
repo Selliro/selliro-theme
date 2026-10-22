@@ -15,12 +15,7 @@
   </style>
   
   <div id="shopify-block-{{ block.id }}">
-    {%- render 'body',
-      text: block.settings.text,
-      variant: block.settings.variant | default: 'base',
-      color: block.settings.color,
-      block_shopify_attributes: block.shopify_attributes
-    -%}
+    {%- render 'body', text: block.settings.text, variant: block.settings.variant, default: 'base', color: block.settings.color, block_shopify_attributes: block.shopify_attributes -%}
   </div>
   
   {% schema %}
@@ -59,4 +54,21 @@
   }
   {% endschema %}
   
-  
+  {%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'body',
+          text: block.settings.text,
+          variant: block.settings.variant | default: 'base',
+          color: block.settings.color,
+          block_shopify_attributes: block.shopify_attributes
+        -%}
+  to: "{%- render 'body', text: block.settings.text, variant: block.settings.variant,
+    default: 'base', color: block.settings.color, block_shopify_attributes: block.shopify_attributes
+    -%}"
+  position: 401..580
+{%- endcomment -%}

@@ -52,32 +52,17 @@
             <div class="brand-lists-section__header-content tw-flex tw-flex-col tw-gap-4 tw-items-start">
               {%- comment -%} Caption {%- endcomment -%}
               {%- if section_caption != blank -%}
-                {%- render 'caption',
-                  text: section_caption,
-                  color: section.settings.caption_color | default: '#323e46',
-                  parent_class: 'brand-lists'
-                -%}
+                {%- render 'caption', text: section_caption, color: section.settings.caption_color, default: '#323e46', parent_class: 'brand-lists' -%}
               {%- endif -%}
               
               {%- comment -%} Heading {%- endcomment -%}
               {%- if section_heading != blank -%}
-                {%- render 'heading',
-                  text: section_heading,
-                  variant: section.settings.heading_variant | default: 'h2',
-                  color: section.settings.heading_color | default: '#092846',
-                  parent_class: 'brand-lists'
-                -%}
+                {%- render 'heading', text: section_heading, variant: section.settings.heading_variant, default: '#092846', color: section.settings.heading_color, parent_class: 'brand-lists' -%}
               {%- endif -%}
               
               {%- comment -%} Subheading {%- endcomment -%}
               {%- if section_subheading != blank -%}
-                {%- render 'subheading',
-                  text: section_subheading,
-                  variant: section.settings.subheading_variant | default: 'md',
-                  color: section.settings.subheading_color | default: '#323e46',
-                  max_width: section.settings.subheading_max_width,
-                  parent_class: 'brand-lists'
-                -%}
+                {%- render 'subheading', text: section_subheading, variant: section.settings.subheading_variant, default: '#323e46', color: section.settings.subheading_color, max_width: section.settings.subheading_max_width, parent_class: 'brand-lists' -%}
               {%- endif -%}
             </div>
           {%- endif -%}
@@ -85,15 +70,7 @@
           {%- comment -%} Image (Outside Flex Container) {%- endcomment -%}
           {%- if section_image != blank -%}
             <div class="brand-lists-section__image tw-mt-4">
-              {%- render 'image',
-                desktop_image: section_image,
-                mobile_image: section_image,
-                image_id: section.id,
-                layout_type: 'icon',
-                icon_max_width: section.settings.image_max_width | default: '145',
-                desktop_aspect_ratio: section.settings.image_aspect_ratio | default: '1',
-                parent_class: 'brand-lists'
-              -%}
+              {%- render 'image', desktop_image: section_image, mobile_image: section_image, image_id: section.id, layout_type: 'icon', icon_max_width: section.settings.image_max_width, default: '1', desktop_aspect_ratio: section.settings.image_aspect_ratio, parent_class: 'brand-lists' -%}
             </div>
           {%- endif -%}
         </div>
@@ -358,3 +335,57 @@
 }
 {% endschema %}
 
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'caption',
+                      text: section_caption,
+                      color: section.settings.caption_color | default: '#323e46',
+                      parent_class: 'brand-lists'
+                    -%}
+  to: "{%- render 'caption', text: section_caption, color: section.settings.caption_color,
+    default: '#323e46', parent_class: 'brand-lists' -%}"
+  position: 2460..2595
+- from: |-
+    {%- render 'heading',
+                      text: section_heading,
+                      variant: section.settings.heading_variant | default: 'h2',
+                      color: section.settings.heading_color | default: '#092846',
+                      parent_class: 'brand-lists'
+                    -%}
+  to: "{%- render 'heading', text: section_heading, variant: section.settings.heading_variant,
+    default: '#092846', color: section.settings.heading_color, parent_class: 'brand-lists'
+    -%}"
+  position: 2762..2940
+- from: |-
+    {%- render 'subheading',
+                      text: section_subheading,
+                      variant: section.settings.subheading_variant | default: 'md',
+                      color: section.settings.subheading_color | default: '#323e46',
+                      max_width: section.settings.subheading_max_width,
+                      parent_class: 'brand-lists'
+                    -%}
+  to: "{%- render 'subheading', text: section_subheading, variant: section.settings.subheading_variant,
+    default: '#323e46', color: section.settings.subheading_color, max_width: section.settings.subheading_max_width,
+    parent_class: 'brand-lists' -%}"
+  position: 3113..3353
+- from: |-
+    {%- render 'image',
+                    desktop_image: section_image,
+                    mobile_image: section_image,
+                    image_id: section.id,
+                    layout_type: 'icon',
+                    icon_max_width: section.settings.image_max_width | default: '145',
+                    desktop_aspect_ratio: section.settings.image_aspect_ratio | default: '1',
+                    parent_class: 'brand-lists'
+                  -%}
+  to: "{%- render 'image', desktop_image: section_image, mobile_image: section_image,
+    image_id: section.id, layout_type: 'icon', icon_max_width: section.settings.image_max_width,
+    default: '1', desktop_aspect_ratio: section.settings.image_aspect_ratio, parent_class:
+    'brand-lists' -%}"
+  position: 3631..3907
+{% endcomment %}

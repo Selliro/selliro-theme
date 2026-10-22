@@ -53,16 +53,7 @@
       
       {%- else -%}
         {%- comment -%} Image Background {%- endcomment -%}
-        {%- render 'banner-layout-image',
-          image_desktop: image_desktop,
-          image_mobile: image_mobile,
-          show_overlay: section.settings.show_overlay,
-          overlay_opacity: section.settings.overlay_opacity,
-          show_gradient_overlay: section.settings.show_gradient_overlay,
-          image_aspect_ratio: section.settings.image_aspect_ratio_desktop | plus:0,
-          image_aspect_ratio_mobile: section.settings.image_aspect_ratio_mobile | plus:0,
-          section: section
-        -%}
+        {%- render 'banner-layout-image', image_desktop: image_desktop, image_mobile: image_mobile, show_overlay: section.settings.show_overlay, overlay_opacity: section.settings.overlay_opacity, show_gradient_overlay: section.settings.show_gradient_overlay, image_aspect_ratio: section.settings.image_aspect_ratio_desktop, plus: 0, image_aspect_ratio_mobile: section.settings.image_aspect_ratio_mobile, section: section -%}
     {%- endcase -%}
   </div>
   
@@ -547,4 +538,27 @@
   }
   {% endschema %}
   
-  
+  {%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'banner-layout-image',
+              image_desktop: image_desktop,
+              image_mobile: image_mobile,
+              show_overlay: section.settings.show_overlay,
+              overlay_opacity: section.settings.overlay_opacity,
+              show_gradient_overlay: section.settings.show_gradient_overlay,
+              image_aspect_ratio: section.settings.image_aspect_ratio_desktop | plus:0,
+              image_aspect_ratio_mobile: section.settings.image_aspect_ratio_mobile | plus:0,
+              section: section
+            -%}
+  to: "{%- render 'banner-layout-image', image_desktop: image_desktop, image_mobile:
+    image_mobile, show_overlay: section.settings.show_overlay, overlay_opacity: section.settings.overlay_opacity,
+    show_gradient_overlay: section.settings.show_gradient_overlay, image_aspect_ratio:
+    section.settings.image_aspect_ratio_desktop, plus: 0, image_aspect_ratio_mobile:
+    section.settings.image_aspect_ratio_mobile, section: section -%}"
+  position: 2052..2468
+{%- endcomment -%}

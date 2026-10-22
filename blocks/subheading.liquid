@@ -15,12 +15,7 @@
 </style>
 
 <div id="shopify-block-{{ block.id }}">
-  {%- render 'subheading',
-    text: block.settings.text,
-    variant: block.settings.variant | default: 'md',
-    color: block.settings.color,
-    block_shopify_attributes: block.shopify_attributes
-  -%}
+  {%- render 'subheading', text: block.settings.text, variant: block.settings.variant, default: 'md', color: block.settings.color, block_shopify_attributes: block.shopify_attributes -%}
 </div>
 
 {% schema %}
@@ -59,3 +54,21 @@
 }
 {% endschema %}
 
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'subheading',
+        text: block.settings.text,
+        variant: block.settings.variant | default: 'md',
+        color: block.settings.color,
+        block_shopify_attributes: block.shopify_attributes
+      -%}
+  to: "{%- render 'subheading', text: block.settings.text, variant: block.settings.variant,
+    default: 'md', color: block.settings.color, block_shopify_attributes: block.shopify_attributes
+    -%}"
+  position: 377..560
+{% endcomment %}

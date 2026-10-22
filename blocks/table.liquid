@@ -32,12 +32,12 @@
     <table class="table-block__table tw-w-full tw-text-sm tw-text-left rtl:tw-text-right tw-text-body tw-overflow-hidden">
       <thead>
         {% for thead in block.blocks -%}
-          {%- if thead.id contains 'table_header' %}{% render: thead, section: section, block: thead %}{% endif %}
+          {%- if thead.id contains 'table_header' %}{% render thead, section: section, block: thead %}{% endif %}
         {% endfor %}
       </thead>
       <tbody>
         {% for tbody in block.blocks -%}
-          {%- if tbody.id contains 'table_row' %}{% render: tbody, section: section, block: tbody %}{% endif %}
+          {%- if tbody.id contains 'table_row' %}{% render tbody, section: section, block: tbody %}{% endif %}
         {% endfor %}
       </tbody>
     </table>
@@ -148,3 +148,16 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render: thead, section: section, block: thead %}"
+  to: "{% render thead, section: section, block: thead %}"
+  position: 1440..1490
+- from: "{% render: tbody, section: section, block: tbody %}"
+  to: "{% render tbody, section: section, block: tbody %}"
+  position: 1642..1692
+{% endcomment %}

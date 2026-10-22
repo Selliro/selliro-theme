@@ -3,13 +3,7 @@
   Global button component - variant set in presets
 {%- endcomment -%}
 
-{%- render 'button',
-  label: block.settings.label,
-  link: block.settings.link,
-  variant: block.settings.variant | default: 'primary',
-  secondary_color: block.settings.secondary_color | default: 'white',
-  block_shopify_attributes: block.shopify_attributes
--%}
+{%- render 'button', label: block.settings.label, link: block.settings.link, variant: block.settings.variant, default: 'white', secondary_color: block.settings.secondary_color, block_shopify_attributes: block.shopify_attributes -%}
 
 {% schema %}
 {
@@ -46,3 +40,22 @@
 }
 {% endschema %}
 
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%- render 'button',
+      label: block.settings.label,
+      link: block.settings.link,
+      variant: block.settings.variant | default: 'primary',
+      secondary_color: block.settings.secondary_color | default: 'white',
+      block_shopify_attributes: block.shopify_attributes
+    -%}
+  to: "{%- render 'button', label: block.settings.label, link: block.settings.link,
+    variant: block.settings.variant, default: 'white', secondary_color: block.settings.secondary_color,
+    block_shopify_attributes: block.shopify_attributes -%}"
+  position: 108..339
+{% endcomment %}
