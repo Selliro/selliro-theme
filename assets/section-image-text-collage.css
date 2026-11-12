@@ -27,22 +27,13 @@
 .itc__pattern--contain { background-size: contain; }
 .itc__pattern--repeat  { background-size: auto; background-repeat: repeat; }
 
-/* Tinted: the pattern image becomes a mask filled with the chosen color */
-.itc__pattern--tinted {
-  background-image: none;
-  background-color: var(--itc-pattern-tint);
-  -webkit-mask-image: var(--itc-pattern-url);
-  mask-image: var(--itc-pattern-url);
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-size: cover;
-  mask-size: cover;
+/* Tint (optional) is applied with an inline SVG filter — see sections/image-text-collage.liquid */
+.itc__tint-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }
-
-.itc__pattern--tinted.itc__pattern--contain { -webkit-mask-size: contain; mask-size: contain; }
-.itc__pattern--tinted.itc__pattern--repeat  { -webkit-mask-size: auto; mask-size: auto; -webkit-mask-repeat: repeat; mask-repeat: repeat; }
 
 /* ══════════════════════════════════════════
    TWO-COLUMN GRID

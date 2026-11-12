@@ -115,12 +115,26 @@
 ></div>
 
 {%- if section.settings.pattern_image != blank -%}
+  {%- if section.settings.pattern_color != blank -%}
+    {%- comment -%}
+      Tint via SVG filter (not CSS mask): masks need CORS headers for CDN images and would hide
+      the pattern entirely. Darker / more opaque pixels take the tint; white and transparent stay clear,
+      so both transparent PNGs and patterns on a white background work.
+    {%- endcomment -%}
+    <svg class="itc__tint-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <filter id="ItcTint-{{ section.id }}" color-interpolation-filters="sRGB" x="0" y="0" width="100%" height="100%">
+        <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -0.5315 -1.788 -0.1805 2.5 0" result="shape"/>
+        <feFlood flood-color="{{ section.settings.pattern_color }}" result="tint"/>
+        <feComposite in="tint" in2="shape" operator="in"/>
+      </filter>
+    </svg>
+  {%- endif -%}
   <div
-    class="itc__pattern itc__pattern--{{ section.settings.pattern_fit | default: 'cover' }}{% if section.settings.pattern_color != blank %} itc__pattern--tinted{% endif %}"
+    class="itc__pattern itc__pattern--{{ section.settings.pattern_fit | default: 'cover' }}"
     style="
       --itc-pattern-url: url('{{ section.settings.pattern_image | image_url: width: 2400 }}');
       --itc-pattern-opacity: {{ section.settings.pattern_opacity | default: 14 | times: 0.01 }};
-      {% if section.settings.pattern_color != blank %}--itc-pattern-tint: {{ section.settings.pattern_color }};{% endif %}
+      {% if section.settings.pattern_color != blank %}filter: url('#ItcTint-{{ section.id }}');{% endif %}
     "
     aria-hidden="true"
   ></div>
