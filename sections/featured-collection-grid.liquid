@@ -99,7 +99,7 @@
 >
   {%- liquid
     assign max_products = 5
-    assign products = section.settings.collection.products | limit: max_products
+    assign products = section.settings.collection.products
     assign use_manual = false
     if section.settings.data_source == 'manual'
       assign use_manual = true
@@ -109,7 +109,7 @@
   {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
     <div class="featured-collection-grid__header">
       {%- if section.settings.title != blank -%}
-        <h3 class="featured-collection-grid__title">{{ section.settings.title }}</h3>
+        <h2 class="featured-collection-grid__title">{{ section.settings.title }}</h2>
       {%- endif -%}
       {%- if section.settings.subtitle != blank -%}
         <p class="featured-collection-grid__subtitle">{{ section.settings.subtitle }}</p>
@@ -129,21 +129,23 @@
                 {%- assign block_product = block.settings.product -%}
                 <div class="featured-collection-grid__card featured-collection-grid__card--half color-{{ block.settings.color_scheme }}" style="{% if block.settings.card_bg_color != blank %}background-color: {{ block.settings.card_bg_color }};{% endif %}{% if block.settings.card_text_color != blank %}--featured-collection-grid-card-text: {{ block.settings.card_text_color }};{% endif %}" {{ block.shopify_attributes }}>
                   {%- if block_product != blank -%}
-                    <a class="featured-collection-grid__card-link" href="{{ block_product.url }}" aria-label="{{ block_product.title }}"></a>
+                    <a class="featured-collection-grid__card-link" href="{{ block_product.url }}" aria-label="{{ block_product.title | escape }}"></a>
                   {%- elsif block.settings.link != blank -%}
-                    <a class="featured-collection-grid__card-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'View item' }}"></a>
+                    <a class="featured-collection-grid__card-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'content.view_item' | t | escape }}"></a>
                   {%- endif -%}
                   <div class="featured-collection-grid__card-image-wrap">
                     {%- if block_product != blank and block_product.featured_image != blank -%}
                       {{ block_product.featured_image | image_url: width: 800 | image_tag:
                         loading: 'lazy',
                         widths: '400, 600, 800',
+                        sizes: '(min-width: 990px) 25vw, 50vw',
                         class: 'featured-collection-grid__card-image'
                       }}
                     {%- elsif block.settings.image != blank -%}
                       {{ block.settings.image | image_url: width: 800 | image_tag:
                         loading: 'lazy',
                         widths: '400, 600, 800',
+                        sizes: '(min-width: 990px) 25vw, 50vw',
                         class: 'featured-collection-grid__card-image'
                       }}
                     {%- else -%}
@@ -182,13 +184,14 @@
             {%- assign product = products[i] -%}
             <div class="featured-collection-grid__card featured-collection-grid__card--half">
               {%- if product != blank -%}
-                <a class="featured-collection-grid__card-link" href="{{ product.url }}" aria-label="{{ product.title }}"></a>
+                <a class="featured-collection-grid__card-link" href="{{ product.url }}" aria-label="{{ product.title | escape }}"></a>
               {%- endif -%}
               <div class="featured-collection-grid__card-image-wrap">
                 {%- if product != blank and product.featured_image != blank -%}
                   {{ product.featured_image | image_url: width: 800 | image_tag:
                     loading: 'lazy',
                     widths: '400, 600, 800',
+                        sizes: '(min-width: 990px) 25vw, 50vw',
                     class: 'featured-collection-grid__card-image'
                   }}
                 {%- else -%}
@@ -242,21 +245,23 @@
                 {%- assign block_product = block.settings.product -%}
                 <div class="featured-collection-grid__card featured-collection-grid__card--half color-{{ block.settings.color_scheme }}" style="{% if block.settings.card_bg_color != blank %}background-color: {{ block.settings.card_bg_color }};{% endif %}{% if block.settings.card_text_color != blank %}--featured-collection-grid-card-text: {{ block.settings.card_text_color }};{% endif %}" {{ block.shopify_attributes }}>
                   {%- if block_product != blank -%}
-                    <a class="featured-collection-grid__card-link" href="{{ block_product.url }}" aria-label="{{ block_product.title }}"></a>
+                    <a class="featured-collection-grid__card-link" href="{{ block_product.url }}" aria-label="{{ block_product.title | escape }}"></a>
                   {%- elsif block.settings.link != blank -%}
-                    <a class="featured-collection-grid__card-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'View item' }}"></a>
+                    <a class="featured-collection-grid__card-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'content.view_item' | t | escape }}"></a>
                   {%- endif -%}
                   <div class="featured-collection-grid__card-image-wrap">
                     {%- if block_product != blank and block_product.featured_image != blank -%}
                       {{ block_product.featured_image | image_url: width: 800 | image_tag:
                         loading: 'lazy',
                         widths: '400, 600, 800',
+                        sizes: '(min-width: 990px) 25vw, 50vw',
                         class: 'featured-collection-grid__card-image'
                       }}
                     {%- elsif block.settings.image != blank -%}
                       {{ block.settings.image | image_url: width: 800 | image_tag:
                         loading: 'lazy',
                         widths: '400, 600, 800',
+                        sizes: '(min-width: 990px) 25vw, 50vw',
                         class: 'featured-collection-grid__card-image'
                       }}
                     {%- else -%}
@@ -295,13 +300,14 @@
             {%- assign product = products[i] -%}
             <div class="featured-collection-grid__card featured-collection-grid__card--half">
               {%- if product != blank -%}
-                <a class="featured-collection-grid__card-link" href="{{ product.url }}" aria-label="{{ product.title }}"></a>
+                <a class="featured-collection-grid__card-link" href="{{ product.url }}" aria-label="{{ product.title | escape }}"></a>
               {%- endif -%}
               <div class="featured-collection-grid__card-image-wrap">
                 {%- if product != blank and product.featured_image != blank -%}
                   {{ product.featured_image | image_url: width: 800 | image_tag:
                     loading: 'lazy',
                     widths: '400, 600, 800',
+                        sizes: '(min-width: 990px) 25vw, 50vw',
                     class: 'featured-collection-grid__card-image'
                   }}
                 {%- else -%}
@@ -354,9 +360,9 @@
             {%- assign block_product = block.settings.product -%}
             <div class="featured-collection-grid__card featured-collection-grid__card--tall color-{{ block.settings.color_scheme }}" style="{% if block.settings.card_bg_color != blank %}background-color: {{ block.settings.card_bg_color }};{% endif %}{% if block.settings.card_text_color != blank %}--featured-collection-grid-card-text: {{ block.settings.card_text_color }};{% endif %}" {{ block.shopify_attributes }}>
               {%- if block_product != blank -%}
-                <a class="featured-collection-grid__card-link" href="{{ block_product.url }}" aria-label="{{ block_product.title }}"></a>
+                <a class="featured-collection-grid__card-link" href="{{ block_product.url }}" aria-label="{{ block_product.title | escape }}"></a>
               {%- elsif block.settings.link != blank -%}
-                <a class="featured-collection-grid__card-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'View item' }}"></a>
+                <a class="featured-collection-grid__card-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'content.view_item' | t | escape }}"></a>
               {%- endif -%}
               <div class="featured-collection-grid__card-image-wrap">
                 {%- if block_product != blank and block_product.featured_image != blank -%}
@@ -405,7 +411,7 @@
         {%- assign product = products[4] -%}
         <div class="featured-collection-grid__card featured-collection-grid__card--tall">
           {%- if product != blank -%}
-            <a class="featured-collection-grid__card-link" href="{{ product.url }}" aria-label="{{ product.title }}"></a>
+            <a class="featured-collection-grid__card-link" href="{{ product.url }}" aria-label="{{ product.title | escape }}"></a>
           {%- endif -%}
           <div class="featured-collection-grid__card-image-wrap">
             {%- if product != blank and product.featured_image != blank -%}

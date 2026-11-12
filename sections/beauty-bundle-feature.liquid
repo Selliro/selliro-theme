@@ -156,7 +156,7 @@
                   <p class="shop-the-look__item-desc">{{ block.settings.description }}</p>
                 {%- endif -%}
                 {%- if section.settings.show_rating and block.settings.rating > 0 -%}
-                  <div class="shop-the-look__rating" aria-label="Rating: {{ block.settings.rating }} out of 5">
+                  <div class="shop-the-look__rating" aria-label="{{ 'accessibility.rating' | t: rating: block.settings.rating | escape }}">
                     {%- for i in (1..5) -%}
                       <span class="shop-the-look__star{% if i <= block.settings.rating %} is-filled{% endif %}">★</span>
                     {%- endfor -%}
@@ -166,7 +166,7 @@
               {%- if block_product != blank -%}
                 <a class="shop-the-look__item-link" href="{{ block_product.url }}" aria-label="{{ block_product.title }}"></a>
               {%- elsif block.settings.link != blank -%}
-                <a class="shop-the-look__item-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'View item' }}"></a>
+                <a class="shop-the-look__item-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.title | default: 'content.view_item' | t | escape }}"></a>
               {%- endif -%}
             </div>
           </div>
