@@ -20,7 +20,7 @@
         <div class="ticker-duo__scroll">
           <div class="ticker-duo__track{% if block.settings.direction == 'reverse' %} is-reverse{% endif %}">
             {%- for i in (1..8) -%}
-              <div class="ticker-duo__group">
+              <div class="ticker-duo__group"{% unless forloop.first %} aria-hidden="true"{% endunless %}>
                 {%- if block.settings.text != blank -%}
                   <span class="ticker-duo__text" style="{% render 'typography-style', settings: block.settings %}">{{ block.settings.text }}</span>
                 {%- endif -%}
@@ -29,7 +29,7 @@
                 {%- endif -%}
                 {%- if block.settings.icon != blank -%}
                   <span class="ticker-duo__icon">
-                    {{ block.settings.icon | image_url: width: 48 | image_tag: loading: 'lazy' }}
+                    {{ block.settings.icon | image_url: width: 96 | image_tag: loading: 'lazy', alt: '', widths: '48, 96', sizes: '48px' }}
                   </span>
                 {%- endif -%}
               </div>
@@ -47,49 +47,78 @@
       this.tracks = Array.from(this.querySelectorAll('.ticker-duo__track'));
       if (!this.tracks.length) return;
 
-      // Clone groups until the track is at least 2.5× the viewport wide.
-      // Reason: at position p = -halfWidth the track's right edge must still
-      // be beyond the viewport right edge, which requires scrollWidth ≥ 2× viewport.
-      // We clone the original set at a time so the loop boundary always falls
-      // on an exact group boundary (no partial-group seam).
-      this.tracks.forEach(track => {
+      // Respect the visitor's "reduce motion" preference: keep the ticker static.
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      // Clone groups until the track is at least 2.5x the viewport wide, so the loop
+      // boundary always falls on a group boundary (no visible seam).
+      // Guarded: a hidden or empty track has scrollWidth 0 and would otherwise loop forever.
+      const MAX_CLONE_ROUNDS = 12;
+      this.tracks.forEach((track) => {
         const origGroups = Array.from(track.querySelectorAll('.ticker-duo__group'));
-        if (!origGroups.length) return;
+        if (!origGroups.length || track.scrollWidth === 0) return;
+
+        // The first group is the readable copy; every repeat is decorative.
+        origGroups.slice(1).forEach((g) => g.setAttribute('aria-hidden', 'true'));
+
         const minWidth = window.innerWidth * 2.5;
-        while (track.scrollWidth < minWidth) {
-          origGroups.forEach(g => track.appendChild(g.cloneNode(true)));
+        let rounds = 0;
+        while (track.scrollWidth < minWidth && rounds < MAX_CLONE_ROUNDS) {
+          origGroups.forEach((g) => {
+            const clone = g.cloneNode(true);
+            clone.setAttribute('aria-hidden', 'true');
+            track.appendChild(clone);
+          });
+          rounds++;
         }
       });
 
-      // Cache loop boundaries after cloning — scrollWidth won't change after this.
-      this.loopWidths = this.tracks.map(t => t.scrollWidth / 2);
-      this.positions  = this.tracks.map(() => 0);
+      this.loopWidths = this.tracks.map((t) => t.scrollWidth / 2);
+      this.positions = this.tracks.map(() => 0);
 
       const IDLE = 0.6;
-      this.idleSpeed     = IDLE;
-      this.velocity      = IDLE;
+      this.idleSpeed = IDLE;
+      this.velocity = IDLE;
       this.targetVelocity = IDLE;
-      this.lastScrollY   = window.scrollY;
-      this.rafId         = null;
+      this.lastScrollY = window.scrollY;
+      this.rafId = null;
+      this.isVisible = false;
 
       this.onScroll = this.onScroll.bind(this);
-      this.tick     = this.tick.bind(this);
+      this.tick = this.tick.bind(this);
 
       window.addEventListener('scroll', this.onScroll, { passive: true });
-      this.rafId = requestAnimationFrame(this.tick);
+
+      // Only animate while the ticker is on screen, to save CPU and battery.
+      this.observer = new IntersectionObserver((entries) => {
+        this.isVisible = entries.some((entry) => entry.isIntersecting);
+        if (this.isVisible) this.start();
+        else this.stop();
+      });
+      this.observer.observe(this);
     }
 
     disconnectedCallback() {
-      window.removeEventListener('scroll', this.onScroll);
-      if (this.rafId) cancelAnimationFrame(this.rafId);
+      if (this.onScroll) window.removeEventListener('scroll', this.onScroll);
+      if (this.observer) this.observer.disconnect();
+      this.stop();
+    }
+
+    start() {
+      if (this.rafId === null) this.rafId = requestAnimationFrame(this.tick);
+    }
+
+    stop() {
+      if (this.rafId !== null && this.rafId !== undefined) cancelAnimationFrame(this.rafId);
+      this.rafId = null;
     }
 
     onScroll() {
       const currentY = window.scrollY;
-      const delta    = currentY - this.lastScrollY;
+      const delta = currentY - this.lastScrollY;
       this.lastScrollY = currentY;
 
-      // Upward scroll is clamped tighter (−1.5) than downward (+4) so a sudden
+      // Upward scroll is clamped tighter (-1.5) than downward (+4) so a sudden
       // scroll-up never causes a jarring fast reversal.
       this.targetVelocity = Math.max(
         this.idleSpeed - 1.5,
@@ -119,7 +148,7 @@
         }
       });
 
-      this.rafId = requestAnimationFrame(this.tick);
+      this.rafId = this.isVisible ? requestAnimationFrame(this.tick) : null;
     }
   }
 
