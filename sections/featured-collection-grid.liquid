@@ -98,7 +98,6 @@
   style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
 >
   {%- liquid
-    assign max_products = 5
     assign products = section.settings.collection.products
     assign use_manual = false
     if section.settings.data_source == 'manual'
@@ -109,7 +108,7 @@
   {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
     <div class="featured-collection-grid__header">
       {%- if section.settings.title != blank -%}
-        <h2 class="featured-collection-grid__title">{{ section.settings.title }}</h2>
+        <h2 class="featured-collection-grid__title h3">{{ section.settings.title }}</h2>
       {%- endif -%}
       {%- if section.settings.subtitle != blank -%}
         <p class="featured-collection-grid__subtitle">{{ section.settings.subtitle }}</p>
