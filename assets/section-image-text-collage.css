@@ -243,8 +243,10 @@
 }
 
 @media (max-width: 989px) {
+  /* Line the text up with the centred collage on tablet / mobile */
   .itc__content {
-    max-width: none;
+    max-width: 36rem;
+    margin-inline: auto;
   }
 }
 
@@ -461,9 +463,9 @@ a.itc-badge:focus-visible {
   stroke-width: 15;
 }
 
-/* Circumference of r=35 is ~219.9 → 8 even dashes / 16 dots */
+/* Circumference of r=35 is ~219.9 → 6 long dashes with hairline gaps / 16 dots */
 .itc-badge--inner-dashed .itc-badge__inner-circle {
-  stroke-dasharray: 23.5 4;
+  stroke-dasharray: 34.15 2.5;
 }
 
 .itc-badge--inner-dotted .itc-badge__inner-circle {
