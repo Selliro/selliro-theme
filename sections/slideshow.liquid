@@ -31,29 +31,40 @@
   endif
 %}
 
+{%- liquid
+  assign content_style = section.settings.content_style | default: 'glass'
+  assign arrow_position = section.settings.arrow_position | default: 'center'
+-%}
 {% style %}
-  /* ── Glass card on slide group blocks ── */
-  .shopify-section-{{ section.id }} slideshow-slide .slide__content {
-    background-color: transparent !important;
-  }
-  .shopify-section-{{ section.id }} .group-block {
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    background-color: rgba(0, 0, 0, 0.38) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    overflow: hidden;
-  }
-  .shopify-section-{{ section.id }} .group-block,
-  .shopify-section-{{ section.id }} .group-block * {
-    color: #ffffff !important;
-  }
-  /* ── Move arrows to bottom so they don't overlap content ── */
-  .shopify-section-{{ section.id }} slideshow-arrows {
-    align-items: flex-end !important;
-    padding-inline: clamp(20px, 3vw, 48px) !important;
-    padding-block-end: 28px !important;
-  }
+  {%- if content_style == 'glass' -%}
+    /* Glass card on slide content groups (light text on a frosted dark panel) */
+    #shopify-section-{{ section.id }} .group-block {
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background-color: rgba(0, 0, 0, 0.32) !important;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    #shopify-section-{{ section.id }} .group-block,
+    #shopify-section-{{ section.id }} .group-block * {
+      color: #ffffff !important;
+    }
+  {%- endif -%}
+
+  {%- if arrow_position == 'bottom' -%}
+    /* Arrows sit at the bottom so they never overlap slide content */
+    #shopify-section-{{ section.id }} slideshow-arrows {
+      align-items: flex-end;
+      padding-inline: clamp(20px, 3vw, 48px);
+      padding-block-end: 28px;
+    }
+  {%- else -%}
+    /* Arrows centred vertically, pushed in from the screen edge */
+    #shopify-section-{{ section.id }} slideshow-arrows {
+      padding-inline: clamp(16px, 2.5vw, 36px);
+    }
+  {%- endif -%}
 {% endstyle %}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
@@ -87,6 +98,31 @@
     "groups": ["header", "footer"]
   },
   "settings": [
+    {
+      "type": "header",
+      "content": "Slide appearance"
+    },
+    {
+      "type": "select",
+      "id": "content_style",
+      "label": "Slide content style",
+      "options": [
+        { "value": "glass", "label": "Glass card" },
+        { "value": "scheme", "label": "Color scheme" }
+      ],
+      "default": "glass",
+      "info": "Glass card shows text in white on a frosted panel. Color scheme uses each group's own colors."
+    },
+    {
+      "type": "select",
+      "id": "arrow_position",
+      "label": "Arrow position",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
     {
       "type": "select",
       "id": "icons_style",
