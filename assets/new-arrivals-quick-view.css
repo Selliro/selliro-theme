@@ -80,8 +80,21 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  /* 44px minimum touch target */
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: -0.375rem -0.5rem -0.375rem 0;
+  border-radius: 50%;
+}
+
+.na-qv-drawer__close:focus-visible {
+  outline: var(--focus-outline-width, 2px) solid currentcolor;
+  outline-offset: -2px;
+}
+
+.na-qv-drawer__close .svg-wrapper {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .na-qv-drawer__body {
@@ -265,8 +278,41 @@
 }
 
 @media (max-width: 47.9375rem) {
+  /* Bottom sheet on phones (thumb-friendly, keeps page context visible) */
   .na-qv-drawer__panel {
+    top: auto;
+    left: 0;
     width: 100%;
+    max-height: 92dvh;
+    border-left: 0;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(100%);
+  }
+
+  .na-qv-drawer.is-open .na-qv-drawer__panel {
+    transform: translateY(0);
+  }
+
+  .na-qv-drawer__header {
+    position: relative;
+    padding-top: 1.35rem;
+  }
+
+  /* Grab handle */
+  .na-qv-drawer__header::before {
+    content: '';
+    position: absolute;
+    top: 0.5rem;
+    left: 50%;
+    width: 2.5rem;
+    height: 0.25rem;
+    border-radius: 999px;
+    background: rgb(var(--color-foreground-rgb) / 0.2);
+    transform: translateX(-50%);
+  }
+
+  .na-qv-drawer__body {
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
   }
 
   .na-qv-drawer__body .product-information__media {
@@ -388,5 +434,109 @@
 @media (prefers-reduced-motion: reduce) {
   .na-qv-cursor-close {
     transition: none;
+  }
+}
+
+/* ── "View full details" link ── */
+.na-qv-view-details {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.na-qv-view-details::after {
+  content: '→';
+  transition: transform 0.2s ease;
+}
+
+.na-qv-view-details:hover::after {
+  transform: translateX(3px);
+}
+
+/* ── Loading skeleton ── */
+.na-qv-skeleton {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 48rem) {
+  .na-qv-skeleton {
+    grid-template-columns: 14rem 1fr;
+  }
+}
+
+.na-qv-skeleton__media,
+.na-qv-skeleton__line,
+.na-qv-skeleton__button {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-foreground-rgb) / 0.06) 0%,
+    rgb(var(--color-foreground-rgb) / 0.12) 50%,
+    rgb(var(--color-foreground-rgb) / 0.06) 100%
+  );
+  background-size: 200% 100%;
+  animation: na-qv-shimmer 1.2s ease-in-out infinite;
+  border-radius: 10px;
+}
+
+.na-qv-skeleton__media {
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+}
+
+.na-qv-skeleton__details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.na-qv-skeleton__line {
+  height: 0.9rem;
+}
+
+.na-qv-skeleton__line--title {
+  height: 2rem;
+  width: 80%;
+}
+
+.na-qv-skeleton__line--short {
+  width: 35%;
+  height: 1.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.na-qv-skeleton__button {
+  height: 3.5rem;
+  margin-top: 1rem;
+  border-radius: 999px;
+}
+
+@keyframes na-qv-shimmer {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+
+/* The theme's custom cursor would sit on top of the quick view close cursor. */
+html:has(.na-qv-drawer--outside-hover) .mouseCursor {
+  opacity: 0 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .na-qv-drawer__panel,
+  .na-qv-drawer__overlay {
+    transition-duration: 0.01ms !important;
+  }
+
+  .na-qv-skeleton__media,
+  .na-qv-skeleton__line,
+  .na-qv-skeleton__button {
+    animation: none;
   }
 }
