@@ -122,7 +122,7 @@
                         {% if show_excerpt %}
                           <p class="featured-blog-posts-v2__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 18 }}</p>
                         {% endif %}
-                        <a class="featured-blog-posts-v2__read-more" href="{{ article.url }}">Read more</a>
+                        <a class="featured-blog-posts-v2__read-more" href="{{ article.url }}">{{ 'content.read_more_link' | t }}</a>
                         {% if show_tags and article.tags.size > 0 %}
                           <ul class="featured-blog-posts-v2__tags" role="list">
                             {% for tag in article.tags limit: 2 %}
@@ -154,7 +154,7 @@
                         {% if show_excerpt %}
                           <p class="featured-blog-posts-v2__excerpt">Explore the biggest beauty trends taking over this year and how to adopt them in your daily routine.</p>
                         {% endif %}
-                        <span class="featured-blog-posts-v2__read-more">Read more</span>
+                        <span class="featured-blog-posts-v2__read-more">{{ 'content.read_more_link' | t }}</span>
                         {% if show_tags %}
                           <ul class="featured-blog-posts-v2__tags" role="list">
                             <li class="featured-blog-posts-v2__tag">#beauty forecast</li>
@@ -289,7 +289,7 @@
                       {% if show_excerpt %}
                         <p class="featured-blog-posts-v2__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 22 }}</p>
                       {% endif %}
-                      <span class="featured-blog-posts-v2__read-more">Read more</span>
+                      <span class="featured-blog-posts-v2__read-more">{{ 'content.read_more_link' | t }}</span>
                     </div>
                   </div>
                 </a>
@@ -305,7 +305,7 @@
                   <div class="featured-blog-posts-v2__meta"><span>{{ 'now' | date: '%b %d, %Y' }}</span><span>0 Comments</span></div>
                   <h3 class="featured-blog-posts-v2__title">Top 5 Skincare Trends of 2025</h3>
                   <p class="featured-blog-posts-v2__excerpt">Explore the biggest beauty trends taking over this year.</p>
-                  <span class="featured-blog-posts-v2__read-more">Read more</span>
+                  <span class="featured-blog-posts-v2__read-more">{{ 'content.read_more_link' | t }}</span>
                 </div>
               </div>
             </article>
@@ -348,7 +348,7 @@
                   {% if show_excerpt %}
                     <p class="featured-blog-posts-v2__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 14 }}</p>
                   {% endif %}
-                  <a class="featured-blog-posts-v2__read-more" href="{{ article.url }}">Read more</a>
+                  <a class="featured-blog-posts-v2__read-more" href="{{ article.url }}">{{ 'content.read_more_link' | t }}</a>
                 </div>
               </article>
             {% endfor %}
@@ -366,7 +366,7 @@
                   <div class="featured-blog-posts-v2__meta"><span>{{ 'now' | date: '%b %d, %Y' }}</span><span>0 Comments</span></div>
                   <h3 class="featured-blog-posts-v2__title">Build the Perfect Routine for Your Skin Type</h3>
                   <p class="featured-blog-posts-v2__excerpt">Discover how to glow with fewer products and better habits.</p>
-                  <span class="featured-blog-posts-v2__read-more">Read more</span>
+                  <span class="featured-blog-posts-v2__read-more">{{ 'content.read_more_link' | t }}</span>
                 </div>
               </article>
             {% endfor %}
@@ -410,7 +410,7 @@
                 {% if show_excerpt %}
                   <p class="featured-blog-posts-v2__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 18 }}</p>
                 {% endif %}
-                <a class="featured-blog-posts-v2__read-more" href="{{ article.url }}">Read more</a>
+                <a class="featured-blog-posts-v2__read-more" href="{{ article.url }}">{{ 'content.read_more_link' | t }}</a>
               </div>
             </article>
           {% endfor %}
@@ -428,7 +428,7 @@
                 <div class="featured-blog-posts-v2__meta"><span>{{ 'now' | date: '%b %d, %Y' }}</span><span>0 Comments</span></div>
                 <h3 class="featured-blog-posts-v2__title">Top 5 Skincare Trends of 2025</h3>
                 <p class="featured-blog-posts-v2__excerpt">Explore the biggest beauty trends taking over this year.</p>
-                <span class="featured-blog-posts-v2__read-more">Read more</span>
+                <span class="featured-blog-posts-v2__read-more">{{ 'content.read_more_link' | t }}</span>
               </div>
             </article>
           {% endfor %}
