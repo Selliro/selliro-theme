@@ -465,7 +465,7 @@ a.itc-badge:focus-visible {
 
 /* Circumference of r=35 is ~219.9 → 6 long dashes with hairline gaps / 16 dots */
 .itc-badge--inner-dashed .itc-badge__inner-circle {
-  stroke-dasharray: 34.15 2.5;
+  stroke-dasharray: 34.85 1.8;
 }
 
 .itc-badge--inner-dotted .itc-badge__inner-circle {
