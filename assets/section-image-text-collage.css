@@ -11,6 +11,41 @@
   overflow-clip-margin: 24px;
 }
 
+/* ── Background photo + overlay (full section width, behind pattern & content) ── */
+.itc__bg-media,
+.itc__bg-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: var(--layer-section-background, -2);
+  overflow: hidden;
+}
+
+.itc__bg-media picture,
+.itc__bg-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.itc__bg-img {
+  object-fit: cover;
+}
+
+.itc__bg-media--contain .itc__bg-img { object-fit: contain; }
+
+/* Explicit positions override the focal point Shopify writes inline */
+.itc__bg-media--pos-center .itc__bg-img { object-position: center !important; }
+.itc__bg-media--pos-top    .itc__bg-img { object-position: center top !important; }
+.itc__bg-media--pos-bottom .itc__bg-img { object-position: center bottom !important; }
+.itc__bg-media--pos-left   .itc__bg-img { object-position: left center !important; }
+.itc__bg-media--pos-right  .itc__bg-img { object-position: right center !important; }
+
+@media (max-width: 749px) {
+  .itc__bg-media--hide-mobile { display: none; }
+  .itc__bg-media--hide-mobile + .itc__bg-overlay { display: none; }
+}
+
 /* ── Decorative background pattern (full section width, behind content) ── */
 .itc__pattern {
   pointer-events: none;

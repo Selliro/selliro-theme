@@ -114,6 +114,49 @@
   {% endif %}
 ></div>
 
+{%- if section.settings.background_image != blank -%}
+  {%- liquid
+    assign bg_img = section.settings.background_image
+    assign bg_img_mobile = section.settings.background_image_mobile | default: bg_img
+    assign bg_loading = 'lazy'
+    if section.index != blank and section.index <= 2
+      assign bg_loading = 'eager'
+    endif
+    assign bg_alt = bg_img.alt | default: ''
+  -%}
+  <div
+    class="itc__bg-media itc__bg-media--{{ section.settings.background_image_fit | default: 'cover' }} itc__bg-media--pos-{{ section.settings.background_image_position | default: 'focal' }}{% if section.settings.background_image_show_mobile == false %} itc__bg-media--hide-mobile{% endif %}"
+    aria-hidden="true"
+  >
+    <picture>
+      {%- if section.settings.background_image_mobile != blank -%}
+        <source
+          media="(max-width: 749px)"
+          srcset="{{ bg_img_mobile | image_url: width: 750 }} 750w, {{ bg_img_mobile | image_url: width: 1100 }} 1100w, {{ bg_img_mobile | image_url: width: 1500 }} 1500w"
+          sizes="100vw"
+        >
+      {%- endif -%}
+      {{
+        bg_img
+        | image_url: width: 3000
+        | image_tag:
+          loading: bg_loading,
+          widths: '750, 1100, 1500, 1920, 2400, 3000',
+          sizes: '100vw',
+          alt: '',
+          class: 'itc__bg-img'
+      }}
+    </picture>
+  </div>
+  {%- if section.settings.background_overlay_opacity > 0 -%}
+    <div
+      class="itc__bg-overlay"
+      style="background-color: {{ section.settings.background_overlay_color | default: '#000000' }}; opacity: {{ section.settings.background_overlay_opacity | times: 0.01 }};"
+      aria-hidden="true"
+    ></div>
+  {%- endif -%}
+{%- endif -%}
+
 {%- if section.settings.pattern_image != blank -%}
   {%- if section.settings.pattern_color != blank -%}
     {%- comment -%}
@@ -405,9 +448,92 @@
     },
     {
       "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image",
+      "info": "Full-width photo behind the section. Set a focal point on the image in Shopify to control cropping."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "Mobile background image",
+      "info": "Optional. Shown on screens under 750px wide."
+    },
+    {
+      "type": "checkbox",
+      "id": "background_image_show_mobile",
+      "label": "Show background image on mobile",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "background_image_fit",
+      "label": "Background image sizing",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Fill section"
+        },
+        {
+          "value": "contain",
+          "label": "Fit inside"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "select",
+      "id": "background_image_position",
+      "label": "Background image position",
+      "options": [
+        {
+          "value": "focal",
+          "label": "Use image focal point"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "focal"
+    },
+    {
+      "type": "color",
+      "id": "background_overlay_color",
+      "label": "Image overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "background_overlay_opacity",
+      "label": "Image overlay opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 0,
+      "info": "Darken or tint the photo so text stays readable."
+    },
+    {
+      "type": "image_picker",
       "id": "pattern_image",
       "label": "Decorative pattern",
-      "info": "Transparent PNG or SVG works best."
+      "info": "Works with transparent PNG/SVG patterns, or a darker pattern on a white background."
     },
     {
       "type": "color",
