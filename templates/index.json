@@ -1576,25 +1576,29 @@
           "type": "feature",
           "settings": {
             "icon": "shopify://shop_images/svgviewer-png-output_1.png",
-            "title": "Healthy & Soft"
+            "title": "Healthy & Soft",
+            "icon_preset": "lips"
           }
         },
         "feature_Jdk3PU": {
           "type": "feature",
           "settings": {
-            "title": "Free from Sulfates"
+            "title": "Free from Sulfates",
+            "icon_preset": "globe"
           }
         },
         "feature_Y8qJiX": {
           "type": "feature",
           "settings": {
-            "title": "No Parabens Added"
+            "title": "No Parabens Added",
+            "icon_preset": "no_bottle"
           }
         },
         "feature_hjE68w": {
           "type": "feature",
           "settings": {
-            "title": "100% Plant-Powered"
+            "title": "100% Plant-Powered",
+            "icon_preset": "sprout"
           }
         }
       },
@@ -1608,14 +1612,14 @@
       "settings": {
         "color_scheme": "scheme-1",
         "pattern_image": "shopify://shop_images/abstract-floral-background-for-design-8ae644.png",
-        "pattern_opacity": 36,
+        "pattern_opacity": 60,
         "section_width": "page-width",
         "media_position": "left",
         "image_1": "shopify://shop_images/side-view-woman-bathrobe-using-skincare_1.png",
         "image_1_width": 76,
         "image_1_height": 40,
         "image_1_zindex": 4,
-        "image_1_rotation": 4,
+        "image_1_rotation": 2,
         "image_1_top": 0,
         "image_1_right": 0,
         "image_1_bottom": -1,
@@ -1624,7 +1628,7 @@
         "image_2_width": 68,
         "image_2_height": 72,
         "image_2_zindex": 3,
-        "image_2_rotation": -6,
+        "image_2_rotation": -3,
         "image_2_top": 32,
         "image_2_right": -1,
         "image_2_bottom": -1,
@@ -1633,7 +1637,7 @@
         "image_3_width": 48,
         "image_3_height": 50,
         "image_3_zindex": 3,
-        "image_3_rotation": 6,
+        "image_3_rotation": 3,
         "image_3_top": 60,
         "image_3_right": 3,
         "image_3_bottom": 0,
@@ -1642,7 +1646,7 @@
         "show_subtitle": true,
         "subtitle": "Pure and simple",
         "heading": "Intensive Hair Serum for Radiant Shine & Lasting Strength",
-        "heading_size": "medium",
+        "heading_size": "large",
         "show_description": true,
         "description": "<p>Our concentrated serum helps smooth the look of damage and adds luminous shine with plant-based actives you can feel good about.</p>",
         "show_feature_grid": true,
@@ -1656,11 +1660,34 @@
         "badge_text": "EXPLORE MORE ~ EXPLORE MORE ~",
         "badge_bg": "#f2c419",
         "badge_fg": "#1a1a1a",
-        "badge_size": 24,
-        "badge_top": 58,
-        "badge_left": 80,
+        "badge_size": 28,
+        "badge_top": 50,
+        "badge_left": 78,
         "padding_top": 72,
-        "padding_bottom": 72
+        "padding_bottom": 72,
+        "collage_layout": "stack",
+        "collage_ratio": 118,
+        "image_shadow": true,
+        "image_hover": "lift",
+        "heading_weight": "500",
+        "heading_max_width": 20,
+        "description_size": "medium",
+        "media_column_width": 48,
+        "column_gap": 72,
+        "content_vertical_alignment": "center",
+        "content_max_width": 560,
+        "feature_columns": "2",
+        "feature_icon_style": "outline",
+        "feature_icon_size": 56,
+        "feature_label_size": 17,
+        "button_style": "filled",
+        "badge_inner_color": "#ffffff",
+        "badge_inner_style": "dashed",
+        "badge_speed": 14,
+        "badge_pause_hover": true,
+        "background_color": "#eaf5df",
+        "pattern_color": "#4c9a47",
+        "pattern_fit": "cover"
       }
     },
     "ticker_duo_UeLfnF": {
