@@ -4326,6 +4326,19 @@ text-component {
   transform: translateY(20px);
   transition: all 400ms linear;
   mix-blend-mode: difference;
+  /* Reset native <button> styles */
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  appearance: none;
+}
+
+.progress-wrap:focus-visible {
+  outline: var(--focus-outline-width, 2px) solid currentcolor;
+  outline-offset: 3px;
+  mix-blend-mode: normal;
 }
 
 .progress-wrap.active-progress {
@@ -4393,14 +4406,15 @@ body .blur-div {
   z-index: 999;
 }
 
-/* ── Page-width utility container ── */
+/* ── Page-width utility container ──
+   Uses the same tokens as `.section--page-width` (header, cart, collection, etc.)
+   so content edges line up across every section:
+   --page-width already includes the page margin on both sides. */
 .page-width {
-  max-width: calc(var(--page-width) + 40px);
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: 1.25rem;
-  padding-left: 1.25rem;
   width: 100%;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--page-margin);
 }
 
 /* ── Full-width utility container ── */

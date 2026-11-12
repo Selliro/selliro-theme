@@ -37,14 +37,29 @@
     inner.style.transform = 'translate(' + innerX + 'px,' + innerY + 'px)';
     outer.style.transform = 'translate(' + outerX + 'px,' + outerY + 'px)';
 
-    requestAnimationFrame(loop);
+    // Stop animating once the cursor has caught up, so an idle page uses no CPU.
+    if (Math.abs(mouseX - outerX) < 0.1 && Math.abs(mouseY - outerY) < 0.1) {
+      rafId = null;
+      return;
+    }
+
+    rafId = requestAnimationFrame(loop);
   }
 
-  document.addEventListener('mousemove', function (e) {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    show();
-  });
+  function startLoop() {
+    if (rafId === null) rafId = requestAnimationFrame(loop);
+  }
+
+  document.addEventListener(
+    'mousemove',
+    function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      show();
+      startLoop();
+    },
+    { passive: true }
+  );
 
   document.addEventListener('mouseleave', hide);
   document.addEventListener('mouseenter', show);
@@ -75,5 +90,4 @@
     }
   });
 
-  loop();
 })();
