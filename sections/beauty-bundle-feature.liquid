@@ -27,6 +27,7 @@
           <button
             class="shop-the-look__hotspot"
             type="button"
+            tabindex="-1"
             style="left: {{ block.settings.hotspot_x }}%; top: {{ block.settings.hotspot_y }}%;"
             data-hotspot-id="{{ section.id }}-{{ block.id }}"
           >
@@ -57,12 +58,12 @@
           <button
             type="button"
             class="shop-the-look__bundle-btn"
-            aria-label="Add all bundle items to cart"
+            aria-live="polite"
           >
-            <span class="shop-the-look__bundle-btn-idle">Add Bundle to Cart</span>
-            <span class="shop-the-look__bundle-btn-loading" hidden>Adding…</span>
-            <span class="shop-the-look__bundle-btn-done" hidden>&#10003; Added to Cart</span>
-            <span class="shop-the-look__bundle-btn-error" hidden>&#10007; Try Again</span>
+            <span class="shop-the-look__bundle-btn-idle">{{ 'sections.beauty_bundle.add_bundle' | t }}</span>
+            <span class="shop-the-look__bundle-btn-loading" hidden>{{ 'sections.beauty_bundle.adding' | t }}</span>
+            <span class="shop-the-look__bundle-btn-done" hidden><span aria-hidden="true">&#10003;</span> {{ 'sections.beauty_bundle.added' | t }}</span>
+            <span class="shop-the-look__bundle-btn-error" hidden><span aria-hidden="true">&#10007;</span> {{ 'sections.beauty_bundle.error' | t }}</span>
           </button>
         {%- endif -%}
       </div>
@@ -345,11 +346,7 @@
         if (id > 0) items.push({ id: id, quantity: 1 });
       });
 
-      console.log('[Bundle] items to add:', JSON.stringify(items));
-      if (!items.length) {
-        console.warn('[Bundle] No products linked — check section settings.');
-        return;
-      }
+      if (!items.length) return;
 
       var idle    = btn.querySelector('.shop-the-look__bundle-btn-idle');
       var loading = btn.querySelector('.shop-the-look__bundle-btn-loading');
@@ -366,7 +363,9 @@
       if (idle) idle.hidden = true;
       if (loading) loading.hidden = false;
 
-      fetch('/cart/add.js', {
+      var root = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+
+      fetch(root + 'cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({ items: items })
@@ -380,7 +379,7 @@
         return r.json();
       })
       .then(function() {
-        return fetch('/cart.js', { headers: { 'Accept': 'application/json' } });
+        return fetch(root + 'cart.js', { headers: { 'Accept': 'application/json' } });
       })
       .then(function(r) { return r.json(); })
       .then(function(cartData) {
@@ -388,12 +387,14 @@
         if (done) done.hidden = false;
         btn.classList.add('is-success');
 
-        var evt = new Event('cart:update', { bubbles: true });
-        evt.detail = {
-          resource: cartData,
-          data: { itemCount: cartData.item_count, source: 'bundle' }
-        };
-        document.dispatchEvent(evt);
+        document.dispatchEvent(new CustomEvent('cart:update', {
+          bubbles: true,
+          detail: {
+            resource: cartData,
+            sourceId: 'bundle',
+            data: { itemCount: cartData.item_count, source: 'bundle' }
+          }
+        }));
 
         setTimeout(function() {
           if (done) done.hidden = true;
@@ -403,7 +404,6 @@
         }, 2500);
       })
       .catch(function(err) {
-        console.error('[Bundle] Add to cart failed:', err.message);
         if (loading) loading.hidden = true;
         if (error) {
           error.hidden = false;
