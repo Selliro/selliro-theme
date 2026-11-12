@@ -373,315 +373,517 @@
   "class": "image-text-collage-section",
   "max_blocks": 8,
   "settings": [
-    { "type": "header", "content": "Color" },
-    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
-
-    { "type": "header", "content": "Background pattern" },
+    {
+      "type": "header",
+      "content": "Colors & background"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Custom background color",
+      "info": "Overrides the color scheme background for this section only."
+    },
     {
       "type": "image_picker",
       "id": "pattern_image",
       "label": "Decorative pattern",
-      "info": "Optional full-width background texture (e.g. floral). Tile or full-cover."
+      "info": "Transparent PNG or SVG works best."
+    },
+    {
+      "type": "color",
+      "id": "pattern_color",
+      "label": "Pattern tint",
+      "info": "Recolors the pattern. Leave empty to keep the image's own colors."
     },
     {
       "type": "range",
       "id": "pattern_opacity",
-      "min": 4,
-      "max": 40,
-      "step": 2,
-      "unit": "%",
       "label": "Pattern visibility",
-      "default": 14
+      "min": 4,
+      "max": 100,
+      "step": 2,
+      "default": 14,
+      "unit": "%"
     },
-
-    { "type": "header", "content": "Layout" },
+    {
+      "type": "select",
+      "id": "pattern_fit",
+      "label": "Pattern sizing",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Fill section"
+        },
+        {
+          "value": "contain",
+          "label": "Fit inside"
+        },
+        {
+          "value": "repeat",
+          "label": "Tile"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
     {
       "type": "select",
       "id": "section_width",
       "label": "Section width",
       "options": [
-        { "value": "page-width", "label": "Page width" },
-        { "value": "full-width", "label": "Full width" }
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
       ],
       "default": "page-width"
     },
     {
       "type": "select",
       "id": "media_position",
-      "label": "Collage side",
+      "label": "Collage side on desktop",
       "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "right", "label": "Right" }
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
       ],
       "default": "left"
     },
-
-    { "type": "header", "content": "Images" },
     {
-      "type": "paragraph",
-      "content": "1 image → fills column. 2 images → offset overlap. 3 images → stacked collage. Position values: −1 = Auto (ignored)."
+      "type": "select",
+      "id": "mobile_media_position",
+      "label": "Collage on mobile",
+      "options": [
+        {
+          "value": "top",
+          "label": "Above text"
+        },
+        {
+          "value": "bottom",
+          "label": "Below text"
+        }
+      ],
+      "default": "top"
     },
-
-    { "type": "image_picker", "id": "image_1", "label": "Image 1", "info": "Top-right photo." },
     {
       "type": "range",
-      "id": "image_1_width",
-      "min": 20,
-      "max": 100,
+      "id": "media_column_width",
+      "label": "Collage column width",
+      "min": 35,
+      "max": 65,
       "step": 1,
+      "default": 50,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Space between columns",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 64,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "content_vertical_alignment",
+      "label": "Text vertical alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Middle"
+        },
+        {
+          "value": "end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Text column max width",
+      "min": 320,
+      "max": 800,
+      "step": 10,
+      "default": 560,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Collage"
+    },
+    {
+      "type": "select",
+      "id": "collage_layout",
+      "label": "Collage layout",
+      "options": [
+        {
+          "value": "stack",
+          "label": "Stacked (recommended)"
+        },
+        {
+          "value": "custom",
+          "label": "Custom positions"
+        }
+      ],
+      "default": "stack",
+      "info": "Stacked uses a balanced arrangement for 3 photos. Choose Custom to set each photo's size and position yourself."
+    },
+    {
+      "type": "range",
+      "id": "collage_ratio",
+      "label": "Collage height",
+      "min": 80,
+      "max": 140,
+      "step": 2,
+      "default": 118,
       "unit": "%",
-      "label": "Image 1 — width",
-      "default": 56
+      "info": "Height relative to the collage width."
     },
     {
       "type": "range",
-      "id": "image_1_height",
-      "min": -1,
-      "max": 99,
-      "step": 1,
-      "unit": "%",
-      "label": "Image 1 — height (−1 = auto)",
-      "default": -1
+      "id": "image_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 16,
+      "unit": "px"
     },
     {
-      "type": "range",
-      "id": "image_1_zindex",
-      "min": 1,
-      "max": 10,
-      "step": 1,
-      "label": "Image 1 — z-index (layer order)",
-      "default": 2
+      "type": "checkbox",
+      "id": "image_shadow",
+      "label": "Show image shadow",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_hover",
+      "label": "Image hover effect",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "lift",
+          "label": "Lift"
+        },
+        {
+          "value": "straighten",
+          "label": "Straighten"
+        }
+      ],
+      "default": "lift"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Image 1"
     },
     {
       "type": "range",
       "id": "image_1_rotation",
+      "label": "Image 1 rotation",
       "min": -15,
       "max": 15,
       "step": 1,
-      "unit": "deg",
-      "label": "Image 1 — rotation",
-      "default": -4
+      "default": 2,
+      "unit": "°"
     },
-    { "type": "header", "content": "Image 1 — position" },
     {
-      "type": "range",
-      "id": "image_1_top",
-      "min": -1,
-      "max": 80,
-      "step": 1,
-      "unit": "%",
-      "label": "From top (−1 = auto)",
-      "default": 0
+      "type": "header",
+      "content": "Image 1 — custom size & position",
+      "info": "Used only when Collage layout is \"Custom\". −1 = automatic."
     },
     {
       "type": "range",
-      "id": "image_1_right",
-      "min": -1,
-      "max": 80,
-      "step": 1,
-      "unit": "%",
-      "label": "From right (−1 = auto)",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "image_1_bottom",
-      "min": -1,
-      "max": 80,
-      "step": 1,
-      "unit": "%",
-      "label": "From bottom (−1 = auto)",
-      "default": -1
-    },
-    {
-      "type": "range",
-      "id": "image_1_left",
-      "min": -1,
-      "max": 80,
-      "step": 1,
-      "unit": "%",
-      "label": "From left (−1 = auto)",
-      "default": -1
-    },
-
-    { "type": "image_picker", "id": "image_2", "label": "Image 2", "info": "Main center-left photo (largest)." },
-    {
-      "type": "range",
-      "id": "image_2_width",
+      "id": "image_1_width",
+      "label": "Width",
       "min": 20,
       "max": 100,
       "step": 1,
-      "unit": "%",
-      "label": "Image 2 — width",
-      "default": 68
+      "default": 56,
+      "unit": "%"
     },
     {
       "type": "range",
-      "id": "image_2_height",
+      "id": "image_1_height",
+      "label": "Height (−1 = auto)",
       "min": -1,
       "max": 99,
       "step": 1,
-      "unit": "%",
-      "label": "Image 2 — height (−1 = auto)",
-      "default": -1
+      "default": -1,
+      "unit": "%"
     },
     {
       "type": "range",
-      "id": "image_2_zindex",
+      "id": "image_1_zindex",
+      "label": "Layer order",
       "min": 1,
       "max": 10,
       "step": 1,
-      "label": "Image 2 — z-index (layer order)",
-      "default": 3
-    },
-    {
-      "type": "range",
-      "id": "image_2_rotation",
-      "min": -15,
-      "max": 15,
-      "step": 1,
-      "unit": "deg",
-      "label": "Image 2 — rotation",
-      "default": 4
-    },
-    { "type": "header", "content": "Image 2 — position" },
-    {
-      "type": "range",
-      "id": "image_2_top",
-      "min": -1,
-      "max": 80,
-      "step": 1,
-      "unit": "%",
-      "label": "From top (−1 = auto)",
-      "default": 28
-    },
-    {
-      "type": "range",
-      "id": "image_2_right",
-      "min": -1,
-      "max": 80,
-      "step": 1,
-      "unit": "%",
-      "label": "From right (−1 = auto)",
-      "default": -1
-    },
-    {
-      "type": "range",
-      "id": "image_2_bottom",
-      "min": -1,
-      "max": 80,
-      "step": 1,
-      "unit": "%",
-      "label": "From bottom (−1 = auto)",
-      "default": -1
-    },
-    {
-      "type": "range",
-      "id": "image_2_left",
-      "min": -1,
-      "max": 80,
-      "step": 1,
-      "unit": "%",
-      "label": "From left (−1 = auto)",
-      "default": 0
-    },
-
-    { "type": "image_picker", "id": "image_3", "label": "Image 3", "info": "Bottom-right photo." },
-    {
-      "type": "range",
-      "id": "image_3_width",
-      "min": 20,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "label": "Image 3 — width",
-      "default": 48
-    },
-    {
-      "type": "range",
-      "id": "image_3_height",
-      "min": -1,
-      "max": 99,
-      "step": 1,
-      "unit": "%",
-      "label": "Image 3 — height (−1 = auto)",
-      "default": -1
-    },
-    {
-      "type": "range",
-      "id": "image_3_zindex",
-      "min": 1,
-      "max": 10,
-      "step": 1,
-      "label": "Image 3 — z-index (layer order)",
       "default": 2
     },
     {
       "type": "range",
-      "id": "image_3_rotation",
+      "id": "image_1_top",
+      "label": "From top",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": 0,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_1_right",
+      "label": "From right",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": 0,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_1_bottom",
+      "label": "From bottom",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_1_left",
+      "label": "From left",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image 2"
+    },
+    {
+      "type": "range",
+      "id": "image_2_rotation",
+      "label": "Image 2 rotation",
       "min": -15,
       "max": 15,
       "step": 1,
-      "unit": "deg",
-      "label": "Image 3 — rotation",
-      "default": -3
+      "default": -3,
+      "unit": "°"
     },
-    { "type": "header", "content": "Image 3 — position" },
     {
-      "type": "range",
-      "id": "image_3_top",
-      "min": -1,
-      "max": 80,
-      "step": 1,
-      "unit": "%",
-      "label": "From top (−1 = auto)",
-      "default": -1
+      "type": "header",
+      "content": "Image 2 — custom size & position",
+      "info": "Used only when Collage layout is \"Custom\". −1 = automatic."
     },
     {
       "type": "range",
-      "id": "image_3_right",
-      "min": -1,
-      "max": 80,
+      "id": "image_2_width",
+      "label": "Width",
+      "min": 20,
+      "max": 100,
       "step": 1,
-      "unit": "%",
-      "label": "From right (−1 = auto)",
+      "default": 68,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_2_height",
+      "label": "Height (−1 = auto)",
+      "min": -1,
+      "max": 99,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_2_zindex",
+      "label": "Layer order",
+      "min": 1,
+      "max": 10,
+      "step": 1,
       "default": 3
     },
     {
       "type": "range",
-      "id": "image_3_bottom",
+      "id": "image_2_top",
+      "label": "From top",
       "min": -1,
       "max": 80,
       "step": 1,
-      "unit": "%",
-      "label": "From bottom (−1 = auto)",
-      "default": 0
+      "default": 28,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_2_right",
+      "label": "From right",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_2_bottom",
+      "label": "From bottom",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_2_left",
+      "label": "From left",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": 0,
+      "unit": "%"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_3",
+      "label": "Image 3"
+    },
+    {
+      "type": "range",
+      "id": "image_3_rotation",
+      "label": "Image 3 rotation",
+      "min": -15,
+      "max": 15,
+      "step": 1,
+      "default": 3,
+      "unit": "°"
+    },
+    {
+      "type": "header",
+      "content": "Image 3 — custom size & position",
+      "info": "Used only when Collage layout is \"Custom\". −1 = automatic."
+    },
+    {
+      "type": "range",
+      "id": "image_3_width",
+      "label": "Width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "default": 48,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_3_height",
+      "label": "Height (−1 = auto)",
+      "min": -1,
+      "max": 99,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_3_zindex",
+      "label": "Layer order",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "image_3_top",
+      "label": "From top",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_3_right",
+      "label": "From right",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": 3,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_3_bottom",
+      "label": "From bottom",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": 0,
+      "unit": "%"
     },
     {
       "type": "range",
       "id": "image_3_left",
+      "label": "From left",
       "min": -1,
       "max": 80,
       "step": 1,
-      "unit": "%",
-      "label": "From left (−1 = auto)",
-      "default": -1
+      "default": -1,
+      "unit": "%"
     },
-
     {
-      "type": "range",
-      "id": "image_radius",
-      "min": 0,
-      "max": 32,
-      "step": 2,
-      "unit": "px",
-      "label": "Image corner radius",
-      "default": 16
+      "type": "header",
+      "content": "Text"
     },
-
-    { "type": "header", "content": "Text" },
-    { "type": "checkbox", "id": "show_subtitle", "label": "Show eyebrow text", "default": true },
-    { "type": "text", "id": "subtitle", "label": "Eyebrow text", "default": "Pure and simple" },
+    {
+      "type": "checkbox",
+      "id": "show_subtitle",
+      "label": "Show eyebrow text",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Eyebrow text",
+      "default": "Pure and simple"
+    },
     {
       "type": "text",
       "id": "heading",
@@ -693,107 +895,466 @@
       "id": "heading_size",
       "label": "Heading size",
       "options": [
-        { "value": "small", "label": "Small" },
-        { "value": "medium", "label": "Medium" },
-        { "value": "large", "label": "Large" },
-        { "value": "xlarge", "label": "Extra large" }
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        },
+        {
+          "value": "xlarge",
+          "label": "Extra large"
+        }
       ],
-      "default": "medium"
+      "default": "large"
     },
-    { "type": "checkbox", "id": "show_description", "label": "Show description", "default": true },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading weight",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme default"
+        },
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semibold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "range",
+      "id": "heading_max_width",
+      "label": "Heading line length",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "default": 20,
+      "unit": "ch",
+      "info": "Lower values wrap the heading onto more lines."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": true
+    },
     {
       "type": "richtext",
       "id": "description",
       "label": "Description",
       "default": "<p>Our concentrated serum helps smooth the look of damage and adds luminous shine with plant-based actives you can feel good about.</p>"
     },
-    { "type": "checkbox", "id": "show_feature_grid", "label": "Show feature icons", "default": true },
-    { "type": "checkbox", "id": "show_cta", "label": "Show button", "default": true },
-    { "type": "text", "id": "button_label", "label": "Button label", "default": "Explore sale" },
-    { "type": "url", "id": "button_link", "label": "Button link" },
-
-    { "type": "header", "content": "Button style" },
-    { "type": "color", "id": "btn_bg", "label": "Background", "default": "#f5c518" },
-    { "type": "color", "id": "btn_fg", "label": "Text color", "default": "#111111" },
-    { "type": "color", "id": "btn_hover_bg", "label": "Hover background", "default": "#ddb015" },
-
-    { "type": "header", "content": "Explore badge" },
+    {
+      "type": "select",
+      "id": "description_size",
+      "label": "Description size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_feature_grid",
+      "label": "Show features",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "feature_columns",
+      "label": "Columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "feature_icon_style",
+      "label": "Icon style",
+      "options": [
+        {
+          "value": "outline",
+          "label": "Outlined circle"
+        },
+        {
+          "value": "filled",
+          "label": "Filled circle"
+        },
+        {
+          "value": "plain",
+          "label": "Icon only"
+        }
+      ],
+      "default": "outline"
+    },
+    {
+      "type": "range",
+      "id": "feature_icon_size",
+      "label": "Icon size",
+      "min": 32,
+      "max": 80,
+      "step": 2,
+      "default": 56,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "feature_icon_color",
+      "label": "Icon color",
+      "info": "Leave empty to use the text color."
+    },
+    {
+      "type": "range",
+      "id": "feature_label_size",
+      "label": "Label size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 17,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Label",
+      "default": "Explore sale"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_new_tab",
+      "label": "Open link in new tab",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "filled",
+          "label": "Filled"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        }
+      ],
+      "default": "filled"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg",
+      "label": "Button color",
+      "default": "#f5c518"
+    },
+    {
+      "type": "color",
+      "id": "btn_fg",
+      "label": "Text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_bg",
+      "label": "Hover color",
+      "default": "#ddb015"
+    },
+    {
+      "type": "header",
+      "content": "Explore badge"
+    },
     {
       "type": "checkbox",
       "id": "show_badge",
       "label": "Show rotating badge",
-      "default": true,
-      "info": "Visible with 2 or 3 images."
+      "default": true
     },
     {
       "type": "text",
       "id": "badge_text",
       "label": "Badge text",
       "default": "EXPLORE MORE ~ EXPLORE MORE ~ ",
-      "info": "Repeat twice with a separator to fill the ring."
+      "info": "Repeat the phrase so it fills the ring."
     },
-    { "type": "color", "id": "badge_bg", "label": "Badge background", "default": "#f2c419" },
-    { "type": "color", "id": "badge_fg", "label": "Badge text & icon color", "default": "#1a1a1a" },
+    {
+      "type": "url",
+      "id": "badge_link",
+      "label": "Badge link",
+      "info": "Leave empty to use the button link."
+    },
+    {
+      "type": "color",
+      "id": "badge_bg",
+      "label": "Badge color",
+      "default": "#f2c419"
+    },
+    {
+      "type": "color",
+      "id": "badge_fg",
+      "label": "Text & arrow color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "badge_inner_color",
+      "label": "Inner ring color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "badge_inner_style",
+      "label": "Inner ring style",
+      "options": [
+        {
+          "value": "dashed",
+          "label": "Dashed"
+        },
+        {
+          "value": "dotted",
+          "label": "Dotted"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        }
+      ],
+      "default": "dashed",
+      "info": "Dashed or dotted lets shoppers see the inner ring turning."
+    },
+    {
+      "type": "range",
+      "id": "badge_speed",
+      "label": "Rotation speed",
+      "min": 4,
+      "max": 40,
+      "step": 1,
+      "default": 14,
+      "unit": "s",
+      "info": "Seconds per full turn. The outer text turns clockwise, the inner ring anti-clockwise."
+    },
+    {
+      "type": "checkbox",
+      "id": "badge_pause_hover",
+      "label": "Pause rotation on hover",
+      "default": true
+    },
     {
       "type": "range",
       "id": "badge_size",
       "label": "Badge size",
       "min": 12,
-      "max": 28,
+      "max": 36,
       "step": 1,
-      "unit": "%",
-      "default": 18
+      "default": 28,
+      "unit": "%"
     },
     {
       "type": "range",
       "id": "badge_top",
+      "label": "Badge position from top",
       "min": 0,
       "max": 100,
       "step": 1,
-      "unit": "%",
-      "label": "Badge — from top",
-      "default": 50
+      "default": 50,
+      "unit": "%"
     },
     {
       "type": "range",
       "id": "badge_left",
+      "label": "Badge position from left",
       "min": 0,
       "max": 100,
       "step": 1,
-      "unit": "%",
-      "label": "Badge — from left",
-      "default": 44
+      "default": 78,
+      "unit": "%"
     },
-
-    { "type": "header", "content": "Spacing" },
+    {
+      "type": "checkbox",
+      "id": "hide_badge_mobile",
+      "label": "Hide badge on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
     {
       "type": "range",
       "id": "padding_top",
+      "label": "Top padding",
       "min": 0,
-      "max": 120,
+      "max": 160,
       "step": 4,
-      "unit": "px",
-      "label": "Padding top",
-      "default": 72
+      "default": 72,
+      "unit": "px"
     },
     {
       "type": "range",
       "id": "padding_bottom",
+      "label": "Bottom padding",
       "min": 0,
-      "max": 120,
+      "max": 160,
       "step": 4,
-      "unit": "px",
-      "label": "Padding bottom",
-      "default": 72
+      "default": 72,
+      "unit": "px"
     }
   ],
   "blocks": [
     {
       "type": "feature",
-      "name": "Feature icon",
+      "name": "Feature",
       "settings": [
-        { "type": "image_picker", "id": "icon", "label": "Icon image" },
-        { "type": "text", "id": "title", "label": "Label", "default": "Healthy & soft" }
+        {
+          "type": "select",
+          "id": "icon_preset",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "lips",
+              "label": "Lips / soft"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "sprout",
+              "label": "Plant / sprout"
+            },
+            {
+              "value": "globe",
+              "label": "Globe / earth"
+            },
+            {
+              "value": "no_bottle",
+              "label": "Free from (bottle crossed)"
+            },
+            {
+              "value": "droplet",
+              "label": "Droplet"
+            },
+            {
+              "value": "sparkle",
+              "label": "Sparkle"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "shield",
+              "label": "Shield / safe"
+            },
+            {
+              "value": "flask",
+              "label": "Lab / formula"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "sun",
+              "label": "Sun"
+            },
+            {
+              "value": "rabbit",
+              "label": "Cruelty free"
+            },
+            {
+              "value": "check",
+              "label": "Check"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "truck",
+              "label": "Delivery"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            }
+          ],
+          "default": "leaf"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Custom icon image",
+          "info": "Replaces the icon above."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Label",
+          "default": "Healthy & soft"
+        }
       ]
     }
   ],
@@ -801,22 +1362,39 @@
     {
       "name": "Image with text collage",
       "settings": {
-        "color_scheme": "scheme-1",
-        "section_width": "page-width",
-        "media_position": "left",
-        "subtitle": "Pure and simple",
         "heading": "Intensive Hair Serum for Radiant Shine & Lasting Strength",
-        "show_subtitle": true,
-        "show_description": true,
-        "show_feature_grid": true,
-        "show_cta": true,
+        "subtitle": "Pure and simple",
         "button_label": "Explore sale"
       },
       "blocks": [
-        { "type": "feature", "settings": { "title": "Healthy & Soft" } },
-        { "type": "feature", "settings": { "title": "Free from Sulfates" } },
-        { "type": "feature", "settings": { "title": "No Parabens Added" } },
-        { "type": "feature", "settings": { "title": "100% Plant-Powered" } }
+        {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "lips",
+            "title": "Healthy & Soft"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "globe",
+            "title": "Free from Sulfates"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "no_bottle",
+            "title": "No Parabens Added"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "sprout",
+            "title": "100% Plant-Powered"
+          }
+        }
       ]
     }
   ]
