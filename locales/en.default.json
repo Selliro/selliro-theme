@@ -50,7 +50,18 @@
     "slideshow_play": "Play slideshow",
     "slideshow_previous": "Previous slide",
     "unit_price": "Unit price",
-    "find_country": "Find country"
+    "find_country": "Find country",
+    "announcement_bar_link": "Learn more",
+    "back_to_top": "Back to top",
+    "before_after_after_alt": "After image",
+    "before_after_before_alt": "Before image",
+    "before_after_before_visible": "before image visible",
+    "before_after_comparison": "Before and after image comparison",
+    "before_after_slider": "Comparison slider",
+    "before_after_slider_help": "Use the left and right arrow keys to compare the before and after images.",
+    "faq_collapse_answer": "Collapse answer",
+    "faq_expand_answer": "Expand answer",
+    "faq_split_gallery": "Frequently asked questions"
   },
   "actions": {
     // Quick add button on product cards, shortened version of add to cart
@@ -121,7 +132,10 @@
     "filter": "Filter",
     "load_video": "Load video: {{ description }}",
     "sold_out": "Sold out",
-    "payment_methods": "Payment methods"
+    "payment_methods": "Payment methods",
+    "marquee_logo": {
+      "placeholder_a11y": "Logo placeholder"
+    }
   },
   "blogs": {
     "article": {
@@ -224,6 +238,9 @@
     "recently_viewed_products": "Recently viewed",
     "reviews": "reviews",
     "read_more": "Read more...",
+    "read_more_link": "Read more",
+    "quick_view": "Quick view",
+    "view_item": "View item",
     "search_input_label": "Search",
     "search_input_placeholder": "Search",
     "search": "Search",
@@ -319,6 +336,16 @@
     },
     "new_arrivals_showcase": {
       "no_tabs": "Add at least one collection tab to display products."
+    },
+    "icon_with_text": {
+      "empty": "Add icon blocks to display content.",
+      "section_aria_label": "Store highlights"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Add bundle to cart",
+      "adding": "Adding…",
+      "added": "Added to cart",
+      "error": "Something went wrong. Try again."
     }
   },
   "products": {
@@ -336,5 +363,8 @@
       "quantity_maximum": "Maximum of {{ maximum }}",
       "in_cart": "in cart"
     }
+  },
+  "search": {
+    "no_results": "No results found"
   }
 }
