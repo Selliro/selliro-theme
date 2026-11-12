@@ -35,14 +35,17 @@
     {% endif %}
 
     {{ content_for_header }}
-    <link href="{{ 'tailwind.css' | asset_url }}" rel="stylesheet">
     {{ 'tailwind.css' | asset_url | stylesheet_tag }}
-    {{ 'custom-cursor.css' | asset_url | stylesheet_tag }}
+    {%- if settings.custom_cursor_enabled -%}
+      {{ 'custom-cursor.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
   </head>
 
   <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
-    <div class="mouseCursor cursor-outer"></div>
-    <div class="mouseCursor cursor-inner"></div>
+    {%- if settings.custom_cursor_enabled -%}
+      <div class="mouseCursor cursor-outer" aria-hidden="true"></div>
+      <div class="mouseCursor cursor-inner" aria-hidden="true"></div>
+    {%- endif -%}
     {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
     <div id="header-group">
       {% sections 'header-group' %}
@@ -70,16 +73,30 @@
 
     {% render 'search-modal' %}
 
-    <script src="{{ 'custom-cursor.js' | asset_url }}" defer></script>
-    <div class="progress-wrap" id="progress-wrap">
-      <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102">
-        <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"></path>
-      </svg>
-      <svg class="progress-wrap__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="18 15 12 9 6 15"></polyline>
-      </svg>
-    </div>
-    <script src="{{ 'scroll-progress.js' | asset_url }}" defer></script>
-    <div class="blur-div"></div>
+    {%- if settings.custom_cursor_enabled -%}
+      <script src="{{ 'custom-cursor.js' | asset_url }}" defer></script>
+    {%- endif -%}
+
+    {%- if settings.back_to_top_enabled -%}
+      <button
+        type="button"
+        class="progress-wrap"
+        id="progress-wrap"
+        aria-label="{{ 'accessibility.back_to_top' | t }}"
+        tabindex="-1"
+      >
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102" aria-hidden="true" focusable="false">
+          <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"></path>
+        </svg>
+        <svg class="progress-wrap__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
+      <script src="{{ 'scroll-progress.js' | asset_url }}" defer></script>
+    {%- endif -%}
+
+    {%- if settings.bottom_blur_enabled -%}
+      <div class="blur-div" aria-hidden="true"></div>
+    {%- endif -%}
   </body>
 </html>
