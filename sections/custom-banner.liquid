@@ -42,6 +42,12 @@
         {% for block in section.blocks %}
           {% liquid
             assign media_type = block.settings.media_type
+            assign image_loading = 'lazy'
+            assign image_priority = 'auto'
+            if forloop.first and section.index <= 2
+              assign image_loading = 'eager'
+              assign image_priority = 'high'
+            endif
             assign has_video = false
             assign has_image = false
             assign is_split_layout = false
@@ -177,7 +183,8 @@
                           | image_url: width: 2400
                           | image_tag:
                             class: 'custom-banner__split-image',
-                            loading: 'lazy',
+                            loading: image_loading,
+                            fetchpriority: image_priority,
                             alt: image_alt,
                             widths: '480, 768, 1024, 1440, 1920, 2400',
                             sizes: '(max-width: 749px) 100vw, 50vw'
@@ -259,7 +266,8 @@
                     | image_url: width: 3840
                     | image_tag:
                       class: 'custom-banner__image',
-                      loading: 'lazy',
+                      loading: image_loading,
+                      fetchpriority: image_priority,
                       alt: image_alt,
                       widths: '768, 1024, 1440, 1920, 2560, 3200, 3840',
                       sizes: '100vw'
@@ -349,7 +357,11 @@
     {% endcapture %}
 
     {% if has_multiple_slides %}
-      <carousel-swiper class="carousel custom-banner__slideshow">
+      <carousel-swiper
+        class="carousel custom-banner__slideshow"
+        data-label-prev="{{ 'accessibility.slideshow_previous' | t | escape }}"
+        data-label-next="{{ 'accessibility.slideshow_next' | t | escape }}"
+      >
         <script type="application/json">
           {
             "slidesPerView": 1,
@@ -370,13 +382,13 @@
           </div>
         </div>
         <div class="custom-banner__navigation">
-          <button type="button" class="custom-banner__nav-button carousel__nav-button--prev" aria-label="Previous slide">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <button type="button" class="custom-banner__nav-button carousel__nav-button--prev" aria-label="{{ 'accessibility.slideshow_previous' | t | escape }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
               <path d="M14.5 6.5L9 12L14.5 17.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
-          <button type="button" class="custom-banner__nav-button carousel__nav-button--next" aria-label="Next slide">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <button type="button" class="custom-banner__nav-button carousel__nav-button--next" aria-label="{{ 'accessibility.slideshow_next' | t | escape }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
               <path d="M9.5 6.5L15 12L9.5 17.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
