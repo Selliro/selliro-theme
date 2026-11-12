@@ -1,27 +1,48 @@
 {% comment %}theme-check-disable UndefinedObject{% endcomment %}
 {{ 'section-footer-main.css' | asset_url | stylesheet_tag }}
 
+{%- if section.settings.enable_reveal -%}
 <script>
 (function () {
+  // "Reveal" footer: the page content slides up off a fixed footer.
+  // Skipped in the theme editor, and only applied while the footer fits inside the
+  // viewport; otherwise its lower part (policies, copyright) would be unreachable.
   if (document.documentElement.classList.contains('shopify-design-mode')) return;
   var footer = document.querySelector('.shopify-section-group-footer-group');
   if (!footer) return;
 
-  footer.style.setProperty('position', 'fixed', 'important');
-  footer.style.setProperty('bottom', '0', 'important');
-  footer.style.setProperty('left', '0', 'important');
-  footer.style.setProperty('right', '0', 'important');
-  footer.style.setProperty('width', '100%', 'important');
-  footer.style.setProperty('z-index', '0', 'important');
+  var PROPS = ['position', 'bottom', 'left', 'right', 'width', 'z-index'];
+  var applied = false;
 
-  function syncPadding() {
-    document.body.style.paddingBottom = footer.offsetHeight + 'px';
+  function apply() {
+    footer.style.setProperty('position', 'fixed', 'important');
+    footer.style.setProperty('bottom', '0', 'important');
+    footer.style.setProperty('left', '0', 'important');
+    footer.style.setProperty('right', '0', 'important');
+    footer.style.setProperty('width', '100%', 'important');
+    footer.style.setProperty('z-index', '0', 'important');
+    applied = true;
   }
-  syncPadding();
-  new ResizeObserver(syncPadding).observe(footer);
 
+  function reset() {
+    PROPS.forEach(function (prop) { footer.style.removeProperty(prop); });
+    document.body.style.paddingBottom = '';
+    applied = false;
+  }
+
+  function sync() {
+    var fits = footer.offsetHeight <= window.innerHeight * 0.9;
+    if (fits && !applied) apply();
+    if (!fits && applied) reset();
+    document.body.style.paddingBottom = applied ? footer.offsetHeight + 'px' : '';
+  }
+
+  sync();
+  new ResizeObserver(sync).observe(footer);
+  window.addEventListener('resize', sync, { passive: true });
 })();
 </script>
+{%- endif -%}
 
 {% style %}
   {% render 'section-padding' %}
@@ -375,6 +396,13 @@
   "tag": "footer",
   "class": "footer-section",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_reveal",
+      "label": "Reveal footer on scroll",
+      "info": "The page slides up to uncover the footer. Turned off automatically when the footer is taller than the screen.",
+      "default": true
+    },
     {
       "type": "header",
       "content": "t:sections.all.color_scheme.label"
