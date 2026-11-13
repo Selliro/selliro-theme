@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
 {
+  "section_spacing": {
+    "header": "Espacement des sections",
+    "mode": "Espacement entre les sections",
+    "mode_info": "Un espacement égal donne le même écart à chaque section. Les bannières pleine largeur restent collées.",
+    "uniform": "Espacement égal (recommandé)",
+    "custom": "Utiliser la marge intérieure de chaque section",
+    "desktop": "Écart entre les sections (ordinateur)",
+    "mobile": "Écart entre les sections (mobile)",
+    "scope": "Appliquer l'espacement égal sur",
+    "scope_home": "Page d'accueil",
+    "scope_all": "Toutes les pages"
+  },
   "bundle_builder": {
     "name": "Créateur de lot",
     "content": "Contenu",

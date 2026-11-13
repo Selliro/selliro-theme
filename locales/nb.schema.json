@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
 {
+  "section_spacing": {
+    "header": "Seksjonsavstand",
+    "mode": "Avstand mellom seksjoner",
+    "mode_info": "Lik avstand gir alle seksjoner samme mellomrom. Kant-til-kant-bannere forblir tette.",
+    "uniform": "Lik avstand (anbefalt)",
+    "custom": "Bruk hver seksjons egen utfylling",
+    "desktop": "Avstand mellom seksjoner (datamaskin)",
+    "mobile": "Avstand mellom seksjoner (mobil)",
+    "scope": "Bruk lik avstand på",
+    "scope_home": "Startside",
+    "scope_all": "Alle sider"
+  },
   "bundle_builder": {
     "name": "Pakkebygger",
     "content": "Innhold",

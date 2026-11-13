@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
 {
+  "section_spacing": {
+    "header": "Sectieruimte",
+    "mode": "Ruimte tussen secties",
+    "mode_info": "Gelijke ruimte geeft elke sectie dezelfde tussenruimte. Banners van rand tot rand sluiten aan.",
+    "uniform": "Gelijke ruimte (aanbevolen)",
+    "custom": "Eigen opvulling van elke sectie gebruiken",
+    "desktop": "Ruimte tussen secties (desktop)",
+    "mobile": "Ruimte tussen secties (mobiel)",
+    "scope": "Gelijke ruimte toepassen op",
+    "scope_home": "Startpagina",
+    "scope_all": "Alle pagina's"
+  },
   "bundle_builder": {
     "name": "Bundelbouwer",
     "content": "Inhoud",

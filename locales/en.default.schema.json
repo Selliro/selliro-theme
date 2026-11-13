@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
  {
+  "section_spacing": {
+    "header": "Section spacing",
+    "mode": "Spacing between sections",
+    "mode_info": "Equal spacing gives every section the same gap. Edge-to-edge banners stay flush.",
+    "uniform": "Equal spacing (recommended)",
+    "custom": "Use each section's own padding",
+    "desktop": "Gap between sections (desktop)",
+    "mobile": "Gap between sections (mobile)",
+    "scope": "Apply equal spacing on",
+    "scope_home": "Home page",
+    "scope_all": "All pages"
+  },
   "bundle_builder": {
     "name": "Bundle builder",
     "content": "Content",

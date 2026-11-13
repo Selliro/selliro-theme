@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
 {
+  "section_spacing": {
+    "header": "Espaciado de secciones",
+    "mode": "Espacio entre secciones",
+    "mode_info": "El espaciado igual da a cada sección el mismo espacio. Los banners de borde a borde quedan pegados.",
+    "uniform": "Espaciado igual (recomendado)",
+    "custom": "Usar el relleno de cada sección",
+    "desktop": "Espacio entre secciones (escritorio)",
+    "mobile": "Espacio entre secciones (móvil)",
+    "scope": "Aplicar espaciado igual en",
+    "scope_home": "Página de inicio",
+    "scope_all": "Todas las páginas"
+  },
   "bundle_builder": {
     "name": "Creador de paquetes",
     "content": "Contenido",

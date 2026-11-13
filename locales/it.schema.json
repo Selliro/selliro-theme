@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
 {
+  "section_spacing": {
+    "header": "Spaziatura delle sezioni",
+    "mode": "Spazio tra le sezioni",
+    "mode_info": "La spaziatura uniforme dà a ogni sezione lo stesso spazio. I banner a tutta larghezza restano aderenti.",
+    "uniform": "Spaziatura uniforme (consigliata)",
+    "custom": "Usa la spaziatura interna di ogni sezione",
+    "desktop": "Spazio tra le sezioni (desktop)",
+    "mobile": "Spazio tra le sezioni (mobile)",
+    "scope": "Applica la spaziatura uniforme a",
+    "scope_home": "Home page",
+    "scope_all": "Tutte le pagine"
+  },
   "bundle_builder": {
     "name": "Crea bundle",
     "content": "Contenuto",

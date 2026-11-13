@@ -1408,6 +1408,54 @@
           }
         ],
         "default": "narrow"
+      },
+      {
+        "type": "header",
+        "content": "t:section_spacing.header"
+      },
+      {
+        "type": "select",
+        "id": "section_spacing_mode",
+        "label": "t:section_spacing.mode",
+        "info": "t:section_spacing.mode_info",
+        "options": [
+          { "value": "uniform", "label": "t:section_spacing.uniform" },
+          { "value": "custom", "label": "t:section_spacing.custom" }
+        ],
+        "default": "uniform"
+      },
+      {
+        "type": "range",
+        "id": "section_spacing_desktop",
+        "label": "t:section_spacing.desktop",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "default": 96,
+        "visible_if": "{{ settings.section_spacing_mode == 'uniform' }}"
+      },
+      {
+        "type": "range",
+        "id": "section_spacing_mobile",
+        "label": "t:section_spacing.mobile",
+        "min": 0,
+        "max": 160,
+        "step": 4,
+        "unit": "px",
+        "default": 56,
+        "visible_if": "{{ settings.section_spacing_mode == 'uniform' }}"
+      },
+      {
+        "type": "select",
+        "id": "section_spacing_scope",
+        "label": "t:section_spacing.scope",
+        "options": [
+          { "value": "home", "label": "t:section_spacing.scope_home" },
+          { "value": "all", "label": "t:section_spacing.scope_all" }
+        ],
+        "default": "home",
+        "visible_if": "{{ settings.section_spacing_mode == 'uniform' }}"
       }
     ]
   },

@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
 {
+  "section_spacing": {
+    "header": "Espaçamento das secções",
+    "mode": "Espaço entre secções",
+    "mode_info": "O espaçamento igual dá o mesmo espaço a cada secção. As faixas de ponta a ponta ficam encostadas.",
+    "uniform": "Espaçamento igual (recomendado)",
+    "custom": "Usar o preenchimento de cada secção",
+    "desktop": "Espaço entre secções (computador)",
+    "mobile": "Espaço entre secções (móvel)",
+    "scope": "Aplicar espaçamento igual em",
+    "scope_home": "Página inicial",
+    "scope_all": "Todas as páginas"
+  },
   "bundle_builder": {
     "name": "Criador de pack",
     "content": "Conteúdo",

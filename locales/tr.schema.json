@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
 {
+  "section_spacing": {
+    "header": "Bölüm aralığı",
+    "mode": "Bölümler arası boşluk",
+    "mode_info": "Eşit aralık her bölüme aynı boşluğu verir. Kenardan kenara bannerlar bitişik kalır.",
+    "uniform": "Eşit aralık (önerilir)",
+    "custom": "Her bölümün kendi dolgusunu kullan",
+    "desktop": "Bölümler arası boşluk (masaüstü)",
+    "mobile": "Bölümler arası boşluk (mobil)",
+    "scope": "Eşit aralığı uygula",
+    "scope_home": "Ana sayfa",
+    "scope_all": "Tüm sayfalar"
+  },
   "bundle_builder": {
     "name": "Paket oluşturucu",
     "content": "İçerik",

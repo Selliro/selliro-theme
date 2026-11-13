@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
 {
+  "section_spacing": {
+    "header": "Abschnittsabstand",
+    "mode": "Abstand zwischen Abschnitten",
+    "mode_info": "Gleicher Abstand gibt jedem Abschnitt denselben Zwischenraum. Randlose Banner bleiben bündig.",
+    "uniform": "Gleicher Abstand (empfohlen)",
+    "custom": "Eigenen Innenabstand jedes Abschnitts verwenden",
+    "desktop": "Abstand zwischen Abschnitten (Desktop)",
+    "mobile": "Abstand zwischen Abschnitten (mobil)",
+    "scope": "Gleichen Abstand anwenden auf",
+    "scope_home": "Startseite",
+    "scope_all": "Alle Seiten"
+  },
   "bundle_builder": {
     "name": "Bundle-Builder",
     "content": "Inhalt",

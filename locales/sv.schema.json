@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
 {
+  "section_spacing": {
+    "header": "Avstånd mellan avsnitt",
+    "mode": "Avstånd mellan avsnitt",
+    "mode_info": "Lika avstånd ger alla avsnitt samma mellanrum. Banners kant till kant ligger kvar tätt.",
+    "uniform": "Lika avstånd (rekommenderas)",
+    "custom": "Använd varje avsnitts egen utfyllnad",
+    "desktop": "Avstånd mellan avsnitt (dator)",
+    "mobile": "Avstånd mellan avsnitt (mobil)",
+    "scope": "Använd lika avstånd på",
+    "scope_home": "Startsida",
+    "scope_all": "Alla sidor"
+  },
   "bundle_builder": {
     "name": "Paketbyggare",
     "content": "Innehåll",

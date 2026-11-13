@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
 {
+  "section_spacing": {
+    "header": "Mezery mezi sekcemi",
+    "mode": "Mezera mezi sekcemi",
+    "mode_info": "Stejné mezery dají každé sekci stejný odstup. Bannery od okraje k okraji zůstanou přiléhat.",
+    "uniform": "Stejné mezery (doporučeno)",
+    "custom": "Použít vlastní odsazení každé sekce",
+    "desktop": "Mezera mezi sekcemi (počítač)",
+    "mobile": "Mezera mezi sekcemi (mobil)",
+    "scope": "Použít stejné mezery na",
+    "scope_home": "Domovská stránka",
+    "scope_all": "Všechny stránky"
+  },
   "bundle_builder": {
     "name": "Tvůrce balíčku",
     "content": "Obsah",

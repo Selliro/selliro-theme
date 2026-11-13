@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
 {
+  "section_spacing": {
+    "header": "Osioiden väli",
+    "mode": "Väli osioiden välillä",
+    "mode_info": "Tasainen väli antaa jokaiselle osiolle saman välin. Reunasta reunaan -bannerit pysyvät kiinni.",
+    "uniform": "Tasainen väli (suositeltu)",
+    "custom": "Käytä kunkin osion omaa täytettä",
+    "desktop": "Osioiden väli (tietokone)",
+    "mobile": "Osioiden väli (mobiili)",
+    "scope": "Käytä tasaista väliä",
+    "scope_home": "Etusivulla",
+    "scope_all": "Kaikilla sivuilla"
+  },
   "bundle_builder": {
     "name": "Pakettikokoaja",
     "content": "Sisältö",

@@ -41,7 +41,18 @@
     {%- endif -%}
   </head>
 
-  <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }} btn-fx--{{ settings.button_hover_effect | default: 'lift-shine' }}">
+  {%- liquid
+    assign section_spacing_class = ''
+    if settings.section_spacing_mode == 'uniform'
+      if settings.section_spacing_scope == 'all' or template.name == 'index'
+        assign section_spacing_class = ' section-spacing--uniform'
+      endif
+    endif
+  -%}
+  <body
+    class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }} btn-fx--{{ settings.button_hover_effect | default: 'lift-shine' }}{{ section_spacing_class }}"
+    style="--section-space: {{ settings.section_spacing_desktop | default: 96 }}px; --section-space-mobile: {{ settings.section_spacing_mobile | default: 56 }}px;"
+  >
     {%- if settings.custom_cursor_enabled -%}
       <div class="mouseCursor cursor-outer" aria-hidden="true"></div>
       <div class="mouseCursor cursor-inner" aria-hidden="true"></div>

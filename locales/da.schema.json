@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
 {
+  "section_spacing": {
+    "header": "Sektionsafstand",
+    "mode": "Afstand mellem sektioner",
+    "mode_info": "Ens afstand giver alle sektioner samme mellemrum. Kant-til-kant-bannere forbliver tætte.",
+    "uniform": "Ens afstand (anbefalet)",
+    "custom": "Brug hver sektions egen udfyldning",
+    "desktop": "Afstand mellem sektioner (computer)",
+    "mobile": "Afstand mellem sektioner (mobil)",
+    "scope": "Anvend ens afstand på",
+    "scope_home": "Forside",
+    "scope_all": "Alle sider"
+  },
   "bundle_builder": {
     "name": "Bundlebygger",
     "content": "Indhold",

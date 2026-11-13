@@ -8,6 +8,18 @@
  * ------------------------------------------------------------
  */
 {
+  "section_spacing": {
+    "header": "Odstępy sekcji",
+    "mode": "Odstęp między sekcjami",
+    "mode_info": "Równe odstępy dają każdej sekcji taki sam odstęp. Banery od krawędzi do krawędzi pozostają przylegające.",
+    "uniform": "Równe odstępy (zalecane)",
+    "custom": "Użyj własnego wypełnienia każdej sekcji",
+    "desktop": "Odstęp między sekcjami (komputer)",
+    "mobile": "Odstęp między sekcjami (mobilny)",
+    "scope": "Stosuj równe odstępy na",
+    "scope_home": "Strona główna",
+    "scope_all": "Wszystkie strony"
+  },
   "bundle_builder": {
     "name": "Kreator zestawu",
     "content": "Treść",
