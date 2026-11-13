@@ -247,7 +247,7 @@
         this.lines.set(variantId, { productId, variantId, qty: 1 });
       }
       this.render({ pop: true });
-      this.announce(this.dataset.announceAdded, '');
+      if (this.el.live) this.el.live.textContent = fill(this.dataset.itemsCount, { count: this.count() });
     }
 
     flashStatus(text) {
@@ -312,7 +312,7 @@
         if (u) {
           slotsHtml.push(
             `<li class="bb__slot is-filled${(added && u.key === added) || pop ? ' is-new' : ''}" style="--i:${i}">` +
-              (u.img ? `<img src="${u.img}" alt="" width="120" height="120" loading="lazy">` : '') +
+              (u.img ? `<img src="${u.img}" alt="" width="120" height="120">` : '') +
               `<span class="visually-hidden">${u.title}</span>` +
               (tierAt ? `<span class="bb__slot-tag" aria-hidden="true">-${tierAt.pct}%</span>` : '') +
               `</li>`
@@ -336,7 +336,7 @@
           const variantTitle = v.title && v.title !== 'Default Title' ? `<span class="bb__item-variant">${esc(v.title)}</span>` : '';
           return (
             `<li class="bb__item">` +
-            `<span class="bb__item-thumb">${img ? `<img src="${img}" alt="" width="56" height="56" loading="lazy">` : ''}</span>` +
+            `<span class="bb__item-thumb">${img ? `<img src="${img}" alt="" width="56" height="56">` : ''}</span>` +
             `<span class="bb__item-info"><span class="bb__item-title">${name}</span>${variantTitle}` +
             `<span class="bb__item-price">${formatMoney(v.price * line.qty, this.moneyFormat)}</span></span>` +
             `<span class="bb__stepper">` +

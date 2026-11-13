@@ -11,9 +11,9 @@
   "bundle_builder": {
     "add_aria": "Add {{ title }} to bundle",
     "empty_slot": "Empty slot",
-    "items_count": "{{ count }} items",
-    "announce_added": "{{ title }} added. {{ count }} items in your box.",
-    "announce_removed": "{{ title }} removed. {{ count }} items in your box.",
+    "items_count": "Items: {{ count }}",
+    "announce_added": "{{ title }} added. Items in your box: {{ count }}.",
+    "announce_removed": "{{ title }} removed. Items in your box: {{ count }}.",
     "savings": "You save",
     "total": "Total",
     "view_bundle": "View box"

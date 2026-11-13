@@ -44,6 +44,11 @@
 
 .bb__heading {
   margin: 0 0 0.75rem;
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-size: clamp(2.125rem, 4.6vw, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
 
@@ -310,10 +315,15 @@
   outline-offset: 3px;
 }
 
-.bb-card__add[aria-pressed='true'] {
+.bb-card__add[aria-pressed='true'],
+.bb-card__add[aria-pressed='true']:not(:disabled):hover {
   background: var(--bb-accent);
   border-color: var(--bb-accent);
   color: var(--bb-accent-text);
+}
+
+.bb-card__add[aria-pressed='true']:not(:disabled):hover {
+  filter: brightness(0.93);
 }
 
 .bb-card__add:disabled,
