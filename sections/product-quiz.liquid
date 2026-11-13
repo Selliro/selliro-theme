@@ -24,9 +24,32 @@
     endif
   endfor
 
+  assign intro_layout = section.settings.intro_layout | default: 'split'
   assign media_position = section.settings.media_position | default: 'left'
-  if section.settings.intro_image == blank
+  if section.settings.intro_image == blank or intro_layout == 'hero'
     assign media_position = 'none'
+  endif
+
+  assign hero_font_source = section.settings.hero_font_source | default: 'custom'
+  case hero_font_source
+    when 'heading'
+      assign hero_family = 'var(--font-heading--family)'
+      assign hero_weight = 'var(--font-heading--weight)'
+    when 'accent'
+      assign hero_family = 'var(--font-accent--family)'
+      assign hero_weight = 'var(--font-accent--weight)'
+    when 'body'
+      assign hero_family = 'var(--font-body--family)'
+      assign hero_weight = 'var(--font-body--weight)'
+    else
+      assign hero_family = section.settings.hero_font.family | append: ', ' | append: section.settings.hero_font.fallback_families
+      assign hero_weight = section.settings.hero_font.weight
+  endcase
+  assign has_floats = false
+  if intro_layout == 'hero'
+    if section.settings.float_left_image != blank or section.settings.float_right_image != blank
+      assign has_floats = true
+    endif
   endif
 
   assign max_results = section.settings.max_results | default: 4
@@ -49,6 +72,18 @@
 -%}
 
 {% style %}
+  {%- if intro_layout == 'hero' and hero_font_source == 'custom' -%}
+    {{ section.settings.hero_font | font_face: font_display: 'swap' }}
+  {%- endif -%}
+  #ProductQuiz-{{ section.id }},
+  #PqFloats-{{ section.id }} {
+    --pq-hero-family: {{ hero_family }};
+    --pq-hero-weight: {{ hero_weight }};
+    --pq-hero-size: {{ section.settings.hero_heading_size }}px;
+    --pq-hero-max: {{ section.settings.hero_heading_max_width }}ch;
+    --pq-hero-min-height: {{ section.settings.hero_min_height }}vh;
+    --pq-float-radius: {{ section.settings.float_radius }}px;
+  }
   #ProductQuiz-{{ section.id }} {
     --pq-accent: {{ accent }};
     --pq-accent-text: {{ accent_text }};
@@ -68,9 +103,67 @@
 {% endstyle %}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+{%- if has_floats -%}
+  <div
+    id="PqFloats-{{ section.id }}"
+    class="pq-floats{% if section.settings.floats_mobile == 'hide' %} pq-floats--hide-mobile{% endif %}{% if section.settings.floats_keep_during_quiz %} pq-floats--keep{% endif %}"
+    data-pq-floats
+    data-strength="{{ section.settings.parallax_strength }}"
+    data-rotate="{{ section.settings.scroll_rotate }}"
+    aria-hidden="true"
+  >
+    {%- for side in (1..2) -%}
+      {%- liquid
+        if side == 1
+          assign f_side = 'left'
+        else
+          assign f_side = 'right'
+        endif
+        assign k = 'float_' | append: f_side | append: '_image'
+        assign f_image = section.settings[k]
+        if f_image == blank
+          continue
+        endif
+        assign k = 'float_' | append: f_side | append: '_width'
+        assign f_width = section.settings[k]
+        assign k = 'float_' | append: f_side | append: '_top'
+        assign f_top = section.settings[k]
+        assign k = 'float_' | append: f_side | append: '_offset'
+        assign f_offset = section.settings[k]
+        assign k = 'float_' | append: f_side | append: '_rotation'
+        assign f_rotation = section.settings[k]
+        assign k = 'float_' | append: f_side | append: '_ratio'
+        assign f_ratio = section.settings[k] | default: '4 / 5'
+        assign f_dir = 1
+        if side == 1
+          assign f_dir = -1
+        endif
+      -%}
+      <div
+        class="pq-float pq-float--{{ f_side }}"
+        style="--w: {{ f_width }}%; --top: {{ f_top }}%; --offset: {{ f_offset }}%; --rot: {{ f_rotation }}deg; --ratio: {{ f_ratio }}; --dir: {{ f_dir }};"
+      >
+        <div class="pq-float__inner" data-pq-float>
+          {{
+            f_image
+            | image_url: width: 1200
+            | image_tag:
+              loading: 'lazy',
+              widths: '400, 600, 800, 1000, 1200',
+              sizes: '(min-width: 990px) 30vw, 45vw',
+              alt: '',
+              class: 'pq-float__img'
+          }}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
 <product-quiz
   id="ProductQuiz-{{ section.id }}"
-  class="pq pq--{{ container_style }} pq--media-{{ media_position }} {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  class="pq pq--{{ container_style }} pq--intro-{{ intro_layout }} pq--btn-{{ section.settings.hero_button_style }}{% if section.settings.hero_button_uppercase %} pq--btn-upper{% endif %} pq--media-{{ media_position }} {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
   data-section-id="{{ section.id }}"
   data-state="intro"
   data-auto-advance="{{ section.settings.auto_advance }}"
@@ -150,7 +243,7 @@
             <p class="pq__eyebrow">{{ section.settings.eyebrow | escape }}</p>
           {%- endif -%}
           {%- if section.settings.heading != blank -%}
-            <h2 class="pq__heading {{ heading_class }}" tabindex="-1">{{ section.settings.heading | escape }}</h2>
+            <h2 class="pq__heading{% if intro_layout == 'hero' %} pq__hero-heading{% else %} {{ heading_class }}{% endif %}" tabindex="-1">{{ section.settings.heading | escape }}</h2>
           {%- endif -%}
           {%- if section.settings.text != blank -%}
             <div class="pq__text rte">{{ section.settings.text }}</div>
@@ -185,6 +278,12 @@
 
           {%- if question_count == 0 and request.design_mode -%}
             <p class="pq__editor-hint">Add a “Question” block to start building your quiz.</p>
+          {%- endif -%}
+
+          {%- if intro_layout == 'hero' and section.settings.show_scroll_hint -%}
+            <button type="button" class="pq__scroll-hint button-unstyled" data-pq-scroll-hint aria-label="{{ section.settings.start_label | escape }}">
+              <svg viewBox="0 0 40 20" width="40" height="20" fill="none" aria-hidden="true" focusable="false"><path d="M3 4l17 13L37 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
           {%- endif -%}
         </div>
 
@@ -432,6 +531,26 @@
   "settings": [
     {
       "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "intro_layout",
+      "label": "Intro layout",
+      "options": [
+        {
+          "value": "hero",
+          "label": "Centered hero with floating images"
+        },
+        {
+          "value": "split",
+          "label": "Image beside the quiz"
+        }
+      ],
+      "default": "hero"
+    },
+    {
+      "type": "header",
       "content": "Intro"
     },
     {
@@ -464,7 +583,8 @@
           "label": "Large"
         }
       ],
-      "default": "medium"
+      "default": "medium",
+      "visible_if": "{{ section.settings.intro_layout == 'split' }}"
     },
     {
       "type": "richtext",
@@ -511,13 +631,334 @@
       "type": "image_picker",
       "id": "intro_image",
       "label": "Image",
-      "info": "A question's own image replaces it while that question is open."
+      "info": "A question's own image replaces it while that question is open.",
+      "visible_if": "{{ section.settings.intro_layout == 'split' }}"
     },
     {
       "type": "text",
       "id": "media_badge",
       "label": "Image badge",
-      "default": "Made for your skin"
+      "default": "Made for your skin",
+      "visible_if": "{{ section.settings.intro_layout == 'split' }}"
+    },
+    {
+      "type": "header",
+      "content": "Hero intro"
+    },
+    {
+      "type": "select",
+      "id": "hero_font_source",
+      "label": "Heading font",
+      "options": [
+        {
+          "value": "custom",
+          "label": "Custom (pick below)"
+        },
+        {
+          "value": "heading",
+          "label": "Theme heading font"
+        },
+        {
+          "value": "accent",
+          "label": "Theme accent font"
+        },
+        {
+          "value": "body",
+          "label": "Theme body font"
+        }
+      ],
+      "default": "custom",
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "font_picker",
+      "id": "hero_font",
+      "label": "Custom heading font",
+      "default": "playfair_display_n4",
+      "visible_if": "{{ section.settings.intro_layout == 'hero' and section.settings.hero_font_source == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "hero_heading_size",
+      "label": "Heading size (desktop)",
+      "min": 32,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "default": 104,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "hero_heading_max_width",
+      "label": "Heading width",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "ch",
+      "default": 22,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "hero_min_height",
+      "label": "Minimum height",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 85,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "select",
+      "id": "hero_button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "dark",
+          "label": "Solid dark"
+        },
+        {
+          "value": "accent",
+          "label": "Accent color"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        }
+      ],
+      "default": "dark"
+    },
+    {
+      "type": "checkbox",
+      "id": "hero_button_uppercase",
+      "label": "Uppercase button text",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_hint",
+      "label": "Show scroll arrow",
+      "default": true,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "header",
+      "content": "Floating images"
+    },
+    {
+      "type": "paragraph",
+      "content": "Two tilted images frame the hero and drift up as the page scrolls."
+    },
+    {
+      "type": "image_picker",
+      "id": "float_left_image",
+      "label": "Left image",
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "float_left_width",
+      "label": "Left image size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "%",
+      "default": 20,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "float_left_top",
+      "label": "Left image vertical position",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "%",
+      "default": 58,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "float_left_offset",
+      "label": "Left image distance from edge",
+      "info": "Negative values push the image off the edge.",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "%",
+      "default": -3,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "float_left_rotation",
+      "label": "Left image tilt",
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "deg",
+      "default": -10,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "select",
+      "id": "float_left_ratio",
+      "label": "Left image shape",
+      "options": [
+        {
+          "value": "4 / 5",
+          "label": "Portrait"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Tall"
+        },
+        {
+          "value": "5 / 4",
+          "label": "Landscape"
+        }
+      ],
+      "default": "4 / 5",
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "float_right_image",
+      "label": "Right image",
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "float_right_width",
+      "label": "Right image size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "%",
+      "default": 24,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "float_right_top",
+      "label": "Right image vertical position",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "%",
+      "default": 22,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "float_right_offset",
+      "label": "Right image distance from edge",
+      "info": "Negative values push the image off the edge.",
+      "min": -20,
+      "max": 20,
+      "step": 1,
+      "unit": "%",
+      "default": -2,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "float_right_rotation",
+      "label": "Right image tilt",
+      "min": -45,
+      "max": 45,
+      "step": 1,
+      "unit": "deg",
+      "default": 8,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "select",
+      "id": "float_right_ratio",
+      "label": "Right image shape",
+      "options": [
+        {
+          "value": "4 / 5",
+          "label": "Portrait"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Tall"
+        },
+        {
+          "value": "5 / 4",
+          "label": "Landscape"
+        }
+      ],
+      "default": "4 / 5",
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "float_radius",
+      "label": "Image corner radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "parallax_strength",
+      "label": "Scroll movement",
+      "info": "0 keeps the images still.",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 6,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "range",
+      "id": "scroll_rotate",
+      "label": "Extra tilt while scrolling",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "deg",
+      "default": 6,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "floats_keep_during_quiz",
+      "label": "Keep images visible during the quiz",
+      "default": false,
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "select",
+      "id": "floats_mobile",
+      "label": "On mobile",
+      "options": [
+        {
+          "value": "show",
+          "label": "Show smaller"
+        },
+        {
+          "value": "hide",
+          "label": "Hide"
+        }
+      ],
+      "default": "show",
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
     },
     {
       "type": "header",
@@ -564,7 +1005,8 @@
           "label": "No image"
         }
       ],
-      "default": "left"
+      "default": "left",
+      "visible_if": "{{ section.settings.intro_layout == 'split' }}"
     },
     {
       "type": "select",
@@ -1582,7 +2024,10 @@
             "answer_4_label": ""
           }
         }
-      ]
+      ],
+      "settings": {
+        "intro_layout": "hero"
+      }
     }
   ]
 }
