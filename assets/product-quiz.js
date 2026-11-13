@@ -96,7 +96,7 @@
       if (!this.floats) return;
       this.floatEls = Array.from(this.floats.querySelectorAll('[data-pq-float]'));
       const strength = parseFloat(this.floats.dataset.strength || '0');
-      this.parallaxDistance = strength * 32; // px of travel at strength 10 → 320px
+      this.parallaxDistance = strength * 70; // total travel in px (strength 6 → ~420px across the scroll)
       this.parallaxRotate = parseFloat(this.floats.dataset.rotate || '0');
       if (!this.floatEls.length || reducedMotion() || (!this.parallaxDistance && !this.parallaxRotate)) {
         this.floats.classList.add('is-static');

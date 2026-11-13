@@ -995,6 +995,10 @@
   min-height: var(--pq-hero-min-height, 85vh);
 }
 
+.pq--intro-hero:not([data-state='intro']) .pq__steps {
+  min-height: 0;
+}
+
 .pq--intro-hero .pq__step--intro {
   display: none;
   text-align: center;
