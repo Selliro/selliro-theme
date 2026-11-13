@@ -1,0 +1,24 @@
+{%- doc -%}
+  Decorates one word of the Bundle builder heading.
+  The stroke draws itself in when the section scrolls into view (see bundle-builder.js).
+
+  @param {string} word - The (already escaped) word to decorate
+  @param {string} style - squiggle | wave | marker | circle
+{%- enddoc -%}
+<span class="bb__hl bb__hl--{{ style }}" data-bb-hl>
+  {{- word -}}
+  {%- case style -%}
+    {%- when 'squiggle' -%}
+      <svg class="bb__hl-svg" viewBox="0 0 300 40" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
+        <path pathLength="1" d="M6 30 C 38 12, 64 36, 90 24 C 104 17, 108 6, 117 12 C 126 18, 112 34, 128 30 C 150 24, 170 14, 206 15 C 236 16, 262 14, 294 9" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    {%- when 'wave' -%}
+      <svg class="bb__hl-svg" viewBox="0 0 300 30" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
+        <path pathLength="1" d="M4 18 Q 22 4 40 18 T 76 18 T 112 18 T 148 18 T 184 18 T 220 18 T 256 18 T 296 18" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+      </svg>
+    {%- when 'circle' -%}
+      <svg class="bb__hl-svg" viewBox="0 0 300 110" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
+        <path pathLength="1" d="M168 9 C 92 2, 14 20, 10 56 C 6 92, 110 104, 196 98 C 268 93, 296 72, 290 46 C 284 18, 214 4, 130 12" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+  {%- endcase -%}
+</span>
