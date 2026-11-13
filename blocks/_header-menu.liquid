@@ -240,6 +240,8 @@
     background-color: var(--color-background);
     box-shadow: var(--shadow-popover);
     clip-path: inset(0.5px 0 -100px 0); /* stylelint-disable-line */
+    border-end-start-radius: var(--submenu-radius, 0px);
+    border-end-end-radius: var(--submenu-radius, 0px);
     opacity: var(--submenu-opacity, 1);
     transition: height var(--submenu-animation-speed) var(--ease-out-cubic),
       opacity var(--animation-speed-slow) var(--ease-out-cubic) var(--animation-speed-fast);
@@ -276,7 +278,7 @@
     top: calc(100% - 1px + var(--border-bottom-width));
     z-index: var(--layer-header-menu);
     padding-inline: var(--padding-inline);
-    clip-path: rect(0 100% var(--submenu-height) 0); /* stylelint-disable-line */
+    clip-path: rect(0 100% var(--submenu-height) 0 round 0 0 var(--submenu-radius, 0px) var(--submenu-radius, 0px)); /* stylelint-disable-line */
     transition: clip-path var(--submenu-animation-speed) var(--ease-out-cubic);
   }
 
@@ -566,6 +568,132 @@
     white-space: normal;
   }
 
+  /* Promo cards (menu_style: promo_cards) */
+  .mega-menu__content-list--promos {
+    grid-template-columns: repeat(var(--menu-content-columns-tablet), minmax(0, 1fr));
+    justify-content: stretch;
+
+    @media screen and (min-width: 990px) {
+      grid-template-columns: repeat(var(--menu-content-columns-desktop), minmax(0, 1fr));
+    }
+  }
+
+  .mega-promo {
+    position: relative;
+    display: grid;
+    isolation: isolate;
+    /* No overflow clipping here so the card can grow taller than its ratio when text needs room */
+    aspect-ratio: var(--mega-promo-ratio, 16 / 9);
+    border-radius: var(--mega-promo-radius, 0px);
+    color: var(--mega-promo-color);
+    text-decoration: none;
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-5, 0.05));
+  }
+
+  .mega-promo__media,
+  .mega-promo__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    border-radius: inherit;
+  }
+
+  .mega-promo__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--animation-speed-slow, 0.4s) var(--animation-easing, ease);
+  }
+
+  .mega-promo__image--placeholder {
+    fill: rgb(var(--color-foreground-rgb) / 0.35);
+  }
+
+  .mega-promo__overlay {
+    background-color: #000;
+    opacity: var(--mega-promo-overlay, 0);
+  }
+
+  .mega-promo__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--padding-xs, 0.5rem);
+    box-sizing: border-box;
+    padding: clamp(1rem, 2.2vw, 2rem);
+    max-width: 88%;
+  }
+
+  .mega-promo--top_left .mega-promo__content {
+    align-self: stretch;
+  }
+
+  .mega-promo--center_left .mega-promo__content {
+    align-self: center;
+  }
+
+  .mega-promo--bottom_left .mega-promo__content {
+    align-self: end;
+  }
+
+  .mega-promo--center .mega-promo__content {
+    align-self: center;
+    justify-self: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .mega-promo__subheading {
+    font-size: var(--font-size--md, 1rem);
+    line-height: 1.3;
+  }
+
+  .mega-promo__heading {
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight, 700);
+    font-style: var(--font-heading--style, normal);
+    font-size: clamp(1.375rem, 2.2vw, 2rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .mega-promo--heading-small .mega-promo__heading {
+    font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+  }
+
+  .mega-promo--heading-large .mega-promo__heading {
+    font-size: clamp(1.625rem, 2.8vw, 2.625rem);
+  }
+
+  .mega-promo__button {
+    margin-block-start: auto;
+    pointer-events: none;
+  }
+
+  .mega-promo--center .mega-promo__button,
+  .mega-promo--center_left .mega-promo__button,
+  .mega-promo--bottom_left .mega-promo__button {
+    margin-block-start: var(--padding-sm, 0.75rem);
+  }
+
+  @media (hover: hover) {
+    .mega-promo:hover .mega-promo__image {
+      transform: scale(1.04);
+    }
+  }
+
+  .mega-promo:focus-visible {
+    outline: var(--focus-outline-width, 2px) solid currentColor;
+    outline-offset: var(--focus-outline-offset, 2px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mega-promo__image {
+      transition: none;
+    }
+  }
+
   /* mega more menu */
   .mega-menu__more-list {
     --menu-child-font-size: var(--font-size--xl);
@@ -725,6 +853,10 @@
         {
           "value": "featured_collections",
           "label": "t:options.featured_collections"
+        },
+        {
+          "value": "promo_cards",
+          "label": "Promo cards"
         }
       ],
       "default": "collection_images"
@@ -781,6 +913,204 @@
       "unit": "px",
       "default": 0,
       "visible_if": "{{ block.settings.menu_style != 'text' }}"
+    },
+    {
+      "type": "select",
+      "id": "promo_aspect_ratio",
+      "label": "Promo card ratio",
+      "options": [
+        {
+          "value": "16 / 9",
+          "label": "Landscape"
+        },
+        {
+          "value": "4 / 3",
+          "label": "Standard"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait"
+        }
+      ],
+      "default": "16 / 9",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "select",
+      "id": "promo_content_position",
+      "label": "Promo text position",
+      "options": [
+        {
+          "value": "top_left",
+          "label": "Top left"
+        },
+        {
+          "value": "center_left",
+          "label": "Middle left"
+        },
+        {
+          "value": "bottom_left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "top_left",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "select",
+      "id": "promo_heading_size",
+      "label": "Promo heading size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "color",
+      "id": "promo_text_color",
+      "label": "Promo text color",
+      "default": "#121212",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "range",
+      "id": "promo_overlay_opacity",
+      "label": "Promo image overlay",
+      "min": 0,
+      "max": 70,
+      "step": 5,
+      "unit": "%",
+      "default": 0,
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "select",
+      "id": "promo_button_style",
+      "label": "Promo button style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "Primary"
+        },
+        {
+          "value": "secondary",
+          "label": "Secondary"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_1_menu_item",
+      "label": "Card 1: show in menu item",
+      "info": "Enter a top-level menu item title, e.g. Shop. Leave blank to show in every dropdown.",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "promo_1_image",
+      "label": "Card 1: image",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_1_subheading",
+      "label": "Card 1: subheading",
+      "default": "Big Savings",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_1_heading",
+      "label": "Card 1: heading",
+      "default": "Holiday Set Deal",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_1_button_label",
+      "label": "Card 1: button label",
+      "default": "Shop now",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "url",
+      "id": "promo_1_link",
+      "label": "Card 1: link",
+      "info": "Defaults to the menu item's link.",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_2_menu_item",
+      "label": "Card 2: show in menu item",
+      "info": "Enter a top-level menu item title, e.g. Shop. Leave blank to show in every dropdown.",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "promo_2_image",
+      "label": "Card 2: image",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_2_subheading",
+      "label": "Card 2: subheading",
+      "default": "Big Savings",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_2_heading",
+      "label": "Card 2: heading",
+      "default": "Holiday Set Deal",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_2_button_label",
+      "label": "Card 2: button label",
+      "default": "Shop now",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "url",
+      "id": "promo_2_link",
+      "label": "Card 2: link",
+      "info": "Defaults to the menu item's link.",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "range",
+      "id": "submenu_radius",
+      "label": "Dropdown bottom corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 0
     },
     {
       "type": "header",

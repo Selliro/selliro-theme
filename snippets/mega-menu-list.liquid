@@ -10,6 +10,7 @@
   @param {number} [content_aspect_ratio] - Aspect ratio for content images.
   @param {number} [image_border_radius] - Border radius for content images.
   @param {object} [section] - The section object.
+  @param {object} [menu_settings] - The header menu block settings (promo card content and styling).
 
   @example
   {% render 'mega-menu-list', parent_link: link, id: 'MegaMenuList-1', grid_columns_count: 6, menu_content_type: 'featured_products' %}
@@ -59,6 +60,34 @@
     for collection_link in collection_links
       assign collection_handles = collection_handles | append: collection_link.object.handle | append: ','
     endfor
+  endif
+
+  # Promo cards: up to 2 merchant-defined cards. A card shows in every dropdown unless
+  # its "Show in menu item" field names a specific top-level menu item.
+  if menu_content_type == 'promo_cards'
+    assign promo_cards = ''
+    assign parent_title_handle = parent_link.title | handleize
+    for i in (1..2)
+      assign key_prefix = 'promo_' | append: i | append: '_'
+      assign key_image = key_prefix | append: 'image'
+      assign key_heading = key_prefix | append: 'heading'
+      assign key_subheading = key_prefix | append: 'subheading'
+      assign key_target = key_prefix | append: 'menu_item'
+
+      if menu_settings[key_image] == blank and menu_settings[key_heading] == blank and menu_settings[key_subheading] == blank
+        continue
+      endif
+
+      assign promo_target = menu_settings[key_target] | strip | handleize
+      if promo_target == blank or promo_target == parent_link.handle or promo_target == parent_title_handle
+        assign promo_cards = promo_cards | append: i | append: ','
+      endif
+    endfor
+    assign promo_cards = promo_cards | split: ','
+
+    if promo_cards.size == 0
+      assign menu_content_type = 'text'
+    endif
   endif
 
   if menu_content_type == 'featured_products'
@@ -228,6 +257,14 @@
     assign max_menu_columns_tablet = max_menu_columns_tablet | minus: max_product_columns_tablet
   endif
 
+  if menu_content_type == 'promo_cards'
+    # 6-column desktop grid: 2 cards take 4 columns, 1 card takes 2. Tablet (4 columns) shows 1 card over 2 columns.
+    assign max_promo_columns = promo_cards.size | times: 2
+    assign max_menu_columns = max_menu_columns | minus: max_promo_columns
+    assign max_promo_columns_tablet = 2
+    assign max_menu_columns_tablet = max_menu_columns_tablet | minus: max_promo_columns_tablet
+  endif
+
   if menu_content_type == 'featured_collections'
     # desktop breakpoint
     assign min_featured_collection_columns = min_collections | times: 2
@@ -272,6 +309,80 @@
 {% endstyle %}
 
 {% case menu_content_type %}
+  {% when 'promo_cards' %}
+    {% liquid
+      assign promo_ratio = menu_settings.promo_aspect_ratio | default: '16 / 9'
+      assign promo_position = menu_settings.promo_content_position | default: 'top_left'
+      assign promo_heading_size = menu_settings.promo_heading_size | default: 'medium'
+      assign promo_overlay = menu_settings.promo_overlay_opacity | default: 0 | times: 0.01
+      assign promo_button_class = 'button'
+      if menu_settings.promo_button_style == 'secondary'
+        assign promo_button_class = 'button button-secondary'
+      endif
+      assign promo_sizes = '(min-width: 990px) 34vw, 50vw'
+    %}
+    <span
+      class="mega-menu__content"
+      style="--menu-content-columns-desktop: {{ max_promo_columns }}; --menu-content-columns-tablet: {{ max_promo_columns_tablet }};"
+    >
+      <ul
+        class="mega-menu__content-list mega-menu__content-list--promos list-unstyled"
+        style="--menu-content-columns-desktop: {{ promo_cards.size }}; --menu-content-columns-tablet: 1; --mega-promo-ratio: {{ promo_ratio }}; --mega-promo-radius: {{ image_border_radius }}px; --mega-promo-color: {{ menu_settings.promo_text_color | default: '#121212' }}; --mega-promo-overlay: {{ promo_overlay }};"
+      >
+        {% for i in promo_cards %}
+          {% liquid
+            assign key_prefix = 'promo_' | append: i | append: '_'
+            assign key = key_prefix | append: 'image'
+            assign promo_image = menu_settings[key]
+            assign key = key_prefix | append: 'subheading'
+            assign promo_subheading = menu_settings[key]
+            assign key = key_prefix | append: 'heading'
+            assign promo_heading = menu_settings[key]
+            assign key = key_prefix | append: 'button_label'
+            assign promo_button_label = menu_settings[key]
+            assign key = key_prefix | append: 'link'
+            assign promo_link = menu_settings[key] | default: parent_link.url
+          %}
+          <li class="mega-menu__content-list-item{% if forloop.index > 1 %} mega-menu__content-list-item--hidden-tablet{% endif %}">
+            <a
+              href="{{ promo_link }}"
+              class="mega-promo mega-promo--{{ promo_position }} mega-promo--heading-{{ promo_heading_size }}"
+            >
+              <span class="mega-promo__media">
+                {%- if promo_image != blank -%}
+                  {{
+                    promo_image
+                    | image_url: width: 1400
+                    | image_tag:
+                      widths: '400, 600, 800, 1000, 1200, 1400',
+                      sizes: promo_sizes,
+                      loading: 'lazy',
+                      alt: '',
+                      class: 'mega-promo__image'
+                  }}
+                {%- else -%}
+                  {{ 'collection-1' | placeholder_svg_tag: 'mega-promo__image mega-promo__image--placeholder' }}
+                {%- endif -%}
+              </span>
+              {%- if promo_overlay > 0 -%}
+                <span class="mega-promo__overlay" aria-hidden="true"></span>
+              {%- endif -%}
+              <span class="mega-promo__content">
+                {%- if promo_subheading != blank -%}
+                  <span class="mega-promo__subheading">{{ promo_subheading }}</span>
+                {%- endif -%}
+                {%- if promo_heading != blank -%}
+                  <span class="mega-promo__heading">{{ promo_heading }}</span>
+                {%- endif -%}
+                {%- if promo_button_label != blank -%}
+                  <span class="{{ promo_button_class }} mega-promo__button">{{ promo_button_label }}</span>
+                {%- endif -%}
+              </span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </span>
   {% when 'featured_products' %}
     {%- capture image_sizes -%}
       {%- render 'util-mega-menu-img-sizes-attr',

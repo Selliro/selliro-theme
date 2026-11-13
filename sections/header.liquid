@@ -43,6 +43,17 @@
     endif
   endif
 
+  # Layout presets. "custom" falls back to the individual logo/menu position settings.
+  assign header_layout = section.settings.header_layout | default: 'custom'
+  case header_layout
+    when 'logo_left_menu_center'
+      assign layout_logo_position = 'left'
+      assign layout_menu_position = 'center'
+    when 'logo_center_menu_left'
+      assign layout_logo_position = 'center'
+      assign layout_menu_position = 'left'
+  endcase
+
   capture logo
     content_for 'block', type: '_header-logo', id: 'header-logo'
   endcapture
@@ -237,6 +248,8 @@
         row: row,
         order: order,
         settings: section.settings,
+        logo_position: layout_logo_position,
+        menu_position: layout_menu_position,
         first: first,
         logo: logo,
         menu: menu,
@@ -659,6 +672,31 @@
   "settings": [
     {
       "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "header_layout",
+      "label": "Desktop layout",
+      "options": [
+        {
+          "value": "logo_left_menu_center",
+          "label": "Logo left, menu center"
+        },
+        {
+          "value": "logo_center_menu_left",
+          "label": "Logo center, menu left"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "logo_left_menu_center",
+      "info": "Icons always stay on the right. Choose Custom to position the logo and menu yourself."
+    },
+    {
+      "type": "header",
       "content": "t:content.logo"
     },
     {
@@ -679,7 +717,8 @@
           "label": "t:options.right"
         }
       ],
-      "default": "center"
+      "default": "center",
+      "visible_if": "{{ section.settings.header_layout == 'custom' }}"
     },
     {
       "type": "header",
@@ -703,7 +742,8 @@
           "label": "t:options.right"
         }
       ],
-      "default": "left"
+      "default": "left",
+      "visible_if": "{{ section.settings.header_layout == 'custom' }}"
     },
     {
       "type": "select",

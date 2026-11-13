@@ -60,7 +60,8 @@
               id: list_id,
               menu_content_type: menu_content_type,
               content_aspect_ratio: ratio,
-              image_border_radius: image_border_radius
+              image_border_radius: image_border_radius,
+              menu_settings: block_settings
             %}
           </div>
         </div>
@@ -82,7 +83,7 @@
   </li>
 {% endcapture %}
 
-<nav header-menu>
+<nav header-menu style="--submenu-radius: {{ block_settings.submenu_radius | default: 0 }}px;">
   <div
     class="menu-list"
     style="{% render 'menu-font-styles', settings: block_settings %}"
