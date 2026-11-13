@@ -22,6 +22,22 @@
   }
 {% endjavascript %}
 
+{%- liquid
+  assign use_na_cards = false
+  if section.settings.product_card_style == 'new_arrivals'
+    assign use_na_cards = true
+  endif
+-%}
+
+{%- if use_na_cards -%}
+  {{ 'section-new-arrivals-showcase.css' | asset_url | stylesheet_tag }}
+  {{ 'new-arrivals-quick-view.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'image-loader.js' | asset_url }}" defer></script>
+  <script src="{{ 'new-arrivals-components.js' | asset_url }}" defer></script>
+  <script src="{{ 'new-arrivals-showcase.js' | asset_url }}" defer></script>
+  <script src="{{ 'new-arrivals-quick-view.js' | asset_url }}" defer></script>
+{%- endif -%}
+
 {% comment %} We always render this full-width, as the child blocks have width: page/full settings {% endcomment %}
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <results-list
@@ -29,6 +45,10 @@
   style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
   section-id="{{ section.id }}"
   infinite-scroll="{{ section.settings.enable_infinite_scroll }}"
+  {%- if use_na_cards %}
+    data-new-arrivals-root
+    data-new-arrivals-qv-id="new-arrivals-qv-drawer-{{ section.id }}"
+  {%- endif %}
 >
   {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
 
@@ -58,9 +78,22 @@
             data-product-id="{{ product.id }}"
             ref="cards[]"
           >
-            {% # theme-check-disable %}
-            {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
-            {% # theme-check-enable %}
+            {%- if use_na_cards -%}
+              {%- render 'new-arrivals-card',
+                product: product,
+                accent: section.settings.na_card_cta_color,
+                star_color: section.settings.na_card_star_color,
+                new_days: section.settings.na_card_new_days,
+                new_label: section.settings.na_card_new_label,
+                add_label: section.settings.na_card_add_label,
+                fallback_stars: section.settings.na_card_fallback_stars,
+                image_sizes: '(min-width: 1200px) 25vw, (min-width: 750px) 33vw, 50vw'
+              -%}
+            {%- else -%}
+              {% # theme-check-disable %}
+              {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
+              {% # theme-check-enable %}
+            {%- endif -%}
           </li>
         {% endfor %}
       {% endcapture %}
@@ -75,6 +108,10 @@
     {% endpaginate %}
   </div>
 </results-list>
+
+{%- if use_na_cards -%}
+  {% render 'new-arrivals-quick-view-drawer', section: section %}
+{%- endif -%}
 
 {% stylesheet %}
   .main-collection-grid {
@@ -154,7 +191,9 @@
 {
   "name": "t:names.collection_container",
   "enabled_on": {
-    "templates": ["collection"]
+    "templates": [
+      "collection"
+    ]
   },
   "settings": [
     {
@@ -229,6 +268,76 @@
       "step": 4,
       "default": 24,
       "visible_if": "{{ section.settings.enable_infinite_scroll == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Product card"
+    },
+    {
+      "type": "select",
+      "id": "product_card_style",
+      "label": "Card style",
+      "options": [
+        {
+          "value": "new_arrivals",
+          "label": "New Arrivals style"
+        },
+        {
+          "value": "theme",
+          "label": "Theme default (product card block)"
+        }
+      ],
+      "default": "new_arrivals",
+      "info": "New Arrivals style matches the homepage New Arrivals cards: image scrub gallery, quick view, quick add and star rating."
+    },
+    {
+      "type": "text",
+      "id": "na_card_add_label",
+      "label": "Quick add button label",
+      "default": "ADD TO CART",
+      "visible_if": "{{ section.settings.product_card_style == 'new_arrivals' }}"
+    },
+    {
+      "type": "color",
+      "id": "na_card_cta_color",
+      "label": "Quick add button color",
+      "default": "#f5c518",
+      "visible_if": "{{ section.settings.product_card_style == 'new_arrivals' }}"
+    },
+    {
+      "type": "text",
+      "id": "na_card_new_label",
+      "label": "New badge text",
+      "default": "New",
+      "visible_if": "{{ section.settings.product_card_style == 'new_arrivals' }}"
+    },
+    {
+      "type": "range",
+      "id": "na_card_new_days",
+      "label": "Show New badge for products added in the last",
+      "min": 7,
+      "max": 107,
+      "step": 1,
+      "unit": "d",
+      "default": 45,
+      "visible_if": "{{ section.settings.product_card_style == 'new_arrivals' }}"
+    },
+    {
+      "type": "color",
+      "id": "na_card_star_color",
+      "label": "Star color",
+      "default": "#e6b800",
+      "visible_if": "{{ section.settings.product_card_style == 'new_arrivals' }}"
+    },
+    {
+      "type": "range",
+      "id": "na_card_fallback_stars",
+      "label": "Stars when product has no reviews",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5,
+      "visible_if": "{{ section.settings.product_card_style == 'new_arrivals' }}"
     },
     {
       "type": "header",

@@ -23,7 +23,6 @@
   assign accent = section.settings.cta_yellow | default: '#f5c518'
   assign star_color = section.settings.star_color | default: '#e6b800'
   assign new_days = section.settings.new_window_days | default: 45
-  assign now_ts = 'now' | date: '%s' | plus: 0
 
   assign na_layout = section.settings.product_layout | default: 'slider'
   assign na_use_grid = false
