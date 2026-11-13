@@ -182,7 +182,21 @@
   if collapse_header_paddings_class
     assign class = class | append: ' ' | append: collapse_header_paddings_class
   endif
+
+  if section.settings.menu_backdrop
+    assign class = class | append: ' header--menu-backdrop'
+  endif
 %}
+
+{%- if section.settings.menu_backdrop -%}
+  {% style %}
+    #shopify-section-{{ section.id }} {
+      --menu-backdrop-color: {{ section.settings.menu_backdrop_color | default: '#000000' }};
+      --menu-backdrop-opacity: {{ section.settings.menu_backdrop_opacity | default: 40 | times: 0.01 }};
+      --menu-backdrop-blur: {{ section.settings.menu_backdrop_blur | default: 0 }}px;
+    }
+  {% endstyle %}
+{%- endif -%}
 
 <script type="application/ld+json">
   {
@@ -389,6 +403,64 @@
 
   .header-section {
     position: relative;
+  }
+
+  /* Page backdrop while a dropdown / mega menu is open (desktop only; the mobile drawer has its own) */
+  @media screen and (min-width: 750px) {
+    .header-section:has(> .header--menu-backdrop)::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      background-color: var(--menu-backdrop-color, #000);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--animation-speed-slow, 0.3s) var(--animation-easing, ease),
+        visibility 0s linear var(--animation-speed-slow, 0.3s);
+    }
+
+    .header-section:has(> .header--menu-backdrop .menu-list__link[aria-haspopup][aria-expanded='true']) {
+      z-index: var(--layer-sticky);
+
+      &::after {
+        opacity: var(--menu-backdrop-opacity, 0.4);
+        visibility: visible;
+        transition: opacity var(--animation-speed-slow, 0.3s) var(--animation-easing, ease), visibility 0s;
+      }
+    }
+
+    @supports (backdrop-filter: blur(1px)) {
+      .header-section:has(> .header--menu-backdrop)::after {
+        background-color: transparent;
+        opacity: 1;
+        backdrop-filter: blur(0px);
+        transition: background-color var(--animation-speed-slow, 0.3s) var(--animation-easing, ease),
+          backdrop-filter var(--animation-speed-slow, 0.3s) var(--animation-easing, ease),
+          visibility 0s linear var(--animation-speed-slow, 0.3s);
+      }
+
+      .header-section:has(> .header--menu-backdrop .menu-list__link[aria-haspopup][aria-expanded='true'])::after {
+        opacity: 1;
+        background-color: color-mix(
+          in srgb,
+          var(--menu-backdrop-color, #000) calc(var(--menu-backdrop-opacity, 0.4) * 100%),
+          transparent
+        );
+        backdrop-filter: blur(var(--menu-backdrop-blur, 0px));
+        transition: background-color var(--animation-speed-slow, 0.3s) var(--animation-easing, ease),
+          backdrop-filter var(--animation-speed-slow, 0.3s) var(--animation-easing, ease), visibility 0s;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header-section::after {
+      transition: none !important;
+    }
   }
 
   #header-group:has(#header-component[sticky]) {
@@ -760,6 +832,42 @@
         }
       ],
       "default": "top"
+    },
+    {
+      "type": "checkbox",
+      "id": "menu_backdrop",
+      "label": "Dim page when menu is open",
+      "info": "Adds a backdrop behind dropdowns and mega menus on desktop.",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "menu_backdrop_color",
+      "label": "Backdrop color",
+      "default": "#000000",
+      "visible_if": "{{ section.settings.menu_backdrop }}"
+    },
+    {
+      "type": "range",
+      "id": "menu_backdrop_opacity",
+      "label": "Backdrop opacity",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 40,
+      "visible_if": "{{ section.settings.menu_backdrop }}"
+    },
+    {
+      "type": "range",
+      "id": "menu_backdrop_blur",
+      "label": "Backdrop blur",
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "unit": "px",
+      "default": 2,
+      "visible_if": "{{ section.settings.menu_backdrop }}"
     },
     {
       "type": "header",
