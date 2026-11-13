@@ -1,4 +1,7 @@
 .shop-the-look {
+  /* Custom elements are inline by default — vertical padding on an inline box doesn't take up
+     space, so the section overlapped its neighbours. */
+  display: block;
   background-color: var(--color-background);
   color: var(--color-foreground);
 }
