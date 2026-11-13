@@ -101,10 +101,30 @@
       this.barIo.observe(this.el.box);
       this.barIo.observe(this);
 
+      this.cards.forEach((card) => this.markAvailability(card));
       this.render();
+
+      // Draw the heading underline when it scrolls into view.
+      const hl = this.querySelector('[data-bb-hl]');
+      if (hl) {
+        if (reducedMotion()) hl.classList.add('is-drawn');
+        else {
+          this.hlIo = new IntersectionObserver(
+            (entries) => {
+              if (entries.some((e) => e.isIntersecting)) {
+                hl.classList.add('is-drawn');
+                this.hlIo.disconnect();
+              }
+            },
+            { threshold: 0.6 }
+          );
+          this.hlIo.observe(hl);
+        }
+      }
     }
 
     disconnectedCallback() {
+      this.hlIo?.disconnect();
       this.barIo?.disconnect();
       clearTimeout(this.successTimer);
     }
@@ -122,12 +142,42 @@
       return p && p.variants.find((v) => String(v.id) === String(variantId));
     }
 
-    cardVariantId(card) {
-      const select = card.querySelector('[data-bb-variant]');
-      if (select) return select.value;
+    /** Selected option values on a card (one per option group), in option order. */
+    cardOptions(card) {
+      return Array.from(card.querySelectorAll('[data-bb-option]')).map((group) => {
+        const checked = group.querySelector('[data-bb-swatch]:checked');
+        return checked ? checked.value : null;
+      });
+    }
+
+    cardVariant(card) {
       const p = this.products.get(String(card.dataset.productId));
-      const first = p && (p.variants.find((v) => v.available) || p.variants[0]);
-      return first ? String(first.id) : '';
+      if (!p) return null;
+      const chosen = this.cardOptions(card);
+      if (!chosen.length) return p.variants.find((v) => v.available) || p.variants[0] || null;
+      return p.variants.find((v) => (v.options || []).every((o, i) => chosen[i] == null || o === chosen[i])) || null;
+    }
+
+    cardVariantId(card) {
+      const v = this.cardVariant(card);
+      return v ? String(v.id) : '';
+    }
+
+    /** Grey out option values that can't be bought with the other current selections. */
+    markAvailability(card) {
+      const p = this.products.get(String(card.dataset.productId));
+      if (!p) return;
+      const chosen = this.cardOptions(card);
+      card.querySelectorAll('[data-bb-option]').forEach((group, gi) => {
+        group.querySelectorAll('[data-bb-swatch]').forEach((input) => {
+          const ok = p.variants.some(
+            (v) => v.available && (v.options || []).every((o, i) => (i === gi ? o === input.value : chosen[i] == null || o === chosen[i]))
+          );
+          input.closest('.bb-swatch')?.classList.toggle('is-unavailable', !ok);
+        });
+        const label = group.querySelector('[data-bb-option-value]');
+        if (label) label.textContent = chosen[gi] || '';
+      });
     }
 
     lineForProduct(productId) {
@@ -172,12 +222,14 @@
     }
 
     onChange(event) {
-      const select = event.target;
-      if (!(select instanceof HTMLSelectElement) || !select.matches('[data-bb-variant]')) return;
-      const card = select.closest('[data-bb-card]');
+      const input = event.target;
+      if (!(input instanceof HTMLInputElement) || !input.matches('[data-bb-swatch]')) return;
+      const card = input.closest('[data-bb-card]');
       const productId = card.dataset.productId;
-      const v = this.variant(productId, select.value);
+      const v = this.cardVariant(card);
+      this.markAvailability(card);
       this.renderCardPrice(card, v);
+      if (!v) return;
 
       // If this product is already in the box, swap the variant in place.
       const [key, line] = this.lineForProduct(productId);
@@ -262,11 +314,22 @@
 
     renderCardPrice(card, v) {
       const priceEl = card.querySelector('[data-bb-card-price]');
-      if (!priceEl || !v) return;
+      if (!v) {
+        const add = card.querySelector('[data-bb-add]');
+        if (add) {
+          add.setAttribute('data-soldout', '');
+          add.disabled = true;
+        }
+        return;
+      }
+      if (!priceEl) return;
       const compare = v.compare > v.price ? `<s class="bb-card__compare">${formatMoney(v.compare, this.moneyFormat)}</s>` : '';
       priceEl.innerHTML = `${compare}<span>${formatMoney(v.price, this.moneyFormat)}</span>`;
       const add = card.querySelector('[data-bb-add]');
-      if (add) add.disabled = !v.available;
+      if (add) {
+        add.toggleAttribute('data-soldout', !v.available);
+        add.disabled = !v.available;
+      }
     }
 
     render({ added = null, pop = false } = {}) {
@@ -284,16 +347,20 @@
       });
       const savings = tier ? Math.round((subtotal * tier.pct) / 100) : 0;
 
-      // Cards
+      // Cards — once the box is full, products that aren't in it are locked
+      const full = n >= this.max;
       this.cards.forEach((card) => {
         const [, line] = this.lineForProduct(card.dataset.productId);
         const on = !!line;
         card.classList.toggle('is-selected', on);
+        card.classList.toggle('is-locked', full && !on);
         const add = card.querySelector('[data-bb-add]');
         if (add) {
+          const soldOut = add.hasAttribute('data-soldout');
+          add.disabled = soldOut || (full && !on);
           add.setAttribute('aria-pressed', String(on));
           const label = add.querySelector('[data-bb-add-label]');
-          if (label && !add.disabled) label.textContent = on ? this.dataset.addedLabel : this.dataset.addLabel;
+          if (label && !soldOut) label.textContent = on ? this.dataset.addedLabel : this.dataset.addLabel;
         }
         const qty = card.querySelector('[data-bb-card-qty]');
         if (qty) qty.textContent = line && line.qty > 1 ? `×${line.qty}` : '';
@@ -360,7 +427,8 @@
 
       // Status
       let status;
-      if (n < this.min) status = fill(this.dataset.msgMin, { count: this.min - n });
+      const firstTier = this.tiers[0];
+      if (n < this.min) status = fill(this.dataset.msgMin, { count: this.min - n, discount: firstTier ? `${firstTier.pct}%` : '' });
       else if (next) status = fill(this.dataset.msgMore, { count: next.qty - n, discount: `${next.pct}%` });
       else if (tier) status = fill(this.dataset.msgTop, { discount: `${tier.pct}%` });
       else status = '';
