@@ -1227,3 +1227,8 @@
     opacity: 0;
   }
 }
+
+/* Rising images are only visible while they pass through their own section's scroll window */
+.pq-floats[data-motion='sequence']:not(.is-static) .pq-float:not(.is-passing) {
+  visibility: hidden;
+}

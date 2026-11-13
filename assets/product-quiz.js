@@ -120,10 +120,14 @@
         } else {
           window.removeEventListener('scroll', this.onParallaxScroll);
           window.removeEventListener('resize', this.onParallaxScroll);
+          // Section is far away: hide the images so a stale position can never show over other sections.
+          this.floatEls.forEach((el) => el.parentElement?.classList.remove('is-passing'));
         }
       });
       this.parallaxObserver.observe(this.floats);
       this.updateParallax();
+      window.addEventListener('load', this.onParallaxScroll, { once: true });
+      window.addEventListener('pageshow', this.onParallaxScroll);
       this.floats.classList.add('is-ready');
     }
 
@@ -170,6 +174,7 @@
       if (this.onParallaxScroll) {
         window.removeEventListener('scroll', this.onParallaxScroll);
         window.removeEventListener('resize', this.onParallaxScroll);
+        window.removeEventListener('pageshow', this.onParallaxScroll);
       }
       this.parallaxObserver?.disconnect();
       document.removeEventListener('shopify:block:select', this.onBlockSelect);

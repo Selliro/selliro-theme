@@ -92,6 +92,7 @@
       if (this.onFloatScroll) {
         window.removeEventListener('scroll', this.onFloatScroll);
         window.removeEventListener('resize', this.onFloatScroll);
+        window.removeEventListener('pageshow', this.onFloatScroll);
       }
       this.floatIo?.disconnect();
       document.removeEventListener('click', this.onDocClick);
@@ -337,12 +338,17 @@
           } else {
             window.removeEventListener('scroll', this.onFloatScroll);
             window.removeEventListener('resize', this.onFloatScroll);
+            // Section is far away: hide the images so a stale position can never show over other sections.
+            this.floatEls.forEach((el) => el.classList.remove('is-passing'));
           }
         },
         { rootMargin: '50% 0px' }
       );
       this.floatIo.observe(this.floats);
       this.updateFloats();
+      // Layout can still shift after load (images, fonts, restored scroll position) — re-measure then.
+      window.addEventListener('load', this.onFloatScroll, { once: true });
+      window.addEventListener('pageshow', this.onFloatScroll);
       this.floats.classList.add('is-ready');
     }
 

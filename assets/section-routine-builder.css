@@ -1011,3 +1011,8 @@
     display: none;
   }
 }
+
+/* Rising images are only visible while they pass through their own section's scroll window */
+.rb-floats:not(.is-static) .rb-float:not(.is-passing) {
+  visibility: hidden;
+}
