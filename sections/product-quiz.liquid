@@ -1,0 +1,502 @@
+{%- comment -%}
+  Product Finder Quiz
+  A guided, multi-step quiz that recommends products based on the shopper's answers.
+
+  How it works (merchant view):
+  - Each "Question" block holds up to 6 answers.
+  - Each answer can recommend products. Products picked by more answers rank higher.
+  - Results use the New Arrivals product card (quick view + quick add).
+  - If no answer has products, the "Fallback collection" is shown instead.
+
+  Files: assets/section-product-quiz.css, assets/product-quiz.js
+{%- endcomment -%}
+
+{{ 'section-product-quiz.css' | asset_url | stylesheet_tag }}
+{{ 'section-new-arrivals-showcase.css' | asset_url | stylesheet_tag }}
+{{ 'new-arrivals-quick-view.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign question_count = 0
+  for block in section.blocks
+    if block.type == 'question'
+      assign question_count = question_count | plus: 1
+    endif
+  endfor
+
+  assign media_position = section.settings.media_position | default: 'left'
+  if section.settings.intro_image == blank
+    assign media_position = 'none'
+  endif
+
+  assign max_results = section.settings.max_results | default: 4
+  assign accent = section.settings.accent_color | default: '#f8d12f'
+  assign accent_text = section.settings.accent_text_color | default: '#000000'
+  assign card_sizes = '(min-width: 990px) 25vw, 50vw'
+
+  assign heading_tag = 'h2'
+  if section.settings.heading_size == 'large'
+    assign heading_class = 'h1'
+  elsif section.settings.heading_size == 'small'
+    assign heading_class = 'h3'
+  else
+    assign heading_class = 'h2'
+  endif
+-%}
+
+{% style %}
+  #ProductQuiz-{{ section.id }} {
+    --pq-accent: {{ accent }};
+    --pq-accent-text: {{ accent_text }};
+    --pq-radius: {{ section.settings.card_radius }}px;
+    --pq-columns: {{ section.settings.results_columns }};
+    padding-block: {{ section.settings.padding_top }}px {{ section.settings.padding_bottom }}px;
+  }
+
+  @media screen and (max-width: 749px) {
+    #ProductQuiz-{{ section.id }} {
+      padding-block: {{ section.settings.padding_top | times: 0.7 | round }}px {{ section.settings.padding_bottom | times: 0.7 | round }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<product-quiz
+  id="ProductQuiz-{{ section.id }}"
+  class="pq pq--media-{{ media_position }} {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  data-section-id="{{ section.id }}"
+  data-auto-advance="{{ section.settings.auto_advance }}"
+  data-remember="{{ section.settings.remember_result }}"
+  data-max-results="{{ max_results }}"
+  data-new-arrivals-root
+  data-new-arrivals-qv-id="new-arrivals-qv-drawer-{{ section.id }}"
+  data-step-template="{{ section.settings.step_label | escape }}"
+>
+  <div class="pq__layout">
+    {%- if media_position != 'none' -%}
+      <div class="pq__media" aria-hidden="true">
+        <div class="pq__media-frame">
+          <div class="pq__media-item is-active" data-pq-media="intro">
+            {{
+              section.settings.intro_image
+              | image_url: width: 1600
+              | image_tag:
+                loading: 'lazy',
+                widths: '600, 900, 1200, 1600',
+                sizes: '(min-width: 990px) 45vw, 100vw',
+                alt: '',
+                class: 'pq__media-img'
+            }}
+          </div>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'question' and block.settings.image != blank -%}
+              <div class="pq__media-item" data-pq-media="{{ block.id }}">
+                {{
+                  block.settings.image
+                  | image_url: width: 1600
+                  | image_tag:
+                    loading: 'lazy',
+                    widths: '600, 900, 1200, 1600',
+                    sizes: '(min-width: 990px) 45vw, 100vw',
+                    alt: '',
+                    class: 'pq__media-img'
+                }}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if section.settings.media_badge != blank -%}
+            <span class="pq__media-badge">{{ section.settings.media_badge | escape }}</span>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <div class="pq__panel">
+      {%- comment -%} Progress + navigation (hidden on the intro step) {%- endcomment -%}
+      <div class="pq__toolbar" data-pq-toolbar hidden>
+        <button type="button" class="pq__back button-unstyled" data-pq-back>
+          <svg viewBox="0 0 20 20" width="16" height="16" fill="none" aria-hidden="true" focusable="false"><path d="M12.5 4.5 7 10l5.5 5.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>{{ section.settings.back_label | escape }}</span>
+        </button>
+        <span class="pq__step-label" data-pq-step-label></span>
+      </div>
+      <div class="pq__progress" data-pq-progress hidden>
+        <span class="pq__progress-bar" data-pq-progress-bar></span>
+      </div>
+
+      <p class="visually-hidden" aria-live="polite" data-pq-live></p>
+
+      <div class="pq__steps">
+        {%- comment -%} Intro {%- endcomment -%}
+        <div class="pq__step pq__step--intro is-active" data-pq-step="intro">
+          {%- if section.settings.eyebrow != blank -%}
+            <p class="pq__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <{{ heading_tag }} class="pq__heading {{ heading_class }}" tabindex="-1">{{ section.settings.heading | escape }}</{{ heading_tag }}>
+          {%- endif -%}
+          {%- if section.settings.text != blank -%}
+            <div class="pq__text rte">{{ section.settings.text }}</div>
+          {%- endif -%}
+
+          <div class="pq__intro-actions">
+            <button type="button" class="pq__button pq__button--primary" data-pq-start {% if question_count == 0 %}disabled{% endif %}>
+              {{ section.settings.start_label | escape }}
+              <svg viewBox="0 0 20 20" width="18" height="18" fill="none" aria-hidden="true" focusable="false"><path d="M4 10h11m0 0-4.5-4.5M15 10l-4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            {%- if section.settings.remember_result -%}
+              <button type="button" class="pq__link button-unstyled" data-pq-last hidden>
+                {{ section.settings.last_result_label | escape }}
+              </button>
+            {%- endif -%}
+          </div>
+
+          {%- if section.settings.intro_note != blank -%}
+            <p class="pq__note">
+              <svg viewBox="0 0 20 20" width="16" height="16" fill="none" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="7.25" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l2.5 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              {{ section.settings.intro_note | escape }}
+            </p>
+          {%- endif -%}
+
+          {%- if question_count == 0 and request.design_mode -%}
+            <p class="pq__editor-hint">Add a “Question” block to start building your quiz.</p>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Questions {%- endcomment -%}
+        {%- assign q_index = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'question' -%}
+            {%- assign q_index = q_index | plus: 1 -%}
+            {%- liquid
+              assign multiple = block.settings.allow_multiple
+              assign input_type = 'radio'
+              if multiple
+                assign input_type = 'checkbox'
+              endif
+              assign answer_style = block.settings.answer_style | default: 'cards'
+            -%}
+            <fieldset
+              class="pq__step pq__step--question"
+              data-pq-step="question"
+              data-pq-block-id="{{ block.id }}"
+              data-pq-multiple="{{ multiple }}"
+              {{ block.shopify_attributes }}
+            >
+              <legend class="pq__question">
+                <span class="pq__question-index" aria-hidden="true">{{ q_index | prepend: '0' | slice: -2, 2 }}</span>
+                <span class="pq__question-text {{ heading_class }}" tabindex="-1">{{ block.settings.question | escape }}</span>
+              </legend>
+              {%- if block.settings.helper != blank -%}
+                <p class="pq__helper">{{ block.settings.helper | escape }}</p>
+              {%- endif -%}
+
+              <div class="pq__answers pq__answers--{{ answer_style }}">
+                {%- for n in (1..6) -%}
+                  {%- liquid
+                    assign key = 'answer_' | append: n | append: '_label'
+                    assign answer_label = block.settings[key]
+                    if answer_label == blank
+                      continue
+                    endif
+                    assign key = 'answer_' | append: n | append: '_image'
+                    assign answer_image = block.settings[key]
+                    assign key = 'answer_' | append: n | append: '_products'
+                    assign answer_products = block.settings[key]
+                    assign answer_ids = answer_products | map: 'id' | join: ','
+                  -%}
+                  <label class="pq__answer">
+                    <input
+                      class="pq__answer-input"
+                      type="{{ input_type }}"
+                      name="pq-{{ section.id }}-{{ block.id }}"
+                      value="{{ n }}"
+                      data-products="{{ answer_ids }}"
+                    >
+                    {%- if answer_style == 'cards' -%}
+                      <span class="pq__answer-media">
+                        {%- if answer_image != blank -%}
+                          {{
+                            answer_image
+                            | image_url: width: 480
+                            | image_tag: loading: 'lazy', widths: '240, 360, 480', sizes: '(min-width: 990px) 180px, 40vw', alt: ''
+                          }}
+                        {%- else -%}
+                          <span class="pq__answer-initial" aria-hidden="true">{{ answer_label | slice: 0 | upcase }}</span>
+                        {%- endif -%}
+                      </span>
+                    {%- endif -%}
+                    <span class="pq__answer-label">{{ answer_label | escape }}</span>
+                    <span class="pq__answer-check" aria-hidden="true">
+                      <svg viewBox="0 0 16 16" width="12" height="12" fill="none" focusable="false"><path d="m3.5 8.5 3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                  </label>
+                {%- endfor -%}
+              </div>
+
+              <div class="pq__step-actions">
+                <button type="button" class="pq__button pq__button--primary" data-pq-next disabled>
+                  {%- if q_index == question_count -%}
+                    {{ section.settings.finish_label | escape }}
+                  {%- else -%}
+                    {{ section.settings.next_label | escape }}
+                  {%- endif -%}
+                </button>
+                {%- if block.settings.allow_skip -%}
+                  <button type="button" class="pq__link button-unstyled" data-pq-skip>{{ section.settings.skip_label | escape }}</button>
+                {%- endif -%}
+              </div>
+            </fieldset>
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- comment -%} Results {%- endcomment -%}
+        <div class="pq__step pq__step--results" data-pq-step="results">
+          <div class="pq__results-head">
+            {%- if section.settings.results_eyebrow != blank -%}
+              <p class="pq__eyebrow">{{ section.settings.results_eyebrow | escape }}</p>
+            {%- endif -%}
+            <{{ heading_tag }} class="pq__heading {{ heading_class }}" tabindex="-1">{{ section.settings.results_heading | escape }}</{{ heading_tag }}>
+            {%- if section.settings.results_text != blank -%}
+              <div class="pq__text rte">{{ section.settings.results_text }}</div>
+            {%- endif -%}
+          </div>
+
+          <ul class="pq__results list-unstyled" data-pq-results role="list"></ul>
+          <p class="pq__empty" data-pq-empty hidden>{{ section.settings.empty_text | escape }}</p>
+
+          <div class="pq__results-actions">
+            <button type="button" class="pq__button pq__button--secondary" data-pq-restart>
+              <svg viewBox="0 0 20 20" width="16" height="16" fill="none" aria-hidden="true" focusable="false"><path d="M4 10a6 6 0 1 0 1.76-4.24M4 4v3.5h3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              {{ section.settings.restart_label | escape }}
+            </button>
+            {%- if section.settings.results_link != blank and section.settings.results_link_label != blank -%}
+              <a class="pq__link" href="{{ section.settings.results_link }}">{{ section.settings.results_link_label | escape }}</a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%}
+    Product pool: every product any answer recommends (plus the fallback collection), rendered once.
+    JavaScript moves the best matches into the results list.
+  {%- endcomment -%}
+  <div class="pq__pool" data-pq-pool hidden>
+    {%- liquid
+      assign seen = ','
+      assign best_label = section.settings.best_match_label
+    -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'question' -%}
+        {%- for n in (1..6) -%}
+          {%- liquid
+            assign key = 'answer_' | append: n | append: '_label'
+            if block.settings[key] == blank
+              continue
+            endif
+            assign key = 'answer_' | append: n | append: '_products'
+          -%}
+          {%- for product in block.settings[key] -%}
+            {%- assign needle = ',' | append: product.id | append: ',' -%}
+            {%- unless seen contains needle -%}
+              {%- assign seen = seen | append: product.id | append: ',' -%}
+              <li class="pq__result" data-product-id="{{ product.id }}" data-best-label="{{ best_label | escape }}">
+                {%- render 'new-arrivals-card',
+                  product: product,
+                  accent: accent,
+                  add_label: section.settings.add_label,
+                  image_sizes: card_sizes
+                -%}
+              </li>
+            {%- endunless -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if section.settings.fallback_collection != blank -%}
+      {%- for product in section.settings.fallback_collection.products limit: max_results -%}
+        {%- assign needle = ',' | append: product.id | append: ',' -%}
+        <li
+          class="pq__result"
+          data-product-id="{{ product.id }}"
+          data-fallback="{{ forloop.index }}"
+          data-best-label="{{ best_label | escape }}"
+          {% if seen contains needle %}data-duplicate{% endif %}
+        >
+          {%- unless seen contains needle -%}
+            {%- render 'new-arrivals-card',
+              product: product,
+              accent: accent,
+              add_label: section.settings.add_label,
+              image_sizes: card_sizes
+            -%}
+          {%- endunless -%}
+        </li>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</product-quiz>
+
+{% render 'new-arrivals-quick-view-drawer', section: section %}
+
+<script src="{{ 'image-loader.js' | asset_url }}" defer></script>
+<script src="{{ 'new-arrivals-components.js' | asset_url }}" defer></script>
+<script src="{{ 'new-arrivals-showcase.js' | asset_url }}" defer></script>
+<script src="{{ 'new-arrivals-quick-view.js' | asset_url }}" defer></script>
+<script src="{{ 'product-quiz.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Product finder quiz",
+  "tag": "section",
+  "class": "section-product-quiz",
+  "settings": [
+    { "type": "header", "content": "Intro" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Skin quiz" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Find your perfect routine" },
+    { "type": "select", "id": "heading_size", "label": "Heading size", "options": [
+      { "value": "small", "label": "Small" }, { "value": "medium", "label": "Medium" }, { "value": "large", "label": "Large" }
+    ], "default": "medium" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Answer three quick questions and we'll match you with the products your skin will love.</p>" },
+    { "type": "text", "id": "start_label", "label": "Start button label", "default": "Start the quiz" },
+    { "type": "text", "id": "intro_note", "label": "Note under the button", "default": "Takes less than 1 minute" },
+    { "type": "image_picker", "id": "intro_image", "label": "Image", "info": "Shown beside the quiz. A question's own image replaces it while that question is open." },
+    { "type": "text", "id": "media_badge", "label": "Image badge", "default": "Personalised for you" },
+
+    { "type": "header", "content": "Layout" },
+    { "type": "select", "id": "media_position", "label": "Image position", "options": [
+      { "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }, { "value": "none", "label": "No image" }
+    ], "default": "left" },
+    { "type": "select", "id": "section_width", "label": "Width", "options": [
+      { "value": "page-width", "label": "Page" }, { "value": "full-width", "label": "Full" }
+    ], "default": "page-width" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "color", "id": "accent_color", "label": "Accent color", "info": "Buttons, progress bar and selected answers.", "default": "#f8d12f" },
+    { "type": "color", "id": "accent_text_color", "label": "Accent text color", "default": "#000000" },
+    { "type": "range", "id": "card_radius", "label": "Corner radius", "min": 0, "max": 32, "step": 2, "unit": "px", "default": 16 },
+
+    { "type": "header", "content": "Quiz behavior" },
+    { "type": "checkbox", "id": "auto_advance", "label": "Go to next question after choosing", "info": "Applies to single-choice questions.", "default": true },
+    { "type": "checkbox", "id": "remember_result", "label": "Remember the shopper's last result", "info": "Returning shoppers see a link to their previous recommendations.", "default": true },
+    { "type": "text", "id": "step_label", "label": "Step label", "info": "Use [current] and [total].", "default": "Question [current] of [total]" },
+    { "type": "text", "id": "next_label", "label": "Next button label", "default": "Next" },
+    { "type": "text", "id": "finish_label", "label": "Finish button label", "default": "See my results" },
+    { "type": "text", "id": "back_label", "label": "Back button label", "default": "Back" },
+    { "type": "text", "id": "skip_label", "label": "Skip link label", "default": "Skip this question" },
+    { "type": "text", "id": "last_result_label", "label": "Previous result link label", "default": "View my last results" },
+
+    { "type": "header", "content": "Results" },
+    { "type": "text", "id": "results_eyebrow", "label": "Eyebrow", "default": "Your matches" },
+    { "type": "text", "id": "results_heading", "label": "Heading", "default": "We picked these for you" },
+    { "type": "richtext", "id": "results_text", "label": "Text", "default": "<p>Based on your answers, these are the best fit for your skin.</p>" },
+    { "type": "range", "id": "max_results", "label": "Products to show", "min": 1, "max": 8, "step": 1, "default": 4 },
+    { "type": "range", "id": "results_columns", "label": "Columns on desktop", "min": 2, "max": 4, "step": 1, "default": 4 },
+    { "type": "text", "id": "best_match_label", "label": "Top result badge", "info": "Leave blank to hide.", "default": "Best match" },
+    { "type": "collection", "id": "fallback_collection", "label": "Fallback collection", "info": "Shown when the answers don't recommend any products." },
+    { "type": "text", "id": "empty_text", "label": "No results message", "default": "We couldn't find a perfect match. Try the quiz again or browse all products." },
+    { "type": "text", "id": "add_label", "label": "Quick add button label", "default": "ADD TO CART" },
+    { "type": "text", "id": "restart_label", "label": "Restart button label", "default": "Retake quiz" },
+    { "type": "url", "id": "results_link", "label": "Extra link" },
+    { "type": "text", "id": "results_link_label", "label": "Extra link label", "default": "Shop all products" },
+
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question", "default": "What's your skin type?" },
+        { "type": "text", "id": "helper", "label": "Helper text" },
+        { "type": "select", "id": "answer_style", "label": "Answer style", "options": [
+          { "value": "cards", "label": "Image cards" },
+          { "value": "pills", "label": "Pills" },
+          { "value": "list", "label": "List" }
+        ], "default": "cards" },
+        { "type": "checkbox", "id": "allow_multiple", "label": "Allow multiple answers", "default": false },
+        { "type": "checkbox", "id": "allow_skip", "label": "Allow skipping this question", "default": false },
+        { "type": "image_picker", "id": "image", "label": "Side image for this question", "info": "Optional. Replaces the intro image while this question is open." },
+
+        { "type": "header", "content": "Answer 1" },
+        { "type": "text", "id": "answer_1_label", "label": "Label", "default": "Dry" },
+        { "type": "image_picker", "id": "answer_1_image", "label": "Image" },
+        { "type": "product_list", "id": "answer_1_products", "label": "Recommended products", "limit": 8 },
+
+        { "type": "header", "content": "Answer 2" },
+        { "type": "text", "id": "answer_2_label", "label": "Label", "default": "Oily" },
+        { "type": "image_picker", "id": "answer_2_image", "label": "Image" },
+        { "type": "product_list", "id": "answer_2_products", "label": "Recommended products", "limit": 8 },
+
+        { "type": "header", "content": "Answer 3" },
+        { "type": "text", "id": "answer_3_label", "label": "Label", "default": "Combination" },
+        { "type": "image_picker", "id": "answer_3_image", "label": "Image" },
+        { "type": "product_list", "id": "answer_3_products", "label": "Recommended products", "limit": 8 },
+
+        { "type": "header", "content": "Answer 4" },
+        { "type": "text", "id": "answer_4_label", "label": "Label", "default": "Sensitive" },
+        { "type": "image_picker", "id": "answer_4_image", "label": "Image" },
+        { "type": "product_list", "id": "answer_4_products", "label": "Recommended products", "limit": 8 },
+
+        { "type": "header", "content": "Answer 5" },
+        { "type": "text", "id": "answer_5_label", "label": "Label", "info": "Leave blank to hide this answer." },
+        { "type": "image_picker", "id": "answer_5_image", "label": "Image" },
+        { "type": "product_list", "id": "answer_5_products", "label": "Recommended products", "limit": 8 },
+
+        { "type": "header", "content": "Answer 6" },
+        { "type": "text", "id": "answer_6_label", "label": "Label", "info": "Leave blank to hide this answer." },
+        { "type": "image_picker", "id": "answer_6_image", "label": "Image" },
+        { "type": "product_list", "id": "answer_6_products", "label": "Recommended products", "limit": 8 }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Product finder quiz",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "What's your skin type?",
+            "answer_style": "cards",
+            "answer_1_label": "Dry",
+            "answer_2_label": "Oily",
+            "answer_3_label": "Combination",
+            "answer_4_label": "Sensitive"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "What's your main concern?",
+            "helper": "Choose all that apply.",
+            "answer_style": "pills",
+            "allow_multiple": true,
+            "answer_1_label": "Dullness",
+            "answer_2_label": "Dryness",
+            "answer_3_label": "Dark spots",
+            "answer_4_label": "Fine lines",
+            "answer_5_label": "Sun damage",
+            "answer_6_label": "Uneven texture"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "How much time do you spend on your routine?",
+            "answer_style": "list",
+            "answer_1_label": "Under 5 minutes",
+            "answer_2_label": "5 to 10 minutes",
+            "answer_3_label": "I love a full routine",
+            "answer_4_label": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
