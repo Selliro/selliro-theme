@@ -732,6 +732,19 @@
 .rb__result {
   list-style: none;
   min-width: 0;
+  /* Step number on top, card fills the rest — the card must not take 100% of the item height,
+     or it overflows by the step label and leaves empty space under the stars. */
+  display: flex;
+  flex-direction: column;
+}
+
+.rb__result new-arrivals-product-card {
+  flex: 1;
+  height: auto;
+}
+
+.rb__result .new-arrivals-card__body {
+  padding-bottom: 0.9rem;
 }
 
 .rb__step {
