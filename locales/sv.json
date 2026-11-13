@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Lägg till ett block för ”Tom ruta” för att börja bygga meningen.",
+    "ready": "Din rutin är klar. {{ count }} rekommenderade produkter."
+  },
   "blocks": {
     "load_video": "Ladda video: {{ description }}",
     "sold_out": "Slutsåld",

@@ -138,7 +138,7 @@
       {%- endif -%}
 
       {%- comment -%} The sentence {%- endcomment -%}
-      <p class="rb__sentence">
+      <h2 class="rb__sentence">
         {%- assign b_index = 0 -%}
         {%- for block in section.blocks -%}
           {%- if block.type == 'blank' -%}
@@ -153,6 +153,7 @@
               aria-controls="RbTray-{{ section.id }}-{{ block.id }}"
               {{ block.shopify_attributes }}
             >
+              <span class="visually-hidden">{{ block.settings.question | default: block.settings.before | escape }}:</span>
               <span class="rb__blank-thumbs" data-rb-thumbs aria-hidden="true"></span>
               <span class="rb__blank-text" data-rb-blank-text data-placeholder="{{ block.settings.placeholder | default: section.settings.placeholder | escape }}">
                 {{- block.settings.placeholder | default: section.settings.placeholder | escape -}}
@@ -177,7 +178,7 @@
             {%- assign b_index = b_index | plus: 1 -%}
           {%- endif -%}
         {%- endfor -%}
-      </p>
+      </h2>
 
       <div class="rb__status">
         <div class="rb__meter" aria-hidden="true">
@@ -193,7 +194,7 @@
       </div>
 
       {%- if blank_count == 0 and request.design_mode -%}
-        <p class="rb__editor-hint">Add a “Blank” block to start building the sentence.</p>
+        <p class="rb__editor-hint">{{ 'routine_builder.editor_hint' | t }}</p>
       {%- endif -%}
     </div>
 
@@ -270,7 +271,8 @@
     </div>
 
     {%- comment -%} Results — revealed once every blank is filled {%- endcomment -%}
-    <div class="rb__results-wrap" data-rb-results-wrap>
+    <p class="visually-hidden" aria-live="polite" data-rb-live data-ready="{{ 'routine_builder.ready' | t: count: '[count]' | escape }}"></p>
+    <div class="rb__results-wrap" data-rb-results-wrap aria-hidden="true">
       <div class="rb__results-clip">
         <div class="rb__results-inner">
           <div class="rb__results-head">
@@ -278,7 +280,7 @@
               {%- if section.settings.results_eyebrow != blank -%}
                 <p class="rb__results-eyebrow">{{ section.settings.results_eyebrow | escape }}</p>
               {%- endif -%}
-              <h2 class="rb__results-title" tabindex="-1" data-rb-results-title>{{ section.settings.results_done | escape }}</h2>
+              <h3 class="rb__results-title" tabindex="-1" data-rb-results-title>{{ section.settings.results_done | escape }}</h3>
             </div>
             <div class="rb__results-actions">
               {%- if section.settings.show_add_all -%}
@@ -348,40 +350,46 @@
 
 {% schema %}
 {
-  "name": "Routine builder",
+  "name": "t:routine_builder.name",
   "tag": "section",
   "class": "section-routine-builder",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
   "settings": [
     {
       "type": "header",
-      "content": "Sentence"
+      "content": "t:routine_builder.sentence"
     },
     {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Build your routine"
+      "label": "t:routine_builder.eyebrow",
+      "default": "t:routine_builder.d_eyebrow"
     },
     {
       "type": "select",
       "id": "sentence_font_source",
-      "label": "Sentence font",
+      "label": "t:routine_builder.sentence_font",
       "options": [
         {
           "value": "custom",
-          "label": "Custom (pick below)"
+          "label": "t:routine_builder.font_custom"
         },
         {
           "value": "heading",
-          "label": "Theme heading font"
+          "label": "t:routine_builder.font_theme_heading"
         },
         {
           "value": "accent",
-          "label": "Theme accent font"
+          "label": "t:routine_builder.font_theme_accent"
         },
         {
           "value": "body",
-          "label": "Theme body font"
+          "label": "t:routine_builder.font_theme_body"
         }
       ],
       "default": "custom"
@@ -389,14 +397,14 @@
     {
       "type": "font_picker",
       "id": "sentence_font",
-      "label": "Custom font",
+      "label": "t:routine_builder.custom_font",
       "default": "playfair_display_n4",
       "visible_if": "{{ section.settings.sentence_font_source == 'custom' }}"
     },
     {
       "type": "range",
       "id": "sentence_size",
-      "label": "Sentence size (desktop)",
+      "label": "t:routine_builder.sentence_size",
       "min": 28,
       "max": 96,
       "step": 2,
@@ -406,15 +414,15 @@
     {
       "type": "select",
       "id": "alignment",
-      "label": "Alignment",
+      "label": "t:settings.alignment",
       "options": [
         {
           "value": "center",
-          "label": "Center"
+          "label": "t:options.center"
         },
         {
           "value": "left",
-          "label": "Left"
+          "label": "t:options.left"
         }
       ],
       "default": "center"
@@ -422,50 +430,50 @@
     {
       "type": "text",
       "id": "placeholder",
-      "label": "Blank placeholder",
-      "info": "Shown in a blank before it's filled. Each blank can override it.",
-      "default": "choose"
+      "label": "t:routine_builder.placeholder",
+      "info": "t:routine_builder.placeholder_info",
+      "default": "t:routine_builder.d_placeholder"
     },
     {
       "type": "text",
       "id": "hint",
-      "label": "Hint under the sentence",
-      "default": "Tap the underlined words to build your routine"
+      "label": "t:routine_builder.hint",
+      "default": "t:routine_builder.d_hint"
     },
     {
       "type": "text",
       "id": "multiple_note",
-      "label": "Multiple-choice note",
-      "default": "Pick as many as you like"
+      "label": "t:routine_builder.multiple_note",
+      "default": "t:routine_builder.d_multiple_note"
     },
     {
       "type": "text",
       "id": "done_label",
-      "label": "Done button (multiple choice)",
-      "default": "Done"
+      "label": "t:routine_builder.done_button",
+      "default": "t:routine_builder.d_done"
     },
     {
       "type": "header",
-      "content": "Design"
+      "content": "t:routine_builder.design"
     },
     {
       "type": "color_scheme",
       "id": "color_scheme",
-      "label": "Color scheme",
+      "label": "t:settings.color_scheme",
       "default": "scheme-1"
     },
     {
       "type": "select",
       "id": "section_width",
-      "label": "Width",
+      "label": "t:settings.width",
       "options": [
         {
           "value": "page-width",
-          "label": "Page"
+          "label": "t:options.page"
         },
         {
           "value": "full-width",
-          "label": "Full"
+          "label": "t:options.full"
         }
       ],
       "default": "page-width"
@@ -473,26 +481,26 @@
     {
       "type": "color",
       "id": "accent_color",
-      "label": "Accent color",
+      "label": "t:routine_builder.accent_color",
       "default": "#f8d12f"
     },
     {
       "type": "color",
       "id": "accent_text_color",
-      "label": "Accent text color",
+      "label": "t:routine_builder.accent_text_color",
       "default": "#000000"
     },
     {
       "type": "checkbox",
       "id": "show_mood",
-      "label": "Mood background",
-      "info": "Soft color clouds that take on the colors of the chosen answers.",
+      "label": "t:routine_builder.mood",
+      "info": "t:routine_builder.mood_info",
       "default": true
     },
     {
       "type": "range",
       "id": "mood_strength",
-      "label": "Mood intensity",
+      "label": "t:routine_builder.mood_intensity",
       "min": 10,
       "max": 100,
       "step": 5,
@@ -503,7 +511,7 @@
     {
       "type": "range",
       "id": "card_radius",
-      "label": "Corner radius",
+      "label": "t:settings.corner_radius",
       "min": 0,
       "max": 32,
       "step": 2,
@@ -512,34 +520,34 @@
     },
     {
       "type": "header",
-      "content": "Floating images"
+      "content": "t:routine_builder.floating_images"
     },
     {
       "type": "paragraph",
-      "content": "One image on each side. As the page scrolls down, they rise from the bottom of the screen to the top, one after the other."
+      "content": "t:routine_builder.floating_info"
     },
     {
       "type": "image_picker",
       "id": "float_image_1",
-      "label": "Left image"
+      "label": "t:routine_builder.left_image"
     },
     {
       "type": "image_picker",
       "id": "float_image_2",
-      "label": "Right image"
+      "label": "t:routine_builder.right_image"
     },
     {
       "type": "select",
       "id": "float_first",
-      "label": "Image that rises first",
+      "label": "t:routine_builder.rises_first",
       "options": [
         {
           "value": "left",
-          "label": "Left"
+          "label": "t:options.left"
         },
         {
           "value": "right",
-          "label": "Right"
+          "label": "t:options.right"
         }
       ],
       "default": "left"
@@ -547,23 +555,23 @@
     {
       "type": "select",
       "id": "float_shape",
-      "label": "Shape",
+      "label": "t:settings.shape",
       "options": [
         {
           "value": "rounded",
-          "label": "Rounded rectangle"
+          "label": "t:routine_builder.shape_rounded"
         },
         {
           "value": "arch",
-          "label": "Arch"
+          "label": "t:routine_builder.shape_arch"
         },
         {
           "value": "pebble",
-          "label": "Pebble"
+          "label": "t:routine_builder.shape_pebble"
         },
         {
           "value": "circle",
-          "label": "Circle"
+          "label": "t:options.circle"
         }
       ],
       "default": "rounded"
@@ -571,7 +579,7 @@
     {
       "type": "range",
       "id": "float_size",
-      "label": "Size",
+      "label": "t:settings.size",
       "min": 8,
       "max": 26,
       "step": 1,
@@ -581,7 +589,7 @@
     {
       "type": "range",
       "id": "float_tilt",
-      "label": "Tilt",
+      "label": "t:routine_builder.tilt",
       "min": 0,
       "max": 15,
       "step": 1,
@@ -591,8 +599,8 @@
     {
       "type": "range",
       "id": "float_speed",
-      "label": "Rise speed",
-      "info": "Higher is faster. 0 keeps the images still.",
+      "label": "t:routine_builder.rise_speed",
+      "info": "t:routine_builder.rise_speed_info",
       "min": 0,
       "max": 10,
       "step": 1,
@@ -601,45 +609,45 @@
     {
       "type": "select",
       "id": "floats_mobile",
-      "label": "On mobile",
+      "label": "t:routine_builder.on_mobile",
       "options": [
         {
           "value": "show",
-          "label": "Show small"
+          "label": "t:routine_builder.show_small"
         },
         {
           "value": "hide",
-          "label": "Hide"
+          "label": "t:routine_builder.hide"
         }
       ],
       "default": "show"
     },
     {
       "type": "header",
-      "content": "Results"
+      "content": "t:routine_builder.results"
     },
     {
       "type": "text",
       "id": "results_eyebrow",
-      "label": "Results eyebrow",
-      "default": "Made for you"
+      "label": "t:routine_builder.results_eyebrow",
+      "default": "t:routine_builder.d_results_eyebrow"
     },
     {
       "type": "text",
       "id": "results_done",
-      "label": "Results heading",
-      "default": "Your routine is ready"
+      "label": "t:routine_builder.results_heading",
+      "default": "t:routine_builder.d_results_heading"
     },
     {
       "type": "checkbox",
       "id": "scroll_to_results",
-      "label": "Scroll to the products when the sentence is complete",
+      "label": "t:routine_builder.scroll_to_results",
       "default": true
     },
     {
       "type": "range",
       "id": "max_results",
-      "label": "Products to show",
+      "label": "t:routine_builder.products_to_show",
       "min": 2,
       "max": 8,
       "step": 1,
@@ -648,7 +656,7 @@
     {
       "type": "range",
       "id": "results_columns",
-      "label": "Columns on desktop",
+      "label": "t:routine_builder.columns_desktop",
       "min": 2,
       "max": 4,
       "step": 1,
@@ -657,48 +665,48 @@
     {
       "type": "collection",
       "id": "fallback_collection",
-      "label": "Fallback collection",
-      "info": "Fills the routine when answers recommend too few products."
+      "label": "t:routine_builder.fallback_collection",
+      "info": "t:routine_builder.fallback_info"
     },
     {
       "type": "checkbox",
       "id": "show_add_all",
-      "label": "Show “Add routine to cart”",
+      "label": "t:routine_builder.show_add_all",
       "default": true
     },
     {
       "type": "text",
       "id": "add_all_label",
-      "label": "Add routine button",
-      "default": "Add routine to cart",
+      "label": "t:routine_builder.add_all_label",
+      "default": "t:routine_builder.d_add_all",
       "visible_if": "{{ section.settings.show_add_all }}"
     },
     {
       "type": "text",
       "id": "add_label",
-      "label": "Quick add button",
-      "default": "ADD TO CART"
+      "label": "t:routine_builder.quick_add_label",
+      "default": "t:routine_builder.d_quick_add"
     },
     {
       "type": "text",
       "id": "reset_label",
-      "label": "Start over link",
-      "default": "Start over"
+      "label": "t:routine_builder.reset_label",
+      "default": "t:routine_builder.d_reset"
     },
     {
       "type": "checkbox",
       "id": "remember",
-      "label": "Remember answers for returning shoppers",
+      "label": "t:routine_builder.remember",
       "default": true
     },
     {
       "type": "header",
-      "content": "Spacing"
+      "content": "t:names.spacing"
     },
     {
       "type": "range",
       "id": "padding_top",
-      "label": "Top padding",
+      "label": "t:settings.top_padding",
       "min": 0,
       "max": 160,
       "step": 4,
@@ -708,7 +716,7 @@
     {
       "type": "range",
       "id": "padding_bottom",
-      "label": "Bottom padding",
+      "label": "t:settings.bottom_padding",
       "min": 0,
       "max": 160,
       "step": 4,
@@ -719,202 +727,202 @@
   "blocks": [
     {
       "type": "blank",
-      "name": "Blank",
+      "name": "t:routine_builder.blank",
       "settings": [
         {
           "type": "text",
           "id": "before",
-          "label": "Words before the blank",
-          "default": "My skin feels"
+          "label": "t:routine_builder.words_before",
+          "default": "t:routine_builder.d_before"
         },
         {
           "type": "text",
           "id": "after",
-          "label": "Words after the blank",
-          "info": "Optional, e.g. a comma or “every morning.”"
+          "label": "t:routine_builder.words_after",
+          "info": "t:routine_builder.words_after_info"
         },
         {
           "type": "text",
           "id": "placeholder",
-          "label": "Placeholder",
-          "info": "Leave blank to use the section's placeholder."
+          "label": "t:routine_builder.placeholder",
+          "info": "t:routine_builder.block_placeholder_info"
         },
         {
           "type": "text",
           "id": "question",
-          "label": "Question for screen readers",
-          "info": "Read aloud above the answers. Defaults to the words before the blank."
+          "label": "t:routine_builder.question",
+          "info": "t:routine_builder.question_info"
         },
         {
           "type": "checkbox",
           "id": "allow_multiple",
-          "label": "Allow multiple answers",
+          "label": "t:routine_builder.allow_multiple",
           "default": false
         },
         {
           "type": "header",
-          "content": "Answer 1"
+          "content": "t:routine_builder.answer_1"
         },
         {
           "type": "text",
           "id": "answer_1_label",
-          "label": "Label",
-          "default": "dry"
+          "label": "t:settings.label",
+          "default": "t:routine_builder.d_dry"
         },
         {
           "type": "color",
           "id": "answer_1_color",
-          "label": "Mood color",
+          "label": "t:routine_builder.mood_color",
           "default": "#f4c9a0"
         },
         {
           "type": "image_picker",
           "id": "answer_1_image",
-          "label": "Image",
-          "info": "Optional small thumbnail."
+          "label": "t:content.image",
+          "info": "t:routine_builder.thumbnail_info"
         },
         {
           "type": "product_list",
           "id": "answer_1_products",
-          "label": "Recommended products",
+          "label": "t:routine_builder.recommended_products",
           "limit": 8
         },
         {
           "type": "header",
-          "content": "Answer 2"
+          "content": "t:routine_builder.answer_2"
         },
         {
           "type": "text",
           "id": "answer_2_label",
-          "label": "Label",
-          "default": "oily"
+          "label": "t:settings.label",
+          "default": "t:routine_builder.d_oily"
         },
         {
           "type": "color",
           "id": "answer_2_color",
-          "label": "Mood color",
+          "label": "t:routine_builder.mood_color",
           "default": "#b9e2c8"
         },
         {
           "type": "image_picker",
           "id": "answer_2_image",
-          "label": "Image",
-          "info": "Optional small thumbnail."
+          "label": "t:content.image",
+          "info": "t:routine_builder.thumbnail_info"
         },
         {
           "type": "product_list",
           "id": "answer_2_products",
-          "label": "Recommended products",
+          "label": "t:routine_builder.recommended_products",
           "limit": 8
         },
         {
           "type": "header",
-          "content": "Answer 3"
+          "content": "t:routine_builder.answer_3"
         },
         {
           "type": "text",
           "id": "answer_3_label",
-          "label": "Label",
-          "default": "a bit of both"
+          "label": "t:settings.label",
+          "default": "t:routine_builder.d_both"
         },
         {
           "type": "color",
           "id": "answer_3_color",
-          "label": "Mood color",
+          "label": "t:routine_builder.mood_color",
           "default": "#d9c9f2"
         },
         {
           "type": "image_picker",
           "id": "answer_3_image",
-          "label": "Image",
-          "info": "Optional small thumbnail."
+          "label": "t:content.image",
+          "info": "t:routine_builder.thumbnail_info"
         },
         {
           "type": "product_list",
           "id": "answer_3_products",
-          "label": "Recommended products",
+          "label": "t:routine_builder.recommended_products",
           "limit": 8
         },
         {
           "type": "header",
-          "content": "Answer 4"
+          "content": "t:routine_builder.answer_4"
         },
         {
           "type": "text",
           "id": "answer_4_label",
-          "label": "Label",
-          "default": "sensitive"
+          "label": "t:settings.label",
+          "default": "t:routine_builder.d_sensitive"
         },
         {
           "type": "color",
           "id": "answer_4_color",
-          "label": "Mood color",
+          "label": "t:routine_builder.mood_color",
           "default": "#f5b8c0"
         },
         {
           "type": "image_picker",
           "id": "answer_4_image",
-          "label": "Image",
-          "info": "Optional small thumbnail."
+          "label": "t:content.image",
+          "info": "t:routine_builder.thumbnail_info"
         },
         {
           "type": "product_list",
           "id": "answer_4_products",
-          "label": "Recommended products",
+          "label": "t:routine_builder.recommended_products",
           "limit": 8
         },
         {
           "type": "header",
-          "content": "Answer 5"
+          "content": "t:routine_builder.answer_5"
         },
         {
           "type": "text",
           "id": "answer_5_label",
-          "label": "Label",
-          "info": "Leave blank to hide."
+          "label": "t:settings.label",
+          "info": "t:routine_builder.answer_hide_info"
         },
         {
           "type": "color",
           "id": "answer_5_color",
-          "label": "Mood color"
+          "label": "t:routine_builder.mood_color"
         },
         {
           "type": "image_picker",
           "id": "answer_5_image",
-          "label": "Image",
-          "info": "Optional small thumbnail."
+          "label": "t:content.image",
+          "info": "t:routine_builder.thumbnail_info"
         },
         {
           "type": "product_list",
           "id": "answer_5_products",
-          "label": "Recommended products",
+          "label": "t:routine_builder.recommended_products",
           "limit": 8
         },
         {
           "type": "header",
-          "content": "Answer 6"
+          "content": "t:routine_builder.answer_6"
         },
         {
           "type": "text",
           "id": "answer_6_label",
-          "label": "Label",
-          "info": "Leave blank to hide."
+          "label": "t:settings.label",
+          "info": "t:routine_builder.answer_hide_info"
         },
         {
           "type": "color",
           "id": "answer_6_color",
-          "label": "Mood color"
+          "label": "t:routine_builder.mood_color"
         },
         {
           "type": "image_picker",
           "id": "answer_6_image",
-          "label": "Image",
-          "info": "Optional small thumbnail."
+          "label": "t:content.image",
+          "info": "t:routine_builder.thumbnail_info"
         },
         {
           "type": "product_list",
           "id": "answer_6_products",
-          "label": "Recommended products",
+          "label": "t:routine_builder.recommended_products",
           "limit": 8
         }
       ]
@@ -923,51 +931,52 @@
   "max_blocks": 6,
   "presets": [
     {
-      "name": "Routine builder",
+      "name": "t:routine_builder.name",
       "blocks": [
         {
           "type": "blank",
           "settings": {
-            "before": "My skin feels",
+            "before": "t:routine_builder.d_before",
             "after": ",",
-            "answer_1_label": "dry",
-            "answer_2_label": "oily",
-            "answer_3_label": "a bit of both",
-            "answer_4_label": "sensitive"
+            "answer_1_label": "t:routine_builder.d_dry",
+            "answer_2_label": "t:routine_builder.d_oily",
+            "answer_3_label": "t:routine_builder.d_both",
+            "answer_4_label": "t:routine_builder.d_sensitive"
           }
         },
         {
           "type": "blank",
           "settings": {
-            "before": "I'd love to fix",
+            "before": "t:routine_builder.p_fix",
             "allow_multiple": true,
-            "answer_1_label": "dullness",
+            "answer_1_label": "t:routine_builder.p_dullness",
             "answer_1_color": "#ffe08a",
-            "answer_2_label": "dryness",
+            "answer_2_label": "t:routine_builder.p_dryness",
             "answer_2_color": "#bfe0f5",
-            "answer_3_label": "dark spots",
+            "answer_3_label": "t:routine_builder.p_dark_spots",
             "answer_3_color": "#f2c6a8",
-            "answer_4_label": "fine lines",
+            "answer_4_label": "t:routine_builder.p_fine_lines",
             "answer_4_color": "#e3cdf0",
-            "answer_5_label": "sun damage",
+            "answer_5_label": "t:routine_builder.p_sun_damage",
             "answer_5_color": "#ffd2a6"
           }
         },
         {
           "type": "blank",
           "settings": {
-            "before": "and I have",
-            "after": "for my routine.",
-            "answer_1_label": "five minutes",
+            "before": "t:routine_builder.p_have",
+            "after": "t:routine_builder.p_routine",
+            "answer_1_label": "t:routine_builder.p_five",
             "answer_1_color": "#c9ead9",
-            "answer_2_label": "ten minutes",
+            "answer_2_label": "t:routine_builder.p_ten",
             "answer_2_color": "#f8e3b5",
-            "answer_3_label": "all the time in the world",
+            "answer_3_label": "t:routine_builder.p_all_time",
             "answer_3_color": "#e6d3f7",
             "answer_4_label": ""
           }
         }
-      ]
+      ],
+      "category": "t:categories.products"
     }
   ]
 }

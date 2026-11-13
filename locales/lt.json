@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Pridėkite bloką „Tarpas“, kad pradėtumėte kurti sakinį.",
+    "ready": "Jūsų rutina paruošta. Rekomenduojami produktai: {{ count }}."
+  },
   "blocks": {
     "load_video": "Įkelti vaizdo įrašą „{{ description }}“",
     "sold_out": "Išparduota",

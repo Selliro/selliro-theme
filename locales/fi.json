@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Lisää Aukko-lohko aloittaaksesi lauseen.",
+    "ready": "Rutiinisi on valmis. Suositeltuja tuotteita: {{ count }}."
+  },
   "blocks": {
     "load_video": "Lataa video: {{ description }}",
     "sold_out": "Loppuunmyyty",

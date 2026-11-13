@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Přidejte blok „Mezera“ a začněte sestavovat větu.",
+    "ready": "Vaše rutina je připravena. Doporučené produkty: {{ count }}."
+  },
   "blocks": {
     "load_video": "Načíst video: {{ description }}",
     "sold_out": "Vyprodáno",

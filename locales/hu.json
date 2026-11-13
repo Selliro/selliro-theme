@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Adjon hozzá egy „Üres hely” blokkot a mondat elkezdéséhez.",
+    "ready": "A rutinja elkészült. Ajánlott termékek: {{ count }}."
+  },
   "blocks": {
     "load_video": "Videó betöltése: {{ description }}",
     "sold_out": "Elfogyott",

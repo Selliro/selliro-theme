@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Pridajte blok „Medzera“ a začnite tvoriť vetu.",
+    "ready": "Vaša rutina je pripravená. Odporúčané produkty: {{ count }}."
+  },
   "blocks": {
     "load_video": "Načítať video: {{ description }}",
     "sold_out": "Vypredané",

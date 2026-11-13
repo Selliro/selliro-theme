@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Agrega un bloque «Hueco» para empezar a crear la frase.",
+    "ready": "Tu rutina está lista. {{ count }} productos recomendados."
+  },
   "blocks": {
     "load_video": "Cargar video: {{ description }}",
     "sold_out": "Agotado",

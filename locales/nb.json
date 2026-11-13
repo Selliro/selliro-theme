@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Legg til en «Tomt felt»-blokk for å begynne å bygge setningen.",
+    "ready": "Rutinen din er klar. {{ count }} anbefalte produkter."
+  },
   "blocks": {
     "load_video": "Last inn video: {{ description }}",
     "sold_out": "Utsolgt",

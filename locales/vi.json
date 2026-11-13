@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Thêm khối “Chỗ trống” để bắt đầu tạo câu.",
+    "ready": "Quy trình của bạn đã sẵn sàng. {{ count }} sản phẩm được đề xuất."
+  },
   "blocks": {
     "load_video": "Tải video: {{ description }}",
     "sold_out": "Hết hàng",

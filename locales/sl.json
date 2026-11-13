@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Dodajte blok »Praznina«, da začnete sestavljati stavek.",
+    "ready": "Vaša rutina je pripravljena. Priporočeni izdelki: {{ count }}."
+  },
   "blocks": {
     "load_video": "Naloži videoposnetek: {{ description }}",
     "sold_out": "Razprodano",

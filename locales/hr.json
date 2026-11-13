@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Dodajte blok „Praznina” kako biste započeli rečenicu.",
+    "ready": "Vaša rutina je spremna. Preporučeni proizvodi: {{ count }}."
+  },
   "blocks": {
     "load_video": "Učitaj videozapis: {{ description }}",
     "sold_out": "Rasprodano",

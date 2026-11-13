@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Ajoutez un bloc « Blanc » pour commencer la phrase.",
+    "ready": "Votre routine est prête. {{ count }} produits recommandés."
+  },
   "blocks": {
     "load_video": "Charger la vidéo : {{ description }}",
     "sold_out": "Épuisé",

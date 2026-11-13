@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Aggiungi un blocco «Spazio vuoto» per iniziare la frase.",
+    "ready": "La tua routine è pronta. {{ count }} prodotti consigliati."
+  },
   "blocks": {
     "load_video": "Carica il video: {{ description }}",
     "sold_out": "Esaurito",

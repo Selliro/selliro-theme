@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Füge einen Block „Lücke“ hinzu, um mit dem Satz zu beginnen.",
+    "ready": "Deine Routine ist fertig. {{ count }} empfohlene Produkte."
+  },
   "blocks": {
     "load_video": "Video laden: {{ description }}",
     "sold_out": "Ausverkauft",

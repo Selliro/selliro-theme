@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Adicione um bloco \"Lacuna\" para começar a montar a frase.",
+    "ready": "Sua rotina está pronta. {{ count }} produtos recomendados."
+  },
   "blocks": {
     "load_video": "Carregar vídeo: {{ description }}",
     "sold_out": "Esgotado",

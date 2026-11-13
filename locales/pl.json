@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Dodaj blok „Luka”, aby zacząć tworzyć zdanie.",
+    "ready": "Twoja rutyna jest gotowa. Polecane produkty: {{ count }}."
+  },
   "blocks": {
     "load_video": "Załaduj film: {{ description }}",
     "sold_out": "Wyprzedane",

@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Cümleyi oluşturmaya başlamak için bir \"Boşluk\" bloğu ekleyin.",
+    "ready": "Rutinin hazır. {{ count }} ürün önerildi."
+  },
   "blocks": {
     "load_video": "Videoyu yükle: {{ description }}",
     "sold_out": "Tükendi",

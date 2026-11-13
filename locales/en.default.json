@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Add a “Blank” block to start building the sentence.",
+    "ready": "Your routine is ready. {{ count }} products recommended."
+  },
   "accessibility": {
     "account": "Account",
     "cart": "Cart",

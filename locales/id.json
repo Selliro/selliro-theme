@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Tambahkan blok “Kosong” untuk mulai menyusun kalimat.",
+    "ready": "Rutinitas Anda siap. {{ count }} produk direkomendasikan."
+  },
   "blocks": {
     "load_video": "Muat video: {{ description }}",
     "sold_out": "Habis",

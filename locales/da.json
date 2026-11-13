@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Tilføj en blok med et \"tomt felt\" for at begynde at bygge sætningen.",
+    "ready": "Din rutine er klar. {{ count }} anbefalede produkter."
+  },
   "blocks": {
     "load_video": "Indlæs video: {{ description }}",
     "sold_out": "Udsolgt",

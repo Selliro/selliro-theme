@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Adăugați un bloc „Spațiu gol” pentru a începe propoziția.",
+    "ready": "Rutina ta este gata. Produse recomandate: {{ count }}."
+  },
   "blocks": {
     "load_video": "Încarcă clipul video: {{ description }}",
     "sold_out": "Stoc epuizat",

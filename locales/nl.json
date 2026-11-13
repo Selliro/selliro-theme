@@ -8,6 +8,10 @@
  * ------------------------------------------------------------
  */
 {
+  "routine_builder": {
+    "editor_hint": "Voeg een blok ‘Leeg vak’ toe om de zin te bouwen.",
+    "ready": "Je routine is klaar. {{ count }} aanbevolen producten."
+  },
   "blocks": {
     "load_video": "Video laden: {{ description }}",
     "sold_out": "Uitverkocht",
