@@ -323,8 +323,11 @@
         return;
       }
       if (!priceEl) return;
-      const compare = v.compare > v.price ? `<s class="bb-card__compare">${formatMoney(v.compare, this.moneyFormat)}</s>` : '';
-      priceEl.innerHTML = `${compare}<span>${formatMoney(v.price, this.moneyFormat)}</span>`;
+      const compare =
+        v.compare > v.price
+          ? `<span class="new-arrivals-card__price new-arrivals-card__price--compare">${formatMoney(v.compare, this.moneyFormat)}</span>`
+          : '';
+      priceEl.innerHTML = `${compare}<span class="new-arrivals-card__price new-arrivals-card__price--current">${formatMoney(v.price, this.moneyFormat)}</span>`;
       const add = card.querySelector('[data-bb-add]');
       if (add) {
         add.toggleAttribute('data-soldout', !v.available);
@@ -394,6 +397,7 @@
         }
       }
       this.el.slots.innerHTML = slotsHtml.join('');
+      this.el.slots.style.setProperty('--bb-slot-count', String(totalSlots));
 
       // Item list with steppers
       this.el.items.innerHTML = lines

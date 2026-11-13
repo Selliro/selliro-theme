@@ -70,7 +70,9 @@
     "hl_marker": "Zvýrazňovač",
     "hl_circle": "Ručně kreslený kruh",
     "highlight_color": "Barva zvýraznění",
-    "d_highlight": "balíček"
+    "d_highlight": "balíček",
+    "card_add_label": "Text tlačítka na kartě",
+    "d_card_add": "Přidat do balíčku"
   },
   "button_fx": {
     "label": "Animace při najetí",

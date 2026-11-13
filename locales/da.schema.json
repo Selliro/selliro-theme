@@ -70,7 +70,9 @@
     "hl_marker": "Overstregningstusch",
     "hl_circle": "Håndtegnet cirkel",
     "highlight_color": "Fremhævningsfarve",
-    "d_highlight": "bundle"
+    "d_highlight": "bundle",
+    "card_add_label": "Knaptekst på kort",
+    "d_card_add": "Føj til bundle"
   },
   "button_fx": {
     "label": "Hover-animation",

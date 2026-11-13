@@ -70,7 +70,9 @@
     "hl_marker": "螢光筆",
     "hl_circle": "手繪圓圈",
     "highlight_color": "強調顏色",
-    "d_highlight": "套組"
+    "d_highlight": "套組",
+    "card_add_label": "卡片按鈕文字",
+    "d_card_add": "加入套組"
   },
   "button_fx": {
     "label": "懸停動畫",

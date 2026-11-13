@@ -70,7 +70,9 @@
     "hl_marker": "Textmarker",
     "hl_circle": "Handgezeichneter Kreis",
     "highlight_color": "Farbe der Hervorhebung",
-    "d_highlight": "Bundle"
+    "d_highlight": "Bundle",
+    "card_add_label": "Beschriftung der Kartenschaltfläche",
+    "d_card_add": "Zum Bundle hinzufügen"
   },
   "button_fx": {
     "label": "Hover-Animation",

@@ -70,7 +70,9 @@
     "hl_marker": "Överstrykningspenna",
     "hl_circle": "Handritad cirkel",
     "highlight_color": "Färg för framhävning",
-    "d_highlight": "paket"
+    "d_highlight": "paket",
+    "card_add_label": "Knapptext på kort",
+    "d_card_add": "Lägg till i paketet"
   },
   "button_fx": {
     "label": "Hovringsanimation",

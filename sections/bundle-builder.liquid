@@ -111,8 +111,6 @@
       {%- if source_products != blank and source_products.size > 0 -%}
         {%- for product in source_products limit: limit -%}
           {%- liquid
-            assign v = product.selected_or_first_available_variant
-            assign second = product.media[1]
             assign multi = false
             if product.has_only_default_variant == false
               assign multi = true
@@ -400,6 +398,12 @@
       "default": 8
     },
     {
+      "type": "text",
+      "id": "card_add_label",
+      "label": "t:bundle_builder.card_add_label",
+      "default": "t:bundle_builder.d_card_add"
+    },
+    {
       "type": "header",
       "content": "t:bundle_builder.rules"
     },
@@ -553,7 +557,7 @@
           "label": "t:options.left"
         }
       ],
-      "default": "right"
+      "default": "left"
     },
     {
       "type": "range",
@@ -708,12 +712,6 @@
         }
       ],
       "default": "1 / 1"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_second_image",
-      "label": "t:bundle_builder.show_second_image",
-      "default": true
     },
     {
       "type": "checkbox",

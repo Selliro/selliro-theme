@@ -70,7 +70,9 @@
     "hl_marker": "형광펜",
     "hl_circle": "손으로 그린 원",
     "highlight_color": "강조 색상",
-    "d_highlight": "번들"
+    "d_highlight": "번들",
+    "card_add_label": "카드 버튼 레이블",
+    "d_card_add": "번들에 추가"
   },
   "button_fx": {
     "label": "호버 애니메이션",

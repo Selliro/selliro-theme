@@ -70,7 +70,9 @@
     "hl_marker": "Marker",
     "hl_circle": "Hand-drawn circle",
     "highlight_color": "Highlight color",
-    "d_highlight": "Bundle"
+    "d_highlight": "Bundle",
+    "card_add_label": "Card button label",
+    "d_card_add": "Add to bundle"
   },
   "button_fx": {
     "label": "Hover animation",

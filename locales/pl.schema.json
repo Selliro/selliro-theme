@@ -70,7 +70,9 @@
     "hl_marker": "Zakreślacz",
     "hl_circle": "Ręcznie rysowane kółko",
     "highlight_color": "Kolor wyróżnienia",
-    "d_highlight": "zestaw"
+    "d_highlight": "zestaw",
+    "card_add_label": "Tekst przycisku na karcie",
+    "d_card_add": "Dodaj do zestawu"
   },
   "button_fx": {
     "label": "Animacja po najechaniu",

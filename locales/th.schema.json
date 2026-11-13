@@ -70,7 +70,9 @@
     "hl_marker": "ปากกาไฮไลต์",
     "hl_circle": "วงกลมวาดมือ",
     "highlight_color": "สีการเน้น",
-    "d_highlight": "ชุด"
+    "d_highlight": "ชุด",
+    "card_add_label": "ข้อความปุ่มบนการ์ด",
+    "d_card_add": "เพิ่มลงในชุด"
   },
   "button_fx": {
     "label": "แอนิเมชันเมื่อวางเมาส์",

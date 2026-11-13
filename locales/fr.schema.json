@@ -70,7 +70,9 @@
     "hl_marker": "Surligneur",
     "hl_circle": "Cercle dessiné à la main",
     "highlight_color": "Couleur de mise en avant",
-    "d_highlight": "lot"
+    "d_highlight": "lot",
+    "card_add_label": "Libellé du bouton de la carte",
+    "d_card_add": "Ajouter au lot"
   },
   "button_fx": {
     "label": "Animation au survol",

@@ -70,7 +70,9 @@
     "hl_marker": "Evidenziatore",
     "hl_circle": "Cerchio disegnato a mano",
     "highlight_color": "Colore dell'evidenziazione",
-    "d_highlight": "bundle"
+    "d_highlight": "bundle",
+    "card_add_label": "Testo del pulsante della scheda",
+    "d_card_add": "Aggiungi al bundle"
   },
   "button_fx": {
     "label": "Animazione al passaggio",

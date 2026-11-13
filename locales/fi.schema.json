@@ -70,7 +70,9 @@
     "hl_marker": "Korostuskynä",
     "hl_circle": "Käsin piirretty ympyrä",
     "highlight_color": "Korostusväri",
-    "d_highlight": "paketti"
+    "d_highlight": "paketti",
+    "card_add_label": "Kortin painikkeen teksti",
+    "d_card_add": "Lisää pakettiin"
   },
   "button_fx": {
     "label": "Hover-animaatio",

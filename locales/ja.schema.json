@@ -70,7 +70,9 @@
     "hl_marker": "マーカー",
     "hl_circle": "手描きの丸",
     "highlight_color": "強調の色",
-    "d_highlight": "セット"
+    "d_highlight": "セット",
+    "card_add_label": "カードのボタンラベル",
+    "d_card_add": "セットに追加"
   },
   "button_fx": {
     "label": "ホバーアニメーション",

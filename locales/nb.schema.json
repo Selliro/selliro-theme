@@ -70,7 +70,9 @@
     "hl_marker": "Merkepenn",
     "hl_circle": "Håndtegnet sirkel",
     "highlight_color": "Uthevingsfarge",
-    "d_highlight": "pakke"
+    "d_highlight": "pakke",
+    "card_add_label": "Knappetekst på kort",
+    "d_card_add": "Legg til i pakken"
   },
   "button_fx": {
     "label": "Animasjon ved peking",

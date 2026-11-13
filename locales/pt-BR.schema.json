@@ -70,7 +70,9 @@
     "hl_marker": "Marca-texto",
     "hl_circle": "Círculo desenhado à mão",
     "highlight_color": "Cor do destaque",
-    "d_highlight": "kit"
+    "d_highlight": "kit",
+    "card_add_label": "Texto do botão do card",
+    "d_card_add": "Adicionar ao kit"
   },
   "button_fx": {
     "label": "Animação ao passar o cursor",

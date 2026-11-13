@@ -70,7 +70,9 @@
     "hl_marker": "İşaretleme kalemi",
     "hl_circle": "Elle çizilmiş daire",
     "highlight_color": "Vurgu rengi",
-    "d_highlight": "paketini"
+    "d_highlight": "paketini",
+    "card_add_label": "Kart düğmesi metni",
+    "d_card_add": "Pakete ekle"
   },
   "button_fx": {
     "label": "Üzerine gelme animasyonu",

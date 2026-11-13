@@ -70,7 +70,9 @@
     "hl_marker": "Marcador",
     "hl_circle": "Círculo dibujado a mano",
     "highlight_color": "Color del resaltado",
-    "d_highlight": "paquete"
+    "d_highlight": "paquete",
+    "card_add_label": "Texto del botón de la tarjeta",
+    "d_card_add": "Agregar al paquete"
   },
   "button_fx": {
     "label": "Animación al pasar el cursor",

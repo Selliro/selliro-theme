@@ -70,7 +70,9 @@
     "hl_marker": "Markeerstift",
     "hl_circle": "Handgetekende cirkel",
     "highlight_color": "Kleur van markering",
-    "d_highlight": "bundel"
+    "d_highlight": "bundel",
+    "card_add_label": "Knoplabel op kaart",
+    "d_card_add": "Aan bundel toevoegen"
   },
   "button_fx": {
     "label": "Hover-animatie",

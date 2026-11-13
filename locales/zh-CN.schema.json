@@ -70,7 +70,9 @@
     "hl_marker": "荧光笔",
     "hl_circle": "手绘圆圈",
     "highlight_color": "强调颜色",
-    "d_highlight": "套装"
+    "d_highlight": "套装",
+    "card_add_label": "卡片按钮文字",
+    "d_card_add": "加入套装"
   },
   "button_fx": {
     "label": "悬停动画",
