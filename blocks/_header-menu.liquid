@@ -602,6 +602,12 @@
     }
   }
 
+  /* Promo card dropdowns always get breathing room above and below the content */
+  .header-menu-nav .menu-list__submenu:has(.mega-menu__content-list--promos) {
+    --submenu-padding-block-start: clamp(1.5rem, 2.5vw, 2.25rem);
+    --submenu-padding-block-end: clamp(1.5rem, 2.5vw, 2.25rem);
+  }
+
   /* Thin divider between the header bar and an open dropdown */
   .header-menu-nav--submenu-divider .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu,
   .header-menu-nav--submenu-divider .overflow-menu::part(overflow) {
