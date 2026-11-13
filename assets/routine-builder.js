@@ -43,16 +43,14 @@
       this.trays = Array.from(this.querySelectorAll('[data-rb-tray]'));
       this.results = this.querySelector('[data-rb-results]');
       this.pool = this.querySelector('[data-rb-pool]');
-      this.ghosts = Array.from(this.querySelectorAll('[data-rb-ghost]'));
       this.meter = Array.from(this.querySelectorAll('.rb__meter-seg'));
       this.addAllBtn = this.querySelector('[data-rb-add-all]');
       this.resetBtn = this.querySelector('[data-rb-reset]');
       this.hint = this.querySelector('[data-rb-hint]');
-      this.titles = {
-        idle: this.querySelector('[data-rb-title-idle]'),
-        live: this.querySelector('[data-rb-title-live]'),
-        done: this.querySelector('[data-rb-title-done]'),
-      };
+      this.resultsWrap = this.querySelector('[data-rb-results-wrap]');
+      this.resultsTitle = this.querySelector('[data-rb-results-title]');
+      this.scrollToResults = this.dataset.scrollResults === 'true';
+      this.wasDone = false;
       this.maxResults = parseInt(this.dataset.maxResults || '4', 10);
       this.accent = this.dataset.accent || '#f8d12f';
       this.storageKey = STORAGE_PREFIX + (this.dataset.sectionId || '');
@@ -72,6 +70,7 @@
 
       if (this.dataset.remember === 'true') this.restore();
       this.refresh({ animate: false });
+      this.initFloats();
 
       // Invite the first interaction: open the first empty blank when the section scrolls into view.
       this.io = new IntersectionObserver(
@@ -89,6 +88,11 @@
     }
 
     disconnectedCallback() {
+      if (this.onFloatScroll) {
+        window.removeEventListener('scroll', this.onFloatScroll);
+        window.removeEventListener('resize', this.onFloatScroll);
+      }
+      this.floatIo?.disconnect();
       document.removeEventListener('click', this.onDocClick);
       document.removeEventListener('shopify:block:select', this.onBlockSelect);
       this.io?.disconnect();
@@ -254,13 +258,86 @@
       ['--rb-m1', '--rb-m2', '--rb-m3'].forEach((v, k) => this.style.setProperty(v, mood[k % mood.length]));
 
       this.meter.forEach((seg, i) => seg.classList.toggle('is-on', i < answered));
-      const state = answered === 0 ? 'idle' : answered === this.blanks.length ? 'done' : 'live';
+      const done = this.blanks.length > 0 && answered === this.blanks.length;
+      const state = answered === 0 ? 'idle' : done ? 'done' : 'live';
       this.dataset.progress = state;
-      Object.entries(this.titles).forEach(([k, el]) => el && (el.hidden = k !== state));
       if (this.hint) this.hint.classList.toggle('is-hidden', answered > 0);
       if (this.resetBtn) this.resetBtn.hidden = answered === 0;
+      if (this.resultsWrap) this.resultsWrap.setAttribute('aria-hidden', String(!done));
 
-      this.renderResults(answered ? this.rank() : [], animate);
+      // Products stay hidden until every blank is filled.
+      const justCompleted = done && !this.wasDone;
+      this.renderResults(done ? this.rank() : [], animate && !justCompleted);
+      if (justCompleted) this.reveal(animate);
+      this.wasDone = done;
+    }
+
+    reveal(animate) {
+      const items = Array.from(this.results.querySelectorAll('.rb__result'));
+      if (animate && !reducedMotion()) {
+        items.forEach((li, i) =>
+          li.animate(
+            [
+              { opacity: 0, transform: 'translateY(28px) scale(0.96)' },
+              { opacity: 1, transform: 'none' },
+            ],
+            { duration: 700, delay: 260 + i * 110, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'backwards' }
+          )
+        );
+      }
+      if (animate && this.scrollToResults && this.resultsWrap) {
+        setTimeout(() => {
+          const rect = this.resultsWrap.getBoundingClientRect();
+          if (rect.top > window.innerHeight * 0.55) {
+            window.scrollBy({ top: rect.top - window.innerHeight * 0.18, behavior: reducedMotion() ? 'auto' : 'smooth' });
+          }
+          this.resultsTitle?.focus({ preventScroll: true });
+        }, 380);
+      }
+    }
+
+    /* ---------------------------------------------------------------- floating images */
+
+    initFloats() {
+      this.floats = document.getElementById(`RbFloats-${this.dataset.sectionId}`);
+      if (!this.floats) return;
+      this.floatEls = Array.from(this.floats.querySelectorAll('[data-rb-float]'));
+      this.floatDistance = parseFloat(this.floats.dataset.speed || '0') * 75;
+      if (!this.floatEls.length || !this.floatDistance || reducedMotion()) {
+        this.floats.classList.add('is-static');
+        return;
+      }
+      this.onFloatScroll = () => {
+        if (this.floatFrame) return;
+        this.floatFrame = requestAnimationFrame(() => {
+          this.floatFrame = null;
+          this.updateFloats();
+        });
+      };
+      this.floatIo = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          window.addEventListener('scroll', this.onFloatScroll, { passive: true });
+          window.addEventListener('resize', this.onFloatScroll, { passive: true });
+          this.updateFloats();
+        } else {
+          window.removeEventListener('scroll', this.onFloatScroll);
+          window.removeEventListener('resize', this.onFloatScroll);
+        }
+      });
+      this.floatIo.observe(this.floats);
+      this.updateFloats();
+    }
+
+    updateFloats() {
+      const rect = this.floats.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      const progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
+      // Start low and rise past their resting spot as the page scrolls down; each image has its own pace.
+      const speeds = [1, 1.45, 0.75, 1.2];
+      this.floatEls.forEach((el, i) => {
+        const y = (0.5 - progress) * this.floatDistance * (speeds[i % speeds.length] || 1);
+        el.style.setProperty('--rise', `${y.toFixed(1)}px`);
+      });
     }
 
     joinLabels(labels) {
@@ -313,12 +390,6 @@
         const step = li.querySelector('.rb__step');
         if (step) step.textContent = String(i + 1).padStart(2, '0');
         this.results.appendChild(li);
-      });
-
-      // Ghost placeholders fill any empty slots.
-      this.ghosts.forEach((g, i) => {
-        g.hidden = i < items.length;
-        this.results.appendChild(g);
       });
 
       if (this.addAllBtn) {
