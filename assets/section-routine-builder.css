@@ -157,6 +157,8 @@
 }
 
 .rb__sentence {
+  color: inherit;
+  text-transform: none;
   max-width: 24ch;
   margin: 0.25rem 0 0;
   font-family: var(--rb-family, var(--font-heading--family));
@@ -224,7 +226,8 @@
 }
 
 .rb__blank:not(.is-filled) .rb__blank-text {
-  color: rgb(var(--color-foreground-rgb) / 0.45);
+  /* Large text: keeps at least 3:1 contrast on the tinted pill */
+  color: rgb(var(--color-foreground-rgb) / 0.62);
 }
 
 .rb__blank-icon {
@@ -645,6 +648,7 @@
 
 .rb__reset {
   order: 3;
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -978,5 +982,32 @@
 
   .rb__results-wrap {
     transition: none;
+  }
+}
+
+
+/* ================================================================ accessibility */
+
+.rb__reset:focus-visible,
+.rb__add-all:focus-visible,
+.rb__done:focus-visible {
+  outline: 2px solid var(--color-foreground);
+  outline-offset: 3px;
+}
+
+/* Windows high contrast: keep pills and selected answers distinguishable */
+@media (forced-colors: active) {
+  .rb__blank,
+  .rb__option,
+  .rb__tray {
+    border: 1px solid CanvasText;
+  }
+
+  .rb__option:has(.rb__option-input:checked) {
+    outline: 3px solid Highlight;
+  }
+
+  .rb__mood {
+    display: none;
   }
 }

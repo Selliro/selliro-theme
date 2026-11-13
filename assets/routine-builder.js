@@ -50,6 +50,7 @@
       this.resultsWrap = this.querySelector('[data-rb-results-wrap]');
       this.resultsTitle = this.querySelector('[data-rb-results-title]');
       this.scrollToResults = this.dataset.scrollResults === 'true';
+      this.live = this.querySelector('[data-rb-live]');
       this.wasDone = false;
       this.maxResults = parseInt(this.dataset.maxResults || '4', 10);
       this.accent = this.dataset.accent || '#f8d12f';
@@ -274,6 +275,10 @@
 
     reveal(animate) {
       const items = Array.from(this.results.querySelectorAll('.rb__result'));
+      if (this.live && animate) {
+        // Announce completion to screen readers (string comes from the locale file).
+        this.live.textContent = (this.live.dataset.ready || '').replace('[count]', String(items.length));
+      }
       if (animate && !reducedMotion()) {
         items.forEach((li, i) =>
           li.animate(
