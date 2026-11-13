@@ -8,6 +8,9 @@
 <ticker-duo
   class="ticker-duo {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
   id="ticker-duo-{{ section.id }}"
+  data-scroll-boost="{{ section.settings.scroll_boost }}"
+  data-boost-strength="{{ section.settings.scroll_boost_strength }}"
+  data-scroll-up="{{ section.settings.scroll_up_behavior }}"
   style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
 >
   <div class="ticker-duo__stack" style="gap: {{ section.settings.row_gap }}px;">
@@ -18,7 +21,7 @@
         {{ block.shopify_attributes }}
       >
         <div class="ticker-duo__scroll">
-          <div class="ticker-duo__track{% if block.settings.direction == 'reverse' %} is-reverse{% endif %}">
+          <div class="ticker-duo__track{% if block.settings.direction == 'reverse' %} is-reverse{% endif %}" data-speed="{{ block.settings.speed }}">
             {%- for i in (1..8) -%}
               <div class="ticker-duo__group"{% unless forloop.first %} aria-hidden="true"{% endunless %}>
                 {%- if block.settings.text != blank -%}
@@ -41,121 +44,7 @@
   </div>
 </ticker-duo>
 
-<script>
-  class TickerDuo extends HTMLElement {
-    connectedCallback() {
-      this.tracks = Array.from(this.querySelectorAll('.ticker-duo__track'));
-      if (!this.tracks.length) return;
-
-      // Respect the visitor's "reduce motion" preference: keep the ticker static.
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-      // Clone groups until the track is at least 2.5x the viewport wide, so the loop
-      // boundary always falls on a group boundary (no visible seam).
-      // Guarded: a hidden or empty track has scrollWidth 0 and would otherwise loop forever.
-      const MAX_CLONE_ROUNDS = 12;
-      this.tracks.forEach((track) => {
-        const origGroups = Array.from(track.querySelectorAll('.ticker-duo__group'));
-        if (!origGroups.length || track.scrollWidth === 0) return;
-
-        // The first group is the readable copy; every repeat is decorative.
-        origGroups.slice(1).forEach((g) => g.setAttribute('aria-hidden', 'true'));
-
-        const minWidth = window.innerWidth * 2.5;
-        let rounds = 0;
-        while (track.scrollWidth < minWidth && rounds < MAX_CLONE_ROUNDS) {
-          origGroups.forEach((g) => {
-            const clone = g.cloneNode(true);
-            clone.setAttribute('aria-hidden', 'true');
-            track.appendChild(clone);
-          });
-          rounds++;
-        }
-      });
-
-      this.loopWidths = this.tracks.map((t) => t.scrollWidth / 2);
-      this.positions = this.tracks.map(() => 0);
-
-      const IDLE = 0.6;
-      this.idleSpeed = IDLE;
-      this.velocity = IDLE;
-      this.targetVelocity = IDLE;
-      this.lastScrollY = window.scrollY;
-      this.rafId = null;
-      this.isVisible = false;
-
-      this.onScroll = this.onScroll.bind(this);
-      this.tick = this.tick.bind(this);
-
-      window.addEventListener('scroll', this.onScroll, { passive: true });
-
-      // Only animate while the ticker is on screen, to save CPU and battery.
-      this.observer = new IntersectionObserver((entries) => {
-        this.isVisible = entries.some((entry) => entry.isIntersecting);
-        if (this.isVisible) this.start();
-        else this.stop();
-      });
-      this.observer.observe(this);
-    }
-
-    disconnectedCallback() {
-      if (this.onScroll) window.removeEventListener('scroll', this.onScroll);
-      if (this.observer) this.observer.disconnect();
-      this.stop();
-    }
-
-    start() {
-      if (this.rafId === null) this.rafId = requestAnimationFrame(this.tick);
-    }
-
-    stop() {
-      if (this.rafId !== null && this.rafId !== undefined) cancelAnimationFrame(this.rafId);
-      this.rafId = null;
-    }
-
-    onScroll() {
-      const currentY = window.scrollY;
-      const delta = currentY - this.lastScrollY;
-      this.lastScrollY = currentY;
-
-      // Upward scroll is clamped tighter (-1.5) than downward (+4) so a sudden
-      // scroll-up never causes a jarring fast reversal.
-      this.targetVelocity = Math.max(
-        this.idleSpeed - 1.5,
-        Math.min(this.idleSpeed + 4, this.idleSpeed + delta * 0.15)
-      );
-    }
-
-    tick() {
-      // Decay target back toward idle each frame (~4 frames to settle).
-      this.targetVelocity += (this.idleSpeed - this.targetVelocity) * 0.25;
-
-      // Asymmetric lerp: ease in slowly when decelerating/reversing (scroll up)
-      // so it never snaps; ease in faster when accelerating (scroll down).
-      const lerp = this.targetVelocity < this.velocity ? 0.06 : 0.18;
-      this.velocity += (this.targetVelocity - this.velocity) * lerp;
-
-      this.tracks.forEach((track, i) => {
-        const dir = track.classList.contains('is-reverse') ? 1 : -1;
-        this.positions[i] += this.velocity * dir;
-
-        const halfWidth = this.loopWidths[i];
-        if (halfWidth > 0) {
-          let p = this.positions[i] % halfWidth;
-          if (p > 0) p -= halfWidth;
-          this.positions[i] = p;
-          track.style.transform = `translateX(${p}px)`;
-        }
-      });
-
-      this.rafId = this.isVisible ? requestAnimationFrame(this.tick) : null;
-    }
-  }
-
-  if (!customElements.get('ticker-duo')) {
-    customElements.define('ticker-duo', TickerDuo);
-  }
-</script>
+<script src="{{ 'ticker-duo.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
@@ -198,8 +87,14 @@
       "id": "section_width",
       "label": "Section width",
       "options": [
-        { "value": "page-width", "label": "Page" },
-        { "value": "full-width", "label": "Full" }
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
       ],
       "default": "full-width"
     },
@@ -208,6 +103,44 @@
       "id": "color_scheme",
       "label": "Color scheme",
       "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Scroll effect"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_boost",
+      "label": "Speed up while scrolling",
+      "info": "Rows move faster while the page scrolls, then ease back to normal speed.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "scroll_boost_strength",
+      "label": "Scroll speed boost",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "visible_if": "{{ section.settings.scroll_boost }}"
+    },
+    {
+      "type": "select",
+      "id": "scroll_up_behavior",
+      "label": "When scrolling up",
+      "options": [
+        {
+          "value": "faster",
+          "label": "Speed up (same direction)"
+        },
+        {
+          "value": "reverse",
+          "label": "Reverse direction"
+        }
+      ],
+      "default": "faster",
+      "visible_if": "{{ section.settings.scroll_boost }}"
     }
   ],
   "blocks": [
@@ -235,15 +168,42 @@
           "id": "type_preset",
           "label": "t:settings.preset",
           "options": [
-            { "value": "rte", "label": "t:options.default" },
-            { "value": "paragraph", "label": "t:options.paragraph" },
-            { "value": "h1", "label": "t:options.h1" },
-            { "value": "h2", "label": "t:options.h2" },
-            { "value": "h3", "label": "t:options.h3" },
-            { "value": "h4", "label": "t:options.h4" },
-            { "value": "h5", "label": "t:options.h5" },
-            { "value": "h6", "label": "t:options.h6" },
-            { "value": "custom", "label": "t:options.custom" }
+            {
+              "value": "rte",
+              "label": "t:options.default"
+            },
+            {
+              "value": "paragraph",
+              "label": "t:options.paragraph"
+            },
+            {
+              "value": "h1",
+              "label": "t:options.h1"
+            },
+            {
+              "value": "h2",
+              "label": "t:options.h2"
+            },
+            {
+              "value": "h3",
+              "label": "t:options.h3"
+            },
+            {
+              "value": "h4",
+              "label": "t:options.h4"
+            },
+            {
+              "value": "h5",
+              "label": "t:options.h5"
+            },
+            {
+              "value": "h6",
+              "label": "t:options.h6"
+            },
+            {
+              "value": "custom",
+              "label": "t:options.custom"
+            }
           ],
           "default": "rte",
           "info": "t:info.edit_presets_in_theme_settings"
@@ -253,10 +213,22 @@
           "id": "font",
           "label": "t:settings.font",
           "options": [
-            { "value": "var(--font-body--family)", "label": "t:options.body" },
-            { "value": "var(--font-subheading--family)", "label": "t:options.subheading" },
-            { "value": "var(--font-heading--family)", "label": "t:options.heading" },
-            { "value": "var(--font-accent--family)", "label": "t:options.accent" }
+            {
+              "value": "var(--font-body--family)",
+              "label": "t:options.body"
+            },
+            {
+              "value": "var(--font-subheading--family)",
+              "label": "t:options.subheading"
+            },
+            {
+              "value": "var(--font-heading--family)",
+              "label": "t:options.heading"
+            },
+            {
+              "value": "var(--font-accent--family)",
+              "label": "t:options.accent"
+            }
           ],
           "default": "var(--font-body--family)",
           "visible_if": "{{ block.settings.type_preset == 'custom' }}"
@@ -266,23 +238,74 @@
           "id": "font_size",
           "label": "t:settings.size",
           "options": [
-            { "value": "", "label": "t:options.default" },
-            { "value": "0.625rem", "label": "10px" },
-            { "value": "0.75rem", "label": "12px" },
-            { "value": "0.875rem", "label": "14px" },
-            { "value": "1rem", "label": "16px" },
-            { "value": "1.125rem", "label": "18px" },
-            { "value": "1.25rem", "label": "20px" },
-            { "value": "1.5rem", "label": "24px" },
-            { "value": "2rem", "label": "32px" },
-            { "value": "2.5rem", "label": "40px" },
-            { "value": "3rem", "label": "48px" },
-            { "value": "3.5rem", "label": "56px" },
-            { "value": "4.5rem", "label": "72px" },
-            { "value": "5.5rem", "label": "88px" },
-            { "value": "7.5rem", "label": "120px" },
-            { "value": "9.5rem", "label": "152px" },
-            { "value": "11.5rem", "label": "184px" }
+            {
+              "value": "",
+              "label": "t:options.default"
+            },
+            {
+              "value": "0.625rem",
+              "label": "10px"
+            },
+            {
+              "value": "0.75rem",
+              "label": "12px"
+            },
+            {
+              "value": "0.875rem",
+              "label": "14px"
+            },
+            {
+              "value": "1rem",
+              "label": "16px"
+            },
+            {
+              "value": "1.125rem",
+              "label": "18px"
+            },
+            {
+              "value": "1.25rem",
+              "label": "20px"
+            },
+            {
+              "value": "1.5rem",
+              "label": "24px"
+            },
+            {
+              "value": "2rem",
+              "label": "32px"
+            },
+            {
+              "value": "2.5rem",
+              "label": "40px"
+            },
+            {
+              "value": "3rem",
+              "label": "48px"
+            },
+            {
+              "value": "3.5rem",
+              "label": "56px"
+            },
+            {
+              "value": "4.5rem",
+              "label": "72px"
+            },
+            {
+              "value": "5.5rem",
+              "label": "88px"
+            },
+            {
+              "value": "7.5rem",
+              "label": "120px"
+            },
+            {
+              "value": "9.5rem",
+              "label": "152px"
+            },
+            {
+              "value": "11.5rem",
+              "label": "184px"
+            }
           ],
           "default": "1rem",
           "visible_if": "{{ block.settings.type_preset == 'custom' }}"
@@ -292,9 +315,18 @@
           "id": "line_height",
           "label": "t:settings.line_height",
           "options": [
-            { "value": "tight", "label": "t:options.tight" },
-            { "value": "normal", "label": "t:options.normal" },
-            { "value": "loose", "label": "t:options.loose" }
+            {
+              "value": "tight",
+              "label": "t:options.tight"
+            },
+            {
+              "value": "normal",
+              "label": "t:options.normal"
+            },
+            {
+              "value": "loose",
+              "label": "t:options.loose"
+            }
           ],
           "default": "normal",
           "visible_if": "{{ block.settings.type_preset == 'custom' }}"
@@ -304,9 +336,18 @@
           "id": "letter_spacing",
           "label": "t:settings.letter_spacing",
           "options": [
-            { "value": "tight", "label": "t:options.tight" },
-            { "value": "normal", "label": "t:options.normal" },
-            { "value": "loose", "label": "t:options.loose" }
+            {
+              "value": "tight",
+              "label": "t:options.tight"
+            },
+            {
+              "value": "normal",
+              "label": "t:options.normal"
+            },
+            {
+              "value": "loose",
+              "label": "t:options.loose"
+            }
           ],
           "default": "normal",
           "visible_if": "{{ block.settings.type_preset == 'custom' }}"
@@ -316,8 +357,14 @@
           "id": "case",
           "label": "t:settings.case",
           "options": [
-            { "value": "none", "label": "t:options.default" },
-            { "value": "uppercase", "label": "t:options.uppercase" }
+            {
+              "value": "none",
+              "label": "t:options.default"
+            },
+            {
+              "value": "uppercase",
+              "label": "t:options.uppercase"
+            }
           ],
           "default": "none",
           "visible_if": "{{ block.settings.type_preset == 'custom' }}"
@@ -327,9 +374,18 @@
           "id": "wrap",
           "label": "t:settings.wrap",
           "options": [
-            { "value": "pretty", "label": "t:options.pretty" },
-            { "value": "balance", "label": "t:options.balance" },
-            { "value": "nowrap", "label": "t:options.none" }
+            {
+              "value": "pretty",
+              "label": "t:options.pretty"
+            },
+            {
+              "value": "balance",
+              "label": "t:options.balance"
+            },
+            {
+              "value": "nowrap",
+              "label": "t:options.none"
+            }
           ],
           "visible_if": "{{ block.settings.type_preset == 'custom' }}"
         },
@@ -343,8 +399,14 @@
           "id": "direction",
           "label": "Direction",
           "options": [
-            { "value": "forward", "label": "Forward" },
-            { "value": "reverse", "label": "Reverse" }
+            {
+              "value": "forward",
+              "label": "Forward"
+            },
+            {
+              "value": "reverse",
+              "label": "Reverse"
+            }
           ],
           "default": "forward"
         },
