@@ -124,6 +124,7 @@
       });
       this.parallaxObserver.observe(this.floats);
       this.updateParallax();
+      this.floats.classList.add('is-ready');
     }
 
     updateParallax() {

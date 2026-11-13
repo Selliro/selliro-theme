@@ -1208,3 +1208,10 @@
     transform: rotate(var(--rot, 0deg));
   }
 }
+
+/* Sequence motion: hide until the script has placed the images (prevents a flash at their resting spot) */
+@media (prefers-reduced-motion: no-preference) {
+  .pq-floats[data-motion='sequence']:not(.is-ready):not(.is-static) .pq-float__inner {
+    opacity: 0;
+  }
+}
