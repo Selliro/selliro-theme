@@ -82,7 +82,18 @@
         <p class="bb__eyebrow">{{ section.settings.eyebrow | escape }}</p>
       {%- endif -%}
       {%- if section.settings.heading != blank -%}
-        <h2 class="bb__heading">{{ section.settings.heading | escape }}</h2>
+        {%- liquid
+          assign heading_html = section.settings.heading | escape
+          assign hl_word = section.settings.highlight_word | strip | escape
+          assign hl_style = section.settings.highlight_style | default: 'none'
+          if hl_word != blank and hl_style != 'none' and heading_html contains hl_word
+            capture hl_markup
+              render 'bundle-builder-highlight', word: hl_word, style: hl_style
+            endcapture
+            assign heading_html = heading_html | replace_first: hl_word, hl_markup
+          endif
+        -%}
+        <h2 class="bb__heading" style="--bb-hl: {{ section.settings.highlight_color }};">{{ heading_html }}</h2>
       {%- endif -%}
       {%- if section.settings.text != blank -%}
         <div class="bb__text rte">{{ section.settings.text }}</div>
@@ -156,17 +167,43 @@
               </p>
 
               {%- if multi -%}
-                <label class="visually-hidden" for="BbVariant-{{ section.id }}-{{ product.id }}">{{ product.title | escape }}</label>
-                <div class="bb-card__select">
-                  <select id="BbVariant-{{ section.id }}-{{ product.id }}" data-bb-variant>
-                    {%- for variant in product.variants -%}
-                      <option value="{{ variant.id }}"{% if variant.id == v.id %} selected{% endif %}{% unless variant.available %} disabled{% endunless %}>
-                        {{- variant.title | escape -}}
-                        {%- unless variant.available %} — {{ 'products.product.sold_out' | t }}{% endunless -%}
-                      </option>
-                    {%- endfor -%}
-                  </select>
-                  <svg viewBox="0 0 12 12" width="12" height="12" fill="none" aria-hidden="true" focusable="false"><path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <div class="bb-card__options">
+                  {%- for option in product.options_with_values -%}
+                    <fieldset class="bb-opt" data-bb-option="{{ forloop.index0 }}">
+                      <legend class="bb-opt__label">
+                        {{ option.name | escape }}: <span data-bb-option-value>{{ option.selected_value | escape }}</span>
+                      </legend>
+                      <div class="bb-opt__values">
+                        {%- for value in option.values -%}
+                          {%- liquid
+                            assign has_chip = false
+                            if value.swatch.image or value.swatch.color
+                              assign has_chip = true
+                            endif
+                          -%}
+                          <label class="bb-swatch{% if has_chip %} bb-swatch--chip{% else %} bb-swatch--pill{% endif %}" title="{{ value | escape }}">
+                            <input
+                              class="bb-swatch__input"
+                              type="radio"
+                              name="bb-{{ section.id }}-{{ product.id }}-{{ option.position }}"
+                              value="{{ value | escape }}"
+                              data-bb-swatch
+                              {% if option.selected_value == value %}checked{% endif %}
+                            >
+                            {%- if value.swatch.image -%}
+                              <span class="bb-swatch__chip" style="background-image: url('{{ value.swatch.image | image_url: width: 72 }}');" aria-hidden="true"></span>
+                              <span class="visually-hidden">{{ value | escape }}</span>
+                            {%- elsif value.swatch.color -%}
+                              <span class="bb-swatch__chip" style="background-color: {{ value.swatch.color }};" aria-hidden="true"></span>
+                              <span class="visually-hidden">{{ value | escape }}</span>
+                            {%- else -%}
+                              <span class="bb-swatch__text">{{ value | escape }}</span>
+                            {%- endif -%}
+                          </label>
+                        {%- endfor -%}
+                      </div>
+                    </fieldset>
+                  {%- endfor -%}
                 </div>
               {%- endif -%}
 
@@ -174,6 +211,7 @@
                 type="button"
                 class="bb-card__add"
                 data-bb-add
+                {% unless product.available %}data-soldout{% endunless %}
                 aria-pressed="false"
                 aria-label="{{ 'bundle_builder.add_aria' | t: title: product.title | escape }}"
                 {% unless product.available %}disabled{% endunless %}
@@ -199,6 +237,7 @@
                     {
                       "id": {{ variant.id | json }},
                       "title": {{ variant.title | json }},
+                      "options": {{ variant.options | json }},
                       "price": {{ variant.price | json }},
                       "compare": {{ variant.compare_at_price | default: 0 | json }},
                       "available": {{ variant.available | json }},
