@@ -110,6 +110,8 @@
     class="pq-floats{% if section.settings.floats_mobile == 'hide' %} pq-floats--hide-mobile{% endif %}{% if section.settings.floats_keep_during_quiz %} pq-floats--keep{% endif %}"
     data-pq-floats
     data-strength="{{ section.settings.parallax_strength }}"
+    data-motion="{{ section.settings.float_motion | default: 'sequence' }}"
+    data-first="{{ section.settings.float_first | default: 'left' }}"
     data-rotate="{{ section.settings.scroll_rotate }}"
     aria-hidden="true"
   >
@@ -777,7 +779,8 @@
       "step": 2,
       "unit": "%",
       "default": 58,
-      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}",
+      "info": "Used when the images are still (Both together, or reduced motion)."
     },
     {
       "type": "range",
@@ -853,7 +856,8 @@
       "step": 2,
       "unit": "%",
       "default": 22,
-      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}",
+      "info": "Used when the images are still (Both together, or reduced motion)."
     },
     {
       "type": "range",
@@ -915,10 +919,44 @@
       "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
     },
     {
+      "type": "select",
+      "id": "float_motion",
+      "label": "Scroll animation",
+      "options": [
+        {
+          "value": "sequence",
+          "label": "One after the other (rise from bottom)"
+        },
+        {
+          "value": "together",
+          "label": "Both together (gentle drift)"
+        }
+      ],
+      "default": "sequence",
+      "visible_if": "{{ section.settings.intro_layout == 'hero' }}"
+    },
+    {
+      "type": "select",
+      "id": "float_first",
+      "label": "Image that rises first",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left",
+      "visible_if": "{{ section.settings.intro_layout == 'hero' and section.settings.float_motion == 'sequence' }}"
+    },
+    {
       "type": "range",
       "id": "parallax_strength",
-      "label": "Scroll movement",
-      "info": "0 keeps the images still.",
+      "label": "Scroll speed",
+      "info": "Higher is faster. 0 keeps the images still.",
       "min": 0,
       "max": 10,
       "step": 1,

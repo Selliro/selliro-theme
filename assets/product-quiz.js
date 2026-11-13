@@ -131,12 +131,34 @@
       const vh = window.innerHeight || 1;
       // 0 when the section top enters at the bottom of the screen, 1 when its bottom leaves the top.
       const progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
-      const centered = 0.5 - progress; // +0.5 → -0.5
-      this.floatEls.forEach((el, i) => {
-        // Each image moves at a slightly different speed for depth.
-        const speed = i === 0 ? 1 : 1.35;
-        el.style.setProperty('--py', `${(centered * this.parallaxDistance * speed).toFixed(1)}px`);
-        el.style.setProperty('--pr', `${(centered * this.parallaxRotate).toFixed(2)}deg`);
+
+      if (this.floats.dataset.motion === 'together') {
+        const centered = 0.5 - progress; // +0.5 → -0.5
+        this.floatEls.forEach((el, i) => {
+          const speed = i === 0 ? 1 : 1.35; // slightly different speeds for depth
+          el.style.setProperty('--py', `${(centered * this.parallaxDistance * speed).toFixed(1)}px`);
+          el.style.setProperty('--pr', `${(centered * this.parallaxRotate).toFixed(2)}deg`);
+        });
+        return;
+      }
+
+      // "sequence": each image rises from below the screen to above it, faster than the page,
+      // one after the other — the second only starts once the first has left.
+      const strength = parseFloat(this.floats.dataset.strength || '6');
+      const windowSize = Math.min(0.48, Math.max(0.18, 0.5 - strength * 0.03)); // share of the scroll each image takes
+      const ordered = this.floats.dataset.first === 'right' ? [...this.floatEls].reverse() : this.floatEls;
+
+      ordered.forEach((el, i) => {
+        const start = 0.5 - windowSize + i * windowSize;
+        const local = Math.min(1, Math.max(0, (progress - start) / windowSize));
+        const holder = el.parentElement;
+        const naturalTop = holder.getBoundingClientRect().top;
+        const height = holder.offsetHeight;
+        const margin = height * 0.25; // room for the tilt so corners don't peek in
+        const desiredTop = vh + margin - local * (vh + height + margin * 2);
+        el.style.setProperty('--py', `${(desiredTop - naturalTop).toFixed(1)}px`);
+        el.style.setProperty('--pr', `${((0.5 - local) * this.parallaxRotate).toFixed(2)}deg`);
+        holder.classList.toggle('is-passing', local > 0 && local < 1);
       });
     }
 

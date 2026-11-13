@@ -979,8 +979,8 @@
   z-index: 1;
 }
 
+/* After the intro the quiz uses the full section width (same as the results) */
 .pq--intro-hero .pq__shell {
-  max-width: 60rem;
   margin-inline: auto;
 }
 

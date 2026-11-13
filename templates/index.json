@@ -2298,35 +2298,35 @@
             "allow_multiple": false,
             "allow_skip": false,
             "answer_1_label": "Dry",
+            "answer_1_description": "Feels tight or flaky",
+            "answer_1_icon": "droplet",
             "answer_1_products": [
               "luxury-face-creams",
               "glass-skin-overnight-mask"
             ],
             "answer_2_label": "Oily",
+            "answer_2_description": "Shiny by midday",
+            "answer_2_icon": "sun",
             "answer_2_products": [
               "luminous-balance-toner",
               "sun-cream-spf-protection"
             ],
             "answer_3_label": "Combination",
+            "answer_3_description": "Oily T-zone, dry cheeks",
+            "answer_3_icon": "leaf",
             "answer_3_products": [
               "luminous-balance-toner",
               "brightening-serum"
             ],
             "answer_4_label": "Sensitive",
+            "answer_4_description": "Easily irritated",
+            "answer_4_icon": "heart",
             "answer_4_products": [
               "luxury-face-creams",
               "sun-cream-spf-protection"
             ],
             "answer_5_label": "",
-            "answer_6_label": "",
-            "answer_1_description": "Feels tight or flaky",
-            "answer_1_icon": "droplet",
-            "answer_2_description": "Shiny by midday",
-            "answer_2_icon": "sun",
-            "answer_3_description": "Oily T-zone, dry cheeks",
-            "answer_3_icon": "leaf",
-            "answer_4_description": "Easily irritated",
-            "answer_4_icon": "heart"
+            "answer_6_label": ""
           }
         },
         "question_concern": {
@@ -2374,16 +2374,19 @@
             "allow_multiple": false,
             "allow_skip": false,
             "answer_1_label": "Under 5 minutes",
+            "answer_1_description": "Just the essentials",
             "answer_1_products": [
               "sun-cream-spf-protection",
               "comfort-matte-bullet-lipstick"
             ],
             "answer_2_label": "5 to 10 minutes",
+            "answer_2_description": "Cleanse, treat, protect",
             "answer_2_products": [
               "luminous-balance-toner",
               "brightening-serum"
             ],
             "answer_3_label": "I love a full routine",
+            "answer_3_description": "Masks, serums, the works",
             "answer_3_products": [
               "glass-skin-overnight-mask",
               "luxury-face-creams",
@@ -2391,10 +2394,7 @@
             ],
             "answer_4_label": "",
             "answer_5_label": "",
-            "answer_6_label": "",
-            "answer_1_description": "Just the essentials",
-            "answer_2_description": "Cleanse, treat, protect",
-            "answer_3_description": "Masks, serums, the works"
+            "answer_6_label": ""
           }
         }
       },
@@ -2404,36 +2404,18 @@
         "question_routine"
       ],
       "settings": {
+        "intro_layout": "hero",
         "eyebrow": "",
         "heading": "Where every skincare moment counts.",
         "heading_size": "medium",
         "text": "<p>Skincare isn't just a routine, it's a moment of self-care. Answer three quick questions and we'll curate the products your skin will love.</p>",
         "start_label": "Take a quiz",
-        "intro_note": "Under 1 minute",
-        "intro_image": "shopify://shop_images/woman-applying-face-cream_1.png",
-        "media_badge": "Made for your skin",
-        "media_position": "left",
-        "section_width": "page-width",
-        "color_scheme": "scheme-1",
-        "accent_color": "#f8d12f",
-        "accent_text_color": "#000000",
-        "card_radius": 20,
-        "auto_advance": true,
-        "remember_result": true,
-        "max_results": 4,
-        "results_columns": 4,
-        "fallback_collection": "all",
-        "best_match_label": "Best match",
-        "padding_top": 40,
-        "padding_bottom": 64,
-        "container_style": "card",
         "show_meta": false,
         "questions_label": "[count] quick questions",
+        "intro_note": "Under 1 minute",
         "meta_third": "Personalised picks",
-        "show_analyzing": true,
-        "show_summary": true,
-        "show_add_all": true,
-        "intro_layout": "hero",
+        "intro_image": "shopify://shop_images/woman-applying-face-cream_1.png",
+        "media_badge": "Made for your skin",
         "hero_font_source": "custom",
         "hero_font": "playfair_display_n4",
         "hero_heading_size": 104,
@@ -2458,7 +2440,25 @@
         "parallax_strength": 6,
         "scroll_rotate": 10,
         "floats_keep_during_quiz": false,
-        "floats_mobile": "show"
+        "floats_mobile": "show",
+        "container_style": "card",
+        "media_position": "left",
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "accent_color": "#f8d12f",
+        "accent_text_color": "#000000",
+        "card_radius": 20,
+        "auto_advance": true,
+        "show_analyzing": true,
+        "remember_result": true,
+        "show_summary": true,
+        "max_results": 4,
+        "results_columns": 4,
+        "best_match_label": "Best match",
+        "fallback_collection": "all",
+        "show_add_all": true,
+        "padding_top": 40,
+        "padding_bottom": 64
       }
     }
   },
