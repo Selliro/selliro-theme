@@ -48,6 +48,19 @@ class HeaderMenu extends Component {
    * Time to allow for a closing animation between initiating a deactivation and actually deactivating the active item.
    * @returns {number}
    */
+  /**
+   * Hover-intent delay (ms) before the first submenu opens. Switching between
+   * items while a submenu is already open stays instant.
+   * @returns {number}
+   */
+  get activateDelay() {
+    const value = parseInt(this.dataset.activateDelay ?? '0', 10);
+    return Number.isFinite(value) && value > 0 ? value : 0;
+  }
+
+  /** @type {number | undefined} */
+  #intentTimer;
+
   get animationDelay() {
     const value = this.dataset.animationDelay;
     return value ? parseInt(value, 10) : 0;
@@ -75,8 +88,15 @@ class HeaderMenu extends Component {
   activate = (event) => {
     this.#debouncedDeactivate.cancel();
     this.#debouncedActivateHandler.cancel();
+    clearTimeout(this.#intentTimer);
 
-    this.#debouncedActivateHandler(event);
+    const delay = this.#state.activeItem || event.type !== 'pointerenter' ? 0 : this.activateDelay;
+
+    if (delay > 0) {
+      this.#intentTimer = window.setTimeout(() => this.#debouncedActivateHandler(event), delay);
+    } else {
+      this.#debouncedActivateHandler(event);
+    }
   };
 
   /**
@@ -131,6 +151,7 @@ class HeaderMenu extends Component {
    */
   deactivate(event) {
     this.#debouncedActivateHandler.cancel();
+    clearTimeout(this.#intentTimer);
 
     if (!(event.target instanceof Element)) return;
 

@@ -8,7 +8,8 @@
 
 {% liquid
   assign block_settings = block.settings
-  assign animation_speed = 200
+  assign animation_speed = block_settings.submenu_animation_speed | default: 350
+  assign activate_delay = block_settings.submenu_hover_delay | default: 0
 %}
 
 {% case variant %}
@@ -59,8 +60,9 @@
       ref="headerMenu"
       class="header-menu mobile:hidden"
       data-animation-delay="{{ animation_speed }}"
+      data-activate-delay="{{ activate_delay }}"
       {{ block.shopify_attributes }}
-      style="--submenu-animation-speed: {{ animation_speed }}ms;"
+      style="--submenu-animation-speed: {{ animation_speed }}ms; --submenu-ease: cubic-bezier(0.22, 1, 0.36, 1);"
     >
       <div class="header-menu__inner">
         {%- render 'header-menu' %}
@@ -243,8 +245,8 @@
     border-end-start-radius: var(--submenu-radius, 0px);
     border-end-end-radius: var(--submenu-radius, 0px);
     opacity: var(--submenu-opacity, 1);
-    transition: height var(--submenu-animation-speed) var(--ease-out-cubic),
-      opacity var(--animation-speed-slow) var(--ease-out-cubic) var(--animation-speed-fast);
+    transition: height var(--submenu-animation-speed) var(--submenu-ease, var(--ease-out-cubic)),
+      opacity var(--animation-speed-slow) var(--submenu-ease, var(--ease-out-cubic)) var(--animation-speed-fast);
     z-index: calc(var(--layer-header-menu) - 1);
   }
 
@@ -267,7 +269,7 @@
   .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu,
   .overflow-menu::part(overflow) {
     --submenu-content-opacity: 0;
-    --submenu-content-animation: opacity calc(var(--submenu-animation-speed) * 0.75) var(--animation-easing);
+    --submenu-content-animation: opacity calc(var(--submenu-animation-speed) * 0.9) var(--submenu-ease, var(--animation-easing));
 
     box-shadow: var(--shadow-drawer);
     visibility: hidden;
@@ -279,7 +281,7 @@
     z-index: var(--layer-header-menu);
     padding-inline: var(--padding-inline);
     clip-path: rect(0 100% var(--submenu-height) 0 round 0 0 var(--submenu-radius, 0px) var(--submenu-radius, 0px)); /* stylelint-disable-line */
-    transition: clip-path var(--submenu-animation-speed) var(--ease-out-cubic);
+    transition: clip-path var(--submenu-animation-speed) var(--submenu-ease, var(--ease-out-cubic));
   }
 
   /* Show the submenus on hover */
@@ -599,6 +601,45 @@
     /* Current page link is bold only while no other item is hovered */
     .menu-list:not(:has(.menu-list__list-item:is(:hover, :focus-within))) .menu-list__link--active .menu-list__link-title {
       font-weight: 600;
+    }
+  }
+
+  /* Staggered reveal: link columns and promo cards fade + rise in after the panel opens */
+  .header-menu-nav--animate-content .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu {
+    .mega-menu__column,
+    .mega-menu__content-list-item {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity calc(var(--submenu-animation-speed) * 0.6) ease,
+        transform calc(var(--submenu-animation-speed) * 0.6) ease;
+    }
+
+    .mega-menu__column:nth-child(2) { --submenu-stagger: 1; }
+    .mega-menu__column:nth-child(3) { --submenu-stagger: 2; }
+    .mega-menu__column:nth-child(4) { --submenu-stagger: 3; }
+    .mega-menu__column:nth-child(n + 5) { --submenu-stagger: 4; }
+    .mega-menu__content-list-item:nth-child(1) { --submenu-stagger: 1; }
+    .mega-menu__content-list-item:nth-child(2) { --submenu-stagger: 2; }
+    .mega-menu__content-list-item:nth-child(n + 3) { --submenu-stagger: 3; }
+  }
+
+  .header-menu-nav--animate-content .menu-list__list-item:where(:not([slot='overflow'])):has(> .menu-list__link[aria-expanded='true']) > .menu-list__submenu,
+  .header-menu-nav--animate-content .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu:hover {
+    .mega-menu__column,
+    .mega-menu__content-list-item {
+      opacity: 1;
+      transform: none;
+      transition: opacity calc(var(--submenu-animation-speed) * 1.1) var(--submenu-ease, ease),
+        transform calc(var(--submenu-animation-speed) * 1.4) var(--submenu-ease, ease);
+      transition-delay: calc(var(--submenu-animation-speed) * 0.25 + var(--submenu-stagger, 0) * 60ms);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header-menu-nav--animate-content .menu-list__submenu :is(.mega-menu__column, .mega-menu__content-list-item) {
+      transform: none !important;
+      transition-duration: 1ms !important;
+      transition-delay: 0s !important;
     }
   }
 
@@ -1346,6 +1387,34 @@
       "step": 2,
       "unit": "px",
       "default": 0
+    },
+    {
+      "type": "range",
+      "id": "submenu_animation_speed",
+      "label": "Dropdown animation speed",
+      "min": 150,
+      "max": 700,
+      "step": 50,
+      "unit": "ms",
+      "default": 350
+    },
+    {
+      "type": "range",
+      "id": "submenu_hover_delay",
+      "label": "Hover delay before opening",
+      "info": "Prevents menus flashing open when the cursor just passes over the menu.",
+      "min": 0,
+      "max": 300,
+      "step": 10,
+      "unit": "ms",
+      "default": 80
+    },
+    {
+      "type": "checkbox",
+      "id": "submenu_animate_content",
+      "label": "Animate dropdown content",
+      "info": "Links and promo cards fade and slide in one after another.",
+      "default": true
     },
     {
       "type": "header",

@@ -90,7 +90,7 @@
 
 <nav
   header-menu
-  class="header-menu-nav header-menu-nav--hover-{{ block_settings.menu_hover_style | default: 'dim' }}{% if block_settings.submenu_divider != false %} header-menu-nav--submenu-divider{% endif %}"
+  class="header-menu-nav header-menu-nav--hover-{{ block_settings.menu_hover_style | default: 'dim' }}{% if block_settings.submenu_divider != false %} header-menu-nav--submenu-divider{% endif %}{% if block_settings.submenu_animate_content != false %} header-menu-nav--animate-content{% endif %}"
   style="--submenu-radius: {{ block_settings.submenu_radius | default: 0 }}px;"
 >
   <div

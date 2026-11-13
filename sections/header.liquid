@@ -194,6 +194,7 @@
       --menu-backdrop-color: {{ section.settings.menu_backdrop_color | default: '#000000' }};
       --menu-backdrop-opacity: {{ section.settings.menu_backdrop_opacity | default: 40 | times: 0.01 }};
       --menu-backdrop-blur: {{ section.settings.menu_backdrop_blur | default: 0 }}px;
+      --menu-backdrop-speed: 0.35s;
     }
   {% endstyle %}
 {%- endif -%}
@@ -419,8 +420,8 @@
       background-color: var(--menu-backdrop-color, #000);
       opacity: 0;
       visibility: hidden;
-      transition: opacity var(--animation-speed-slow, 0.3s) var(--animation-easing, ease),
-        visibility 0s linear var(--animation-speed-slow, 0.3s);
+      transition: opacity var(--menu-backdrop-speed, 0.35s) var(--animation-easing, ease),
+        visibility 0s linear var(--menu-backdrop-speed, 0.35s);
     }
 
     .header-section:has(> .header--menu-backdrop .menu-list__link[aria-haspopup][aria-expanded='true']) {
@@ -429,7 +430,7 @@
       &::after {
         opacity: var(--menu-backdrop-opacity, 0.4);
         visibility: visible;
-        transition: opacity var(--animation-speed-slow, 0.3s) var(--animation-easing, ease), visibility 0s;
+        transition: opacity var(--menu-backdrop-speed, 0.35s) var(--animation-easing, ease), visibility 0s;
       }
     }
 
@@ -438,9 +439,9 @@
         background-color: transparent;
         opacity: 1;
         backdrop-filter: blur(0px);
-        transition: background-color var(--animation-speed-slow, 0.3s) var(--animation-easing, ease),
-          backdrop-filter var(--animation-speed-slow, 0.3s) var(--animation-easing, ease),
-          visibility 0s linear var(--animation-speed-slow, 0.3s);
+        transition: background-color var(--menu-backdrop-speed, 0.35s) var(--animation-easing, ease),
+          backdrop-filter var(--menu-backdrop-speed, 0.35s) var(--animation-easing, ease),
+          visibility 0s linear var(--menu-backdrop-speed, 0.35s);
       }
 
       .header-section:has(> .header--menu-backdrop .menu-list__link[aria-haspopup][aria-expanded='true'])::after {
@@ -451,8 +452,8 @@
           transparent
         );
         backdrop-filter: blur(var(--menu-backdrop-blur, 0px));
-        transition: background-color var(--animation-speed-slow, 0.3s) var(--animation-easing, ease),
-          backdrop-filter var(--animation-speed-slow, 0.3s) var(--animation-easing, ease), visibility 0s;
+        transition: background-color var(--menu-backdrop-speed, 0.35s) var(--animation-easing, ease),
+          backdrop-filter var(--menu-backdrop-speed, 0.35s) var(--animation-easing, ease), visibility 0s;
       }
     }
   }
