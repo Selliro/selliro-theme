@@ -368,14 +368,55 @@
     {
       "type": "text",
       "id": "eyebrow",
-      "label": "t:bundle_builder.eyebrow",
-      "default": "t:bundle_builder.d_eyebrow"
+      "label": "t:bundle_builder.eyebrow"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "t:bundle_builder.heading",
       "default": "t:bundle_builder.d_heading"
+    },
+    {
+      "type": "text",
+      "id": "highlight_word",
+      "label": "t:bundle_builder.highlight_word",
+      "info": "t:bundle_builder.highlight_word_info",
+      "default": "t:bundle_builder.d_highlight"
+    },
+    {
+      "type": "select",
+      "id": "highlight_style",
+      "label": "t:bundle_builder.highlight_style",
+      "options": [
+        {
+          "value": "squiggle",
+          "label": "t:bundle_builder.hl_squiggle"
+        },
+        {
+          "value": "wave",
+          "label": "t:bundle_builder.hl_wave"
+        },
+        {
+          "value": "marker",
+          "label": "t:bundle_builder.hl_marker"
+        },
+        {
+          "value": "circle",
+          "label": "t:bundle_builder.hl_circle"
+        },
+        {
+          "value": "none",
+          "label": "t:bundle_builder.hl_none"
+        }
+      ],
+      "default": "squiggle"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "t:bundle_builder.highlight_color",
+      "default": "#f4c9a8",
+      "visible_if": "{{ section.settings.highlight_style != 'none' }}"
     },
     {
       "type": "richtext",
@@ -423,7 +464,7 @@
       "min": 1,
       "max": 10,
       "step": 1,
-      "default": 2
+      "default": 3
     },
     {
       "type": "range",
@@ -432,7 +473,7 @@
       "min": 2,
       "max": 20,
       "step": 1,
-      "default": 8
+      "default": 3
     },
     {
       "type": "header",
@@ -446,7 +487,7 @@
       "min": 0,
       "max": 12,
       "step": 1,
-      "default": 2
+      "default": 3
     },
     {
       "type": "range",
@@ -456,7 +497,7 @@
       "max": 80,
       "step": 1,
       "unit": "%",
-      "default": 10
+      "default": 30
     },
     {
       "type": "text",
@@ -476,7 +517,7 @@
       "min": 0,
       "max": 12,
       "step": 1,
-      "default": 3
+      "default": 0
     },
     {
       "type": "range",
@@ -506,7 +547,7 @@
       "min": 0,
       "max": 12,
       "step": 1,
-      "default": 4
+      "default": 0
     },
     {
       "type": "range",
@@ -571,7 +612,7 @@
       "min": 2,
       "max": 8,
       "step": 1,
-      "default": 4
+      "default": 3
     },
     {
       "type": "text",
