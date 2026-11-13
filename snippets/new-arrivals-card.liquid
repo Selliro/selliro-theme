@@ -12,6 +12,9 @@
   @param {string} [add_label] - Quick add button label
   @param {number} [fallback_stars] - Stars shown when the product has no rating (default: 5)
   @param {string} [image_sizes] - `sizes` attribute for card images
+  @param {boolean} [bundle] - Bundle builder mode: the bar becomes an "add to bundle" toggle (no cart request)
+  @param {string} [bundle_aria] - Accessible label for the bundle toggle
+  @param {string} [extra] - Extra markup rendered under the price (e.g. variant swatches)
 {%- enddoc -%}
 {%- liquid
   assign accent = accent | default: '#f5c518'
@@ -158,7 +161,25 @@
         {%- endif -%}
       </div>
       <div class="new-arrivals-card__quick-add">
-        {%- if na_variant -%}
+        {%- if bundle -%}
+          <button
+            type="button"
+            class="new-arrivals-card__quick-add-btn new-arrivals-card__quick-add-btn--bundle"
+            style="--new-arrivals-cta: {{ accent }};"
+            data-bb-add
+            aria-pressed="false"
+            aria-label="{{ bundle_aria | escape }}"
+            {% unless product.available %}disabled data-soldout{% endunless %}
+          >
+            <span class="new-arrivals-card__quick-add-icon bb-toggle-icon" aria-hidden="true">
+              <svg class="bb-toggle-icon__plus" viewBox="0 0 16 16" width="16" height="16" fill="none" focusable="false"><path d="M8 3.5v9M3.5 8h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <svg class="bb-toggle-icon__tick" viewBox="0 0 16 16" width="16" height="16" fill="none" focusable="false"><path d="m3.5 8.5 3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="new-arrivals-card__quick-add-label" data-bb-add-label>
+              {%- if product.available -%}{{ add_label | escape }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
+            </span>
+          </button>
+        {%- elsif na_variant -%}
           <button
             type="button"
             class="new-arrivals-card__quick-add-btn"
@@ -187,12 +208,15 @@
       <h3 class="new-arrivals-card__title">
         <a href="{{ product.url }}">{{ product.title | escape }}</a>
       </h3>
-      <div class="new-arrivals-card__prices">
+      <div class="new-arrivals-card__prices"{% if bundle %} data-bb-card-price{% endif %}>
         {%- if product.compare_at_price > product.price -%}
           <span class="new-arrivals-card__price new-arrivals-card__price--compare">{{ product.compare_at_price | money }}</span>
         {%- endif -%}
         <span class="new-arrivals-card__price new-arrivals-card__price--current">{{ product.price | money }}</span>
       </div>
+      {%- if extra != blank -%}
+        {{ extra }}
+      {%- endif -%}
       {%- liquid
         assign r = fallback_stars | plus: 0
         assign rating_drop = product.metafields.reviews.rating.value

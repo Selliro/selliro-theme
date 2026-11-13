@@ -10,6 +10,8 @@
   Files: assets/section-bundle-builder.css, assets/bundle-builder.js
 {%- endcomment -%}
 
+{{ 'section-new-arrivals-showcase.css' | asset_url | stylesheet_tag }}
+{{ 'new-arrivals-quick-view.css' | asset_url | stylesheet_tag }}
 {{ 'section-bundle-builder.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
@@ -55,6 +57,8 @@
   id="BundleBuilder-{{ section.id }}"
   class="bb bb--box-{{ section.settings.box_position }} {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
   data-section-id="{{ section.id }}"
+  data-new-arrivals-root
+  data-new-arrivals-qv-id="new-arrivals-qv-drawer-{{ section.id }}"
   data-min="{{ section.settings.min_items }}"
   data-max="{{ section.settings.max_items }}"
   data-slots="{{ section.settings.slots }}"
@@ -64,7 +68,7 @@
   data-msg-top="{{ section.settings.msg_top | escape }}"
   data-msg-max="{{ section.settings.msg_max | escape }}"
   data-success="{{ section.settings.success_label | escape }}"
-  data-add-label="{{ 'actions.add' | t | escape }}"
+  data-add-label="{{ section.settings.card_add_label | escape }}"
   data-added-label="{{ 'actions.added' | t | escape }}"
   data-add-aria="{{ 'bundle_builder.add_aria' | t: title: '[title]' | escape }}"
   data-remove-aria="{{ 'accessibility.remove_item' | t: title: '[title]' | escape }}"
@@ -113,59 +117,10 @@
             if product.has_only_default_variant == false
               assign multi = true
             endif
+            assign bundle_aria_label = 'bundle_builder.add_aria' | t: title: product.title
           -%}
-          <li class="bb-card{% unless product.available %} bb-card--soldout{% endunless %}" data-bb-card data-product-id="{{ product.id }}">
-            <div class="bb-card__media">
-              <a href="{{ product.url }}" class="bb-card__media-link" tabindex="-1" aria-hidden="true">
-                {%- if product.featured_media -%}
-                  {{
-                    product.featured_media
-                    | image_url: width: 900
-                    | image_tag:
-                      loading: 'lazy',
-                      widths: '300, 450, 600, 900',
-                      sizes: '(min-width: 990px) 22vw, 50vw',
-                      alt: '',
-                      class: 'bb-card__img bb-card__img--primary'
-                  }}
-                  {%- if section.settings.show_second_image and second != blank -%}
-                    {{
-                      second
-                      | image_url: width: 900
-                      | image_tag:
-                        loading: 'lazy',
-                        widths: '300, 450, 600, 900',
-                        sizes: '(min-width: 990px) 22vw, 50vw',
-                        alt: '',
-                        class: 'bb-card__img bb-card__img--secondary'
-                    }}
-                  {%- endif -%}
-                {%- else -%}
-                  {{ 'product-1' | placeholder_svg_tag: 'bb-card__img bb-card__img--placeholder' }}
-                {%- endif -%}
-              </a>
-              {%- if product.compare_at_price > product.price and product.available -%}
-                <span class="bb-card__badge">{{ 'content.product_badge_sale' | t }}</span>
-              {%- elsif product.available == false -%}
-                <span class="bb-card__badge bb-card__badge--muted">{{ 'products.product.sold_out' | t }}</span>
-              {%- endif -%}
-              <span class="bb-card__check" aria-hidden="true">
-                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" focusable="false"><path d="m3.5 8.5 3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                <span class="bb-card__qty" data-bb-card-qty></span>
-              </span>
-            </div>
-
-            <div class="bb-card__body">
-              <h3 class="bb-card__title">
-                <a href="{{ product.url }}">{{ product.title | escape }}</a>
-              </h3>
-              <p class="bb-card__price" data-bb-card-price>
-                {%- if v.compare_at_price > v.price and section.settings.show_compare_price -%}
-                  <s class="bb-card__compare">{{ v.compare_at_price | money }}</s>
-                {%- endif -%}
-                <span>{{ v.price | money }}</span>
-              </p>
-
+          <li class="bb-card" data-bb-card data-product-id="{{ product.id }}">
+            {%- capture swatches_markup -%}
               {%- if multi -%}
                 <div class="bb-card__options">
                   {%- for option in product.options_with_values -%}
@@ -206,26 +161,16 @@
                   {%- endfor -%}
                 </div>
               {%- endif -%}
-
-              <button
-                type="button"
-                class="bb-card__add"
-                data-bb-add
-                {% unless product.available %}data-soldout{% endunless %}
-                aria-pressed="false"
-                aria-label="{{ 'bundle_builder.add_aria' | t: title: product.title | escape }}"
-                {% unless product.available %}disabled{% endunless %}
-              >
-                <span class="bb-card__add-icon" aria-hidden="true">
-                  <svg class="bb-card__add-plus" viewBox="0 0 16 16" width="14" height="14" fill="none" focusable="false"><path d="M8 3.5v9M3.5 8h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-                  <svg class="bb-card__add-tick" viewBox="0 0 16 16" width="14" height="14" fill="none" focusable="false"><path d="m3.5 8.5 3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </span>
-                <span class="bb-card__add-label" data-bb-add-label>
-                  {%- if product.available -%}{{ 'actions.add' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
-                </span>
-              </button>
-            </div>
-
+            {%- endcapture -%}
+            {%- render 'new-arrivals-card',
+              product: product,
+              accent: section.settings.accent_color,
+              add_label: section.settings.card_add_label,
+              bundle: true,
+              bundle_aria: bundle_aria_label,
+              extra: swatches_markup,
+              image_sizes: '(min-width: 1200px) 22vw, (min-width: 750px) 30vw, 50vw'
+            -%}
             <script type="application/json" data-bb-product>
               {
                 "id": {{ product.id | json }},
@@ -347,6 +292,11 @@
   <p class="visually-hidden" aria-live="polite" data-bb-live></p>
 </bundle-builder>
 
+{% render 'new-arrivals-quick-view-drawer', section: section %}
+
+<script src="{{ 'image-loader.js' | asset_url }}" defer></script>
+<script src="{{ 'new-arrivals-components.js' | asset_url }}" defer></script>
+<script src="{{ 'new-arrivals-quick-view.js' | asset_url }}" defer></script>
 <script src="{{ 'bundle-builder.js' | asset_url }}" defer></script>
 
 {% schema %}
