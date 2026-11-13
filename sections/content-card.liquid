@@ -84,7 +84,19 @@
       
       {%- else -%}
         {%- comment -%} Image Background {%- endcomment -%}
-        {%- render 'content-card-background-image', image_desktop: image_desktop, image_mobile: image_mobile, show_overlay: section.settings.show_overlay, overlay_opacity: section.settings.overlay_opacity, show_gradient_overlay: section.settings.show_gradient_overlay, image_aspect_ratio: section.settings.image_aspect_ratio_desktop, plus: 0, image_aspect_ratio_mobile: section.settings.image_aspect_ratio_mobile -%}
+        {%- liquid
+          assign render_image_aspect_ratio = section.settings.image_aspect_ratio_desktop | plus:0
+          assign render_image_aspect_ratio_mobile = section.settings.image_aspect_ratio_mobile | plus:0
+        -%}
+        {%- render 'content-card-background-image', 
+          image_desktop: image_desktop,
+          image_mobile: image_mobile,
+          show_overlay: section.settings.show_overlay,
+          overlay_opacity: section.settings.overlay_opacity,
+          show_gradient_overlay: section.settings.show_gradient_overlay,
+          image_aspect_ratio: render_image_aspect_ratio,
+          image_aspect_ratio_mobile: render_image_aspect_ratio_mobile
+        -%}
     {%- endcase -%}
 
     <div class="content-card__blocks">
@@ -111,7 +123,7 @@
         "default": "image",
         "options": [
           { "value": "image", "label": "Image" },
-          { "value": "color", "label": "Solid Color" },
+          { "value": "color", "label": "Solid Color" }
         ]
       },
       {
@@ -277,7 +289,7 @@
     ],
     "blocks": [
       {"type": "parent-rich-text"},
-      {"type": "content-card-content"},
+      {"type": "content-card-content"}
     ],
     "presets": [
       {
@@ -323,7 +335,7 @@
                   "button_3_label": "Tertiary CTA",
                   "button_3_link": "#"
                 }
-              },
+              }
             ]
           },
           {
@@ -446,22 +458,4 @@
       }
     ]
   }
-{% endschema %}{%- comment -%}
-
-This file has been rewritten to preserve the original behavior.
-
----
-Changes:
-- from: "{%- render 'content-card-background-image', \n          image_desktop: image_desktop,\n
-    \         image_mobile: image_mobile,\n          show_overlay: section.settings.show_overlay,\n
-    \         overlay_opacity: section.settings.overlay_opacity,\n          show_gradient_overlay:
-    section.settings.show_gradient_overlay,\n          image_aspect_ratio: section.settings.image_aspect_ratio_desktop
-    | plus:0,\n          image_aspect_ratio_mobile: section.settings.image_aspect_ratio_mobile
-    | plus:0,\n        -%}"
-  to: "{%- render 'content-card-background-image', image_desktop: image_desktop, image_mobile:
-    image_mobile, show_overlay: section.settings.show_overlay, overlay_opacity: section.settings.overlay_opacity,
-    show_gradient_overlay: section.settings.show_gradient_overlay, image_aspect_ratio:
-    section.settings.image_aspect_ratio_desktop, plus: 0, image_aspect_ratio_mobile:
-    section.settings.image_aspect_ratio_mobile -%}"
-  position: 3794..4202
-{%- endcomment -%}
+{% endschema %}

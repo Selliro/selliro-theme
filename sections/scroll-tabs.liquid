@@ -82,7 +82,21 @@
                     tw-hidden md:tw-block tw-sticky tw-top-[120px]"
                     aria-label="Desktop tab navigation"
                     >
-                    {%- render 'carousel-wrapper', section_id: section.id, desktop_slides_per_view: "auto", tablet_slides_per_view: "auto", mobile_slides_per_view: "auto", direction: 'vertical', mobile_space_between: 16, tablet_space_between: 16, desktop_space_between: 16, carousel_class: parent_class, append: '__carousel--desktop', slider_items: slider_items -%}
+                    {%- liquid
+                      assign render_carousel_class = parent_class | append: '__carousel--desktop'
+                    -%}
+                    {%- render 'carousel-wrapper',
+                        section_id: section.id,
+                        desktop_slides_per_view: 'auto',
+                        tablet_slides_per_view: 'auto',
+                        mobile_slides_per_view: "auto",
+                        direction: 'vertical',
+                        mobile_space_between: 16,
+                        tablet_space_between: 16,
+                        desktop_space_between: 16,
+                        carousel_class: render_carousel_class,
+                        slider_items: slider_items
+                    -%}
                 </div>
                 {%- comment -%} Mobile Tabs List {%- endcomment -%}
                 <div class="{{ parent_class }}__tabs-list {{ parent_class }}__tabs-list--mobile 
@@ -94,7 +108,18 @@
                     tw-z-10 
                     tw-pt-11"
                     aria-label="Mobile tab navigation">
-                    {%- render 'carousel-wrapper', section_id: section.id, desktop_slides_per_view: '1', mobile_slides_per_view: "auto", mobile_space_between: 16, desktop_space_between: 16, carousel_class: parent_class, append: '__carousel--mobile', slider_items: slider_items -%}
+                    {%- liquid
+                      assign render_carousel_class = parent_class | append: '__carousel--mobile'
+                    -%}
+                    {%- render 'carousel-wrapper',
+                        section_id: section.id,
+                        desktop_slides_per_view: '1',
+                        mobile_slides_per_view: "auto",
+                        mobile_space_between: 16,
+                        desktop_space_between: 16,
+                        carousel_class: render_carousel_class,
+                        slider_items: slider_items
+                    -%}
                 </div>
                 
                 {%- comment -%} Content Panels Wrapper {%- endcomment -%}
@@ -207,44 +232,4 @@
     ]
   }
   {% endschema %}
-  {%- comment -%}
-
-This file has been rewritten to preserve the original behavior.
-
----
-Changes:
-- from: |-
-    {%- render 'carousel-wrapper',
-                            section_id: section.id,
-                            desktop_slides_per_view: 'auto',
-                            tablet_slides_per_view: 'auto',
-                            mobile_slides_per_view: "auto",
-                            direction: 'vertical',
-                            mobile_space_between: 16,
-                            tablet_space_between: 16,
-                            desktop_space_between: 16,
-                            carousel_class: parent_class | append: '__carousel--desktop',
-                            slider_items: slider_items
-                        -%}
-  to: '{%- render ''carousel-wrapper'', section_id: section.id, desktop_slides_per_view:
-    "auto", tablet_slides_per_view: "auto", mobile_slides_per_view: "auto", direction:
-    ''vertical'', mobile_space_between: 16, tablet_space_between: 16, desktop_space_between:
-    16, carousel_class: parent_class, append: ''__carousel--desktop'', slider_items:
-    slider_items -%}'
-  position: 3343..3688
-- from: |-
-    {%- render 'carousel-wrapper',
-                            section_id: section.id,
-                            desktop_slides_per_view: '1',
-                            mobile_slides_per_view: "auto",
-                            mobile_space_between: 16,
-                            desktop_space_between: 16,
-                            carousel_class: parent_class | append: '__carousel--mobile',
-                            slider_items: slider_items
-                        -%}
-  to: '{%- render ''carousel-wrapper'', section_id: section.id, desktop_slides_per_view:
-    ''1'', mobile_slides_per_view: "auto", mobile_space_between: 16, desktop_space_between:
-    16, carousel_class: parent_class, append: ''__carousel--mobile'', slider_items:
-    slider_items -%}'
-  position: 4183..4443
-{%- endcomment -%}
+  

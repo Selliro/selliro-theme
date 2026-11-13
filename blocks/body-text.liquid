@@ -3,7 +3,15 @@
   Global body text component - variant set in presets
 {%- endcomment -%}
 
-{%- render 'body', text: block.settings.text, variant: block.settings.variant, default: 'lg', color: block.settings.color, block_shopify_attributes: block.shopify_attributes -%}
+{%- liquid
+  assign render_variant = block.settings.variant | default: 'lg'
+-%}
+{%- render 'body',
+  text: block.settings.text,
+  variant: render_variant,
+  color: block.settings.color,
+  block_shopify_attributes: block.shopify_attributes
+-%}
 
 {% schema %}
 {
@@ -35,21 +43,3 @@
 }
 {% endschema %}
 
-{% comment %}
-
-This file has been rewritten to preserve the original behavior.
-
----
-Changes:
-- from: |-
-    {%- render 'body',
-      text: block.settings.text,
-      variant: block.settings.variant | default: 'lg',
-      color: block.settings.color,
-      block_shopify_attributes: block.shopify_attributes
-    -%}
-  to: "{%- render 'body', text: block.settings.text, variant: block.settings.variant,
-    default: 'lg', color: block.settings.color, block_shopify_attributes: block.shopify_attributes
-    -%}"
-  position: 114..291
-{% endcomment %}

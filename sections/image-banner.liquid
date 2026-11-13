@@ -53,7 +53,20 @@
       
       {%- else -%}
         {%- comment -%} Image Background {%- endcomment -%}
-        {%- render 'banner-layout-image', image_desktop: image_desktop, image_mobile: image_mobile, show_overlay: section.settings.show_overlay, overlay_opacity: section.settings.overlay_opacity, show_gradient_overlay: section.settings.show_gradient_overlay, image_aspect_ratio: section.settings.image_aspect_ratio_desktop, plus: 0, image_aspect_ratio_mobile: section.settings.image_aspect_ratio_mobile, section: section -%}
+        {%- liquid
+          assign render_image_aspect_ratio = section.settings.image_aspect_ratio_desktop | plus:0
+          assign render_image_aspect_ratio_mobile = section.settings.image_aspect_ratio_mobile | plus:0
+        -%}
+        {%- render 'banner-layout-image',
+          image_desktop: image_desktop,
+          image_mobile: image_mobile,
+          show_overlay: section.settings.show_overlay,
+          overlay_opacity: section.settings.overlay_opacity,
+          show_gradient_overlay: section.settings.show_gradient_overlay,
+          image_aspect_ratio: render_image_aspect_ratio,
+          image_aspect_ratio_mobile: render_image_aspect_ratio_mobile,
+          section: section
+        -%}
     {%- endcase -%}
   </div>
   
@@ -138,14 +151,14 @@
         "id": "image_aspect_ratio_desktop",
         "label": "Image aspect ratio (desktop)",
         "info": "Enter a decimal, e.g., 1.8",
-        "default": "1.8",
+        "default": "1.8"
       },
       {
         "type": "text",
         "id": "image_aspect_ratio_mobile",
         "label": "Image aspect ratio (mobile)",
         "info": "Enter a decimal, e.g., 0.48",
-        "default": "0.48",
+        "default": "0.48"
       },
       {
         "type": "checkbox",
@@ -265,7 +278,7 @@
             "type": "image_picker",
             "id": "icon_image",
             "label": "Icon Image",
-            "info": "Optional: Icon to display as superscript in the upper right corner",
+            "info": "Optional: Icon to display as superscript in the upper right corner"
           },
           {
             "type": "text",
@@ -521,7 +534,7 @@
             "info": "Where the form should submit to (e.g., Klaviyo, Mailchimp endpoint)"
           }
         ]
-      },
+      }
     ],
     "presets": [
       {
@@ -538,27 +551,4 @@
   }
   {% endschema %}
   
-  {%- comment -%}
-
-This file has been rewritten to preserve the original behavior.
-
----
-Changes:
-- from: |-
-    {%- render 'banner-layout-image',
-              image_desktop: image_desktop,
-              image_mobile: image_mobile,
-              show_overlay: section.settings.show_overlay,
-              overlay_opacity: section.settings.overlay_opacity,
-              show_gradient_overlay: section.settings.show_gradient_overlay,
-              image_aspect_ratio: section.settings.image_aspect_ratio_desktop | plus:0,
-              image_aspect_ratio_mobile: section.settings.image_aspect_ratio_mobile | plus:0,
-              section: section
-            -%}
-  to: "{%- render 'banner-layout-image', image_desktop: image_desktop, image_mobile:
-    image_mobile, show_overlay: section.settings.show_overlay, overlay_opacity: section.settings.overlay_opacity,
-    show_gradient_overlay: section.settings.show_gradient_overlay, image_aspect_ratio:
-    section.settings.image_aspect_ratio_desktop, plus: 0, image_aspect_ratio_mobile:
-    section.settings.image_aspect_ratio_mobile, section: section -%}"
-  position: 2052..2468
-{%- endcomment -%}
+  
