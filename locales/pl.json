@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Strona główna",
+    "breadcrumb_label": "Ścieżka nawigacji",
+    "all": "Wszystko"
+  },
   "bundle_builder": {
     "add_aria": "Dodaj {{ title }} do zestawu",
     "empty_slot": "Puste miejsce",

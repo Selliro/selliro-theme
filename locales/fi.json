@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Etusivu",
+    "breadcrumb_label": "Murupolku",
+    "all": "Kaikki"
+  },
   "bundle_builder": {
     "add_aria": "Lisää {{ title }} pakettiin",
     "empty_slot": "Tyhjä paikka",

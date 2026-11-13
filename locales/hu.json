@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Kezdőlap",
+    "breadcrumb_label": "Morzsamenü",
+    "all": "Összes"
+  },
   "bundle_builder": {
     "add_aria": "{{ title }} hozzáadása a csomaghoz",
     "empty_slot": "Üres hely",

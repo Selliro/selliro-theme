@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Forside",
+    "breadcrumb_label": "Brødkrumme",
+    "all": "Alle"
+  },
   "bundle_builder": {
     "add_aria": "Føj {{ title }} til bundlet",
     "empty_slot": "Tom plads",

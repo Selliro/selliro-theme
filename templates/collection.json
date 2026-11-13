@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "section": {
       "type": "section",
@@ -68,6 +69,7 @@
         "text_tqQTNE",
         "text_twGGkJ"
       ],
+      "disabled": true,
       "name": "Collection heading",
       "settings": {
         "content_direction": "column",
@@ -214,6 +216,7 @@
         "layout_type": "grid",
         "product_card_size": "medium",
         "mobile_product_card_size": "small",
+        "product_card_style": "new_arrivals",
         "product_grid_width": "centered",
         "full_width_on_mobile": false,
         "columns_gap_horizontal": 16,
@@ -224,9 +227,36 @@
         "padding-block-start": 0,
         "padding-block-end": 32
       }
+    },
+    "collection_hero": {
+      "type": "collection-hero",
+      "settings": {
+        "use_collection_image": true,
+        "image": "shopify://shop_images/young-woman-doing-her-morning-routine.png",
+        "height": "medium",
+        "overlay_color": "#000000",
+        "overlay_opacity": 55,
+        "text_color": "#ffffff",
+        "alignment": "left",
+        "vertical_position": "bottom",
+        "title_size": "medium",
+        "rounded_bottom": true,
+        "radius": 28,
+        "show_breadcrumbs": true,
+        "show_description": false,
+        "show_count": false,
+        "quick_links": [
+          "moisturizer",
+          "sunscreen",
+          "frontpage"
+        ],
+        "show_all_link": true,
+        "show_link_counts": true
+      }
     }
   },
   "order": [
+    "collection_hero",
     "section",
     "main"
   ]

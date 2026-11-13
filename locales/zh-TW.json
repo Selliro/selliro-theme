@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "首頁",
+    "breadcrumb_label": "導覽路徑",
+    "all": "全部"
+  },
   "bundle_builder": {
     "add_aria": "將 {{ title }} 加入套組",
     "empty_slot": "空格",

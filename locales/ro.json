@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Acasă",
+    "breadcrumb_label": "Traseu de navigare",
+    "all": "Toate"
+  },
   "bundle_builder": {
     "add_aria": "Adaugă {{ title }} în pachet",
     "empty_slot": "Loc liber",

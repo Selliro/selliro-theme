@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Domov",
+    "breadcrumb_label": "Navigačná cesta",
+    "all": "Všetko"
+  },
   "bundle_builder": {
     "add_aria": "Pridať {{ title }} do balíka",
     "empty_slot": "Prázdne miesto",

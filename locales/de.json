@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Startseite",
+    "breadcrumb_label": "Brotkrumen",
+    "all": "Alle"
+  },
   "bundle_builder": {
     "add_aria": "{{ title }} zum Bundle hinzufügen",
     "empty_slot": "Leerer Platz",

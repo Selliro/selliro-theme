@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Beranda",
+    "breadcrumb_label": "Breadcrumb",
+    "all": "Semua"
+  },
   "bundle_builder": {
     "add_aria": "Tambahkan {{ title }} ke paket",
     "empty_slot": "Slot kosong",

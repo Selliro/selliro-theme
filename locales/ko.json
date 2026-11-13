@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "홈",
+    "breadcrumb_label": "탐색 경로",
+    "all": "전체"
+  },
   "bundle_builder": {
     "add_aria": "{{ title }}을(를) 번들에 추가",
     "empty_slot": "빈 칸",

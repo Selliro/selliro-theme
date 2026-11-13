@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Trang chủ",
+    "breadcrumb_label": "Đường dẫn",
+    "all": "Tất cả"
+  },
   "bundle_builder": {
     "add_aria": "Thêm {{ title }} vào gói",
     "empty_slot": "Ô trống",

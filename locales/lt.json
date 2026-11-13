@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Pradžia",
+    "breadcrumb_label": "Naršymo kelias",
+    "all": "Visi"
+  },
   "bundle_builder": {
     "add_aria": "Pridėti {{ title }} į rinkinį",
     "empty_slot": "Tuščia vieta",

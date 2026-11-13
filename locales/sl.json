@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Domov",
+    "breadcrumb_label": "Drobtinice",
+    "all": "Vse"
+  },
   "bundle_builder": {
     "add_aria": "Dodaj {{ title }} v paket",
     "empty_slot": "Prazno mesto",

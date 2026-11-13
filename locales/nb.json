@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Hjem",
+    "breadcrumb_label": "Brødsmulesti",
+    "all": "Alle"
+  },
   "bundle_builder": {
     "add_aria": "Legg {{ title }} i pakken",
     "empty_slot": "Tom plass",

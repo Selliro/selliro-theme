@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Početna",
+    "breadcrumb_label": "Navigacijski put",
+    "all": "Sve"
+  },
   "bundle_builder": {
     "add_aria": "Dodaj {{ title }} u paket",
     "empty_slot": "Prazno mjesto",

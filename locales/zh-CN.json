@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "首页",
+    "breadcrumb_label": "面包屑导航",
+    "all": "全部"
+  },
   "bundle_builder": {
     "add_aria": "将 {{ title }} 加入套装",
     "empty_slot": "空格",

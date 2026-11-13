@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Home",
+    "breadcrumb_label": "Breadcrumb",
+    "all": "Tutti"
+  },
   "bundle_builder": {
     "add_aria": "Aggiungi {{ title }} al bundle",
     "empty_slot": "Spazio vuoto",

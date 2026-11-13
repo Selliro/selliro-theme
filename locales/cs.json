@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Domů",
+    "breadcrumb_label": "Drobečková navigace",
+    "all": "Vše"
+  },
   "bundle_builder": {
     "add_aria": "Přidat {{ title }} do balíčku",
     "empty_slot": "Prázdné místo",

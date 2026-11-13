@@ -8,6 +8,11 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Ana sayfa",
+    "breadcrumb_label": "İçerik haritası",
+    "all": "Tümü"
+  },
   "bundle_builder": {
     "add_aria": "{{ title }} ürününü pakete ekle",
     "empty_slot": "Boş yer",
