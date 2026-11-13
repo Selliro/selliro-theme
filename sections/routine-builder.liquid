@@ -67,6 +67,43 @@
 {% endstyle %}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+{%- liquid
+  assign float_count = 0
+  for i in (1..4)
+    assign k = 'float_image_' | append: i
+    if section.settings[k] != blank
+      assign float_count = float_count | plus: 1
+    endif
+  endfor
+-%}
+{%- if float_count > 0 -%}
+  <div
+    class="rb-floats rb-floats--{{ section.settings.float_shape }}{% if section.settings.floats_mobile == 'hide' %} rb-floats--hide-mobile{% endif %}"
+    id="RbFloats-{{ section.id }}"
+    data-rb-floats
+    data-speed="{{ section.settings.float_speed }}"
+    style="--rb-float-size: {{ section.settings.float_size }}vw; --rb-float-tilt: {{ section.settings.float_tilt }}deg;"
+    aria-hidden="true"
+  >
+    {%- for i in (1..4) -%}
+      {%- assign k = 'float_image_' | append: i -%}
+      {%- assign f_image = section.settings[k] -%}
+      {%- if f_image != blank -%}
+        <div class="rb-float rb-float--{{ i }}" data-rb-float data-depth="{{ forloop.index }}">
+          <div class="rb-float__inner">
+            {{
+              f_image
+              | image_url: width: 900
+              | image_tag: loading: 'lazy', widths: '300, 450, 600, 900', sizes: '(min-width: 990px) 18vw, 30vw', alt: '', class: 'rb-float__img'
+            }}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+{%- endif -%}
+
 <routine-builder
   id="RoutineBuilder-{{ section.id }}"
   class="rb rb--align-{{ section.settings.alignment }} {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}{% if section.settings.show_mood %} rb--mood{% endif %}"
@@ -114,7 +151,10 @@
               <span class="rb__blank-text" data-rb-blank-text data-placeholder="{{ block.settings.placeholder | default: section.settings.placeholder | escape }}">
                 {{- block.settings.placeholder | default: section.settings.placeholder | escape -}}
               </span>
-              <svg class="rb__blank-caret" viewBox="0 0 12 12" width="12" height="12" fill="none" aria-hidden="true" focusable="false"><path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="rb__blank-icon" aria-hidden="true">
+                <svg class="rb__blank-plus" viewBox="0 0 16 16" width="16" height="16" fill="none" focusable="false"><path d="M8 3.5v9M3.5 8h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                <svg class="rb__blank-caret" viewBox="0 0 12 12" width="12" height="12" fill="none" focusable="false"><path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
             </button>
             {%- liquid
               assign after_text = block.settings.after | strip
@@ -133,9 +173,18 @@
         {%- endfor -%}
       </p>
 
-      {%- if section.settings.hint != blank -%}
-        <p class="rb__hint" data-rb-hint>{{ section.settings.hint | escape }}</p>
-      {%- endif -%}
+      <div class="rb__status">
+        <div class="rb__meter" aria-hidden="true">
+          {%- for i in (1..blank_count) -%}<span class="rb__meter-seg"></span>{%- endfor -%}
+        </div>
+        {%- if section.settings.hint != blank -%}
+          <p class="rb__hint" data-rb-hint>{{ section.settings.hint | escape }}</p>
+        {%- endif -%}
+        <button type="button" class="rb__reset button-unstyled" data-rb-reset hidden>
+          <svg viewBox="0 0 20 20" width="15" height="15" fill="none" aria-hidden="true" focusable="false"><path d="M4 10a6 6 0 1 0 1.76-4.24M4 4v3.5h3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          {{ section.settings.reset_label | escape }}
+        </button>
+      </div>
 
       {%- if blank_count == 0 and request.design_mode -%}
         <p class="rb__editor-hint">Add a “Blank” block to start building the sentence.</p>
@@ -212,42 +261,29 @@
       {%- endfor -%}
     </div>
 
-    {%- comment -%} Live results {%- endcomment -%}
+    {%- comment -%} Results — revealed once every blank is filled {%- endcomment -%}
     <div class="rb__results-wrap" data-rb-results-wrap>
-      <div class="rb__results-head">
-        <div>
-          <p class="rb__results-title">
-            <span data-rb-title-idle>{{ section.settings.results_idle | escape }}</span>
-            <span data-rb-title-live hidden>{{ section.settings.results_heading | escape }}</span>
-            <span data-rb-title-done hidden>{{ section.settings.results_done | escape }}</span>
-          </p>
-          <div class="rb__meter" aria-hidden="true">
-            {%- for i in (1..blank_count) -%}<span class="rb__meter-seg"></span>{%- endfor -%}
+      <div class="rb__results-clip">
+        <div class="rb__results-inner">
+          <div class="rb__results-head">
+            <div>
+              {%- if section.settings.results_eyebrow != blank -%}
+                <p class="rb__results-eyebrow">{{ section.settings.results_eyebrow | escape }}</p>
+              {%- endif -%}
+              <h2 class="rb__results-title" tabindex="-1" data-rb-results-title>{{ section.settings.results_done | escape }}</h2>
+            </div>
+            <div class="rb__results-actions">
+              {%- if section.settings.show_add_all -%}
+                <button type="button" class="rb__add-all" data-rb-add-all disabled>
+                  <span class="rb__add-all-label">{{ section.settings.add_all_label | escape }}</span>
+                  <span class="rb__add-all-spinner" aria-hidden="true"></span>
+                </button>
+              {%- endif -%}
+            </div>
           </div>
-        </div>
-        <div class="rb__results-actions">
-          <button type="button" class="rb__reset button-unstyled" data-rb-reset hidden>
-            <svg viewBox="0 0 20 20" width="15" height="15" fill="none" aria-hidden="true" focusable="false"><path d="M4 10a6 6 0 1 0 1.76-4.24M4 4v3.5h3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            {{ section.settings.reset_label | escape }}
-          </button>
-          {%- if section.settings.show_add_all -%}
-            <button type="button" class="rb__add-all" data-rb-add-all disabled>
-              <span class="rb__add-all-label">{{ section.settings.add_all_label | escape }}</span>
-              <span class="rb__add-all-spinner" aria-hidden="true"></span>
-            </button>
-          {%- endif -%}
+          <ul class="rb__results list-unstyled" data-rb-results role="list"></ul>
         </div>
       </div>
-
-      <ul class="rb__results list-unstyled" data-rb-results role="list" aria-live="polite">
-        {%- for i in (1..section.settings.max_results) -%}
-          <li class="rb__ghost" data-rb-ghost aria-hidden="true">
-            <span class="rb__ghost-media"></span>
-            <span class="rb__ghost-line"></span>
-            <span class="rb__ghost-line rb__ghost-line--short"></span>
-          </li>
-        {%- endfor -%}
-      </ul>
     </div>
   </div>
 
@@ -468,25 +504,123 @@
     },
     {
       "type": "header",
+      "content": "Floating images"
+    },
+    {
+      "type": "paragraph",
+      "content": "Images float in the side margins and rise as the page scrolls. Images 1 and 3 sit on the left, 2 and 4 on the right."
+    },
+    {
+      "type": "image_picker",
+      "id": "float_image_1",
+      "label": "Image 1 (left, top)"
+    },
+    {
+      "type": "image_picker",
+      "id": "float_image_2",
+      "label": "Image 2 (right, top)"
+    },
+    {
+      "type": "image_picker",
+      "id": "float_image_3",
+      "label": "Image 3 (left, bottom)"
+    },
+    {
+      "type": "image_picker",
+      "id": "float_image_4",
+      "label": "Image 4 (right, bottom)"
+    },
+    {
+      "type": "select",
+      "id": "float_shape",
+      "label": "Shape",
+      "options": [
+        {
+          "value": "arch",
+          "label": "Arch"
+        },
+        {
+          "value": "pebble",
+          "label": "Pebble"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "rounded",
+          "label": "Rounded rectangle"
+        }
+      ],
+      "default": "arch"
+    },
+    {
+      "type": "range",
+      "id": "float_size",
+      "label": "Size",
+      "min": 8,
+      "max": 22,
+      "step": 1,
+      "unit": "vw",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "float_tilt",
+      "label": "Tilt",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "unit": "deg",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "float_speed",
+      "label": "Rise speed",
+      "info": "0 keeps them still.",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "select",
+      "id": "floats_mobile",
+      "label": "On mobile",
+      "options": [
+        {
+          "value": "show",
+          "label": "Show small"
+        },
+        {
+          "value": "hide",
+          "label": "Hide"
+        }
+      ],
+      "default": "show"
+    },
+    {
+      "type": "header",
       "content": "Results"
     },
     {
       "type": "text",
-      "id": "results_idle",
-      "label": "Title before any answer",
-      "default": "Your routine appears here"
-    },
-    {
-      "type": "text",
-      "id": "results_heading",
-      "label": "Title while building",
-      "default": "Matching your routine…"
+      "id": "results_eyebrow",
+      "label": "Results eyebrow",
+      "default": "Made for you"
     },
     {
       "type": "text",
       "id": "results_done",
-      "label": "Title when complete",
+      "label": "Results heading",
       "default": "Your routine is ready"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_to_results",
+      "label": "Scroll to the products when the sentence is complete",
+      "default": true
     },
     {
       "type": "range",
