@@ -592,15 +592,20 @@
     }
 
     .menu-list__list-item:where(:not([slot='overflow'])):is(:hover, :focus-within) > .menu-list__link .menu-list__link-title,
-    .menu-list__link[aria-expanded='true'] .menu-list__link-title,
-    .menu-list__link--active .menu-list__link-title {
+    .menu-list__link[aria-expanded='true'] .menu-list__link-title {
       font-weight: 700;
+    }
+
+    /* Current page link is bold only while no other item is hovered */
+    .menu-list:not(:has(.menu-list__list-item:is(:hover, :focus-within))) .menu-list__link--active .menu-list__link-title {
+      font-weight: 600;
     }
   }
 
   /* Thin divider between the header bar and an open dropdown */
-  .header-menu-nav--submenu-divider .overflow-menu::after {
-    border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.12);
+  .header-menu-nav--submenu-divider .menu-list__list-item:where(:not([slot='overflow'])) > .menu-list__submenu,
+  .header-menu-nav--submenu-divider .overflow-menu::part(overflow) {
+    box-shadow: inset 0 1px 0 rgb(var(--color-foreground-rgb) / 0.12), var(--shadow-drawer);
   }
 
   /* Dropdown arrow on top-level items that open a submenu */
