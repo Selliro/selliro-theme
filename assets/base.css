@@ -4405,3 +4405,208 @@ body .blur-div {
 .full-width {
   width: 100%;
 }
+
+/* ==========================================================================
+   Button hover animations
+   Theme settings → Buttons → Hover animation (body class: btn-fx--{style})
+   Applies to theme buttons and the call-to-action buttons used by custom sections.
+   Only owns transform / shine background / drop shadow / transition, so each button keeps its colors.
+   ========================================================================== */
+
+:root {
+  --btn-fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --btn-fx-speed: 0.35s;
+  --btn-fx-shine: rgb(255 255 255 / 0.38);
+  --btn-fx-shadow: 0 12px 24px -12px rgb(0 0 0 / 0.38), 0 4px 10px -6px rgb(0 0 0 / 0.18);
+}
+
+/* Every call-to-action button the effects target (pointer-hover state is listed separately below) */
+:is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift)
+  :is(
+    .button:not(.button-unstyled, .menu-list__link),
+    .button-secondary,
+    button.shopify-payment-button__button--unbranded,
+    .mega-promo__button--accent,
+    .pq__button,
+    .rb__add-all,
+    .rb__done,
+    .new-arrivals-showcase__promo-btn,
+    .itc__btn:not(.itc__btn--static),
+    .custom-banner__button,
+    .reveal-image__btn,
+    .shop-the-look__bundle-btn,
+    .before-after-slider__btn:not(.before-after-slider__btn--static),
+    .vertical-rich-text-section__button
+  ) {
+  background-repeat: no-repeat;
+  transition: color var(--btn-fx-speed) var(--btn-fx-ease), background-color var(--btn-fx-speed) var(--btn-fx-ease),
+    border-color var(--btn-fx-speed) var(--btn-fx-ease), box-shadow var(--btn-fx-speed) var(--btn-fx-ease),
+    transform var(--btn-fx-speed) var(--btn-fx-ease), background-position 0.75s var(--btn-fx-ease),
+    background-size 0.5s var(--btn-fx-ease), opacity 0.2s ease, filter 0.2s ease;
+}
+
+/* ---- Shine: a soft light band waits off the left edge, sweeps across on hover */
+.btn-fx--lift-shine
+  :is(
+    .button:not(.button-unstyled, .menu-list__link),
+    .button-secondary,
+    button.shopify-payment-button__button--unbranded,
+    .mega-promo__button--accent,
+    .pq__button,
+    .rb__add-all,
+    .rb__done,
+    .new-arrivals-showcase__promo-btn,
+    .new-arrivals-card__quick-add-btn,
+    .itc__btn:not(.itc__btn--static),
+    .custom-banner__button,
+    .reveal-image__btn,
+    .shop-the-look__bundle-btn,
+    .before-after-slider__btn:not(.before-after-slider__btn--static),
+    .vertical-rich-text-section__button
+  ) {
+  background-image: linear-gradient(110deg, transparent 0 38%, var(--btn-fx-shine) 50%, transparent 62% 100%);
+  background-size: 250% 100%;
+  background-position: 120% 0;
+}
+
+/* ---- Color sweep: a tint of the text color fills from the left */
+.btn-fx--fill
+  :is(
+    .button:not(.button-unstyled, .menu-list__link),
+    .button-secondary,
+    button.shopify-payment-button__button--unbranded,
+    .mega-promo__button--accent,
+    .pq__button,
+    .rb__add-all,
+    .rb__done,
+    .new-arrivals-showcase__promo-btn,
+    .new-arrivals-card__quick-add-btn,
+    .itc__btn:not(.itc__btn--static),
+    .custom-banner__button,
+    .reveal-image__btn,
+    .shop-the-look__bundle-btn,
+    .before-after-slider__btn:not(.before-after-slider__btn--static),
+    .vertical-rich-text-section__button
+  ) {
+  background-image: linear-gradient(color-mix(in srgb, currentColor 16%, transparent), color-mix(in srgb, currentColor 16%, transparent));
+  background-size: 0% 100%;
+  background-position: 0 0;
+}
+
+/* ---- Hover state (desktop pointers + keyboard focus) */
+@media (hover: hover) {
+  .btn-fx--lift-shine
+    :is(
+      .button:not(.button-unstyled, .menu-list__link, :disabled, [aria-disabled='true']),
+      .button-secondary:not(:disabled, [aria-disabled='true']),
+      button.shopify-payment-button__button--unbranded:not(:disabled),
+      .pq__button:not(:disabled),
+      .rb__add-all:not(:disabled),
+      .rb__done,
+      .new-arrivals-showcase__promo-btn:not(:disabled),
+      .new-arrivals-card__quick-add-btn:not(:disabled),
+      .itc__btn:not(.itc__btn--static),
+      .custom-banner__button,
+      .reveal-image__btn,
+      .shop-the-look__bundle-btn:not(:disabled),
+      .before-after-slider__btn:not(.before-after-slider__btn--static),
+      .vertical-rich-text-section__button
+    ):hover,
+  .btn-fx--lift-shine .mega-promo:hover .mega-promo__button--accent {
+    background-position: -20% 0;
+  }
+
+  .btn-fx--fill
+    :is(
+      .button:not(.button-unstyled, .menu-list__link, :disabled, [aria-disabled='true']),
+      .button-secondary:not(:disabled, [aria-disabled='true']),
+      button.shopify-payment-button__button--unbranded:not(:disabled),
+      .pq__button:not(:disabled),
+      .rb__add-all:not(:disabled),
+      .rb__done,
+      .new-arrivals-showcase__promo-btn:not(:disabled),
+      .new-arrivals-card__quick-add-btn:not(:disabled),
+      .itc__btn:not(.itc__btn--static),
+      .custom-banner__button,
+      .reveal-image__btn,
+      .shop-the-look__bundle-btn:not(:disabled),
+      .before-after-slider__btn:not(.before-after-slider__btn--static),
+      .vertical-rich-text-section__button
+    ):hover,
+  .btn-fx--fill .mega-promo:hover .mega-promo__button--accent {
+    background-size: 100% 100%;
+  }
+
+  /* Lift + soft shadow (not on the card quick-add bar, which already slides in) */
+  :is(.btn-fx--lift-shine, .btn-fx--lift)
+    :is(
+      .button-secondary:not(:disabled, [aria-disabled='true']),
+      .pq__button:not(:disabled),
+      .rb__add-all:not(:disabled),
+      .rb__done,
+      .new-arrivals-showcase__promo-btn:not(:disabled),
+      .itc__btn:not(.itc__btn--static),
+      .custom-banner__button,
+      .reveal-image__btn,
+      .shop-the-look__bundle-btn:not(:disabled),
+      .before-after-slider__btn:not(.before-after-slider__btn--static),
+      .vertical-rich-text-section__button
+    ):hover,
+  :is(.btn-fx--lift-shine, .btn-fx--lift) .mega-promo:hover .mega-promo__button--accent {
+    transform: translateY(-2px);
+    box-shadow: var(--btn-fx-shadow);
+  }
+
+  /* Horizon buttons draw their border with an inset shadow — keep it while adding the drop shadow */
+  :is(.btn-fx--lift-shine, .btn-fx--lift)
+    :is(.button:not(.button-unstyled, .menu-list__link, :disabled, [aria-disabled='true']), button.shopify-payment-button__button--unbranded:not(:disabled)):hover,
+  :is(.btn-fx--lift-shine, .btn-fx--lift) .button-secondary:not(:disabled, [aria-disabled='true']):hover {
+    transform: translateY(-2px);
+    box-shadow: inset 0 0 0 var(--button-border-width) var(--button-border-color), var(--btn-fx-shadow);
+  }
+
+  /* Arrow / trailing icons nudge forward */
+  :is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift)
+    :is(.button, .button-secondary, .pq__button, .rb__add-all, .itc__btn, .custom-banner__button, .reveal-image__btn):hover
+    > svg:last-child {
+    transform: translateX(3px);
+  }
+}
+
+/* Keyboard users get the same feedback */
+:is(.btn-fx--lift-shine, .btn-fx--lift)
+  :is(.button:not(.button-unstyled, .menu-list__link), .button-secondary, .pq__button, .rb__add-all, .rb__done, .itc__btn, .custom-banner__button, .reveal-image__btn, .shop-the-look__bundle-btn):focus-visible {
+  transform: translateY(-2px);
+}
+
+/* Press: a quick, tactile push */
+:is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift)
+  :is(
+    .button:not(.button-unstyled, .menu-list__link, :disabled, [aria-disabled='true']),
+    .button-secondary:not(:disabled),
+    .pq__button:not(:disabled),
+    .rb__add-all:not(:disabled),
+    .rb__done,
+    .new-arrivals-showcase__promo-btn:not(:disabled),
+    .itc__btn:not(.itc__btn--static),
+    .custom-banner__button,
+    .reveal-image__btn,
+    .shop-the-look__bundle-btn:not(:disabled),
+    .before-after-slider__btn:not(.before-after-slider__btn--static)
+  ):active {
+  transform: translateY(0) scale(0.97);
+  transition-duration: 0.08s;
+}
+
+:is(.button, .button-secondary, .pq__button, .rb__add-all, .itc__btn, .custom-banner__button, .reveal-image__btn) > svg {
+  transition: transform var(--btn-fx-speed, 0.35s) var(--btn-fx-ease, ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) :is(.button, .button-secondary, .pq__button, .rb__add-all, .rb__done, .itc__btn, .custom-banner__button, .reveal-image__btn, .shop-the-look__bundle-btn, .before-after-slider__btn, .mega-promo__button--accent, .new-arrivals-showcase__promo-btn, .new-arrivals-card__quick-add-btn, .vertical-rich-text-section__button),
+  :is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) :is(.button, .button-secondary, .pq__button, .rb__add-all, .rb__done, .itc__btn, .custom-banner__button, .reveal-image__btn, .shop-the-look__bundle-btn, .before-after-slider__btn, .mega-promo__button--accent, .new-arrivals-showcase__promo-btn, .new-arrivals-card__quick-add-btn, .vertical-rich-text-section__button):is(:hover, :active, :focus-visible) {
+    transform: none !important;
+    background-image: none !important;
+    transition-property: color, background-color, border-color, box-shadow;
+  }
+}
