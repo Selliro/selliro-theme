@@ -107,7 +107,8 @@
       // Keep the sticky box just below a sticky header (if any).
       this.setStickyTop = () => {
         const header = document.querySelector('#header-component[sticky], header-component[sticky]');
-        const h = header ? Math.max(0, Math.round(header.getBoundingClientRect().bottom)) : 0;
+        // Sticky header pins at the top of the viewport, so its own height is the offset we need.
+        const h = header && header.getAttribute('sticky') === 'always' ? header.offsetHeight : 0;
         this.style.setProperty('--bb-sticky-top', `${h}px`);
       };
       this.setStickyTop();
