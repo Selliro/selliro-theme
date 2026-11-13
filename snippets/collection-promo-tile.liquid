@@ -1,0 +1,68 @@
+{%- doc -%}
+  Promotion tile shown between products in the collection grid (main-collection section).
+
+  @param {object} section - The main collection section (tile settings live there)
+  @param {number} index - Tile number (1 or 2)
+{%- enddoc -%}
+{%- liquid
+  assign p = 'promo_' | append: index | append: '_'
+  assign k = p | append: 'image'
+  assign tile_image = section.settings[k]
+  assign k = p | append: 'icon'
+  assign tile_icon = section.settings[k] | default: 'none'
+  assign k = p | append: 'heading'
+  assign tile_heading = section.settings[k]
+  assign k = p | append: 'text'
+  assign tile_text = section.settings[k]
+  assign k = p | append: 'button_label'
+  assign tile_button = section.settings[k]
+  assign k = p | append: 'link'
+  assign tile_link = section.settings[k]
+  assign k = p | append: 'bg_color'
+  assign tile_bg = section.settings[k] | default: '#3b4a2f'
+  assign k = p | append: 'text_color'
+  assign tile_fg = section.settings[k] | default: '#ffffff'
+  assign k = p | append: 'overlay'
+  assign tile_overlay = section.settings[k] | default: 0 | times: 0.01
+  assign k = p | append: 'span'
+  assign tile_span = section.settings[k] | default: 1
+-%}
+<div
+  class="collection-promo{% if tile_image != blank %} collection-promo--image{% endif %}"
+  style="--cp-bg: {{ tile_bg }}; --cp-fg: {{ tile_fg }}; --cp-overlay: {{ tile_overlay }};"
+  data-span="{{ tile_span }}"
+>
+  {%- if tile_image != blank -%}
+    <div class="collection-promo__media" aria-hidden="true">
+      {{
+        tile_image
+        | image_url: width: 1200
+        | image_tag:
+          loading: 'lazy',
+          widths: '400, 600, 800, 1200',
+          sizes: '(min-width: 1100px) 25vw, (min-width: 750px) 33vw, 50vw',
+          alt: '',
+          class: 'collection-promo__img'
+      }}
+      <span class="collection-promo__overlay"></span>
+    </div>
+  {%- endif -%}
+
+  <div class="collection-promo__content">
+    {%- if tile_icon != 'none' -%}
+      <span class="collection-promo__icon" aria-hidden="true">{% render 'itc-feature-icon', icon: tile_icon %}</span>
+    {%- endif -%}
+    {%- if tile_heading != blank -%}
+      <h2 class="collection-promo__heading">{{ tile_heading | escape }}</h2>
+    {%- endif -%}
+    {%- if tile_text != blank -%}
+      <p class="collection-promo__text">{{ tile_text | escape }}</p>
+    {%- endif -%}
+    {%- if tile_button != blank -%}
+      <a class="collection-promo__button" href="{{ tile_link | default: routes.all_products_collection_url }}">
+        <span>{{ tile_button | escape }}</span>
+        <svg viewBox="0 0 20 20" width="16" height="16" fill="none" aria-hidden="true" focusable="false"><path d="M4 10h11m0 0-4.5-4.5M15 10l-4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    {%- endif -%}
+  </div>
+</div>
