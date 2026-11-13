@@ -53,7 +53,7 @@
     "d_text": "<p>The choice is yours. With our bundle builder, you can select any combination from our range of products. The easiest way to keep everyone happy.</p>",
     "d_box_title": "Your bundle",
     "d_tier_label": "[count] items · [discount]% off",
-    "d_msg_min": "Add [count] more products to proceed and save [discount]",
+    "d_msg_min": "Add [count] more to proceed and save [discount]",
     "d_msg_more": "Add [count] more to save [discount]",
     "d_msg_top": "Your bundle is complete, you're saving [discount]!",
     "d_msg_max": "You can choose up to [count] products",

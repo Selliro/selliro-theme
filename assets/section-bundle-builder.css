@@ -1134,3 +1134,13 @@
     transform: skewX(-8deg);
   }
 }
+
+/* A single tier sits at the end of the track (the goal) */
+.bb__tiers-list:has(> .bb__tier:only-child) {
+  justify-content: flex-end;
+}
+
+.bb__tier:only-child {
+  justify-items: end;
+  text-align: end;
+}

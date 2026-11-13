@@ -2647,7 +2647,7 @@
         "box_title": "Your bundle",
         "box_position": "right",
         "slots": 3,
-        "msg_min": "Add [count] more products to proceed and save [discount]",
+        "msg_min": "Add [count] more to proceed and save [discount]",
         "msg_more": "Add [count] more to save [discount]",
         "msg_top": "Your bundle is complete, you're saving [discount]!",
         "msg_max": "You can choose up to [count] products",
