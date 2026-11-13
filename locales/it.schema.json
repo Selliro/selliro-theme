@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "button_fx": {
+    "label": "Animazione al passaggio",
+    "info": "Si applica ai pulsanti di tutto il tema.",
+    "lift_shine": "Sollevamento e riflesso",
+    "fill": "Scorrimento di colore",
+    "lift": "Sollevamento",
+    "none": "Nessuna"
+  },
   "routine_builder": {
     "name": "Crea routine",
     "blank": "Spazio vuoto",

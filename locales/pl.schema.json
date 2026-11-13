@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "button_fx": {
+    "label": "Animacja po najechaniu",
+    "info": "Dotyczy przycisków w całym motywie.",
+    "lift_shine": "Uniesienie i połysk",
+    "fill": "Przesunięcie koloru",
+    "lift": "Uniesienie",
+    "none": "Brak"
+  },
   "routine_builder": {
     "name": "Kreator rutyny",
     "blank": "Luka",

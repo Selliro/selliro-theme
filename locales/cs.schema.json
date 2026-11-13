@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "button_fx": {
+    "label": "Animace při najetí",
+    "info": "Platí pro tlačítka v celém motivu.",
+    "lift_shine": "Zvednutí a lesk",
+    "fill": "Barevný přechod",
+    "lift": "Zvednutí",
+    "none": "Žádná"
+  },
   "routine_builder": {
     "name": "Tvůrce rutiny",
     "blank": "Mezera",

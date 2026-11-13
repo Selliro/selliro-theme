@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
  {
+  "button_fx": {
+    "label": "Hover animation",
+    "info": "Applies to buttons across the theme.",
+    "lift_shine": "Lift and shine",
+    "fill": "Color sweep",
+    "lift": "Lift",
+    "none": "None"
+  },
   "routine_builder": {
     "name": "Routine builder",
     "blank": "Blank",

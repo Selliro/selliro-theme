@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "button_fx": {
+    "label": "Hovringsanimation",
+    "info": "Gäller knappar i hela temat.",
+    "lift_shine": "Lyft och glans",
+    "fill": "Färgsvep",
+    "lift": "Lyft",
+    "none": "Ingen"
+  },
   "routine_builder": {
     "name": "Rutinbyggare",
     "blank": "Tom ruta",

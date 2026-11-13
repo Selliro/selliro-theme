@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "button_fx": {
+    "label": "Hover-animaatio",
+    "info": "Koskee teeman kaikkia painikkeita.",
+    "lift_shine": "Nosto ja kiilto",
+    "fill": "Väripyyhkäisy",
+    "lift": "Nosto",
+    "none": "Ei mitään"
+  },
   "routine_builder": {
     "name": "Rutiinin kokoaja",
     "blank": "Aukko",

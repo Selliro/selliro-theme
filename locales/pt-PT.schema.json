@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "button_fx": {
+    "label": "Animação ao passar o cursor",
+    "info": "Aplica-se aos botões de todo o tema.",
+    "lift_shine": "Elevação e brilho",
+    "fill": "Varrimento de cor",
+    "lift": "Elevação",
+    "none": "Nenhuma"
+  },
   "routine_builder": {
     "name": "Criador de rotina",
     "blank": "Espaço em branco",

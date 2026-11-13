@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "button_fx": {
+    "label": "Hover-animation",
+    "info": "Gælder for knapper i hele temaet.",
+    "lift_shine": "Løft og glans",
+    "fill": "Farvestrøg",
+    "lift": "Løft",
+    "none": "Ingen"
+  },
   "routine_builder": {
     "name": "Rutinebygger",
     "blank": "Tomt felt",

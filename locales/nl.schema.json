@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "button_fx": {
+    "label": "Hover-animatie",
+    "info": "Geldt voor knoppen in het hele thema.",
+    "lift_shine": "Optillen en glans",
+    "fill": "Kleurveeg",
+    "lift": "Optillen",
+    "none": "Geen"
+  },
   "routine_builder": {
     "name": "Routinebouwer",
     "blank": "Leeg vak",

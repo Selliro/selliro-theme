@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "button_fx": {
+    "label": "Üzerine gelme animasyonu",
+    "info": "Temadaki tüm düğmelere uygulanır.",
+    "lift_shine": "Yükselme ve parıltı",
+    "fill": "Renk geçişi",
+    "lift": "Yükselme",
+    "none": "Yok"
+  },
   "routine_builder": {
     "name": "Rutin oluşturucu",
     "blank": "Boşluk",

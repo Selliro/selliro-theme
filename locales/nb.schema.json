@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "button_fx": {
+    "label": "Animasjon ved peking",
+    "info": "Gjelder knapper i hele temaet.",
+    "lift_shine": "Løft og glans",
+    "fill": "Fargesveip",
+    "lift": "Løft",
+    "none": "Ingen"
+  },
   "routine_builder": {
     "name": "Rutinebygger",
     "blank": "Tomt felt",

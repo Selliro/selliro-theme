@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "button_fx": {
+    "label": "Animation au survol",
+    "info": "S'applique aux boutons de tout le thème.",
+    "lift_shine": "Élévation et reflet",
+    "fill": "Balayage de couleur",
+    "lift": "Élévation",
+    "none": "Aucune"
+  },
   "routine_builder": {
     "name": "Créateur de routine",
     "blank": "Blanc",

@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "button_fx": {
+    "label": "Hover-Animation",
+    "info": "Gilt für Schaltflächen im gesamten Theme.",
+    "lift_shine": "Anheben und Glanz",
+    "fill": "Farbwischer",
+    "lift": "Anheben",
+    "none": "Keine"
+  },
   "routine_builder": {
     "name": "Routine-Builder",
     "blank": "Lücke",
