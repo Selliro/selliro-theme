@@ -2318,14 +2318,22 @@
               "sun-cream-spf-protection"
             ],
             "answer_5_label": "",
-            "answer_6_label": ""
+            "answer_6_label": "",
+            "answer_1_description": "Feels tight or flaky",
+            "answer_1_icon": "droplet",
+            "answer_2_description": "Shiny by midday",
+            "answer_2_icon": "sun",
+            "answer_3_description": "Oily T-zone, dry cheeks",
+            "answer_3_icon": "leaf",
+            "answer_4_description": "Easily irritated",
+            "answer_4_icon": "heart"
           }
         },
         "question_concern": {
           "type": "question",
           "settings": {
             "question": "What's your main concern?",
-            "helper": "Choose all that apply.",
+            "helper": "",
             "answer_style": "pills",
             "allow_multiple": true,
             "allow_skip": true,
@@ -2383,7 +2391,10 @@
             ],
             "answer_4_label": "",
             "answer_5_label": "",
-            "answer_6_label": ""
+            "answer_6_label": "",
+            "answer_1_description": "Just the essentials",
+            "answer_2_description": "Cleanse, treat, protect",
+            "answer_3_description": "Masks, serums, the works"
           }
         }
       },
@@ -2398,15 +2409,15 @@
         "heading_size": "medium",
         "text": "<p>Answer three quick questions and we'll match you with the products your skin will love.</p>",
         "start_label": "Start the quiz",
-        "intro_note": "Takes less than 1 minute",
+        "intro_note": "Under 1 minute",
         "intro_image": "shopify://shop_images/woman-applying-face-cream_1.png",
-        "media_badge": "Personalised for you",
+        "media_badge": "Made for your skin",
         "media_position": "left",
         "section_width": "page-width",
         "color_scheme": "scheme-1",
         "accent_color": "#f8d12f",
         "accent_text_color": "#000000",
-        "card_radius": 16,
+        "card_radius": 20,
         "auto_advance": true,
         "remember_result": true,
         "max_results": 4,
@@ -2414,7 +2425,14 @@
         "fallback_collection": "all",
         "best_match_label": "Best match",
         "padding_top": 64,
-        "padding_bottom": 64
+        "padding_bottom": 64,
+        "container_style": "card",
+        "show_meta": true,
+        "questions_label": "[count] quick questions",
+        "meta_third": "Personalised picks",
+        "show_analyzing": true,
+        "show_summary": true,
+        "show_add_all": true
       }
     }
   },
