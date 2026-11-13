@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Aggiungi {{ title }} al bundle",
+    "empty_slot": "Spazio vuoto",
+    "items_count": "{{ count }} articoli",
+    "announce_added": "{{ title }} aggiunto. {{ count }} articoli nella tua box.",
+    "announce_removed": "{{ title }} rimosso. {{ count }} articoli nella tua box.",
+    "savings": "Risparmi",
+    "total": "Totale",
+    "view_bundle": "Vedi la box"
+  },
   "routine_builder": {
     "editor_hint": "Aggiungi un blocco «Spazio vuoto» per iniziare la frase.",
     "ready": "La tua routine è pronta. {{ count }} prodotti consigliati."

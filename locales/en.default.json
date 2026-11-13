@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Add {{ title }} to bundle",
+    "empty_slot": "Empty slot",
+    "items_count": "{{ count }} items",
+    "announce_added": "{{ title }} added. {{ count }} items in your box.",
+    "announce_removed": "{{ title }} removed. {{ count }} items in your box.",
+    "savings": "You save",
+    "total": "Total",
+    "view_bundle": "View box"
+  },
   "routine_builder": {
     "editor_hint": "Add a “Blank” block to start building the sentence.",
     "ready": "Your routine is ready. {{ count }} products recommended."

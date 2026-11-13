@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "将 {{ title }} 加入套装",
+    "empty_slot": "空格",
+    "items_count": "{{ count }} 件",
+    "announce_added": "已添加 {{ title }}。盒子中有 {{ count }} 件商品。",
+    "announce_removed": "已移除 {{ title }}。盒子中有 {{ count }} 件商品。",
+    "savings": "节省",
+    "total": "合计",
+    "view_bundle": "查看盒子"
+  },
   "routine_builder": {
     "editor_hint": "添加“空格”区块以开始组成句子。",
     "ready": "你的护肤流程已就绪。推荐了 {{ count }} 件产品。"

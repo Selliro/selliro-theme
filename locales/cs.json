@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Přidat {{ title }} do balíčku",
+    "empty_slot": "Prázdné místo",
+    "items_count": "{{ count }} položky",
+    "announce_added": "{{ title }} přidáno. V krabici: {{ count }} položek.",
+    "announce_removed": "{{ title }} odebráno. V krabici: {{ count }} položek.",
+    "savings": "Ušetříte",
+    "total": "Celkem",
+    "view_bundle": "Zobrazit krabici"
+  },
   "routine_builder": {
     "editor_hint": "Přidejte blok „Mezera“ a začněte sestavovat větu.",
     "ready": "Vaše rutina je připravena. Doporučené produkty: {{ count }}."

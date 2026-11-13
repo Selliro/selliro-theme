@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Thêm {{ title }} vào gói",
+    "empty_slot": "Ô trống",
+    "items_count": "{{ count }} sản phẩm",
+    "announce_added": "Đã thêm {{ title }}. Có {{ count }} sản phẩm trong hộp.",
+    "announce_removed": "Đã xóa {{ title }}. Có {{ count }} sản phẩm trong hộp.",
+    "savings": "Bạn tiết kiệm",
+    "total": "Tổng",
+    "view_bundle": "Xem hộp"
+  },
   "routine_builder": {
     "editor_hint": "Thêm khối “Chỗ trống” để bắt đầu tạo câu.",
     "ready": "Quy trình của bạn đã sẵn sàng. {{ count }} sản phẩm được đề xuất."

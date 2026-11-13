@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Lägg till {{ title }} i paketet",
+    "empty_slot": "Tom plats",
+    "items_count": "{{ count }} artiklar",
+    "announce_added": "{{ title }} har lagts till. {{ count }} artiklar i din låda.",
+    "announce_removed": "{{ title }} har tagits bort. {{ count }} artiklar i din låda.",
+    "savings": "Du sparar",
+    "total": "Totalt",
+    "view_bundle": "Visa lådan"
+  },
   "routine_builder": {
     "editor_hint": "Lägg till ett block för ”Tom ruta” för att börja bygga meningen.",
     "ready": "Din rutin är klar. {{ count }} rekommenderade produkter."

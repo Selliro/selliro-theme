@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Adaugă {{ title }} în pachet",
+    "empty_slot": "Loc liber",
+    "items_count": "{{ count }} produse",
+    "announce_added": "{{ title }} adăugat. Produse în cutie: {{ count }}.",
+    "announce_removed": "{{ title }} eliminat. Produse în cutie: {{ count }}.",
+    "savings": "Economisești",
+    "total": "Total",
+    "view_bundle": "Vezi cutia"
+  },
   "routine_builder": {
     "editor_hint": "Adăugați un bloc „Spațiu gol” pentru a începe propoziția.",
     "ready": "Rutina ta este gata. Produse recomandate: {{ count }}."

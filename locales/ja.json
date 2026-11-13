@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "{{ title }}をバンドルに追加",
+    "empty_slot": "空き枠",
+    "items_count": "{{ count }}点",
+    "announce_added": "{{ title }}を追加しました。ボックス内: {{ count }}点。",
+    "announce_removed": "{{ title }}を削除しました。ボックス内: {{ count }}点。",
+    "savings": "割引額",
+    "total": "合計",
+    "view_bundle": "ボックスを見る"
+  },
   "routine_builder": {
     "editor_hint": "「空欄」ブロックを追加して文章を作り始めましょう。",
     "ready": "ルーティンが完成しました。おすすめ商品: {{ count }}点。"

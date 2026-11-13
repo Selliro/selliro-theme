@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Dodaj {{ title }} do zestawu",
+    "empty_slot": "Puste miejsce",
+    "items_count": "{{ count }} produkty",
+    "announce_added": "Dodano: {{ title }}. Produkty w pudełku: {{ count }}.",
+    "announce_removed": "Usunięto: {{ title }}. Produkty w pudełku: {{ count }}.",
+    "savings": "Oszczędzasz",
+    "total": "Razem",
+    "view_bundle": "Zobacz pudełko"
+  },
   "routine_builder": {
     "editor_hint": "Dodaj blok „Luka”, aby zacząć tworzyć zdanie.",
     "ready": "Twoja rutyna jest gotowa. Polecane produkty: {{ count }}."

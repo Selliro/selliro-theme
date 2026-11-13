@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Ajouter {{ title }} au lot",
+    "empty_slot": "Emplacement vide",
+    "items_count": "{{ count }} articles",
+    "announce_added": "{{ title }} ajouté. {{ count }} articles dans votre box.",
+    "announce_removed": "{{ title }} retiré. {{ count }} articles dans votre box.",
+    "savings": "Vous économisez",
+    "total": "Total",
+    "view_bundle": "Voir la box"
+  },
   "routine_builder": {
     "editor_hint": "Ajoutez un bloc « Blanc » pour commencer la phrase.",
     "ready": "Votre routine est prête. {{ count }} produits recommandés."

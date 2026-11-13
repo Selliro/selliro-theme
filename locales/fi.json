@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Lisää {{ title }} pakettiin",
+    "empty_slot": "Tyhjä paikka",
+    "items_count": "{{ count }} tuotetta",
+    "announce_added": "{{ title }} lisätty. Laatikossa {{ count }} tuotetta.",
+    "announce_removed": "{{ title }} poistettu. Laatikossa {{ count }} tuotetta.",
+    "savings": "Säästät",
+    "total": "Yhteensä",
+    "view_bundle": "Näytä laatikko"
+  },
   "routine_builder": {
     "editor_hint": "Lisää Aukko-lohko aloittaaksesi lauseen.",
     "ready": "Rutiinisi on valmis. Suositeltuja tuotteita: {{ count }}."

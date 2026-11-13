@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Pridėti {{ title }} į rinkinį",
+    "empty_slot": "Tuščia vieta",
+    "items_count": "{{ count }} prekės",
+    "announce_added": "{{ title }} pridėta. Dėžutėje prekių: {{ count }}.",
+    "announce_removed": "{{ title }} pašalinta. Dėžutėje prekių: {{ count }}.",
+    "savings": "Sutaupote",
+    "total": "Iš viso",
+    "view_bundle": "Peržiūrėti dėžutę"
+  },
   "routine_builder": {
     "editor_hint": "Pridėkite bloką „Tarpas“, kad pradėtumėte kurti sakinį.",
     "ready": "Jūsų rutina paruošta. Rekomenduojami produktai: {{ count }}."

@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Tambahkan {{ title }} ke paket",
+    "empty_slot": "Slot kosong",
+    "items_count": "{{ count }} item",
+    "announce_added": "{{ title }} ditambahkan. {{ count }} item di kotak Anda.",
+    "announce_removed": "{{ title }} dihapus. {{ count }} item di kotak Anda.",
+    "savings": "Anda hemat",
+    "total": "Total",
+    "view_bundle": "Lihat kotak"
+  },
   "routine_builder": {
     "editor_hint": "Tambahkan blok “Kosong” untuk mulai menyusun kalimat.",
     "ready": "Rutinitas Anda siap. {{ count }} produk direkomendasikan."

@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "{{ title }} hozzáadása a csomaghoz",
+    "empty_slot": "Üres hely",
+    "items_count": "{{ count }} termék",
+    "announce_added": "{{ title }} hozzáadva. Termékek a dobozban: {{ count }}.",
+    "announce_removed": "{{ title }} eltávolítva. Termékek a dobozban: {{ count }}.",
+    "savings": "Megtakarítás",
+    "total": "Összesen",
+    "view_bundle": "Doboz megtekintése"
+  },
   "routine_builder": {
     "editor_hint": "Adjon hozzá egy „Üres hely” blokkot a mondat elkezdéséhez.",
     "ready": "A rutinja elkészült. Ajánlott termékek: {{ count }}."

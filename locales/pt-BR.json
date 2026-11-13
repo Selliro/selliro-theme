@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Adicionar {{ title }} ao kit",
+    "empty_slot": "Espaço vazio",
+    "items_count": "{{ count }} itens",
+    "announce_added": "{{ title }} adicionado. {{ count }} itens na sua caixa.",
+    "announce_removed": "{{ title }} removido. {{ count }} itens na sua caixa.",
+    "savings": "Você economiza",
+    "total": "Total",
+    "view_bundle": "Ver caixa"
+  },
   "routine_builder": {
     "editor_hint": "Adicione um bloco \"Lacuna\" para começar a montar a frase.",
     "ready": "Sua rotina está pronta. {{ count }} produtos recomendados."

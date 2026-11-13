@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "{{ title }} ürününü pakete ekle",
+    "empty_slot": "Boş yer",
+    "items_count": "{{ count }} ürün",
+    "announce_added": "{{ title }} eklendi. Kutunda {{ count }} ürün var.",
+    "announce_removed": "{{ title }} çıkarıldı. Kutunda {{ count }} ürün var.",
+    "savings": "Tasarrufun",
+    "total": "Toplam",
+    "view_bundle": "Kutuyu gör"
+  },
   "routine_builder": {
     "editor_hint": "Cümleyi oluşturmaya başlamak için bir \"Boşluk\" bloğu ekleyin.",
     "ready": "Rutinin hazır. {{ count }} ürün önerildi."

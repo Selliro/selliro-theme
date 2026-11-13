@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "{{ title }} aan bundel toevoegen",
+    "empty_slot": "Leeg vak",
+    "items_count": "{{ count }} artikelen",
+    "announce_added": "{{ title }} toegevoegd. {{ count }} artikelen in je box.",
+    "announce_removed": "{{ title }} verwijderd. {{ count }} artikelen in je box.",
+    "savings": "Je bespaart",
+    "total": "Totaal",
+    "view_bundle": "Box bekijken"
+  },
   "routine_builder": {
     "editor_hint": "Voeg een blok ‘Leeg vak’ toe om de zin te bouwen.",
     "ready": "Je routine is klaar. {{ count }} aanbevolen producten."

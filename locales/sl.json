@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Dodaj {{ title }} v paket",
+    "empty_slot": "Prazno mesto",
+    "items_count": "{{ count }} izdelkov",
+    "announce_added": "{{ title }} dodano. Izdelkov v škatli: {{ count }}.",
+    "announce_removed": "{{ title }} odstranjeno. Izdelkov v škatli: {{ count }}.",
+    "savings": "Prihranite",
+    "total": "Skupaj",
+    "view_bundle": "Ogled škatle"
+  },
   "routine_builder": {
     "editor_hint": "Dodajte blok »Praznina«, da začnete sestavljati stavek.",
     "ready": "Vaša rutina je pripravljena. Priporočeni izdelki: {{ count }}."

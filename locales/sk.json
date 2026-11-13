@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Pridať {{ title }} do balíka",
+    "empty_slot": "Prázdne miesto",
+    "items_count": "{{ count }} položky",
+    "announce_added": "{{ title }} pridané. V krabici: {{ count }} položiek.",
+    "announce_removed": "{{ title }} odstránené. V krabici: {{ count }} položiek.",
+    "savings": "Ušetríte",
+    "total": "Spolu",
+    "view_bundle": "Zobraziť krabicu"
+  },
   "routine_builder": {
     "editor_hint": "Pridajte blok „Medzera“ a začnite tvoriť vetu.",
     "ready": "Vaša rutina je pripravená. Odporúčané produkty: {{ count }}."

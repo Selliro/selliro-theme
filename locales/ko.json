@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "{{ title }}을(를) 번들에 추가",
+    "empty_slot": "빈 칸",
+    "items_count": "{{ count }}개",
+    "announce_added": "{{ title }}을(를) 추가했습니다. 박스에 {{ count }}개가 있습니다.",
+    "announce_removed": "{{ title }}을(를) 삭제했습니다. 박스에 {{ count }}개가 있습니다.",
+    "savings": "절약 금액",
+    "total": "합계",
+    "view_bundle": "박스 보기"
+  },
   "routine_builder": {
     "editor_hint": "‘빈칸’ 블록을 추가하여 문장 만들기를 시작하세요.",
     "ready": "루틴이 완성되었습니다. 추천 제품 {{ count }}개."

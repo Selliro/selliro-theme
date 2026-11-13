@@ -8,6 +8,16 @@
  * ------------------------------------------------------------
  */
 {
+  "bundle_builder": {
+    "add_aria": "Legg {{ title }} i pakken",
+    "empty_slot": "Tom plass",
+    "items_count": "{{ count }} varer",
+    "announce_added": "{{ title }} lagt til. {{ count }} varer i boksen.",
+    "announce_removed": "{{ title }} fjernet. {{ count }} varer i boksen.",
+    "savings": "Du sparer",
+    "total": "Totalt",
+    "view_bundle": "Se boksen"
+  },
   "routine_builder": {
     "editor_hint": "Legg til en «Tomt felt»-blokk for å begynne å bygge setningen.",
     "ready": "Rutinen din er klar. {{ count }} anbefalte produkter."
