@@ -990,3 +990,8 @@
   justify-items: end;
   text-align: end;
 }
+
+/* Match the New Arrivals bar typography (uppercase, tracked) */
+.new-arrivals-card__quick-add-btn--bundle .new-arrivals-card__quick-add-label {
+  text-transform: uppercase;
+}
