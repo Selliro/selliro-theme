@@ -85,10 +85,67 @@
       if (this.remember && this.lastBtn && storage.get(this.storageKey)) this.lastBtn.hidden = false;
 
       this.questions.forEach((q) => this.updateNextState(q));
+      this.floats = document.getElementById(`PqFloats-${this.dataset.sectionId}`);
       this.show(this.current, { focus: false, animate: false });
+      this.initParallax();
+    }
+
+    /* ------------------------------------------------------------ floating images */
+
+    initParallax() {
+      if (!this.floats) return;
+      this.floatEls = Array.from(this.floats.querySelectorAll('[data-pq-float]'));
+      const strength = parseFloat(this.floats.dataset.strength || '0');
+      this.parallaxDistance = strength * 32; // px of travel at strength 10 → 320px
+      this.parallaxRotate = parseFloat(this.floats.dataset.rotate || '0');
+      if (!this.floatEls.length || reducedMotion() || (!this.parallaxDistance && !this.parallaxRotate)) {
+        this.floats.classList.add('is-static');
+        return;
+      }
+
+      this.onParallaxScroll = () => {
+        if (this.parallaxFrame) return;
+        this.parallaxFrame = requestAnimationFrame(() => {
+          this.parallaxFrame = null;
+          this.updateParallax();
+        });
+      };
+
+      this.parallaxObserver = new IntersectionObserver((entries) => {
+        const visible = entries.some((e) => e.isIntersecting);
+        if (visible) {
+          window.addEventListener('scroll', this.onParallaxScroll, { passive: true });
+          window.addEventListener('resize', this.onParallaxScroll, { passive: true });
+          this.updateParallax();
+        } else {
+          window.removeEventListener('scroll', this.onParallaxScroll);
+          window.removeEventListener('resize', this.onParallaxScroll);
+        }
+      });
+      this.parallaxObserver.observe(this.floats);
+      this.updateParallax();
+    }
+
+    updateParallax() {
+      const rect = this.floats.getBoundingClientRect();
+      const vh = window.innerHeight || 1;
+      // 0 when the section top enters at the bottom of the screen, 1 when its bottom leaves the top.
+      const progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
+      const centered = 0.5 - progress; // +0.5 → -0.5
+      this.floatEls.forEach((el, i) => {
+        // Each image moves at a slightly different speed for depth.
+        const speed = i === 0 ? 1 : 1.35;
+        el.style.setProperty('--py', `${(centered * this.parallaxDistance * speed).toFixed(1)}px`);
+        el.style.setProperty('--pr', `${(centered * this.parallaxRotate).toFixed(2)}deg`);
+      });
     }
 
     disconnectedCallback() {
+      if (this.onParallaxScroll) {
+        window.removeEventListener('scroll', this.onParallaxScroll);
+        window.removeEventListener('resize', this.onParallaxScroll);
+      }
+      this.parallaxObserver?.disconnect();
       document.removeEventListener('shopify:block:select', this.onBlockSelect);
       document.removeEventListener('shopify:section:select', this.onSectionSelect);
       clearTimeout(this.timer);
@@ -115,6 +172,7 @@
       if (target.closest('[data-pq-next]') || target.closest('[data-pq-skip]')) return this.next();
       if (target.closest('[data-pq-restart]')) return this.restart();
       if (target.closest('[data-pq-add-all]')) return this.addAllToCart();
+      if (target.closest('[data-pq-scroll-hint]')) return this.goToQuestion(0);
 
       const edit = target.closest('[data-pq-edit]');
       if (edit) return this.goToQuestion(Number(edit.dataset.pqEdit));
@@ -411,6 +469,7 @@
 
       const kind = step.dataset.pqStep;
       this.dataset.state = kind;
+      if (this.floats) this.floats.dataset.state = kind;
       const total = this.questions.length;
       const qNum = kind === 'question' ? this.questionNumber(step) : kind === 'intro' ? 0 : total;
 
