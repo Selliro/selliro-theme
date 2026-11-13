@@ -29,6 +29,23 @@
   endif
 -%}
 
+{%- if section.settings.products_per_row > 0 and section.settings.layout_type == 'grid' -%}
+  {%- assign ppr = section.settings.products_per_row -%}
+  {% style %}
+    @media screen and (min-width: 750px) and (max-width: 1099px) {
+      .product-grid--{{ section.id }}:is(.product-grid--grid):not([product-grid-view='zoom-out']) {
+        --product-grid-columns-desktop: repeat({{ ppr | at_most: 3 }}, minmax(0, 1fr));
+      }
+    }
+    @media screen and (min-width: 1100px) {
+      .product-grid--{{ section.id }}:is(.product-grid--grid):not([product-grid-view='zoom-out']) {
+        --product-grid-columns-desktop: repeat({{ ppr }}, minmax(0, 1fr));
+      }
+    }
+  {% endstyle %}
+{%- endif -%}
+{{ 'section-collection-promo.css' | asset_url | stylesheet_tag }}
+
 {%- if use_na_cards -%}
   {{ 'section-new-arrivals-showcase.css' | asset_url | stylesheet_tag }}
   {{ 'new-arrivals-quick-view.css' | asset_url | stylesheet_tag }}
@@ -95,6 +112,21 @@
               {% # theme-check-enable %}
             {%- endif -%}
           </li>
+          {%- comment -%} Promotion tiles (first page only), shown after the chosen product position {%- endcomment -%}
+          {%- if paginate.current_page == 1 -%}
+            {%- assign product_position = forloop.index -%}
+            {%- for t in (1..2) -%}
+              {%- liquid
+                assign k_on = 'promo_' | append: t | append: '_enabled'
+                assign k_pos = 'promo_' | append: t | append: '_position'
+              -%}
+              {%- if section.settings[k_on] and section.settings[k_pos] == product_position -%}
+                <li class="product-grid__item collection-promo-item">
+                  {%- render 'collection-promo-tile', section: section, index: t -%}
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
         {% endfor %}
       {% endcapture %}
 
