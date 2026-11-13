@@ -1111,9 +1111,21 @@
 .pq-floats {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 2;
   pointer-events: none;
   overflow: clip;
+}
+
+/* Rising images may pass over the section edges while they fly by (they're only on screen mid-pass) */
+.pq-floats[data-motion='sequence']:not(.is-static) {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+/* Keep the quiz text and buttons above the images */
+.pq--intro-hero .pq__step--intro > * {
+  position: relative;
+  z-index: 3;
 }
 
 .pq-float {
