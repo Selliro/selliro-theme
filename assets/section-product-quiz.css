@@ -966,3 +966,241 @@
     transform: none;
   }
 }
+
+/* ================================================================ hero intro layout */
+
+.section-product-quiz:has(> .pq-floats) {
+  /* Floating images may extend past the edges; keep the page from scrolling sideways */
+  overflow-x: clip;
+}
+
+.pq--intro-hero {
+  position: relative;
+  z-index: 1;
+}
+
+.pq--intro-hero .pq__shell {
+  max-width: 60rem;
+  margin-inline: auto;
+}
+
+/* Intro: no card, centered, tall */
+.pq--intro-hero[data-state='intro'] .pq__shell {
+  max-width: none;
+  padding: 0;
+  background: transparent;
+}
+
+.pq--intro-hero[data-state='intro'] .pq__steps {
+  min-height: var(--pq-hero-min-height, 85vh);
+}
+
+.pq--intro-hero .pq__step--intro {
+  display: none;
+  text-align: center;
+}
+
+.pq--intro-hero .pq__step--intro.is-active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.pq__hero-heading {
+  max-width: var(--pq-hero-max, 22ch);
+  margin: 0 auto 1.75rem;
+  font-family: var(--pq-hero-family, var(--font-heading--family));
+  font-weight: var(--pq-hero-weight, 400);
+  font-size: clamp(2.5rem, 7.2vw, var(--pq-hero-size, 104px));
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.pq--intro-hero .pq__step--intro .pq__text {
+  max-width: 42rem;
+  margin-inline: auto;
+  margin-block-end: 2.25rem;
+  color: rgb(var(--color-foreground-rgb) / 0.82);
+  font-size: clamp(1rem, 1.25vw, 1.1875rem);
+  line-height: 1.65;
+}
+
+.pq--intro-hero .pq__step--intro .pq__eyebrow {
+  margin-inline: auto;
+}
+
+.pq--intro-hero .pq__meta {
+  justify-content: center;
+}
+
+.pq--intro-hero .pq__step--intro .pq__actions {
+  justify-content: center;
+}
+
+/* Hero button styles (also used on question/results primary buttons) */
+.pq--btn-dark .pq__button--primary {
+  background: var(--color-foreground);
+  color: var(--color-background);
+  box-shadow: 0 10px 26px rgb(0 0 0 / 0.18);
+}
+
+.pq--btn-dark .pq__button--primary:not(:disabled):hover {
+  box-shadow: 0 14px 32px rgb(0 0 0 / 0.24);
+}
+
+.pq--btn-outline .pq__button--primary {
+  background: transparent;
+  color: inherit;
+  border-color: currentColor;
+  box-shadow: none;
+}
+
+.pq--btn-upper .pq__step--intro .pq__button {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 500;
+  font-size: 0.9375rem;
+}
+
+.pq--intro-hero .pq__step--intro .pq__button {
+  min-height: 3.75rem;
+  padding-inline: 2.75rem;
+}
+
+.pq--intro-hero .pq__step--intro .pq__button svg {
+  display: none;
+}
+
+.pq__scroll-hint {
+  margin-top: clamp(2rem, 6vh, 4.5rem);
+  color: inherit;
+  opacity: 0.75;
+  cursor: pointer;
+  animation: pq-bob 2.2s ease-in-out infinite;
+}
+
+.pq__scroll-hint:hover {
+  opacity: 1;
+}
+
+@keyframes pq-bob {
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .pq--intro-hero .pq__step--intro .pq__button {
+    flex: 0 1 auto;
+  }
+
+  .pq__hero-heading {
+    font-size: clamp(2.25rem, 11vw, 3.5rem);
+  }
+}
+
+/* ================================================================ floating images */
+
+.pq-floats {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: clip;
+}
+
+.pq-float {
+  position: absolute;
+  top: var(--top, 30%);
+  width: var(--w, 22%);
+  max-width: 34rem;
+  transition: opacity 0.6s var(--pq-ease, ease), transform 0.8s var(--pq-ease, ease);
+}
+
+.pq-float--left {
+  left: var(--offset, 0%);
+}
+
+.pq-float--right {
+  right: var(--offset, 0%);
+}
+
+.pq-float__inner {
+  aspect-ratio: var(--ratio, 4 / 5);
+  border-radius: var(--pq-float-radius, 24px);
+  overflow: hidden;
+  background: rgb(var(--color-foreground-rgb) / 0.06);
+  box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.25);
+  transform: translate3d(0, var(--py, 0px), 0) rotate(calc(var(--rot, 0deg) + var(--pr, 0deg)));
+  will-change: transform;
+}
+
+.pq-float__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Step away while the quiz runs so answers have room (unless the merchant keeps them) */
+.pq-floats:not(.pq-floats--keep):not([data-state='intro']) .pq-float {
+  opacity: 0;
+}
+
+.pq-floats:not(.pq-floats--keep):not([data-state='intro']) .pq-float--left {
+  transform: translateX(-30%);
+}
+
+.pq-floats:not(.pq-floats--keep):not([data-state='intro']) .pq-float--right {
+  transform: translateX(30%);
+}
+
+.pq-floats--keep:not([data-state='intro']) .pq-float {
+  opacity: 0.35;
+}
+
+@media screen and (max-width: 989px) {
+  .pq-float {
+    width: calc(var(--w, 22%) * 1.6);
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .pq-floats--hide-mobile {
+    display: none;
+  }
+
+  /* Small corner accents on phones: tuck behind the top and bottom of the hero */
+  .pq-float {
+    width: 34%;
+    opacity: 0.95;
+  }
+
+  .pq-float--left {
+    top: auto;
+    bottom: 2%;
+    left: -8%;
+  }
+
+  .pq-float--right {
+    top: 2%;
+    right: -8%;
+  }
+
+  .pq--intro-hero[data-state='intro'] .pq__steps {
+    min-height: max(32rem, var(--pq-hero-min-height, 85vh));
+    padding-block: 7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pq__scroll-hint {
+    animation: none;
+  }
+
+  .pq-float__inner {
+    transform: rotate(var(--rot, 0deg));
+  }
+}
