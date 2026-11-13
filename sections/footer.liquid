@@ -21,11 +21,13 @@
     footer.style.setProperty('right', '0', 'important');
     footer.style.setProperty('width', '100%', 'important');
     footer.style.setProperty('z-index', '0', 'important');
+    document.body.classList.add('footer-reveal-on');
     applied = true;
   }
 
   function reset() {
     PROPS.forEach(function (prop) { footer.style.removeProperty(prop); });
+    document.body.classList.remove('footer-reveal-on');
     document.body.style.paddingBottom = '';
     applied = false;
   }

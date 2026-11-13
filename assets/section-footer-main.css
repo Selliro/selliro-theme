@@ -583,7 +583,9 @@
    page stays fully scrollable and the footer is revealed
    once all page content has scrolled away.
    ===================================================== */
-.shopify-section-group-footer-group {
+/* Only while the reveal is active (set by the footer script, and only when the footer fits on
+   screen) — a fixed footer taller than the viewport would show above the header on phones. */
+body.footer-reveal-on .shopify-section-group-footer-group {
   position: fixed !important;
   bottom: 0 !important;
   left: 0 !important;
@@ -592,7 +594,7 @@
   z-index: 0;
 }
 
-#MainContent {
+body.footer-reveal-on #MainContent {
   position: relative;
   z-index: 1;
   background-color: var(--color-background, #fff);
