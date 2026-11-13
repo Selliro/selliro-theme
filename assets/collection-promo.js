@@ -92,5 +92,12 @@
   else init();
 
   // Filtering / sorting / infinite scroll re-render the grid — pick up new tiles.
-  new MutationObserver(() => init()).observe(document.body, { childList: true, subtree: true });
+  let pending = 0;
+  new MutationObserver(() => {
+    if (pending) return;
+    pending = requestAnimationFrame(() => {
+      pending = 0;
+      init();
+    });
+  }).observe(document.body, { childList: true, subtree: true });
 })();
