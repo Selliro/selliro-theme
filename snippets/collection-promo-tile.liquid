@@ -26,26 +26,113 @@
   assign tile_overlay = section.settings[k] | default: 0 | times: 0.01
   assign k = p | append: 'span'
   assign tile_span = section.settings[k] | default: 1
+  assign k = p | append: 'media'
+  assign tile_media = section.settings[k] | default: 'image'
+  assign k = p | append: 'video'
+  assign tile_video = section.settings[k]
+  assign k = p | append: 'video_mp4'
+  assign tile_mp4 = section.settings[k]
+  assign k = p | append: 'video_url'
+  assign tile_video_url = section.settings[k]
+
+  # Fall back to the image when the chosen video source is empty
+  assign media_kind = 'image'
+  if tile_media == 'video' and tile_video != blank
+    assign media_kind = 'video'
+  elsif tile_media == 'mp4' and tile_mp4 != blank
+    assign media_kind = 'mp4'
+  elsif tile_media == 'external' and tile_video_url != blank
+    assign media_kind = 'external'
+  endif
+  assign has_media = false
+  if media_kind != 'image' or tile_image != blank
+    assign has_media = true
+  endif
 -%}
 <div
-  class="collection-promo{% if tile_image != blank %} collection-promo--image{% endif %}"
+  data-cp-tile
+  class="collection-promo{% if has_media %} collection-promo--image{% endif %}{% if media_kind != 'image' %} collection-promo--video{% endif %}"
   style="--cp-bg: {{ tile_bg }}; --cp-fg: {{ tile_fg }}; --cp-overlay: {{ tile_overlay }};"
   data-span="{{ tile_span }}"
 >
-  {%- if tile_image != blank -%}
-    <div class="collection-promo__media" aria-hidden="true">
-      {{
-        tile_image
-        | image_url: width: 1200
-        | image_tag:
-          loading: 'lazy',
-          widths: '400, 600, 800, 1200',
-          sizes: '(min-width: 1100px) 25vw, (min-width: 750px) 33vw, 50vw',
-          alt: '',
-          class: 'collection-promo__img'
-      }}
+  {%- if has_media -%}
+    <div class="collection-promo__media" aria-hidden="true" data-cp-media="{{ media_kind }}">
+      {%- if tile_image != blank -%}
+        {{
+          tile_image
+          | image_url: width: 1200
+          | image_tag:
+            loading: 'lazy',
+            widths: '400, 600, 800, 1200',
+            sizes: '(min-width: 1100px) 25vw, (min-width: 750px) 33vw, 50vw',
+            alt: '',
+            class: 'collection-promo__img collection-promo__poster'
+        }}
+      {%- endif -%}
+
+      {%- case media_kind -%}
+        {%- when 'video' -%}
+          {{
+            tile_video
+            | video_tag:
+              image_size: '1200x',
+              autoplay: false,
+              loop: true,
+              muted: true,
+              controls: false,
+              playsinline: true,
+              preload: 'none',
+              class: 'collection-promo__video',
+              data-cp-video: ''
+          }}
+        {%- when 'mp4' -%}
+          <video
+            class="collection-promo__video"
+            data-cp-video
+            muted
+            loop
+            playsinline
+            preload="none"
+            {% if tile_image != blank %}poster="{{ tile_image | image_url: width: 1200 }}"{% endif %}
+          >
+            <source data-src="{{ tile_mp4 }}" type="video/mp4">
+          </video>
+        {%- when 'external' -%}
+          {%- liquid
+            assign vid_id = tile_video_url.id
+            if tile_video_url.type == 'youtube'
+              assign embed = 'https://www.youtube-nocookie.com/embed/' | append: vid_id | append: '?autoplay=1&mute=1&loop=1&playlist=' | append: vid_id | append: '&controls=0&modestbranding=1&playsinline=1&rel=0&enablejsapi=1'
+            else
+              assign embed = 'https://player.vimeo.com/video/' | append: vid_id | append: '?background=1&autoplay=1&muted=1&loop=1&autopause=0&dnt=1'
+            endif
+          -%}
+          <iframe
+            class="collection-promo__iframe"
+            data-cp-iframe="{{ tile_video_url.type }}"
+            data-src="{{ embed }}"
+            title=""
+            tabindex="-1"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+      {%- endcase -%}
       <span class="collection-promo__overlay"></span>
     </div>
+  {%- endif -%}
+
+  {%- if media_kind != 'image' -%}
+    <button
+      type="button"
+      class="collection-promo__toggle"
+      data-cp-toggle
+      aria-pressed="false"
+      data-label-pause="{{ 'accessibility.pause_video' | t | escape }}"
+      data-label-play="{{ 'accessibility.play_video' | t | escape }}"
+      aria-label="{{ 'accessibility.pause_video' | t | escape }}"
+    >
+      <svg class="collection-promo__toggle-pause" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false"><path d="M5 3.5v9M11 3.5v9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg class="collection-promo__toggle-play" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.5 8 5 3.2Z" fill="currentColor"/></svg>
+    </button>
   {%- endif -%}
 
   <div class="collection-promo__content">
