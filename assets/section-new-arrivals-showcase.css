@@ -994,7 +994,8 @@ image-loader.image-loader[data-loaded]::before {
 .new-arrivals-card__stars {
   display: flex;
   gap: 1px;
-  margin-top: auto;
+  /* Sits right under the price (cards still share equal heights; any spare space falls below) */
+  margin-top: 0.15rem;
 }
 
 .new-arrivals-card__star {

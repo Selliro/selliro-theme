@@ -131,7 +131,7 @@
 }
 
 .bb-card .new-arrivals-card__stars {
-  padding-top: 0.25rem;
+  padding-top: 0;
 }
 
 /* The bundle bar: hover on desktop, always on touch screens, and stays once added */
