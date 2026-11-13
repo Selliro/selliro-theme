@@ -804,16 +804,22 @@
     opacity: var(--mega-promo-overlay, 0);
   }
 
-  /* Gradient overlay: darkest behind the text, fading out across the image */
+  /* Gradient overlay: darkest behind the text, easing out across the image so the photo stays clear.
+     Several stops give a smooth (non-banded) fade; the whole layer's strength comes from the opacity setting. */
   .mega-promo--overlay-gradient .mega-promo__overlay {
     --mega-promo-overlay-direction: 90deg;
+    --c: var(--mega-promo-overlay-color, #000);
 
     background-color: transparent;
     background-image: linear-gradient(
       var(--mega-promo-overlay-direction),
-      var(--mega-promo-overlay-color, #000) 0%,
-      color-mix(in srgb, var(--mega-promo-overlay-color, #000) 55%, transparent) 45%,
-      transparent 85%
+      var(--c) 0%,
+      color-mix(in srgb, var(--c) 86%, transparent) 16%,
+      color-mix(in srgb, var(--c) 64%, transparent) 32%,
+      color-mix(in srgb, var(--c) 40%, transparent) 48%,
+      color-mix(in srgb, var(--c) 20%, transparent) 64%,
+      color-mix(in srgb, var(--c) 7%, transparent) 80%,
+      transparent 100%
     );
   }
 
@@ -833,6 +839,13 @@
   .mega-promo__subheading,
   .mega-promo__heading {
     text-wrap: balance;
+  }
+
+  /* Soft shadow behind the text for extra legibility on busy photos */
+  .mega-promo--shadow .mega-promo__subheading,
+  .mega-promo--shadow .mega-promo__heading {
+    text-shadow: 0 1px 2px color-mix(in srgb, var(--mega-promo-overlay-color, #000) 35%, transparent),
+      0 2px 18px color-mix(in srgb, var(--mega-promo-overlay-color, #000) 30%, transparent);
   }
 
   .mega-promo__content {
@@ -1093,9 +1106,18 @@
       "id": "menu_hover_style",
       "label": "Hover style",
       "options": [
-        { "value": "underline", "label": "Animated underline" },
-        { "value": "dim", "label": "Fade other items" },
-        { "value": "bold", "label": "Bold hovered item" }
+        {
+          "value": "underline",
+          "label": "Animated underline"
+        },
+        {
+          "value": "dim",
+          "label": "Fade other items"
+        },
+        {
+          "value": "bold",
+          "label": "Bold hovered item"
+        }
       ],
       "default": "underline"
     },
@@ -1268,8 +1290,14 @@
       "id": "promo_overlay_style",
       "label": "Promo overlay style",
       "options": [
-        { "value": "gradient", "label": "Gradient behind text" },
-        { "value": "solid", "label": "Solid" }
+        {
+          "value": "gradient",
+          "label": "Gradient behind text"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        }
       ],
       "default": "gradient",
       "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
@@ -1289,7 +1317,15 @@
       "max": 70,
       "step": 5,
       "unit": "%",
-      "default": 0,
+      "default": 50,
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}",
+      "info": "Darkens the image behind the text so it stays readable."
+    },
+    {
+      "type": "checkbox",
+      "id": "promo_text_shadow",
+      "label": "Soft shadow behind promo text",
+      "default": true,
       "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
     },
     {
@@ -1332,10 +1368,22 @@
       "id": "promo_heading_weight",
       "label": "Promo heading weight",
       "options": [
-        { "value": "400", "label": "Regular" },
-        { "value": "500", "label": "Medium" },
-        { "value": "600", "label": "Semibold" },
-        { "value": "700", "label": "Bold" }
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semibold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
       ],
       "default": "700",
       "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"

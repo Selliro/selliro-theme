@@ -363,7 +363,7 @@
           <li class="mega-menu__content-list-item{% if forloop.index > 1 %} mega-menu__content-list-item--hidden-tablet{% endif %}">
             <a
               href="{{ promo_link }}"
-              class="mega-promo mega-promo--{{ promo_position }} mega-promo--heading-{{ promo_heading_size }} mega-promo--overlay-{{ promo_overlay_style }}"
+              class="mega-promo mega-promo--{{ promo_position }} mega-promo--heading-{{ promo_heading_size }} mega-promo--overlay-{{ promo_overlay_style }}{% if menu_settings.promo_text_shadow != false %} mega-promo--shadow{% endif %}"
             >
               <span class="mega-promo__media">
                 {%- if promo_image != blank -%}
