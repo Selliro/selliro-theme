@@ -401,7 +401,10 @@ p:empty {
   background: transparent;
 }
 
-.shopify-section:not(.header-section):has(.section, .page-width, .full-width) {
+.shopify-section:not(.header-section):has(.section, .page-width, .full-width),
+/* Any section that renders a .section-background must contain it; otherwise the absolutely
+   positioned background stretches to <main> and paints over earlier sections' backgrounds. */
+.shopify-section:not(.header-section):has(> .section-background) {
   position: relative;
 }
 
