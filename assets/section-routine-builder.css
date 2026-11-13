@@ -180,11 +180,11 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.18em;
+  gap: 0.22em;
   margin: 0;
-  padding: 0 0.28em 0.02em;
+  padding: 0.02em 0.42em 0.06em;
   border: 0;
-  border-radius: 0.38em;
+  border-radius: 999px;
   background: transparent;
   color: inherit;
   font: inherit;
@@ -195,49 +195,113 @@
   transition: background-color 0.45s var(--rb-ease), box-shadow 0.35s var(--rb-ease), transform 0.35s var(--rb-ease);
 }
 
-.rb__blank::after {
+/* Empty: dashed pill with a soft tint and a "+" bubble */
+.rb__blank:not(.is-filled) {
+  padding-inline: 0.5em 0.24em;
+  background: color-mix(in srgb, var(--rb-accent) 12%, rgb(var(--color-background-rgb) / 0.6));
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--color-foreground) 22%, transparent);
+  background-image: none;
+}
+
+.rb__blank:not(.is-filled)::before {
   content: '';
   position: absolute;
-  left: 0.28em;
-  right: 0.28em;
-  bottom: 0.02em;
-  height: 0.06em;
-  min-height: 2px;
-  background-image: linear-gradient(90deg, currentColor 50%, transparent 0);
-  background-size: 0.32em 100%;
-  opacity: 0.55;
-  transition: opacity 0.3s ease;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px dashed color-mix(in srgb, var(--color-foreground) 35%, transparent);
+  pointer-events: none;
+}
+
+.rb__blank:not(.is-filled) {
+  box-shadow: none;
 }
 
 .rb__blank:not(.is-filled) .rb__blank-text {
-  opacity: 0.42;
+  color: rgb(var(--color-foreground-rgb) / 0.45);
 }
 
-.rb__blank.is-filled {
-  background: color-mix(in srgb, var(--rb-c) 52%, var(--color-background));
+.rb__blank-icon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 0.62em;
+  height: 0.62em;
+  min-width: 22px;
+  min-height: 22px;
+  border-radius: 50%;
+  font-style: normal;
+  transition: transform 0.35s var(--rb-ease), background-color 0.3s ease;
 }
 
-.rb__blank.is-filled::after {
+.rb__blank-icon svg {
+  position: absolute;
+  width: 45%;
+  height: 45%;
+  transition: opacity 0.25s ease, transform 0.35s var(--rb-ease);
+}
+
+.rb__blank:not(.is-filled) .rb__blank-icon {
+  background: var(--color-foreground);
+  color: var(--color-background);
+}
+
+.rb__blank:not(.is-filled) .rb__blank-caret,
+.rb__blank.is-filled .rb__blank-plus {
   opacity: 0;
+}
+
+.rb__blank.is-filled .rb__blank-icon {
+  width: 0.4em;
+  min-width: 14px;
+  opacity: 0.55;
+}
+
+.rb__blank.is-filled .rb__blank-caret {
+  width: 100%;
+  height: 100%;
+}
+
+/* Filled: solid color pill */
+.rb__blank.is-filled {
+  background: color-mix(in srgb, var(--rb-c) 55%, var(--color-background));
 }
 
 @media (hover: hover) {
   .rb__blank:hover {
     transform: translateY(-2px);
   }
+
+  .rb__blank:not(.is-filled):hover .rb__blank-icon {
+    transform: rotate(90deg);
+  }
+
+  .rb__blank.is-filled:hover .rb__blank-icon {
+    opacity: 1;
+  }
 }
 
+/* Active (tray open): one clean ring, gentle breathing glow while empty */
 .rb__blank.is-active {
-  box-shadow: 0 0 0 2px var(--color-foreground);
+  box-shadow: 0 0 0 2px var(--color-foreground), 0 10px 30px -12px rgb(0 0 0 / 0.35);
 }
 
-.rb__blank:not(.is-filled).is-active {
-  animation: rb-pulse 1.8s ease-in-out infinite;
+.rb__blank.is-active::before {
+  border-color: transparent;
 }
 
-@keyframes rb-pulse {
+.rb__blank.is-active:not(.is-filled) {
+  background: var(--color-background);
+  animation: rb-breathe 2s ease-in-out infinite;
+}
+
+.rb__blank.is-active .rb__blank-caret {
+  transform: rotate(180deg);
+}
+
+@keyframes rb-breathe {
   50% {
-    box-shadow: 0 0 0 2px var(--color-foreground), 0 0 0 8px color-mix(in srgb, var(--rb-accent) 45%, transparent);
+    box-shadow: 0 0 0 2px var(--color-foreground), 0 0 0 9px color-mix(in srgb, var(--rb-accent) 40%, transparent);
   }
 }
 
@@ -256,19 +320,6 @@
     transform: translateY(0.35em);
     filter: blur(4px);
   }
-}
-
-.rb__blank-caret {
-  width: 0.32em;
-  height: 0.32em;
-  min-width: 10px;
-  min-height: 10px;
-  opacity: 0.55;
-  transition: transform 0.3s var(--rb-ease);
-}
-
-.rb__blank.is-active .rb__blank-caret {
-  transform: rotate(180deg);
 }
 
 .rb__blank-thumbs {
@@ -292,8 +343,32 @@
   margin-inline-end: 0.12em;
 }
 
+/* Status row under the sentence */
+.rb__status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem 1.25rem;
+  margin-top: 0.25rem;
+}
+
+.rb--align-left .rb__status {
+  justify-content: flex-start;
+}
+
+.rb__status .rb__meter {
+  width: auto;
+}
+
+.rb__status .rb__meter-seg {
+  flex: none;
+  width: 2.25rem;
+}
+
 .rb__hint {
   margin: 0;
+  order: 2;
   font-size: 0.9375rem;
   color: var(--rb-muted);
   transition: opacity 0.4s ease, transform 0.4s var(--rb-ease);
@@ -470,9 +545,41 @@
 /* ================================================================ results */
 
 .rb__results-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  margin-top: 0;
+  transition: grid-template-rows 0.8s var(--rb-ease), opacity 0.5s ease, margin-top 0.8s var(--rb-ease);
+}
+
+.rb[data-progress='done'] .rb__results-wrap {
+  grid-template-rows: 1fr;
+  opacity: 1;
   margin-top: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.rb__results-clip {
+  min-height: 0;
+  overflow: clip;
+  overflow-clip-margin: 40px;
+}
+
+.rb__results-inner {
   padding-top: clamp(1.5rem, 3vw, 2rem);
   border-top: 1px solid var(--rb-line);
+}
+
+.rb__results-eyebrow {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--rb-muted);
+}
+
+.rb__results-title:focus {
+  outline: none;
 }
 
 .rb__results-head {
@@ -485,7 +592,7 @@
 }
 
 .rb__results-title {
-  margin: 0 0 0.7rem;
+  margin: 0;
   font-family: var(--rb-family, var(--font-heading--family));
   font-size: clamp(1.375rem, 2.2vw, 1.875rem);
   line-height: 1.2;
@@ -531,6 +638,7 @@
 }
 
 .rb__reset {
+  order: 3;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -747,5 +855,110 @@
   .rb__ghost-line {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+
+/* ================================================================ floating images */
+
+.rb-floats {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.rb-float {
+  position: absolute;
+  width: var(--rb-float-size, 14vw);
+  max-width: 17rem;
+  transform: translate3d(0, var(--rise, 0px), 0);
+  will-change: transform;
+}
+
+.rb-float--1 { top: 10%; left: 2.5%; }
+.rb-float--2 { top: 4%; right: 3%; width: calc(var(--rb-float-size, 14vw) * 1.12); }
+.rb-float--3 { top: 52%; left: 6%; width: calc(var(--rb-float-size, 14vw) * 0.78); }
+.rb-float--4 { top: 50%; right: 7%; width: calc(var(--rb-float-size, 14vw) * 0.86); }
+
+.rb-float__inner {
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: rgb(var(--color-foreground-rgb) / 0.06);
+  box-shadow: 0 28px 50px -24px rgb(0 0 0 / 0.35);
+  transform: rotate(calc(var(--rb-float-tilt, 5deg) * -1));
+}
+
+.rb-float--2 .rb-float__inner,
+.rb-float--4 .rb-float__inner {
+  transform: rotate(var(--rb-float-tilt, 5deg));
+}
+
+.rb-floats--arch .rb-float__inner {
+  border-radius: 999px 999px 18px 18px;
+}
+
+.rb-floats--pebble .rb-float__inner {
+  aspect-ratio: 4 / 5;
+  border-radius: 58% 42% 52% 48% / 46% 54% 46% 54%;
+}
+
+.rb-floats--circle .rb-float__inner {
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.rb-floats--rounded .rb-float__inner {
+  border-radius: 22px;
+}
+
+.rb-float__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Keep the trays and results above the images */
+.rb__trays,
+.rb__results-wrap {
+  position: relative;
+  z-index: 2;
+}
+
+@media screen and (max-width: 989px) {
+  .rb-float {
+    width: calc(var(--rb-float-size, 14vw) * 1.4);
+  }
+
+  .rb-float--3,
+  .rb-float--4 {
+    display: none;
+  }
+
+  .rb-float--1 { top: 2%; left: -4%; }
+  .rb-float--2 { top: 1%; right: -4%; }
+}
+
+@media screen and (max-width: 749px) {
+  .rb-floats--hide-mobile {
+    display: none;
+  }
+
+  .rb-float {
+    width: 24vw;
+    opacity: 0.9;
+  }
+
+  .rb-float--1 { top: 0.5rem; left: -6vw; }
+  .rb-float--2 { top: 0; right: -6vw; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rb-float {
+    transform: none;
+  }
+
+  .rb__results-wrap {
+    transition: none;
   }
 }
