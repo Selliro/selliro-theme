@@ -24,6 +24,10 @@ var(--font-
     --menu-parent-font-size: var(--menu-font-sm--size); --menu-parent-font-line-height:
     var(--menu-font-sm--line-height); --menu-parent-font-color: rgb(var(--color-foreground-rgb) /
     var(--opacity-subdued-text)); --menu-parent-active-font-color: var(--color-foreground);
+  {% when 'bold_heading' %}
+    --menu-parent-font-size: var(--menu-font-lg--size); --menu-parent-font-line-height:
+    var(--menu-font-lg--line-height); --menu-parent-font-weight: 700; --menu-parent-font-color: var(--color-foreground);
+    --menu-parent-active-font-color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
 {% endcase %}
 --menu-child-font-family: var(--font-{{ settings.type_font_primary_link }}--family); --menu-child-font-style:
 var(--font-
@@ -43,6 +47,10 @@ var(--font-
     var(--opacity-subdued-text));
   {% when 'inverse_large' %}
     --menu-child-font-size: var(--menu-font-xl--size); --menu-child-font-line-height: var(--menu-font-xl--line-height);
+    --menu-child-font-color: var(--color-foreground); --menu-child-active-font-color: rgb(var(--color-foreground-rgb) /
+    var(--opacity-subdued-text));
+  {% when 'bold_heading' %}
+    --menu-child-font-size: var(--menu-font-md--size); --menu-child-font-line-height: var(--menu-font-md--line-height);
     --menu-child-font-color: var(--color-foreground); --menu-child-active-font-color: rgb(var(--color-foreground-rgb) /
     var(--opacity-subdued-text));
 {% endcase %}

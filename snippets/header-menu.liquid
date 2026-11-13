@@ -44,7 +44,7 @@
         {%- endif -%}
         ref="menuitem"
       >
-        <span class="menu-list__link-title">{{- link.title -}}</span>
+        <span class="menu-list__link-title" data-text="{{ link.title | escape }}">{{- link.title -}}</span>
         {%- if link.links != blank and block_settings.show_dropdown_icon != false -%}
           <span class="menu-list__link-caret" aria-hidden="true">
             <svg viewBox="0 0 12 12" width="12" height="12" fill="none" focusable="false"><path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -88,7 +88,11 @@
   </li>
 {% endcapture %}
 
-<nav header-menu style="--submenu-radius: {{ block_settings.submenu_radius | default: 0 }}px;">
+<nav
+  header-menu
+  class="header-menu-nav header-menu-nav--hover-{{ block_settings.menu_hover_style | default: 'dim' }}{% if block_settings.submenu_divider != false %} header-menu-nav--submenu-divider{% endif %}"
+  style="--submenu-radius: {{ block_settings.submenu_radius | default: 0 }}px;"
+>
   <div
     class="menu-list"
     style="{% render 'menu-font-styles', settings: block_settings %}"
