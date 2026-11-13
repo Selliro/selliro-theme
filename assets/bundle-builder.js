@@ -104,6 +104,16 @@
       this.cards.forEach((card) => this.markAvailability(card));
       this.render();
 
+      // Keep the sticky box just below a sticky header (if any).
+      this.setStickyTop = () => {
+        const header = document.querySelector('#header-component[sticky], header-component[sticky]');
+        const h = header ? Math.max(0, Math.round(header.getBoundingClientRect().bottom)) : 0;
+        this.style.setProperty('--bb-sticky-top', `${h}px`);
+      };
+      this.setStickyTop();
+      window.addEventListener('resize', this.setStickyTop, { passive: true });
+      window.addEventListener('load', this.setStickyTop, { once: true });
+
       // Draw the heading underline when it scrolls into view.
       const hl = this.querySelector('[data-bb-hl]');
       if (hl) {
@@ -124,6 +134,7 @@
     }
 
     disconnectedCallback() {
+      if (this.setStickyTop) window.removeEventListener('resize', this.setStickyTop);
       this.hlIo?.disconnect();
       this.barIo?.disconnect();
       clearTimeout(this.successTimer);

@@ -205,9 +205,18 @@
 }
 
 @media screen and (min-width: 990px) {
+  /* The box column stretches to the full height of the product grid, so the box can stay
+     in view (sticky) while the products scroll, and stops at the end of the section. */
+  .bb__box {
+    align-self: stretch;
+  }
+
   .bb__box-inner {
     position: sticky;
-    top: calc(var(--header-height, 0px) + 1.25rem);
+    top: calc(var(--bb-sticky-top, 0px) + 1.25rem);
+    max-height: calc(100vh - var(--bb-sticky-top, 0px) - 2.5rem);
+    overflow-y: auto;
+    scrollbar-width: thin;
   }
 }
 
