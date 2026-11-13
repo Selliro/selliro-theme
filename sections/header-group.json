@@ -119,7 +119,7 @@
             "type_font_primary_link": "body",
             "type_case_primary_link": "none",
             "show_dropdown_icon": true,
-            "menu_hover_style": "bold",
+            "menu_hover_style": "underline",
             "menu_style": "promo_cards",
             "featured_products_aspect_ratio": "4 / 5",
             "featured_collections_aspect_ratio": "16 / 9",

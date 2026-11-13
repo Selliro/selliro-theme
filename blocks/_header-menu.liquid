@@ -570,6 +570,55 @@
     white-space: normal;
   }
 
+  /* Top-level hover style: "underline" (default) — full-color links, a thin line slides in under the
+     hovered / open item. No font-weight change, so nothing moves. */
+  .header-menu-nav--hover-underline {
+    .menu-list .menu-list__link,
+    .menu-list .menu-list__list-item .menu-list__link {
+      color: var(--menu-top-level-font-color);
+    }
+
+    .menu-list__link-title {
+      position: relative;
+    }
+
+    .menu-list__link-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -0.3em;
+      height: 1.5px;
+      border-radius: 1px;
+      background-color: currentColor;
+      transform: scaleX(0);
+      transform-origin: right center;
+      transition: transform calc(var(--submenu-animation-speed, 350ms) * 1.1) var(--submenu-ease, ease);
+      pointer-events: none;
+    }
+
+    .menu-list__list-item:where(:not([slot='overflow'])):is(:hover, :focus-within) > .menu-list__link .menu-list__link-title::after,
+    .menu-list__link[aria-expanded='true'] .menu-list__link-title::after {
+      transform: scaleX(1);
+      transform-origin: left center;
+    }
+
+    /* Current page keeps its underline while nothing else is hovered */
+    .menu-list:not(:has(.menu-list__list-item:is(:hover, :focus-within))) .menu-list__link--active .menu-list__link-title::after {
+      transform: scaleX(1);
+    }
+
+    .menu-list__list-item[slot='overflow'] .menu-list__link-title::after {
+      content: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header-menu-nav--hover-underline .menu-list__link-title::after {
+      transition: none;
+    }
+  }
+
   /* Top-level hover style: "bold" keeps every link full color and bolds the hovered/open one */
   .header-menu-nav--hover-bold {
     .menu-list .menu-list__link,
@@ -579,7 +628,7 @@
 
     .menu-list__link-title {
       display: inline-grid;
-      transition: font-weight var(--animation-speed) var(--animation-easing);
+      justify-items: center;
     }
 
     /* Reserve the bold width so neighbours don't shift on hover */
@@ -1044,10 +1093,11 @@
       "id": "menu_hover_style",
       "label": "Hover style",
       "options": [
-        { "value": "bold", "label": "Bold hovered item" },
-        { "value": "dim", "label": "Fade other items" }
+        { "value": "underline", "label": "Animated underline" },
+        { "value": "dim", "label": "Fade other items" },
+        { "value": "bold", "label": "Bold hovered item" }
       ],
-      "default": "bold"
+      "default": "underline"
     },
     {
       "type": "header",
