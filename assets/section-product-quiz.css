@@ -162,6 +162,16 @@
   min-height: 0;
 }
 
+/* Questions start at the top so the progress bar and question stay close together */
+.pq[data-state='question'] .pq__steps {
+  justify-content: flex-start;
+}
+
+.pq[data-state='results'] .pq__progress,
+.pq[data-state='results'] .pq__step-label {
+  display: none;
+}
+
 /* ================================================================ toolbar */
 
 .pq__toolbar {
@@ -263,7 +273,7 @@
 }
 
 .pq[data-animate] .pq__step.is-active {
-  animation: pq-step-in 0.55s var(--pq-ease) both;
+  animation: pq-step-in 0.55s var(--pq-ease) backwards;
 }
 
 .pq[data-animate][data-direction='back'] .pq__step.is-active {
@@ -286,7 +296,7 @@
 
 /* Answers cascade in after the question */
 .pq[data-animate] .pq__step.is-active .pq__answer {
-  animation: pq-rise 0.5s var(--pq-ease) both;
+  animation: pq-rise 0.5s var(--pq-ease) backwards;
   animation-delay: calc(120ms + var(--pq-n, 0) * 45ms);
 }
 

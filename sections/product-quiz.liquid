@@ -381,7 +381,7 @@
             {%- assign needle = ',' | append: product.id | append: ',' -%}
             {%- unless seen contains needle -%}
               {%- assign seen = seen | append: product.id | append: ',' -%}
-              <li class="pq__result" data-product-id="{{ product.id }}" data-best-label="{{ section.settings.best_match_label | escape }}">
+              <li class="pq__result" data-product-id="{{ product.id }}" data-available="{{ product.available }}" data-best-label="{{ section.settings.best_match_label | escape }}">
                 {%- render 'new-arrivals-card',
                   product: product,
                   accent: accent,
@@ -402,7 +402,7 @@
           <li class="pq__result" data-product-id="{{ product.id }}" data-fallback="{{ forloop.index }}" data-duplicate></li>
         {%- else -%}
           {%- assign seen = seen | append: product.id | append: ',' -%}
-          <li class="pq__result" data-product-id="{{ product.id }}" data-fallback="{{ forloop.index }}" data-best-label="{{ section.settings.best_match_label | escape }}">
+          <li class="pq__result" data-product-id="{{ product.id }}" data-fallback="{{ forloop.index }}" data-available="{{ product.available }}" data-best-label="{{ section.settings.best_match_label | escape }}">
             {%- render 'new-arrivals-card',
               product: product,
               accent: accent,

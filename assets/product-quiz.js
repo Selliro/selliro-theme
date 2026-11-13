@@ -225,8 +225,16 @@
         });
       });
 
+      const available = (id) => {
+        const li = this.findItem(id);
+        return !li || li.dataset.available !== 'false';
+      };
+      // Highest score first; sold-out products sink below available ones; then pool order.
       const ids = Array.from(scores.keys()).sort(
-        (a, b) => scores.get(b) - scores.get(a) || order.indexOf(a) - order.indexOf(b)
+        (a, b) =>
+          Number(available(b)) - Number(available(a)) ||
+          scores.get(b) - scores.get(a) ||
+          order.indexOf(a) - order.indexOf(b)
       );
 
       // Top up with the fallback collection so the results row is never half empty.
@@ -234,7 +242,7 @@
         .sort((a, b) => Number(a.dataset.fallback) - Number(b.dataset.fallback))
         .forEach((li) => {
           const id = li.dataset.productId;
-          if (ids.length < this.maxResults && !ids.includes(id)) ids.push(id);
+          if (ids.length < this.maxResults && !ids.includes(id) && available(id)) ids.push(id);
         });
 
       const finalIds = ids.slice(0, this.maxResults);
