@@ -1116,6 +1116,11 @@
   overflow: clip;
 }
 
+/* Lift the whole section above its neighbours so images flying past the edges aren't hidden by them */
+.section-product-quiz:has(> .pq-floats[data-motion='sequence']:not(.is-static)) {
+  z-index: 1;
+}
+
 /* Rising images may pass over the section edges while they fly by (they're only on screen mid-pass) */
 .pq-floats[data-motion='sequence']:not(.is-static) {
   overflow-x: clip;
