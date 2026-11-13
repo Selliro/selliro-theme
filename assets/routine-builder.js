@@ -122,7 +122,11 @@
       const blank = t.closest('[data-rb-blank]');
       if (blank) {
         const i = Number(blank.dataset.rbBlank);
-        return this.active === i ? this.close() : this.open(i);
+        if (this.active !== i) return this.open(i);
+        // Keyboard activation (Enter/Space reports detail 0) on an already open blank moves into its answers;
+        // a pointer click toggles it closed.
+        if (event.detail === 0) return this.open(i, { focus: true });
+        return this.close();
       }
       if (t.closest('[data-rb-done]')) return this.advance();
       if (t.closest('[data-rb-reset]')) return this.reset();
