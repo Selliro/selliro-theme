@@ -302,11 +302,16 @@
       this.floats = document.getElementById(`RbFloats-${this.dataset.sectionId}`);
       if (!this.floats) return;
       this.floatEls = Array.from(this.floats.querySelectorAll('[data-rb-float]'));
-      this.floatDistance = parseFloat(this.floats.dataset.speed || '0') * 75;
-      if (!this.floatEls.length || !this.floatDistance || reducedMotion()) {
+      this.floatRise = this.floatEls.map(() => 0);
+      const speed = parseFloat(this.floats.dataset.speed || '0');
+      if (!this.floatEls.length || !speed || reducedMotion()) {
         this.floats.classList.add('is-static');
         return;
       }
+      // Share of the section's scroll each image takes to cross the screen: speed 6 → 0.2 (about 4× page speed).
+      this.floatWindow = Math.min(0.34, Math.max(0.12, 0.12 + (10 - speed) * 0.022));
+      if (this.floats.dataset.first === 'right') this.floatEls.reverse();
+
       this.onFloatScroll = () => {
         if (this.floatFrame) return;
         this.floatFrame = requestAnimationFrame(() => {
@@ -314,29 +319,47 @@
           this.updateFloats();
         });
       };
-      this.floatIo = new IntersectionObserver((entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          window.addEventListener('scroll', this.onFloatScroll, { passive: true });
-          window.addEventListener('resize', this.onFloatScroll, { passive: true });
-          this.updateFloats();
-        } else {
-          window.removeEventListener('scroll', this.onFloatScroll);
-          window.removeEventListener('resize', this.onFloatScroll);
-        }
-      });
+      this.floatIo = new IntersectionObserver(
+        (entries) => {
+          if (entries.some((e) => e.isIntersecting)) {
+            window.addEventListener('scroll', this.onFloatScroll, { passive: true });
+            window.addEventListener('resize', this.onFloatScroll, { passive: true });
+            this.updateFloats();
+          } else {
+            window.removeEventListener('scroll', this.onFloatScroll);
+            window.removeEventListener('resize', this.onFloatScroll);
+          }
+        },
+        { rootMargin: '50% 0px' }
+      );
       this.floatIo.observe(this.floats);
       this.updateFloats();
+      this.floats.classList.add('is-ready');
     }
 
+    /**
+     * One image at a time: the first rises from below the screen to above it, then the second follows.
+     * Positions are worked out in screen space so each pass always runs bottom → top, whatever the layout.
+     */
     updateFloats() {
       const rect = this.floats.getBoundingClientRect();
       const vh = window.innerHeight || 1;
       const progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
-      // Start low and rise past their resting spot as the page scrolls down; each image has its own pace.
-      const speeds = [1, 1.45, 0.75, 1.2];
+      const span = this.floatWindow;
+      const pivot = 0.5;
+
       this.floatEls.forEach((el, i) => {
-        const y = (0.5 - progress) * this.floatDistance * (speeds[i % speeds.length] || 1);
-        el.style.setProperty('--rise', `${y.toFixed(1)}px`);
+        const start = pivot - span + i * span;
+        const local = Math.min(1, Math.max(0, (progress - start) / span));
+        const box = el.getBoundingClientRect();
+        const naturalTop = box.top - this.floatRise[i];
+        const margin = box.height * 0.3; // extra room so tilted corners never peek in
+        const target = vh + margin - local * (vh + box.height + margin * 2);
+        const rise = target - naturalTop;
+        this.floatRise[i] = rise;
+        el.style.setProperty('--rise', `${rise.toFixed(1)}px`);
+        el.style.setProperty('--spin', `${((0.5 - local) * 8).toFixed(2)}deg`);
+        el.classList.toggle('is-passing', local > 0 && local < 1);
       });
     }
 

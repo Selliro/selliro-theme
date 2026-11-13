@@ -23,6 +23,13 @@
   overflow: clip;
 }
 
+/* Rising images fly past the section edges, so only clip sideways and sit above neighbouring sections */
+.section-routine-builder:has(.rb-floats:not(.is-static)) {
+  overflow-x: clip;
+  overflow-y: visible;
+  z-index: 1;
+}
+
 .rb {
   --rb-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --rb-line: rgb(var(--color-foreground-rgb) / 0.12);
@@ -883,16 +890,20 @@
 
 .rb-float {
   position: absolute;
-  width: var(--rb-float-size, 14vw);
-  max-width: 17rem;
-  transform: translate3d(0, var(--rise, 0px), 0);
+  top: 30%;
+  width: var(--rb-float-size, 17vw);
+  max-width: 21rem;
+  transform: translate3d(0, var(--rise, 0px), 0) rotate(var(--spin, 0deg));
   will-change: transform;
 }
 
-.rb-float--1 { top: 10%; left: 2.5%; }
-.rb-float--2 { top: 4%; right: 3%; width: calc(var(--rb-float-size, 14vw) * 1.12); }
-.rb-float--3 { top: 58%; left: 7%; width: calc(var(--rb-float-size, 14vw) * 0.78); }
-.rb-float--4 { top: 54%; right: 6%; width: calc(var(--rb-float-size, 14vw) * 0.86); }
+.rb-float--1 { left: 3%; }
+.rb-float--2 { right: 3%; top: 18%; }
+
+/* Hidden until the script has placed them (prevents a flash at their resting spot) */
+.rb-floats:not(.is-ready):not(.is-static) .rb-float {
+  visibility: hidden;
+}
 
 .rb-float__inner {
   aspect-ratio: 3 / 4;
@@ -940,16 +951,11 @@
 
 @media screen and (max-width: 989px) {
   .rb-float {
-    width: calc(var(--rb-float-size, 14vw) * 1.4);
+    width: calc(var(--rb-float-size, 17vw) * 1.35);
   }
 
-  .rb-float--3,
-  .rb-float--4 {
-    display: none;
-  }
-
-  .rb-float--1 { top: 2%; left: -4%; }
-  .rb-float--2 { top: 1%; right: -4%; }
+  .rb-float--1 { left: -3%; }
+  .rb-float--2 { right: -3%; }
 }
 
 @media screen and (max-width: 749px) {
@@ -958,12 +964,11 @@
   }
 
   .rb-float {
-    width: 24vw;
-    opacity: 0.9;
+    width: 30vw;
   }
 
-  .rb-float--1 { top: 0.5rem; left: -6vw; }
-  .rb-float--2 { top: 0; right: -6vw; }
+  .rb-float--1 { left: -6vw; }
+  .rb-float--2 { right: -6vw; }
 }
 
 @media (prefers-reduced-motion: reduce) {

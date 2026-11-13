@@ -2403,6 +2403,7 @@
         "question_concern",
         "question_routine"
       ],
+      "disabled": true,
       "settings": {
         "intro_layout": "hero",
         "eyebrow": "",
@@ -2459,8 +2460,7 @@
         "show_add_all": true,
         "padding_top": 40,
         "padding_bottom": 64
-      },
-      "disabled": true
+      }
     },
     "routine_builder_main": {
       "type": "routine-builder",
@@ -2594,7 +2594,16 @@
         "show_mood": true,
         "mood_strength": 55,
         "card_radius": 18,
+        "float_image_1": "shopify://shop_images/side-view-woman-bathrobe-using-skincare_1.png",
+        "float_image_2": "shopify://shop_images/high-angle-jar-bowl-with-salt.png",
+        "float_shape": "arch",
+        "float_size": 17,
+        "float_tilt": 5,
+        "float_speed": 6,
+        "floats_mobile": "show",
+        "results_eyebrow": "Made for you",
         "results_done": "Your routine is ready",
+        "scroll_to_results": true,
         "max_results": 4,
         "results_columns": 4,
         "fallback_collection": "all",
@@ -2604,18 +2613,7 @@
         "reset_label": "Start over",
         "remember": true,
         "padding_top": 120,
-        "padding_bottom": 120,
-        "results_eyebrow": "Made for you",
-        "scroll_to_results": true,
-        "float_image_1": "shopify://shop_images/side-view-woman-bathrobe-using-skincare_1.png",
-        "float_image_2": "shopify://shop_images/high-angle-jar-bowl-with-salt.png",
-        "float_image_3": "shopify://shop_images/young-woman-doing-her-morning-routine.png",
-        "float_image_4": "shopify://shop_images/young-beautiful-blonde-girl-cares-face-skin-with-moisturizer-front-mirror.png",
-        "float_shape": "arch",
-        "float_size": 14,
-        "float_tilt": 5,
-        "float_speed": 6,
-        "floats_mobile": "show"
+        "padding_bottom": 120
       }
     }
   },

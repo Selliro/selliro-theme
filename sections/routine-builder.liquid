@@ -70,7 +70,7 @@
 
 {%- liquid
   assign float_count = 0
-  for i in (1..4)
+  for i in (1..2)
     assign k = 'float_image_' | append: i
     if section.settings[k] != blank
       assign float_count = float_count | plus: 1
@@ -84,10 +84,11 @@
     id="RbFloats-{{ section.id }}"
     data-rb-floats
     data-speed="{{ section.settings.float_speed }}"
+    data-first="{{ section.settings.float_first | default: 'left' }}"
     style="--rb-float-size: {{ section.settings.float_size }}vw; --rb-float-tilt: {{ section.settings.float_tilt }}deg;"
     aria-hidden="true"
   >
-    {%- for i in (1..4) -%}
+    {%- for i in (1..2) -%}
       {%- assign k = 'float_image_' | append: i -%}
       {%- assign f_image = section.settings[k] -%}
       {%- if f_image != blank -%}
@@ -515,27 +516,33 @@
     },
     {
       "type": "paragraph",
-      "content": "Images float in the side margins and rise as the page scrolls. Images 1 and 3 sit on the left, 2 and 4 on the right."
+      "content": "One image on each side. As the page scrolls down, they rise from the bottom of the screen to the top, one after the other."
     },
     {
       "type": "image_picker",
       "id": "float_image_1",
-      "label": "Image 1 (left, top)"
+      "label": "Left image"
     },
     {
       "type": "image_picker",
       "id": "float_image_2",
-      "label": "Image 2 (right, top)"
+      "label": "Right image"
     },
     {
-      "type": "image_picker",
-      "id": "float_image_3",
-      "label": "Image 3 (left, bottom)"
-    },
-    {
-      "type": "image_picker",
-      "id": "float_image_4",
-      "label": "Image 4 (right, bottom)"
+      "type": "select",
+      "id": "float_first",
+      "label": "Image that rises first",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
     },
     {
       "type": "select",
@@ -566,10 +573,10 @@
       "id": "float_size",
       "label": "Size",
       "min": 8,
-      "max": 22,
+      "max": 26,
       "step": 1,
       "unit": "vw",
-      "default": 14
+      "default": 17
     },
     {
       "type": "range",
@@ -585,7 +592,7 @@
       "type": "range",
       "id": "float_speed",
       "label": "Rise speed",
-      "info": "0 keeps them still.",
+      "info": "Higher is faster. 0 keeps the images still.",
       "min": 0,
       "max": 10,
       "step": 1,
