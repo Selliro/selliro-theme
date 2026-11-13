@@ -1111,7 +1111,7 @@
 .pq-floats {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 0;
   pointer-events: none;
   overflow: clip;
 }
@@ -1122,11 +1122,6 @@
   overflow-y: visible;
 }
 
-/* Keep the quiz text and buttons above the images */
-.pq--intro-hero .pq__step--intro > * {
-  position: relative;
-  z-index: 3;
-}
 
 .pq-float {
   position: absolute;
