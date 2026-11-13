@@ -1,0 +1,817 @@
+{%- comment -%}
+  Routine Builder
+  A sentence-style product finder: shoppers complete one sentence by tapping its blank words
+  ("My skin feels [dry] and I'd love to fix [dullness]…"). Recommendations update live under the
+  sentence after every choice, and the background mood colors follow the answers.
+
+  Merchant view:
+  - Each "Blank" block is one gap in the sentence: words before it, words after it, and up to
+    6 answers (label, mood color, optional image, recommended products).
+  - Products recommended by more of the chosen answers rank higher; the fallback collection tops up.
+
+  Files: assets/section-routine-builder.css, assets/routine-builder.js
+{%- endcomment -%}
+
+{{ 'section-routine-builder.css' | asset_url | stylesheet_tag }}
+{{ 'section-new-arrivals-showcase.css' | asset_url | stylesheet_tag }}
+{{ 'new-arrivals-quick-view.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign blank_count = 0
+  for block in section.blocks
+    if block.type == 'blank'
+      assign blank_count = blank_count | plus: 1
+    endif
+  endfor
+
+  assign accent = section.settings.accent_color | default: '#f8d12f'
+  assign font_source = section.settings.sentence_font_source | default: 'custom'
+  case font_source
+    when 'heading'
+      assign sentence_family = 'var(--font-heading--family)'
+      assign sentence_weight = 'var(--font-heading--weight)'
+    when 'accent'
+      assign sentence_family = 'var(--font-accent--family)'
+      assign sentence_weight = 'var(--font-accent--weight)'
+    when 'body'
+      assign sentence_family = 'var(--font-body--family)'
+      assign sentence_weight = 'var(--font-body--weight)'
+    else
+      assign sentence_family = section.settings.sentence_font.family | append: ', ' | append: section.settings.sentence_font.fallback_families
+      assign sentence_weight = section.settings.sentence_font.weight
+  endcase
+  assign card_sizes = '(min-width: 990px) 22vw, 50vw'
+-%}
+
+{% style %}
+  {%- if font_source == 'custom' -%}
+    {{ section.settings.sentence_font | font_face: font_display: 'swap' }}
+  {%- endif -%}
+  #RoutineBuilder-{{ section.id }} {
+    --rb-accent: {{ accent }};
+    --rb-accent-text: {{ section.settings.accent_text_color | default: '#000000' }};
+    --rb-family: {{ sentence_family }};
+    --rb-weight: {{ sentence_weight }};
+    --rb-size: {{ section.settings.sentence_size }}px;
+    --rb-columns: {{ section.settings.results_columns }};
+    --rb-radius: {{ section.settings.card_radius }}px;
+    --rb-mood-strength: {{ section.settings.mood_strength | times: 0.01 }};
+    padding-block: {{ section.settings.padding_top }}px {{ section.settings.padding_bottom }}px;
+  }
+
+  @media screen and (max-width: 749px) {
+    #RoutineBuilder-{{ section.id }} {
+      padding-block: {{ section.settings.padding_top | times: 0.6 | round }}px {{ section.settings.padding_bottom | times: 0.6 | round }}px;
+    }
+  }
+{% endstyle %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<routine-builder
+  id="RoutineBuilder-{{ section.id }}"
+  class="rb rb--align-{{ section.settings.alignment }} {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}{% if section.settings.show_mood %} rb--mood{% endif %}"
+  data-section-id="{{ section.id }}"
+  data-max-results="{{ section.settings.max_results }}"
+  data-remember="{{ section.settings.remember }}"
+  data-accent="{{ accent }}"
+  data-new-arrivals-root
+  data-new-arrivals-qv-id="new-arrivals-qv-drawer-{{ section.id }}"
+>
+  {%- if section.settings.show_mood -%}
+    <div class="rb__mood" aria-hidden="true">
+      <span class="rb__blob rb__blob--1"></span>
+      <span class="rb__blob rb__blob--2"></span>
+      <span class="rb__blob rb__blob--3"></span>
+    </div>
+  {%- endif -%}
+
+  <div class="rb__inner">
+    <div class="rb__head">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="rb__eyebrow">
+          <span class="rb__eyebrow-dot" aria-hidden="true"></span>
+          {{ section.settings.eyebrow | escape }}
+        </p>
+      {%- endif -%}
+
+      {%- comment -%} The sentence {%- endcomment -%}
+      <p class="rb__sentence">
+        {%- assign b_index = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'blank' -%}
+            {%- if block.settings.before != blank -%}
+              <span class="rb__words">{{ block.settings.before | escape }}</span>
+            {%- endif -%}
+            <button
+              type="button"
+              class="rb__blank"
+              data-rb-blank="{{ b_index }}"
+              aria-expanded="false"
+              aria-controls="RbTray-{{ section.id }}-{{ block.id }}"
+              {{ block.shopify_attributes }}
+            >
+              <span class="rb__blank-thumbs" data-rb-thumbs aria-hidden="true"></span>
+              <span class="rb__blank-text" data-rb-blank-text data-placeholder="{{ block.settings.placeholder | default: section.settings.placeholder | escape }}">
+                {{- block.settings.placeholder | default: section.settings.placeholder | escape -}}
+              </span>
+              <svg class="rb__blank-caret" viewBox="0 0 12 12" width="12" height="12" fill="none" aria-hidden="true" focusable="false"><path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            {%- if block.settings.after != blank -%}
+              <span class="rb__words">{{ block.settings.after | escape }}</span>
+            {%- endif -%}
+            {%- assign b_index = b_index | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </p>
+
+      {%- if section.settings.hint != blank -%}
+        <p class="rb__hint" data-rb-hint>{{ section.settings.hint | escape }}</p>
+      {%- endif -%}
+
+      {%- if blank_count == 0 and request.design_mode -%}
+        <p class="rb__editor-hint">Add a “Blank” block to start building the sentence.</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Answer trays — one per blank, only the active one is shown {%- endcomment -%}
+    <div class="rb__trays">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'blank' -%}
+          {%- liquid
+            assign multiple = block.settings.allow_multiple
+            assign input_type = 'radio'
+            if multiple
+              assign input_type = 'checkbox'
+            endif
+          -%}
+          <fieldset
+            class="rb__tray"
+            id="RbTray-{{ section.id }}-{{ block.id }}"
+            data-rb-tray
+            data-rb-block-id="{{ block.id }}"
+            data-multiple="{{ multiple }}"
+            hidden
+          >
+            <legend class="rb__tray-legend">
+              {{- block.settings.question | default: block.settings.before | escape -}}
+              {%- if multiple -%}<span class="rb__tray-note">{{ section.settings.multiple_note | escape }}</span>{%- endif -%}
+            </legend>
+            <div class="rb__options">
+              {%- for n in (1..6) -%}
+                {%- liquid
+                  assign key = 'answer_' | append: n | append: '_label'
+                  assign label = block.settings[key]
+                  if label == blank
+                    continue
+                  endif
+                  assign key = 'answer_' | append: n | append: '_color'
+                  assign color = block.settings[key] | default: accent
+                  assign key = 'answer_' | append: n | append: '_image'
+                  assign image = block.settings[key]
+                  assign key = 'answer_' | append: n | append: '_products'
+                  assign ids = block.settings[key] | map: 'id' | join: ','
+                  assign thumb = ''
+                  if image != blank
+                    assign thumb = image | image_url: width: 96
+                  endif
+                -%}
+                <label class="rb__option" style="--rb-c: {{ color }};">
+                  <input
+                    class="rb__option-input"
+                    type="{{ input_type }}"
+                    name="rb-{{ section.id }}-{{ block.id }}"
+                    value="{{ n }}"
+                    data-label="{{ label | escape }}"
+                    data-color="{{ color }}"
+                    data-products="{{ ids }}"
+                    {% if thumb != blank %}data-thumb="{{ thumb }}"{% endif %}
+                  >
+                  {%- if image != blank -%}
+                    <span class="rb__option-thumb">{{ image | image_url: width: 96 | image_tag: loading: 'lazy', alt: '', width: 48, height: 48 }}</span>
+                  {%- else -%}
+                    <span class="rb__option-dot" aria-hidden="true"></span>
+                  {%- endif -%}
+                  <span class="rb__option-label">{{ label | escape }}</span>
+                </label>
+              {%- endfor -%}
+            </div>
+            {%- if multiple -%}
+              <button type="button" class="rb__done" data-rb-done>{{ section.settings.done_label | escape }}</button>
+            {%- endif -%}
+          </fieldset>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} Live results {%- endcomment -%}
+    <div class="rb__results-wrap" data-rb-results-wrap>
+      <div class="rb__results-head">
+        <div>
+          <p class="rb__results-title">
+            <span data-rb-title-idle>{{ section.settings.results_idle | escape }}</span>
+            <span data-rb-title-live hidden>{{ section.settings.results_heading | escape }}</span>
+            <span data-rb-title-done hidden>{{ section.settings.results_done | escape }}</span>
+          </p>
+          <div class="rb__meter" aria-hidden="true">
+            {%- for i in (1..blank_count) -%}<span class="rb__meter-seg"></span>{%- endfor -%}
+          </div>
+        </div>
+        <div class="rb__results-actions">
+          <button type="button" class="rb__reset button-unstyled" data-rb-reset hidden>
+            <svg viewBox="0 0 20 20" width="15" height="15" fill="none" aria-hidden="true" focusable="false"><path d="M4 10a6 6 0 1 0 1.76-4.24M4 4v3.5h3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            {{ section.settings.reset_label | escape }}
+          </button>
+          {%- if section.settings.show_add_all -%}
+            <button type="button" class="rb__add-all" data-rb-add-all disabled>
+              <span class="rb__add-all-label">{{ section.settings.add_all_label | escape }}</span>
+              <span class="rb__add-all-spinner" aria-hidden="true"></span>
+            </button>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <ul class="rb__results list-unstyled" data-rb-results role="list" aria-live="polite">
+        {%- for i in (1..section.settings.max_results) -%}
+          <li class="rb__ghost" data-rb-ghost aria-hidden="true">
+            <span class="rb__ghost-media"></span>
+            <span class="rb__ghost-line"></span>
+            <span class="rb__ghost-line rb__ghost-line--short"></span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+
+  {%- comment -%} Product pool (rendered once; JS moves matches into the results list) {%- endcomment -%}
+  <div class="rb__pool" data-rb-pool hidden>
+    {%- assign seen = ',' -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'blank' -%}
+        {%- for n in (1..6) -%}
+          {%- liquid
+            assign key = 'answer_' | append: n | append: '_label'
+            if block.settings[key] == blank
+              continue
+            endif
+            assign key = 'answer_' | append: n | append: '_products'
+          -%}
+          {%- for product in block.settings[key] -%}
+            {%- assign needle = ',' | append: product.id | append: ',' -%}
+            {%- unless seen contains needle -%}
+              {%- assign seen = seen | append: product.id | append: ',' -%}
+              <li class="rb__result" data-product-id="{{ product.id }}" data-available="{{ product.available }}">
+                <span class="rb__step" aria-hidden="true"></span>
+                {%- render 'new-arrivals-card', product: product, accent: accent, add_label: section.settings.add_label, image_sizes: card_sizes -%}
+              </li>
+            {%- endunless -%}
+          {%- endfor -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if section.settings.fallback_collection != blank -%}
+      {%- for product in section.settings.fallback_collection.products limit: 12 -%}
+        {%- assign needle = ',' | append: product.id | append: ',' -%}
+        {%- if seen contains needle -%}
+          <li class="rb__result" data-product-id="{{ product.id }}" data-fallback="{{ forloop.index }}" data-duplicate></li>
+        {%- else -%}
+          {%- assign seen = seen | append: product.id | append: ',' -%}
+          <li class="rb__result" data-product-id="{{ product.id }}" data-fallback="{{ forloop.index }}" data-available="{{ product.available }}">
+            <span class="rb__step" aria-hidden="true"></span>
+            {%- render 'new-arrivals-card', product: product, accent: accent, add_label: section.settings.add_label, image_sizes: card_sizes -%}
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</routine-builder>
+
+{% render 'new-arrivals-quick-view-drawer', section: section %}
+
+<script src="{{ 'image-loader.js' | asset_url }}" defer></script>
+<script src="{{ 'new-arrivals-components.js' | asset_url }}" defer></script>
+<script src="{{ 'new-arrivals-showcase.js' | asset_url }}" defer></script>
+<script src="{{ 'new-arrivals-quick-view.js' | asset_url }}" defer></script>
+<script src="{{ 'routine-builder.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Routine builder",
+  "tag": "section",
+  "class": "section-routine-builder",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Sentence"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Build your routine"
+    },
+    {
+      "type": "select",
+      "id": "sentence_font_source",
+      "label": "Sentence font",
+      "options": [
+        {
+          "value": "custom",
+          "label": "Custom (pick below)"
+        },
+        {
+          "value": "heading",
+          "label": "Theme heading font"
+        },
+        {
+          "value": "accent",
+          "label": "Theme accent font"
+        },
+        {
+          "value": "body",
+          "label": "Theme body font"
+        }
+      ],
+      "default": "custom"
+    },
+    {
+      "type": "font_picker",
+      "id": "sentence_font",
+      "label": "Custom font",
+      "default": "playfair_display_n4",
+      "visible_if": "{{ section.settings.sentence_font_source == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "sentence_size",
+      "label": "Sentence size (desktop)",
+      "min": 28,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Blank placeholder",
+      "info": "Shown in a blank before it's filled. Each blank can override it.",
+      "default": "choose"
+    },
+    {
+      "type": "text",
+      "id": "hint",
+      "label": "Hint under the sentence",
+      "default": "Tap the underlined words to build your routine"
+    },
+    {
+      "type": "text",
+      "id": "multiple_note",
+      "label": "Multiple-choice note",
+      "default": "Pick as many as you like"
+    },
+    {
+      "type": "text",
+      "id": "done_label",
+      "label": "Done button (multiple choice)",
+      "default": "Done"
+    },
+    {
+      "type": "header",
+      "content": "Design"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#f8d12f"
+    },
+    {
+      "type": "color",
+      "id": "accent_text_color",
+      "label": "Accent text color",
+      "default": "#000000"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mood",
+      "label": "Mood background",
+      "info": "Soft color clouds that take on the colors of the chosen answers.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "mood_strength",
+      "label": "Mood intensity",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 55,
+      "visible_if": "{{ section.settings.show_mood }}"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "header",
+      "content": "Results"
+    },
+    {
+      "type": "text",
+      "id": "results_idle",
+      "label": "Title before any answer",
+      "default": "Your routine appears here"
+    },
+    {
+      "type": "text",
+      "id": "results_heading",
+      "label": "Title while building",
+      "default": "Matching your routine…"
+    },
+    {
+      "type": "text",
+      "id": "results_done",
+      "label": "Title when complete",
+      "default": "Your routine is ready"
+    },
+    {
+      "type": "range",
+      "id": "max_results",
+      "label": "Products to show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "results_columns",
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "collection",
+      "id": "fallback_collection",
+      "label": "Fallback collection",
+      "info": "Fills the routine when answers recommend too few products."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_add_all",
+      "label": "Show “Add routine to cart”",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "add_all_label",
+      "label": "Add routine button",
+      "default": "Add routine to cart",
+      "visible_if": "{{ section.settings.show_add_all }}"
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "Quick add button",
+      "default": "ADD TO CART"
+    },
+    {
+      "type": "text",
+      "id": "reset_label",
+      "label": "Start over link",
+      "default": "Start over"
+    },
+    {
+      "type": "checkbox",
+      "id": "remember",
+      "label": "Remember answers for returning shoppers",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "blank",
+      "name": "Blank",
+      "settings": [
+        {
+          "type": "text",
+          "id": "before",
+          "label": "Words before the blank",
+          "default": "My skin feels"
+        },
+        {
+          "type": "text",
+          "id": "after",
+          "label": "Words after the blank",
+          "info": "Optional, e.g. a comma or “every morning.”"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Placeholder",
+          "info": "Leave blank to use the section's placeholder."
+        },
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question for screen readers",
+          "info": "Read aloud above the answers. Defaults to the words before the blank."
+        },
+        {
+          "type": "checkbox",
+          "id": "allow_multiple",
+          "label": "Allow multiple answers",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Answer 1"
+        },
+        {
+          "type": "text",
+          "id": "answer_1_label",
+          "label": "Label",
+          "default": "dry"
+        },
+        {
+          "type": "color",
+          "id": "answer_1_color",
+          "label": "Mood color",
+          "default": "#f4c9a0"
+        },
+        {
+          "type": "image_picker",
+          "id": "answer_1_image",
+          "label": "Image",
+          "info": "Optional small thumbnail."
+        },
+        {
+          "type": "product_list",
+          "id": "answer_1_products",
+          "label": "Recommended products",
+          "limit": 8
+        },
+        {
+          "type": "header",
+          "content": "Answer 2"
+        },
+        {
+          "type": "text",
+          "id": "answer_2_label",
+          "label": "Label",
+          "default": "oily"
+        },
+        {
+          "type": "color",
+          "id": "answer_2_color",
+          "label": "Mood color",
+          "default": "#b9e2c8"
+        },
+        {
+          "type": "image_picker",
+          "id": "answer_2_image",
+          "label": "Image",
+          "info": "Optional small thumbnail."
+        },
+        {
+          "type": "product_list",
+          "id": "answer_2_products",
+          "label": "Recommended products",
+          "limit": 8
+        },
+        {
+          "type": "header",
+          "content": "Answer 3"
+        },
+        {
+          "type": "text",
+          "id": "answer_3_label",
+          "label": "Label",
+          "default": "a bit of both"
+        },
+        {
+          "type": "color",
+          "id": "answer_3_color",
+          "label": "Mood color",
+          "default": "#d9c9f2"
+        },
+        {
+          "type": "image_picker",
+          "id": "answer_3_image",
+          "label": "Image",
+          "info": "Optional small thumbnail."
+        },
+        {
+          "type": "product_list",
+          "id": "answer_3_products",
+          "label": "Recommended products",
+          "limit": 8
+        },
+        {
+          "type": "header",
+          "content": "Answer 4"
+        },
+        {
+          "type": "text",
+          "id": "answer_4_label",
+          "label": "Label",
+          "default": "sensitive"
+        },
+        {
+          "type": "color",
+          "id": "answer_4_color",
+          "label": "Mood color",
+          "default": "#f5b8c0"
+        },
+        {
+          "type": "image_picker",
+          "id": "answer_4_image",
+          "label": "Image",
+          "info": "Optional small thumbnail."
+        },
+        {
+          "type": "product_list",
+          "id": "answer_4_products",
+          "label": "Recommended products",
+          "limit": 8
+        },
+        {
+          "type": "header",
+          "content": "Answer 5"
+        },
+        {
+          "type": "text",
+          "id": "answer_5_label",
+          "label": "Label",
+          "info": "Leave blank to hide."
+        },
+        {
+          "type": "color",
+          "id": "answer_5_color",
+          "label": "Mood color"
+        },
+        {
+          "type": "image_picker",
+          "id": "answer_5_image",
+          "label": "Image",
+          "info": "Optional small thumbnail."
+        },
+        {
+          "type": "product_list",
+          "id": "answer_5_products",
+          "label": "Recommended products",
+          "limit": 8
+        },
+        {
+          "type": "header",
+          "content": "Answer 6"
+        },
+        {
+          "type": "text",
+          "id": "answer_6_label",
+          "label": "Label",
+          "info": "Leave blank to hide."
+        },
+        {
+          "type": "color",
+          "id": "answer_6_color",
+          "label": "Mood color"
+        },
+        {
+          "type": "image_picker",
+          "id": "answer_6_image",
+          "label": "Image",
+          "info": "Optional small thumbnail."
+        },
+        {
+          "type": "product_list",
+          "id": "answer_6_products",
+          "label": "Recommended products",
+          "limit": 8
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Routine builder",
+      "blocks": [
+        {
+          "type": "blank",
+          "settings": {
+            "before": "My skin feels",
+            "after": ",",
+            "answer_1_label": "dry",
+            "answer_2_label": "oily",
+            "answer_3_label": "a bit of both",
+            "answer_4_label": "sensitive"
+          }
+        },
+        {
+          "type": "blank",
+          "settings": {
+            "before": "I'd love to fix",
+            "allow_multiple": true,
+            "answer_1_label": "dullness",
+            "answer_1_color": "#ffe08a",
+            "answer_2_label": "dryness",
+            "answer_2_color": "#bfe0f5",
+            "answer_3_label": "dark spots",
+            "answer_3_color": "#f2c6a8",
+            "answer_4_label": "fine lines",
+            "answer_4_color": "#e3cdf0",
+            "answer_5_label": "sun damage",
+            "answer_5_color": "#ffd2a6"
+          }
+        },
+        {
+          "type": "blank",
+          "settings": {
+            "before": "and I have",
+            "after": "for my routine.",
+            "answer_1_label": "five minutes",
+            "answer_1_color": "#c9ead9",
+            "answer_2_label": "ten minutes",
+            "answer_2_color": "#f8e3b5",
+            "answer_3_label": "all the time in the world",
+            "answer_3_color": "#e6d3f7",
+            "answer_4_label": ""
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
