@@ -6,8 +6,7 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */
-{
+ */{
   "sections": {
     "section": {
       "type": "section",
@@ -69,7 +68,6 @@
         "text_tqQTNE",
         "text_twGGkJ"
       ],
-      "disabled": true,
       "name": "Collection heading",
       "settings": {
         "content_direction": "column",
@@ -97,7 +95,8 @@
         "gradient_direction": "to top",
         "padding-block-start": 48,
         "padding-block-end": 48
-      }
+      },
+      "disabled": true
     },
     "main": {
       "type": "main-collection",
@@ -216,7 +215,6 @@
         "layout_type": "grid",
         "product_card_size": "medium",
         "mobile_product_card_size": "small",
-        "product_card_style": "new_arrivals",
         "product_grid_width": "centered",
         "full_width_on_mobile": false,
         "columns_gap_horizontal": 16,
@@ -225,7 +223,22 @@
         "padding-inline-end": 0,
         "color_scheme": "scheme-1",
         "padding-block-start": 0,
-        "padding-block-end": 32
+        "padding-block-end": 32,
+        "products_per_row": 4,
+        "product_card_style": "new_arrivals",
+        "promo_1_enabled": true,
+        "promo_1_position": 7,
+        "promo_1_span": "1",
+        "promo_1_image": "shopify://shop_images/high-angle-jar-bowl-with-salt.png",
+        "promo_1_icon": "leaf",
+        "promo_1_heading": "Skincare essentials",
+        "promo_1_text": "Build a routine that keeps your skin calm, glowing and protected.",
+        "promo_1_button_label": "Shop skincare",
+        "promo_1_link": "shopify://collections/moisturizer",
+        "promo_1_bg_color": "#2f3a24",
+        "promo_1_text_color": "#ffffff",
+        "promo_1_overlay": 55,
+        "promo_2_enabled": false
       }
     },
     "collection_hero": {
