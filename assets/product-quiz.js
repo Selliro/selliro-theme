@@ -1,16 +1,21 @@
 /**
  * Product finder quiz — <product-quiz>
  *
- * Steps: intro → question 1..n → results.
+ * Steps: intro → question 1..n → (analyzing) → results.
  * Each answer input carries data-products="id,id". On finish, products are scored by how many
- * selected answers recommend them; the top N are moved from the hidden pool into the results list.
- * Theme editor: selecting a Question block jumps to that question.
+ * selected answers recommend them; the top N are moved from the hidden pool into the results list,
+ * topped up from the fallback collection.
+ * Extras: answer summary with "edit" jumps, add-all-to-cart, number-key shortcuts,
+ * remembered result, theme editor block selection.
  */
 (() => {
   if (customElements.get('product-quiz')) return;
 
   const STORAGE_PREFIX = 'product-quiz:';
-  const AUTO_ADVANCE_DELAY = 420;
+  const AUTO_ADVANCE_DELAY = 380;
+  const ANALYZING_DURATION = 1300;
+
+  const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const storage = {
     get(key) {
@@ -24,47 +29,63 @@
       try {
         window.localStorage.setItem(key, JSON.stringify(value));
       } catch (e) {
-        /* storage unavailable (private mode) — ignore */
+        /* storage unavailable — ignore */
       }
     },
   };
+
+  function cartAddUrl() {
+    const routes = window.Theme && window.Theme.routes;
+    return (routes && routes.cart_add_url) || '/cart/add.js';
+  }
+
+  function cartSectionIds() {
+    return Array.from(document.querySelectorAll('cart-items-component'))
+      .map((n) => n.dataset && n.dataset.sectionId)
+      .filter(Boolean);
+  }
 
   class ProductQuiz extends HTMLElement {
     connectedCallback() {
       this.steps = Array.from(this.querySelectorAll('[data-pq-step]'));
       this.questions = this.steps.filter((s) => s.dataset.pqStep === 'question');
+      this.analyzingStep = this.querySelector('[data-pq-step="analyzing"]');
       this.resultsStep = this.querySelector('[data-pq-step="results"]');
       this.resultsList = this.querySelector('[data-pq-results]');
       this.pool = this.querySelector('[data-pq-pool]');
-      this.toolbar = this.querySelector('[data-pq-toolbar]');
-      this.progress = this.querySelector('[data-pq-progress]');
-      this.progressBar = this.querySelector('[data-pq-progress-bar]');
+      this.segments = Array.from(this.querySelectorAll('[data-pq-seg]'));
       this.stepLabel = this.querySelector('[data-pq-step-label]');
       this.live = this.querySelector('[data-pq-live]');
       this.emptyMsg = this.querySelector('[data-pq-empty]');
       this.lastBtn = this.querySelector('[data-pq-last]');
+      this.addAllBtn = this.querySelector('[data-pq-add-all]');
+      this.summaryWrap = this.querySelector('[data-pq-summary-wrap]');
+      this.summaryList = this.querySelector('[data-pq-summary]');
 
       this.autoAdvance = this.dataset.autoAdvance === 'true';
       this.remember = this.dataset.remember === 'true';
+      this.useAnalyzing = this.dataset.analyzing === 'true';
       this.maxResults = parseInt(this.dataset.maxResults || '4', 10);
       this.storageKey = STORAGE_PREFIX + (this.dataset.sectionId || '');
-      this.current = 0;
+      this.current = this.steps.findIndex((s) => s.dataset.pqStep === 'intro');
       this.timer = null;
 
       this.onClick = this.onClick.bind(this);
       this.onChange = this.onChange.bind(this);
+      this.onKeydown = this.onKeydown.bind(this);
       this.onBlockSelect = this.onBlockSelect.bind(this);
       this.onSectionSelect = this.onSectionSelect.bind(this);
 
       this.addEventListener('click', this.onClick);
       this.addEventListener('change', this.onChange);
+      this.addEventListener('keydown', this.onKeydown);
       document.addEventListener('shopify:block:select', this.onBlockSelect);
       document.addEventListener('shopify:section:select', this.onSectionSelect);
 
       if (this.remember && this.lastBtn && storage.get(this.storageKey)) this.lastBtn.hidden = false;
 
       this.questions.forEach((q) => this.updateNextState(q));
-      this.show(0, { focus: false });
+      this.show(this.current, { focus: false, animate: false });
     }
 
     disconnectedCallback() {
@@ -73,21 +94,36 @@
       clearTimeout(this.timer);
     }
 
+    /* ------------------------------------------------------------ helpers */
+
+    stepIndexOf(el) {
+      return this.steps.indexOf(el);
+    }
+
+    questionNumber(step) {
+      return this.questions.indexOf(step) + 1;
+    }
+
     /* ------------------------------------------------------------ events */
 
     onClick(event) {
       const target = event.target instanceof Element ? event.target : null;
       if (!target) return;
 
-      if (target.closest('[data-pq-start]')) return this.show(1);
-      if (target.closest('[data-pq-back]')) return this.show(Math.max(0, this.current - 1));
+      if (target.closest('[data-pq-start]')) return this.goToQuestion(0);
+      if (target.closest('[data-pq-back]')) return this.back();
       if (target.closest('[data-pq-next]') || target.closest('[data-pq-skip]')) return this.next();
       if (target.closest('[data-pq-restart]')) return this.restart();
+      if (target.closest('[data-pq-add-all]')) return this.addAllToCart();
+
+      const edit = target.closest('[data-pq-edit]');
+      if (edit) return this.goToQuestion(Number(edit.dataset.pqEdit));
+
       if (target.closest('[data-pq-last]')) {
         const saved = storage.get(this.storageKey);
         if (saved && Array.isArray(saved.ids)) {
-          this.renderResults(saved.ids);
-          this.show(this.steps.length - 1);
+          this.renderResults(saved.ids, saved.summary || []);
+          this.show(this.stepIndexOf(this.resultsStep));
         }
       }
     }
@@ -100,16 +136,39 @@
 
       this.updateNextState(question);
 
-      const multiple = question.dataset.pqMultiple === 'true';
-      if (!multiple && this.autoAdvance && input.checked) {
+      if (question.dataset.pqMultiple !== 'true' && this.autoAdvance && input.checked) {
         clearTimeout(this.timer);
         this.timer = setTimeout(() => this.next(), AUTO_ADVANCE_DELAY);
       }
     }
 
+    onKeydown(event) {
+      const step = this.steps[this.current];
+      if (!step || step.dataset.pqStep !== 'question') return;
+      if (event.metaKey || event.ctrlKey || event.altKey) return;
+      if (event.target instanceof HTMLElement && event.target.matches('input[type="text"], textarea')) return;
+
+      const n = parseInt(event.key, 10);
+      if (n >= 1 && n <= 9) {
+        const input = step.querySelectorAll('.pq__answer-input')[n - 1];
+        if (!input) return;
+        event.preventDefault();
+        input.checked = input.type === 'checkbox' ? !input.checked : true;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+        input.focus({ preventScroll: true });
+      } else if (event.key === 'Enter' && !(event.target instanceof HTMLButtonElement)) {
+        const next = step.querySelector('[data-pq-next]');
+        if (next && !next.disabled) {
+          event.preventDefault();
+          this.next();
+        }
+      }
+    }
+
     onBlockSelect(event) {
       if (!this.contains(event.target)) return;
-      const index = this.steps.indexOf(event.target.closest('[data-pq-step]'));
+      const step = event.target.closest('[data-pq-step]');
+      const index = this.stepIndexOf(step);
       if (index > -1) this.show(index, { focus: false });
     }
 
@@ -119,14 +178,26 @@
 
     /* ------------------------------------------------------------ flow */
 
+    goToQuestion(qIndex) {
+      const step = this.questions[qIndex];
+      if (step) this.show(this.stepIndexOf(step));
+    }
+
+    back() {
+      clearTimeout(this.timer);
+      const step = this.steps[this.current];
+      if (step === this.resultsStep) return this.goToQuestion(this.questions.length - 1);
+      const qi = this.questions.indexOf(step);
+      if (qi > 0) this.goToQuestion(qi - 1);
+      else this.show(0);
+    }
+
     next() {
       clearTimeout(this.timer);
-      const isLastQuestion = this.current === this.questions.length;
-      if (isLastQuestion) {
-        this.finish();
-      } else {
-        this.show(this.current + 1);
-      }
+      const qi = this.questions.indexOf(this.steps[this.current]);
+      if (qi === -1) return;
+      if (qi === this.questions.length - 1) this.finish();
+      else this.goToQuestion(qi + 1);
     }
 
     restart() {
@@ -135,15 +206,18 @@
         this.updateNextState(q);
       });
       this.returnResultsToPool();
-      this.show(1);
+      this.goToQuestion(0);
     }
 
     finish() {
       const scores = new Map();
       const order = this.poolOrder();
+      const summary = [];
 
-      this.questions.forEach((q) => {
-        q.querySelectorAll('.pq__answer-input:checked').forEach((input) => {
+      this.questions.forEach((q, qi) => {
+        const picked = Array.from(q.querySelectorAll('.pq__answer-input:checked'));
+        if (picked.length) summary.push({ q: qi, labels: picked.map((i) => i.dataset.label || '') });
+        picked.forEach((input) => {
           (input.dataset.products || '')
             .split(',')
             .filter(Boolean)
@@ -151,25 +225,33 @@
         });
       });
 
-      let ids = Array.from(scores.keys()).sort(
+      const ids = Array.from(scores.keys()).sort(
         (a, b) => scores.get(b) - scores.get(a) || order.indexOf(a) - order.indexOf(b)
       );
 
       // Top up with the fallback collection so the results row is never half empty.
-      const fallback = Array.from(this.pool.querySelectorAll('[data-fallback]'))
+      Array.from(this.pool.querySelectorAll('[data-fallback]'))
         .sort((a, b) => Number(a.dataset.fallback) - Number(b.dataset.fallback))
-        .map((li) => li.dataset.productId);
-      fallback.forEach((id) => {
-        if (ids.length < this.maxResults && !ids.includes(id)) ids.push(id);
-      });
+        .forEach((li) => {
+          const id = li.dataset.productId;
+          if (ids.length < this.maxResults && !ids.includes(id)) ids.push(id);
+        });
 
-      ids = ids.slice(0, this.maxResults);
-      this.renderResults(ids);
-      if (this.remember && ids.length) {
-        storage.set(this.storageKey, { ids, at: Date.now() });
+      const finalIds = ids.slice(0, this.maxResults);
+      this.renderResults(finalIds, summary);
+
+      if (this.remember && finalIds.length) {
+        storage.set(this.storageKey, { ids: finalIds, summary, at: Date.now() });
         if (this.lastBtn) this.lastBtn.hidden = false;
       }
-      this.show(this.steps.length - 1);
+
+      const resultsIndex = this.stepIndexOf(this.resultsStep);
+      if (this.useAnalyzing && this.analyzingStep && !reducedMotion()) {
+        this.show(this.stepIndexOf(this.analyzingStep), { focus: false });
+        this.timer = setTimeout(() => this.show(resultsIndex), ANALYZING_DURATION);
+      } else {
+        this.show(resultsIndex);
+      }
     }
 
     /* ------------------------------------------------------------ results */
@@ -180,10 +262,9 @@
       );
     }
 
-    findPoolItem(id) {
-      return (
-        this.pool.querySelector(`.pq__result[data-product-id="${CSS.escape(id)}"]:not([data-duplicate])`) || null
-      );
+    findItem(id) {
+      const sel = `.pq__result[data-product-id="${CSS.escape(id)}"]:not([data-duplicate])`;
+      return this.pool.querySelector(sel) || this.resultsList.querySelector(sel);
     }
 
     returnResultsToPool() {
@@ -194,22 +275,107 @@
       });
     }
 
-    renderResults(ids) {
+    renderResults(ids, summary) {
       this.returnResultsToPool();
       let count = 0;
       ids.forEach((id) => {
-        const li = this.findPoolItem(id);
+        const li = this.findItem(id);
         if (!li) return;
         li.style.setProperty('--pq-i', String(count));
         if (count === 0 && li.dataset.bestLabel) li.classList.add('pq__result--best');
         this.resultsList.appendChild(li);
         count++;
       });
+
       if (this.emptyMsg) this.emptyMsg.hidden = count > 0;
-      // Trigger staggered reveal on next frame.
-      requestAnimationFrame(() => {
-        Array.from(this.resultsList.children).forEach((li) => li.classList.add('is-revealed'));
+      if (this.addAllBtn) {
+        this.addAllBtn.hidden = this.resultVariantIds().length < 2;
+        this.addAllBtn.removeAttribute('data-done');
+      }
+      this.renderSummary(summary || []);
+    }
+
+    renderSummary(summary) {
+      if (!this.summaryList || !this.summaryWrap) return;
+      this.summaryList.replaceChildren();
+      summary.forEach(({ q, labels }) => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'pq__summary-chip button-unstyled';
+        btn.dataset.pqEdit = String(q);
+        btn.textContent = labels.join(', ');
+        const q_el = this.questions[q] && this.questions[q].querySelector('.pq__question-text');
+        if (q_el) btn.setAttribute('aria-label', `${q_el.textContent.trim()}: ${btn.textContent}`);
+        const pen = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        pen.setAttribute('viewBox', '0 0 16 16');
+        pen.setAttribute('aria-hidden', 'true');
+        pen.innerHTML = '<path d="M10.5 3.5l2 2L6 12H4v-2l6.5-6.5Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>';
+        btn.appendChild(pen);
+        li.appendChild(btn);
+        this.summaryList.appendChild(li);
       });
+      this.summaryWrap.hidden = summary.length === 0;
+    }
+
+    resultVariantIds() {
+      return Array.from(this.resultsList.querySelectorAll('[data-new-arrivals-add]:not([disabled])'))
+        .map((btn) => ({ id: btn.getAttribute('data-variant-id'), quantity: parseInt(btn.getAttribute('data-quantity') || '1', 10) || 1 }))
+        .filter((item) => item.id);
+    }
+
+    async addAllToCart() {
+      const btn = this.addAllBtn;
+      const items = this.resultVariantIds();
+      if (!btn || !items.length || btn.getAttribute('aria-busy') === 'true') return;
+
+      const formData = new FormData();
+      items.forEach((item, i) => {
+        formData.append(`items[${i}][id]`, item.id);
+        formData.append(`items[${i}][quantity]`, String(item.quantity));
+      });
+      const sections = cartSectionIds();
+      if (sections.length) formData.append('sections', sections.join(','));
+
+      btn.setAttribute('aria-busy', 'true');
+      btn.disabled = true;
+      try {
+        const response = await fetch(cartAddUrl(), {
+          method: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest', Accept: 'application/json' },
+          body: formData,
+        });
+        const json = await response.json();
+        if (json.status) {
+          document.dispatchEvent(
+            new CustomEvent('cart:error', {
+              bubbles: true,
+              detail: { sourceId: 'product-quiz', data: { message: json.message, description: json.description, errors: json.errors } },
+            })
+          );
+          return;
+        }
+        document.dispatchEvent(
+          new CustomEvent('cart:update', {
+            bubbles: true,
+            detail: {
+              resource: {},
+              sourceId: 'product-quiz',
+              data: {
+                source: 'product-form-component',
+                itemCount: items.reduce((sum, i) => sum + i.quantity, 0),
+                sections: json.sections,
+              },
+            },
+          })
+        );
+        btn.setAttribute('data-done', '');
+      } catch (error) {
+        console.error(error);
+      } finally {
+        btn.removeAttribute('aria-busy');
+        btn.disabled = false;
+      }
     }
 
     /* ------------------------------------------------------------ rendering */
@@ -219,13 +385,14 @@
       if (next) next.disabled = !question.querySelector('.pq__answer-input:checked');
     }
 
-    show(index, { focus = true } = {}) {
-      const total = this.questions.length;
+    show(index, { focus = true, animate = true } = {}) {
       const step = this.steps[index];
       if (!step) return;
-      const direction = index >= this.current ? 'forward' : 'back';
+      clearTimeout(this.timer);
+
+      this.dataset.direction = index >= this.current ? 'forward' : 'back';
+      this.toggleAttribute('data-animate', animate);
       this.current = index;
-      this.dataset.direction = direction;
 
       this.steps.forEach((s, i) => {
         const active = i === index;
@@ -236,39 +403,46 @@
 
       const kind = step.dataset.pqStep;
       this.dataset.state = kind;
-      const inQuiz = kind === 'question';
-      if (this.toolbar) this.toolbar.hidden = kind === 'intro';
-      if (this.progress) this.progress.hidden = kind === 'intro';
+      const total = this.questions.length;
+      const qNum = kind === 'question' ? this.questionNumber(step) : kind === 'intro' ? 0 : total;
 
-      const pct = total ? ((kind === 'results' ? total : index) / total) * 100 : 0;
-      if (this.progressBar) this.progressBar.style.transform = `scaleX(${Math.min(1, pct / 100)})`;
+      this.segments.forEach((seg, i) => {
+        seg.classList.toggle('is-done', i + 1 < qNum || (kind !== 'question' && kind !== 'intro'));
+        seg.classList.toggle('is-current', kind === 'question' && i + 1 === qNum);
+      });
 
       if (this.stepLabel) {
-        if (inQuiz) {
-          const tpl = this.dataset.stepTemplate || '[current] / [total]';
-          this.stepLabel.textContent = tpl.replace('[current]', String(index)).replace('[total]', String(total));
-        } else {
-          this.stepLabel.textContent = '';
-        }
+        const tpl = this.dataset.stepTemplate || '[current] / [total]';
+        this.stepLabel.textContent =
+          kind === 'question' ? tpl.replace('[current]', String(qNum)).replace('[total]', String(total)) : '';
       }
 
-      // Side media: question image if set, otherwise the intro image.
-      const mediaKey = inQuiz && this.querySelector(`[data-pq-media="${step.dataset.pqBlockId}"]`) ? step.dataset.pqBlockId : 'intro';
+      const blockId = step.dataset.pqBlockId;
+      const hasOwnMedia = kind === 'question' && blockId && this.querySelector(`[data-pq-media="${blockId}"]`);
+      const mediaKey = hasOwnMedia ? blockId : 'intro';
       this.querySelectorAll('[data-pq-media]').forEach((m) => m.classList.toggle('is-active', m.dataset.pqMedia === mediaKey));
 
+      if (kind === 'results') {
+        requestAnimationFrame(() => {
+          Array.from(this.resultsList.children).forEach((li) => li.classList.add('is-revealed'));
+        });
+      }
+
       if (focus) {
-        const heading = step.querySelector('.pq__question-text, .pq__heading');
-        if (heading) heading.focus({ preventScroll: true });
+        const heading = step.querySelector('.pq__question-text, .pq__heading, .pq__analyzing-text');
+        if (heading && heading.hasAttribute('tabindex')) heading.focus({ preventScroll: true });
         const rect = this.getBoundingClientRect();
-        if (rect.top < 0 || rect.top > window.innerHeight * 0.6) {
-          this.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (rect.top < -40 || rect.top > window.innerHeight * 0.5) {
+          this.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
         }
       }
 
-      if (this.live && this.stepLabel && inQuiz) this.live.textContent = this.stepLabel.textContent;
-      if (this.live && kind === 'results') {
-        const heading = step.querySelector('.pq__heading');
-        this.live.textContent = heading ? heading.textContent.trim() : '';
+      if (this.live) {
+        if (kind === 'question') this.live.textContent = this.stepLabel ? this.stepLabel.textContent : '';
+        else {
+          const text = step.querySelector('.pq__heading, .pq__analyzing-text');
+          this.live.textContent = text ? text.textContent.trim() : '';
+        }
       }
     }
   }
