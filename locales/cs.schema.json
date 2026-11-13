@@ -50,7 +50,7 @@
     "show_compare_price": "Zobrazit srovnávací cenu",
     "d_eyebrow": "Sestavte a ušetřete",
     "d_heading": "Naplňte svou krabici",
-    "d_text": "Vyberte si oblíbené produkty a sledujte, jak roste úspora. Čím víc přidáte, tím víc ušetříte.",
+    "d_text": "<p>Vyberte si oblíbené produkty a sledujte, jak roste úspora. Čím víc přidáte, tím víc ušetříte.</p>",
     "d_box_title": "Vaše krabice",
     "d_tier_label": "[count] položky · sleva [discount] %",
     "d_msg_min": "Přidejte ještě [count] a začněte svou krabici",

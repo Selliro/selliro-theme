@@ -50,7 +50,7 @@
     "show_compare_price": "Näytä vertailuhinta",
     "d_eyebrow": "Kokoa ja säästä",
     "d_heading": "Täytä laatikkosi",
-    "d_text": "Valitse suosikkisi ja katso säästön kasvavan. Mitä enemmän lisäät, sitä enemmän säästät.",
+    "d_text": "<p>Valitse suosikkisi ja katso säästön kasvavan. Mitä enemmän lisäät, sitä enemmän säästät.</p>",
     "d_box_title": "Laatikkosi",
     "d_tier_label": "[count] tuotetta · −[discount] %",
     "d_msg_min": "Lisää vielä [count] aloittaaksesi laatikkosi",

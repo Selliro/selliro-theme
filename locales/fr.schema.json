@@ -50,7 +50,7 @@
     "show_compare_price": "Afficher le prix barré",
     "d_eyebrow": "Composez et économisez",
     "d_heading": "Remplissez votre box",
-    "d_text": "Choisissez vos favoris et regardez vos économies grandir. Plus vous ajoutez, plus vous économisez.",
+    "d_text": "<p>Choisissez vos favoris et regardez vos économies grandir. Plus vous ajoutez, plus vous économisez.</p>",
     "d_box_title": "Votre box",
     "d_tier_label": "[count] articles · -[discount] %",
     "d_msg_min": "Ajoutez encore [count] article(s) pour commencer votre box",

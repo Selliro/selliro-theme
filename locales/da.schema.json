@@ -50,7 +50,7 @@
     "show_compare_price": "Vis sammenligningspris",
     "d_eyebrow": "Saml og spar",
     "d_heading": "Fyld din boks",
-    "d_text": "Vælg dine favoritter og se besparelsen vokse. Jo mere du tilføjer, jo mere sparer du.",
+    "d_text": "<p>Vælg dine favoritter og se besparelsen vokse. Jo mere du tilføjer, jo mere sparer du.</p>",
     "d_box_title": "Din boks",
     "d_tier_label": "[count] varer · [discount] % rabat",
     "d_msg_min": "Tilføj [count] mere for at starte din boks",

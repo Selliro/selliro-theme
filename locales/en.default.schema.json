@@ -50,7 +50,7 @@
     "show_compare_price": "Show compare-at price",
     "d_eyebrow": "Bundle and save",
     "d_heading": "Fill your box",
-    "d_text": "Pick your favourites and watch the savings grow. The more you add, the more you save.",
+    "d_text": "<p>Pick your favourites and watch the savings grow. The more you add, the more you save.</p>",
     "d_box_title": "Your box",
     "d_tier_label": "[count] items · [discount]% off",
     "d_msg_min": "Add [count] more to start your box",

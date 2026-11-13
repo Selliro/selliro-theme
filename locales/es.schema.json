@@ -50,7 +50,7 @@
     "show_compare_price": "Mostrar precio de comparación",
     "d_eyebrow": "Arma tu paquete y ahorra",
     "d_heading": "Llena tu caja",
-    "d_text": "Elige tus favoritos y mira cómo crece tu ahorro. Cuanto más agregas, más ahorras.",
+    "d_text": "<p>Elige tus favoritos y mira cómo crece tu ahorro. Cuanto más agregas, más ahorras.</p>",
     "d_box_title": "Tu caja",
     "d_tier_label": "[count] artículos · [discount] % de descuento",
     "d_msg_min": "Agrega [count] más para empezar tu caja",

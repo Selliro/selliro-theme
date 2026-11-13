@@ -50,7 +50,7 @@
     "show_compare_price": "Mostra prezzo di confronto",
     "d_eyebrow": "Crea il bundle e risparmia",
     "d_heading": "Riempi la tua box",
-    "d_text": "Scegli i tuoi preferiti e guarda crescere il risparmio. Più aggiungi, più risparmi.",
+    "d_text": "<p>Scegli i tuoi preferiti e guarda crescere il risparmio. Più aggiungi, più risparmi.</p>",
     "d_box_title": "La tua box",
     "d_tier_label": "[count] articoli · -[discount]%",
     "d_msg_min": "Aggiungi altri [count] per iniziare la tua box",
