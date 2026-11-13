@@ -38,6 +38,9 @@
     });
   }
 
+  const esc = (str) =>
+    String(str ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
   const fill = (tpl, map) => Object.entries(map).reduce((s, [k, v]) => s.split(`[${k}]`).join(String(v)), tpl || '');
 
   class BundleBuilder extends HTMLElement {
@@ -213,7 +216,9 @@
       this.render();
       this.announce(this.dataset.announceRemoved, p ? p.title : '');
       // Keep keyboard focus inside the box
-      this.querySelector('[data-bb-remove]')?.focus() || this.el.cta?.focus();
+      const nextRemove = this.querySelector('[data-bb-remove]');
+      if (nextRemove) nextRemove.focus();
+      else this.el.cta?.focus();
     }
 
     step(key, delta) {
@@ -297,7 +302,7 @@
       // Slots: one tile per unit, plus empty tiles up to the slot count (or the next tier)
       const units = [];
       lines.forEach(({ key, line, v, p }) => {
-        for (let i = 0; i < line.qty; i++) units.push({ key, img: v.image || p.image, title: p.title });
+        for (let i = 0; i < line.qty; i++) units.push({ key, img: esc(v.image || p.image || ''), title: esc(p.title) });
       });
       const totalSlots = Math.min(this.max, Math.max(this.slotCount, units.length, next ? next.qty : 0));
       const slotsHtml = [];
@@ -314,7 +319,7 @@
           );
         } else {
           slotsHtml.push(
-            `<li class="bb__slot" style="--i:${i}"><span class="visually-hidden">${this.dataset.emptySlot}</span>` +
+            `<li class="bb__slot" style="--i:${i}"><span class="visually-hidden">${esc(this.dataset.emptySlot)}</span>` +
               `<span class="bb__slot-num" aria-hidden="true">${i + 1}</span>` +
               (tierAt ? `<span class="bb__slot-tag" aria-hidden="true">-${tierAt.pct}%</span>` : '') +
               `</li>`
@@ -326,19 +331,20 @@
       // Item list with steppers
       this.el.items.innerHTML = lines
         .map(({ key, line, v, p }) => {
-          const name = p.title.replace(/"/g, '&quot;');
-          const variantTitle = v.title && v.title !== 'Default Title' ? `<span class="bb__item-variant">${v.title}</span>` : '';
+          const name = esc(p.title);
+          const img = esc(v.image || p.image || '');
+          const variantTitle = v.title && v.title !== 'Default Title' ? `<span class="bb__item-variant">${esc(v.title)}</span>` : '';
           return (
             `<li class="bb__item">` +
-            `<span class="bb__item-thumb">${v.image || p.image ? `<img src="${v.image || p.image}" alt="" width="56" height="56" loading="lazy">` : ''}</span>` +
-            `<span class="bb__item-info"><span class="bb__item-title">${p.title}</span>${variantTitle}` +
+            `<span class="bb__item-thumb">${img ? `<img src="${img}" alt="" width="56" height="56" loading="lazy">` : ''}</span>` +
+            `<span class="bb__item-info"><span class="bb__item-title">${name}</span>${variantTitle}` +
             `<span class="bb__item-price">${formatMoney(v.price * line.qty, this.moneyFormat)}</span></span>` +
             `<span class="bb__stepper">` +
-            `<button type="button" data-bb-step="-1" data-key="${key}" aria-label="${this.dataset.decrease} — ${name}">−</button>` +
+            `<button type="button" data-bb-step="-1" data-key="${key}" aria-label="${esc(this.dataset.decrease)} — ${name}">−</button>` +
             `<span class="bb__stepper-qty" aria-live="off">${line.qty}</span>` +
-            `<button type="button" data-bb-step="1" data-key="${key}" aria-label="${this.dataset.increase} — ${name}"${n >= this.max ? ' disabled' : ''}>+</button>` +
+            `<button type="button" data-bb-step="1" data-key="${key}" aria-label="${esc(this.dataset.increase)} — ${name}"${n >= this.max ? ' disabled' : ''}>+</button>` +
             `</span>` +
-            `<button type="button" class="bb__item-remove" data-bb-remove="${key}" aria-label="${fill(this.dataset.removeAria, { title: name })}">` +
+            `<button type="button" class="bb__item-remove" data-bb-remove="${key}" aria-label="${esc(fill(this.dataset.removeAria, { title: p.title }))}">` +
             `<svg viewBox="0 0 16 16" width="12" height="12" fill="none" aria-hidden="true" focusable="false"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>` +
             `</button>` +
             `</li>`
