@@ -155,11 +155,13 @@
         (a, b) => scores.get(b) - scores.get(a) || order.indexOf(a) - order.indexOf(b)
       );
 
-      if (!ids.length) {
-        ids = Array.from(this.pool.querySelectorAll('[data-fallback]'))
-          .sort((a, b) => Number(a.dataset.fallback) - Number(b.dataset.fallback))
-          .map((li) => li.dataset.productId);
-      }
+      // Top up with the fallback collection so the results row is never half empty.
+      const fallback = Array.from(this.pool.querySelectorAll('[data-fallback]'))
+        .sort((a, b) => Number(a.dataset.fallback) - Number(b.dataset.fallback))
+        .map((li) => li.dataset.productId);
+      fallback.forEach((id) => {
+        if (ids.length < this.maxResults && !ids.includes(id)) ids.push(id);
+      });
 
       ids = ids.slice(0, this.maxResults);
       this.renderResults(ids);
