@@ -297,6 +297,17 @@
     {% endif %}
   }
 
+  {%- if menu_content_type == 'promo_cards' -%}
+    {%- liquid
+      assign promo_list_fr = column_count | at_least: 1
+      assign promo_cards_fr = promo_cards.size | times: 1.6
+    -%}
+    [data-menu-grid-id="{{ id }}"] {
+      --mega-promo-grid: minmax(11rem, {{ promo_list_fr }}fr) minmax(0, {{ promo_cards_fr }}fr);
+      --mega-list-columns: {{ promo_list_fr }};
+    }
+  {%- endif -%}
+
   [data-menu-list-id="{{ id }}"] {
     {% if menu_content_type == 'collection_images' and parent_link.links.size < 5 %}
       --menu-columns-desktop: {{ grid_columns_count_collection_images }};
@@ -315,6 +326,7 @@
       assign promo_position = menu_settings.promo_content_position | default: 'top_left'
       assign promo_heading_size = menu_settings.promo_heading_size | default: 'medium'
       assign promo_overlay = menu_settings.promo_overlay_opacity | default: 0 | times: 0.01
+      assign promo_overlay_style = menu_settings.promo_overlay_style | default: 'gradient'
       assign promo_button_class = 'button'
       if menu_settings.promo_button_style == 'secondary'
         assign promo_button_class = 'button button-secondary'
@@ -327,7 +339,7 @@
     >
       <ul
         class="mega-menu__content-list mega-menu__content-list--promos list-unstyled"
-        style="--menu-content-columns-desktop: {{ promo_cards.size }}; --menu-content-columns-tablet: 1; --mega-promo-ratio: {{ promo_ratio }}; --mega-promo-radius: {{ image_border_radius }}px; --mega-promo-color: {{ menu_settings.promo_text_color | default: '#121212' }}; --mega-promo-overlay: {{ promo_overlay }};"
+        style="--menu-content-columns-desktop: {{ promo_cards.size }}; --menu-content-columns-tablet: 1; --mega-promo-ratio: {{ promo_ratio }}; --mega-promo-radius: {{ image_border_radius }}px; --mega-promo-color: {{ menu_settings.promo_text_color | default: '#ffffff' }}; --mega-promo-overlay: {{ promo_overlay }}; --mega-promo-overlay-color: {{ menu_settings.promo_overlay_color | default: '#000000' }};"
       >
         {% for i in promo_cards %}
           {% liquid
@@ -346,7 +358,7 @@
           <li class="mega-menu__content-list-item{% if forloop.index > 1 %} mega-menu__content-list-item--hidden-tablet{% endif %}">
             <a
               href="{{ promo_link }}"
-              class="mega-promo mega-promo--{{ promo_position }} mega-promo--heading-{{ promo_heading_size }}"
+              class="mega-promo mega-promo--{{ promo_position }} mega-promo--heading-{{ promo_heading_size }} mega-promo--overlay-{{ promo_overlay_style }}"
             >
               <span class="mega-promo__media">
                 {%- if promo_image != blank -%}

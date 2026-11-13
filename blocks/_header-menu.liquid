@@ -568,6 +568,59 @@
     white-space: normal;
   }
 
+  /* Dropdown arrow on top-level items that open a submenu */
+  .menu-list__link:has(.menu-list__link-caret) {
+    gap: 0.3em;
+  }
+
+  .menu-list__link-caret {
+    display: inline-flex;
+    flex-shrink: 0;
+    width: 0.75em;
+    min-width: 10px;
+    transition: transform var(--animation-speed) var(--animation-easing);
+
+    svg {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .menu-list__link[aria-expanded='true'] .menu-list__link-caret {
+    transform: rotate(180deg);
+  }
+
+  /* The "More" overflow column lists items as large text: no arrows there */
+  .menu-list__list-item[slot='overflow'] .menu-list__link-caret {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-list__link-caret {
+      transition: none;
+    }
+  }
+
+  /* Promo card mode: compact link column on the left, cards fill the rest */
+  @media screen and (min-width: 990px) {
+    .mega-menu__grid:has(.mega-menu__content-list--promos) {
+      grid-template-columns: var(--mega-promo-grid, minmax(11rem, 1fr) minmax(0, 3.2fr));
+
+      > .mega-menu__list {
+        grid-column: 1;
+        grid-template-columns: repeat(var(--mega-list-columns, 1), minmax(0, 1fr));
+      }
+
+      > .mega-menu__content {
+        grid-column: 2;
+      }
+
+      .mega-menu__column[class*='mega-menu__column--span-'] {
+        grid-column: span 1;
+      }
+    }
+  }
+
   /* Promo cards (menu_style: promo_cards) */
   .mega-menu__content-list--promos {
     grid-template-columns: repeat(var(--menu-content-columns-tablet), minmax(0, 1fr));
@@ -611,8 +664,39 @@
   }
 
   .mega-promo__overlay {
-    background-color: #000;
+    background-color: var(--mega-promo-overlay-color, #000);
     opacity: var(--mega-promo-overlay, 0);
+  }
+
+  /* Gradient overlay: darkest behind the text, fading out across the image */
+  .mega-promo--overlay-gradient .mega-promo__overlay {
+    --mega-promo-overlay-direction: 90deg;
+
+    background-color: transparent;
+    background-image: linear-gradient(
+      var(--mega-promo-overlay-direction),
+      var(--mega-promo-overlay-color, #000) 0%,
+      color-mix(in srgb, var(--mega-promo-overlay-color, #000) 55%, transparent) 45%,
+      transparent 85%
+    );
+  }
+
+  .mega-promo--overlay-gradient.mega-promo--bottom_left .mega-promo__overlay {
+    --mega-promo-overlay-direction: 0deg;
+  }
+
+  .mega-promo--overlay-gradient.mega-promo--center .mega-promo__overlay {
+    background-image: radial-gradient(
+      circle at center,
+      var(--mega-promo-overlay-color, #000) 0%,
+      color-mix(in srgb, var(--mega-promo-overlay-color, #000) 40%, transparent) 70%,
+      transparent 100%
+    );
+  }
+
+  .mega-promo__subheading,
+  .mega-promo__heading {
+    text-wrap: balance;
   }
 
   .mega-promo__content {
@@ -829,6 +913,13 @@
       "default": "none"
     },
     {
+      "type": "checkbox",
+      "id": "show_dropdown_icon",
+      "label": "Show dropdown arrow",
+      "info": "Adds an arrow to menu items that open a submenu.",
+      "default": true
+    },
+    {
       "type": "header",
       "content": "t:content.submenu_feature"
     },
@@ -989,7 +1080,25 @@
       "type": "color",
       "id": "promo_text_color",
       "label": "Promo text color",
-      "default": "#121212",
+      "default": "#ffffff",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "select",
+      "id": "promo_overlay_style",
+      "label": "Promo overlay style",
+      "options": [
+        { "value": "gradient", "label": "Gradient behind text" },
+        { "value": "solid", "label": "Solid" }
+      ],
+      "default": "gradient",
+      "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
+    },
+    {
+      "type": "color",
+      "id": "promo_overlay_color",
+      "label": "Promo overlay color",
+      "default": "#000000",
       "visible_if": "{{ block.settings.menu_style == 'promo_cards' }}"
     },
     {
