@@ -33,7 +33,14 @@
     "d1_button": "Comprar skincare",
     "d2_heading": "Proteção solar diária",
     "d2_text": "FPS leve que fica perfeito sob a maquiagem.",
-    "d2_button": "Conhecer FPS"
+    "d2_button": "Conhecer FPS",
+    "media_upload": "Vídeo (envio)",
+    "media_mp4": "Vídeo (link MP4)",
+    "media_external": "YouTube ou Vimeo",
+    "video_mp4": "URL do vídeo MP4",
+    "video_mp4_info": "Cole um link .mp4 direto, por exemplo do admin da Shopify → Conteúdo → Arquivos.",
+    "video_url": "URL do YouTube ou Vimeo",
+    "image_poster_info": "Para vídeos, exibida como capa e quando o visitante prefere menos movimento."
   },
   "collection_hero": {
     "name": "Banner da coleção",

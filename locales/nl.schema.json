@@ -33,7 +33,14 @@
     "d1_button": "Shop huidverzorging",
     "d2_heading": "Dagelijkse zonbescherming",
     "d2_text": "Lichte SPF die prachtig onder make-up past.",
-    "d2_button": "Ontdek SPF"
+    "d2_button": "Ontdek SPF",
+    "media_upload": "Video (upload)",
+    "media_mp4": "Video (MP4-link)",
+    "media_external": "YouTube of Vimeo",
+    "video_mp4": "MP4-video-URL",
+    "video_mp4_info": "Plak een directe .mp4-link, bijvoorbeeld uit Shopify-beheer → Content → Bestanden.",
+    "video_url": "YouTube- of Vimeo-URL",
+    "image_poster_info": "Bij video's getoond als coverafbeelding en wanneer bezoekers minder beweging willen."
   },
   "collection_hero": {
     "name": "Collectiebanner",

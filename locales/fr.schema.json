@@ -33,7 +33,14 @@
     "d1_button": "Voir les soins",
     "d2_heading": "Protection solaire au quotidien",
     "d2_text": "Un SPF léger qui se superpose parfaitement sous le maquillage.",
-    "d2_button": "Découvrir le SPF"
+    "d2_button": "Découvrir le SPF",
+    "media_upload": "Vidéo (téléversement)",
+    "media_mp4": "Vidéo (lien MP4)",
+    "media_external": "YouTube ou Vimeo",
+    "video_mp4": "URL de la vidéo MP4",
+    "video_mp4_info": "Collez un lien .mp4 direct, par exemple depuis l'administration Shopify → Contenu → Fichiers.",
+    "video_url": "URL YouTube ou Vimeo",
+    "image_poster_info": "Pour les vidéos, affichée comme image de couverture et quand les visiteurs préfèrent moins d'animations."
   },
   "collection_hero": {
     "name": "Bannière de collection",

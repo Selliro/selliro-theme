@@ -33,7 +33,14 @@
     "d1_button": "Comprar cuidados de pele",
     "d2_heading": "Proteção solar diária",
     "d2_text": "FPS leve que fica perfeito por baixo da maquilhagem.",
-    "d2_button": "Descobrir FPS"
+    "d2_button": "Descobrir FPS",
+    "media_upload": "Vídeo (carregamento)",
+    "media_mp4": "Vídeo (ligação MP4)",
+    "media_external": "YouTube ou Vimeo",
+    "video_mp4": "URL do vídeo MP4",
+    "video_mp4_info": "Cole uma ligação .mp4 direta, por exemplo do admin da Shopify → Conteúdo → Ficheiros.",
+    "video_url": "URL do YouTube ou Vimeo",
+    "image_poster_info": "Para vídeos, mostrada como capa e quando o visitante prefere menos movimento."
   },
   "collection_hero": {
     "name": "Faixa da coleção",

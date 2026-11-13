@@ -33,7 +33,14 @@
     "d1_button": "Nakupovat péči o pleť",
     "d2_heading": "Každodenní ochrana před sluncem",
     "d2_text": "Lehký SPF, který se krásně vrství pod make-up.",
-    "d2_button": "Objevit SPF"
+    "d2_button": "Objevit SPF",
+    "media_upload": "Video (nahrání)",
+    "media_mp4": "Video (odkaz MP4)",
+    "media_external": "YouTube nebo Vimeo",
+    "video_mp4": "URL videa MP4",
+    "video_mp4_info": "Vložte přímý odkaz .mp4, např. z administrace Shopify → Obsah → Soubory.",
+    "video_url": "URL YouTube nebo Vimeo",
+    "image_poster_info": "U videí se zobrazí jako titulní obrázek a když návštěvník preferuje omezený pohyb."
   },
   "collection_hero": {
     "name": "Banner kolekce",

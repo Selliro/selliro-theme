@@ -33,7 +33,14 @@
     "d1_button": "Kjøp hudpleie",
     "d2_heading": "Solbeskyttelse for hver dag",
     "d2_text": "Lett SPF som fungerer fint under sminke.",
-    "d2_button": "Oppdag SPF"
+    "d2_button": "Oppdag SPF",
+    "media_upload": "Video (opplasting)",
+    "media_mp4": "Video (MP4-lenke)",
+    "media_external": "YouTube eller Vimeo",
+    "video_mp4": "MP4-video-URL",
+    "video_mp4_info": "Lim inn en direkte .mp4-lenke, f.eks. fra Shopify-administrator → Innhold → Filer.",
+    "video_url": "YouTube- eller Vimeo-URL",
+    "image_poster_info": "For videoer vises det som forsidebilde og når besøkende foretrekker mindre bevegelse."
   },
   "collection_hero": {
     "name": "Kolleksjonsbanner",

@@ -33,7 +33,14 @@
     "d1_button": "ช้อปสกินแคร์",
     "d2_heading": "กันแดดทุกวัน",
     "d2_text": "SPF เนื้อบางเบาที่ลงตัวใต้เมคอัพ",
-    "d2_button": "ดู SPF"
+    "d2_button": "ดู SPF",
+    "media_upload": "วิดีโอ (อัปโหลด)",
+    "media_mp4": "วิดีโอ (ลิงก์ MP4)",
+    "media_external": "YouTube หรือ Vimeo",
+    "video_mp4": "URL วิดีโอ MP4",
+    "video_mp4_info": "วางลิงก์ .mp4 โดยตรง เช่น จาก Shopify admin → เนื้อหา → ไฟล์",
+    "video_url": "URL ของ YouTube หรือ Vimeo",
+    "image_poster_info": "สำหรับวิดีโอ จะแสดงเป็นภาพปกและเมื่อผู้เข้าชมต้องการลดการเคลื่อนไหว"
   },
   "collection_hero": {
     "name": "แบนเนอร์คอลเลกชัน",

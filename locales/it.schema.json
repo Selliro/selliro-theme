@@ -33,7 +33,14 @@
     "d1_button": "Acquista skincare",
     "d2_heading": "Protezione solare quotidiana",
     "d2_text": "SPF leggero che si stende perfettamente sotto il trucco.",
-    "d2_button": "Scopri l'SPF"
+    "d2_button": "Scopri l'SPF",
+    "media_upload": "Video (caricamento)",
+    "media_mp4": "Video (link MP4)",
+    "media_external": "YouTube o Vimeo",
+    "video_mp4": "URL del video MP4",
+    "video_mp4_info": "Incolla un link .mp4 diretto, ad esempio da Shopify admin → Contenuti → File.",
+    "video_url": "URL YouTube o Vimeo",
+    "image_poster_info": "Per i video, mostrata come copertina e quando i visitatori preferiscono meno movimento."
   },
   "collection_hero": {
     "name": "Banner della collezione",

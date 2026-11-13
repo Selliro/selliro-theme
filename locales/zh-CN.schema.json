@@ -33,7 +33,14 @@
     "d1_button": "选购护肤品",
     "d2_heading": "日常防晒",
     "d2_text": "轻盈防晒，妆前叠加也服帖。",
-    "d2_button": "了解防晒"
+    "d2_button": "了解防晒",
+    "media_upload": "视频（上传）",
+    "media_mp4": "视频（MP4 链接）",
+    "media_external": "YouTube 或 Vimeo",
+    "video_mp4": "MP4 视频网址",
+    "video_mp4_info": "粘贴直接的 .mp4 链接，例如来自 Shopify 后台 → 内容 → 文件。",
+    "video_url": "YouTube 或 Vimeo 网址",
+    "image_poster_info": "对于视频，用作封面图，并在访客偏好减少动态效果时显示。"
   },
   "collection_hero": {
     "name": "产品系列横幅",

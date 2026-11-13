@@ -33,7 +33,14 @@
     "d1_button": "Shop skincare",
     "d2_heading": "Everyday sun care",
     "d2_text": "Lightweight SPF that layers beautifully under makeup.",
-    "d2_button": "Discover SPF"
+    "d2_button": "Discover SPF",
+    "media_upload": "Video (upload)",
+    "media_mp4": "Video (MP4 link)",
+    "media_external": "YouTube or Vimeo",
+    "video_mp4": "MP4 video URL",
+    "video_mp4_info": "Paste a direct .mp4 link, for example from Shopify admin → Content → Files.",
+    "video_url": "YouTube or Vimeo URL",
+    "image_poster_info": "For videos, shown as the cover image and when visitors prefer reduced motion."
   },
   "collection_hero": {
     "name": "Collection hero",

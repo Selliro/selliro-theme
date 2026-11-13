@@ -33,7 +33,14 @@
     "d1_button": "스킨케어 쇼핑",
     "d2_heading": "매일 쓰는 자외선 차단",
     "d2_text": "메이크업 아래에도 가볍게 스며드는 SPF.",
-    "d2_button": "SPF 보기"
+    "d2_button": "SPF 보기",
+    "media_upload": "동영상(업로드)",
+    "media_mp4": "동영상(MP4 링크)",
+    "media_external": "YouTube 또는 Vimeo",
+    "video_mp4": "MP4 동영상 URL",
+    "video_mp4_info": "직접 .mp4 링크를 붙여 넣으세요(예: Shopify 관리자 → 콘텐츠 → 파일).",
+    "video_url": "YouTube 또는 Vimeo URL",
+    "image_poster_info": "동영상의 경우 커버 이미지로, 그리고 움직임 줄이기를 선호하는 방문자에게 표시됩니다."
   },
   "collection_hero": {
     "name": "컬렉션 히어로",

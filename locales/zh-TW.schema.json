@@ -33,7 +33,14 @@
     "d1_button": "選購保養品",
     "d2_heading": "日常防曬",
     "d2_text": "輕盈防曬，妝前疊擦也服貼。",
-    "d2_button": "探索防曬"
+    "d2_button": "探索防曬",
+    "media_upload": "影片（上傳）",
+    "media_mp4": "影片（MP4 連結）",
+    "media_external": "YouTube 或 Vimeo",
+    "video_mp4": "MP4 影片網址",
+    "video_mp4_info": "貼上直接的 .mp4 連結，例如來自 Shopify 管理介面 → 內容 → 檔案。",
+    "video_url": "YouTube 或 Vimeo 網址",
+    "image_poster_info": "影片時作為封面圖，並在訪客偏好減少動態效果時顯示。"
   },
   "collection_hero": {
     "name": "商品系列橫幅",

@@ -33,7 +33,14 @@
     "d1_button": "スキンケアを見る",
     "d2_heading": "毎日の紫外線ケア",
     "d2_text": "メイクの下にもなじむ軽やかなSPF。",
-    "d2_button": "SPFを見る"
+    "d2_button": "SPFを見る",
+    "media_upload": "動画(アップロード)",
+    "media_mp4": "動画(MP4リンク)",
+    "media_external": "YouTubeまたはVimeo",
+    "video_mp4": "MP4動画のURL",
+    "video_mp4_info": "直接の.mp4リンクを貼り付けます(例: Shopify管理画面 → コンテンツ → ファイル)。",
+    "video_url": "YouTubeまたはVimeoのURL",
+    "image_poster_info": "動画の場合はカバー画像として、また視差効果を減らす設定の訪問者に表示されます。"
   },
   "collection_hero": {
     "name": "コレクションヒーロー",

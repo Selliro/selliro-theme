@@ -33,7 +33,14 @@
     "d1_button": "Handla hudvård",
     "d2_heading": "Solskydd för varje dag",
     "d2_text": "Lätt SPF som fungerar fint under smink.",
-    "d2_button": "Upptäck SPF"
+    "d2_button": "Upptäck SPF",
+    "media_upload": "Video (uppladdning)",
+    "media_mp4": "Video (MP4-länk)",
+    "media_external": "YouTube eller Vimeo",
+    "video_mp4": "URL för MP4-video",
+    "video_mp4_info": "Klistra in en direkt .mp4-länk, t.ex. från Shopify-admin → Innehåll → Filer.",
+    "video_url": "URL för YouTube eller Vimeo",
+    "image_poster_info": "För videor visas den som omslagsbild och när besökare föredrar mindre rörelse."
   },
   "collection_hero": {
     "name": "Kollektionsbanner",

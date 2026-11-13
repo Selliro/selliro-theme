@@ -33,7 +33,14 @@
     "d1_button": "Osta ihonhoitoa",
     "d2_heading": "Päivittäinen aurinkosuoja",
     "d2_text": "Kevyt SPF, joka sopii kauniisti meikin alle.",
-    "d2_button": "Tutustu SPF:ään"
+    "d2_button": "Tutustu SPF:ään",
+    "media_upload": "Video (lataus)",
+    "media_mp4": "Video (MP4-linkki)",
+    "media_external": "YouTube tai Vimeo",
+    "video_mp4": "MP4-videon URL",
+    "video_mp4_info": "Liitä suora .mp4-linkki, esimerkiksi Shopify-hallinnasta → Sisältö → Tiedostot.",
+    "video_url": "YouTube- tai Vimeo-URL",
+    "image_poster_info": "Videoissa näytetään kansikuvana ja kun kävijä suosii vähäistä liikettä."
   },
   "collection_hero": {
     "name": "Kokoelman banneri",

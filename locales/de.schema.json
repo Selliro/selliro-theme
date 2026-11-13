@@ -33,7 +33,14 @@
     "d1_button": "Hautpflege shoppen",
     "d2_heading": "Sonnenschutz für jeden Tag",
     "d2_text": "Leichter LSF, der sich wunderbar unter Make-up tragen lässt.",
-    "d2_button": "LSF entdecken"
+    "d2_button": "LSF entdecken",
+    "media_upload": "Video (Upload)",
+    "media_mp4": "Video (MP4-Link)",
+    "media_external": "YouTube oder Vimeo",
+    "video_mp4": "MP4-Video-URL",
+    "video_mp4_info": "Füge einen direkten .mp4-Link ein, z. B. aus Shopify-Admin → Inhalte → Dateien.",
+    "video_url": "YouTube- oder Vimeo-URL",
+    "image_poster_info": "Bei Videos als Titelbild und bei bevorzugter reduzierter Bewegung angezeigt."
   },
   "collection_hero": {
     "name": "Kollektions-Hero",

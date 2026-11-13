@@ -33,7 +33,14 @@
     "d1_button": "Køb hudpleje",
     "d2_heading": "Solbeskyttelse til hverdag",
     "d2_text": "Let SPF, der fungerer smukt under makeup.",
-    "d2_button": "Opdag SPF"
+    "d2_button": "Opdag SPF",
+    "media_upload": "Video (upload)",
+    "media_mp4": "Video (MP4-link)",
+    "media_external": "YouTube eller Vimeo",
+    "video_mp4": "MP4-video-URL",
+    "video_mp4_info": "Indsæt et direkte .mp4-link, f.eks. fra Shopify-administrator → Indhold → Filer.",
+    "video_url": "YouTube- eller Vimeo-URL",
+    "image_poster_info": "Til videoer vises det som forsidebillede og når besøgende foretrækker mindre bevægelse."
   },
   "collection_hero": {
     "name": "Kollektionsbanner",

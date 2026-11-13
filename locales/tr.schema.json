@@ -33,7 +33,14 @@
     "d1_button": "Cilt bakımını keşfet",
     "d2_heading": "Her gün güneş koruması",
     "d2_text": "Makyaj altında güzelce duran hafif SPF.",
-    "d2_button": "SPF'yi keşfet"
+    "d2_button": "SPF'yi keşfet",
+    "media_upload": "Video (yükleme)",
+    "media_mp4": "Video (MP4 bağlantısı)",
+    "media_external": "YouTube veya Vimeo",
+    "video_mp4": "MP4 video URL'si",
+    "video_mp4_info": "Doğrudan bir .mp4 bağlantısı yapıştırın, örneğin Shopify yöneticisi → İçerik → Dosyalar.",
+    "video_url": "YouTube veya Vimeo URL'si",
+    "image_poster_info": "Videolarda kapak görseli olarak ve ziyaretçi az hareket tercih ettiğinde gösterilir."
   },
   "collection_hero": {
     "name": "Koleksiyon banner'ı",

@@ -45,6 +45,7 @@
   {% endstyle %}
 {%- endif -%}
 {{ 'section-collection-promo.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'collection-promo.js' | asset_url }}" defer></script>
 
 {%- if use_na_cards -%}
   {{ 'section-new-arrivals-showcase.css' | asset_url | stylesheet_tag }}
@@ -525,10 +526,59 @@
       "visible_if": "{{ section.settings.promo_1_enabled }}"
     },
     {
+      "type": "select",
+      "id": "promo_1_media",
+      "label": "t:settings.media_type",
+      "options": [
+        {
+          "value": "image",
+          "label": "t:options.image"
+        },
+        {
+          "value": "video",
+          "label": "t:collection_grid.media_upload"
+        },
+        {
+          "value": "mp4",
+          "label": "t:collection_grid.media_mp4"
+        },
+        {
+          "value": "external",
+          "label": "t:collection_grid.media_external"
+        }
+      ],
+      "default": "image",
+      "visible_if": "{{ section.settings.promo_1_enabled }}"
+    },
+    {
       "type": "image_picker",
       "id": "promo_1_image",
       "label": "t:content.image",
-      "visible_if": "{{ section.settings.promo_1_enabled }}"
+      "visible_if": "{{ section.settings.promo_1_enabled }}",
+      "info": "t:collection_grid.image_poster_info"
+    },
+    {
+      "type": "video",
+      "id": "promo_1_video",
+      "label": "t:settings.video",
+      "visible_if": "{{ section.settings.promo_1_enabled and section.settings.promo_1_media == 'video' }}"
+    },
+    {
+      "type": "url",
+      "id": "promo_1_video_mp4",
+      "label": "t:collection_grid.video_mp4",
+      "info": "t:collection_grid.video_mp4_info",
+      "visible_if": "{{ section.settings.promo_1_enabled and section.settings.promo_1_media == 'mp4' }}"
+    },
+    {
+      "type": "video_url",
+      "id": "promo_1_video_url",
+      "label": "t:collection_grid.video_url",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "visible_if": "{{ section.settings.promo_1_enabled and section.settings.promo_1_media == 'external' }}"
     },
     {
       "type": "select",
@@ -665,10 +715,59 @@
       "visible_if": "{{ section.settings.promo_2_enabled }}"
     },
     {
+      "type": "select",
+      "id": "promo_2_media",
+      "label": "t:settings.media_type",
+      "options": [
+        {
+          "value": "image",
+          "label": "t:options.image"
+        },
+        {
+          "value": "video",
+          "label": "t:collection_grid.media_upload"
+        },
+        {
+          "value": "mp4",
+          "label": "t:collection_grid.media_mp4"
+        },
+        {
+          "value": "external",
+          "label": "t:collection_grid.media_external"
+        }
+      ],
+      "default": "image",
+      "visible_if": "{{ section.settings.promo_2_enabled }}"
+    },
+    {
       "type": "image_picker",
       "id": "promo_2_image",
       "label": "t:content.image",
-      "visible_if": "{{ section.settings.promo_2_enabled }}"
+      "visible_if": "{{ section.settings.promo_2_enabled }}",
+      "info": "t:collection_grid.image_poster_info"
+    },
+    {
+      "type": "video",
+      "id": "promo_2_video",
+      "label": "t:settings.video",
+      "visible_if": "{{ section.settings.promo_2_enabled and section.settings.promo_2_media == 'video' }}"
+    },
+    {
+      "type": "url",
+      "id": "promo_2_video_mp4",
+      "label": "t:collection_grid.video_mp4",
+      "info": "t:collection_grid.video_mp4_info",
+      "visible_if": "{{ section.settings.promo_2_enabled and section.settings.promo_2_media == 'mp4' }}"
+    },
+    {
+      "type": "video_url",
+      "id": "promo_2_video_url",
+      "label": "t:collection_grid.video_url",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "visible_if": "{{ section.settings.promo_2_enabled and section.settings.promo_2_media == 'external' }}"
     },
     {
       "type": "select",

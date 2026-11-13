@@ -33,7 +33,14 @@
     "d1_button": "Comprar cuidado de la piel",
     "d2_heading": "Protección solar diaria",
     "d2_text": "FPS ligero que se aplica perfecto bajo el maquillaje.",
-    "d2_button": "Descubrir FPS"
+    "d2_button": "Descubrir FPS",
+    "media_upload": "Video (subido)",
+    "media_mp4": "Video (enlace MP4)",
+    "media_external": "YouTube o Vimeo",
+    "video_mp4": "URL del video MP4",
+    "video_mp4_info": "Pega un enlace .mp4 directo, por ejemplo de Shopify → Contenido → Archivos.",
+    "video_url": "URL de YouTube o Vimeo",
+    "image_poster_info": "En videos, se muestra como portada y cuando el visitante prefiere menos movimiento."
   },
   "collection_hero": {
     "name": "Portada de colección",

@@ -33,7 +33,14 @@
     "d1_button": "Kup pielęgnację",
     "d2_heading": "Codzienna ochrona przeciwsłoneczna",
     "d2_text": "Lekki filtr SPF, który świetnie sprawdza się pod makijażem.",
-    "d2_button": "Odkryj SPF"
+    "d2_button": "Odkryj SPF",
+    "media_upload": "Wideo (przesłane)",
+    "media_mp4": "Wideo (link MP4)",
+    "media_external": "YouTube lub Vimeo",
+    "video_mp4": "Adres URL wideo MP4",
+    "video_mp4_info": "Wklej bezpośredni link .mp4, np. z panelu Shopify → Treści → Pliki.",
+    "video_url": "Adres URL YouTube lub Vimeo",
+    "image_poster_info": "Przy wideo wyświetlany jako okładka i gdy odwiedzający woli ograniczony ruch."
   },
   "collection_hero": {
     "name": "Baner kolekcji",
