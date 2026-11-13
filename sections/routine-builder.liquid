@@ -100,7 +100,7 @@
         {%- for block in section.blocks -%}
           {%- if block.type == 'blank' -%}
             {%- if block.settings.before != blank -%}
-              <span class="rb__words">{{ block.settings.before | escape }}</span>
+              <span class="rb__words">{{ block.settings.before | escape }} </span>
             {%- endif -%}
             <button
               type="button"
@@ -116,9 +116,18 @@
               </span>
               <svg class="rb__blank-caret" viewBox="0 0 12 12" width="12" height="12" fill="none" aria-hidden="true" focusable="false"><path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            {%- if block.settings.after != blank -%}
-              <span class="rb__words">{{ block.settings.after | escape }}</span>
+            {%- liquid
+              assign after_text = block.settings.after | strip
+              assign first_char = after_text | slice: 0
+              assign is_punct = false
+              if first_char == ',' or first_char == '.' or first_char == '!' or first_char == '?' or first_char == ';' or first_char == ':'
+                assign is_punct = true
+              endif
+            -%}
+            {%- if after_text != blank -%}
+              <span class="rb__words{% if is_punct %} rb__words--punct{% endif %}">{% unless is_punct %} {% endunless %}{{ after_text | escape }}</span>
             {%- endif -%}
+            {{- ' ' -}}
             {%- assign b_index = b_index | plus: 1 -%}
           {%- endif -%}
         {%- endfor -%}

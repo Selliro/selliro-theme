@@ -165,12 +165,12 @@
 }
 
 .rb__words {
-  margin-inline-end: 0.22em;
+  white-space: pre-wrap;
 }
 
-.rb__words + .rb__blank,
-.rb__blank + .rb__words {
-  margin-inline-start: 0.04em;
+/* Punctuation hugs the blank before it */
+.rb__words--punct {
+  margin-inline-start: -0.12em;
 }
 
 /* Blank word */
@@ -181,7 +181,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.18em;
-  margin: 0 0.22em 0 0;
+  margin: 0;
   padding: 0 0.28em 0.02em;
   border: 0;
   border-radius: 0.38em;
@@ -352,6 +352,9 @@
 }
 
 .rb__tray-legend {
+  /* float + full width keeps the legend inside the box instead of on its border */
+  float: left;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -597,7 +600,7 @@
 .rb__results {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(0.75rem, 1.6vw, 1.25rem);
+  gap: clamp(1.75rem, 3vw, 2.25rem) clamp(0.75rem, 1.6vw, 1.25rem);
   margin: 0;
   padding: 0;
 }
