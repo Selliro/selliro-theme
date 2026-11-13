@@ -48,11 +48,15 @@
 .collection-promo__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    color-mix(in srgb, var(--cp-bg, #000) calc(var(--cp-overlay, 0.5) * 70%), transparent),
-    color-mix(in srgb, var(--cp-bg, #000) calc(var(--cp-overlay, 0.5) * 100%), transparent)
-  );
+  /* Even tint of the tile color over the photo (strength = overlay setting), a little deeper in the middle
+     where the text sits */
+  background:
+    radial-gradient(ellipse at center, color-mix(in srgb, var(--cp-bg, #000) 35%, transparent), transparent 70%),
+    color-mix(in srgb, var(--cp-bg, #000) calc(var(--cp-overlay, 0.6) * 100%), transparent);
+}
+
+.collection-promo--image .collection-promo__content {
+  text-shadow: 0 1px 12px rgb(0 0 0 / 0.25);
 }
 
 .collection-promo__content {
