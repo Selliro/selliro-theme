@@ -238,20 +238,7 @@
         "promo_1_bg_color": "#2f3a24",
         "promo_1_text_color": "#ffffff",
         "promo_1_overlay": 70,
-        "promo_2_enabled": true,
-        "promo_1_media": "external",
-        "promo_1_video_url": "https://www.youtube.com/watch?v=ScMzIvxBSi4",
-        "promo_2_position": 3,
-        "promo_2_span": "1",
-        "promo_2_media": "mp4",
-        "promo_2_video_mp4": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-        "promo_2_icon": "sun",
-        "promo_2_heading": "Everyday sun care",
-        "promo_2_text": "Lightweight SPF that layers beautifully under makeup.",
-        "promo_2_button_label": "Discover SPF",
-        "promo_2_bg_color": "#8a5a3c",
-        "promo_2_text_color": "#ffffff",
-        "promo_2_overlay": 55
+        "promo_2_enabled": false
       }
     },
     "collection_hero": {
