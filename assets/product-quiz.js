@@ -146,11 +146,14 @@
       // "sequence": each image rises from below the screen to above it, faster than the page,
       // one after the other — the second only starts once the first has left.
       const strength = parseFloat(this.floats.dataset.strength || '6');
-      const windowSize = Math.min(0.48, Math.max(0.18, 0.5 - strength * 0.03)); // share of the scroll each image takes
+      // Share of the section's scroll each image takes to cross the screen (strength 6 → 0.2 → ~4× page speed).
+      const windowSize = Math.min(0.32, Math.max(0.12, 0.12 + (10 - strength) * 0.02));
+      // Passes happen while the section fills most of the screen, so images aren't cut off by its edges.
+      const pivot = 0.55;
       const ordered = this.floats.dataset.first === 'right' ? [...this.floatEls].reverse() : this.floatEls;
 
       ordered.forEach((el, i) => {
-        const start = 0.5 - windowSize + i * windowSize;
+        const start = pivot - windowSize + i * windowSize;
         const local = Math.min(1, Math.max(0, (progress - start) / windowSize));
         const holder = el.parentElement;
         const naturalTop = holder.getBoundingClientRect().top;
