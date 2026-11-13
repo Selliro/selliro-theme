@@ -4610,3 +4610,55 @@ body .blur-div {
     transition-property: color, background-color, border-color, box-shadow;
   }
 }
+
+/* ==========================================================================
+   Equal section spacing
+   Theme settings → Page layout → Section spacing (body class: section-spacing--uniform)
+
+   Every content section gets half the gap above and below its content, so two neighbouring
+   sections are always exactly one gap apart — and sections with a background color keep
+   breathing room inside it. Edge-to-edge banners (custom banner, slideshow, reveal image)
+   stay flush; the section next to one takes the full gap on that side instead.
+   Overrides each section's own top/bottom padding (that setting returns when the mode is
+   switched to "Use each section's own padding").
+   ========================================================================== */
+
+.section-spacing--uniform {
+  --ss: var(--section-space, 96px);
+}
+
+@media screen and (max-width: 749px) {
+  .section-spacing--uniform {
+    --ss: var(--section-space-mobile, 56px);
+  }
+}
+
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .pq-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .custom-banner, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper {
+  padding-top: calc(var(--ss) / 2) !important;
+  padding-bottom: calc(var(--ss) / 2) !important;
+}
+
+/* Next to a flush banner, or at the very start/end of the page: the full gap on that side */
+.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .pq-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .custom-banner, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
+.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
+.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
+.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper,
+.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .pq-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .custom-banner, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
+.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
+.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
+.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper {
+  padding-top: var(--ss) !important;
+}
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))):has(+ .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .pq-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .custom-banner, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))):has(+ .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))):has(+ .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))):has(+ .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper,
+.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .pq-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .custom-banner, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
+.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
+.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
+.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper {
+  padding-bottom: var(--ss) !important;
+}
