@@ -375,8 +375,7 @@
 }
 
 .rb__hint.is-hidden {
-  opacity: 0;
-  transform: translateY(-4px);
+  display: none;
 }
 
 .rb__editor-hint {
@@ -861,9 +860,23 @@
 
 /* ================================================================ floating images */
 
+/* The stage holds the sentence + trays; floating images live in its side margins, full viewport wide */
+.rb__stage {
+  position: relative;
+}
+
+.rb__head,
+.rb__trays {
+  position: relative;
+  z-index: 2;
+}
+
 .rb-floats {
   position: absolute;
-  inset: 0;
+  top: -6%;
+  bottom: -6%;
+  left: calc(50% - 50vw);
+  right: calc(50% - 50vw);
   z-index: 0;
   pointer-events: none;
 }
@@ -878,8 +891,8 @@
 
 .rb-float--1 { top: 10%; left: 2.5%; }
 .rb-float--2 { top: 4%; right: 3%; width: calc(var(--rb-float-size, 14vw) * 1.12); }
-.rb-float--3 { top: 52%; left: 6%; width: calc(var(--rb-float-size, 14vw) * 0.78); }
-.rb-float--4 { top: 50%; right: 7%; width: calc(var(--rb-float-size, 14vw) * 0.86); }
+.rb-float--3 { top: 58%; left: 7%; width: calc(var(--rb-float-size, 14vw) * 0.78); }
+.rb-float--4 { top: 54%; right: 6%; width: calc(var(--rb-float-size, 14vw) * 0.86); }
 
 .rb-float__inner {
   aspect-ratio: 3 / 4;
