@@ -2285,6 +2285,137 @@
         "padding_top": 48,
         "padding_bottom": 48
       }
+    },
+    "product_quiz_skin": {
+      "type": "product-quiz",
+      "blocks": {
+        "question_skin": {
+          "type": "question",
+          "settings": {
+            "question": "What's your skin type?",
+            "helper": "",
+            "answer_style": "cards",
+            "allow_multiple": false,
+            "allow_skip": false,
+            "answer_1_label": "Dry",
+            "answer_1_products": [
+              "luxury-face-creams",
+              "glass-skin-overnight-mask"
+            ],
+            "answer_2_label": "Oily",
+            "answer_2_products": [
+              "luminous-balance-toner",
+              "sun-cream-spf-protection"
+            ],
+            "answer_3_label": "Combination",
+            "answer_3_products": [
+              "luminous-balance-toner",
+              "brightening-serum"
+            ],
+            "answer_4_label": "Sensitive",
+            "answer_4_products": [
+              "luxury-face-creams",
+              "sun-cream-spf-protection"
+            ],
+            "answer_5_label": "",
+            "answer_6_label": ""
+          }
+        },
+        "question_concern": {
+          "type": "question",
+          "settings": {
+            "question": "What's your main concern?",
+            "helper": "Choose all that apply.",
+            "answer_style": "pills",
+            "allow_multiple": true,
+            "allow_skip": true,
+            "answer_1_label": "Dullness",
+            "answer_1_products": [
+              "brightening-serum"
+            ],
+            "answer_2_label": "Dryness",
+            "answer_2_products": [
+              "glass-skin-overnight-mask",
+              "luxury-face-creams"
+            ],
+            "answer_3_label": "Dark spots",
+            "answer_3_products": [
+              "brightening-serum",
+              "rewind-concealer"
+            ],
+            "answer_4_label": "Fine lines",
+            "answer_4_products": [
+              "glass-skin-overnight-mask"
+            ],
+            "answer_5_label": "Sun damage",
+            "answer_5_products": [
+              "sun-cream-spf-protection"
+            ],
+            "answer_6_label": "Uneven texture",
+            "answer_6_products": [
+              "luminous-balance-toner"
+            ]
+          }
+        },
+        "question_routine": {
+          "type": "question",
+          "settings": {
+            "question": "How much time do you spend on your routine?",
+            "helper": "",
+            "answer_style": "list",
+            "allow_multiple": false,
+            "allow_skip": false,
+            "answer_1_label": "Under 5 minutes",
+            "answer_1_products": [
+              "sun-cream-spf-protection",
+              "comfort-matte-bullet-lipstick"
+            ],
+            "answer_2_label": "5 to 10 minutes",
+            "answer_2_products": [
+              "luminous-balance-toner",
+              "brightening-serum"
+            ],
+            "answer_3_label": "I love a full routine",
+            "answer_3_products": [
+              "glass-skin-overnight-mask",
+              "luxury-face-creams",
+              "rewind-concealer"
+            ],
+            "answer_4_label": "",
+            "answer_5_label": "",
+            "answer_6_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "question_skin",
+        "question_concern",
+        "question_routine"
+      ],
+      "settings": {
+        "eyebrow": "Skin quiz",
+        "heading": "Find your perfect routine",
+        "heading_size": "medium",
+        "text": "<p>Answer three quick questions and we'll match you with the products your skin will love.</p>",
+        "start_label": "Start the quiz",
+        "intro_note": "Takes less than 1 minute",
+        "intro_image": "shopify://shop_images/woman-applying-face-cream_1.png",
+        "media_badge": "Personalised for you",
+        "media_position": "left",
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "accent_color": "#f8d12f",
+        "accent_text_color": "#000000",
+        "card_radius": 16,
+        "auto_advance": true,
+        "remember_result": true,
+        "max_results": 4,
+        "results_columns": 4,
+        "fallback_collection": "all",
+        "best_match_label": "Best match",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
     }
   },
   "order": [
@@ -2298,6 +2429,7 @@
     "ticker_duo_UeLfnF",
     "featured_collection_grid_LHPfHM",
     "before_after_slider_CUEk9V",
+    "product_quiz_skin",
     "reveal_image_yFL9GW",
     "beauty_bundle_feature_RdWw6Q",
     "faq_split_gallery_LpzKU4",
