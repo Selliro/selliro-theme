@@ -341,9 +341,9 @@
         this.floats.classList.add('is-static');
         return;
       }
-      // Share of the section's scroll each image takes to cross the screen: speed 6 → 0.2 (about 4× page speed).
-      this.floatWindow = Math.min(0.34, Math.max(0.12, 0.12 + (10 - speed) * 0.022));
-      if (this.floats.dataset.first === 'right') this.floatEls.reverse();
+      // Share of the section's scroll the images take to cross the screen. Bigger = slower:
+      // speed 4 → 0.51 (about 1.5× page speed), speed 10 → 0.3, speed 1 → 0.62.
+      this.floatWindow = Math.min(0.7, Math.max(0.3, 0.3 + (10 - speed) * 0.035));
 
       this.onFloatScroll = () => {
         if (this.floatFrame) return;
@@ -376,7 +376,7 @@
     }
 
     /**
-     * One image at a time: the first rises from below the screen to above it, then the second follows.
+     * Both images rise together, from below the screen to above it, centred on the middle of the section's scroll.
      * Positions are worked out in screen space so each pass always runs bottom → top, whatever the layout.
      */
     updateFloats() {
@@ -387,7 +387,7 @@
       const pivot = 0.5;
 
       this.floatEls.forEach((el, i) => {
-        const start = pivot - span + i * span;
+        const start = pivot - span / 2;
         const local = Math.min(1, Math.max(0, (progress - start) / span));
         const box = el.getBoundingClientRect();
         const naturalTop = box.top - this.floatRise[i];

@@ -86,7 +86,6 @@
     id="RbFloats-{{ section.id }}"
     data-rb-floats
     data-speed="{{ section.settings.float_speed }}"
-    data-first="{{ section.settings.float_first | default: 'left' }}"
     style="--rb-float-size: {{ section.settings.float_size }}vw; --rb-float-tilt: {{ section.settings.float_tilt }}deg;"
     aria-hidden="true"
   >
@@ -617,22 +616,6 @@
       "type": "image_picker",
       "id": "float_image_2",
       "label": "t:routine_builder.right_image"
-    },
-    {
-      "type": "select",
-      "id": "float_first",
-      "label": "t:routine_builder.rises_first",
-      "options": [
-        {
-          "value": "left",
-          "label": "t:options.left"
-        },
-        {
-          "value": "right",
-          "label": "t:options.right"
-        }
-      ],
-      "default": "left"
     },
     {
       "type": "select",
