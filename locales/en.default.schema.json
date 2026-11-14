@@ -1637,6 +1637,8 @@
         "promo_video_loop": "Loop video",
         "promo_video_controls": "Show video controls",
         "promo_badge": "Badge text",
+        "promo_heading": "Promotion heading",
+        "promo_text": "Promotion text",
         "promo_button": "Button label",
         "promo_link": "Button link",
         "products_per_tab": "Products per tab",

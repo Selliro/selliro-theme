@@ -50,14 +50,14 @@
         {%- if na_use_grid -%}
           <div class="new-arrivals-showcase__promo-sticky">
         {%- endif -%}
-        <div class="new-arrivals-showcase__promo">
+        <div class="new-arrivals-showcase__promo" data-na-promo>
           {%- if promo_media_type == 'image' -%}
           <a
             class="new-arrivals-showcase__promo-media-link"
             href="{{ na_promo_url }}"
             {% if na_promo_url_blank %}aria-disabled="true"{% endif %}
           >
-            <span class="new-arrivals-showcase__promo-label">{{ section.settings.promo_badge | escape }}</span>
+            {%- if section.settings.promo_badge != blank -%}<span class="new-arrivals-showcase__promo-label">{{ section.settings.promo_badge | escape }}</span>{%- endif -%}
             <div class="new-arrivals-showcase__promo-picture">
               {%- if section.settings.promo_image != blank -%}
                 {{
@@ -80,7 +80,7 @@
             class="new-arrivals-showcase__promo-media-link new-arrivals-showcase__promo-media-link--video"
             {% if na_promo_url_blank %}aria-disabled="true"{% endif %}
           >
-            <span class="new-arrivals-showcase__promo-label">{{ section.settings.promo_badge | escape }}</span>
+            {%- if section.settings.promo_badge != blank -%}<span class="new-arrivals-showcase__promo-label">{{ section.settings.promo_badge | escape }}</span>{%- endif -%}
             <div class="new-arrivals-showcase__promo-picture new-arrivals-showcase__promo-picture--video">
               {%- if promo_media_type == 'video_upload' and section.settings.promo_video != blank -%}
                 {%- liquid
@@ -136,6 +136,16 @@
               {%- endif -%}
             </div>
           </div>
+          {%- endif -%}
+          {%- if section.settings.promo_heading != blank or section.settings.promo_text != blank -%}
+            <div class="new-arrivals-showcase__promo-content">
+              {%- if section.settings.promo_heading != blank -%}
+                <h3 class="new-arrivals-showcase__promo-heading" data-na-promo-heading>{{ section.settings.promo_heading | escape }}</h3>
+              {%- endif -%}
+              {%- if section.settings.promo_text != blank -%}
+                <p class="new-arrivals-showcase__promo-text">{{ section.settings.promo_text | escape }}</p>
+              {%- endif -%}
+            </div>
           {%- endif -%}
           <button
             type="button"
