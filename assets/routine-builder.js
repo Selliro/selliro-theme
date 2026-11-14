@@ -15,6 +15,7 @@
 
   const STORAGE_PREFIX = 'routine-builder:';
   const ADVANCE_DELAY = 260;
+  const FLOAT_OVERLAP = 0.35; // second image starts when the first is 35% through its rise
   const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const storage = {
@@ -344,6 +345,7 @@
       // Share of the section's scroll the images take to cross the screen. Bigger = slower:
       // speed 4 → 0.51 (about 1.5× page speed), speed 10 → 0.3, speed 1 → 0.62.
       this.floatWindow = Math.min(0.7, Math.max(0.3, 0.3 + (10 - speed) * 0.035));
+      if (this.floats.dataset.first === 'right') this.floatEls.reverse();
 
       this.onFloatScroll = () => {
         if (this.floatFrame) return;
@@ -376,7 +378,8 @@
     }
 
     /**
-     * Both images rise together, from below the screen to above it, centred on the middle of the section's scroll.
+     * One after the other, overlapping: the first rises from below the screen, and once it is about a third of
+     * the way up, the second follows from the bottom. The pair is centred on the middle of the section's scroll.
      * Positions are worked out in screen space so each pass always runs bottom → top, whatever the layout.
      */
     updateFloats() {
@@ -385,9 +388,11 @@
       const progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
       const span = this.floatWindow;
       const pivot = 0.5;
+      const offset = span * FLOAT_OVERLAP; // how far the first image has travelled when the second sets off
+      const first = pivot - (span + offset * (this.floatEls.length - 1)) / 2;
 
       this.floatEls.forEach((el, i) => {
-        const start = pivot - span / 2;
+        const start = first + i * offset;
         const local = Math.min(1, Math.max(0, (progress - start) / span));
         const box = el.getBoundingClientRect();
         const naturalTop = box.top - this.floatRise[i];
