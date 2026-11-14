@@ -3,13 +3,15 @@
 {% endcomment %}
 
 <style>
-  .featured-collection-grid__title {
-    font-size: {{ section.settings.title_font_size }}px;
+  /* Heading scale matches the other homepage section headings; the setting caps the desktop size */
+  #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__title {
+    font-size: clamp(1.65rem, 3.2vw, {{ section.settings.title_font_size }}px);
+    --text-hl-color: {{ section.settings.highlight_color | default: '#f8d12f' }};
   }
-  .featured-collection-grid__subtitle {
+  #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__subtitle {
     font-size: {{ section.settings.subtitle_font_size }}px;
   }
-  .featured-collection-grid__header {
+  #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__header {
     text-align: {{ section.settings.header_alignment }};
   }
 
@@ -89,12 +91,16 @@
 </style>
 
 {{ 'section-featured-collection-grid.css' | asset_url | stylesheet_tag }}
+{{ 'text-highlight.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'text-highlight.js' | asset_url }}" defer></script>
+<script src="{{ 'featured-collection-grid.js' | asset_url }}" defer></script>
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <section
-  class="featured-collection-grid {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  class="featured-collection-grid {{ section.settings.section_width | default: 'page-width' }} color-{{ section.settings.color_scheme }}"
   id="FeaturedCollectionGrid-{{ section.id }}"
   data-section-id="{{ section.id }}"
+  data-fcg
   style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
 >
   {%- liquid
@@ -108,10 +114,21 @@
   {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
     <div class="featured-collection-grid__header">
       {%- if section.settings.title != blank -%}
-        <h2 class="featured-collection-grid__title h3">{{ section.settings.title }}</h2>
+        {%- liquid
+          assign fcg_heading = section.settings.title | escape
+          assign fcg_hl_word = section.settings.highlight_word | strip | escape
+          assign fcg_hl_style = section.settings.highlight_style | default: 'none'
+          if fcg_hl_word != blank and fcg_hl_style != 'none' and fcg_heading contains fcg_hl_word
+            capture fcg_hl_markup
+              render 'text-highlight', word: fcg_hl_word, style: fcg_hl_style
+            endcapture
+            assign fcg_heading = fcg_heading | replace_first: fcg_hl_word, fcg_hl_markup
+          endif
+        -%}
+        <h2 class="featured-collection-grid__title" data-fcg-title>{{ fcg_heading }}</h2>
       {%- endif -%}
       {%- if section.settings.subtitle != blank -%}
-        <p class="featured-collection-grid__subtitle">{{ section.settings.subtitle }}</p>
+        <p class="featured-collection-grid__subtitle">{{ section.settings.subtitle | escape }}</p>
       {%- endif -%}
     </div>
   {%- endif -%}
@@ -496,13 +513,41 @@
       "default": "Only the best seller products added recently in our catalog"
     },
     {
+      "type": "text",
+      "id": "highlight_word",
+      "label": "t:bundle_builder.highlight_word",
+      "info": "t:bundle_builder.highlight_word_info",
+      "default": "category"
+    },
+    {
+      "type": "select",
+      "id": "highlight_style",
+      "label": "t:bundle_builder.highlight_style",
+      "options": [
+        { "value": "squiggle", "label": "t:bundle_builder.hl_squiggle" },
+        { "value": "wave", "label": "t:bundle_builder.hl_wave" },
+        { "value": "marker", "label": "t:bundle_builder.hl_marker" },
+        { "value": "circle", "label": "t:bundle_builder.hl_circle" },
+        { "value": "none", "label": "t:bundle_builder.hl_none" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "t:bundle_builder.highlight_color",
+      "default": "#f8d12f",
+      "visible_if": "{{ section.settings.highlight_style != 'none' }}"
+    },
+    {
       "type": "range",
       "id": "title_font_size",
       "label": "Title font size",
-      "min": 16,
+      "info": "Largest size on desktop. Smaller screens scale it down.",
+      "min": 24,
       "max": 64,
       "step": 1,
-      "default": 40,
+      "default": 38,
       "unit": "px"
     },
     {
@@ -544,7 +589,17 @@
         { "value": "center", "label": "Center" },
         { "value": "right", "label": "Right" }
       ],
-      "default": "center"
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.section_width",
+      "options": [
+        { "value": "page-width", "label": "t:settings.page_width" },
+        { "value": "full-width", "label": "t:settings.full_width" }
+      ],
+      "default": "page-width"
     },
     {
       "type": "select",

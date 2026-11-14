@@ -13,7 +13,7 @@
       "type": "product-information",
       "blocks": {
         "fbp_fast_bundle_all_bundles_bYrGPB": {
-          "type": "shopify://apps/fbp-fast-bundle/blocks/all_bundles/9e87fbe2-9041-4c23-acf5-322413994cef",
+          "type": "shopify://apps/fast-bundle-upsell/blocks/all_bundles/9e87fbe2-9041-4c23-acf5-322413994cef",
           "settings": {}
         },
         "media-gallery": {
