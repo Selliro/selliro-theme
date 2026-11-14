@@ -130,13 +130,11 @@
         <span class="rb__blob rb__blob--3"></span>
       </div>
     {%- endif -%}
-    {%- if section.settings.show_sparkles -%}
       {%- for i in (1..5) -%}
         <svg class="rb__sparkle rb__sparkle--{{ i }}" viewBox="0 0 24 24" width="24" height="24" focusable="false"><path d="M12 0c.6 5.8 3.2 8.9 12 12-8.8 3.1-11.4 6.2-12 12-.6-5.8-3.2-8.9-12-12C8.8 8.9 11.4 5.8 12 0Z" fill="currentColor"/></svg>
       {%- endfor -%}
       <span class="rb__ring rb__ring--1"></span>
       <span class="rb__ring rb__ring--2"></span>
-    {%- endif -%}
     <span class="rb__grain"></span>
   </div>
 
@@ -305,9 +303,7 @@
                 </p>
               {%- endif -%}
               <h3 class="rb__results-title" tabindex="-1" data-rb-results-title>{{ section.settings.results_done | escape }}</h3>
-              {%- if section.settings.show_summary -%}
-                <ul class="rb__summary list-unstyled" data-rb-summary role="list"></ul>
-              {%- endif -%}
+              <ul class="rb__summary list-unstyled" data-rb-summary role="list"></ul>
             </div>
             <div class="rb__results-actions">
               <div class="rb__nav" data-rb-nav hidden>
@@ -519,16 +515,62 @@
       "default": "page-width"
     },
     {
+      "type": "select",
+      "id": "palette",
+      "label": "t:routine_builder.palette",
+      "options": [
+        {
+          "value": "sunrise",
+          "label": "t:routine_builder.palette_sunrise"
+        },
+        {
+          "value": "botanical",
+          "label": "t:routine_builder.palette_botanical"
+        },
+        {
+          "value": "berry",
+          "label": "t:routine_builder.palette_berry"
+        },
+        {
+          "value": "ocean",
+          "label": "t:routine_builder.palette_ocean"
+        },
+        {
+          "value": "custom",
+          "label": "t:routine_builder.palette_custom"
+        }
+      ],
+      "default": "sunrise"
+    },
+    {
+      "type": "select",
+      "id": "panel_style",
+      "label": "t:routine_builder.panel_style",
+      "options": [
+        {
+          "value": "card",
+          "label": "t:routine_builder.panel_card"
+        },
+        {
+          "value": "open",
+          "label": "t:routine_builder.panel_open"
+        }
+      ],
+      "default": "card"
+    },
+    {
       "type": "color",
       "id": "accent_color",
       "label": "t:routine_builder.accent_color",
+      "info": "t:routine_builder.accent_info",
       "default": "#f8d12f"
     },
     {
       "type": "color",
       "id": "accent_text_color",
       "label": "t:routine_builder.accent_text_color",
-      "default": "#000000"
+      "default": "#000000",
+      "visible_if": "{{ section.settings.palette == 'custom' }}"
     },
     {
       "type": "checkbox",
@@ -688,10 +730,11 @@
       "type": "range",
       "id": "max_results",
       "label": "t:routine_builder.products_to_show",
+      "info": "t:routine_builder.carousel_info",
       "min": 2,
-      "max": 8,
+      "max": 12,
       "step": 1,
-      "default": 4
+      "default": 6
     },
     {
       "type": "range",
