@@ -832,7 +832,8 @@
   padding: 0 1.8rem;
   border: 0;
   border-radius: 999px;
-  background: linear-gradient(135deg, var(--rb-g1), var(--rb-g2));
+  /* solid fill so the theme's global button hover effect can layer on top */
+  background-color: var(--rb-g1);
   color: var(--rb-on-g);
   font: inherit;
   font-weight: 700;
@@ -849,6 +850,7 @@
 
 .rb__results-wrap {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: 0fr;
   opacity: 0;
   margin-top: 0;
@@ -863,6 +865,7 @@
 
 .rb__results-clip {
   min-height: 0;
+  min-width: 0;
   overflow: clip;
   overflow-clip-margin: 60px;
 }
@@ -1248,6 +1251,7 @@
     overflow-x: auto;
     margin-inline: -1rem;
     padding: 0.25rem 1rem 0.5rem;
+    scroll-padding-inline: 1rem;
     scroll-snap-type: x proximity;
     scrollbar-width: none;
   }
