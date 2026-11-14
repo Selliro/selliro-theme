@@ -1,0 +1,99 @@
+/* Heading word highlight — snippets/text-highlight.liquid (used by Bundle builder and New Arrivals).
+   Set the stroke color with --text-hl-color on the heading. */
+
+.text-hl {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  isolation: isolate;
+}
+
+.text-hl__svg {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  color: var(--text-hl-color, currentColor);
+  overflow: visible;
+}
+
+.text-hl__svg path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.1s cubic-bezier(0.65, 0, 0.35, 1) 0.15s;
+}
+
+.text-hl.is-drawn .text-hl__svg path {
+  stroke-dashoffset: 0;
+}
+
+.text-hl--squiggle .text-hl__svg {
+  left: -2%;
+  width: 104%;
+  bottom: -0.32em;
+  height: 0.45em;
+}
+
+.text-hl--wave .text-hl__svg {
+  left: 0;
+  width: 100%;
+  bottom: -0.22em;
+  height: 0.28em;
+}
+
+.text-hl--circle .text-hl__svg {
+  left: -10%;
+  width: 120%;
+  top: -18%;
+  height: 136%;
+}
+
+.text-hl--circle {
+  padding-inline: 0.08em;
+}
+
+/* Marker: a soft highlighter stroke behind the lower half of the word */
+.text-hl--marker::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: -0.08em;
+  right: -0.08em;
+  bottom: 0.06em;
+  height: 0.42em;
+  border-radius: 0.2em 0.35em 0.25em 0.4em;
+  background: var(--text-hl-color, currentColor);
+  opacity: 0.75;
+  transform: scaleX(0) skewX(-8deg);
+  transform-origin: left center;
+  transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.15s;
+}
+
+[dir='rtl'] .text-hl--marker::before {
+  transform-origin: right center;
+}
+
+.text-hl--marker.is-drawn::before {
+  transform: scaleX(1) skewX(-8deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-hl__svg path {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+
+  .text-hl--marker::before {
+    transform: skewX(-8deg);
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .text-hl__svg {
+    color: CanvasText;
+  }
+
+  .text-hl--marker::before {
+    background: Highlight;
+  }
+}
