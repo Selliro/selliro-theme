@@ -13,6 +13,7 @@
 {{ 'section-new-arrivals-showcase.css' | asset_url | stylesheet_tag }}
 {{ 'new-arrivals-quick-view.css' | asset_url | stylesheet_tag }}
 {{ 'section-bundle-builder.css' | asset_url | stylesheet_tag }}
+{{ 'text-highlight.css' | asset_url | stylesheet_tag }}
 
 {%- liquid
   assign source_products = section.settings.products
@@ -92,12 +93,12 @@
           assign hl_style = section.settings.highlight_style | default: 'none'
           if hl_word != blank and hl_style != 'none' and heading_html contains hl_word
             capture hl_markup
-              render 'bundle-builder-highlight', word: hl_word, style: hl_style
+              render 'text-highlight', word: hl_word, style: hl_style
             endcapture
             assign heading_html = heading_html | replace_first: hl_word, hl_markup
           endif
         -%}
-        <h2 class="bb__heading" style="--bb-hl: {{ section.settings.highlight_color }};">{{ heading_html }}</h2>
+        <h2 class="bb__heading" style="--text-hl-color: {% if section.settings.highlight_color != blank %}{{ section.settings.highlight_color }}{% else %}var(--bb-accent){% endif %};">{{ heading_html }}</h2>
       {%- endif -%}
       {%- if section.settings.text != blank -%}
         <div class="bb__text rte">{{ section.settings.text }}</div>
@@ -296,6 +297,7 @@
 <script src="{{ 'new-arrivals-components.js' | asset_url }}" defer></script>
 <script src="{{ 'new-arrivals-quick-view.js' | asset_url }}" defer></script>
 <script src="{{ 'bundle-builder.js' | asset_url }}" defer></script>
+<script src="{{ 'text-highlight.js' | asset_url }}" defer></script>
 
 {% schema %}
 {

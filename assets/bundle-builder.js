@@ -115,28 +115,10 @@
       window.addEventListener('resize', this.setStickyTop, { passive: true });
       window.addEventListener('load', this.setStickyTop, { once: true });
 
-      // Draw the heading underline when it scrolls into view.
-      const hl = this.querySelector('[data-bb-hl]');
-      if (hl) {
-        if (reducedMotion()) hl.classList.add('is-drawn');
-        else {
-          this.hlIo = new IntersectionObserver(
-            (entries) => {
-              if (entries.some((e) => e.isIntersecting)) {
-                hl.classList.add('is-drawn');
-                this.hlIo.disconnect();
-              }
-            },
-            { threshold: 0.6 }
-          );
-          this.hlIo.observe(hl);
-        }
-      }
     }
 
     disconnectedCallback() {
       if (this.setStickyTop) window.removeEventListener('resize', this.setStickyTop);
-      this.hlIo?.disconnect();
       this.barIo?.disconnect();
       clearTimeout(this.successTimer);
     }
