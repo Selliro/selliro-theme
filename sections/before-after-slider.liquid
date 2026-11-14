@@ -49,6 +49,7 @@
   assign label_after = section.settings.after_label | strip
   assign label_inset = section.settings.label_inset | default: 12
   assign show_particles = section.settings.enable_particles
+  assign show_story = section.settings.show_story
 -%}
 
 <section
@@ -75,7 +76,7 @@
     <div
       class="before-after-slider__inner{% if has_copy == false %} before-after-slider__inner--media-full{% elsif section.settings.layout == 'media_right' %} before-after-slider__inner--media-right{% endif %}"
     >
-      <div class="before-after-slider__media">
+      <div class="before-after-slider__media{% if show_story %} before-after-slider__media--story{% endif %}">
         <span id="BeforeAfterSlider-hint-{{ section.id }}" class="visually-hidden">
           {{- 'accessibility.before_after_slider_help' | t -}}
         </span>
@@ -112,6 +113,9 @@
                 {{- label_after | escape -}}
               </span>
             {%- endif -%}
+            {%- if show_story -%}
+              {% render 'before-after-story', section: section, side: 'after', variant: 'overlay' %}
+            {%- endif -%}
             <div class="before-after-slider__clip">
               {%- if before_img != blank -%}
                 {{
@@ -134,6 +138,9 @@
                 >
                   {{- label_before | escape -}}
                 </span>
+              {%- endif -%}
+              {%- if show_story -%}
+                {% render 'before-after-story', section: section, side: 'before', variant: 'overlay' %}
               {%- endif -%}
             </div>
             <div class="before-after-slider__divider" aria-hidden="true"></div>
@@ -159,6 +166,16 @@
             </span>
           </button>
         </div>
+        {%- if show_story -%}
+          {%- comment -%} Narrow screens: the same story sits under the image instead of on it {%- endcomment -%}
+          <div class="ba-stories">
+            {% render 'before-after-story', section: section, side: 'before', variant: 'stacked' %}
+            {% render 'before-after-story', section: section, side: 'after', variant: 'stacked' %}
+          </div>
+        {%- endif -%}
+        {%- if section.settings.results_note != blank -%}
+          <p class="ba-note">{{ section.settings.results_note | escape }}</p>
+        {%- endif -%}
       </div>
 
       {%- if has_copy -%}
@@ -314,6 +331,61 @@
       "unit": "px",
       "label": "Label inset from edges",
       "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Skin story"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_story",
+      "label": "Show skin story on the images",
+      "info": "A short note on each side of the comparison. On small screens it moves under the image.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "before_story_eyebrow",
+      "label": "Before — small heading",
+      "default": "Day 1"
+    },
+    {
+      "type": "text",
+      "id": "before_story_title",
+      "label": "Before — title",
+      "default": "Breakouts & redness"
+    },
+    {
+      "type": "textarea",
+      "id": "before_story_points",
+      "label": "Before — points",
+      "info": "One point per line.",
+      "default": "Active blemishes\nUneven, red tone\nOily, congested pores"
+    },
+    {
+      "type": "text",
+      "id": "after_story_eyebrow",
+      "label": "After — small heading",
+      "default": "Day 28"
+    },
+    {
+      "type": "text",
+      "id": "after_story_title",
+      "label": "After — title",
+      "default": "Clear, calm & glowing"
+    },
+    {
+      "type": "textarea",
+      "id": "after_story_points",
+      "label": "After — points",
+      "info": "One point per line.",
+      "default": "Visibly fewer blemishes\nEven, balanced tone\nRefined, matte pores"
+    },
+    {
+      "type": "text",
+      "id": "results_note",
+      "label": "Note under the images",
+      "default": "Results after 4 weeks of daily use. Individual results may vary."
     },
     {
       "type": "header",

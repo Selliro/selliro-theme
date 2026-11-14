@@ -1,0 +1,42 @@
+{%- doc -%}
+  One side of the before / after skin story: eyebrow, title and a short list of points.
+
+  @param {object} section - The before-after-slider section
+  @param {string} side - before | after
+  @param {string} variant - overlay (on the image) | stacked (below the image)
+{%- enddoc -%}
+{%- liquid
+  assign k_eyebrow = side | append: '_story_eyebrow'
+  assign k_title = side | append: '_story_title'
+  assign k_points = side | append: '_story_points'
+  assign s_eyebrow = section.settings[k_eyebrow]
+  assign s_title = section.settings[k_title]
+  assign s_points = section.settings[k_points] | strip | newline_to_br | split: '<br />'
+-%}
+{%- if s_eyebrow != blank or s_title != blank or s_points.size > 0 -%}
+  <div class="ba-story ba-story--{{ side }} ba-story--{{ variant }}">
+    {%- if s_eyebrow != blank -%}
+      <p class="ba-story__eyebrow">{{ s_eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if s_title != blank -%}
+      <p class="ba-story__title">{{ s_title | escape }}</p>
+    {%- endif -%}
+    {%- if s_points.size > 0 -%}
+      <ul class="ba-story__points" role="list">
+        {%- for point in s_points -%}
+          {%- assign p = point | strip -%}
+          {%- if p != blank -%}
+            <li>
+              {%- if side == 'after' -%}
+                <svg class="ba-story__icon" viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="8" fill="currentColor" opacity=".16"/><path d="m4.8 8.3 2.1 2.1 4.3-4.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              {%- else -%}
+                <svg class="ba-story__icon" viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true" focusable="false"><circle cx="8" cy="8" r="8" fill="currentColor" opacity=".16"/><circle cx="8" cy="8" r="2.6" fill="currentColor"/></svg>
+              {%- endif -%}
+              {{ p | escape }}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+{%- endif -%}
