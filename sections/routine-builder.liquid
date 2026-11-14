@@ -111,7 +111,7 @@
 
 <routine-builder
   id="RoutineBuilder-{{ section.id }}"
-  class="rb rb--align-{{ section.settings.alignment }} {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}{% if section.settings.show_mood %} rb--mood{% endif %}"
+  class="rb rb--align-{{ section.settings.alignment }} rb--palette-{{ palette }} rb--{{ panel_style }} {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}{% if section.settings.show_mood %} rb--mood{% endif %}"
   data-section-id="{{ section.id }}"
   data-max-results="{{ section.settings.max_results }}"
   data-remember="{{ section.settings.remember }}"
@@ -120,13 +120,25 @@
   data-new-arrivals-root
   data-new-arrivals-qv-id="new-arrivals-qv-drawer-{{ section.id }}"
 >
-  {%- if section.settings.show_mood -%}
-    <div class="rb__mood" aria-hidden="true">
-      <span class="rb__blob rb__blob--1"></span>
-      <span class="rb__blob rb__blob--2"></span>
-      <span class="rb__blob rb__blob--3"></span>
-    </div>
-  {%- endif -%}
+  <div class="rb__panel">
+  {%- comment -%} Decorative backdrop: palette wash, mood clouds, grain and sparkles {%- endcomment -%}
+  <div class="rb__canvas" aria-hidden="true">
+    {%- if section.settings.show_mood -%}
+      <div class="rb__mood">
+        <span class="rb__blob rb__blob--1"></span>
+        <span class="rb__blob rb__blob--2"></span>
+        <span class="rb__blob rb__blob--3"></span>
+      </div>
+    {%- endif -%}
+    {%- if section.settings.show_sparkles -%}
+      {%- for i in (1..5) -%}
+        <svg class="rb__sparkle rb__sparkle--{{ i }}" viewBox="0 0 24 24" width="24" height="24" focusable="false"><path d="M12 0c.6 5.8 3.2 8.9 12 12-8.8 3.1-11.4 6.2-12 12-.6-5.8-3.2-8.9-12-12C8.8 8.9 11.4 5.8 12 0Z" fill="currentColor"/></svg>
+      {%- endfor -%}
+      <span class="rb__ring rb__ring--1"></span>
+      <span class="rb__ring rb__ring--2"></span>
+    {%- endif -%}
+    <span class="rb__grain"></span>
+  </div>
 
   <div class="rb__inner">
     <div class="rb__stage">
@@ -147,9 +159,11 @@
             {%- if block.settings.before != blank -%}
               <span class="rb__words">{{ block.settings.before | escape }} </span>
             {%- endif -%}
+            {%- assign tint = b_index | modulo: 3 | plus: 1 -%}
             <button
               type="button"
               class="rb__blank"
+              style="--rb-tint: var(--rb-p{{ tint }});"
               data-rb-blank="{{ b_index }}"
               aria-expanded="false"
               aria-controls="RbTray-{{ section.id }}-{{ block.id }}"
@@ -185,6 +199,7 @@
       <div class="rb__status">
         <div class="rb__meter" aria-hidden="true">
           {%- for i in (1..blank_count) -%}<span class="rb__meter-seg"></span>{%- endfor -%}
+          <span class="rb__meter-count"><span data-rb-count>0</span>/{{ blank_count }}</span>
         </div>
         {%- if section.settings.hint != blank -%}
           <p class="rb__hint" data-rb-hint>{{ section.settings.hint | escape }}</p>
@@ -202,6 +217,7 @@
 
     {%- comment -%} Answer trays — one per blank, only the active one is shown {%- endcomment -%}
     <div class="rb__trays">
+      {%- assign tray_index = 0 -%}
       {%- for block in section.blocks -%}
         {%- if block.type == 'blank' -%}
           {%- liquid
@@ -220,6 +236,7 @@
             hidden
           >
             <legend class="rb__tray-legend">
+              <span class="rb__tray-step" aria-hidden="true">{{ tray_index | plus: 1 }}/{{ blank_count }}</span>
               {{- block.settings.question | default: block.settings.before | escape -}}
               {%- if multiple -%}<span class="rb__tray-note">{{ section.settings.multiple_note | escape }}</span>{%- endif -%}
             </legend>
@@ -258,6 +275,7 @@
                   {%- else -%}
                     <span class="rb__option-dot" aria-hidden="true"></span>
                   {%- endif -%}
+                  <svg class="rb__option-check" viewBox="0 0 16 16" width="16" height="16" fill="none" aria-hidden="true" focusable="false"><path d="m3.5 8.5 3 3 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   <span class="rb__option-label">{{ label | escape }}</span>
                 </label>
               {%- endfor -%}
@@ -266,6 +284,7 @@
               <button type="button" class="rb__done" data-rb-done>{{ section.settings.done_label | escape }}</button>
             {%- endif -%}
           </fieldset>
+          {%- assign tray_index = tray_index | plus: 1 -%}
         {%- endif -%}
       {%- endfor -%}
     </div>
