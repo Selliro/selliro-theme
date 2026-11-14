@@ -4,10 +4,13 @@
 
 /* ─── Section root ──────────────────────────────────────────── */
 .featured-collection-grid {
+  /* no padding/margin reset here: .page-width supplies the page margins (top/bottom padding comes from the section settings) */
   background-color: var(--color-background);
-  padding: 0;
-  margin: 0;
   overflow: hidden;
+}
+
+.featured-collection-grid__header {
+  margin-inline: auto;
 }
 
 /* ─── Header ────────────────────────────────────────────────── */

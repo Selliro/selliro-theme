@@ -1865,7 +1865,7 @@
         "subtitle_font_size": 15,
         "padding_top": 40,
         "padding_bottom": 40,
-        "header_alignment": "left",
+        "header_alignment": "center",
         "tall_card_side": "right",
         "card_gradient": "none",
         "card_gradient_color": "#535353",
