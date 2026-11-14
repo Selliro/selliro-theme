@@ -401,7 +401,7 @@
 .before-after-slider__caption {
   position: absolute;
   z-index: 2;
-  max-width: min(22rem, 42cqw);
+  max-width: min(22rem, 44cqw);
   margin: 0;
   padding: 0.55em 1em;
   border: 1px solid rgb(255 255 255 / 0.75);
@@ -413,10 +413,20 @@
   color: #2a211a;
   font-family: var(--font-heading--family);
   font-weight: var(--font-heading--weight, 500);
-  font-size: clamp(0.9rem, 2.4cqw, 1.5rem);
+  font-size: clamp(0.75rem, 2.4cqw, 1.5rem);
   line-height: 1.2;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   pointer-events: none;
+}
+
+@container beforeafter (max-width: 560px) {
+  .before-after-slider__caption {
+    padding: 0.45em 0.8em;
+    border-radius: 10px;
+  }
 }
 
 /* Before: bottom-left of its half (inside the clip, so it hides as the divider moves left) */
