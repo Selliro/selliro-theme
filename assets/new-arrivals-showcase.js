@@ -582,3 +582,64 @@
     }
   });
 })();
+
+/**
+ * Promotion card entrance: badge drops in, heading rises word by word, then the text and button.
+ * Skipped for reduced motion and in the theme editor; content is fully visible without it.
+ */
+(function () {
+  if (window.__naPromoAnimInit) return;
+  window.__naPromoAnimInit = true;
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  function splitWords(el) {
+    if (el.dataset.naSplit) return el.querySelectorAll('.na-promo-w').length;
+    var words = el.textContent.trim().split(/\s+/);
+    el.textContent = '';
+    words.forEach(function (word, i) {
+      var span = document.createElement('span');
+      span.className = 'na-promo-w';
+      span.style.setProperty('--i', String(i));
+      span.textContent = word;
+      el.appendChild(span);
+      if (i < words.length - 1) el.appendChild(document.createTextNode(' '));
+    });
+    el.dataset.naSplit = 'true';
+    return words.length;
+  }
+
+  function setup(root) {
+    if (reduced.matches || !('IntersectionObserver' in window)) return;
+    if (window.Shopify && window.Shopify.designMode) return;
+    var cards = (root || document).querySelectorAll('[data-na-promo]:not([data-na-promo-ready])');
+    if (!cards.length) return;
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+          var card = entry.target;
+          // Hand back to normal styles afterwards so hover effects run without delays.
+          setTimeout(function () {
+            card.classList.remove('na-promo-anim', 'is-in');
+          }, 3200);
+        });
+      },
+      { threshold: 0.3 }
+    );
+    cards.forEach(function (card) {
+      card.setAttribute('data-na-promo-ready', '');
+      var heading = card.querySelector('[data-na-promo-heading]');
+      var count = heading ? splitWords(heading) : 0;
+      card.style.setProperty('--na-promo-end', 0.35 + count * 0.09 + 's');
+      card.classList.add('na-promo-anim');
+      io.observe(card);
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setup(); });
+  else setup();
+  document.addEventListener('shopify:section:load', function (e) { setup(e.target); });
+})();

@@ -353,13 +353,35 @@ image-loader.image-loader[data-loaded]::before {
 
 .new-arrivals-showcase__promo-label {
   position: absolute;
-  top: 0.95rem;
-  left: 0.95rem;
+  top: 1rem;
+  left: 1rem;
   z-index: 2;
-  font-size: 0.625rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  max-width: calc(100% - 2rem);
+  padding: 0.45rem 0.8rem 0.45rem 0.65rem;
+  border: 1px solid rgb(255 255 255 / 0.35);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-size: 0.75rem;
   font-weight: 800;
-  letter-spacing: 0.14em;
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: #fff;
+}
+
+.new-arrivals-showcase__promo-label::before {
+  content: '';
+  flex-shrink: 0;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--new-arrivals-cta, #f5c518);
+  box-shadow: 0 0 0 3px rgb(255 255 255 / 0.25);
 }
 
 .new-arrivals-showcase__promo-picture {
@@ -387,25 +409,168 @@ image-loader.image-loader[data-loaded]::before {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(to top, rgb(0 0 0 / 0.58) 0%, transparent 52%);
+  /* darker at the bottom for the heading + button, light veil at the top for the badge */
+  background:
+    linear-gradient(to top, rgb(0 0 0 / 0.78) 0%, rgb(0 0 0 / 0.45) 32%, transparent 62%),
+    linear-gradient(to bottom, rgb(0 0 0 / 0.32) 0%, transparent 22%);
   pointer-events: none;
+}
+
+/* Heading + text sit just above the button, left-aligned with the badge */
+.new-arrivals-showcase__promo-content {
+  position: absolute;
+  z-index: 2;
+  left: 1rem;
+  right: 1rem;
+  bottom: calc(1.1rem + 2.75rem + 1rem);
+  display: grid;
+  gap: 0.45rem;
+  color: #fff;
+  pointer-events: none;
+  text-shadow: 0 1px 14px rgb(0 0 0 / 0.35);
+}
+
+.new-arrivals-showcase__promo-heading {
+  margin: 0;
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight, 700);
+  font-size: clamp(1.6rem, 2.3vw, 2.1rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: none;
+  text-wrap: balance;
+  color: #fff;
+}
+
+.new-arrivals-showcase__promo-text {
+  margin: 0;
+  max-width: 22ch;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: rgb(255 255 255 / 0.9);
+}
+
+@media (max-width: 989px) {
+  .new-arrivals-showcase__promo-heading {
+    font-size: 1.6rem;
+  }
+
+  .new-arrivals-showcase__promo-text {
+    max-width: none;
+  }
+}
+
+/* ---- Promo entrance (added by new-arrivals-showcase.js; content always shows without JS) */
+.na-promo-w {
+  display: inline-block;
+}
+
+.new-arrivals-showcase__promo.na-promo-anim .new-arrivals-showcase__promo-label,
+.new-arrivals-showcase__promo.na-promo-anim .na-promo-w,
+.new-arrivals-showcase__promo.na-promo-anim .new-arrivals-showcase__promo-text,
+.new-arrivals-showcase__promo.na-promo-anim .new-arrivals-showcase__promo-btn {
+  opacity: 0;
+}
+
+.new-arrivals-showcase__promo.na-promo-anim .new-arrivals-showcase__promo-label {
+  translate: 0 -12px;
+}
+
+.new-arrivals-showcase__promo.na-promo-anim .na-promo-w {
+  translate: 0 0.6em;
+  rotate: 4deg;
+  filter: blur(8px);
+}
+
+.new-arrivals-showcase__promo.na-promo-anim .new-arrivals-showcase__promo-text {
+  translate: 0 14px;
+}
+
+.new-arrivals-showcase__promo.na-promo-anim .new-arrivals-showcase__promo-btn {
+  translate: 0 18px;
+  scale: 0.94;
+}
+
+.new-arrivals-showcase__promo.na-promo-anim :is(.new-arrivals-showcase__promo-video, .new-arrivals-showcase__promo-img, .new-arrivals-showcase__promo-iframe) {
+  scale: 1.12;
+}
+
+.new-arrivals-showcase__promo.na-promo-anim.is-in .new-arrivals-showcase__promo-label {
+  opacity: 1;
+  translate: 0 0;
+  transition: opacity 0.6s ease 0.1s, translate 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+}
+
+.new-arrivals-showcase__promo.na-promo-anim.is-in .na-promo-w {
+  opacity: 1;
+  translate: 0 0;
+  rotate: 0deg;
+  filter: blur(0);
+  transition-property: opacity, translate, rotate, filter;
+  transition-duration: 0.7s, 0.95s, 0.95s, 0.7s;
+  transition-timing-function: ease, cubic-bezier(0.22, 1, 0.36, 1), cubic-bezier(0.22, 1, 0.36, 1), ease;
+  transition-delay: calc(0.25s + var(--i, 0) * 90ms);
+}
+
+.new-arrivals-showcase__promo.na-promo-anim.is-in .new-arrivals-showcase__promo-text {
+  opacity: 1;
+  translate: 0 0;
+  transition: opacity 0.7s ease var(--na-promo-end, 0.6s), translate 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--na-promo-end, 0.6s);
+}
+
+.new-arrivals-showcase__promo.na-promo-anim.is-in .new-arrivals-showcase__promo-btn {
+  opacity: 1;
+  translate: 0 0;
+  scale: 1;
+  transition:
+    opacity 0.6s ease calc(var(--na-promo-end, 0.6s) + 0.15s),
+    translate 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--na-promo-end, 0.6s) + 0.15s),
+    scale 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--na-promo-end, 0.6s) + 0.15s);
+}
+
+.new-arrivals-showcase__promo.na-promo-anim.is-in :is(.new-arrivals-showcase__promo-video, .new-arrivals-showcase__promo-img, .new-arrivals-showcase__promo-iframe) {
+  scale: 1;
+  transition: scale 2.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Gentle zoom on the media while hovering the card */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  :is(.new-arrivals-showcase__promo-video, .new-arrivals-showcase__promo-img) {
+    transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .new-arrivals-showcase__promo:hover :is(.new-arrivals-showcase__promo-video, .new-arrivals-showcase__promo-img) {
+    transform: scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .new-arrivals-showcase__promo.na-promo-anim :is(.new-arrivals-showcase__promo-label, .na-promo-w, .new-arrivals-showcase__promo-text, .new-arrivals-showcase__promo-btn, .new-arrivals-showcase__promo-video, .new-arrivals-showcase__promo-img, .new-arrivals-showcase__promo-iframe) {
+    opacity: 1 !important;
+    translate: none !important;
+    rotate: none !important;
+    scale: none !important;
+    filter: none !important;
+  }
 }
 
 .new-arrivals-showcase__promo-btn {
   position: absolute;
   z-index: 3;
-  left: 0.625rem;
-  right: 0.625rem;
+  left: 1rem;
+  right: 1rem;
   bottom: 1.1rem;
   box-sizing: border-box;
   width: auto;
   max-width: none;
   margin: 0;
+  min-height: 2.75rem;
   padding: 0.8rem 1rem;
   border: none;
   border-radius: 999px;
   font: inherit;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 700;
   line-height: 1.2;
   text-align: center;
