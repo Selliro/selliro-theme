@@ -145,6 +145,17 @@
     "none": "없음"
   },
   "routine_builder": {
+    "palette": "색상 팔레트",
+    "palette_sunrise": "선라이즈",
+    "palette_botanical": "보태니컬",
+    "palette_berry": "베리",
+    "palette_ocean": "오션",
+    "palette_custom": "사용자 지정 (강조 색상)",
+    "panel_style": "배경 스타일",
+    "panel_card": "둥근 카드",
+    "panel_open": "전체 너비",
+    "accent_info": "빠른 추가 버튼에 사용되며, 팔레트가 사용자 지정일 때는 섹션 전체에 사용됩니다.",
+    "carousel_info": "제품 수가 열 수보다 많으면 캐러셀로 표시됩니다.",
     "name": "루틴 빌더",
     "blank": "빈칸",
     "sentence": "문장",

@@ -145,6 +145,17 @@
     "none": "Nessuna"
   },
   "routine_builder": {
+    "palette": "Tavolozza colori",
+    "palette_sunrise": "Alba",
+    "palette_botanical": "Botanica",
+    "palette_berry": "Frutti di bosco",
+    "palette_ocean": "Oceano",
+    "palette_custom": "Personalizzata (colore di accento)",
+    "panel_style": "Stile dello sfondo",
+    "panel_card": "Scheda arrotondata",
+    "panel_open": "Larghezza intera",
+    "accent_info": "Usato per i pulsanti di aggiunta rapida e per l'intera sezione con la tavolozza Personalizzata.",
+    "carousel_info": "Quando ci sono più prodotti che colonne, vengono mostrati in un carosello.",
     "name": "Crea routine",
     "blank": "Spazio vuoto",
     "sentence": "Frase",

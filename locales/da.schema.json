@@ -145,6 +145,17 @@
     "none": "Ingen"
   },
   "routine_builder": {
+    "palette": "Farvepalet",
+    "palette_sunrise": "Solopgang",
+    "palette_botanical": "Botanisk",
+    "palette_berry": "Bær",
+    "palette_ocean": "Hav",
+    "palette_custom": "Tilpasset (accentfarve)",
+    "panel_style": "Baggrundsstil",
+    "panel_card": "Afrundet kort",
+    "panel_open": "Fuld bredde",
+    "accent_info": "Bruges til knapperne til hurtig tilføjelse og til hele sektionen, når paletten er Tilpasset.",
+    "carousel_info": "Når der er flere produkter end kolonner, vises de som en karrusel.",
     "name": "Rutinebygger",
     "blank": "Tomt felt",
     "sentence": "Sætning",

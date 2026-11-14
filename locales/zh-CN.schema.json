@@ -145,6 +145,17 @@
     "none": "无"
   },
   "routine_builder": {
+    "palette": "配色方案",
+    "palette_sunrise": "日出",
+    "palette_botanical": "植物",
+    "palette_berry": "莓果",
+    "palette_ocean": "海洋",
+    "palette_custom": "自定义（强调色）",
+    "panel_style": "背景样式",
+    "panel_card": "圆角卡片",
+    "panel_open": "全宽",
+    "accent_info": "用于快速添加按钮；当配色方案为“自定义”时用于整个分区。",
+    "carousel_info": "当产品数量多于列数时，将以轮播形式显示。",
     "name": "护肤流程生成器",
     "blank": "空格",
     "sentence": "句子",

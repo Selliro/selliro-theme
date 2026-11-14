@@ -145,6 +145,17 @@
     "none": "Yok"
   },
   "routine_builder": {
+    "palette": "Renk paleti",
+    "palette_sunrise": "Gün doğumu",
+    "palette_botanical": "Botanik",
+    "palette_berry": "Orman meyvesi",
+    "palette_ocean": "Okyanus",
+    "palette_custom": "Özel (vurgu rengi)",
+    "panel_style": "Arka plan stili",
+    "panel_card": "Yuvarlatılmış kart",
+    "panel_open": "Tam genişlik",
+    "accent_info": "Hızlı ekle düğmelerinde ve palet Özel olduğunda tüm bölümde kullanılır.",
+    "carousel_info": "Sütundan fazla ürün olduğunda ürünler karusel olarak gösterilir.",
     "name": "Rutin oluşturucu",
     "blank": "Boşluk",
     "sentence": "Cümle",

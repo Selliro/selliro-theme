@@ -145,6 +145,17 @@
     "none": "Geen"
   },
   "routine_builder": {
+    "palette": "Kleurenpalet",
+    "palette_sunrise": "Zonsopgang",
+    "palette_botanical": "Botanisch",
+    "palette_berry": "Bes",
+    "palette_ocean": "Oceaan",
+    "palette_custom": "Aangepast (accentkleur)",
+    "panel_style": "Achtergrondstijl",
+    "panel_card": "Afgeronde kaart",
+    "panel_open": "Volledige breedte",
+    "accent_info": "Gebruikt voor de knoppen voor snel toevoegen, en voor de hele sectie bij het palet Aangepast.",
+    "carousel_info": "Als er meer producten dan kolommen zijn, worden ze als carrousel getoond.",
     "name": "Routinebouwer",
     "blank": "Leeg vak",
     "sentence": "Zin",

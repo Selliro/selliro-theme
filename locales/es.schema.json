@@ -145,6 +145,17 @@
     "none": "Ninguna"
   },
   "routine_builder": {
+    "palette": "Paleta de colores",
+    "palette_sunrise": "Amanecer",
+    "palette_botanical": "Botánica",
+    "palette_berry": "Frutos rojos",
+    "palette_ocean": "Océano",
+    "palette_custom": "Personalizada (color de acento)",
+    "panel_style": "Estilo de fondo",
+    "panel_card": "Tarjeta redondeada",
+    "panel_open": "Ancho completo",
+    "accent_info": "Se usa en los botones de añadir rápido y en toda la sección cuando la paleta es Personalizada.",
+    "carousel_info": "Si hay más productos que columnas, se muestran en un carrusel.",
     "name": "Creador de rutinas",
     "blank": "Hueco",
     "sentence": "Frase",

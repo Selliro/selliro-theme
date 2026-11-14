@@ -145,6 +145,17 @@
     "none": "Aucune"
   },
   "routine_builder": {
+    "palette": "Palette de couleurs",
+    "palette_sunrise": "Aurore",
+    "palette_botanical": "Botanique",
+    "palette_berry": "Baies",
+    "palette_ocean": "Océan",
+    "palette_custom": "Personnalisée (couleur d'accent)",
+    "panel_style": "Style d'arrière-plan",
+    "panel_card": "Carte arrondie",
+    "panel_open": "Pleine largeur",
+    "accent_info": "Utilisée pour les boutons d'ajout rapide, et pour toute la section avec la palette Personnalisée.",
+    "carousel_info": "Lorsqu'il y a plus de produits que de colonnes, ils s'affichent en carrousel.",
     "name": "Créateur de routine",
     "blank": "Blanc",
     "sentence": "Phrase",

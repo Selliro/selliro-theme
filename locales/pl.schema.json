@@ -145,6 +145,17 @@
     "none": "Brak"
   },
   "routine_builder": {
+    "palette": "Paleta kolorów",
+    "palette_sunrise": "Wschód słońca",
+    "palette_botanical": "Botaniczna",
+    "palette_berry": "Jagodowa",
+    "palette_ocean": "Oceaniczna",
+    "palette_custom": "Niestandardowa (kolor akcentu)",
+    "panel_style": "Styl tła",
+    "panel_card": "Zaokrąglona karta",
+    "panel_open": "Pełna szerokość",
+    "accent_info": "Używany w przyciskach szybkiego dodawania oraz w całej sekcji przy palecie Niestandardowa.",
+    "carousel_info": "Gdy produktów jest więcej niż kolumn, są wyświetlane w karuzeli.",
     "name": "Kreator rutyny",
     "blank": "Luka",
     "sentence": "Zdanie",

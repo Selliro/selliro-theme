@@ -145,6 +145,17 @@
     "none": "Nenhuma"
   },
   "routine_builder": {
+    "palette": "Paleta de cores",
+    "palette_sunrise": "Amanhecer",
+    "palette_botanical": "Botânica",
+    "palette_berry": "Frutas vermelhas",
+    "palette_ocean": "Oceano",
+    "palette_custom": "Personalizada (cor de destaque)",
+    "panel_style": "Estilo do fundo",
+    "panel_card": "Cartão arredondado",
+    "panel_open": "Largura total",
+    "accent_info": "Usada nos botões de adição rápida e em toda a seção quando a paleta é Personalizada.",
+    "carousel_info": "Quando houver mais produtos do que colunas, eles aparecem em um carrossel.",
     "name": "Criador de rotina",
     "blank": "Lacuna",
     "sentence": "Frase",

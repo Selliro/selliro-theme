@@ -145,6 +145,17 @@
     "none": "None"
   },
   "routine_builder": {
+    "palette": "Color palette",
+    "palette_sunrise": "Sunrise",
+    "palette_botanical": "Botanical",
+    "palette_berry": "Berry",
+    "palette_ocean": "Ocean",
+    "palette_custom": "Custom (accent color)",
+    "panel_style": "Background style",
+    "panel_card": "Rounded card",
+    "panel_open": "Full width",
+    "accent_info": "Used for the quick add buttons, and for the whole section when the palette is Custom.",
+    "carousel_info": "When there are more products than columns, they show as a carousel.",
     "name": "Routine builder",
     "blank": "Blank",
     "sentence": "Sentence",

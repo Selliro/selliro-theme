@@ -145,6 +145,17 @@
     "none": "無"
   },
   "routine_builder": {
+    "palette": "配色方案",
+    "palette_sunrise": "日出",
+    "palette_botanical": "植物",
+    "palette_berry": "莓果",
+    "palette_ocean": "海洋",
+    "palette_custom": "自訂（強調色）",
+    "panel_style": "背景樣式",
+    "panel_card": "圓角卡片",
+    "panel_open": "全寬",
+    "accent_info": "用於快速加入按鈕；當配色方案為「自訂」時用於整個區段。",
+    "carousel_info": "當商品數量多於欄數時，將以輪播方式顯示。",
     "name": "保養流程產生器",
     "blank": "空格",
     "sentence": "句子",

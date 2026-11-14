@@ -145,6 +145,17 @@
     "none": "Keine"
   },
   "routine_builder": {
+    "palette": "Farbpalette",
+    "palette_sunrise": "Sonnenaufgang",
+    "palette_botanical": "Botanisch",
+    "palette_berry": "Beere",
+    "palette_ocean": "Ozean",
+    "palette_custom": "Benutzerdefiniert (Akzentfarbe)",
+    "panel_style": "Hintergrundstil",
+    "panel_card": "Abgerundete Karte",
+    "panel_open": "Volle Breite",
+    "accent_info": "Wird für die Schnellkauf-Schaltflächen verwendet und bei der Palette „Benutzerdefiniert“ für den ganzen Abschnitt.",
+    "carousel_info": "Wenn es mehr Produkte als Spalten gibt, werden sie als Karussell angezeigt.",
     "name": "Routine-Builder",
     "blank": "Lücke",
     "sentence": "Satz",

@@ -145,6 +145,17 @@
     "none": "Žádná"
   },
   "routine_builder": {
+    "palette": "Barevná paleta",
+    "palette_sunrise": "Východ slunce",
+    "palette_botanical": "Botanická",
+    "palette_berry": "Lesní plody",
+    "palette_ocean": "Oceán",
+    "palette_custom": "Vlastní (barva zvýraznění)",
+    "panel_style": "Styl pozadí",
+    "panel_card": "Zaoblená karta",
+    "panel_open": "Plná šířka",
+    "accent_info": "Používá se pro tlačítka rychlého přidání a pro celou sekci, pokud je paleta Vlastní.",
+    "carousel_info": "Pokud je produktů víc než sloupců, zobrazí se jako karusel.",
     "name": "Tvůrce rutiny",
     "blank": "Mezera",
     "sentence": "Věta",

@@ -145,6 +145,17 @@
     "none": "なし"
   },
   "routine_builder": {
+    "palette": "カラーパレット",
+    "palette_sunrise": "サンライズ",
+    "palette_botanical": "ボタニカル",
+    "palette_berry": "ベリー",
+    "palette_ocean": "オーシャン",
+    "palette_custom": "カスタム (アクセントカラー)",
+    "panel_style": "背景のスタイル",
+    "panel_card": "角丸カード",
+    "panel_open": "全幅",
+    "accent_info": "クイック追加ボタンに使用され、パレットがカスタムの場合はセクション全体に使用されます。",
+    "carousel_info": "商品数が列数より多い場合は、カルーセルで表示されます。",
     "name": "ルーティンビルダー",
     "blank": "空欄",
     "sentence": "文章",

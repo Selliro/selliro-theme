@@ -145,6 +145,17 @@
     "none": "Ingen"
   },
   "routine_builder": {
+    "palette": "Färgpalett",
+    "palette_sunrise": "Soluppgång",
+    "palette_botanical": "Botanisk",
+    "palette_berry": "Bär",
+    "palette_ocean": "Hav",
+    "palette_custom": "Anpassad (accentfärg)",
+    "panel_style": "Bakgrundsstil",
+    "panel_card": "Rundat kort",
+    "panel_open": "Full bredd",
+    "accent_info": "Används för knapparna för snabbtillägg och för hela avsnittet när paletten är Anpassad.",
+    "carousel_info": "När det finns fler produkter än kolumner visas de som en karusell.",
     "name": "Rutinbyggare",
     "blank": "Tom ruta",
     "sentence": "Mening",

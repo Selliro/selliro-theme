@@ -145,6 +145,17 @@
     "none": "Ei mitään"
   },
   "routine_builder": {
+    "palette": "Väripaletti",
+    "palette_sunrise": "Auringonnousu",
+    "palette_botanical": "Kasvillinen",
+    "palette_berry": "Marja",
+    "palette_ocean": "Meri",
+    "palette_custom": "Mukautettu (korostusväri)",
+    "panel_style": "Taustan tyyli",
+    "panel_card": "Pyöristetty kortti",
+    "panel_open": "Koko leveys",
+    "accent_info": "Käytetään pikalisäyspainikkeissa ja koko osiossa, kun paletti on Mukautettu.",
+    "carousel_info": "Kun tuotteita on enemmän kuin sarakkeita, ne näytetään karusellina.",
     "name": "Rutiinin kokoaja",
     "blank": "Aukko",
     "sentence": "Lause",
