@@ -1413,10 +1413,14 @@
 
   .rb__tray {
     width: 100%;
+    grid-template-columns: minmax(0, 1fr);
     padding: 1.15rem 1rem 1rem;
   }
 
   .rb__options {
+    /* fill the tray (not shrink-to-fit + centered) so the row scrolls instead of spilling out */
+    justify-self: stretch;
+    min-width: 0;
     flex-wrap: nowrap;
     justify-content: flex-start !important;
     overflow-x: auto;
