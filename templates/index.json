@@ -1874,8 +1874,8 @@
       "type": "before-after-slider",
       "name": "Before / after slider",
       "settings": {
-        "before_image": "shopify://shop_images/before.webp",
-        "after_image": "shopify://shop_images/after.webp",
+        "before_image": "shopify://shop_images/skincare-before-acne.jpg",
+        "after_image": "shopify://shop_images/skincare-after-clear.jpg",
         "initial_position": 50,
         "image_radius": 16,
         "show_image_labels": true,
