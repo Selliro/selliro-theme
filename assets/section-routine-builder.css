@@ -1280,7 +1280,19 @@
 
   .rb__add-all {
     flex: 1;
-    padding-inline: 1.25rem;
+    min-width: 0;
+    padding-inline: 1rem;
+    font-size: 0.9375rem;
+    white-space: nowrap;
+  }
+
+  .rb__add-all-icon {
+    display: none;
+  }
+
+  .rb__nav-btn {
+    width: 2.75rem;
+    height: 2.75rem;
   }
 
   .rb__mood {
