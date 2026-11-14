@@ -5,6 +5,8 @@
  * moves on to the next empty blank, recolors the mood background and re-ranks the live results.
  * Results are scored by how many chosen answers recommend each product (available first),
  * topped up from the fallback collection, and re-ordered with a FLIP animation.
+ * When there are more products than fit in one row, the list becomes a scroll-snap carousel
+ * with previous/next buttons and a progress bar.
  */
 (() => {
   if (customElements.get('routine-builder')) return;
@@ -51,6 +53,13 @@
       this.resultsTitle = this.querySelector('[data-rb-results-title]');
       this.scrollToResults = this.dataset.scrollResults === 'true';
       this.live = this.querySelector('[data-rb-live]');
+      this.count = this.querySelector('[data-rb-count]');
+      this.summary = this.querySelector('[data-rb-summary]');
+      this.track = this.querySelector('[data-rb-track]');
+      this.nav = this.querySelector('[data-rb-nav]');
+      this.prevBtn = this.querySelector('[data-rb-prev]');
+      this.nextBtn = this.querySelector('[data-rb-next]');
+      this.progressBar = this.querySelector('[data-rb-progress]');
       this.wasDone = false;
       this.maxResults = parseInt(this.dataset.maxResults || '4', 10);
       this.accent = this.dataset.accent || '#f8d12f';
@@ -72,6 +81,7 @@
       if (this.dataset.remember === 'true') this.restore();
       this.refresh({ animate: false });
       this.initFloats();
+      this.initCarousel();
 
       // Invite the first interaction: open the first empty blank when the section scrolls into view.
       this.io = new IntersectionObserver(
@@ -95,6 +105,7 @@
         window.removeEventListener('pageshow', this.onFloatScroll);
       }
       this.floatIo?.disconnect();
+      this.carouselRo?.disconnect();
       document.removeEventListener('click', this.onDocClick);
       document.removeEventListener('shopify:block:select', this.onBlockSelect);
       this.io?.disconnect();
@@ -129,6 +140,8 @@
         if (event.detail === 0) return this.open(i, { focus: true });
         return this.close();
       }
+      if (t.closest('[data-rb-prev]')) return this.slide(-1);
+      if (t.closest('[data-rb-next]')) return this.slide(1);
       if (t.closest('[data-rb-done]')) return this.advance();
       if (t.closest('[data-rb-reset]')) return this.reset();
       if (t.closest('[data-rb-add-all]')) return this.addAll();
@@ -259,11 +272,15 @@
           });
       });
 
-      // Mood colors follow the answers (cycled across the three clouds).
-      const mood = colors.length ? colors : [this.accent];
-      ['--rb-m1', '--rb-m2', '--rb-m3'].forEach((v, k) => this.style.setProperty(v, mood[k % mood.length]));
+      // Mood colors follow the answers (cycled across the three clouds); with no answers the palette shows.
+      ['--rb-m1', '--rb-m2', '--rb-m3'].forEach((v, k) => {
+        if (colors.length) this.style.setProperty(v, colors[k % colors.length]);
+        else this.style.removeProperty(v);
+      });
 
       this.meter.forEach((seg, i) => seg.classList.toggle('is-on', i < answered));
+      if (this.count) this.count.textContent = String(answered);
+      this.renderSummary();
       const done = this.blanks.length > 0 && answered === this.blanks.length;
       const state = answered === 0 ? 'idle' : done ? 'done' : 'live';
       this.dataset.progress = state;
@@ -378,6 +395,79 @@
       });
     }
 
+    /* ---------------------------------------------------------------- summary chips */
+
+    renderSummary() {
+      if (!this.summary) return;
+      const chips = [];
+      this.trays.forEach((tray) =>
+        tray.querySelectorAll('.rb__option-input:checked').forEach((input) => {
+          const li = document.createElement('li');
+          li.textContent = input.dataset.label || '';
+          if (input.dataset.color) li.style.setProperty('--rb-c', input.dataset.color);
+          chips.push(li);
+        })
+      );
+      this.summary.replaceChildren(...chips);
+    }
+
+    /* ---------------------------------------------------------------- carousel */
+
+    initCarousel() {
+      if (!this.track) return;
+      this.onTrackScroll = () => {
+        if (this.trackFrame) return;
+        this.trackFrame = requestAnimationFrame(() => {
+          this.trackFrame = null;
+          this.updateCarouselUi();
+        });
+      };
+      this.results.addEventListener('scroll', this.onTrackScroll, { passive: true });
+      if ('ResizeObserver' in window) {
+        this.carouselRo = new ResizeObserver(() => this.updateCarousel());
+        this.carouselRo.observe(this.track);
+      }
+      this.updateCarousel();
+    }
+
+    /** Switch between grid and carousel: carousel once the products no longer fit in one row (CSS --rb-grid-max). */
+    updateCarousel({ resetScroll = false } = {}) {
+      if (!this.track) return;
+      const count = this.results.querySelectorAll('.rb__result').length;
+      const max = parseFloat(getComputedStyle(this.track).getPropertyValue('--rb-grid-max')) || 4;
+      const carousel = count > max;
+      this.results.classList.toggle('is-carousel', carousel);
+      if (this.nav) this.nav.hidden = !carousel;
+      if (this.progressBar) this.progressBar.hidden = !carousel;
+      if (resetScroll) this.results.scrollTo({ left: 0, behavior: 'auto' });
+      this.updateCarouselUi();
+    }
+
+    updateCarouselUi() {
+      if (!this.results.classList.contains('is-carousel')) return;
+      const el = this.results;
+      const max = Math.max(0, el.scrollWidth - el.clientWidth);
+      const pos = Math.min(max, Math.abs(el.scrollLeft)); // RTL reports negative offsets
+      if (this.prevBtn) this.prevBtn.disabled = pos <= 2;
+      if (this.nextBtn) this.nextBtn.disabled = pos >= max - 2;
+      if (this.progressBar) {
+        const size = el.scrollWidth ? (el.clientWidth / el.scrollWidth) * 100 : 100;
+        const start = max ? (pos / max) * (100 - size) : 0;
+        this.progressBar.style.setProperty('--rb-thumb-size', `${size.toFixed(2)}%`);
+        this.progressBar.style.setProperty('--rb-thumb-start', `${start.toFixed(2)}%`);
+      }
+    }
+
+    /** Move one view (a full row of cards) back or forward. */
+    slide(dir) {
+      const el = this.results;
+      const rtl = getComputedStyle(el).direction === 'rtl';
+      const card = el.querySelector('.rb__result');
+      const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
+      const step = card ? Math.max(card.offsetWidth + gap, Math.floor((el.clientWidth + gap) / (card.offsetWidth + gap)) * (card.offsetWidth + gap)) : el.clientWidth;
+      el.scrollBy({ left: dir * step * (rtl ? -1 : 1), behavior: reducedMotion() ? 'auto' : 'smooth' });
+    }
+
     joinLabels(labels) {
       if (labels.length < 2) return labels[0] || '';
       return `${labels.slice(0, -1).join(', ')} & ${labels[labels.length - 1]}`;
@@ -429,6 +519,7 @@
         if (step) step.textContent = String(i + 1).padStart(2, '0');
         this.results.appendChild(li);
       });
+      this.updateCarousel({ resetScroll: true });
 
       if (this.addAllBtn) {
         this.addAllBtn.disabled = this.variantItems().length === 0;
