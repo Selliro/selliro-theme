@@ -395,3 +395,186 @@
     transform: none;
   }
 }
+
+/* ================================================================ skin story (snippets/before-after-story.liquid) */
+
+.before-after-slider__media--story {
+  container-type: inline-size;
+  container-name: bamedia;
+}
+
+.ba-story {
+  --ba-ink: #2a211a;
+  --ba-before: #b4462a;
+  --ba-after: #2f7a4f;
+
+  color: var(--ba-ink);
+}
+
+.ba-story__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.4rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.ba-story__eyebrow::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.ba-story--before .ba-story__eyebrow,
+.ba-story--before .ba-story__icon {
+  color: var(--ba-before);
+}
+
+.ba-story--after .ba-story__eyebrow,
+.ba-story--after .ba-story__icon {
+  color: var(--ba-after);
+}
+
+.ba-story__title {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight, 500);
+  font-size: clamp(1.15rem, 2.2cqw, 1.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ba-ink);
+}
+
+.ba-story__points {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+.ba-story__points li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.ba-story__icon {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.05rem;
+}
+
+/* On the image: frosted card centred in the empty space of each half */
+.ba-story--overlay {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: min(17rem, 24cqw);
+  padding: 1.1rem 1.25rem 1.2rem;
+  border: 1px solid rgb(255 255 255 / 0.75);
+  border-radius: 18px;
+  background: rgb(255 255 255 / 0.62);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  box-shadow: 0 18px 40px -24px rgb(60 35 15 / 0.45);
+  translate: 0 -50%;
+  pointer-events: none;
+}
+
+.ba-story--overlay.ba-story--before {
+  left: 5cqw;
+}
+
+.ba-story--overlay.ba-story--after {
+  right: 5cqw;
+}
+
+/* Under the image: two cards side by side */
+.ba-stories {
+  display: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.ba-story--stacked {
+  padding: 1rem;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--ba-before) 7%, #fff);
+  border: 1px solid color-mix(in srgb, var(--ba-before) 16%, transparent);
+}
+
+.ba-story--stacked.ba-story--after {
+  background: color-mix(in srgb, var(--ba-after) 8%, #fff);
+  border-color: color-mix(in srgb, var(--ba-after) 18%, transparent);
+}
+
+.ba-story--stacked .ba-story__title {
+  font-size: 1.05rem;
+}
+
+.ba-story--stacked .ba-story__points {
+  font-size: 0.8125rem;
+}
+
+/* Not enough room on the image → move the story below it */
+@container bamedia (max-width: 760px) {
+  .ba-story--overlay {
+    display: none;
+  }
+
+  .ba-stories {
+    display: grid;
+  }
+}
+
+.ba-note {
+  margin: 0.85rem 0 0;
+  font-size: 0.75rem;
+  text-align: center;
+  color: rgb(var(--color-foreground-rgb) / 0.68);
+}
+
+/* Cards glide in from their own side as the section scrolls into view */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ba-story--overlay {
+      animation: ba-story-in linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 42%;
+    }
+
+    .ba-story--overlay.ba-story--after {
+      --ba-from: 36px;
+    }
+  }
+}
+
+@keyframes ba-story-in {
+  from {
+    opacity: 0;
+    translate: var(--ba-from, -36px) -50%;
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    translate: 0 -50%;
+    filter: blur(0);
+  }
+}
+
+@media (forced-colors: active) {
+  .ba-story--overlay,
+  .ba-story--stacked {
+    border: 1px solid CanvasText;
+  }
+}
