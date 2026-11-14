@@ -130,8 +130,10 @@
 }
 
 .rb--card .rb__panel {
+  --rb-panel-radius: clamp(24px, 3vw, 40px);
+
   padding: clamp(3rem, 6vw, 5.5rem) clamp(1.25rem, 4vw, 4rem);
-  border-radius: clamp(24px, 3vw, 40px);
+  border-radius: var(--rb-panel-radius);
   box-shadow: 0 50px 90px -60px color-mix(in srgb, var(--rb-g1) 55%, transparent);
 }
 
@@ -1175,6 +1177,11 @@
   top: 1.125rem;
   inset-inline: 3.25rem 0.5rem;
   border-top: 2px dashed color-mix(in srgb, var(--rb-g1) 32%, transparent);
+  transform-origin: left center;
+}
+
+[dir='rtl'] .rb__result::before {
+  transform-origin: right center;
 }
 
 .rb__results.is-carousel > .rb__result::before {
@@ -1226,6 +1233,170 @@
 
 .rb__pool {
   display: none !important;
+}
+
+/* ================================================================ scroll-in intro */
+
+/* Words of the sentence and results heading (split by routine-builder.js) */
+.rb-w {
+  display: inline-block;
+}
+
+/* Hidden states only exist while JS has added .rb--intro, so content always shows without it.
+   Individual transform properties (translate/scale/rotate) keep these separate from hover and
+   looping animations that use `transform`. */
+.rb--intro .rb__canvas {
+  clip-path: inset(9% 7% round var(--rb-panel-radius, 0px));
+  opacity: 0;
+}
+
+.rb--intro .rb__eyebrow {
+  opacity: 0;
+  translate: 0 -16px;
+}
+
+.rb--intro .rb__sentence .rb-w {
+  opacity: 0;
+  translate: 0 0.55em;
+  rotate: 4deg;
+  filter: blur(10px);
+}
+
+.rb--intro .rb__blank {
+  opacity: 0;
+  scale: 0.45;
+  rotate: -8deg;
+}
+
+.rb--intro .rb__status,
+.rb--intro .rb__trays {
+  opacity: 0;
+  translate: 0 26px;
+}
+
+.rb--intro .rb__sparkle {
+  scale: 0;
+  rotate: -140deg;
+}
+
+.rb--intro .rb__ring {
+  opacity: 0;
+  scale: 0.7;
+}
+
+.rb--intro.is-in .rb__canvas {
+  clip-path: inset(0 0 round var(--rb-panel-radius, 0px));
+  opacity: 1;
+  transition: clip-path 1.3s var(--rb-ease), opacity 0.7s ease;
+}
+
+.rb--intro.is-in .rb__eyebrow {
+  opacity: 1;
+  translate: 0 0;
+  transition: opacity 0.6s ease 0.15s, translate 0.9s var(--rb-ease) 0.15s;
+}
+
+.rb--intro.is-in .rb__sentence .rb-w {
+  opacity: 1;
+  translate: 0 0;
+  rotate: 0deg;
+  filter: blur(0);
+  transition-property: opacity, translate, rotate, filter;
+  transition-duration: 0.7s, 1s, 1s, 0.8s;
+  transition-timing-function: ease, var(--rb-ease), var(--rb-ease), ease;
+  transition-delay: calc(0.3s + var(--i, 0) * 60ms);
+}
+
+.rb--intro.is-in .rb__blank {
+  opacity: 1;
+  scale: 1;
+  rotate: 0deg;
+  transition-property: opacity, scale, rotate;
+  transition-duration: 0.5s, 0.9s, 0.9s;
+  transition-timing-function: ease, cubic-bezier(0.34, 1.56, 0.64, 1), cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition-delay: calc(0.3s + var(--i, 0) * 60ms);
+}
+
+.rb--intro.is-in .rb__status,
+.rb--intro.is-in .rb__trays {
+  opacity: 1;
+  translate: 0 0;
+  transition: opacity 0.7s ease var(--rb-intro-end, 1s), translate 1s var(--rb-ease) var(--rb-intro-end, 1s);
+}
+
+.rb--intro.is-in .rb__trays {
+  transition-delay: calc(var(--rb-intro-end, 1s) + 0.15s);
+}
+
+.rb--intro.is-in .rb__sparkle {
+  scale: 1;
+  rotate: 0deg;
+  transition: scale 1s cubic-bezier(0.34, 1.56, 0.64, 1), rotate 1.2s var(--rb-ease);
+  transition-delay: calc(0.45s + var(--s, 0) * 0.14s);
+}
+
+.rb--intro.is-in .rb__ring {
+  opacity: 1;
+  scale: 1;
+  transition: opacity 1.2s ease 0.2s, scale 1.8s var(--rb-ease) 0.2s;
+}
+
+.rb__sparkle--1 { --s: 0; }
+.rb__sparkle--2 { --s: 1; }
+.rb__sparkle--3 { --s: 2; }
+.rb__sparkle--4 { --s: 3; }
+.rb__sparkle--5 { --s: 4; }
+
+/* Scroll-linked depth: rings and clouds drift at their own pace while the section scrolls by
+   (browsers without scroll-driven animations simply keep them still) */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .rb__ring--1 {
+      animation: rb-par-ring-1 linear both;
+      animation-timeline: view();
+    }
+
+    .rb__ring--2 {
+      animation: rb-par-ring-2 linear both;
+      animation-timeline: view();
+    }
+
+    .rb__mood {
+      animation: rb-par-mood linear both;
+      animation-timeline: view();
+    }
+  }
+}
+
+@keyframes rb-par-ring-1 {
+  from {
+    translate: 0 -50px;
+    rotate: -10deg;
+  }
+  to {
+    translate: 0 70px;
+    rotate: 12deg;
+  }
+}
+
+@keyframes rb-par-ring-2 {
+  from {
+    translate: 0 80px;
+    rotate: -30deg;
+  }
+  to {
+    translate: 0 -60px;
+    rotate: 30deg;
+  }
+}
+
+@keyframes rb-par-mood {
+  from {
+    translate: 0 -4%;
+  }
+  to {
+    translate: 0 4%;
+  }
 }
 
 /* ================================================================ mobile */
@@ -1331,6 +1502,16 @@
 
   .rb__results.is-carousel {
     scroll-behavior: auto;
+  }
+
+  /* Safety net: never leave intro content hidden */
+  .rb--intro :is(.rb__canvas, .rb__eyebrow, .rb-w, .rb__blank, .rb__status, .rb__trays, .rb__sparkle, .rb__ring) {
+    opacity: 1 !important;
+    translate: none !important;
+    scale: none !important;
+    rotate: none !important;
+    filter: none !important;
+    clip-path: none !important;
   }
 }
 
