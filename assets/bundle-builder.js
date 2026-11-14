@@ -114,7 +114,6 @@
       this.setStickyTop();
       window.addEventListener('resize', this.setStickyTop, { passive: true });
       window.addEventListener('load', this.setStickyTop, { once: true });
-
     }
 
     disconnectedCallback() {

@@ -4,6 +4,7 @@
 {% endcomment %}
 
 {{ 'section-new-arrivals-showcase.css' | asset_url | stylesheet_tag }}
+{{ 'text-highlight.css' | asset_url | stylesheet_tag }}
 {{ 'new-arrivals-quick-view.css' | asset_url | stylesheet_tag }}
 
 {% style %}
@@ -50,11 +51,31 @@
       if nac_scribble != 'squiggle' and nac_scribble != 'wave' and nac_scribble != 'brush' and nac_scribble != 'double' and nac_scribble != 'scribble_underline' and nac_scribble != 'hand_drawn' and nac_scribble != 'sketch' and nac_scribble != 'marker' and nac_scribble != 'zigzag' and nac_scribble != 'arc' and nac_scribble != 'dotted' and nac_scribble != 'erratic' and nac_scribble != 'ribbon'
         assign nac_scribble = 'none'
       endif
+
+      # One word of the heading can get a hand-drawn highlight (replaces the whole-heading scribble)
+      assign nac_heading_html = section.settings.heading | escape
+      assign nac_hl_word = section.settings.highlight_word | strip | escape
+      assign nac_hl_style = section.settings.highlight_style | default: 'none'
+      assign nac_has_hl = false
+      if nac_hl_word != blank and nac_hl_style != 'none' and nac_heading_html contains nac_hl_word
+        capture nac_hl_markup
+          render 'text-highlight', word: nac_hl_word, style: nac_hl_style
+        endcapture
+        assign nac_heading_html = nac_heading_html | replace_first: nac_hl_word, nac_hl_markup
+        assign nac_has_hl = true
+      endif
     -%}
     <div class="new-arrivals-showcase__intro-row">
       <div class="new-arrivals-showcase__intro">
         {%- if section.settings.heading != blank -%}
-          {%- if nac_scribble != 'none' -%}
+          {%- if nac_has_hl -%}
+            <h2
+              class="new-arrivals-showcase__heading new-arrivals-showcase__heading--highlight"
+              style="--text-hl-color: {{ section.settings.highlight_color | default: '#f8d12f' }};"
+            >
+              {{- nac_heading_html -}}
+            </h2>
+          {%- elsif nac_scribble != 'none' -%}
             <h2
               class="new-arrivals-showcase__heading new-arrivals-showcase__heading--scribble"
               style="--new-arrivals-scribble-color: {{ section.settings.heading_scribble_color }};"
@@ -118,6 +139,7 @@
 <script src="{{ 'new-arrivals-components.js' | asset_url }}" defer></script>
 <script src="{{ 'new-arrivals-showcase.js' | asset_url }}" defer></script>
 <script src="{{ 'new-arrivals-quick-view.js' | asset_url }}" defer></script>
+<script src="{{ 'text-highlight.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
@@ -178,8 +200,36 @@
       "default": "All our new arrivals in a exclusive brand selection"
     },
     {
+      "type": "text",
+      "id": "highlight_word",
+      "label": "t:bundle_builder.highlight_word",
+      "info": "t:bundle_builder.highlight_word_info",
+      "default": "Arrivals"
+    },
+    {
+      "type": "select",
+      "id": "highlight_style",
+      "label": "t:bundle_builder.highlight_style",
+      "options": [
+        { "value": "squiggle", "label": "t:bundle_builder.hl_squiggle" },
+        { "value": "wave", "label": "t:bundle_builder.hl_wave" },
+        { "value": "marker", "label": "t:bundle_builder.hl_marker" },
+        { "value": "circle", "label": "t:bundle_builder.hl_circle" },
+        { "value": "none", "label": "t:bundle_builder.hl_none" }
+      ],
+      "default": "marker"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "t:bundle_builder.highlight_color",
+      "default": "#f8d12f",
+      "visible_if": "{{ section.settings.highlight_style != 'none' }}"
+    },
+    {
       "type": "select",
       "id": "heading_scribble",
+      "visible_if": "{{ section.settings.highlight_style == 'none' }}",
       "label": "t:sections.new-arrivals-showcase.settings.heading_scribble",
       "options": [
         { "value": "none", "label": "t:sections.new-arrivals-showcase.options.scribble.none" },
@@ -202,6 +252,7 @@
     {
       "type": "color",
       "id": "heading_scribble_color",
+      "visible_if": "{{ section.settings.highlight_style == 'none' and section.settings.heading_scribble != 'none' }}",
       "label": "t:sections.new-arrivals-showcase.settings.scribble_color",
       "default": "#0a0a0a"
     },
