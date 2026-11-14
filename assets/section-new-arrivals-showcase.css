@@ -290,6 +290,9 @@ image-loader.image-loader[data-loaded]::before {
     flex: 0 0 var(--new-arrivals-promo-width, 26%);
     max-width: 300px;
     min-width: 176px;
+    /* same 4px top offset as the product slides, so the card tops line up */
+    padding-top: 4px;
+    box-sizing: border-box;
   }
 }
 
@@ -433,7 +436,7 @@ image-loader.image-loader[data-loaded]::before {
 .new-arrivals-showcase__promo-heading {
   margin: 0;
   font-family: var(--font-heading--family);
-  font-weight: var(--font-heading--weight, 700);
+  font-weight: 600;
   font-size: clamp(1.6rem, 2.3vw, 2.1rem);
   line-height: 1.05;
   letter-spacing: -0.02em;
