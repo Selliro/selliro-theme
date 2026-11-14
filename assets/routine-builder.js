@@ -7,6 +7,8 @@
  * topped up from the fallback collection, and re-ordered with a FLIP animation.
  * When there are more products than fit in one row, the list becomes a scroll-snap carousel
  * with previous/next buttons and a progress bar.
+ * Scroll-in intro: the card unfolds, the sentence rises word by word and the blanks pop in
+ * (IntersectionObserver + CSS transitions; skipped for reduced motion and in the theme editor).
  */
 (() => {
   if (customElements.get('routine-builder')) return;
@@ -82,6 +84,7 @@
       this.refresh({ animate: false });
       this.initFloats();
       this.initCarousel();
+      this.initIntro();
 
       // Invite the first interaction: open the first empty blank when the section scrolls into view.
       this.io = new IntersectionObserver(
@@ -106,6 +109,8 @@
       }
       this.floatIo?.disconnect();
       this.carouselRo?.disconnect();
+      this.introIo?.disconnect();
+      clearTimeout(this.introTimer);
       document.removeEventListener('click', this.onDocClick);
       document.removeEventListener('shopify:block:select', this.onBlockSelect);
       this.io?.disconnect();
@@ -301,6 +306,7 @@
         // Announce completion to screen readers (string comes from the locale file).
         this.live.textContent = (this.live.dataset.ready || '').replace('[count]', String(items.length));
       }
+      if (animate) this.animateResultsIntro();
       if (animate && !reducedMotion()) {
         items.forEach((li, i) =>
           li.animate(
@@ -392,6 +398,106 @@
         el.style.setProperty('--rise', `${rise.toFixed(1)}px`);
         el.style.setProperty('--spin', `${((0.5 - local) * 8).toFixed(2)}deg`);
         el.classList.toggle('is-passing', local > 0 && local < 1);
+      });
+    }
+
+    /* ---------------------------------------------------------------- scroll-in intro */
+
+    /** Wrap each word of an element's text in <span class="rb-w"> (whitespace stays as text, so wrapping is unchanged). */
+    splitWords(el, start = 0) {
+      let i = start;
+      Array.from(el.childNodes).forEach((node) => {
+        if (node.nodeType !== Node.TEXT_NODE || !node.textContent.trim()) return;
+        const frag = document.createDocumentFragment();
+        node.textContent.split(/(\s+)/).forEach((part) => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) return frag.appendChild(document.createTextNode(part));
+          const w = document.createElement('span');
+          w.className = 'rb-w';
+          w.textContent = part;
+          w.style.setProperty('--i', String(i++));
+          frag.appendChild(w);
+        });
+        node.replaceWith(frag);
+      });
+      return i;
+    }
+
+    initIntro() {
+      const sentence = this.querySelector('.rb__sentence');
+      if (!sentence || reducedMotion() || !('IntersectionObserver' in window)) return;
+      if (window.Shopify && window.Shopify.designMode) return; // merchants see everything at once in the editor
+
+      // One running index across words and blanks, so the sentence reads in left to right.
+      let i = 0;
+      Array.from(sentence.children).forEach((child) => {
+        if (child.classList.contains('rb__words')) i = this.splitWords(child, i);
+        else if (child.classList.contains('rb__blank')) child.style.setProperty('--i', String(i++));
+      });
+      const STEP = 60;
+      const end = 300 + i * STEP;
+      this.style.setProperty('--rb-intro-end', `${end}ms`);
+      this.classList.add('rb--intro');
+
+      this.introIo = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((e) => e.isIntersecting)) return;
+          this.introIo.disconnect();
+          this.classList.add('is-in');
+          // Hand back to the normal styles once everything has landed (restores hover transitions).
+          this.introTimer = setTimeout(() => this.classList.remove('rb--intro', 'is-in'), end + 1400);
+        },
+        { threshold: 0.18, rootMargin: '0px 0px -8% 0px' }
+      );
+      this.introIo.observe(this.querySelector('.rb__panel') || this);
+    }
+
+    /** Results heading, answer chips, step numbers and the dashed routine line animate in one after another. */
+    animateResultsIntro() {
+      if (reducedMotion()) return;
+      const ease = 'cubic-bezier(0.22, 1, 0.36, 1)';
+      const spring = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+      if (this.resultsTitle && !this.resultsTitle.dataset.split) {
+        this.splitWords(this.resultsTitle);
+        this.resultsTitle.dataset.split = 'true';
+      }
+      this.resultsTitle?.querySelectorAll('.rb-w').forEach((w, k) =>
+        w.animate(
+          [
+            { opacity: 0, transform: 'translateY(0.6em) rotate(3deg)', filter: 'blur(8px)' },
+            { opacity: 1, transform: 'none', filter: 'blur(0)' },
+          ],
+          { duration: 800, delay: 120 + k * 70, easing: ease, fill: 'backwards' }
+        )
+      );
+      this.summary?.querySelectorAll('li').forEach((chip, k) =>
+        chip.animate(
+          [
+            { opacity: 0, transform: 'translateY(10px) scale(0.7)' },
+            { opacity: 1, transform: 'none' },
+          ],
+          { duration: 600, delay: 380 + k * 80, easing: spring, fill: 'backwards' }
+        )
+      );
+      this.results.querySelectorAll('.rb__result').forEach((li, k) => {
+        li.querySelector('.rb__step')?.animate(
+          [
+            { opacity: 0, transform: 'scale(0.3) rotate(-90deg)' },
+            { opacity: 1, transform: 'none' },
+          ],
+          { duration: 700, delay: 420 + k * 110, easing: spring, fill: 'backwards' }
+        );
+        try {
+          li.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], {
+            duration: 700,
+            delay: 560 + k * 110,
+            easing: ease,
+            fill: 'backwards',
+            pseudoElement: '::before',
+          });
+        } catch (e) {
+          /* pseudo-element animation not supported — line simply shows */
+        }
       });
     }
 
