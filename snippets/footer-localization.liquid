@@ -12,12 +12,15 @@
 
 {%- if show_language and show_country == false -%}
   <div class="footer-main__localization-form-only">
+    {%- liquid
+      assign render_form_id = 'LocalizationForm-footer-' | append: block_id | append: '-lang'
+    -%}
     {%- render 'localization-form',
       show_country: false,
       show_language: true,
       localization_style: 'FooterLang',
       block_id: block_id,
-      form_id: 'LocalizationForm-footer-' | append: block_id | append: '-lang'
+      form_id: render_form_id
     -%}
   </div>
 {%- elsif show_country and show_language == false -%}
@@ -48,24 +51,30 @@
       hidden
       ref="panel"
     >
+      {%- liquid
+        assign render_form_id = 'LocalizationForm-footer-' | append: block_id | append: '-country'
+      -%}
       {%- render 'localization-form',
         show_country: true,
         show_language: false,
         localization_style: 'dropdown',
         block_id: block_id,
-        form_id: 'LocalizationForm-footer-' | append: block_id | append: '-country'
+        form_id: render_form_id
       -%}
     </div>
   </dropdown-localization-component>
 {%- elsif show_country and show_language -%}
   <div class="footer-main__localization-split">
     <div class="footer-main__localization-pill footer-main__localization-pill--language">
+      {%- liquid
+        assign render_form_id = 'LocalizationForm-footer-' | append: block_id | append: '-lang'
+      -%}
       {%- render 'localization-form',
         show_country: false,
         show_language: true,
         localization_style: 'FooterLang',
         block_id: block_id,
-        form_id: 'LocalizationForm-footer-' | append: block_id | append: '-lang'
+        form_id: render_form_id
       -%}
     </div>
     <div class="footer-main__localization-pill footer-main__localization-pill--country">
@@ -96,12 +105,15 @@
           hidden
           ref="panel"
         >
+          {%- liquid
+            assign render_form_id = 'LocalizationForm-footer-' | append: block_id | append: '-country'
+          -%}
           {%- render 'localization-form',
             show_country: true,
             show_language: false,
             localization_style: 'dropdown',
             block_id: block_id,
-            form_id: 'LocalizationForm-footer-' | append: block_id | append: '-country'
+            form_id: render_form_id
           -%}
         </div>
       </dropdown-localization-component>

@@ -1,4 +1,7 @@
 .shop-the-look {
+  /* Custom elements are inline by default — vertical padding on an inline box doesn't take up
+     space, so the section overlapped its neighbours. */
+  display: block;
   background-color: var(--color-background);
   color: var(--color-foreground);
 }
@@ -98,9 +101,12 @@
 
 .shop-the-look__heading {
   margin: 0;
-  font-size: 32px;
-  font-weight: medium;
-  line-height: 1.2;  
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  line-height: var(--section-title-leading);
+  letter-spacing: var(--section-title-tracking);
+  text-transform: none;
+  color: var(--color-foreground-heading, var(--color-foreground));
 }
 
 .shop-the-look__subheading {
@@ -186,6 +192,10 @@
   color: rgb(var(--color-foreground-rgb) / 0.7);
   font-size: 13px;
   line-height: 1.5;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 
 .shop-the-look__rating {
@@ -327,4 +337,151 @@
 
 .shop-the-look__item {
   transition: opacity 0.2s ease;
+}
+
+/* Custom variant dropdown */
+.stl-dropdown {
+  position: relative;
+  display: inline-block;
+  z-index: 3;
+}
+
+.stl-dropdown__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.2);
+  border-radius: 6px;
+  background: transparent;
+  font-size: 13px;
+  color: var(--color-foreground);
+  cursor: pointer;
+  line-height: 1.4;
+  transition: border-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.stl-dropdown__trigger:hover,
+.stl-dropdown__trigger[aria-expanded="true"] {
+  border-color: rgb(var(--color-foreground-rgb) / 0.45);
+  outline: none;
+}
+
+.stl-dropdown__chevron {
+  flex-shrink: 0;
+  color: rgb(var(--color-foreground-rgb) / 0.5);
+  transition: transform 0.2s ease;
+  display: block;
+}
+
+.stl-dropdown__trigger[aria-expanded="true"] .stl-dropdown__chevron {
+  transform: rotate(180deg);
+}
+
+.stl-dropdown__list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 100%;
+  background: var(--color-background);
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.15);
+  border-radius: 8px;
+  padding: 4px;
+  margin: 0;
+  list-style: none;
+  z-index: 20;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.stl-dropdown__option {
+  padding: 7px 10px;
+  font-size: 13px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.stl-dropdown__option:hover {
+  background: rgb(var(--color-foreground-rgb) / 0.07);
+}
+
+.stl-dropdown__option.is-selected {
+  background: rgb(var(--color-foreground-rgb) / 0.07);
+  font-weight: 600;
+}
+
+.stl-dropdown__option[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  text-decoration: line-through;
+  pointer-events: none;
+}
+
+/* Heading row: heading left, bundle button right */
+.shop-the-look__heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.shop-the-look__heading-row .shop-the-look__heading {
+  margin: 0;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.shop-the-look__bundle-btn {
+  flex-shrink: 0;
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  border: none;
+  background: var(--color-foreground);
+  color: var(--color-background);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.3s ease;
+}
+
+.shop-the-look__bundle-btn:hover:not(:disabled) {
+  opacity: 0.82;
+  transform: translateY(-1px);
+}
+
+.shop-the-look__bundle-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.shop-the-look__bundle-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.shop-the-look__bundle-btn.is-success {
+  background-color: #2e7d32;
+}
+
+.shop-the-look__bundle-btn.is-error {
+  background-color: #c62828;
+}
+
+@media screen and (max-width: 600px) {
+  .shop-the-look__heading-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .shop-the-look__bundle-btn {
+    width: 100%;
+  }
 }

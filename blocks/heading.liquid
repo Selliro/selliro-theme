@@ -3,9 +3,12 @@
   Global heading component - variant set in presets
 {%- endcomment -%}
 
+{%- liquid
+  assign render_variant = block.settings.variant | default: 'h3'
+-%}
 {%- render 'heading',
   text: block.settings.text,
-  variant: block.settings.variant | default: 'h3',
+  variant: render_variant,
   color: block.settings.color,
   icon_image: block.settings.icon_image,
   icon_max_width: block.settings.icon_max_width,

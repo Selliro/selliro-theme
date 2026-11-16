@@ -1,0 +1,308 @@
+{%- comment -%}
+  Collection hero
+  Full-width image banner for collection pages: breadcrumbs, collection title, optional description
+  and product count, plus a row of quick links to sibling collections (with product counts).
+  Uses the collection's own image when it has one, otherwise the fallback image.
+{%- endcomment -%}
+
+{{ 'section-collection-hero.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign hero_collection = collection
+  assign hero_image = section.settings.image
+  if section.settings.use_collection_image and hero_collection.featured_image != blank
+    assign hero_image = hero_collection.featured_image
+  endif
+  assign hero_title = hero_collection.title
+  assign overlay = section.settings.overlay_opacity | times: 0.01
+
+  case section.settings.height
+    when 'small'
+      assign hero_min = '22rem'
+    when 'large'
+      assign hero_min = '38rem'
+    else
+      assign hero_min = '30rem'
+  endcase
+-%}
+
+{% style %}
+  #CollectionHero-{{ section.id }} {
+    --ch-min: {{ hero_min }};
+    --ch-overlay: {{ overlay }};
+    --ch-overlay-color: {{ section.settings.overlay_color }};
+    --ch-text: {{ section.settings.text_color }};
+    --ch-radius: {{ section.settings.radius }}px;
+  }
+{% endstyle %}
+
+<div
+  id="CollectionHero-{{ section.id }}"
+  class="ch ch--{{ section.settings.alignment }} ch--v-{{ section.settings.vertical_position }} ch--title-{{ section.settings.title_size }}{% if section.settings.rounded_bottom %} ch--rounded{% endif %}"
+>
+  <div class="ch__banner">
+    <div class="ch__media" aria-hidden="true">
+      {%- if hero_image != blank -%}
+        {{
+          hero_image
+          | image_url: width: 3000
+          | image_tag:
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '750, 1100, 1500, 1920, 2400, 3000',
+            sizes: '100vw',
+            alt: '',
+            class: 'ch__img'
+        }}
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'ch__img ch__img--placeholder' }}
+      {%- endif -%}
+      <span class="ch__overlay"></span>
+    </div>
+
+    <div class="ch__content page-width">
+      {%- if section.settings.show_breadcrumbs -%}
+        <nav class="ch__crumbs" aria-label="{{ 'collection_hero.breadcrumb_label' | t | escape }}">
+          <ol class="list-unstyled">
+            <li>
+              <a href="{{ routes.root_url }}">
+                <svg viewBox="0 0 20 20" width="16" height="16" fill="none" aria-hidden="true" focusable="false"><path d="M3.5 9 10 3.5 16.5 9v7a1 1 0 0 1-1 1h-3.5v-4.5h-4V17H4.5a1 1 0 0 1-1-1V9Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                <span class="visually-hidden">{{ 'collection_hero.home' | t }}</span>
+              </a>
+            </li>
+            <li><a href="{{ routes.collections_url }}">{{ 'content.search_results_resource_collections' | t }}</a></li>
+            <li><span aria-current="page">{{ hero_title | escape }}</span></li>
+          </ol>
+        </nav>
+      {%- endif -%}
+
+      <h1 class="ch__title">{{ hero_title | escape }}</h1>
+
+      {%- if section.settings.show_description and hero_collection.description != blank -%}
+        <div class="ch__desc rte">{{ hero_collection.description }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.show_count and hero_collection -%}
+        <p class="ch__count">{{ 'content.search_results_resource_products_count' | t: count: hero_collection.products_count }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if section.settings.quick_links != blank and section.settings.quick_links.size > 0 -%}
+    <nav class="ch__links page-width" aria-label="{{ 'content.search_results_resource_collections' | t | escape }}">
+      <ul class="list-unstyled">
+        {%- if section.settings.show_all_link -%}
+          <li>
+            <a href="{{ routes.all_products_collection_url }}" class="ch__link{% if hero_collection.handle == 'all' %} is-current{% endif %}"{% if hero_collection.handle == 'all' %} aria-current="page"{% endif %}>
+              {{- 'collection_hero.all' | t -}}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- for item in section.settings.quick_links -%}
+          {%- assign current = false -%}
+          {%- if item.handle == hero_collection.handle -%}{%- assign current = true -%}{%- endif -%}
+          <li>
+            <a href="{{ item.url }}" class="ch__link{% if current %} is-current{% endif %}"{% if current %} aria-current="page"{% endif %}>
+              {{- item.title | escape -}}
+              {%- if section.settings.show_link_counts -%}
+                <span class="visually-hidden"> (</span><sup class="ch__link-count">{{ item.products_count }}</sup><span class="visually-hidden">)</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:collection_hero.name",
+  "tag": "section",
+  "class": "section-collection-hero",
+  "enabled_on": {
+    "templates": [
+      "collection"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:content.image"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_collection_image",
+      "label": "t:collection_hero.use_collection_image",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:collection_hero.fallback_image"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "t:settings.height",
+      "options": [
+        {
+          "value": "small",
+          "label": "t:options.small"
+        },
+        {
+          "value": "medium",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "large",
+          "label": "t:options.large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "t:settings.overlay",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "t:settings.overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 55
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:collection_hero.text_color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:settings.alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:options.left"
+        },
+        {
+          "value": "center",
+          "label": "t:options.center"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "vertical_position",
+      "label": "t:settings.position",
+      "options": [
+        {
+          "value": "bottom",
+          "label": "t:options.bottom"
+        },
+        {
+          "value": "center",
+          "label": "t:options.center"
+        }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "t:collection_hero.title_size",
+      "options": [
+        {
+          "value": "small",
+          "label": "t:options.small"
+        },
+        {
+          "value": "medium",
+          "label": "t:options.medium"
+        },
+        {
+          "value": "large",
+          "label": "t:options.large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "checkbox",
+      "id": "rounded_bottom",
+      "label": "t:collection_hero.rounded",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "radius",
+      "label": "t:settings.corner_radius",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 28,
+      "visible_if": "{{ section.settings.rounded_bottom }}"
+    },
+    {
+      "type": "header",
+      "content": "t:collection_hero.details"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "t:collection_hero.show_breadcrumbs",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "t:collection_hero.show_description",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "t:collection_hero.show_count",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:collection_hero.quick_links_header"
+    },
+    {
+      "type": "collection_list",
+      "id": "quick_links",
+      "label": "t:settings.collection_list",
+      "info": "t:collection_hero.quick_links_info",
+      "limit": 10
+    },
+    {
+      "type": "checkbox",
+      "id": "show_all_link",
+      "label": "t:collection_hero.show_all",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_link_counts",
+      "label": "t:collection_hero.show_counts",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:collection_hero.name",
+      "category": "t:categories.collection"
+    }
+  ]
+}
+{% endschema %}

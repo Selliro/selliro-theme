@@ -15,9 +15,12 @@
 </style>
 
 <div id="shopify-block-{{ block.id }}">
+  {%- liquid
+    assign render_variant = block.settings.variant | default: 'md'
+  -%}
   {%- render 'subheading',
     text: block.settings.text,
-    variant: block.settings.variant | default: 'md',
+    variant: render_variant,
     color: block.settings.color,
     block_shopify_attributes: block.shopify_attributes
   -%}

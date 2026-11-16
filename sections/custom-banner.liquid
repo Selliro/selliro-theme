@@ -42,6 +42,12 @@
         {% for block in section.blocks %}
           {% liquid
             assign media_type = block.settings.media_type
+            assign image_loading = 'lazy'
+            assign image_priority = 'auto'
+            if forloop.first and section.index <= 2
+              assign image_loading = 'eager'
+              assign image_priority = 'high'
+            endif
             assign has_video = false
             assign has_image = false
             assign is_split_layout = false
@@ -177,7 +183,8 @@
                           | image_url: width: 2400
                           | image_tag:
                             class: 'custom-banner__split-image',
-                            loading: 'lazy',
+                            loading: image_loading,
+                            fetchpriority: image_priority,
                             alt: image_alt,
                             widths: '480, 768, 1024, 1440, 1920, 2400',
                             sizes: '(max-width: 749px) 100vw, 50vw'
@@ -259,7 +266,8 @@
                     | image_url: width: 3840
                     | image_tag:
                       class: 'custom-banner__image',
-                      loading: 'lazy',
+                      loading: image_loading,
+                      fetchpriority: image_priority,
                       alt: image_alt,
                       widths: '768, 1024, 1440, 1920, 2560, 3200, 3840',
                       sizes: '100vw'
@@ -272,57 +280,60 @@
               {% endif %}
 
               {% unless is_split_layout %}
-                <div class="custom-banner__overlay">
-                  {% if block.settings.caption != blank %}
-                    <p
-                      class="custom-banner__caption"
-                      style="
-                        --custom-banner-caption-color: {{ block.settings.caption_color }};
-                        --custom-banner-caption-size: {{ block.settings.caption_font_size }}px;
-                      "
-                    >
-                      {{ block.settings.caption }}
-                    </p>
-                  {% endif %}
+                {%- assign align = block.settings.content_alignment | default: 'left' -%}
+                <div class="custom-banner__overlay custom-banner__overlay--align-{{ align }}">
+                  <div class="custom-banner__overlay-inner">
+                    {% if block.settings.caption != blank %}
+                      <p
+                        class="custom-banner__caption"
+                        style="
+                          --custom-banner-caption-color: {{ block.settings.caption_color }};
+                          --custom-banner-caption-size: {{ block.settings.caption_font_size }}px;
+                        "
+                      >
+                        {{ block.settings.caption }}
+                      </p>
+                    {% endif %}
 
-                  {% if block.settings.heading != blank %}
-                    <h2
-                      class="custom-banner__heading"
-                      style="
-                        --custom-banner-heading-color: {{ block.settings.heading_color }};
-                        --custom-banner-heading-size: {{ block.settings.heading_font_size }}px;
-                      "
-                    >
-                      {{ block.settings.heading }}
-                    </h2>
-                  {% endif %}
+                    {% if block.settings.heading != blank %}
+                      <h2
+                        class="custom-banner__heading"
+                        style="
+                          --custom-banner-heading-color: {{ block.settings.heading_color }};
+                          --custom-banner-heading-size: {{ block.settings.heading_font_size }}px;
+                        "
+                      >
+                        {{ block.settings.heading }}
+                      </h2>
+                    {% endif %}
 
-                  {% if block.settings.subheading != blank %}
-                    <p
-                      class="custom-banner__subheading"
-                      style="
-                        --custom-banner-subheading-color: {{ block.settings.subheading_color }};
-                        --custom-banner-subheading-size: {{ block.settings.subheading_font_size }}px;
-                      "
-                    >
-                      {{ block.settings.subheading }}
-                    </p>
-                  {% endif %}
+                    {% if block.settings.subheading != blank %}
+                      <p
+                        class="custom-banner__subheading"
+                        style="
+                          --custom-banner-subheading-color: {{ block.settings.subheading_color }};
+                          --custom-banner-subheading-size: {{ block.settings.subheading_font_size }}px;
+                        "
+                      >
+                        {{ block.settings.subheading }}
+                      </p>
+                    {% endif %}
 
-                  {% if block.settings.button_label != blank and block.settings.button_link != blank %}
-                    <a
-                      href="{{ block.settings.button_link }}"
-                      class="button custom-banner__button"
-                      style="
-                        --custom-banner-button-text-color: {{ block.settings.button_text_color }};
-                        --custom-banner-button-font-size: {{ block.settings.button_font_size }}px;
-                        --custom-banner-button-background-color: {{ block.settings.button_background_color }};
-                        --custom-banner-button-border-color: {{ block.settings.button_border_color }};
-                      "
-                    >
-                      {{ block.settings.button_label }}
-                    </a>
-                  {% endif %}
+                    {% if block.settings.button_label != blank and block.settings.button_link != blank %}
+                      <a
+                        href="{{ block.settings.button_link }}"
+                        class="button custom-banner__button"
+                        style="
+                          --custom-banner-button-text-color: {{ block.settings.button_text_color }};
+                          --custom-banner-button-font-size: {{ block.settings.button_font_size }}px;
+                          --custom-banner-button-background-color: {{ block.settings.button_background_color }};
+                          --custom-banner-button-border-color: {{ block.settings.button_border_color }};
+                        "
+                      >
+                        {{ block.settings.button_label }}
+                      </a>
+                    {% endif %}
+                  </div>
                 </div>
               {% endunless %}
             </div>
@@ -346,7 +357,11 @@
     {% endcapture %}
 
     {% if has_multiple_slides %}
-      <carousel-swiper class="carousel custom-banner__slideshow">
+      <carousel-swiper
+        class="carousel custom-banner__slideshow"
+        data-label-prev="{{ 'accessibility.slideshow_previous' | t | escape }}"
+        data-label-next="{{ 'accessibility.slideshow_next' | t | escape }}"
+      >
         <script type="application/json">
           {
             "slidesPerView": 1,
@@ -367,13 +382,13 @@
           </div>
         </div>
         <div class="custom-banner__navigation">
-          <button type="button" class="custom-banner__nav-button carousel__nav-button--prev" aria-label="Previous slide">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <button type="button" class="custom-banner__nav-button carousel__nav-button--prev" aria-label="{{ 'accessibility.slideshow_previous' | t | escape }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
               <path d="M14.5 6.5L9 12L14.5 17.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
-          <button type="button" class="custom-banner__nav-button carousel__nav-button--next" aria-label="Next slide">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <button type="button" class="custom-banner__nav-button carousel__nav-button--next" aria-label="{{ 'accessibility.slideshow_next' | t | escape }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
               <path d="M9.5 6.5L15 12L9.5 17.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
@@ -508,19 +523,49 @@
     order: 1;
   }
 
+  /* ── Overlay: full-slide flex shell ── */
   .custom-banner__overlay {
     position: absolute;
     inset: 0;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 40px;
-    color: rgb(var(--color-foreground-rgb));
-    background: linear-gradient(90deg, rgb(0 0 0 / 42%) 0%, rgb(0 0 0 / 10%) 45%, transparent 75%);
-    max-width: min(100%, 700px);
+    align-items: center;
     z-index: var(--layer-flat);
+    color: rgb(var(--color-foreground-rgb));
+  }
+
+  /* ── Gradient per alignment ── */
+  .custom-banner__overlay--align-left {
+    background: linear-gradient(90deg, rgb(0 0 0 / 52%) 0%, rgb(0 0 0 / 18%) 50%, transparent 80%);
+  }
+  .custom-banner__overlay--align-center {
+    background: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 48%) 30%, rgb(0 0 0 / 48%) 70%, transparent 100%);
+  }
+  .custom-banner__overlay--align-right {
+    background: linear-gradient(270deg, rgb(0 0 0 / 52%) 0%, rgb(0 0 0 / 18%) 50%, transparent 80%);
+  }
+
+  /* ── Inner: same page container as the header ── */
+  .custom-banner__overlay-inner {
+    width: 100%;
+    max-width: var(--page-width, 1400px);
+    margin-inline: auto;
+    /* At least 56px (44px arrow + 12px gap), but respects the page margin when larger */
+    padding-inline: max(var(--page-margin, 40px), 56px);
+    padding-block: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .custom-banner__overlay--align-center .custom-banner__overlay-inner {
+    align-items: center;
+    text-align: center;
+  }
+
+  .custom-banner__overlay--align-right .custom-banner__overlay-inner {
+    align-items: flex-end;
+    text-align: right;
   }
 
   .custom-banner__caption,
@@ -577,7 +622,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-inline: 10px;
+    padding-inline: 0;
     transform: translateY(-50%);
     z-index: var(--layer-raised);
     pointer-events: none;
@@ -614,11 +659,18 @@
     }
 
     .custom-banner__overlay {
-      padding: 15px;
-      gap: 10px;
-      max-width: 100%;
-      justify-content: flex-end;
+      align-items: flex-end;
+    }
+    .custom-banner__overlay--align-left,
+    .custom-banner__overlay--align-center,
+    .custom-banner__overlay--align-right {
+      justify-content: center;
       background: linear-gradient(180deg, transparent 30%, rgb(0 0 0 / 58%) 100%);
+    }
+    .custom-banner__overlay-inner {
+      padding-block: 15px;
+      padding-inline: max(var(--page-margin, 16px), 50px); /* 38px mobile arrow + 12px */
+      gap: 10px;
     }
 
     .custom-banner__heading {
@@ -635,7 +687,7 @@
     }
 
     .custom-banner__navigation {
-      padding-inline: 8px;
+      padding-inline: 0;
     }
 
     .custom-banner__nav-button {
@@ -875,6 +927,17 @@
         {
           "type": "header",
           "content": "Content"
+        },
+        {
+          "type": "select",
+          "id": "content_alignment",
+          "label": "Content alignment",
+          "options": [
+            { "value": "left",   "label": "Left"   },
+            { "value": "center", "label": "Center" },
+            { "value": "right",  "label": "Right"  }
+          ],
+          "default": "left"
         },
         {
           "type": "text",

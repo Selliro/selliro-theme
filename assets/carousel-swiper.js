@@ -69,7 +69,72 @@
         }
       }
 
+      this._applyUxDefaults(config);
+
       this._swiper = new window.Swiper(swiperEl, config);
+    }
+
+    /**
+     * Accessibility and usability defaults shared by every carousel.
+     * Sections can still override any of these through their JSON config.
+     */
+    _applyUxDefaults(config) {
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var inEditor = !!(window.Shopify && window.Shopify.designMode);
+
+      // Screen-reader announcements and keyboard support (both modules ship in swiper-bundle).
+      if (config.a11y == null) {
+        var prevLabel = this.dataset.labelPrev || 'Previous slide';
+        var nextLabel = this.dataset.labelNext || 'Next slide';
+        config.a11y = {
+          enabled: true,
+          prevSlideMessage: prevLabel,
+          nextSlideMessage: nextLabel,
+        };
+      }
+      if (config.keyboard == null) {
+        config.keyboard = { enabled: true, onlyInViewport: true };
+      }
+      if (config.watchOverflow == null) config.watchOverflow = true;
+
+      if (config.autoplay) {
+        // Respect "reduce motion" and never auto-advance while the merchant is editing.
+        if (reduceMotion || inEditor) {
+          config.autoplay = false;
+        } else if (typeof config.autoplay === 'object') {
+          // WCAG 2.2.2: moving content must pause on hover/focus.
+          if (config.autoplay.pauseOnMouseEnter == null) config.autoplay.pauseOnMouseEnter = true;
+          this._bindFocusPause();
+        }
+      }
+
+      if (reduceMotion && config.speed == null) config.speed = 0;
+    }
+
+    _bindFocusPause() {
+      if (this._focusPauseBound) return;
+      this._focusPauseBound = true;
+      var self = this;
+      this.addEventListener('focusin', function () {
+        if (self._swiper && self._swiper.autoplay) self._swiper.autoplay.stop();
+      });
+      this.addEventListener('focusout', function (e) {
+        if (self.contains(e.relatedTarget)) return;
+        if (self._swiper && self._swiper.autoplay && self._swiper.params.autoplay) self._swiper.autoplay.start();
+      });
+    }
+
+    /** Theme editor: show the slide for the block the merchant selected. */
+    selectBlock(blockEl) {
+      if (!this._swiper || !blockEl) return;
+      var slide = blockEl.closest('.swiper-slide');
+      if (!slide) return;
+      var index = this._swiper.params.loop
+        ? Number(slide.getAttribute('data-swiper-slide-index'))
+        : Array.prototype.indexOf.call(this._swiper.slides, slide);
+      if (isNaN(index) || index < 0) return;
+      if (this._swiper.params.loop) this._swiper.slideToLoop(index);
+      else this._swiper.slideTo(index);
     }
 
     _parseNumericValues(config) {
@@ -146,5 +211,11 @@
       el._swiper = null;
       el._setup();
     });
+  });
+
+  document.addEventListener('shopify:block:select', function (event) {
+    var blockEl = event.target;
+    var carousel = blockEl && blockEl.closest && blockEl.closest('carousel-swiper');
+    if (carousel && typeof carousel.selectBlock === 'function') carousel.selectBlock(blockEl);
   });
 })();

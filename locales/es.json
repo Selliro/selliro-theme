@@ -8,6 +8,25 @@
  * ------------------------------------------------------------
  */
 {
+  "collection_hero": {
+    "home": "Inicio",
+    "breadcrumb_label": "Ruta de navegación",
+    "all": "Todo"
+  },
+  "bundle_builder": {
+    "add_aria": "Agregar {{ title }} al paquete",
+    "empty_slot": "Espacio vacío",
+    "items_count": "{{ count }} artículos",
+    "announce_added": "{{ title }} agregado. {{ count }} artículos en tu caja.",
+    "announce_removed": "{{ title }} eliminado. {{ count }} artículos en tu caja.",
+    "savings": "Ahorras",
+    "total": "Total",
+    "view_bundle": "Ver caja"
+  },
+  "routine_builder": {
+    "editor_hint": "Agrega un bloque «Hueco» para empezar a crear la frase.",
+    "ready": "Tu rutina está lista. {{ count }} productos recomendados."
+  },
   "blocks": {
     "load_video": "Cargar video: {{ description }}",
     "sold_out": "Agotado",

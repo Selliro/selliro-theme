@@ -21,7 +21,7 @@
     "theme",
     "webpack"
   ],
-  "author": "@jingleBaba",
+  "author": "Selliro",
   "license": "ISC",
   "dependencies": {
     "@headlessui/react": "^1.7.17",

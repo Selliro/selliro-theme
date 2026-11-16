@@ -3,11 +3,15 @@
   Global button component - variant set in presets
 {%- endcomment -%}
 
+{%- liquid
+  assign render_variant = block.settings.variant | default: 'primary'
+  assign render_secondary_color = block.settings.secondary_color | default: 'white'
+-%}
 {%- render 'button',
   label: block.settings.label,
   link: block.settings.link,
-  variant: block.settings.variant | default: 'primary',
-  secondary_color: block.settings.secondary_color | default: 'white',
+  variant: render_variant,
+  secondary_color: render_secondary_color,
   block_shopify_attributes: block.shopify_attributes
 -%}
 

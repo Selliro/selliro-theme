@@ -52,29 +52,40 @@
             <div class="brand-lists-section__header-content tw-flex tw-flex-col tw-gap-4 tw-items-start">
               {%- comment -%} Caption {%- endcomment -%}
               {%- if section_caption != blank -%}
+                {%- liquid
+                  assign render_color = section.settings.caption_color | default: '#323e46'
+                -%}
                 {%- render 'caption',
                   text: section_caption,
-                  color: section.settings.caption_color | default: '#323e46',
+                  color: render_color,
                   parent_class: 'brand-lists'
                 -%}
               {%- endif -%}
               
               {%- comment -%} Heading {%- endcomment -%}
               {%- if section_heading != blank -%}
+                {%- liquid
+                  assign render_variant = section.settings.heading_variant | default: 'h2'
+                  assign render_color = section.settings.heading_color | default: '#092846'
+                -%}
                 {%- render 'heading',
                   text: section_heading,
-                  variant: section.settings.heading_variant | default: 'h2',
-                  color: section.settings.heading_color | default: '#092846',
+                  variant: render_variant,
+                  color: render_color,
                   parent_class: 'brand-lists'
                 -%}
               {%- endif -%}
               
               {%- comment -%} Subheading {%- endcomment -%}
               {%- if section_subheading != blank -%}
+                {%- liquid
+                  assign render_variant = section.settings.subheading_variant | default: 'md'
+                  assign render_color = section.settings.subheading_color | default: '#323e46'
+                -%}
                 {%- render 'subheading',
                   text: section_subheading,
-                  variant: section.settings.subheading_variant | default: 'md',
-                  color: section.settings.subheading_color | default: '#323e46',
+                  variant: render_variant,
+                  color: render_color,
                   max_width: section.settings.subheading_max_width,
                   parent_class: 'brand-lists'
                 -%}
@@ -85,13 +96,17 @@
           {%- comment -%} Image (Outside Flex Container) {%- endcomment -%}
           {%- if section_image != blank -%}
             <div class="brand-lists-section__image tw-mt-4">
+              {%- liquid
+                assign render_icon_max_width = section.settings.image_max_width | default: '145'
+                assign render_desktop_aspect_ratio = section.settings.image_aspect_ratio | default: '1'
+              -%}
               {%- render 'image',
                 desktop_image: section_image,
                 mobile_image: section_image,
                 image_id: section.id,
                 layout_type: 'icon',
-                icon_max_width: section.settings.image_max_width | default: '145',
-                desktop_aspect_ratio: section.settings.image_aspect_ratio | default: '1',
+                icon_max_width: render_icon_max_width,
+                desktop_aspect_ratio: render_desktop_aspect_ratio,
                 parent_class: 'brand-lists'
               -%}
             </div>

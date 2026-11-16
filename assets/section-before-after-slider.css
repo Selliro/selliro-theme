@@ -395,3 +395,55 @@
     transform: none;
   }
 }
+
+/* ================================================================ image text (one line per side) */
+
+.before-after-slider__caption {
+  position: absolute;
+  z-index: 2;
+  max-width: min(22rem, 44cqw);
+  margin: 0;
+  padding: 0.55em 1em;
+  border: 1px solid rgb(255 255 255 / 0.75);
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.6);
+  backdrop-filter: blur(10px) saturate(1.2);
+  -webkit-backdrop-filter: blur(10px) saturate(1.2);
+  box-shadow: 0 14px 30px -20px rgb(60 35 15 / 0.45);
+  color: #2a211a;
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight, 500);
+  font-size: clamp(0.75rem, 2.4cqw, 1.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+@container beforeafter (max-width: 560px) {
+  .before-after-slider__caption {
+    padding: 0.45em 0.8em;
+    border-radius: 10px;
+  }
+}
+
+/* Before: bottom-left of its half (inside the clip, so it hides as the divider moves left) */
+.before-after-slider__caption--before {
+  left: var(--badge-inset);
+  bottom: var(--badge-inset);
+}
+
+/* After: top-right */
+.before-after-slider__caption--after {
+  top: var(--badge-inset);
+  right: var(--badge-inset);
+  z-index: 1;
+}
+
+@media (forced-colors: active) {
+  .before-after-slider__caption {
+    border: 1px solid CanvasText;
+  }
+}

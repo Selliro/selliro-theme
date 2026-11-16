@@ -29,10 +29,13 @@
     {%- comment -%} Full Image - First on mobile, Left on desktop (1024px+) {%- endcomment -%}
     {%- if content_image != blank or content_image_mobile != blank -%}
       <div class="horizontal-tabs__panel-image  tw-w-full tw-min-h-[200px] tw-rounded-[12px] lg:tw-max-w-[400px]">
+        {%- liquid
+          assign render_image_id = block.id | append: '-image'
+        -%}
         {%- render 'image',
           desktop_image: content_image,
           mobile_image: content_image_mobile,
-          image_id: block.id | append: '-image',  
+          image_id: render_image_id,  
           layout_type: 'full',
           desktop_aspect_ratio: '1',
           mobile_aspect_ratio: '1.75',
@@ -48,10 +51,13 @@
       {%- comment -%} Mini Icon - Small icon image {%- endcomment -%}
       {%- if mini_icon != blank -%}
         <div class="horizontal-tabs__panel-mini-icon tw-shrink-0 tw-flex-shrink-0">
+          {%- liquid
+            assign render_image_id = block.id | append: '-mini-icon'
+          -%}
           {%- render 'image',
             desktop_image: mini_icon,
             mobile_image: mini_icon,
-            image_id: block.id | append: '-mini-icon',
+            image_id: render_image_id,
             layout_type: 'icon',
             desktop_aspect_ratio: '1.36',
             mobile_aspect_ratio: '1.36',
@@ -111,11 +117,10 @@
 
       {%- comment -%} Icon Text List Blocks - Render below divider {%- endcomment -%}
       <div class="horizontal-tabs__panel-icon-text-list tw-mt-2">
-        {%- for nested_block in block.blocks -%}
-          {%- render nested_block, section: section -%}
-        {%- endfor -%} 
+        {%- content_for 'blocks' -%}
       </div>
     </div>
+  </div>
 </div>
 
 {% schema %}
@@ -128,7 +133,7 @@
     {
       "type": "text",
       "id": "section_id",
-      "label": "Section ID",
+      "label": "Section ID"
     },
     {
       "type": "header",

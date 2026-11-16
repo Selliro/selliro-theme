@@ -34,14 +34,11 @@
   {%- endif -%}
 
   {%- comment -%} Divider - hidden on mobile {%- endcomment -%}
-  <img 
-    src="{{ 'divider-vertical.svg' | asset_url }}" 
-    alt="" 
-    class="button-icontext-divider tw-hidden tw-h-[39px] tw-w-px tw-shrink-0" 
-    width="1" 
-    height="39"
-    loading="lazy"
-  >
+  <span
+    class="button-icontext-divider tw-hidden tw-h-[39px] tw-w-px tw-shrink-0"
+    style="background-color: currentColor; opacity: 0.2;"
+    aria-hidden="true"
+  ></span>
 
   {%- comment -%} Render icon-text items {%- endcomment -%}
   <div class="button-icontext-items tw-flex tw-flex-col tw-gap-1 tw-shrink-0">

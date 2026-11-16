@@ -22,6 +22,40 @@
   }
 {% endjavascript %}
 
+{%- liquid
+  assign use_na_cards = false
+  if section.settings.product_card_style == 'new_arrivals'
+    assign use_na_cards = true
+  endif
+-%}
+
+{%- if section.settings.products_per_row > 0 and section.settings.layout_type == 'grid' -%}
+  {%- assign ppr = section.settings.products_per_row -%}
+  {% style %}
+    @media screen and (min-width: 750px) and (max-width: 1099px) {
+      .product-grid--{{ section.id }}:is(.product-grid--grid):not([product-grid-view='zoom-out']) {
+        --product-grid-columns-desktop: repeat({{ ppr | at_most: 3 }}, minmax(0, 1fr));
+      }
+    }
+    @media screen and (min-width: 1100px) {
+      .product-grid--{{ section.id }}:is(.product-grid--grid):not([product-grid-view='zoom-out']) {
+        --product-grid-columns-desktop: repeat({{ ppr }}, minmax(0, 1fr));
+      }
+    }
+  {% endstyle %}
+{%- endif -%}
+{{ 'section-collection-promo.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'collection-promo.js' | asset_url }}" defer></script>
+
+{%- if use_na_cards -%}
+  {{ 'section-new-arrivals-showcase.css' | asset_url | stylesheet_tag }}
+  {{ 'new-arrivals-quick-view.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'image-loader.js' | asset_url }}" defer></script>
+  <script src="{{ 'new-arrivals-components.js' | asset_url }}" defer></script>
+  <script src="{{ 'new-arrivals-showcase.js' | asset_url }}" defer></script>
+  <script src="{{ 'new-arrivals-quick-view.js' | asset_url }}" defer></script>
+{%- endif -%}
+
 {% comment %} We always render this full-width, as the child blocks have width: page/full settings {% endcomment %}
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <results-list
@@ -29,6 +63,10 @@
   style="--padding-block-start: {{ section.settings.padding-block-start }}px; --padding-block-end: {{ section.settings.padding-block-end }}px;"
   section-id="{{ section.id }}"
   infinite-scroll="{{ section.settings.enable_infinite_scroll }}"
+  {%- if use_na_cards %}
+    data-new-arrivals-root
+    data-new-arrivals-qv-id="new-arrivals-qv-drawer-{{ section.id }}"
+  {%- endif %}
 >
   {% render 'skip-to-content-link', href: '#ResultsList', text: 'accessibility.skip_to_results_list' %}
 
@@ -58,10 +96,38 @@
             data-product-id="{{ product.id }}"
             ref="cards[]"
           >
-            {% # theme-check-disable %}
-            {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
-            {% # theme-check-enable %}
+            {%- if use_na_cards -%}
+              {%- render 'new-arrivals-card',
+                product: product,
+                accent: section.settings.na_card_cta_color,
+                star_color: section.settings.na_card_star_color,
+                new_days: section.settings.na_card_new_days,
+                new_label: section.settings.na_card_new_label,
+                add_label: section.settings.na_card_add_label,
+                fallback_stars: section.settings.na_card_fallback_stars,
+                image_sizes: '(min-width: 1200px) 25vw, (min-width: 750px) 33vw, 50vw'
+              -%}
+            {%- else -%}
+              {% # theme-check-disable %}
+              {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
+              {% # theme-check-enable %}
+            {%- endif -%}
           </li>
+          {%- comment -%} Promotion tiles (first page only), shown after the chosen product position {%- endcomment -%}
+          {%- if paginate.current_page == 1 -%}
+            {%- assign product_position = forloop.index -%}
+            {%- for t in (1..2) -%}
+              {%- liquid
+                assign k_on = 'promo_' | append: t | append: '_enabled'
+                assign k_pos = 'promo_' | append: t | append: '_position'
+              -%}
+              {%- if section.settings[k_on] and section.settings[k_pos] == product_position -%}
+                <li class="product-grid__item collection-promo-item">
+                  {%- render 'collection-promo-tile', section: section, index: t -%}
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
         {% endfor %}
       {% endcapture %}
 
@@ -75,6 +141,10 @@
     {% endpaginate %}
   </div>
 </results-list>
+
+{%- if use_na_cards -%}
+  {% render 'new-arrivals-quick-view-drawer', section: section %}
+{%- endif -%}
 
 {% stylesheet %}
   .main-collection-grid {
@@ -154,7 +224,9 @@
 {
   "name": "t:names.collection_container",
   "enabled_on": {
-    "templates": ["collection"]
+    "templates": [
+      "collection"
+    ]
   },
   "settings": [
     {
@@ -172,6 +244,17 @@
         }
       ],
       "default": "grid"
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "label": "t:collection_grid.products_per_row",
+      "info": "t:collection_grid.products_per_row_info",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4,
+      "visible_if": "{{ section.settings.layout_type == 'grid' }}"
     },
     {
       "type": "select",
@@ -229,6 +312,76 @@
       "step": 4,
       "default": 24,
       "visible_if": "{{ section.settings.enable_infinite_scroll == false }}"
+    },
+    {
+      "type": "header",
+      "content": "Product card"
+    },
+    {
+      "type": "select",
+      "id": "product_card_style",
+      "label": "Card style",
+      "options": [
+        {
+          "value": "new_arrivals",
+          "label": "New Arrivals style"
+        },
+        {
+          "value": "theme",
+          "label": "Theme default (product card block)"
+        }
+      ],
+      "default": "new_arrivals",
+      "info": "New Arrivals style matches the homepage New Arrivals cards: image scrub gallery, quick view, quick add and star rating."
+    },
+    {
+      "type": "text",
+      "id": "na_card_add_label",
+      "label": "Quick add button label",
+      "default": "ADD TO CART",
+      "visible_if": "{{ section.settings.product_card_style == 'new_arrivals' }}"
+    },
+    {
+      "type": "color",
+      "id": "na_card_cta_color",
+      "label": "Quick add button color",
+      "default": "#f5c518",
+      "visible_if": "{{ section.settings.product_card_style == 'new_arrivals' }}"
+    },
+    {
+      "type": "text",
+      "id": "na_card_new_label",
+      "label": "New badge text",
+      "default": "New",
+      "visible_if": "{{ section.settings.product_card_style == 'new_arrivals' }}"
+    },
+    {
+      "type": "range",
+      "id": "na_card_new_days",
+      "label": "Show New badge for products added in the last",
+      "min": 7,
+      "max": 107,
+      "step": 1,
+      "unit": "d",
+      "default": 45,
+      "visible_if": "{{ section.settings.product_card_style == 'new_arrivals' }}"
+    },
+    {
+      "type": "color",
+      "id": "na_card_star_color",
+      "label": "Star color",
+      "default": "#e6b800",
+      "visible_if": "{{ section.settings.product_card_style == 'new_arrivals' }}"
+    },
+    {
+      "type": "range",
+      "id": "na_card_fallback_stars",
+      "label": "Stars when product has no reviews",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 5,
+      "visible_if": "{{ section.settings.product_card_style == 'new_arrivals' }}"
     },
     {
       "type": "header",
@@ -326,6 +479,392 @@
       "step": 1,
       "unit": "px",
       "default": 8
+    },
+    {
+      "type": "header",
+      "content": "t:collection_grid.promo_header"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:collection_grid.promo_info"
+    },
+    {
+      "type": "header",
+      "content": "t:collection_grid.tile_1"
+    },
+    {
+      "type": "checkbox",
+      "id": "promo_1_enabled",
+      "label": "t:collection_grid.show_tile",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "promo_1_position",
+      "label": "t:collection_grid.position",
+      "min": 1,
+      "max": 24,
+      "step": 1,
+      "default": 7,
+      "visible_if": "{{ section.settings.promo_1_enabled }}"
+    },
+    {
+      "type": "select",
+      "id": "promo_1_span",
+      "label": "t:collection_grid.span",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:collection_grid.span_1"
+        },
+        {
+          "value": "2",
+          "label": "t:collection_grid.span_2"
+        }
+      ],
+      "default": "1",
+      "visible_if": "{{ section.settings.promo_1_enabled }}"
+    },
+    {
+      "type": "select",
+      "id": "promo_1_media",
+      "label": "t:settings.media_type",
+      "options": [
+        {
+          "value": "image",
+          "label": "t:options.image"
+        },
+        {
+          "value": "video",
+          "label": "t:collection_grid.media_upload"
+        },
+        {
+          "value": "mp4",
+          "label": "t:collection_grid.media_mp4"
+        },
+        {
+          "value": "external",
+          "label": "t:collection_grid.media_external"
+        }
+      ],
+      "default": "image",
+      "visible_if": "{{ section.settings.promo_1_enabled }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "promo_1_image",
+      "label": "t:content.image",
+      "visible_if": "{{ section.settings.promo_1_enabled }}",
+      "info": "t:collection_grid.image_poster_info"
+    },
+    {
+      "type": "video",
+      "id": "promo_1_video",
+      "label": "t:settings.video",
+      "visible_if": "{{ section.settings.promo_1_enabled and section.settings.promo_1_media == 'video' }}"
+    },
+    {
+      "type": "url",
+      "id": "promo_1_video_mp4",
+      "label": "t:collection_grid.video_mp4",
+      "info": "t:collection_grid.video_mp4_info",
+      "visible_if": "{{ section.settings.promo_1_enabled and section.settings.promo_1_media == 'mp4' }}"
+    },
+    {
+      "type": "video_url",
+      "id": "promo_1_video_url",
+      "label": "t:collection_grid.video_url",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "visible_if": "{{ section.settings.promo_1_enabled and section.settings.promo_1_media == 'external' }}"
+    },
+    {
+      "type": "select",
+      "id": "promo_1_icon",
+      "label": "t:content.icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "leaf",
+          "label": "t:collection_grid.icon_leaf"
+        },
+        {
+          "value": "sparkle",
+          "label": "t:collection_grid.icon_sparkle"
+        },
+        {
+          "value": "droplet",
+          "label": "t:collection_grid.icon_droplet"
+        },
+        {
+          "value": "sun",
+          "label": "t:collection_grid.icon_sun"
+        },
+        {
+          "value": "heart",
+          "label": "t:collection_grid.icon_heart"
+        },
+        {
+          "value": "gift",
+          "label": "t:collection_grid.icon_gift"
+        },
+        {
+          "value": "sprout",
+          "label": "t:collection_grid.icon_sprout"
+        },
+        {
+          "value": "star",
+          "label": "t:collection_grid.icon_star"
+        }
+      ],
+      "default": "leaf",
+      "visible_if": "{{ section.settings.promo_1_enabled }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_1_heading",
+      "label": "t:content.heading",
+      "default": "t:collection_grid.d1_heading",
+      "visible_if": "{{ section.settings.promo_1_enabled }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_1_text",
+      "label": "t:content.text",
+      "default": "t:collection_grid.d1_text",
+      "visible_if": "{{ section.settings.promo_1_enabled }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_1_button_label",
+      "label": "t:sections.all.button.label.label",
+      "default": "t:collection_grid.d1_button",
+      "visible_if": "{{ section.settings.promo_1_enabled }}"
+    },
+    {
+      "type": "url",
+      "id": "promo_1_link",
+      "label": "t:settings.link",
+      "visible_if": "{{ section.settings.promo_1_enabled }}"
+    },
+    {
+      "type": "color",
+      "id": "promo_1_bg_color",
+      "label": "t:settings.background_color",
+      "default": "#3b4a2f",
+      "visible_if": "{{ section.settings.promo_1_enabled }}"
+    },
+    {
+      "type": "color",
+      "id": "promo_1_text_color",
+      "label": "t:collection_hero.text_color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.promo_1_enabled }}"
+    },
+    {
+      "type": "range",
+      "id": "promo_1_overlay",
+      "label": "t:settings.overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 70,
+      "visible_if": "{{ section.settings.promo_1_enabled }}"
+    },
+    {
+      "type": "header",
+      "content": "t:collection_grid.tile_2"
+    },
+    {
+      "type": "checkbox",
+      "id": "promo_2_enabled",
+      "label": "t:collection_grid.show_tile",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "promo_2_position",
+      "label": "t:collection_grid.position",
+      "min": 1,
+      "max": 24,
+      "step": 1,
+      "default": 14,
+      "visible_if": "{{ section.settings.promo_2_enabled }}"
+    },
+    {
+      "type": "select",
+      "id": "promo_2_span",
+      "label": "t:collection_grid.span",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:collection_grid.span_1"
+        },
+        {
+          "value": "2",
+          "label": "t:collection_grid.span_2"
+        }
+      ],
+      "default": "2",
+      "visible_if": "{{ section.settings.promo_2_enabled }}"
+    },
+    {
+      "type": "select",
+      "id": "promo_2_media",
+      "label": "t:settings.media_type",
+      "options": [
+        {
+          "value": "image",
+          "label": "t:options.image"
+        },
+        {
+          "value": "video",
+          "label": "t:collection_grid.media_upload"
+        },
+        {
+          "value": "mp4",
+          "label": "t:collection_grid.media_mp4"
+        },
+        {
+          "value": "external",
+          "label": "t:collection_grid.media_external"
+        }
+      ],
+      "default": "image",
+      "visible_if": "{{ section.settings.promo_2_enabled }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "promo_2_image",
+      "label": "t:content.image",
+      "visible_if": "{{ section.settings.promo_2_enabled }}",
+      "info": "t:collection_grid.image_poster_info"
+    },
+    {
+      "type": "video",
+      "id": "promo_2_video",
+      "label": "t:settings.video",
+      "visible_if": "{{ section.settings.promo_2_enabled and section.settings.promo_2_media == 'video' }}"
+    },
+    {
+      "type": "url",
+      "id": "promo_2_video_mp4",
+      "label": "t:collection_grid.video_mp4",
+      "info": "t:collection_grid.video_mp4_info",
+      "visible_if": "{{ section.settings.promo_2_enabled and section.settings.promo_2_media == 'mp4' }}"
+    },
+    {
+      "type": "video_url",
+      "id": "promo_2_video_url",
+      "label": "t:collection_grid.video_url",
+      "accept": [
+        "youtube",
+        "vimeo"
+      ],
+      "visible_if": "{{ section.settings.promo_2_enabled and section.settings.promo_2_media == 'external' }}"
+    },
+    {
+      "type": "select",
+      "id": "promo_2_icon",
+      "label": "t:content.icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:options.none"
+        },
+        {
+          "value": "leaf",
+          "label": "t:collection_grid.icon_leaf"
+        },
+        {
+          "value": "sparkle",
+          "label": "t:collection_grid.icon_sparkle"
+        },
+        {
+          "value": "droplet",
+          "label": "t:collection_grid.icon_droplet"
+        },
+        {
+          "value": "sun",
+          "label": "t:collection_grid.icon_sun"
+        },
+        {
+          "value": "heart",
+          "label": "t:collection_grid.icon_heart"
+        },
+        {
+          "value": "gift",
+          "label": "t:collection_grid.icon_gift"
+        },
+        {
+          "value": "sprout",
+          "label": "t:collection_grid.icon_sprout"
+        },
+        {
+          "value": "star",
+          "label": "t:collection_grid.icon_star"
+        }
+      ],
+      "default": "sun",
+      "visible_if": "{{ section.settings.promo_2_enabled }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_2_heading",
+      "label": "t:content.heading",
+      "default": "t:collection_grid.d2_heading",
+      "visible_if": "{{ section.settings.promo_2_enabled }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_2_text",
+      "label": "t:content.text",
+      "default": "t:collection_grid.d2_text",
+      "visible_if": "{{ section.settings.promo_2_enabled }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_2_button_label",
+      "label": "t:sections.all.button.label.label",
+      "default": "t:collection_grid.d2_button",
+      "visible_if": "{{ section.settings.promo_2_enabled }}"
+    },
+    {
+      "type": "url",
+      "id": "promo_2_link",
+      "label": "t:settings.link",
+      "visible_if": "{{ section.settings.promo_2_enabled }}"
+    },
+    {
+      "type": "color",
+      "id": "promo_2_bg_color",
+      "label": "t:settings.background_color",
+      "default": "#8a5a3c",
+      "visible_if": "{{ section.settings.promo_2_enabled }}"
+    },
+    {
+      "type": "color",
+      "id": "promo_2_text_color",
+      "label": "t:collection_hero.text_color",
+      "default": "#ffffff",
+      "visible_if": "{{ section.settings.promo_2_enabled }}"
+    },
+    {
+      "type": "range",
+      "id": "promo_2_overlay",
+      "label": "t:settings.overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 70,
+      "visible_if": "{{ section.settings.promo_2_enabled }}"
     }
   ],
   "presets": []

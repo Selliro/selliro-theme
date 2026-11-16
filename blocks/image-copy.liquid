@@ -3,11 +3,14 @@
   Global image component for cards and sections
 {%- endcomment -%}
 
+{%- liquid
+  assign render_layout_type = block.settings.layout_type | default: 'icon'
+-%}
 {%- render 'image',
   desktop_image: block.settings.desktop_image,
   mobile_image: block.settings.mobile_image,
   image_id: block.id,
-  layout_type: block.settings.layout_type | default: 'icon',
+  layout_type: render_layout_type,
   icon_max_width: block.settings.icon_max_width,
   desktop_aspect_ratio: block.settings.desktop_aspect_ratio,
   mobile_aspect_ratio: block.settings.mobile_aspect_ratio,

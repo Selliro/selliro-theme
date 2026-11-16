@@ -81,9 +81,8 @@
           
           {%- comment -%} Secondary Button (Below on mobile/desktop, Right on tablet) {%- endcomment -%}
           {%- if show_button or show_button_3 -%}
-            <div class="blog-post-list__button md:tw-pt-0md:tw-justify-end md:tw-shrink-0 lg:tw-pt-5">
+            <div class="blog-post-list__button md:tw-pt-0 md:tw-justify-end md:tw-shrink-0 lg:tw-pt-5">
               {%- render 'button-group',
-                show_button_1: false,
                 show_button_1: show_button,
                 button_1_label: button_label,
                 button_1_link: button_link,

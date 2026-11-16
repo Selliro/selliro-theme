@@ -82,9 +82,13 @@
                 {{ rating_value }}
               </div>
               
+              {%- liquid
+                assign render_rating = rating_value | plus: 0
+                assign render_star_color = section.settings.star_color | default: '#52c3c2'
+              -%}
               {%- render 'star-rating',
-                rating: rating_value | plus: 0,
-                star_color: section.settings.star_color | default: '#52c3c2',
+                rating: render_rating,
+                star_color: render_star_color,
                 parent_class: 'testimonials'
               -%}
             </div>

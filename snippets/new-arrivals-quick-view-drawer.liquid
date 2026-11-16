@@ -1,13 +1,25 @@
 {% comment %}
   New Arrivals quick view drawer shell.
   Content is injected by assets/new-arrivals-quick-view.js
+
+  Desktop: slides in from the right. Mobile (< 750px): bottom sheet.
 {% endcomment %}
+
+{%- liquid
+  assign close_on_add = false
+  if settings.cart_type == 'drawer' and settings.auto_open_cart_drawer
+    assign close_on_add = true
+  endif
+-%}
 
 <div
   id="new-arrivals-qv-drawer-{{ section.id }}"
   class="na-qv-drawer"
   data-na-qv-drawer
   data-section-id="{{ section.id }}"
+  data-close-on-add="{{ close_on_add }}"
+  data-label-dialog="{{ 'content.quick_view' | t | escape }}"
+  data-label-view-details="{{ 'content.view_full_details' | t | escape }}"
   aria-hidden="true"
 >
   <div class="na-qv-drawer__overlay" data-na-qv-close tabindex="-1"></div>
@@ -15,7 +27,7 @@
     class="na-qv-drawer__panel color-{{ settings.drawer_color_scheme }}"
     role="dialog"
     aria-modal="true"
-    aria-label="{{ 'content.quick_view' | t }}"
+    aria-label="{{ 'content.quick_view' | t | escape }}"
     tabindex="-1"
   >
     <header class="na-qv-drawer__header">
@@ -24,11 +36,25 @@
         type="button"
         class="na-qv-drawer__close button-unstyled"
         data-na-qv-close
-        aria-label="{{ 'actions.close_dialog' | t }}"
+        aria-label="{{ 'actions.close_dialog' | t | escape }}"
       >
-        <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+        <span class="svg-wrapper" aria-hidden="true">{{- 'icon-close.svg' | inline_asset_content -}}</span>
       </button>
     </header>
     <div class="na-qv-drawer__body" data-na-qv-content></div>
   </aside>
+
+  <template data-na-qv-skeleton>
+    <div class="na-qv-skeleton" role="status">
+      <span class="visually-hidden">{{ 'accessibility.quick_view_loading' | t }}</span>
+      <div class="na-qv-skeleton__media" aria-hidden="true"></div>
+      <div class="na-qv-skeleton__details" aria-hidden="true">
+        <div class="na-qv-skeleton__line na-qv-skeleton__line--title"></div>
+        <div class="na-qv-skeleton__line na-qv-skeleton__line--short"></div>
+        <div class="na-qv-skeleton__line"></div>
+        <div class="na-qv-skeleton__line"></div>
+        <div class="na-qv-skeleton__button"></div>
+      </div>
+    </div>
+  </template>
 </div>

@@ -82,6 +82,9 @@
                     tw-hidden md:tw-block tw-sticky tw-top-[120px]"
                     aria-label="Desktop tab navigation"
                     >
+                    {%- liquid
+                      assign render_carousel_class = parent_class | append: '__carousel--desktop'
+                    -%}
                     {%- render 'carousel-wrapper',
                         section_id: section.id,
                         desktop_slides_per_view: 'auto',
@@ -91,7 +94,7 @@
                         mobile_space_between: 16,
                         tablet_space_between: 16,
                         desktop_space_between: 16,
-                        carousel_class: parent_class | append: '__carousel--desktop',
+                        carousel_class: render_carousel_class,
                         slider_items: slider_items
                     -%}
                 </div>
@@ -105,13 +108,16 @@
                     tw-z-10 
                     tw-pt-11"
                     aria-label="Mobile tab navigation">
+                    {%- liquid
+                      assign render_carousel_class = parent_class | append: '__carousel--mobile'
+                    -%}
                     {%- render 'carousel-wrapper',
                         section_id: section.id,
                         desktop_slides_per_view: '1',
                         mobile_slides_per_view: "auto",
                         mobile_space_between: 16,
                         desktop_space_between: 16,
-                        carousel_class: parent_class | append: '__carousel--mobile',
+                        carousel_class: render_carousel_class,
                         slider_items: slider_items
                     -%}
                 </div>

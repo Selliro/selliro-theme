@@ -32,12 +32,12 @@
     <table class="table-block__table tw-w-full tw-text-sm tw-text-left rtl:tw-text-right tw-text-body tw-overflow-hidden">
       <thead>
         {% for thead in block.blocks -%}
-          {%- if thead.id contains 'table_header' %}{% render: thead, section: section, block: thead %}{% endif %}
+          {%- if thead.id contains 'table_header' %}{% render thead, section: section, block: thead %}{% endif %}
         {% endfor %}
       </thead>
       <tbody>
         {% for tbody in block.blocks -%}
-          {%- if tbody.id contains 'table_row' %}{% render: tbody, section: section, block: tbody %}{% endif %}
+          {%- if tbody.id contains 'table_row' %}{% render tbody, section: section, block: tbody %}{% endif %}
         {% endfor %}
       </tbody>
     </table>

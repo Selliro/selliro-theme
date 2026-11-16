@@ -43,6 +43,17 @@
     endif
   endif
 
+  # Layout presets. "custom" falls back to the individual logo/menu position settings.
+  assign header_layout = section.settings.header_layout | default: 'custom'
+  case header_layout
+    when 'logo_left_menu_center'
+      assign layout_logo_position = 'left'
+      assign layout_menu_position = 'center'
+    when 'logo_center_menu_left'
+      assign layout_logo_position = 'center'
+      assign layout_menu_position = 'left'
+  endcase
+
   capture logo
     content_for 'block', type: '_header-logo', id: 'header-logo'
   endcapture
@@ -171,7 +182,22 @@
   if collapse_header_paddings_class
     assign class = class | append: ' ' | append: collapse_header_paddings_class
   endif
+
+  if section.settings.menu_backdrop
+    assign class = class | append: ' header--menu-backdrop'
+  endif
 %}
+
+{%- if section.settings.menu_backdrop -%}
+  {% style %}
+    #shopify-section-{{ section.id }} {
+      --menu-backdrop-color: {{ section.settings.menu_backdrop_color | default: '#000000' }};
+      --menu-backdrop-opacity: {{ section.settings.menu_backdrop_opacity | default: 40 | times: 0.01 }};
+      --menu-backdrop-blur: {{ section.settings.menu_backdrop_blur | default: 0 }}px;
+      --menu-backdrop-speed: 0.35s;
+    }
+  {% endstyle %}
+{%- endif -%}
 
 <script type="application/ld+json">
   {
@@ -237,6 +263,8 @@
         row: row,
         order: order,
         settings: section.settings,
+        logo_position: layout_logo_position,
+        menu_position: layout_menu_position,
         first: first,
         logo: logo,
         menu: menu,
@@ -376,6 +404,64 @@
 
   .header-section {
     position: relative;
+  }
+
+  /* Page backdrop while a dropdown / mega menu is open (desktop only; the mobile drawer has its own) */
+  @media screen and (min-width: 750px) {
+    .header-section:has(> .header--menu-backdrop)::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      background-color: var(--menu-backdrop-color, #000);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--menu-backdrop-speed, 0.35s) var(--animation-easing, ease),
+        visibility 0s linear var(--menu-backdrop-speed, 0.35s);
+    }
+
+    .header-section:has(> .header--menu-backdrop .menu-list__link[aria-haspopup][aria-expanded='true']) {
+      z-index: var(--layer-sticky);
+
+      &::after {
+        opacity: var(--menu-backdrop-opacity, 0.4);
+        visibility: visible;
+        transition: opacity var(--menu-backdrop-speed, 0.35s) var(--animation-easing, ease), visibility 0s;
+      }
+    }
+
+    @supports (backdrop-filter: blur(1px)) {
+      .header-section:has(> .header--menu-backdrop)::after {
+        background-color: transparent;
+        opacity: 1;
+        backdrop-filter: blur(0px);
+        transition: background-color var(--menu-backdrop-speed, 0.35s) var(--animation-easing, ease),
+          backdrop-filter var(--menu-backdrop-speed, 0.35s) var(--animation-easing, ease),
+          visibility 0s linear var(--menu-backdrop-speed, 0.35s);
+      }
+
+      .header-section:has(> .header--menu-backdrop .menu-list__link[aria-haspopup][aria-expanded='true'])::after {
+        opacity: 1;
+        background-color: color-mix(
+          in srgb,
+          var(--menu-backdrop-color, #000) calc(var(--menu-backdrop-opacity, 0.4) * 100%),
+          transparent
+        );
+        backdrop-filter: blur(var(--menu-backdrop-blur, 0px));
+        transition: background-color var(--menu-backdrop-speed, 0.35s) var(--animation-easing, ease),
+          backdrop-filter var(--menu-backdrop-speed, 0.35s) var(--animation-easing, ease), visibility 0s;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header-section::after {
+      transition: none !important;
+    }
   }
 
   #header-group:has(#header-component[sticky]) {
@@ -659,6 +745,31 @@
   "settings": [
     {
       "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "header_layout",
+      "label": "Desktop layout",
+      "options": [
+        {
+          "value": "logo_left_menu_center",
+          "label": "Logo left, menu center"
+        },
+        {
+          "value": "logo_center_menu_left",
+          "label": "Logo center, menu left"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ],
+      "default": "logo_left_menu_center",
+      "info": "Icons always stay on the right. Choose Custom to position the logo and menu yourself."
+    },
+    {
+      "type": "header",
       "content": "t:content.logo"
     },
     {
@@ -679,7 +790,8 @@
           "label": "t:options.right"
         }
       ],
-      "default": "center"
+      "default": "center",
+      "visible_if": "{{ section.settings.header_layout == 'custom' }}"
     },
     {
       "type": "header",
@@ -703,7 +815,8 @@
           "label": "t:options.right"
         }
       ],
-      "default": "left"
+      "default": "left",
+      "visible_if": "{{ section.settings.header_layout == 'custom' }}"
     },
     {
       "type": "select",
@@ -720,6 +833,42 @@
         }
       ],
       "default": "top"
+    },
+    {
+      "type": "checkbox",
+      "id": "menu_backdrop",
+      "label": "Dim page when menu is open",
+      "info": "Adds a backdrop behind dropdowns and mega menus on desktop.",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "menu_backdrop_color",
+      "label": "Backdrop color",
+      "default": "#000000",
+      "visible_if": "{{ section.settings.menu_backdrop }}"
+    },
+    {
+      "type": "range",
+      "id": "menu_backdrop_opacity",
+      "label": "Backdrop opacity",
+      "min": 10,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 40,
+      "visible_if": "{{ section.settings.menu_backdrop }}"
+    },
+    {
+      "type": "range",
+      "id": "menu_backdrop_blur",
+      "label": "Backdrop blur",
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "unit": "px",
+      "default": 2,
+      "visible_if": "{{ section.settings.menu_backdrop }}"
     },
     {
       "type": "header",

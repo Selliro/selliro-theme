@@ -46,7 +46,7 @@
     "type_font_h6": "subheading",
     "type_size_h6": "12",
     "type_line_height_h6": "display-loose",
-    "page_width": "narrow",
+    "page_width": "normal",
     "page_transition_enabled": false,
     "transition_to_main_product": false,
     "card_hover_effect": "none",
@@ -82,6 +82,15 @@
     "variant_button_radius": 14,
     "variant_button_width": "equal-width-buttons",
     "content_for_index": [],
+    "blocks": {
+      "4137089995462709539": {
+        "type": "shopify://apps/bundleboost/blocks/app-embed/019feb2a-bd81-7c1c-a3ce-031f83981337",
+        "disabled": false,
+        "settings": {
+          "api_url": "https://bundleboost-app.onrender.com"
+        }
+      }
+    },
     "color_schemes": {
       "scheme-1": {
         "settings": {

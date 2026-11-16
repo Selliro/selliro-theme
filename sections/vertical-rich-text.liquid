@@ -57,9 +57,12 @@
           {%- comment -%} Caption {%- endcomment -%}
           {%- if section_caption != blank -%}
             <div class="vertical-rich-text-section__caption md:tw-mb-4">
+              {%- liquid
+                assign render_color = section.settings.caption_color | default: '#323e46'
+              -%}
               {%- render 'caption',
                 text: section_caption,
-                color: section.settings.caption_color | default: '#323e46',
+                color: render_color,
                 parent_class: 'vertical-rich-text'
               -%}
             </div>
@@ -68,10 +71,13 @@
           {%- comment -%} Heading {%- endcomment -%}
           {%- if section_heading != blank -%}
             <div class="vertical-rich-text-section__heading tw-text-center">
+              {%- liquid
+                assign render_color = section.settings.heading_color | default: '#092846'
+              -%}
               {%- render 'heading',
                 text: section_heading,
-                variant: section.settings.heading_variant
-                color: section.settings.heading_color | default: '#092846',
+                variant: section.settings.heading_variant,
+                color: render_color,
                 parent_class: 'vertical-rich-text'
               -%}
             </div>
@@ -80,10 +86,13 @@
           {%- comment -%} Subheading {%- endcomment -%}
           {%- if section_subheading != blank -%}
             <div class="vertical-rich-text-section__subheading tw-text-center">
+              {%- liquid
+                assign render_color = section.settings.subheading_color | default: '#323e46'
+              -%}
               {%- render 'body',
                 text: section_subheading,
-                variant: section.settings.subheading_variant
-                color: section.settings.subheading_color | default: '#323e46',
+                variant: section.settings.subheading_variant,
+                color: render_color,
                 max_width: section.settings.subheading_max_width,
                 parent_class: 'vertical-rich-text vertical-rich-text__body'
               -%}

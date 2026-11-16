@@ -39,11 +39,12 @@
 
 .faq-split-gallery__title {
   margin: 0 0 clamp(28px, 4vw, 40px);
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: var(--color-foreground-heading);
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  line-height: var(--section-title-leading);
+  letter-spacing: var(--section-title-tracking);
+  text-transform: none;
+  color: var(--color-foreground-heading, var(--color-foreground));
 }
 
 .faq-split-gallery__accordion {

@@ -3,9 +3,12 @@
   Global body text component - variant set in presets
 {%- endcomment -%}
 
+{%- liquid
+  assign render_variant = block.settings.variant | default: 'lg'
+-%}
 {%- render 'body',
   text: block.settings.text,
-  variant: block.settings.variant | default: 'lg',
+  variant: render_variant,
   color: block.settings.color,
   block_shopify_attributes: block.shopify_attributes
 -%}

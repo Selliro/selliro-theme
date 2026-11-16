@@ -49,6 +49,8 @@
   assign label_after = section.settings.after_label | strip
   assign label_inset = section.settings.label_inset | default: 12
   assign show_particles = section.settings.enable_particles
+  assign caption_before = section.settings.before_caption | strip
+  assign caption_after = section.settings.after_caption | strip
 -%}
 
 <section
@@ -112,6 +114,9 @@
                 {{- label_after | escape -}}
               </span>
             {%- endif -%}
+            {%- if caption_after != blank -%}
+              <p class="before-after-slider__caption before-after-slider__caption--after">{{ caption_after | escape }}</p>
+            {%- endif -%}
             <div class="before-after-slider__clip">
               {%- if before_img != blank -%}
                 {{
@@ -134,6 +139,9 @@
                 >
                   {{- label_before | escape -}}
                 </span>
+              {%- endif -%}
+              {%- if caption_before != blank -%}
+                <p class="before-after-slider__caption before-after-slider__caption--before">{{ caption_before | escape }}</p>
               {%- endif -%}
             </div>
             <div class="before-after-slider__divider" aria-hidden="true"></div>
@@ -314,6 +322,24 @@
       "unit": "px",
       "label": "Label inset from edges",
       "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Image text"
+    },
+    {
+      "type": "text",
+      "id": "before_caption",
+      "label": "Before text",
+      "info": "Shown in the bottom-left corner of the before image. Leave empty to hide.",
+      "default": "Breakouts & redness"
+    },
+    {
+      "type": "text",
+      "id": "after_caption",
+      "label": "After text",
+      "info": "Shown in the top-right corner of the after image. Leave empty to hide.",
+      "default": "Clear, glowing skin"
     },
     {
       "type": "header",

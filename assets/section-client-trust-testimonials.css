@@ -30,11 +30,12 @@
 
 .client-trust-testimonials__title {
   margin: 0;
-  font-size: clamp(1.65rem, 3.2vw, 2.35rem);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: var(--color-foreground-heading, #0a0a0a);
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  line-height: var(--section-title-leading);
+  letter-spacing: var(--section-title-tracking);
+  text-transform: none;
+  color: var(--color-foreground-heading, var(--color-foreground));
 }
 
 .client-trust-testimonials__title + .client-trust-testimonials__subheading {
