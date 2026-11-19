@@ -166,6 +166,16 @@
               <span class="rb__words">{{ block.settings.before | escape }} </span>
             {%- endif -%}
             {%- assign tint = b_index | modulo: 3 | plus: 1 -%}
+            {%- liquid
+              assign after_text = block.settings.after | strip
+              assign first_char = after_text | slice: 0
+              assign is_punct = false
+              if first_char == ',' or first_char == '.' or first_char == '!' or first_char == '?' or first_char == ';' or first_char == ':'
+                assign is_punct = true
+              endif
+            -%}
+            {%- comment -%} A chip and the punctuation right after it never split across lines {%- endcomment -%}
+            {%- if is_punct -%}<span class="rb__pair">{%- endif -%}
             <button
               type="button"
               class="rb__blank"
@@ -185,16 +195,15 @@
                 <svg class="rb__blank-caret" viewBox="0 0 12 12" width="12" height="12" fill="none" focusable="false"><path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
             </button>
-            {%- liquid
-              assign after_text = block.settings.after | strip
-              assign first_char = after_text | slice: 0
-              assign is_punct = false
-              if first_char == ',' or first_char == '.' or first_char == '!' or first_char == '?' or first_char == ';' or first_char == ':'
-                assign is_punct = true
-              endif
-            -%}
-            {%- if after_text != blank -%}
-              <span class="rb__words{% if is_punct %} rb__words--punct{% endif %}">{% unless is_punct %} {% endunless %}{{ after_text | escape }}</span>
+            {%- if is_punct -%}
+              {%- assign punct = after_text | slice: 0 -%}
+              {%- assign rest = after_text | remove_first: punct | strip -%}
+              <span class="rb__words rb__words--punct">{{ punct | escape }}</span></span>
+              {%- if rest != blank -%}
+                <span class="rb__words"> {{ rest | escape }}</span>
+              {%- endif -%}
+            {%- elsif after_text != blank -%}
+              <span class="rb__words"> {{ after_text | escape }}</span>
             {%- endif -%}
             {{- ' ' -}}
             {%- assign b_index = b_index | plus: 1 -%}

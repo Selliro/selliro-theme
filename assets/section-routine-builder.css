@@ -366,6 +366,11 @@
   white-space: pre-wrap;
 }
 
+/* A chip and its punctuation stay on one line */
+.rb__pair {
+  white-space: nowrap;
+}
+
 /* Punctuation hugs the blank before it */
 .rb__words--punct {
   margin-inline-start: -0.12em;
