@@ -2536,7 +2536,7 @@
         "model_url": "",
         "model_usdz_url": "",
         "load_mode": "scroll",
-        "layout": "split",
+        "layout": "showcase",
         "media_position": "right",
         "stage_height": 600,
         "stage_height_mobile": 420,
