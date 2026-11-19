@@ -32,7 +32,7 @@
 {%- comment -%} Values that come from this section's settings (the rest is in section-header-announcements.css) {%- endcomment -%}
 {% style %}
   #shopify-section-{{ section.id }} .announcement-bar {
-    {% render 'spacing-padding', settings: section.settings %};
+    {% render 'spacing-padding', settings: section.settings %}
     --border-bottom-width: {{ section.settings.divider_width }}px;
     --ab-gap: {{ section.settings.marquee_gap | default: 48 }}px;
     {%- if section.settings.background_style == 'gradient' %}
