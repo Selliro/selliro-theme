@@ -367,7 +367,8 @@
 }
 
 /* A chip and its punctuation stay on one line */
-.rb__pair {
+.rb__pair,
+.rb__pair > .rb__words {
   white-space: nowrap;
 }
 
