@@ -1408,7 +1408,7 @@
   }
 
   .rb__sentence {
-    font-size: clamp(1.75rem, 8.4vw, 2.5rem);
+    font-size: var(--rb-font-size, clamp(1.75rem, 8.4vw, 2.5rem));
     line-height: 1.42;
   }
 
