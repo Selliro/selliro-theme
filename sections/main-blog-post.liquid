@@ -1,9 +1,10 @@
 {%- comment -%}
   Blog post (article template) — editorial layout.
-  · Head: back to the blog, tags, title, author (initial avatar), date and reading time.
-  · Featured image: wide, rounded, with a fixed height (Small / Medium / Large) or its original shape.
+  · Header: Split (a soft panel with the text beside the image) or Stacked (title above a wide image). Text: back to
+    the blog, tags, title, summary (if the post has one), author (initial avatar), date and reading time.
+    Image height: Small / Medium / Large or its original shape.
   · Body: a ~720px reading column with styled headings, quotes, lists and images; share bar (sticky on desktop,
-    a row on mobile); tags; previous / next post; "Keep reading" related posts; comments when enabled.
+    a row on mobile); tags; comments when enabled; previous / next post; "Keep reading" related posts.
   · Reading progress bar at the top of the page.
   Files:  assets/section-main-blog-post.css (styles), assets/section-main-blog-post.js (share + progress).
   Order:  1. CSS   2. Liquid (data + markup)   3. Schema
@@ -465,7 +466,23 @@
   "settings": [
     {
       "type": "header",
-      "content": "Featured image"
+      "content": "Header and image"
+    },
+    {
+      "type": "select",
+      "id": "hero_layout",
+      "label": "Header layout",
+      "options": [
+        {
+          "value": "split",
+          "label": "Split: text beside the image"
+        },
+        {
+          "value": "stacked",
+          "label": "Stacked: title above a wide image"
+        }
+      ],
+      "default": "split"
     },
     {
       "type": "select",
