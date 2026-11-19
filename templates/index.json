@@ -1621,101 +1621,6 @@
         "padding_bottom": 64
       }
     },
-    "product_3d_showcase": {
-      "type": "product-3d",
-      "blocks": {
-        "f_cap": {
-          "type": "feature",
-          "settings": {
-            "title": "Whipped, cloud-light texture",
-            "text": "Melts in on contact and leaves skin soft, never greasy.",
-            "turn_model": true,
-            "view_angle": 0,
-            "view_height": 45,
-            "hotspot": ""
-          }
-        },
-        "f_alu": {
-          "type": "feature",
-          "settings": {
-            "title": "Polished silver lid",
-            "text": "A weighty screw-top that seals in freshness.",
-            "turn_model": true,
-            "view_angle": 135,
-            "view_height": 20,
-            "hotspot": ""
-          }
-        },
-        "f_lining": {
-          "type": "feature",
-          "settings": {
-            "title": "Porcelain-finish jar",
-            "text": "Glossy, heavy glass that keeps light and air out.",
-            "turn_model": true,
-            "view_angle": 90,
-            "view_height": 10,
-            "hotspot": ""
-          }
-        },
-        "f_refill": {
-          "type": "feature",
-          "settings": {
-            "title": "Refill, don't rebuy",
-            "text": "Pop in a refill pod and keep the jar for years.",
-            "turn_model": true,
-            "view_angle": -120,
-            "view_height": 15,
-            "hotspot": ""
-          }
-        }
-      },
-      "block_order": [
-        "f_cap",
-        "f_alu",
-        "f_lining",
-        "f_refill"
-      ],
-      "settings": {
-        "eyebrow": "360° view",
-        "heading": "See it from every angle",
-        "text": "<p>Turn it, tilt it, peek inside. Meet our Luxury Face Cream before it reaches your shelf.</p>",
-        "product": "luxury-face-creams",
-        "model_url": "",
-        "model_usdz_url": "",
-        "load_mode": "scroll",
-        "layout": "showcase",
-        "media_position": "right",
-        "stage_height": 600,
-        "stage_height_mobile": 420,
-        "radius": 28,
-        "backdrop": "glow",
-        "stage_color": "#f3efe7",
-        "accent_color": "#f8d12f",
-        "background_text": "360°",
-        "shadow_intensity": 10,
-        "exposure": 10,
-        "auto_rotate": true,
-        "rotate_speed": 20,
-        "model_size": 80,
-        "start_angle": 30,
-        "start_height": 15,
-        "allow_drag": true,
-        "allow_zoom": false,
-        "enable_ar": true,
-        "show_controls": true,
-        "show_readout": true,
-        "show_hint": true,
-        "show_product_info": true,
-        "show_price": true,
-        "button_label": "Shop now",
-        "button_link": "",
-        "section_width": "page-width",
-        "color_scheme": "",
-        "anchor_id": "",
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
-    },
     "product_story_ritual": {
       "type": "product-story",
       "blocks": {
@@ -2488,7 +2393,7 @@
     "product_3d_bC9kEE": {
       "type": "product-3d",
       "blocks": {
-        "feature_mpDFpD": {
+        "f_cap": {
           "type": "feature",
           "settings": {
             "title": "Whipped, cloud-light texture",
@@ -2499,18 +2404,18 @@
             "hotspot": ""
           }
         },
-        "feature_qiE33r": {
+        "f_alu": {
           "type": "feature",
           "settings": {
             "title": "Polished silver lid",
             "text": "A weighty screw-top that seals in freshness.",
             "turn_model": true,
             "view_angle": 135,
-            "view_height": 15,
+            "view_height": 20,
             "hotspot": ""
           }
         },
-        "feature_yj9ecC": {
+        "f_lining": {
           "type": "feature",
           "settings": {
             "title": "Porcelain-finish jar",
@@ -2520,23 +2425,35 @@
             "view_height": 10,
             "hotspot": ""
           }
+        },
+        "f_refill": {
+          "type": "feature",
+          "settings": {
+            "title": "Refill, don't rebuy",
+            "text": "Pop in a refill pod and keep the jar for years.",
+            "turn_model": true,
+            "view_angle": -120,
+            "view_height": 15,
+            "hotspot": ""
+          }
         }
       },
       "block_order": [
-        "feature_mpDFpD",
-        "feature_qiE33r",
-        "feature_yj9ecC"
+        "f_cap",
+        "f_alu",
+        "f_lining",
+        "f_refill"
       ],
       "name": "3D product — split",
       "settings": {
         "eyebrow": "360° view",
         "heading": "See it from every angle",
-        "text": "<p>Turn it, tilt it, peek inside. Get to know it before it reaches your shelf.</p>",
+        "text": "<p>Turn it, tilt it, peek inside. Meet our Luxury Face Cream before it reaches your shelf.</p>",
         "product": "luxury-face-creams",
         "model_url": "",
         "model_usdz_url": "",
         "load_mode": "scroll",
-        "layout": "showcase",
+        "layout": "split",
         "media_position": "right",
         "stage_height": 600,
         "stage_height_mobile": 420,
@@ -2582,7 +2499,7 @@
     "countdown_banner_bf",
     "bundle_builder_box",
     "before_after_slider_CUEk9V",
-    "product_3d_showcase",
+    "product_3d_bC9kEE",
     "product_story_ritual",
     "routine_builder_main",
     "reveal_image_yFL9GW",
@@ -2591,7 +2508,6 @@
     "faq_split_gallery_LpzKU4",
     "client_trust_testimonials_D4AhAL",
     "marquee_xXM4Hr",
-    "featured_blog_posts_8riExY",
-    "product_3d_bC9kEE"
+    "featured_blog_posts_8riExY"
   ]
 }
