@@ -46,9 +46,12 @@
     Previous = the older post, Next = the newer one. At the oldest / newest post the missing side wraps round to
     the other end of the blog, so both links are always there when the blog has more than one post.
   endcomment
-  assign prev_post = blog.next_article
-  assign next_post = blog.previous_article
+  assign prev_post = blog.previous_article
+  assign next_post = blog.next_article
   if blog.articles_count > 1
+    comment
+      blog.articles is newest first: past the oldest post, Previous wraps to the newest; past the newest, Next wraps to the oldest
+    endcomment
     if prev_post == blank
       assign prev_post = blog.articles.first
     endif
