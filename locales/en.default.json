@@ -8,6 +8,25 @@
  * ------------------------------------------------------------
  */
 {
+  "article_plus": {
+    "back_to_blog": "Back to {{ blog }}",
+    "min_read": {
+      "one": "{{ count }} min read",
+      "other": "{{ count }} min read"
+    },
+    "by_author": "By {{ author }}",
+    "share": "Share",
+    "share_on": "Share on {{ network }}",
+    "share_email": "Share by email",
+    "copy_link": "Copy link",
+    "copied": "Link copied",
+    "tagged": "Tagged",
+    "previous": "Previous post",
+    "next": "Next post",
+    "keep_reading": "Keep reading",
+    "read_article": "Read article",
+    "reading_progress": "Reading progress"
+  },
   "search_plus": {
     "placeholder": "Search products, pages, blog posts…",
     "recent": "Recent searches",
