@@ -96,10 +96,11 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 24px;
   padding: clamp(20px, 3.5vw, 48px);
+  border: 1px solid var(--article-line);
   border-radius: calc(var(--article-radius, 24px) + 8px);
   background:
-    radial-gradient(70% 90% at 0% 0%, color-mix(in srgb, var(--color-primary-button-background, #f8d12f) 9%, transparent), transparent 70%),
-    var(--article-soft);
+    radial-gradient(80% 100% at 0% 0%, rgb(250 208 44 / 0.16), transparent 65%),
+    rgb(var(--color-foreground-rgb) / 0.05);
 }
 
 .article__head--split .article__intro {
@@ -232,6 +233,25 @@
   border-radius: 50%;
   background: currentColor;
   opacity: 0.5;
+}
+
+/* Phones: author on its own line, then date · reading time (no stray separator at the start of a line) */
+@media screen and (max-width: 749px) {
+  .article__meta {
+    row-gap: 10px;
+  }
+
+  .article__author {
+    flex-basis: 100%;
+  }
+
+  .article__head--stacked .article__author {
+    justify-content: center;
+  }
+
+  .article__author + .article__meta-item::before {
+    display: none;
+  }
 }
 
 .article__author {
