@@ -598,12 +598,14 @@
   border-top: 1px solid var(--article-line);
 }
 
+/* Centred like the article above it: heading, then a link to the blog, then the cards */
 .article__related-head {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 24px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+  text-align: center;
 }
 
 .article__related-heading {
@@ -617,7 +619,7 @@
 .article__related-all {
   font-size: 0.875rem;
   font-weight: 500;
-  color: inherit;
+  color: var(--article-muted);
   text-decoration: none;
   white-space: nowrap;
 }
