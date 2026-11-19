@@ -291,7 +291,9 @@ announcement-bar-component.announcement-bar__slider {
 }
 
 .announcement-bar--marquee .announcement-bar__marquee-item {
+  /* The block's text styles stack content vertically; keep text and separator on one row */
   display: inline-flex;
+  flex-direction: row;
   align-items: center;
   white-space: nowrap;
 }
