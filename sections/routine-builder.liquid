@@ -25,7 +25,7 @@
   endfor
 
   assign accent = section.settings.accent_color | default: '#f8d12f'
-  assign font_source = section.settings.sentence_font_source | default: 'custom'
+  assign font_source = section.settings.sentence_font_source | default: 'heading'
   case font_source
     when 'heading'
       assign sentence_family = 'var(--font-heading--family)'
@@ -55,6 +55,14 @@
     --rb-family: {{ sentence_family }};
     --rb-weight: {{ sentence_weight }};
     --rb-size: {{ section.settings.sentence_size }}px;
+    {%- if section.settings.sentence_scale != 'custom' %}
+    --rb-font-size: var(--section-title-size);
+    --rb-tracking: var(--section-title-tracking);
+    --rb-measure: 30ch;
+    {%- if font_source == 'heading' %}
+    --rb-weight: var(--section-title-weight);
+    {%- endif %}
+    {%- endif %}
     --rb-columns: {{ section.settings.results_columns }};
     --rb-radius: {{ section.settings.card_radius }}px;
     --rb-mood-strength: {{ section.settings.mood_strength | times: 0.01 }};
@@ -428,7 +436,7 @@
           "label": "t:routine_builder.font_theme_body"
         }
       ],
-      "default": "custom"
+      "default": "heading"
     },
     {
       "type": "font_picker",
@@ -438,6 +446,23 @@
       "visible_if": "{{ section.settings.sentence_font_source == 'custom' }}"
     },
     {
+      "type": "select",
+      "id": "sentence_scale",
+      "label": "Sentence size",
+      "options": [
+        {
+          "value": "section",
+          "label": "Match section headings"
+        },
+        {
+          "value": "custom",
+          "label": "Custom size"
+        }
+      ],
+      "default": "section",
+      "info": "Match section headings uses the same size and weight as the other section titles."
+    },
+    {
       "type": "range",
       "id": "sentence_size",
       "label": "t:routine_builder.sentence_size",
@@ -445,7 +470,8 @@
       "max": 96,
       "step": 2,
       "unit": "px",
-      "default": 64
+      "default": 64,
+      "visible_if": "{{ section.settings.sentence_scale == 'custom' }}"
     },
     {
       "type": "select",
