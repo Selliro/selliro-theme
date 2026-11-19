@@ -728,7 +728,8 @@ a.itc-badge:hover .itc-badge__center {
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   .itc-badge__ring,
-  .itc-badge__inner { animation: none; }
+  .itc-badge__inner,
+  .itc-badge__icon { animation: none; }
   .itc__photo,
   .itc__btn,
   .itc-badge,
