@@ -92,128 +92,102 @@
     </article-progress>
   {%- endif -%}
 
-  {%- comment -%} ---------------------------------------------------------------- head {%- endcomment -%}
-  <header class="article__head page-width">
-    <div class="article__topbar">
-    <a
-      class="article__back"
-      href="{{ blog.url }}"
-    >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        aria-hidden="true"
+  {%- comment -%} ---------------------------------------------------------- head + image {%- endcomment -%}
+  {%- assign hero_layout = section.settings.hero_layout | default: 'split' -%}
+  <header class="article__head article__head--{{ hero_layout }}{% unless article.image %} article__head--no-image{% endunless %} page-width">
+    <div class="article__intro">
+      <a
+        class="article__back"
+        href="{{ blog.url }}"
       >
-        <path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      {{- 'article_plus.back_to_blog' | t: blog: blog.title -}}
-    </a>
-
-    {%- if show_pager -%}
-      <nav
-        class="article__quicknav"
-        aria-label="{{ 'article_plus.previous' | t }} / {{ 'article_plus.next' | t }}"
-      >
-        {%- if prev_post -%}
-          <a
-            class="article__quicknav-btn"
-            href="{{ prev_post.url }}"
-            rel="prev"
-            title="{{ 'article_plus.previous' | t }}: {{ prev_post.title | escape }}"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span class="article__quicknav-text">{{ 'article_plus.previous' | t }}</span>
-          </a>
-        {%- endif -%}
-        {%- if next_post -%}
-          <a
-            class="article__quicknav-btn"
-            href="{{ next_post.url }}"
-            rel="next"
-            title="{{ 'article_plus.next' | t }}: {{ next_post.title | escape }}"
-          >
-            <span class="article__quicknav-text">{{ 'article_plus.next' | t }}</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-        {%- endif -%}
-      </nav>
-    {%- endif -%}
-    </div>
-
-    {%- if section.settings.show_tags and article.tags.size > 0 -%}
-      <ul
-        class="article__tags list-unstyled"
-        role="list"
-      >
-        {%- for tag in article.tags limit: 3 -%}
-          <li>
-            <a
-              class="article__tag"
-              href="{{ blog.url }}/tagged/{{ tag | handleize }}"
-            >
-              {{- tag | escape -}}
-            </a>
-          </li>
-        {%- endfor -%}
-      </ul>
-    {%- endif -%}
-
-    <h1
-      class="article__title"
-      itemprop="headline"
-    >
-      {{- article.title | escape -}}
-    </h1>
-
-    <div class="article__meta">
-      {%- if section.settings.show_author and article.author != blank -%}
-        <span
-          class="article__author"
-          itemprop="author"
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
         >
-          <span
-            class="article__avatar"
-            aria-hidden="true"
-          >
-            {%- if article.user.image -%}
-              {{ article.user.image | image_url: width: 80 | image_tag: loading: 'lazy', alt: '' }}
-            {%- else -%}
-              {{ author_initial }}
-            {%- endif -%}
-          </span>
-          {{- 'article_plus.by_author' | t: author: article.author -}}
-        </span>
-      {%- endif -%}
-      {%- if section.settings.show_date -%}
-        <span class="article__meta-item">
-          {{- article.published_at | time_tag: format: 'date' -}}
-        </span>
-      {%- endif -%}
-      {%- if section.settings.show_reading_time -%}
-        <span class="article__meta-item">{{ 'article_plus.min_read' | t: count: minutes }}</span>
-      {%- endif -%}
-    </div>
-  </header>
+          <path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        {{- 'article_plus.back_to_blog' | t: blog: blog.title -}}
+      </a>
 
-  {%- comment -%} ------------------------------------------------------- featured image {%- endcomment -%}
-  {%- if article.image -%}
-    <figure class="article__hero article__hero--{{ image_height }} page-width">
-      {{
-        article.image
-        | image_url: width: 2400
-        | image_tag:
-          loading: 'eager',
-          fetchpriority: 'high',
-          widths: '600, 900, 1200, 1600, 2000, 2400',
-          sizes: '(min-width: 1440px) 1360px, 94vw',
-          class: 'article__hero-img',
-          alt: article.image.alt,
-          itemprop: 'image'
-      }}
-    </figure>
-  {%- endif -%}
+      {%- if section.settings.show_tags and article.tags.size > 0 -%}
+        <ul
+          class="article__tags list-unstyled"
+          role="list"
+        >
+          {%- for tag in article.tags limit: 3 -%}
+            <li>
+              <a
+                class="article__tag"
+                href="{{ blog.url }}/tagged/{{ tag | handleize }}"
+              >
+                {{- tag | escape -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      <h1
+        class="article__title"
+        itemprop="headline"
+      >
+        {{- article.title | escape -}}
+      </h1>
+
+      {%- if article.excerpt != blank -%}
+        <p class="article__lede">{{ article.excerpt | strip_html | truncatewords: 40 }}</p>
+      {%- endif -%}
+
+      <div class="article__meta">
+        {%- if section.settings.show_author and article.author != blank -%}
+          <span
+            class="article__author"
+            itemprop="author"
+          >
+            <span
+              class="article__avatar"
+              aria-hidden="true"
+            >
+              {%- if article.user.image -%}
+                {{ article.user.image | image_url: width: 80 | image_tag: loading: 'lazy', alt: '' }}
+              {%- else -%}
+                {{ author_initial }}
+              {%- endif -%}
+            </span>
+            {{- 'article_plus.by_author' | t: author: article.author -}}
+          </span>
+        {%- endif -%}
+        {%- if section.settings.show_date -%}
+          <span class="article__meta-item">
+            {{- article.published_at | time_tag: format: 'date' -}}
+          </span>
+        {%- endif -%}
+        {%- if section.settings.show_reading_time -%}
+          <span class="article__meta-item">{{ 'article_plus.min_read' | t: count: minutes }}</span>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- if article.image -%}
+      <figure class="article__hero article__hero--{{ image_height }}">
+        {{
+          article.image
+          | image_url: width: 2000
+          | image_tag:
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '600, 900, 1200, 1600, 2000',
+            sizes: '(min-width: 990px) 50vw, 94vw',
+            class: 'article__hero-img',
+            alt: article.image.alt,
+            itemprop: 'image'
+        }}
+      </figure>
+    {%- endif -%}
+  </header>
 
   {%- comment -%} ---------------------------------------------------------------- body {%- endcomment -%}
   <div class="article__layout page-width">
@@ -324,6 +298,36 @@
         </div>
       {%- endif -%}
 
+      {%- comment -%} -------------------------------------------------------- comments {%- endcomment -%}
+      {% if blog.comments_enabled? %}
+        <div class="blog-post-comments-container">
+          <h2 class="h3">{{- 'blogs.article.comments_heading' | t: count: article.comments_count -}}</h2>
+
+          <div class="blog-post-comments">
+            {% paginate article.comments by 10 %}
+              {% for comment in article.comments %}
+                <div class="blog-post-comment">
+                  {{ comment.content }}
+                  <div class="blog-post-comment__author">
+                    <span class="blog-post-comment__author-name">{{- comment.author -}}</span>
+                    <span>{{- 'blogs.article.comment_author_separator' | t -}}</span>
+                    <span class="blog-post-comment__date">
+                      {{- comment.created_at | time_tag: format: 'date' -}}
+                    </span>
+                  </div>
+                </div>
+              {% endfor %}
+
+              <div class="blog-post-comments-pagination">
+                {{- paginate | default_pagination -}}
+              </div>
+            {% endpaginate %}
+          </div>
+
+          {% render 'blog-comment-form', article: article, section_id: section.id %}
+        </div>
+      {% endif %}
+
       {%- comment -%} ------------------------------------------------ previous / next {%- endcomment -%}
       {%- if show_pager -%}
         <nav
@@ -368,36 +372,6 @@
           {%- endfor -%}
         </nav>
       {%- endif -%}
-
-      {%- comment -%} -------------------------------------------------------- comments {%- endcomment -%}
-      {% if blog.comments_enabled? %}
-        <div class="blog-post-comments-container">
-          <h2 class="h3">{{- 'blogs.article.comments_heading' | t: count: article.comments_count -}}</h2>
-
-          <div class="blog-post-comments">
-            {% paginate article.comments by 10 %}
-              {% for comment in article.comments %}
-                <div class="blog-post-comment">
-                  {{ comment.content }}
-                  <div class="blog-post-comment__author">
-                    <span class="blog-post-comment__author-name">{{- comment.author -}}</span>
-                    <span>{{- 'blogs.article.comment_author_separator' | t -}}</span>
-                    <span class="blog-post-comment__date">
-                      {{- comment.created_at | time_tag: format: 'date' -}}
-                    </span>
-                  </div>
-                </div>
-              {% endfor %}
-
-              <div class="blog-post-comments-pagination">
-                {{- paginate | default_pagination -}}
-              </div>
-            {% endpaginate %}
-          </div>
-
-          {% render 'blog-comment-form', article: article, section_id: section.id %}
-        </div>
-      {% endif %}
     </div>
   </div>
 
