@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Dni",
+    "hours": "Godz",
+    "minutes": "Min",
+    "seconds": "Sek",
+    "ends_on": "Oferta kończy się {{ date }}",
+    "editor_hint": "Dodaj datę zakończenia w ustawieniach sekcji, aby uruchomić odliczanie."
+  },
   "collection_hero": {
     "home": "Strona główna",
     "breadcrumb_label": "Ścieżka nawigacji",
@@ -22,6 +30,19 @@
     "savings": "Oszczędzasz",
     "total": "Razem",
     "view_bundle": "Zobacz pudełko"
+  },
+  "product_3d": {
+    "view_3d": "Zobacz w 3D",
+    "drag_hint": "Przeciągnij, aby obrócić",
+    "reset": "Resetuj widok",
+    "views": "Widoki kamery",
+    "front": "Przód",
+    "side": "Bok",
+    "back": "Tył",
+    "top": "Góra",
+    "loading": "Ładowanie modelu 3D",
+    "editor_hint": "Wybierz produkt z modelem 3D lub wklej link do pliku .glb, aby wyświetlić go w 3D.",
+    "position_copied": "Skopiowano pozycję — wklej ją do bloku cechy."
   },
   "routine_builder": {
     "editor_hint": "Dodaj blok „Luka”, aby zacząć tworzyć zdanie.",
@@ -44,6 +65,9 @@
       "comment": "Komentarz",
       "post_success": "Dziękujemy za skontaktowanie się z nami. Odpowiemy tak szybko, jak to możliwe.",
       "error_heading": "Dostosuj następujące dane:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Symbol zastępczy logo"
     }
   },
   "accessibility": {
@@ -90,7 +114,19 @@
     "increase_quantity": "Zwiększ ilość",
     "rating": "Ocena tego produktu to: {{ rating }} na 5",
     "quantity": "Ilość",
-    "nested_product": "{{ product_title }}: {{ parent_title }}"
+    "nested_product": "{{ product_title }}: {{ parent_title }}",
+    "announcement_bar_link": "Dowiedz się więcej",
+    "back_to_top": "Powrót na górę",
+    "quick_view_loading": "Wczytywanie produktu",
+    "before_after_after_alt": "Zdjęcie po",
+    "before_after_before_alt": "Zdjęcie przed",
+    "before_after_before_visible": "widoczne zdjęcie przed",
+    "before_after_comparison": "Porównanie zdjęć przed i po",
+    "before_after_slider": "Suwak porównania",
+    "before_after_slider_help": "Użyj klawiszy strzałek w lewo i w prawo, aby porównać zdjęcia przed i po.",
+    "faq_collapse_answer": "Zwiń odpowiedź",
+    "faq_expand_answer": "Rozwiń odpowiedź",
+    "faq_split_gallery": "Często zadawane pytania"
   },
   "actions": {
     "add_to_cart": "Dodaj do koszyka",
@@ -271,7 +307,11 @@
       "previous": "Wstecz",
       "next": "Dalej",
       "page": "Strona {{ page }}"
-    }
+    },
+    "read_more_link": "Czytaj więcej",
+    "quick_view": "Szybki podgląd",
+    "view_full_details": "Zobacz wszystkie szczegóły",
+    "view_item": "Zobacz produkt"
   },
   "gift_cards": {
     "issued": {
@@ -338,5 +378,29 @@
       "success_moderated": "Komentarz został opublikowany i oczekuje na moderację",
       "success": "Opublikowano komentarz"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Wszelkie prawa zastrzeżone."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Kolaż obrazu z tekstem"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Dodaj co najmniej jedną kartę kolekcji, aby wyświetlić produkty."
+    },
+    "icon_with_text": {
+      "empty": "Dodaj bloki ikon, aby wyświetlić treść.",
+      "section_aria_label": "Atuty sklepu"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Dodaj zestaw do koszyka",
+      "adding": "Dodawanie…",
+      "added": "Dodano do koszyka",
+      "error": "Coś poszło nie tak. Spróbuj ponownie."
+    }
+  },
+  "search": {
+    "no_results": "Nie znaleziono wyników"
   }
 }

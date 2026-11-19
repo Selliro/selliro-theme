@@ -6,38 +6,7 @@
   color: var(--color-foreground);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .shop-the-look {
-    animation: stl-fade-up 0.6s ease both;
-  }
-
-  .shop-the-look__media {
-    animation: stl-fade-up 0.6s ease both;
-  }
-
-  .shop-the-look__content > * {
-    opacity: 0;
-    transform: translateY(12px);
-    animation: stl-fade-up 0.6s ease both;
-  }
-
-  .shop-the-look__content > *:nth-child(1) { animation-delay: 0.05s; }
-  .shop-the-look__content > *:nth-child(2) { animation-delay: 0.10s; }
-  .shop-the-look__content > *:nth-child(3) { animation-delay: 0.15s; }
-  .shop-the-look__content > *:nth-child(4) { animation-delay: 0.20s; }
-  .shop-the-look__content > *:nth-child(5) { animation-delay: 0.25s; }
-}
-
-@keyframes stl-fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* Entrance animation: shared scroll reveal (assets/section-reveal.*), set up in the section markup. */
 
 .shop-the-look__grid {
   display: grid;

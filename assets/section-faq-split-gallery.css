@@ -327,3 +327,8 @@
     margin-top: clamp(1.25rem, 5vw, 2.5rem);
   }
 }
+
+/* Footer / menu links can jump here (#faq): keep the heading clear of the sticky header */
+.faq-split-gallery[id] {
+  scroll-margin-top: calc(var(--header-height, 72px) + 16px);
+}

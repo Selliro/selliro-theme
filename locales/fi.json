@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Pv",
+    "hours": "H",
+    "minutes": "Min",
+    "seconds": "S",
+    "ends_on": "Tarjous päättyy {{ date }}",
+    "editor_hint": "Lisää päättymispäivä osion asetuksiin käynnistääksesi lähtölaskennan."
+  },
   "collection_hero": {
     "home": "Etusivu",
     "breadcrumb_label": "Murupolku",
@@ -22,6 +30,19 @@
     "savings": "Säästät",
     "total": "Yhteensä",
     "view_bundle": "Näytä laatikko"
+  },
+  "product_3d": {
+    "view_3d": "Näytä 3D:nä",
+    "drag_hint": "Kierrä vetämällä",
+    "reset": "Palauta näkymä",
+    "views": "Kameranäkymät",
+    "front": "Edestä",
+    "side": "Sivulta",
+    "back": "Takaa",
+    "top": "Ylhäältä",
+    "loading": "Ladataan 3D-mallia",
+    "editor_hint": "Valitse tuote, jolla on 3D-malli, tai liitä linkki .glb-tiedostoon näyttääksesi sen 3D:nä.",
+    "position_copied": "Sijainti kopioitu – liitä se ominaisuuslohkoon."
   },
   "routine_builder": {
     "editor_hint": "Lisää Aukko-lohko aloittaaksesi lauseen.",
@@ -44,6 +65,9 @@
       "comment": "Kommentti",
       "post_success": "Kiitos yhteydenotostasi. Vastaamme sinulle mahdollisimman pian.",
       "error_heading": "Muokkaa seuraavia:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Logon paikkamerkki"
     }
   },
   "accessibility": {
@@ -88,7 +112,19 @@
     "increase_quantity": "Suurenna määrää",
     "quantity": "Määrä",
     "rating": "Tämän tuoteen tuotearvio on {{ rating }}/5",
-    "nested_product": "{{ product_title }} – {{ parent_title }}"
+    "nested_product": "{{ product_title }} – {{ parent_title }}",
+    "announcement_bar_link": "Lue lisää",
+    "back_to_top": "Takaisin ylös",
+    "quick_view_loading": "Ladataan tuotetta",
+    "before_after_after_alt": "Jälkeen-kuva",
+    "before_after_before_alt": "Ennen-kuva",
+    "before_after_before_visible": "ennen-kuva näkyvissä",
+    "before_after_comparison": "Ennen ja jälkeen -kuvien vertailu",
+    "before_after_slider": "Vertailuliukusäädin",
+    "before_after_slider_help": "Vertaa ennen- ja jälkeen-kuvia vasemmalla ja oikealla nuolinäppäimellä.",
+    "faq_collapse_answer": "Piilota vastaus",
+    "faq_expand_answer": "Näytä vastaus",
+    "faq_split_gallery": "Usein kysytyt kysymykset"
   },
   "actions": {
     "add_to_cart": "Lisää ostoskoriin",
@@ -261,7 +297,11 @@
       "previous": "Edellinen",
       "next": "Seuraava",
       "page": "Sivu {{ page }}"
-    }
+    },
+    "read_more_link": "Lue lisää",
+    "quick_view": "Pikanäkymä",
+    "view_full_details": "Näytä kaikki tiedot",
+    "view_item": "Näytä tuote"
   },
   "gift_cards": {
     "issued": {
@@ -326,5 +366,29 @@
       "success_moderated": "Kommentti on julkaistu; odotetaan moderointia",
       "success": "Kommentti on julkaistu"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Kaikki oikeudet pidätetään."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Kuva- ja tekstikollaasi"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Lisää vähintään yksi kokoelmavälilehti tuotteiden näyttämiseksi."
+    },
+    "icon_with_text": {
+      "empty": "Lisää kuvakelohkoja sisällön näyttämiseksi.",
+      "section_aria_label": "Kaupan kohokohdat"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Lisää paketti ostoskoriin",
+      "adding": "Lisätään…",
+      "added": "Lisätty ostoskoriin",
+      "error": "Jokin meni pieleen. Yritä uudelleen."
+    }
+  },
+  "search": {
+    "no_results": "Tuloksia ei löytynyt"
   }
 }

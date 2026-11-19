@@ -6,6 +6,7 @@
 {{ 'section-new-arrivals-showcase.css' | asset_url | stylesheet_tag }}
 {{ 'text-highlight.css' | asset_url | stylesheet_tag }}
 {{ 'new-arrivals-quick-view.css' | asset_url | stylesheet_tag }}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
 
 {% style %}
   #new-arrivals-{{ section.id }} {
@@ -28,6 +29,7 @@
 <section
   class="{{ section.settings.section_width }} new-arrivals-showcase color-{{ section.settings.color_scheme }}"
   id="new-arrivals-{{ section.id }}"
+  data-reveal
   {{ section.shopify_attributes }}
 >
   <div
@@ -71,6 +73,7 @@
           {%- if nac_has_hl -%}
             <h2
               class="new-arrivals-showcase__heading new-arrivals-showcase__heading--highlight"
+              data-reveal-title
               style="--text-hl-color: {{ section.settings.highlight_color | default: '#f8d12f' }};"
             >
               {{- nac_heading_html -}}
@@ -81,22 +84,22 @@
               style="--new-arrivals-scribble-color: {{ section.settings.heading_scribble_color }};"
             >
               <span class="new-arrivals-showcase__heading-inner">
-                <span class="new-arrivals-showcase__heading-text">{{ section.settings.heading | escape }}</span>
+                <span class="new-arrivals-showcase__heading-text" data-reveal-title>{{ section.settings.heading | escape }}</span>
                 <span class="new-arrivals-showcase__heading-decoration">
                   {%- render 'new-arrivals-heading-scribble', style: nac_scribble -%}
                 </span>
               </span>
             </h2>
           {%- else -%}
-            <h2 class="new-arrivals-showcase__heading">{{ section.settings.heading | escape }}</h2>
+            <h2 class="new-arrivals-showcase__heading" data-reveal-title>{{ section.settings.heading | escape }}</h2>
           {%- endif -%}
         {%- endif -%}
         {%- if section.settings.subheading != blank -%}
-          <p class="new-arrivals-showcase__lede">{{ section.settings.subheading | escape }}</p>
+          <p class="new-arrivals-showcase__lede" data-reveal-fade>{{ section.settings.subheading | escape }}</p>
         {%- endif -%}
       </div>
       {%- if nac_tab_count > 0 -%}
-        <div class="new-arrivals-showcase__tablist" role="tablist" aria-label="{{ section.settings.tabs_a11y | escape }}">
+        <div class="new-arrivals-showcase__tablist" role="tablist" data-reveal-fade aria-label="{{ section.settings.tabs_a11y | escape }}">
           {%- assign nac_tab_i = 0 -%}
           {%- for block in section.blocks -%}
             {%- if block.type == 'collection_tab' or block.type == 'layout_placeholder' -%}
@@ -140,6 +143,7 @@
 <script src="{{ 'new-arrivals-showcase.js' | asset_url }}" defer></script>
 <script src="{{ 'new-arrivals-quick-view.js' | asset_url }}" defer></script>
 <script src="{{ 'text-highlight.js' | asset_url }}" defer></script>
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
 
 {% schema %}
 {

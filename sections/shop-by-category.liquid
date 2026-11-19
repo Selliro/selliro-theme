@@ -9,6 +9,9 @@
 <style>
   .shop-by-category-{{ section_id }} {
     padding: var(--section-padding-top, 60px) 20px var(--section-padding-bottom, 60px);
+    /* full width up to the max — without this the grid shrank to its content (cards collapsed with no images) */
+    width: 100%;
+    box-sizing: border-box;
     max-width: 1200px;
     margin: 0 auto;
     background-color: {{ section.settings.background_color }};
@@ -93,9 +96,28 @@
   }
 
   .shop-by-category-{{ section_id }} .image-placeholder svg {
-    width: 60px;
-    height: 60px;
-    opacity: 0.3;
+    width: 100%;
+    height: 100%;
+    opacity: 0.6;
+  }
+
+  /* No image yet: stack placeholder above the text so the illustration stays readable */
+  .shop-by-category-{{ section_id }} .category-image-wrapper--placeholder {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .shop-by-category-{{ section_id }} .category-image-wrapper--placeholder .image-placeholder {
+    position: relative;
+    inset: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .shop-by-category-{{ section_id }} .category-image-wrapper--placeholder .category-content {
+    position: relative;
+    flex: 0 0 auto;
   }
 
   /* Glass text panel — sits at bottom of card, overlaying the image */
@@ -261,7 +283,7 @@
         style="grid-column: span {{ col_span }}; grid-row: span {{ row_span }};"
         {{ block.shopify_attributes }}
       >
-        {% render 'shop-by-category-card', block: block, section: section %}
+        {% render 'shop-by-category-card', block: block, section: section, index: forloop.index %}
       </a>
     {% endfor %}
   </div>

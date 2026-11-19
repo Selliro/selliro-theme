@@ -4,14 +4,17 @@
 {% endcomment %}
 
 {{ 'section-beauty-bundle-feature.css' | asset_url | stylesheet_tag }}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
 
 <shop-the-look
+  data-reveal
   class="shop-the-look {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
   id="shop-the-look-{{ section.id }}"
   style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
 >
   <div class="shop-the-look__grid shop-the-look__grid--{{ section.settings.image_position }}">
-    <div class="shop-the-look__media">
+    <div class="shop-the-look__media" data-reveal-card>
       {%- if section.settings.image != blank -%}
         {{ section.settings.image | image_url: width: 1600 | image_tag:
           loading: 'lazy',
@@ -26,6 +29,7 @@
         {%- for block in section.blocks -%}
           <button
             class="shop-the-look__hotspot"
+            data-reveal-pop
             type="button"
             tabindex="-1"
             style="left: {{ block.settings.hotspot_x }}%; top: {{ block.settings.hotspot_y }}%;"
@@ -47,17 +51,18 @@
       {%- endfor -%}
 
       {%- if section.settings.eyebrow != blank -%}
-        <p class="shop-the-look__eyebrow">{{ section.settings.eyebrow }}</p>
+        <p class="shop-the-look__eyebrow" data-reveal-fade="first">{{ section.settings.eyebrow }}</p>
       {%- endif -%}
 
       <div class="shop-the-look__heading-row">
         {%- if section.settings.heading != blank -%}
-          <h2 class="shop-the-look__heading">{{ section.settings.heading }}</h2>
+          <h2 class="shop-the-look__heading" data-reveal-title>{{ section.settings.heading }}</h2>
         {%- endif -%}
         {%- if has_linked_products -%}
           <button
             type="button"
             class="shop-the-look__bundle-btn"
+            data-reveal-fade
             aria-live="polite"
           >
             <span class="shop-the-look__bundle-btn-idle">{{ 'sections.beauty_bundle.add_bundle' | t }}</span>
@@ -69,7 +74,7 @@
       </div>
 
       {%- if section.settings.subheading != blank -%}
-        <p class="shop-the-look__subheading">{{ section.settings.subheading }}</p>
+        <p class="shop-the-look__subheading" data-reveal-fade>{{ section.settings.subheading }}</p>
       {%- endif -%}
 
       <div
@@ -78,7 +83,7 @@
       >
         {%- for block in section.blocks -%}
           {%- assign block_product = block.settings.product -%}
-          <div class="shop-the-look__item" data-item-id="{{ section.id }}-{{ block.id }}" {{ block.shopify_attributes }}>
+          <div class="shop-the-look__item" data-reveal-fade data-item-id="{{ section.id }}-{{ block.id }}" {{ block.shopify_attributes }}>
             <div class="shop-the-look__item-card" style="background-color: {{ section.settings.card_background }}; border-radius: {{ section.settings.card_radius }}px;">
               <div class="shop-the-look__item-media">
                 {%- if block_product != blank and block_product.featured_image != blank -%}
@@ -175,7 +180,7 @@
       </div>
 
       {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
-        <a class="shop-the-look__button" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+        <a class="shop-the-look__button" data-reveal-fade href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
       {%- endif -%}
     </div>
   </div>

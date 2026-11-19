@@ -617,3 +617,126 @@ body.footer-reveal-on #MainContent {
 .shopify-design-mode body {
   padding-bottom: 0 !important;
 }
+
+/* ==========================================================================
+   Responsive layout
+   · Phones (< 750px): brand → menus as accordions (full-width rows with dividers, 48px tap targets)
+     → newsletter; compact, left-aligned bottom bar.
+   · Tablets and small laptops (750–1199px): brand + newsletter side by side, then the menus in a row of
+     columns underneath (the 5-column desktop row is too cramped below 1200px).
+   · Desktop (≥ 1200px): unchanged 5-column row.
+   ========================================================================== */
+
+/* Comfortable tap targets everywhere */
+.footer-main__nav-list a {
+  display: inline-block;
+  padding-block: 0.2rem;
+}
+
+.footer-main__localization-pill--language .language-selector,
+.footer-main__localization-pill--country .footer-main__localization-toggle {
+  min-height: 2.75rem;
+}
+
+@media screen and (max-width: 749px) {
+  .footer-main__grid--blocks {
+    gap: 0;
+  }
+
+  .footer-main__brand {
+    padding-bottom: 1.75rem;
+  }
+
+  /* Menus: a tidy stack of rows with dividers */
+  .footer-main__link-list {
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+  }
+
+  .footer-main__link-list:has(+ .footer-main__block:not(.footer-main__link-list)),
+  .footer-main__link-list:last-child {
+    border-bottom: 1px solid rgb(255 255 255 / 0.12);
+  }
+
+  .footer-main__accordion-summary {
+    min-height: 3.25rem;
+    padding-block: 0.5rem;
+  }
+
+  .footer-main__accordion .footer-main__nav-list {
+    gap: 0.15rem;
+    padding: 0 0 1rem;
+  }
+
+  .footer-main__accordion .footer-main__nav-list a {
+    padding-block: 0.45rem;
+    font-size: 0.9375rem;
+  }
+
+  .footer-main__newsletter {
+    padding-top: 2rem;
+  }
+
+  .footer-main__email-input {
+    font-size: 1rem; /* 16px stops iOS zooming into the field */
+  }
+
+  .footer-main__social {
+    flex-wrap: wrap;
+  }
+
+  /* Bottom bar: copyright then payment icons, no stretched gaps */
+  .footer-main__bottom-bar {
+    gap: 1rem;
+  }
+
+  .footer-main__inline-copyright--bottom {
+    flex: none;
+    font-size: 0.75rem;
+  }
+
+  .footer-main__payment-list {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 1199px) {
+  .footer-main__grid--blocks {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    column-gap: clamp(1.5rem, 4vw, 3rem);
+    row-gap: 2.25rem;
+    align-items: start;
+  }
+
+  .footer-main__grid--blocks .footer-main__block--logo {
+    grid-column: 1 / span 3;
+    grid-row: 1;
+  }
+
+  .footer-main__grid--blocks .footer-main__block--subscribe {
+    grid-column: 4 / span 3;
+    grid-row: 1;
+  }
+
+  /* Menus share the second row (3 menus → 3 equal columns) */
+  .footer-main__grid--blocks .footer-main__link-list {
+    grid-column: span 2;
+    padding-top: 2rem;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+  }
+
+  .footer-main__tagline {
+    max-width: 26rem;
+  }
+
+  .footer-main__localization-split {
+    max-width: 22rem;
+  }
+}
+
+/* Without a newsletter block the brand spans the full row */
+@media screen and (min-width: 750px) and (max-width: 1199px) {
+  .footer-main__grid--blocks:not(:has(.footer-main__block--subscribe)) .footer-main__block--logo {
+    grid-column: 1 / -1;
+  }
+}

@@ -31,9 +31,17 @@
     <span class="svg-wrapper search__icon{{ color_scheme }}">
       {{ 'icon-search.svg' | inline_asset_content }}
     </span>
+    {%- comment -%} Search everything (products, blog posts, pages), or keep the type tab the shopper is on {%- endcomment -%}
+    {%- if search.performed and search.types.size == 1 -%}
+      <input
+        name="type"
+        value="{{ search.types.first }}"
+        type="hidden"
+      >
+    {%- endif -%}
     <input
-      name="type"
-      value="product"
+      name="options[prefix]"
+      value="last"
       type="hidden"
     >
     <input
@@ -44,7 +52,7 @@
       ref="searchPageInput"
       on:keydown="/handleKeyDown"
       value="{{ search.terms | escape }}"
-      placeholder="{{ 'content.search_input_placeholder' | t }}"
+      placeholder="{{ 'search_plus.placeholder' | t }}"
     >
     <button
       type="button"
@@ -60,6 +68,18 @@
         {{ 'actions.clear' | t }}
       </span>
     </button>
+    <button
+      type="submit"
+      class="search-page-input__submit"
+    >
+      <span class="search-page-input__submit-label">{{ 'content.search' | t }}</span>
+      <span
+        class="svg-wrapper search-page-input__submit-icon"
+        aria-hidden="true"
+      >
+        {{- 'icon-search.svg' | inline_asset_content -}}
+      </span>
+    </button>
   </search-page-input-component>
 
   {% if search.results.size == 0 and search.terms != blank %}
@@ -72,6 +92,10 @@
 </form>
 
 {% stylesheet %}
+  .search-page-input__submit {
+    display: none;
+  }
+
   .search-page-input {
     width: 100%;
     color: var(--color-input-text);

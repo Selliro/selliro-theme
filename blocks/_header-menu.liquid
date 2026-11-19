@@ -611,10 +611,38 @@
     .menu-list__list-item[slot='overflow'] .menu-list__link-title::after {
       content: none;
     }
+
+    /* Dropdown (mega menu) links get the same line: it slides in from the left on hover / keyboard focus
+       and slides out to the right when the pointer leaves. */
+    .mega-menu__link .mega-menu__link-title {
+      position: relative;
+      align-self: flex-start;
+    }
+
+    .mega-menu__link .mega-menu__link-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -0.15em;
+      height: 1.5px;
+      border-radius: 1px;
+      background-color: currentColor;
+      transform: scaleX(0);
+      transform-origin: right center;
+      transition: transform calc(var(--submenu-animation-speed, 350ms) * 0.9) var(--submenu-ease, ease);
+      pointer-events: none;
+    }
+
+    .mega-menu__link:is(:hover, :focus-visible) .mega-menu__link-title::after,
+    .mega-menu__link[aria-current='page'] .mega-menu__link-title::after {
+      transform: scaleX(1);
+      transform-origin: left center;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .header-menu-nav--hover-underline .menu-list__link-title::after {
+    .header-menu-nav--hover-underline :is(.menu-list__link-title, .mega-menu__link-title)::after {
       transition: none;
     }
   }

@@ -12,3 +12,9 @@ templates/gift_card.liquid
 .cursor/.claude/*
 .claude/*
 .cursor/*
+# Docs and release tooling (not part of the theme)
+docs/*
+scripts/*
+CHANGELOG.md
+README.md
+dist/*

@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "D.",
+    "hours": "Val.",
+    "minutes": "Min.",
+    "seconds": "Sek.",
+    "ends_on": "Pasiūlymas baigiasi {{ date }}",
+    "editor_hint": "Skilties nustatymuose pridėkite pabaigos datą, kad pradėtumėte atgalinį skaičiavimą."
+  },
   "collection_hero": {
     "home": "Pradžia",
     "breadcrumb_label": "Naršymo kelias",
@@ -22,6 +30,19 @@
     "savings": "Sutaupote",
     "total": "Iš viso",
     "view_bundle": "Peržiūrėti dėžutę"
+  },
+  "product_3d": {
+    "view_3d": "Žiūrėti 3D",
+    "drag_hint": "Vilkite, kad pasuktumėte",
+    "reset": "Atkurti vaizdą",
+    "views": "Kameros vaizdai",
+    "front": "Priekis",
+    "side": "Šonas",
+    "back": "Galas",
+    "top": "Viršus",
+    "loading": "Įkeliamas 3D modelis",
+    "editor_hint": "Pasirinkite produktą su 3D modeliu arba įklijuokite nuorodą į .glb failą, kad jis būtų rodomas 3D.",
+    "position_copied": "Padėtis nukopijuota – įklijuokite ją į ypatybės bloką."
   },
   "routine_builder": {
     "editor_hint": "Pridėkite bloką „Tarpas“, kad pradėtumėte kurti sakinį.",
@@ -44,6 +65,9 @@
       "comment": "Komentaras",
       "post_success": "Dėkojame, kad kreipėtės. Atsakysime kaip galėdami greičiau.",
       "error_heading": "Pakoreguokite toliau pateiktą informaciją:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Logotipo vietos rezervavimo ženklas"
     }
   },
   "accessibility": {
@@ -90,7 +114,19 @@
     "rating": "Šio produkto vertinimas: {{ rating }} iš 5",
     "quantity": "Kiekis",
     "nested_product": "{{ product_title }} ({{ parent_title }})",
-    "discount_menu": "Nuolaidų kodai"
+    "discount_menu": "Nuolaidų kodai",
+    "announcement_bar_link": "Sužinoti daugiau",
+    "back_to_top": "Grįžti į viršų",
+    "quick_view_loading": "Įkeliamas produktas",
+    "before_after_after_alt": "Vaizdas po",
+    "before_after_before_alt": "Vaizdas prieš",
+    "before_after_before_visible": "matomas vaizdas prieš",
+    "before_after_comparison": "Vaizdų prieš ir po palyginimas",
+    "before_after_slider": "Palyginimo slankiklis",
+    "before_after_slider_help": "Naudokite rodyklių kairėn ir dešinėn klavišus, kad palygintumėte vaizdus prieš ir po.",
+    "faq_collapse_answer": "Suskleisti atsakymą",
+    "faq_expand_answer": "Išskleisti atsakymą",
+    "faq_split_gallery": "Dažniausiai užduodami klausimai"
   },
   "actions": {
     "add_to_cart": "Įdėti į krepšelį",
@@ -271,7 +307,11 @@
       "previous": "Ankstesnis",
       "next": "Kitas",
       "page": "{{ page }} puslapis"
-    }
+    },
+    "read_more_link": "Skaityti daugiau",
+    "quick_view": "Greita peržiūra",
+    "view_full_details": "Peržiūrėti visą informaciją",
+    "view_item": "Peržiūrėti prekę"
   },
   "gift_cards": {
     "issued": {
@@ -338,5 +378,29 @@
       "success_moderated": "Komentaras paskelbtas, laukiama moderavimo",
       "success": "Komentaras paskelbtas"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Visos teisės saugomos."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Vaizdo ir teksto koliažas"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Pridėkite bent vieną kolekcijos skirtuką, kad būtų rodomi produktai."
+    },
+    "icon_with_text": {
+      "empty": "Pridėkite piktogramų blokų, kad būtų rodomas turinys.",
+      "section_aria_label": "Parduotuvės privalumai"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Įdėti rinkinį į krepšelį",
+      "adding": "Pridedama…",
+      "added": "Įdėta į krepšelį",
+      "error": "Kažkas nepavyko. Bandykite dar kartą."
+    }
+  },
+  "search": {
+    "no_results": "Rezultatų nerasta"
   }
 }

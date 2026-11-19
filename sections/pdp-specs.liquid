@@ -1,0 +1,249 @@
+{%- comment -%}
+  Product facts — an image beside a card with a heading, short text and a facts table
+  (skin type, texture, scent, when to use …). Rows are blocks.
+{%- endcomment -%}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="pdp-specs {{ section.settings.section_width }} color-{{ section.settings.color_scheme }} pdp-specs--image-{{ section.settings.image_position }}"
+  data-reveal
+  style="--pdp-sp-pad-top: {{ section.settings.padding_top }}px; --pdp-sp-pad-bottom: {{ section.settings.padding_bottom }}px; --pdp-sp-card: {{ section.settings.card_background | default: '#dff0e3' }}; --pdp-sp-text: {{ section.settings.card_text | default: '#1d2b20' }}; --sr-radius: {{ section.settings.radius }}px; --pdp-sp-radius: {{ section.settings.radius }}px;"
+>
+  <div class="pdp-specs__grid">
+    <div class="pdp-specs__media" data-reveal-card>
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '500, 800, 1100, 1400', sizes: '(min-width: 990px) 50vw, 100vw', alt: section.settings.image.alt }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag }}
+      {%- endif -%}
+    </div>
+
+    <div class="pdp-specs__card">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="pdp-specs__eyebrow" data-reveal-fade="first">
+          {%- if section.settings.show_stars -%}<span class="pdp-specs__stars" aria-hidden="true">★★★★★</span>{%- endif -%}
+          {{ section.settings.eyebrow | escape }}
+        </p>
+      {%- endif -%}
+      {%- liquid
+        # Empty heading = the product's own name, so one template works for every product
+        assign specs_heading = section.settings.heading
+        if specs_heading == blank and product
+          assign specs_heading = product.title
+        endif
+      -%}
+      {%- if specs_heading != blank -%}
+        <h2 class="pdp-specs__heading" data-reveal-title>{{ specs_heading | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="pdp-specs__text rte" data-reveal-fade>{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <dl class="pdp-specs__table" data-reveal-fade>
+          {%- for block in section.blocks -%}
+            <div class="pdp-specs__row{% if block.settings.indent %} pdp-specs__row--indent{% endif %}" {{ block.shopify_attributes }}>
+              <dt>{{ block.settings.label | escape }}</dt>
+              <dd>{{ block.settings.value | escape }}</dd>
+            </div>
+          {%- endfor -%}
+        </dl>
+      {%- endif -%}
+
+      {%- if section.settings.note != blank -%}
+        <p class="pdp-specs__note" data-reveal-fade>{{ section.settings.note | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .pdp-specs {
+    position: relative;
+    padding-block: var(--pdp-sp-pad-top) var(--pdp-sp-pad-bottom);
+  }
+
+  .pdp-specs__grid {
+    display: grid;
+    gap: 0;
+    border-radius: var(--pdp-sp-radius);
+    overflow: hidden;
+    background: var(--pdp-sp-card);
+  }
+
+  .pdp-specs.full-width .pdp-specs__grid {
+    border-radius: 0;
+  }
+
+  .pdp-specs__media {
+    position: relative;
+    min-height: 20rem;
+    aspect-ratio: 4 / 3;
+  }
+
+  .pdp-specs__media :is(img, svg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pdp-specs__card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(1.75rem, 5vw, 4rem);
+    color: var(--pdp-sp-text);
+  }
+
+  .pdp-specs__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.75rem;
+    font-size: 0.8125rem;
+    opacity: 0.8;
+  }
+
+  .pdp-specs__stars {
+    color: #e6b800;
+    letter-spacing: 0.06em;
+  }
+
+  .pdp-specs__heading {
+    margin: 0;
+    color: inherit;
+    font-size: var(--section-title-size);
+    font-weight: var(--section-title-weight);
+    line-height: var(--section-title-leading);
+    letter-spacing: var(--section-title-tracking);
+  }
+
+  .pdp-specs__text {
+    margin-block-start: 0.85rem;
+    max-width: 34rem;
+    opacity: 0.8;
+  }
+
+  .pdp-specs__table {
+    display: grid;
+    margin: 1.75rem 0 0;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 0.875rem;
+  }
+
+  .pdp-specs__row {
+    display: grid;
+    grid-template-columns: minmax(7rem, 0.8fr) minmax(0, 1.2fr);
+    gap: 1rem;
+    padding: 0.7rem 1rem;
+    background: color-mix(in srgb, var(--pdp-sp-text) 3%, transparent);
+  }
+
+  .pdp-specs__row:nth-child(odd) {
+    background: color-mix(in srgb, var(--pdp-sp-text) 8%, transparent);
+  }
+
+  .pdp-specs__row dt {
+    opacity: 0.7;
+  }
+
+  .pdp-specs__row dd {
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .pdp-specs__row--indent dt {
+    padding-inline-start: 1rem;
+  }
+
+  .pdp-specs__note {
+    margin: 1rem 0 0;
+    font-size: 0.75rem;
+    font-style: italic;
+    opacity: 0.7;
+  }
+
+  @media screen and (min-width: 990px) {
+    .pdp-specs__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .pdp-specs__media {
+      aspect-ratio: auto;
+      min-height: 34rem;
+    }
+
+    .pdp-specs--image-right .pdp-specs__media {
+      order: 2;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Product facts",
+  "class": "pdp-specs-section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    { "type": "checkbox", "id": "show_stars", "label": "Show stars by the eyebrow", "default": true },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Rated 4.9/5 by 12,000+ customers" },
+    { "type": "text", "id": "heading", "label": "Heading", "info": "Leave empty to use the product's name.", "default": "Brightening Vitamin C Serum" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>A concentrated, plant-powered formula that fades dark spots and brings back your glow.</p>" },
+    { "type": "text", "id": "note", "label": "Footnote" },
+    { "type": "color", "id": "card_background", "label": "Card background", "default": "#dff0e3" },
+    { "type": "color", "id": "card_text", "label": "Card text", "default": "#1d2b20" },
+    { "type": "range", "id": "radius", "label": "Corner radius", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 20 },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page" },
+        { "value": "full-width", "label": "Full" }
+      ],
+      "default": "page-width"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 48 }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Row",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Skin type" },
+        { "type": "text", "id": "value", "label": "Value", "default": "All skin types" },
+        { "type": "checkbox", "id": "indent", "label": "Indent (sub-row)", "default": false }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Product facts",
+      "blocks": [
+        { "type": "row", "settings": { "label": "Skin benefits", "value": "Brightening, evening tone" } },
+        { "type": "row", "settings": { "label": "Skin type", "value": "All skin types" } },
+        { "type": "row", "settings": { "label": "Texture", "value": "Lightweight, water-based" } },
+        { "type": "row", "settings": { "label": "When to use", "value": "Morning and evening" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

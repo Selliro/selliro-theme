@@ -15,6 +15,7 @@
   @param {boolean} [bundle] - Bundle builder mode: the bar becomes an "add to bundle" toggle (no cart request)
   @param {string} [bundle_aria] - Accessible label for the bundle toggle
   @param {string} [extra] - Extra markup rendered under the price (e.g. variant swatches)
+  @param {boolean} [cta_bottom] - Show the Add to cart bar at the bottom of the card, always visible (instead of on image hover)
 {%- enddoc -%}
 {%- liquid
   assign accent = accent | default: '#f5c518'
@@ -59,7 +60,7 @@
         href="{{ product.url }}"
         aria-label="{{ product.title | escape }}"
       >
-        <span class="new-arrivals-card__media-stack">
+        <span class="new-arrivals-card__media-stack" data-reveal-zoom>
           {%- if product.featured_image != blank -%}
             {%- if product.images.size > 1 -%}
               <new-arrivals-product-gallery class="new-arrivals-card__gallery">
@@ -160,7 +161,7 @@
           <span class="new-arrivals-card__tag new-arrivals-card__tag--new">{{ new_label | escape }}</span>
         {%- endif -%}
       </div>
-      <div class="new-arrivals-card__quick-add">
+      {%- capture na_quick_add -%}
         {%- if bundle -%}
           <button
             type="button"
@@ -196,10 +197,13 @@
           </button>
         {%- else -%}
           <button type="button" class="new-arrivals-card__quick-add-btn" style="--new-arrivals-cta: {{ accent }};" disabled>
-            <span class="new-arrivals-card__quick-add-label">{{ add_label | escape }}</span>
+            <span class="new-arrivals-card__quick-add-label">{{ 'products.product.sold_out' | t }}</span>
           </button>
         {%- endif -%}
-      </div>
+      {%- endcapture -%}
+      {%- unless cta_bottom -%}
+        <div class="new-arrivals-card__quick-add">{{ na_quick_add }}</div>
+      {%- endunless -%}
     </div>
     <div class="new-arrivals-card__body">
       {%- if product.type != blank -%}
@@ -234,5 +238,8 @@
         {%- endfor -%}
       </div>
     </div>
+    {%- if cta_bottom -%}
+      <div class="new-arrivals-card__quick-add new-arrivals-card__quick-add--bottom">{{ na_quick_add }}</div>
+    {%- endif -%}
   </div>
 </new-arrivals-product-card>

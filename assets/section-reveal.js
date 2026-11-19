@@ -1,6 +1,7 @@
 /**
  * Section reveal — shared scroll-in animation for homepage sections
- * (Shop by category, Build your Bundle, …). Styles: assets/section-reveal.css.
+ * (New Arrivals, Shop by category, Black Friday countdown, Build your Bundle, collage, before/after,
+ * beauty bundle, FAQ, testimonials, Latest stories). Styles: assets/section-reveal.css.
  *
  * Markup (all optional except the root):
  *   [data-reveal]                 section root; animates once when it scrolls into view
@@ -8,6 +9,8 @@
  *   [data-reveal-fade]            eyebrow / subtitle / text — fades up after the title, in DOM order
  *   [data-reveal-card]            card — reveals upwards, staggered; its [data-reveal-zoom] (or img) settles from a zoom
  *   [data-reveal-slide="left|right"]  panel — glides in from that side
+ *   [data-reveal-pop]             small overlay (label, hotspot, badge) — pops in once the images have landed
+ *   [data-reveal-rise]            large block (testimonial column, slider) — rises from below, staggered
  *
  * Skipped for reduced motion and in the theme editor; everything is visible without it.
  */
@@ -48,7 +51,14 @@
     root.querySelectorAll('[data-reveal-title]').forEach((t) => (words = Math.max(words, splitTitle(t))));
     const headEnd = 0.15 + words * 0.08;
     root.style.setProperty('--sr-head-end', `${headEnd}s`);
-    root.querySelectorAll('[data-reveal-fade]').forEach((el, k) => el.style.setProperty('--sr-i', String(k)));
+    const stagger = (selector) => {
+      const els = root.querySelectorAll(selector);
+      els.forEach((el, k) => el.style.setProperty('--sr-i', String(Math.min(k, MAX_STAGGER))));
+      return Math.min(els.length, MAX_STAGGER);
+    };
+    const fades = stagger('[data-reveal-fade]');
+    const pops = stagger('[data-reveal-pop]');
+    const rises = stagger('[data-reveal-rise]');
     const cards = Array.from(root.querySelectorAll('[data-reveal-card]'));
     cards.forEach((card, k) => {
       card.style.setProperty('--sr-i', String(Math.min(k, MAX_STAGGER)));
@@ -56,7 +66,13 @@
       (zoom.length ? zoom : card.querySelectorAll('img')).forEach((z) => z.classList.add('sr-zoom'));
     });
     root.classList.add('sr-anim');
-    return 2600 + Math.min(cards.length, MAX_STAGGER) * 120 + headEnd * 1000;
+    // Longest chain (in ms) — after that the root hands back to the normal styles
+    return Math.max(
+      2600 + Math.min(cards.length, MAX_STAGGER) * 120 + headEnd * 1000,
+      (headEnd + fades * 0.1 + 1) * 1000,
+      (1 + pops * 0.12 + 0.8) * 1000,
+      (headEnd + 0.1 + rises * 0.15 + 1.2) * 1000
+    );
   };
 
   const setup = (scope = document) => {
@@ -74,13 +90,18 @@
           // Hand back to the normal styles once everything has landed, so hover effects run without delays.
           setTimeout(() => root.classList.remove('sr-anim', 'is-in'), Number(root.dataset.revealDuration || 3000));
         }),
-      { threshold: 0.12 }
+      // Start once the section's top is a little way up the screen. (A ratio threshold such as 0.12 can never be
+      // reached by sections taller than ~8 screens, e.g. long feature grids on phones, which then stayed hidden.)
+      { threshold: 0, rootMargin: '0px 0px -12% 0px' }
     );
     roots.forEach((root) => {
       root.dataset.revealDuration = String(Math.round(prepare(root)));
       io.observe(root);
     });
   };
+
+  // Sections that load their content later (e.g. product recommendations) call this once it's in place
+  window.SectionReveal = { setup };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setup());
   else setup();

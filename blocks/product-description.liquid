@@ -8,7 +8,110 @@
   endif
 %}
 
-{% render 'text', fallback_text: text, block: block %}
+{%- liquid
+  # Selliro: optionally collapse the description to a few lines with a Read more / Read less toggle
+  assign clamp_lines = block.settings.clamp_lines | default: 0
+  assign read_more = block.settings.read_more_label | default: 'Read more'
+  assign read_less = block.settings.read_less_label | default: 'Read less'
+-%}
+{%- if clamp_lines > 0 -%}
+  <pdp-read-more class="pdp-read-more" style="--pdp-clamp: {{ clamp_lines }};">
+    <div class="pdp-read-more__text" id="ReadMore-{{ block.id }}">
+      {% render 'text', fallback_text: text, block: block %}
+    </div>
+    <button
+      type="button"
+      class="pdp-read-more__toggle"
+      aria-expanded="false"
+      aria-controls="ReadMore-{{ block.id }}"
+      data-more="{{ read_more | escape }}"
+      data-less="{{ read_less | escape }}"
+      hidden
+    >
+      {{- read_more | escape -}}
+    </button>
+  </pdp-read-more>
+  <script>
+    if (!customElements.get('pdp-read-more')) {
+      customElements.define(
+        'pdp-read-more',
+        class extends HTMLElement {
+          connectedCallback() {
+            const wrap = this.querySelector('.pdp-read-more__text');
+            this.text = (wrap && wrap.querySelector('.text-block')) || wrap;
+            this.button = this.querySelector('.pdp-read-more__toggle');
+            if (!this.text || !this.button) return;
+            this.button.addEventListener('click', () => this.toggle());
+            this.check = () => {
+              if (this.classList.contains('is-expanded')) return;
+              // Only offer "Read more" when the text is actually longer than the limit
+              this.button.hidden = this.text.scrollHeight <= this.text.clientHeight + 1;
+            };
+            this.check();
+            new ResizeObserver(this.check).observe(this.text);
+          }
+
+          toggle() {
+            const open = !this.classList.contains('is-expanded');
+            this.classList.toggle('is-expanded', open);
+            this.button.setAttribute('aria-expanded', String(open));
+            this.button.textContent = open ? this.button.dataset.less : this.button.dataset.more;
+          }
+        }
+      );
+    }
+  </script>
+{%- else -%}
+  {% render 'text', fallback_text: text, block: block %}
+{%- endif -%}
+
+{% stylesheet %}
+  .pdp-read-more {
+    display: block;
+    width: 100%;
+  }
+
+  /* Horizon's text block is a flex column, which line-clamp can't pass through — clamp the block itself */
+  .pdp-read-more__text > .text-block {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--pdp-clamp, 2);
+    line-clamp: var(--pdp-clamp, 2);
+    overflow: hidden;
+  }
+
+  .pdp-read-more__text :is(p, ul, ol) {
+    margin-block: 0;
+  }
+
+  .pdp-read-more.is-expanded .pdp-read-more__text > .text-block {
+    display: block;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+
+  .pdp-read-more.is-expanded .pdp-read-more__text :is(p, ul, ol) + :is(p, ul, ol) {
+    margin-block-start: 0.75em;
+  }
+
+  .pdp-read-more__toggle {
+    margin-block-start: 0.35rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-foreground);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+
+  .pdp-read-more__toggle:hover {
+    text-decoration-thickness: 2px;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
@@ -389,6 +492,34 @@
       "step": 1,
       "unit": "px",
       "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Read more"
+    },
+    {
+      "type": "range",
+      "id": "clamp_lines",
+      "label": "Lines before \"Read more\"",
+      "info": "0 shows the whole description.",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "text",
+      "id": "read_more_label",
+      "label": "Read more label",
+      "default": "Read more",
+      "visible_if": "{{ block.settings.clamp_lines > 0 }}"
+    },
+    {
+      "type": "text",
+      "id": "read_less_label",
+      "label": "Read less label",
+      "default": "Read less",
+      "visible_if": "{{ block.settings.clamp_lines > 0 }}"
     }
   ],
   "presets": [

@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "天",
+    "hours": "时",
+    "minutes": "分",
+    "seconds": "秒",
+    "ends_on": "优惠截止于 {{ date }}",
+    "editor_hint": "请在分区设置中添加结束日期以开始倒计时。"
+  },
   "collection_hero": {
     "home": "首页",
     "breadcrumb_label": "面包屑导航",
@@ -22,6 +30,19 @@
     "savings": "节省",
     "total": "合计",
     "view_bundle": "查看盒子"
+  },
+  "product_3d": {
+    "view_3d": "3D 查看",
+    "drag_hint": "拖动以旋转",
+    "reset": "重置视图",
+    "views": "相机视角",
+    "front": "正面",
+    "side": "侧面",
+    "back": "背面",
+    "top": "顶部",
+    "loading": "正在加载 3D 模型",
+    "editor_hint": "选择带有 3D 模型的产品，或粘贴 .glb 文件链接，即可以 3D 展示。",
+    "position_copied": "位置已复制——请粘贴到功能区块中。"
   },
   "routine_builder": {
     "editor_hint": "添加“空格”区块以开始组成句子。",
@@ -44,6 +65,9 @@
       "comment": "评论",
       "post_success": "感谢您联系我们。我们会尽快回复您。",
       "error_heading": "请调整以下内容："
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "徽标占位符"
     }
   },
   "accessibility": {
@@ -88,7 +112,19 @@
     "increase_quantity": "增加数量",
     "quantity": "数量",
     "rating": "此产品的评分是 {{ rating }}/5",
-    "nested_product": "{{ product_title }}（{{ parent_title }}）"
+    "nested_product": "{{ product_title }}（{{ parent_title }}）",
+    "announcement_bar_link": "了解更多",
+    "back_to_top": "返回顶部",
+    "quick_view_loading": "正在加载产品",
+    "before_after_after_alt": "使用后图片",
+    "before_after_before_alt": "使用前图片",
+    "before_after_before_visible": "使用前图片可见",
+    "before_after_comparison": "使用前后图片对比",
+    "before_after_slider": "对比滑块",
+    "before_after_slider_help": "使用左右方向键对比使用前后的图片。",
+    "faq_collapse_answer": "收起回答",
+    "faq_expand_answer": "展开回答",
+    "faq_split_gallery": "常见问题"
   },
   "actions": {
     "add_to_cart": "添加到购物车",
@@ -261,7 +297,11 @@
       "previous": "上一页",
       "next": "下一页",
       "page": "第 {{ page }} 页"
-    }
+    },
+    "read_more_link": "阅读更多",
+    "quick_view": "快速查看",
+    "view_full_details": "查看完整详情",
+    "view_item": "查看商品"
   },
   "gift_cards": {
     "issued": {
@@ -326,5 +366,29 @@
       "success_moderated": "评论已发布，等待审核",
       "success": "评论已发布"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "保留所有权利。"
+    },
+    "image_text_collage": {
+      "section_aria_label": "图文拼贴"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "至少添加一个产品系列标签页以显示产品。"
+    },
+    "icon_with_text": {
+      "empty": "添加图标块以显示内容。",
+      "section_aria_label": "店铺亮点"
+    },
+    "beauty_bundle": {
+      "add_bundle": "将套装加入购物车",
+      "adding": "正在添加…",
+      "added": "已加入购物车",
+      "error": "出了点问题，请重试。"
+    }
+  },
+  "search": {
+    "no_results": "未找到结果"
   }
 }

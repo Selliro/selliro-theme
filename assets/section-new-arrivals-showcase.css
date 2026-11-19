@@ -402,10 +402,13 @@ image-loader.image-loader[data-loaded]::before {
   display: block;
 }
 
+/* No promo image / video yet: show Shopify's placeholder illustration on a light card (like other sections) */
 .new-arrivals-showcase__promo-placeholder {
   width: 100%;
   height: 100%;
-  opacity: 0.32;
+  object-fit: cover;
+  color: rgb(0 0 0 / 0.42);
+  background: #ecebe7;
 }
 
 .new-arrivals-showcase__promo::after {
@@ -1044,6 +1047,22 @@ image-loader.image-loader[data-loaded]::before {
   pointer-events: auto;
 }
 
+/* cta_bottom: the Add to cart bar sits under the price, always visible, aligned across a row of cards */
+.new-arrivals-card .new-arrivals-card__quick-add--bottom {
+  position: static;
+  margin-top: auto;
+  padding: 0 0.9rem 0.9rem;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.new-arrivals-card__quick-add--bottom .new-arrivals-card__quick-add-btn {
+  min-height: 2.6rem;
+  font-size: 0.6875rem;
+  border-radius: 10px;
+}
+
 .new-arrivals-card__quick-add-btn {
   display: flex;
   align-items: center;
@@ -1105,8 +1124,10 @@ image-loader.image-loader[data-loaded]::before {
 
 .new-arrivals-card__title {
   margin: 0 0 0.4rem;
+  /* product names read best in the body font (the heading serif is kept for titles) */
+  font-family: var(--font-body--family);
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.28;
   color: var(--color-foreground-heading, #0a0a0a);
 }

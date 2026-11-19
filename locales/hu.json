@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Nap",
+    "hours": "Óra",
+    "minutes": "Perc",
+    "seconds": "Mp",
+    "ends_on": "Az ajánlat vége: {{ date }}",
+    "editor_hint": "Adjon meg befejezési dátumot a szakasz beállításaiban a visszaszámlálás indításához."
+  },
   "collection_hero": {
     "home": "Kezdőlap",
     "breadcrumb_label": "Morzsamenü",
@@ -22,6 +30,19 @@
     "savings": "Megtakarítás",
     "total": "Összesen",
     "view_bundle": "Doboz megtekintése"
+  },
+  "product_3d": {
+    "view_3d": "Megtekintés 3D-ben",
+    "drag_hint": "Húzd a forgatáshoz",
+    "reset": "Nézet visszaállítása",
+    "views": "Kameranézetek",
+    "front": "Elöl",
+    "side": "Oldalt",
+    "back": "Hátul",
+    "top": "Felül",
+    "loading": "3D modell betöltése",
+    "editor_hint": "Válassz egy 3D modellel rendelkező terméket, vagy illessz be egy .glb fájlra mutató linket a 3D megjelenítéshez.",
+    "position_copied": "Pozíció kimásolva – illeszd be egy jellemzőblokkba."
   },
   "routine_builder": {
     "editor_hint": "Adjon hozzá egy „Üres hely” blokkot a mondat elkezdéséhez.",
@@ -44,6 +65,9 @@
       "comment": "Hozzászólás",
       "post_success": "Köszönjük, hogy írtál nekünk. A lehető legrövidebb időn belül válaszolni fogunk.",
       "error_heading": "Kérjük, helyesbítsd a következőket:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Logó helyőrzője"
     }
   },
   "accessibility": {
@@ -88,7 +112,19 @@
     "quantity": "Mennyiség",
     "rating": "A termék értékelése: {{ rating }} / 5",
     "nested_product": "{{ product_title }} – {{ parent_title }}",
-    "discount_menu": "Kedvezménykódok"
+    "discount_menu": "Kedvezménykódok",
+    "announcement_bar_link": "További információ",
+    "back_to_top": "Vissza a tetejére",
+    "quick_view_loading": "Termék betöltése",
+    "before_after_after_alt": "Utána kép",
+    "before_after_before_alt": "Előtte kép",
+    "before_after_before_visible": "előtte kép látható",
+    "before_after_comparison": "Előtte-utána képösszehasonlítás",
+    "before_after_slider": "Összehasonlító csúszka",
+    "before_after_slider_help": "Az előtte és utána képek összehasonlításához használd a bal és jobb nyílbillentyűt.",
+    "faq_collapse_answer": "Válasz elrejtése",
+    "faq_expand_answer": "Válasz megjelenítése",
+    "faq_split_gallery": "Gyakori kérdések"
   },
   "actions": {
     "add_to_cart": "Hozzáadás a kosárhoz",
@@ -261,7 +297,11 @@
       "previous": "Előző",
       "next": "Következő",
       "page": "{{ page }}. oldal"
-    }
+    },
+    "read_more_link": "Tovább olvasom",
+    "quick_view": "Gyorsnézet",
+    "view_full_details": "Az összes részlet megtekintése",
+    "view_item": "Termék megtekintése"
   },
   "gift_cards": {
     "issued": {
@@ -326,5 +366,29 @@
       "success_moderated": "Hozzászólás közzétéve, moderálásra vár",
       "success": "Hozzászólás közzétéve"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Minden jog fenntartva."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Kép és szöveg kollázs"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "A termékek megjelenítéséhez adj hozzá legalább egy kollekciófület."
+    },
+    "icon_with_text": {
+      "empty": "A tartalom megjelenítéséhez adj hozzá ikonblokkokat.",
+      "section_aria_label": "Az üzlet kiemelt előnyei"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Csomag kosárba helyezése",
+      "adding": "Hozzáadás…",
+      "added": "Kosárba helyezve",
+      "error": "Hiba történt. Próbáld újra."
+    }
+  },
+  "search": {
+    "no_results": "Nincs találat"
   }
 }

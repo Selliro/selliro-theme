@@ -311,6 +311,8 @@
       watchOverflow: true,
       navigation: prev && next ? { prevEl: prev, nextEl: next } : undefined,
       breakpoints: {
+        // Tablets: the phone setting (≈1 card) makes each card huge, so show a little over two
+        560: { slidesPerView: Math.max(sm, 2.15), spaceBetween: Math.max(xm, 12) },
         990: { slidesPerView: sd, spaceBetween: xd },
       },
       on: {

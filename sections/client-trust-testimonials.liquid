@@ -3,6 +3,8 @@
 {% endcomment %}
 
 {{ 'section-client-trust-testimonials.css' | asset_url | stylesheet_tag }}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
 
 {%- liquid
   assign star_c = section.settings.star_color | default: '#e6b800'
@@ -18,6 +20,7 @@
 <section
   class="{{ section.settings.section_width }} client-trust-testimonials client-trust-testimonials--layout-{{ layout_mode }} color-{{ section.settings.color_scheme }}"
   id="ClientTrustTestimonials-{{ section.id }}"
+  data-reveal
   data-layout-mode="{{ layout_mode }}"
   {{ section.shopify_attributes }}
   style="
@@ -28,24 +31,27 @@
     --client-trust-card-bg: {{ section.settings.card_background }};
   "
 >
+  {%- if section.settings.anchor_id != blank -%}
+    <span id="{{ section.settings.anchor_id | handleize }}" class="client-trust-testimonials__anchor" aria-hidden="true"></span>
+  {%- endif -%}
   <div class="client-trust-testimonials__inner section-container">
     {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
       <header
         class="client-trust-testimonials__header client-trust-testimonials__header--align-{{ heading_align }}"
       >
         {%- if section.settings.heading != blank -%}
-          <h2 class="client-trust-testimonials__title" id="ClientTrustTestimonials-heading-{{ section.id }}">
+          <h2 class="client-trust-testimonials__title" data-reveal-title id="ClientTrustTestimonials-heading-{{ section.id }}">
             {{ section.settings.heading | escape }}
           </h2>
         {%- endif -%}
         {%- if section.settings.subheading != blank -%}
-          <div class="client-trust-testimonials__subheading rte">{{ section.settings.subheading }}</div>
+          <div class="client-trust-testimonials__subheading rte" data-reveal-fade>{{ section.settings.subheading }}</div>
         {%- endif -%}
       </header>
     {%- endif -%}
 
     {%- if layout_mode == 'slider' -%}
-      <div class="client-trust-testimonials__slider-wrap">
+      <div class="client-trust-testimonials__slider-wrap" data-reveal-rise>
         <div
           class="client-trust-testimonials__slider swiper"
           data-client-trust-swiper
@@ -98,7 +104,7 @@
       </div>
     {%- else -%}
       {%- comment -%} Mobile: single column, block order, no marquee {%- endcomment -%}
-      <div class="client-trust-testimonials__mobile-stack">
+      <div class="client-trust-testimonials__mobile-stack" data-reveal-rise>
         {%- for block in section.blocks -%}
           {%- if block.type == 'testimonial' -%}
             {%- render 'client-trust-testimonial-card',
@@ -116,7 +122,7 @@
         aria-label="{{ section.settings.heading | default: 'Testimonials' | escape }}"
       >
         {%- comment -%} Column 1 — scroll up {%- endcomment -%}
-        <div class="client-trust-testimonials__column client-trust-testimonials__column--outer">
+        <div class="client-trust-testimonials__column client-trust-testimonials__column--outer" data-reveal-rise>
           <div class="client-trust-testimonials__marquee">
             <div class="client-trust-testimonials__marquee-track">
               <div class="client-trust-testimonials__marquee-set">
@@ -148,7 +154,7 @@
         </div>
 
         {%- comment -%} Column 2 — scroll down {%- endcomment -%}
-        <div class="client-trust-testimonials__column client-trust-testimonials__column--middle">
+        <div class="client-trust-testimonials__column client-trust-testimonials__column--middle" data-reveal-rise>
           <div class="client-trust-testimonials__marquee">
             <div class="client-trust-testimonials__marquee-track client-trust-testimonials__marquee-track--reverse">
               <div class="client-trust-testimonials__marquee-set">
@@ -180,7 +186,7 @@
         </div>
 
         {%- comment -%} Column 3 — scroll up {%- endcomment -%}
-        <div class="client-trust-testimonials__column client-trust-testimonials__column--outer">
+        <div class="client-trust-testimonials__column client-trust-testimonials__column--outer" data-reveal-rise>
           <div class="client-trust-testimonials__marquee">
             <div class="client-trust-testimonials__marquee-track">
               <div class="client-trust-testimonials__marquee-set">
@@ -327,8 +333,14 @@
       "id": "section_width",
       "label": "Section width",
       "options": [
-        { "value": "page-width", "label": "Page width" },
-        { "value": "full-width", "label": "Full width" }
+        {
+          "value": "page-width",
+          "label": "Page width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
       ],
       "default": "page-width"
     },
@@ -354,9 +366,18 @@
       "id": "heading_alignment",
       "label": "Heading alignment",
       "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
       ],
       "default": "center"
     },
@@ -375,8 +396,14 @@
       "id": "layout_mode",
       "label": "Layout mode",
       "options": [
-        { "value": "marquee", "label": "Marquee" },
-        { "value": "slider", "label": "Slider (Swiper)" }
+        {
+          "value": "marquee",
+          "label": "Marquee"
+        },
+        {
+          "value": "slider",
+          "label": "Slider (Swiper)"
+        }
       ],
       "default": "marquee"
     },
@@ -413,6 +440,12 @@
       "id": "card_background",
       "label": "Card background",
       "default": "#ffffff"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Lets a link jump here, e.g. reviews → link to #reviews"
     },
     {
       "type": "range",

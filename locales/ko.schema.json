@@ -8,6 +8,62 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "image_padding": "이미지 여백",
+    "image_padding_info": "이미지와 섹션 가장자리 사이의 간격입니다. 휴대폰에서는 페이지 여백을 사용합니다.",
+    "layout_stacked": "스택: 크게 겹쳐진 카드",
+    "image_parallax": "스크롤 시 이미지 움직임",
+    "image_parallax_info": "페이지를 스크롤하면 이미지가 프레임 안에서 부드럽게 움직입니다. 0으로 설정하면 꺼집니다.",
+    "timer_style": "타이머 스타일",
+    "timer_tiles": "타일",
+    "timer_plain": "심플",
+    "show_end_date": "타이머 아래에 종료 날짜 표시",
+    "badge_text": "스티커 텍스트",
+    "badge_text_info": "왼쪽 이미지의 원형 스티커에 표시됩니다. 숨기려면 비워 두세요.",
+    "d_badge": "최대 25% 할인",
+    "name": "카운트다운 배너",
+    "layout": "레이아웃",
+    "layout_split": "분할: 양쪽에 이미지",
+    "layout_collage": "콜라주: 겹쳐진 이미지 카드",
+    "countdown": "카운트다운",
+    "end_date": "종료 날짜",
+    "end_date_info": "YYYY-MM-DD 형식(예: 2026-11-27). 스토어 시간대를 사용합니다. 카운트다운을 숨기려면 비워 두세요.",
+    "end_time": "종료 시간",
+    "end_time_info": "24시간 형식 HH:MM(예: 23:59).",
+    "show_labels": "레이블 표시(일, 시간, 분, 초)",
+    "after_end": "카운트다운이 끝나면",
+    "after_message": "메시지 표시",
+    "after_hide": "섹션 숨기기",
+    "after_zeros": "계속 0 표시",
+    "expired_message": "메시지",
+    "d_expired": "이 혜택은 종료되었습니다",
+    "d_eyebrow": "블랙 프라이데이 세일",
+    "d_heading": "좋아하는 제품을 더 저렴하게",
+    "d_text": "<p>데일리 스킨케어 필수품을 최대 25% 할인된 가격에 만나보세요. 혜택이 끝나기 전에 내 피부에 맞는 루틴을 완성하세요.</p>",
+    "d_button": "세일 보러 가기",
+    "images": "이미지",
+    "left_image": "왼쪽 이미지",
+    "left_image_2": "왼쪽 이미지 2",
+    "right_image": "오른쪽 이미지",
+    "right_image_2": "오른쪽 이미지 2",
+    "mobile_images": "모바일 이미지",
+    "show_images": "텍스트 위에 한 줄로 표시",
+    "hide_images": "숨기기",
+    "number_size": "숫자 크기",
+    "number_color": "숫자 색상",
+    "number_color_info": "비워 두면 색상 구성표의 텍스트 색상을 사용합니다."
+  },
+  "footer_wordmark": {
+    "header": "하단 큰 텍스트",
+    "text": "텍스트",
+    "text_info": "푸터 하단 전체 너비에 워드마크처럼 크게 표시됩니다. 숨기려면 비워 두세요.",
+    "font": "글꼴",
+    "crop": "하단 잘림",
+    "crop_info": "글자가 아래쪽 가장자리 밖으로 얼마나 나가는지.",
+    "color": "색상",
+    "color_info": "비워 두면 푸터 하단 색상 구성표를 사용합니다.",
+    "animate": "스크롤 시 글자가 올라오기"
+  },
   "slideshow_media": {
     "card_spacing": "위아래 여백",
     "card_spacing_info": "페이지 너비일 때만 적용됩니다. 슬라이드쇼 위아래에 같은 여백이 사용됩니다.",
@@ -378,7 +434,6 @@
     "search": "검색",
     "section": "섹션",
     "selected_variants": "선택한 이형 상품",
-    "shop_the_look": "Shop 외관",
     "slide": "슬라이드",
     "social_media_links": "소셜 미디어 링크",
     "steps": "단계",
@@ -450,7 +505,23 @@
     "blog_posts_editorial": "블로그 게시물: 에디토리얼",
     "excerpt": "요약",
     "footer_password": "비밀번호 바닥글",
-    "policies_and_links": "정책 및 링크"
+    "policies_and_links": "정책 및 링크",
+    "column": "Column",
+    "card": "Card",
+    "carousel": "Carousel",
+    "carousel_content": "Carousel content",
+    "featured_product_information": "Featured product",
+    "image_compare": "Image compare",
+    "layered_slideshow": "Layered slideshow",
+    "new_arrivals_showcase": "New arrivals showcase",
+    "product_hotspots": "Product hotspots",
+    "hotspot_product": "Hotspot",
+    "product_sku": "SKU",
+    "quick_order_list": "Quick order list",
+    "slideshow_full_frame": "Slideshow: Full frame",
+    "slideshow_inset": "Slideshow: Inset",
+    "subheading": "Subheading",
+    "comparison_slider": "Comparison slider"
   },
   "settings": {
     "autoplay": "자동 재생",
@@ -817,10 +888,38 @@
     "custom_mobile_media": "사용자 지정 모바일 미디어",
     "stack_media_on_mobile": "미디어 쌓기",
     "media_type_1": "미디어 유형",
-    "media_type_2": "미디어 2 유형"
+    "media_type_2": "미디어 2 유형",
+    "bullseye_color": "Inner color",
+    "card_height": "Card height",
+    "desktop_pagination": "Desktop pagination",
+    "enable_sticky_add_to_cart": "Sticky add to cart bar",
+    "hotspot_color": "Hotspot color",
+    "image_1": "Image 1",
+    "image_2": "Image 2",
+    "desktop_position": "Desktop position",
+    "product_price_typography": "Product price typography",
+    "product_title_typography": "Product title typography",
+    "social_facebook_link": "Facebook URL",
+    "social_instagram_link": "Instagram URL",
+    "social_twitter_link": "X (Twitter) URL",
+    "social_youtube_link": "YouTube URL",
+    "skus": "SKUs",
+    "sticky_add_to_cart": "Sticky add to cart",
+    "submenu_size": "Submenu size",
+    "subtitle": "Subtitle",
+    "variant_per_page": "Variants per page",
+    "full_frame_on_mobile": "Full width on mobile",
+    "full_width": "Full width",
+    "after_image": "After image",
+    "before_image": "Before image",
+    "cs_slider_style": "Slider style",
+    "cs_slider_color": "Slider color",
+    "cs_slider_inner_color": "Slider inner color",
+    "text_on_images": "Text on images",
+    "x_position": "Horizontal position",
+    "y_position": "Vertical position"
   },
   "options": {
-    "adapt_to_image": "이미지에 맞춤",
     "apple": "사과",
     "arrow": "화살표",
     "banana": "바나나",
@@ -1089,7 +1188,12 @@
     "lift": "리프트",
     "reveal": "표시",
     "scale": "크기 조정",
-    "subtle_zoom": "확대/축소"
+    "subtle_zoom": "확대/축소",
+    "announcement_discount": "Discount",
+    "announcement_shipping": "Shipping",
+    "full_frame": "Full frame",
+    "with_hints": "With hints",
+    "below_media": "Below media"
   },
   "content": {
     "background_video": "배경 동영상",
@@ -1105,7 +1209,6 @@
     "complementary_products": "Search & Discovery 앱을 사용하여 보완 제품을 설정해야 합니다. [자세히 알아보기](https://help.shopify.com/manual/online-store/search-and-discovery)",
     "mobile_column_optimization": "열은 자동으로 모바일에 최적화됩니다",
     "content_width": "콘텐츠 너비는 섹션 너비가 전체 너비로 설정된 경우에만 적용됩니다.",
-    "adjustments_affect_all_content": "이 블록의 모든 콘텐츠에 적용됩니다",
     "responsive_font_sizes": "모든 화면 크기에 맞게 크기가 자동으로 조정됩니다",
     "buttons": "버튼",
     "swatches": "견본",
@@ -1199,9 +1302,14 @@
     "submenu_feature": "하위 메뉴 기능",
     "cart_features": "카트 기능",
     "email_signup": "이메일 가입",
-    "submissions_are_sent_to_store_email_address": "제출 사항은 스토어의 [발신자 이메일 주소](https://admin.shopify.com/settings/notifications)(으)로 전송됩니다.",
     "mobile_media": "모바일 미디어",
-    "mobile_media_2": "모바일 미디어 2"
+    "mobile_media_2": "모바일 미디어 2",
+    "content_layout": "Content layout",
+    "mobile_media_1": "Mobile media 1",
+    "popover": "Popover",
+    "popover_position": "Popover position",
+    "resource_reference_product_sku": "Displays SKU from parent product",
+    "navigation": "Navigation"
   },
   "html_defaults": {
     "share_information_about_your": "<p>고객과 브랜드 정보를 공유하세요. 제품을 설명하고 공지 사항을 제공하고, 스토어를 방문하는 고객을 환영할 수 있습니다.</p>",
@@ -1247,7 +1355,18 @@
     "unable_to_accept_returns": "<p>특정 품목은 반품이 불가능합니다. 이러한 품목은 구매 전에 명확하게 표시됩니다.</p>",
     "work_quickly_to_ship": "<p>주문하신 제품을 최대한 빨리 배송하기 위해 신속하게 처리하겠습니다. 주문이 배송되면 추가 정보가 포함된 이메일을 받게 됩니다. 배송 시간은 고객님의 위치에 따라 다릅니다.</p>",
     "join_our_email_list": "<h2>이메일 리스트에 가입하세요</h2>",
-    "get_exclusive_deals_and_early_access_to_new_products": "<p>독점 거래 및 신제품 조기 액세스를 받으세요.</p>"
+    "get_exclusive_deals_and_early_access_to_new_products": "<p>독점 거래 및 신제품 조기 액세스를 받으세요.</p>",
+    "artistry_in_action": "<p>Artistry in action </p>",
+    "authentic_materials": "<p>Authentic materials, no compromises </p>",
+    "bold_style_recognizable": "<p>Bold style that's recognizable anywhere</p>",
+    "discover_elevated_design": "<p>Discover elevated design </p>",
+    "expert_construction_finish": "<p>Expert construction and an impeccable finish</p>",
+    "featured_collection_h2": "<h2>Featured collection</h2>",
+    "made_to_last": "<p>Made to last </p>",
+    "pieces_better_with_time": "<p>Pieces that only get better with time and wear </p>",
+    "quality_you_can_feel": "<h2>Quality you can feel</h2>",
+    "shop_collection": "<p>Discover our curated collection featuring hand-picked favorites that blend style and quality.</p>",
+    "uncompromising_standards": "<p>Uncompromising standards </p>"
   },
   "text_defaults": {
     "collapsible_row": "축소 가능한 행",
@@ -1280,11 +1399,14 @@
     "what_is_return_policy": "반품 정책은 어떻게 되나요?",
     "when_will_order_arrive": "주문한 제품은 언제 도착하나요?",
     "where_are_products_made": "제품은 어디에서 제조되나요?",
-    "faq": "자주 묻는 질문"
+    "bestsellers": "Bestsellers",
+    "featured_collection": "Featured collection",
+    "new_arrivals": "New arrivals",
+    "shop_the_look": "Shop the look",
+    "trending_now": "Trending now"
   },
   "info": {
     "carousel_layout_on_mobile": "캐러셀은 모바일에서 사용됩니다.",
-    "link_info": "선택 사항: 아이콘을 클릭할 수 있게 설정",
     "video_alt_text": "보조 기술 사용자에게 동영상을 설명합니다",
     "video_autoplay": "동영상은 기본적으로 음소거됩니다",
     "video_external": "YouTube 또는 Vimeo URL 사용",
@@ -1299,14 +1421,14 @@
     "transparent_background": "읽기 쉽도록 투명한 배경이 적용된 각 템플릿을 검토합니다",
     "logo_font": "로고가 선택되지 않은 경우에만 적용됩니다",
     "aspect_ratio_adjusted": "일부 레이아웃에서 조정됨",
-    "auto_open_cart_drawer": "이 기능을 활성화하면, 카트에 제품이 추가될 때 카트 서랍이 자동으로 열립니다.",
     "custom_liquid": "앱 코드 조각이나 기타 코드를 추가하여 고급 맞춤 설정을 생성할 수 있습니다. [자세히 알아보기](https://shopify.dev/docs/api/liquid)",
     "applies_on_image_only": "이미지에만 적용",
     "hover_effects": "제품 및 컬렉션 카드에 적용합니다",
     "pills_usage": "적용된 필터, 할인 코드 및 검색 제안에 사용됩니다",
     "hide_logo_on_home_page_help": "고정 머리글이 활성화되어 있으면 로고가 계속 표시됩니다",
     "media_type_info": "기능은 메뉴 링크에서 채워집니다",
-    "logo_height": "머리글 로고에만 영향이 있습니다"
+    "logo_height": "머리글 로고에만 영향이 있습니다",
+    "announcement_custom_icon": "Used when Icon is set to Custom."
   },
   "categories": {
     "basic": "Basic",
@@ -1327,5 +1449,282 @@
     "other_sections": "기타",
     "storytelling": "스토리텔링",
     "text": "텍스트"
+  },
+  "sections": {
+    "all": {
+      "color_scheme": {
+        "label": "Color scheme"
+      },
+      "section-margin": {
+        "header": {
+          "content": "Section margin"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "margin_top": {
+          "label": "Top margin"
+        }
+      },
+      "section-padding": {
+        "header": {
+          "content": "Section padding"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "padding_top": {
+          "label": "Top padding"
+        },
+        "padding_bottom": {
+          "label": "Bottom padding"
+        }
+      },
+      "border": {
+        "header": {
+          "content": "Borders"
+        },
+        "border_enable_top": {
+          "label": "Show top border"
+        },
+        "border_enable_bottom": {
+          "label": "Show bottom border"
+        }
+      },
+      "button": {
+        "header": {
+          "content": "Button"
+        },
+        "label": {
+          "label": "Button label",
+          "info": "Leave blank to hide the button."
+        },
+        "style": {
+          "label": "Button style",
+          "options__1": {
+            "label": "Primary"
+          },
+          "options__2": {
+            "label": "Secondary"
+          },
+          "options__3": {
+            "label": "Tertiary"
+          }
+        }
+      }
+    },
+    "footer": {
+      "name": "Footer",
+      "footer_color_scheme": {
+        "color_scheme_bottom": "Bottom bar color scheme"
+      },
+      "settings": {
+        "header__3": {
+          "content": "Country/region selector"
+        },
+        "header__4": {
+          "info": "To add a country/region, go to your [payment settings](/admin/settings/payments)."
+        },
+        "header__5": {
+          "content": "Language selector"
+        },
+        "header__6": {
+          "info": "Customers can switch languages using the selector in the footer."
+        },
+        "header__7": {
+          "content": "Payment methods"
+        },
+        "header__8": {
+          "content": "Policy links",
+          "info": "To add store policies, go to your [policy settings](/admin/settings/legal)."
+        },
+        "header__9": {
+          "content": "Follow on Shop",
+          "info": "For the button to show, the Shop channel must be installed and Shop Pay activated. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-shop-buttons)"
+        },
+        "enable_language_selector": {
+          "label": "Enable language selector"
+        },
+        "enable_country_selector": {
+          "label": "Enable country/region selector"
+        },
+        "enable_follow_on_shop": {
+          "label": "Enable Follow on Shop"
+        },
+        "payment_enable": {
+          "label": "Show payment icons"
+        },
+        "show_policy": {
+          "label": "Show policy links"
+        }
+      },
+      "blocks": {
+        "link_list": {
+          "name": "Menu",
+          "settings": {
+            "heading": {
+              "label": "Heading",
+              "info": "Heading must be set for the menu to display."
+            },
+            "menu": {
+              "label": "Menu",
+              "info": "Select a navigation menu to display."
+            }
+          }
+        },
+        "logo_info": {
+          "name": "Brand",
+          "settings": {
+            "logo": {
+              "label": "Logo image"
+            },
+            "logo_2": {
+              "label": "Inverse logo",
+              "info": "Shown on dark backgrounds when using two logos."
+            },
+            "logo_width": {
+              "unit": "px",
+              "label": "Logo width"
+            },
+            "description": {
+              "label": "Description"
+            }
+          }
+        },
+        "copyright_show": {
+          "label": "Show copyright and \"Powered by Shopify\""
+        },
+        "subscribe": {
+          "name": "Email signup",
+          "settings": {
+            "additional_text": {
+              "label": "Description"
+            },
+            "heading": {
+              "label": "Heading"
+            },
+            "newsletter_text": {
+              "label": "Compliance text"
+            },
+            "paragraph": {
+              "content": "Shown below the subscription form."
+            }
+          }
+        }
+      }
+    },
+    "new-arrivals-showcase": {
+      "settings": {
+        "product_layout": "Product layout",
+        "heading_scribble": "Heading decoration",
+        "scribble_color": "Decoration color",
+        "tabs_a11y": "Tabs label (accessibility)",
+        "active_tab_background": "Active tab background",
+        "active_tab_text": "Active tab text",
+        "inactive_tab_background": "Inactive tab background",
+        "inactive_tab_text": "Inactive tab text",
+        "promotion_header": "Promotion column",
+        "show_promotion_column": "Show promotion column",
+        "promo_column_width": "Promotion column width",
+        "promo_media_type": {
+          "label": "Promotion media type",
+          "info": "Use a static image, upload an MP4 file, or embed a YouTube/Vimeo video."
+        },
+        "promo_image": "Promotion image",
+        "promo_video": "Promotion video (MP4)",
+        "promo_video_url": {
+          "label": "YouTube or Vimeo",
+          "info": "Paste a supported video URL from YouTube or Vimeo."
+        },
+        "promo_video_autoplay": "Autoplay video",
+        "promo_video_loop": "Loop video",
+        "promo_video_controls": "Show video controls",
+        "promo_badge": "Badge text",
+        "promo_heading": "Promotion heading",
+        "promo_text": "Promotion text",
+        "promo_button": "Button label",
+        "promo_link": "Button link",
+        "products_per_tab": "Products per tab",
+        "new_badge_days": "“New” badge window (days)",
+        "new_badge_text": "“New” badge text",
+        "hover_image_button": "Image hover button label",
+        "fallback_star_count": "Fallback star rating",
+        "star_color": "Star color",
+        "yellow_cta": "Accent yellow (CTA)",
+        "demo_category": "Demo category label",
+        "demo_product_title": "Demo product title",
+        "carousel_header": "Carousel",
+        "slides_visible_mobile": "Slides visible (mobile)",
+        "slides_visible_desktop": "Slides visible (desktop)",
+        "gap_mobile": "Gap (mobile)",
+        "gap_desktop": "Gap (desktop)"
+      },
+      "options": {
+        "layout": {
+          "slider": "Slider",
+          "grid": "Grid"
+        },
+        "scribble": {
+          "none": "None",
+          "squiggle": "Squiggle",
+          "wave": "Wave",
+          "brush": "Brush",
+          "double": "Double",
+          "scribble_underline": "Scribble Underline",
+          "hand_drawn": "Hand-drawn Underline",
+          "sketch": "Sketch Underline",
+          "marker": "Marker Underline",
+          "zigzag": "Zigzag Underline",
+          "arc": "Arc Underline",
+          "dotted": "Dotted Underline",
+          "erratic": "Erratic Underline",
+          "ribbon": "Ribbon Underline"
+        },
+        "promo_media": {
+          "image": "Image",
+          "video_upload": "Uploaded video (MP4)",
+          "video_embed": "YouTube or Vimeo"
+        }
+      },
+      "blocks": {
+        "layout_placeholder": {
+          "name": "Layout preview",
+          "paragraph": "Shows sample products when no collection is selected. Remove this block when your tabs use real collections.",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        },
+        "collection_tab": {
+          "name": "Collection tab",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        }
+      }
+    }
   }
 }

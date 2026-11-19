@@ -8,6 +8,62 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "image_padding": "图片间距",
+    "image_padding_info": "图片与分区边缘之间的距离。手机上使用页面边距。",
+    "layout_stacked": "叠放：大尺寸重叠卡片",
+    "image_parallax": "滚动时的图片移动",
+    "image_parallax_info": "页面滚动时，图片会在框内轻轻滑动。设为 0 即关闭。",
+    "timer_style": "计时器样式",
+    "timer_tiles": "方块",
+    "timer_plain": "简洁",
+    "show_end_date": "在计时器下方显示结束日期",
+    "badge_text": "贴纸文字",
+    "badge_text_info": "显示在左侧图片的圆形贴纸上。留空则隐藏。",
+    "d_badge": "最高立减 25%",
+    "name": "倒计时横幅",
+    "layout": "布局",
+    "layout_split": "分屏：两侧各一张图片",
+    "layout_collage": "拼贴：重叠的图片卡片",
+    "countdown": "倒计时",
+    "end_date": "结束日期",
+    "end_date_info": "格式为 YYYY-MM-DD，例如 2026-11-27。使用您商店的时区。留空则隐藏倒计时。",
+    "end_time": "结束时间",
+    "end_time_info": "24 小时制 HH:MM，例如 23:59。",
+    "show_labels": "显示标签（天、时、分、秒）",
+    "after_end": "倒计时结束后",
+    "after_message": "显示一条消息",
+    "after_hide": "隐藏此分区",
+    "after_zeros": "继续显示零",
+    "expired_message": "消息",
+    "d_expired": "此优惠已结束",
+    "d_eyebrow": "黑色星期五特卖",
+    "d_heading": "你的心头好，如今更优惠",
+    "d_text": "<p>日常护肤必备单品最高立省 25%。在优惠结束前，为你的肌肤打造专属护理流程。</p>",
+    "d_button": "选购特卖",
+    "images": "图片",
+    "left_image": "左侧图片",
+    "left_image_2": "左侧图片 2",
+    "right_image": "右侧图片",
+    "right_image_2": "右侧图片 2",
+    "mobile_images": "移动端图片",
+    "show_images": "在文字上方并排显示",
+    "hide_images": "隐藏",
+    "number_size": "数字大小",
+    "number_color": "数字颜色",
+    "number_color_info": "留空则使用配色方案的文字颜色。"
+  },
+  "footer_wordmark": {
+    "header": "底部大字",
+    "text": "文字",
+    "text_info": "以文字标识的形式，在页脚底部全宽超大显示。留空则隐藏。",
+    "font": "字体",
+    "crop": "底部裁切",
+    "crop_info": "字母超出下边缘的比例。",
+    "color": "颜色",
+    "color_info": "留空则使用页脚底部的配色方案。",
+    "animate": "滚动时字母浮现"
+  },
   "slideshow_media": {
     "card_spacing": "上下间距",
     "card_spacing_info": "仅适用于页面宽度。幻灯片上方和下方使用相同的间距。",
@@ -380,7 +436,6 @@
     "search": "搜索",
     "section": "分区",
     "selected_variants": "已选择的多属性",
-    "shop_the_look": "Shop 外观",
     "slide": "幻灯片",
     "social_media_links": "社交媒体链接",
     "steps": "步骤",
@@ -450,7 +505,23 @@
     "blog_posts_editorial": "博客文章：编辑精选",
     "excerpt": "摘录",
     "footer_password": "密码页脚",
-    "policies_and_links": "政策和链接"
+    "policies_and_links": "政策和链接",
+    "column": "Column",
+    "card": "Card",
+    "carousel": "Carousel",
+    "carousel_content": "Carousel content",
+    "featured_product_information": "Featured product",
+    "image_compare": "Image compare",
+    "layered_slideshow": "Layered slideshow",
+    "new_arrivals_showcase": "New arrivals showcase",
+    "product_hotspots": "Product hotspots",
+    "hotspot_product": "Hotspot",
+    "product_sku": "SKU",
+    "quick_order_list": "Quick order list",
+    "slideshow_full_frame": "Slideshow: Full frame",
+    "slideshow_inset": "Slideshow: Inset",
+    "subheading": "Subheading",
+    "comparison_slider": "Comparison slider"
   },
   "settings": {
     "alignment": "对齐方式",
@@ -817,10 +888,38 @@
     "custom_mobile_media": "自定义移动端媒体文件",
     "stack_media_on_mobile": "堆叠媒体文件",
     "media_type_1": "媒体文件类型",
-    "media_type_2": "媒体文件 2 类型"
+    "media_type_2": "媒体文件 2 类型",
+    "bullseye_color": "Inner color",
+    "card_height": "Card height",
+    "desktop_pagination": "Desktop pagination",
+    "enable_sticky_add_to_cart": "Sticky add to cart bar",
+    "hotspot_color": "Hotspot color",
+    "image_1": "Image 1",
+    "image_2": "Image 2",
+    "desktop_position": "Desktop position",
+    "product_price_typography": "Product price typography",
+    "product_title_typography": "Product title typography",
+    "social_facebook_link": "Facebook URL",
+    "social_instagram_link": "Instagram URL",
+    "social_twitter_link": "X (Twitter) URL",
+    "social_youtube_link": "YouTube URL",
+    "skus": "SKUs",
+    "sticky_add_to_cart": "Sticky add to cart",
+    "submenu_size": "Submenu size",
+    "subtitle": "Subtitle",
+    "variant_per_page": "Variants per page",
+    "full_frame_on_mobile": "Full width on mobile",
+    "full_width": "Full width",
+    "after_image": "After image",
+    "before_image": "Before image",
+    "cs_slider_style": "Slider style",
+    "cs_slider_color": "Slider color",
+    "cs_slider_inner_color": "Slider inner color",
+    "text_on_images": "Text on images",
+    "x_position": "Horizontal position",
+    "y_position": "Vertical position"
   },
   "options": {
-    "adapt_to_image": "适应图片",
     "apple": "苹果",
     "arrow": "箭头",
     "auto": "自动",
@@ -1089,7 +1188,12 @@
     "spotlight": "聚焦",
     "standard": "标准",
     "subheading": "副标题",
-    "subtle_zoom": "缩放"
+    "subtle_zoom": "缩放",
+    "announcement_discount": "Discount",
+    "announcement_shipping": "Shipping",
+    "full_frame": "Full frame",
+    "with_hints": "With hints",
+    "below_media": "Below media"
   },
   "content": {
     "advanced": "高级",
@@ -1105,7 +1209,6 @@
     "complementary_products": "必须使用 Search & Discovery 应用设置互补产品。[详细了解](https://help.shopify.com/manual/online-store/search-and-discovery)",
     "mobile_column_optimization": "列会针对移动设备进行自动优化",
     "content_width": "只有将分区宽度设置为全宽时，内容宽度才适用。",
-    "adjustments_affect_all_content": "应用于此块中的所有内容",
     "responsive_font_sizes": "尺寸自动缩放，适合各种屏幕尺寸",
     "buttons": "按钮",
     "swatches": "样本",
@@ -1199,9 +1302,14 @@
     "submenu_feature": "子菜单功能",
     "cart_features": "购物车功能",
     "email_signup": "电子邮件注册信息",
-    "submissions_are_sent_to_store_email_address": "提交内容已发送至您商店的[发件人邮箱](https://admin.shopify.com/settings/notifications)",
     "mobile_media": "移动端媒体文件",
-    "mobile_media_2": "移动端媒体文件 2"
+    "mobile_media_2": "移动端媒体文件 2",
+    "content_layout": "Content layout",
+    "mobile_media_1": "Mobile media 1",
+    "popover": "Popover",
+    "popover_position": "Popover position",
+    "resource_reference_product_sku": "Displays SKU from parent product",
+    "navigation": "Navigation"
   },
   "html_defaults": {
     "share_information_about_your": "<p>与客户分享有关您品牌的信息。描述产品、发布公告或欢迎客户访问您的商店。</p>",
@@ -1247,7 +1355,18 @@
     "unable_to_accept_returns": "<p>部分商品不支持退货。这些商品在购买前会有明确标注。</p>",
     "work_quickly_to_ship": "<p>我们会尽快处理并发货您的订单。订单发货后，您将收到一封包含更多信息的电子邮件。配送时间因您所在的地点而异。</p>",
     "join_our_email_list": "<h2>加入我们的邮件列表</h2>",
-    "get_exclusive_deals_and_early_access_to_new_products": "<p>获取独家优惠和新产品的早期访问权。</p>"
+    "get_exclusive_deals_and_early_access_to_new_products": "<p>获取独家优惠和新产品的早期访问权。</p>",
+    "artistry_in_action": "<p>Artistry in action </p>",
+    "authentic_materials": "<p>Authentic materials, no compromises </p>",
+    "bold_style_recognizable": "<p>Bold style that's recognizable anywhere</p>",
+    "discover_elevated_design": "<p>Discover elevated design </p>",
+    "expert_construction_finish": "<p>Expert construction and an impeccable finish</p>",
+    "featured_collection_h2": "<h2>Featured collection</h2>",
+    "made_to_last": "<p>Made to last </p>",
+    "pieces_better_with_time": "<p>Pieces that only get better with time and wear </p>",
+    "quality_you_can_feel": "<h2>Quality you can feel</h2>",
+    "shop_collection": "<p>Discover our curated collection featuring hand-picked favorites that blend style and quality.</p>",
+    "uncompromising_standards": "<p>Uncompromising standards </p>"
   },
   "text_defaults": {
     "button_label": "立即购买",
@@ -1280,14 +1399,17 @@
     "what_is_return_policy": "退货政策是什么？",
     "when_will_order_arrive": "我的订单什么时候能送达？",
     "where_are_products_made": "你们的产品在哪里生产？",
-    "faq": "常见问题"
+    "bestsellers": "Bestsellers",
+    "featured_collection": "Featured collection",
+    "new_arrivals": "New arrivals",
+    "shop_the_look": "Shop the look",
+    "trending_now": "Trending now"
   },
   "info": {
     "video_alt_text": "为辅助技术用户描述视频",
     "video_autoplay": "视频将默认静音",
     "video_external": "使用 YouTube 或 Vimeo URL",
     "carousel_layout_on_mobile": "可在移动设备上使用轮播",
-    "link_info": "可选：使图标可点击",
     "carousel_hover_behavior_not_supported": "当在分区级别选择“轮播”类型时，不支持“轮播”悬停",
     "checkout_buttons": "加快客户的结账速度，提高转化率。[详细了解](https://help.shopify.com/manual/online-store/dynamic-checkout)",
     "custom_heading": "自定义标题",
@@ -1299,14 +1421,14 @@
     "manage_languages": "[管理语言](/admin/settings/languages)",
     "transparent_background": "检查已应用透明背景的每个模板的可读性",
     "aspect_ratio_adjusted": "在某些布局中进行了调整",
-    "auto_open_cart_drawer": "启用后，当产品添加到购物车时，购物车抽屉会自动打开。",
     "custom_liquid": "添加应用代码片段或其他代码以创建高级自定义。[详细了解](https://shopify.dev/docs/api/liquid)",
     "hover_effects": "应用于产品和产品系列卡",
     "pills_usage": "用于应用的筛选条件、折扣码和搜索建议",
     "applies_on_image_only": "仅适用于图像",
     "hide_logo_on_home_page_help": "Logo 将在粘性标头处于激活状态时保持可见",
     "media_type_info": "从您的菜单链接中填充功能",
-    "logo_height": "仅影响标头 logo"
+    "logo_height": "仅影响标头 logo",
+    "announcement_custom_icon": "Used when Icon is set to Custom."
   },
   "categories": {
     "basic": "Basic",
@@ -1327,5 +1449,282 @@
     "other_sections": "其他",
     "storytelling": "故事讲述",
     "text": "文本"
+  },
+  "sections": {
+    "all": {
+      "color_scheme": {
+        "label": "Color scheme"
+      },
+      "section-margin": {
+        "header": {
+          "content": "Section margin"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "margin_top": {
+          "label": "Top margin"
+        }
+      },
+      "section-padding": {
+        "header": {
+          "content": "Section padding"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "padding_top": {
+          "label": "Top padding"
+        },
+        "padding_bottom": {
+          "label": "Bottom padding"
+        }
+      },
+      "border": {
+        "header": {
+          "content": "Borders"
+        },
+        "border_enable_top": {
+          "label": "Show top border"
+        },
+        "border_enable_bottom": {
+          "label": "Show bottom border"
+        }
+      },
+      "button": {
+        "header": {
+          "content": "Button"
+        },
+        "label": {
+          "label": "Button label",
+          "info": "Leave blank to hide the button."
+        },
+        "style": {
+          "label": "Button style",
+          "options__1": {
+            "label": "Primary"
+          },
+          "options__2": {
+            "label": "Secondary"
+          },
+          "options__3": {
+            "label": "Tertiary"
+          }
+        }
+      }
+    },
+    "footer": {
+      "name": "Footer",
+      "footer_color_scheme": {
+        "color_scheme_bottom": "Bottom bar color scheme"
+      },
+      "settings": {
+        "header__3": {
+          "content": "Country/region selector"
+        },
+        "header__4": {
+          "info": "To add a country/region, go to your [payment settings](/admin/settings/payments)."
+        },
+        "header__5": {
+          "content": "Language selector"
+        },
+        "header__6": {
+          "info": "Customers can switch languages using the selector in the footer."
+        },
+        "header__7": {
+          "content": "Payment methods"
+        },
+        "header__8": {
+          "content": "Policy links",
+          "info": "To add store policies, go to your [policy settings](/admin/settings/legal)."
+        },
+        "header__9": {
+          "content": "Follow on Shop",
+          "info": "For the button to show, the Shop channel must be installed and Shop Pay activated. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-shop-buttons)"
+        },
+        "enable_language_selector": {
+          "label": "Enable language selector"
+        },
+        "enable_country_selector": {
+          "label": "Enable country/region selector"
+        },
+        "enable_follow_on_shop": {
+          "label": "Enable Follow on Shop"
+        },
+        "payment_enable": {
+          "label": "Show payment icons"
+        },
+        "show_policy": {
+          "label": "Show policy links"
+        }
+      },
+      "blocks": {
+        "link_list": {
+          "name": "Menu",
+          "settings": {
+            "heading": {
+              "label": "Heading",
+              "info": "Heading must be set for the menu to display."
+            },
+            "menu": {
+              "label": "Menu",
+              "info": "Select a navigation menu to display."
+            }
+          }
+        },
+        "logo_info": {
+          "name": "Brand",
+          "settings": {
+            "logo": {
+              "label": "Logo image"
+            },
+            "logo_2": {
+              "label": "Inverse logo",
+              "info": "Shown on dark backgrounds when using two logos."
+            },
+            "logo_width": {
+              "unit": "px",
+              "label": "Logo width"
+            },
+            "description": {
+              "label": "Description"
+            }
+          }
+        },
+        "copyright_show": {
+          "label": "Show copyright and \"Powered by Shopify\""
+        },
+        "subscribe": {
+          "name": "Email signup",
+          "settings": {
+            "additional_text": {
+              "label": "Description"
+            },
+            "heading": {
+              "label": "Heading"
+            },
+            "newsletter_text": {
+              "label": "Compliance text"
+            },
+            "paragraph": {
+              "content": "Shown below the subscription form."
+            }
+          }
+        }
+      }
+    },
+    "new-arrivals-showcase": {
+      "settings": {
+        "product_layout": "Product layout",
+        "heading_scribble": "Heading decoration",
+        "scribble_color": "Decoration color",
+        "tabs_a11y": "Tabs label (accessibility)",
+        "active_tab_background": "Active tab background",
+        "active_tab_text": "Active tab text",
+        "inactive_tab_background": "Inactive tab background",
+        "inactive_tab_text": "Inactive tab text",
+        "promotion_header": "Promotion column",
+        "show_promotion_column": "Show promotion column",
+        "promo_column_width": "Promotion column width",
+        "promo_media_type": {
+          "label": "Promotion media type",
+          "info": "Use a static image, upload an MP4 file, or embed a YouTube/Vimeo video."
+        },
+        "promo_image": "Promotion image",
+        "promo_video": "Promotion video (MP4)",
+        "promo_video_url": {
+          "label": "YouTube or Vimeo",
+          "info": "Paste a supported video URL from YouTube or Vimeo."
+        },
+        "promo_video_autoplay": "Autoplay video",
+        "promo_video_loop": "Loop video",
+        "promo_video_controls": "Show video controls",
+        "promo_badge": "Badge text",
+        "promo_heading": "Promotion heading",
+        "promo_text": "Promotion text",
+        "promo_button": "Button label",
+        "promo_link": "Button link",
+        "products_per_tab": "Products per tab",
+        "new_badge_days": "“New” badge window (days)",
+        "new_badge_text": "“New” badge text",
+        "hover_image_button": "Image hover button label",
+        "fallback_star_count": "Fallback star rating",
+        "star_color": "Star color",
+        "yellow_cta": "Accent yellow (CTA)",
+        "demo_category": "Demo category label",
+        "demo_product_title": "Demo product title",
+        "carousel_header": "Carousel",
+        "slides_visible_mobile": "Slides visible (mobile)",
+        "slides_visible_desktop": "Slides visible (desktop)",
+        "gap_mobile": "Gap (mobile)",
+        "gap_desktop": "Gap (desktop)"
+      },
+      "options": {
+        "layout": {
+          "slider": "Slider",
+          "grid": "Grid"
+        },
+        "scribble": {
+          "none": "None",
+          "squiggle": "Squiggle",
+          "wave": "Wave",
+          "brush": "Brush",
+          "double": "Double",
+          "scribble_underline": "Scribble Underline",
+          "hand_drawn": "Hand-drawn Underline",
+          "sketch": "Sketch Underline",
+          "marker": "Marker Underline",
+          "zigzag": "Zigzag Underline",
+          "arc": "Arc Underline",
+          "dotted": "Dotted Underline",
+          "erratic": "Erratic Underline",
+          "ribbon": "Ribbon Underline"
+        },
+        "promo_media": {
+          "image": "Image",
+          "video_upload": "Uploaded video (MP4)",
+          "video_embed": "YouTube or Vimeo"
+        }
+      },
+      "blocks": {
+        "layout_placeholder": {
+          "name": "Layout preview",
+          "paragraph": "Shows sample products when no collection is selected. Remove this block when your tabs use real collections.",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        },
+        "collection_tab": {
+          "name": "Collection tab",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        }
+      }
+    }
   }
 }

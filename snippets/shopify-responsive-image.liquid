@@ -160,12 +160,14 @@
       tabindex="-1"
       data-zoom="{{ srcset }}"    
       alt="{{ image_alt | escape }}"
+      width="{{ image_width }}"
+      height="{{ image_height }}"
       {{ image_attributes }}
       loading="lazy"
     >
   </div>
   
   <noscript>
-    <img class="{{ image_class }}" src="{{ noscript_image_url }}" alt="{{ image_alt | escape }}">
+    <img class="{{ image_class }}" src="{{ noscript_image_url }}" alt="{{ image_alt | escape }}" width="{{ image_width }}" height="{{ image_height }}">
   </noscript>
   

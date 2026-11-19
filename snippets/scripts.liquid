@@ -289,5 +289,13 @@
     template: {
       name: '{{ template }}',
     },
+    cartFly: {
+      enabled: {{ settings.add_to_cart_animation | json }},
+      style: {{ settings.cart_fly_style | default: 'dot' | json }},
+    },
   };
 </script>
+<script
+  src="{{ 'cart-fly.js' | asset_url }}"
+  defer
+></script>

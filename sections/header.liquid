@@ -43,6 +43,21 @@
     endif
   endif
 
+  # Home page: a first-section slideshow decides transparent / solid (Slideshow → Header style).
+  # These values let it switch the header without a reload.
+  if template.name == 'index'
+    if sticky
+      assign home_transparent_mode = 'not-sticky'
+    else
+      assign home_transparent_mode = 'always'
+    endif
+    if section.settings.home_color_scheme == 'inverse'
+      assign home_transparent_scheme = 'color-' | append: section.settings.color_scheme_transparent
+    else
+      assign home_transparent_scheme = 'color-' | append: section.settings.color_scheme_top
+    endif
+  endif
+
   # Layout presets. "custom" falls back to the individual logo/menu position settings.
   assign header_layout = section.settings.header_layout | default: 'custom'
   case header_layout
@@ -62,6 +77,8 @@
     content_for 'block', type: '_header-menu', id: 'header-menu'
   endcapture
 
+  # Horizon renders the same menu block as desktop menu, mobile drawer and navigation bar (variants)
+  # theme-check-disable UniqueStaticBlockId
   capture mobile_menu
     content_for 'block', type: '_header-menu', id: 'header-menu', variant: 'mobile'
   endcapture
@@ -69,9 +86,14 @@
   capture navigation_bar
     content_for 'block', type: '_header-menu', id: 'header-menu', variant: 'navigation_bar', transparent: transparent
   endcapture
+  # theme-check-enable UniqueStaticBlockId
 
   capture actions
     render 'header-actions'
+  endcapture
+
+  capture cta
+    render 'header-cta'
   endcapture
 
   if shop.customer_accounts_enabled
@@ -137,6 +159,9 @@
     endcapture
   endif
 
+  # The call-to-action button always sits in the right column, just before the localization (currency) selector
+  assign order = order | replace: 'localization', 'cta,localization'
+
   assign bottom_row_blocks = ''
 
   if section.settings.menu_row == 'bottom'
@@ -188,6 +213,22 @@
   endif
 %}
 
+{%- liquid
+  assign output_shade = false
+  if section.settings.transparent_shade > 0
+    if transparent or template.name == 'index'
+      assign output_shade = true
+    endif
+  endif
+-%}
+{%- if output_shade -%}
+  {% style %}
+    body {
+      --transparent-header-shade: {{ section.settings.transparent_shade | divided_by: 100.0 }};
+    }
+  {% endstyle %}
+{%- endif -%}
+
 {%- if section.settings.menu_backdrop -%}
   {% style %}
     #shopify-section-{{ section.id }} {
@@ -222,6 +263,10 @@
   {% endif %}
   data-skip-node-update
   data-scroll-direction="none"
+  {% if home_transparent_mode %}
+    data-transparent-mode="{{ home_transparent_mode }}"
+    data-transparent-scheme="{{ home_transparent_scheme }}"
+  {% endif %}
 >
   {%- if request.page_type == 'index' -%}
     <h1 class="visually-hidden">{{ shop.name }}</h1>
@@ -269,6 +314,7 @@
         logo: logo,
         menu: menu,
         actions: actions,
+        cta: cta,
         localization: localization_markup,
         search: search,
         mobile_search: mobile_search
@@ -1230,6 +1276,59 @@
       ],
       "default": "default",
       "visible_if": "{{ section.settings.enable_transparent_header_collection }}"
+    },
+    {
+      "type": "range",
+      "id": "transparent_shade",
+      "label": "Top shade",
+      "info": "Darkens the top of the slideshow behind a transparent header so the menu stays easy to read.",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Call to action button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show button",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Label",
+      "default": "Take a quiz",
+      "visible_if": "{{ section.settings.show_cta }}"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Link",
+      "info": "Leave empty to link to /pages/skin-quiz",
+      "visible_if": "{{ section.settings.show_cta }}"
+    },
+    {
+      "type": "select",
+      "id": "cta_style",
+      "label": "Style",
+      "options": [
+        { "value": "solid", "label": "Solid" },
+        { "value": "outline", "label": "Outline" }
+      ],
+      "default": "solid",
+      "visible_if": "{{ section.settings.show_cta }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "cta_icon",
+      "label": "Show sparkle icon",
+      "default": true,
+      "visible_if": "{{ section.settings.show_cta }}"
     }
   ],
   "presets": []

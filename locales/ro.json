@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Zile",
+    "hours": "Ore",
+    "minutes": "Min",
+    "seconds": "Sec",
+    "ends_on": "Oferta se încheie pe {{ date }}",
+    "editor_hint": "Adăugați o dată de încheiere în setările secțiunii pentru a porni numărătoarea inversă."
+  },
   "collection_hero": {
     "home": "Acasă",
     "breadcrumb_label": "Traseu de navigare",
@@ -22,6 +30,19 @@
     "savings": "Economisești",
     "total": "Total",
     "view_bundle": "Vezi cutia"
+  },
+  "product_3d": {
+    "view_3d": "Vezi în 3D",
+    "drag_hint": "Trage pentru a roti",
+    "reset": "Resetează vizualizarea",
+    "views": "Unghiuri de cameră",
+    "front": "Față",
+    "side": "Lateral",
+    "back": "Spate",
+    "top": "Sus",
+    "loading": "Se încarcă modelul 3D",
+    "editor_hint": "Alege un produs cu model 3D sau lipește un link către un fișier .glb pentru a-l afișa în 3D.",
+    "position_copied": "Poziție copiată — lipește-o într-un bloc de caracteristică."
   },
   "routine_builder": {
     "editor_hint": "Adăugați un bloc „Spațiu gol” pentru a începe propoziția.",
@@ -44,7 +65,10 @@
       "post_success": "Îți mulțumim că ne-ai contactat. Vom reveni cât mai curând posibil.",
       "error_heading": "Ajustează următoarele:"
     },
-    "payment_methods": "Metode de plată"
+    "payment_methods": "Metode de plată",
+    "marquee_logo": {
+      "placeholder_a11y": "Substituent pentru logo"
+    }
   },
   "accessibility": {
     "play_model": "Redă modelul 3D",
@@ -89,7 +113,19 @@
     "quantity": "Cantitate",
     "rating": "Evaluarea acestui produs este de {{ rating }} din 5",
     "nested_product": "{{ product_title }} pentru {{ parent_title }}",
-    "discount_menu": "Coduri de reduceri"
+    "discount_menu": "Coduri de reduceri",
+    "announcement_bar_link": "Află mai multe",
+    "back_to_top": "Înapoi sus",
+    "quick_view_loading": "Se încarcă produsul",
+    "before_after_after_alt": "Imagine după",
+    "before_after_before_alt": "Imagine înainte",
+    "before_after_before_visible": "imaginea înainte este vizibilă",
+    "before_after_comparison": "Comparație între imaginile înainte și după",
+    "before_after_slider": "Glisor de comparație",
+    "before_after_slider_help": "Folosește tastele săgeată stânga și dreapta pentru a compara imaginile înainte și după.",
+    "faq_collapse_answer": "Restrânge răspunsul",
+    "faq_expand_answer": "Extinde răspunsul",
+    "faq_split_gallery": "Întrebări frecvente"
   },
   "actions": {
     "add_to_cart": "Adaugă în coș",
@@ -266,7 +302,11 @@
       "previous": "Anteriorul",
       "next": "Următorul",
       "page": "Pagina {{ page }}"
-    }
+    },
+    "read_more_link": "Citește mai mult",
+    "quick_view": "Vizualizare rapidă",
+    "view_full_details": "Vezi toate detaliile",
+    "view_item": "Vezi articolul"
   },
   "gift_cards": {
     "issued": {
@@ -332,5 +372,29 @@
       "success_moderated": "Comentariul a fost postat, se așteaptă moderarea",
       "success": "Comentariu postat"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Toate drepturile rezervate."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Colaj cu imagine și text"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Adaugă cel puțin o filă de colecție pentru a afișa produse."
+    },
+    "icon_with_text": {
+      "empty": "Adaugă blocuri cu pictograme pentru a afișa conținut.",
+      "section_aria_label": "Punctele forte ale magazinului"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Adaugă pachetul în coș",
+      "adding": "Se adaugă…",
+      "added": "Adăugat în coș",
+      "error": "Ceva nu a funcționat. Încearcă din nou."
+    }
+  },
+  "search": {
+    "no_results": "Nu s-au găsit rezultate"
   }
 }

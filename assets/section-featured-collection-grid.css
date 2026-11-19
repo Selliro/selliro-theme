@@ -237,62 +237,123 @@
   max-width: 320px;
 }
 
+/* ─── Tablets & phones ───────────────────────────────────────
+   The text-over-photo cards only work when the photo leaves room at the bottom (desktop). Below 1025px
+   every card puts its photo on top and its text underneath, in an even 2-column grid; the tall card
+   becomes a full-width feature (photo beside the text on tablets, above it on phones). */
 @media screen and (max-width: 1024px) {
   .featured-collection-grid__grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    gap: 14px;
   }
 
-  .featured-collection-grid__col--right {
+  /* Let the four small cards and the tall card sit directly in the grid */
+  .featured-collection-grid__cluster,
+  .featured-collection-grid__col {
+    display: contents;
+  }
+
+  .featured-collection-grid__col--right .featured-collection-grid__card,
+  .featured-collection-grid__card--tall {
     grid-column: 1 / -1;
   }
 
-  .featured-collection-grid__card--half {
-    min-height: 260px;
+  .featured-collection-grid__card,
+  .featured-collection-grid__card--half,
+  .featured-collection-grid__card--tall {
+    min-height: 0;
+  }
+
+  .featured-collection-grid__card-image-wrap {
+    position: relative;
+    inset: auto;
+    flex: none;
+    aspect-ratio: 1 / 1;
+  }
+
+  .featured-collection-grid__card-image {
+    object-position: center;
+  }
+
+  .featured-collection-grid__card::after,
+  .featured-collection-grid__card--tall::after {
+    display: none;
+  }
+
+  .featured-collection-grid__card-body,
+  .featured-collection-grid__card-body--tall {
+    margin-top: 0 !important;
+    padding: 14px 16px 18px;
+  }
+
+  .featured-collection-grid__card-title {
+    font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+  }
+
+  .featured-collection-grid__card-desc {
+    display: -webkit-box;
+    max-width: none;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .featured-collection-grid__card-body--tall .featured-collection-grid__card-desc {
+    max-width: none;
+    -webkit-line-clamp: 3;
+  }
+}
+
+@media screen and (min-width: 641px) and (max-width: 1024px) {
+  .featured-collection-grid__card--half .featured-collection-grid__card-image-wrap {
+    aspect-ratio: 5 / 4;
   }
 
   .featured-collection-grid__card--tall {
-    min-height: 380px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .featured-collection-grid__card--tall .featured-collection-grid__card-image-wrap {
+    aspect-ratio: 4 / 3;
+  }
+
+  .featured-collection-grid__card--tall .featured-collection-grid__card-body {
+    padding: 24px 28px;
   }
 }
 
 @media screen and (max-width: 640px) {
   .featured-collection-grid__grid {
-    grid-template-columns: 1fr;
-    gap: 8px;
+    gap: 10px;
   }
 
-  .featured-collection-grid__col--right {
-    grid-column: auto;
+  .featured-collection-grid__card-body {
+    padding: 10px 12px 14px;
   }
 
-  .featured-collection-grid__col {
-    flex-direction: column;
-  }
-
-  .featured-collection-grid__col--left .featured-collection-grid__card--half:first-child,
-  .featured-collection-grid__col--left .featured-collection-grid__card--half:last-child,
-  .featured-collection-grid__col--middle .featured-collection-grid__card--half:first-child,
-  .featured-collection-grid__col--middle .featured-collection-grid__card--half:last-child {
-    flex: 1 1 100%;
-  }
-
-  .featured-collection-grid__cluster {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .featured-collection-grid__card--half {
-    min-height: 240px;
-  }
-
-  .featured-collection-grid__card--tall {
-    min-height: 300px;
+  .featured-collection-grid__card-tag {
+    font-size: 10px;
   }
 
   .featured-collection-grid__card-title {
-    font-size: 20px;
+    margin-bottom: 4px;
+    font-size: 1rem;
+  }
+
+  .featured-collection-grid__card--half .featured-collection-grid__card-desc {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .featured-collection-grid__card--tall .featured-collection-grid__card-image-wrap {
+    aspect-ratio: 4 / 3;
+  }
+
+  .featured-collection-grid__card--tall .featured-collection-grid__card-title {
+    font-size: 1.25rem;
   }
 }
 

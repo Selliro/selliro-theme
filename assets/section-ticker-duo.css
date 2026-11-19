@@ -4,6 +4,12 @@
   overflow: hidden;
 }
 
+/* Tilted rows reach a hair past the screen edge: clip sideways only (they may still overlap up / down) */
+.shopify-section:has(> .ticker-duo),
+.section-ticker-duo {
+  overflow-x: clip;
+}
+
 .ticker-duo__stack {
   display: grid;
 }
@@ -25,13 +31,13 @@
 .ticker-duo__group {
   display: inline-flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--td-gap, 16px);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   white-space: nowrap;
   /* Owns trailing spacing so scrollWidth/2 lands exactly on group 5 — no seam on loop */
-  padding-right: 24px;
+  padding-right: calc(var(--td-gap, 16px) + 8px);
 }
 
 .ticker-duo__text {
@@ -51,14 +57,121 @@
   text-transform: none;
 }
 
+.ticker-duo__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
 .ticker-duo__icon img {
   display: block;
-  width: 20px;
-  height: 20px;
+  width: var(--td-icon, 20px);
+  height: var(--td-icon, 20px);
+  object-fit: contain;
+}
+
+/* Built-in separators (✦ ★ • —) sit centred and slightly smaller than the text */
+.ticker-duo__sep {
+  display: inline-block;
+  font-size: calc(var(--font-size, 14px) * 0.7);
+  line-height: 1;
+  opacity: 0.85;
+}
+
+/* Outline text — only the letter borders, no fill */
+.ticker-duo__text.is-outline {
+  color: transparent;
+  -webkit-text-stroke: var(--td-stroke, 1px) rgb(var(--color-foreground-rgb));
+  paint-order: stroke fill;
+}
+
+@supports not (-webkit-text-stroke: 1px black) {
+  .ticker-duo__text.is-outline {
+    color: inherit;
+  }
+}
+
+/* Images */
+.ticker-duo__media {
+  display: inline-flex;
+  flex-shrink: 0;
+  height: var(--td-img-h, 64px);
+  overflow: hidden;
+}
+
+.ticker-duo__media img {
+  display: block;
+  width: auto;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  transition: filter 0.4s ease, opacity 0.4s ease, scale 0.4s ease;
+}
+
+.ticker-duo__media--rounded {
+  border-radius: calc(var(--td-img-h, 64px) * 0.18);
+}
+
+.ticker-duo__media--circle {
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.ticker-duo__media--circle img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.ticker-duo__row--grayscale .ticker-duo__media img {
+  filter: grayscale(1);
+  opacity: 0.7;
+}
+
+@media (hover: hover) {
+  .ticker-duo__row--grayscale .ticker-duo__media:hover img {
+    filter: none;
+    opacity: 1;
+  }
+
+  .ticker-duo__media:hover img {
+    scale: 1.06;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .ticker-duo__media {
+    height: calc(var(--td-img-h, 64px) * 0.75);
+  }
+}
+
+/* Whole-row link */
+.ticker-duo__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.ticker-duo__link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -4px;
+}
+
+/* Soft fade at both edges */
+.ticker-duo--fade .ticker-duo__scroll {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ticker-duo__track {
     transform: translateX(0) !important;
   }
+}
+
+/* Layout: straight bands — rows sit flat, edge to edge, with a hairline between them */
+.ticker-duo--straight .ticker-duo__stack {
+  gap: 0 !important;
+}
+
+.ticker-duo--straight .ticker-duo__row + .ticker-duo__row {
+  border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.12);
 }

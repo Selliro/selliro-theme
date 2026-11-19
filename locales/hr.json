@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Dana",
+    "hours": "Sati",
+    "minutes": "Min",
+    "seconds": "Sek",
+    "ends_on": "Ponuda završava {{ date }}",
+    "editor_hint": "Dodajte datum završetka u postavkama odjeljka kako biste pokrenuli odbrojavanje."
+  },
   "collection_hero": {
     "home": "Početna",
     "breadcrumb_label": "Navigacijski put",
@@ -22,6 +30,19 @@
     "savings": "Uštedite",
     "total": "Ukupno",
     "view_bundle": "Prikaži kutiju"
+  },
+  "product_3d": {
+    "view_3d": "Prikaži u 3D-u",
+    "drag_hint": "Povucite za okretanje",
+    "reset": "Vrati prikaz",
+    "views": "Prikazi kamere",
+    "front": "Sprijeda",
+    "side": "Sa strane",
+    "back": "Straga",
+    "top": "Odozgo",
+    "loading": "Učitavanje 3D modela",
+    "editor_hint": "Odaberite proizvod s 3D modelom ili zalijepite poveznicu na .glb datoteku da biste ga prikazali u 3D-u.",
+    "position_copied": "Položaj kopiran — zalijepite ga u blok značajke."
   },
   "routine_builder": {
     "editor_hint": "Dodajte blok „Praznina” kako biste započeli rečenicu.",
@@ -44,6 +65,9 @@
       "comment": "Komentar",
       "post_success": "Hvala vam na javljanju. Odgovorit ćemo vam u najkraćem mogućem roku.",
       "error_heading": "Prilagodite sljedeće:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Rezervirano mjesto za logotip"
     }
   },
   "accessibility": {
@@ -89,7 +113,19 @@
     "quantity": "Količina",
     "rating": "Ocjena ovog proizvoda je {{ rating }} od 5",
     "nested_product": "{{ product_title }} za {{ parent_title }}",
-    "discount_menu": "Kodovi za popust"
+    "discount_menu": "Kodovi za popust",
+    "announcement_bar_link": "Saznajte više",
+    "back_to_top": "Natrag na vrh",
+    "quick_view_loading": "Učitavanje proizvoda",
+    "before_after_after_alt": "Slika poslije",
+    "before_after_before_alt": "Slika prije",
+    "before_after_before_visible": "slika prije je vidljiva",
+    "before_after_comparison": "Usporedba slika prije i poslije",
+    "before_after_slider": "Klizač za usporedbu",
+    "before_after_slider_help": "Upotrijebite tipke sa strelicama lijevo i desno za usporedbu slika prije i poslije.",
+    "faq_collapse_answer": "Sakrij odgovor",
+    "faq_expand_answer": "Prikaži odgovor",
+    "faq_split_gallery": "Često postavljana pitanja"
   },
   "actions": {
     "add_to_cart": "Dodaj u košaricu",
@@ -266,7 +302,11 @@
       "previous": "Prethodna",
       "next": "Sljedeća",
       "page": "Stranica {{ page }}"
-    }
+    },
+    "read_more_link": "Pročitajte više",
+    "quick_view": "Brzi pregled",
+    "view_full_details": "Prikaži sve pojedinosti",
+    "view_item": "Prikaži artikl"
   },
   "gift_cards": {
     "issued": {
@@ -332,5 +372,29 @@
       "success_moderated": "Komentar je objavljen, čeka moderiranje",
       "success": "Komentar objavljen"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Sva prava pridržana."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Kolaž slike s tekstom"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Dodajte barem jednu karticu kolekcije za prikaz proizvoda."
+    },
+    "icon_with_text": {
+      "empty": "Dodajte blokove ikona za prikaz sadržaja.",
+      "section_aria_label": "Istaknuto iz trgovine"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Dodaj paket u košaricu",
+      "adding": "Dodavanje…",
+      "added": "Dodano u košaricu",
+      "error": "Nešto nije u redu. Pokušajte ponovno."
+    }
+  },
+  "search": {
+    "no_results": "Nema rezultata"
   }
 }

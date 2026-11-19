@@ -438,7 +438,8 @@
   top: var(--itc-badge-top, 50%);
   left: var(--itc-badge-left, 78%);
   z-index: 10;
-  width: clamp(96px, var(--itc-badge-size, 28%), 180px);
+  container-type: inline-size;
+  width: clamp(104px, var(--itc-badge-size, 28%), 184px);
   aspect-ratio: 1;
   border-radius: 50%;
   background: var(--itc-badge-bg, #f2c419);
@@ -448,12 +449,27 @@
   justify-content: center;
   text-decoration: none;
   transform: translate(-50%, -50%);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.35);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow:
+    0 18px 40px -18px rgb(0 0 0 / 0.45),
+    inset 0 0 0 1px rgb(255 255 255 / 0.25);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+}
+
+/* Hairline just inside the edge — gives the badge a "stamped seal" finish */
+.itc-badge--outline::before {
+  content: '';
+  position: absolute;
+  inset: 4.5%;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--itc-badge-fg, #1a1a1a) 22%, transparent);
+  pointer-events: none;
 }
 
 a.itc-badge:hover {
-  transform: translate(-50%, -50%) scale(1.06);
+  transform: translate(-50%, -50%) scale(1.05);
+  box-shadow:
+    0 24px 48px -18px rgb(0 0 0 / 0.5),
+    inset 0 0 0 1px rgb(255 255 255 / 0.25);
 }
 
 a.itc-badge:focus-visible {
@@ -467,71 +483,107 @@ a.itc-badge:focus-visible {
   inset: 0;
   width: 100%;
   height: 100%;
+  overflow: visible;
   transform-origin: 50% 50%;
   will-change: transform;
 }
 
 .itc-badge__ring {
-  padding: 4%;
   fill: var(--itc-badge-fg, #1a1a1a);
   animation: itc-spin-cw var(--itc-badge-speed, 14s) linear infinite;
 }
 
 .itc-badge__ring text {
-  font-family: var(--font-h2--family, inherit);
+  font-family: var(--itc-badge-font, var(--font-body--family, sans-serif));
+  font-weight: var(--itc-badge-weight, 600);
+  letter-spacing: 0;
+  text-transform: uppercase;
+  dominant-baseline: central;
+}
+
+/* Separator glyphs (✦ ★ •) often come from a fallback font: draw them smaller and centred on the line */
+.itc-badge__sep {
+  font-family: system-ui, sans-serif;
+  font-size: 0.8em;
+  dominant-baseline: central;
 }
 
 .itc-badge__inner {
-  animation: itc-spin-ccw var(--itc-badge-speed, 14s) linear infinite;
+  animation: itc-spin-ccw calc(var(--itc-badge-speed, 14s) * 1.6) linear infinite;
 }
 
 .itc-badge__inner-circle {
-  stroke: var(--itc-badge-inner, #ffffff);
-  stroke-width: 15;
+  stroke: color-mix(in srgb, var(--itc-badge-fg, #1a1a1a) 45%, transparent);
+  stroke-width: 1.1;
 }
 
-/* Circumference of r=35 is ~219.9 → 6 long dashes with hairline gaps / 16 dots */
+/* Circumference of r=45 is ~282.7 → 24 short dashes / 36 dots */
 .itc-badge--inner-dashed .itc-badge__inner-circle {
-  stroke-dasharray: 34.85 1.8;
+  stroke-dasharray: 6.78 5;
 }
 
 .itc-badge--inner-dotted .itc-badge__inner-circle {
-  stroke-width: 7;
+  stroke-width: 2.2;
   stroke-linecap: round;
-  stroke-dasharray: 0.01 13.74;
+  stroke-dasharray: 0.01 7.85;
 }
 
 .itc-badge__center {
   position: relative;
   z-index: 1;
-  width: 37%;
+  width: 45%;
   aspect-ratio: 1;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.itc-badge__arrow {
-  display: inline-flex;
-  width: 46%;
   color: var(--itc-badge-fg, #1a1a1a);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  background: var(--itc-badge-inner, #ffffff);
+  box-shadow: 0 6px 16px -8px rgb(0 0 0 / 0.35);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.itc-badge__arrow svg {
+.itc-badge__arrow,
+.itc-badge__icon {
+  display: inline-flex;
+  width: 42%;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.itc-badge__arrow svg,
+.itc-badge__icon svg {
   width: 100%;
   height: auto;
 }
 
-a.itc-badge:hover .itc-badge__arrow {
-  transform: translateX(3px);
+.itc-badge__icon {
+  width: 38%;
+  animation: itc-spin-cw calc(var(--itc-badge-speed, 14s) * 0.8) linear infinite;
 }
 
-.itc-badge--pause-hover:hover .itc-badge__ring,
-.itc-badge--pause-hover:hover .itc-badge__inner,
-.itc-badge--pause-hover:focus-visible .itc-badge__ring,
-.itc-badge--pause-hover:focus-visible .itc-badge__inner {
+.itc-badge__center-text {
+  max-width: 86%;
+  overflow: hidden;
+  font-family: var(--itc-badge-font, var(--font-body--family, sans-serif));
+  font-weight: var(--itc-badge-weight, 600);
+  font-size: 13cqi;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: clip;
+}
+
+a.itc-badge:hover .itc-badge__arrow {
+  transform: translate(2px, -2px) rotate(45deg);
+}
+
+a.itc-badge:hover .itc-badge__center {
+  transform: scale(1.06);
+}
+
+.itc-badge--pause-hover:hover :is(.itc-badge__ring, .itc-badge__inner, .itc-badge__icon),
+.itc-badge--pause-hover:focus-visible :is(.itc-badge__ring, .itc-badge__inner, .itc-badge__icon) {
   animation-play-state: paused;
 }
 
@@ -545,7 +597,7 @@ a.itc-badge:hover .itc-badge__arrow {
 
 @media (max-width: 749px) {
   .itc-badge {
-    width: clamp(84px, calc(var(--itc-badge-size, 28%) * 0.95), 150px);
+    width: clamp(92px, calc(var(--itc-badge-size, 28%) * 0.95), 150px);
   }
 
   .itc--hide-badge-mobile .itc-badge {
@@ -554,9 +606,117 @@ a.itc-badge:hover .itc-badge__arrow {
 }
 
 /* ── Reduced motion ── */
+/* ══════════════════════════════════════════
+   DESIGN: EDITORIAL FRAME
+   One large photo, a framed inset overlapping the corner, a small round accent.
+   ══════════════════════════════════════════ */
+.itc--design-editorial .itc__stack--2,
+.itc--design-editorial .itc__stack--3 {
+  aspect-ratio: 100 / 112;
+}
+
+.itc--design-editorial .itc__stack .itc__photo {
+  transform: none;
+}
+
+.itc--design-editorial .itc__stack--2 .itc__photo--1,
+.itc--design-editorial .itc__stack--3 .itc__photo--1 {
+  inset: 0 0 8% 14%;
+  width: auto;
+  height: auto;
+  aspect-ratio: auto;
+  z-index: 1;
+}
+
+.itc--design-editorial .itc__stack--2 .itc__photo--2,
+.itc--design-editorial .itc__stack--3 .itc__photo--2 {
+  top: auto;
+  right: auto;
+  bottom: 0;
+  left: 0;
+  width: 42%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  z-index: 3;
+  border: clamp(6px, 0.8vw, 10px) solid var(--itc-frame-color, var(--color-background, #fff));
+  box-sizing: border-box;
+}
+
+.itc--design-editorial .itc__stack--3 .itc__photo--3 {
+  top: 6%;
+  right: auto;
+  bottom: auto;
+  left: 2%;
+  width: 24%;
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  z-index: 2;
+  border: clamp(4px, 0.6vw, 8px) solid var(--itc-frame-color, var(--color-background, #fff));
+  box-sizing: border-box;
+}
+
+/* Thin offset outline behind the main photo */
+.itc--design-editorial .itc__stack::before {
+  content: '';
+  position: absolute;
+  inset: 4% -3% 3% 18%;
+  border: 1px solid rgb(var(--color-foreground-rgb, 0 0 0) / 0.18);
+  border-radius: calc(var(--itc-img-radius, 16px) + 6px);
+  pointer-events: none;
+}
+
+.itc--design-editorial .itc__stack--1::before {
+  display: none;
+}
+
+/* ══════════════════════════════════════════
+   DESIGN: MOSAIC GRID
+   Straight photos in a tidy grid: tall photo left, two stacked on the right.
+   ══════════════════════════════════════════ */
+.itc--design-mosaic .itc__stack--2,
+.itc--design-mosaic .itc__stack--3 {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: clamp(10px, 1.2vw, 16px);
+  aspect-ratio: 100 / 104;
+}
+
+.itc--design-mosaic .itc__stack .itc__photo {
+  position: relative;
+  inset: auto;
+  width: auto;
+  height: auto;
+  aspect-ratio: auto;
+  transform: none;
+  z-index: auto;
+}
+
+.itc--design-mosaic .itc__stack .itc__photo--1 {
+  grid-row: 1 / -1;
+}
+
+.itc--design-mosaic .itc__stack--2 .itc__photo--2 {
+  grid-row: 1 / -1;
+}
+
+.itc--design-mosaic .itc__stack .itc__photo--3 {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+@media (hover: hover) {
+  .itc--design-editorial.itc--hover-straighten .itc__stack .itc__photo:hover,
+  .itc--design-mosaic.itc--hover-straighten .itc__stack .itc__photo:hover {
+    transform: scale(1.02);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .itc-badge__ring,
-  .itc-badge__inner { animation: none; }
+  .itc-badge__inner,
+  .itc-badge__icon { animation: none; }
   .itc__photo,
   .itc__btn,
   .itc-badge,

@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Hari",
+    "hours": "Jam",
+    "minutes": "Mnt",
+    "seconds": "Dtk",
+    "ends_on": "Penawaran berakhir {{ date }}",
+    "editor_hint": "Tambahkan tanggal berakhir di pengaturan bagian untuk memulai hitung mundur."
+  },
   "collection_hero": {
     "home": "Beranda",
     "breadcrumb_label": "Breadcrumb",
@@ -22,6 +30,19 @@
     "savings": "Anda hemat",
     "total": "Total",
     "view_bundle": "Lihat kotak"
+  },
+  "product_3d": {
+    "view_3d": "Lihat dalam 3D",
+    "drag_hint": "Seret untuk memutar",
+    "reset": "Atur ulang tampilan",
+    "views": "Tampilan kamera",
+    "front": "Depan",
+    "side": "Samping",
+    "back": "Belakang",
+    "top": "Atas",
+    "loading": "Memuat model 3D",
+    "editor_hint": "Pilih produk yang memiliki model 3D, atau tempel tautan ke file .glb untuk menampilkannya dalam 3D.",
+    "position_copied": "Posisi disalin — tempel ke blok fitur."
   },
   "routine_builder": {
     "editor_hint": "Tambahkan blok “Kosong” untuk mulai menyusun kalimat.",
@@ -44,6 +65,9 @@
       "comment": "Komentar",
       "post_success": "Terima kasih sudah menghubungi kami. Kami akan segera menghubungi Anda.",
       "error_heading": "Mohon sesuaikan:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Placeholder logo"
     }
   },
   "accessibility": {
@@ -88,7 +112,19 @@
     "quantity": "Jumlah",
     "rating": "Peringkat produk ini adalah {{ rating }} dari 5",
     "nested_product": "{{ product_title }} untuk {{ parent_title }}",
-    "discount_menu": "Kode Diskon"
+    "discount_menu": "Kode Diskon",
+    "announcement_bar_link": "Pelajari selengkapnya",
+    "back_to_top": "Kembali ke atas",
+    "quick_view_loading": "Memuat produk",
+    "before_after_after_alt": "Gambar sesudah",
+    "before_after_before_alt": "Gambar sebelum",
+    "before_after_before_visible": "gambar sebelum terlihat",
+    "before_after_comparison": "Perbandingan gambar sebelum dan sesudah",
+    "before_after_slider": "Penggeser perbandingan",
+    "before_after_slider_help": "Gunakan tombol panah kiri dan kanan untuk membandingkan gambar sebelum dan sesudah.",
+    "faq_collapse_answer": "Tutup jawaban",
+    "faq_expand_answer": "Buka jawaban",
+    "faq_split_gallery": "Pertanyaan umum"
   },
   "actions": {
     "add_to_cart": "Tambahkan ke keranjang",
@@ -261,7 +297,11 @@
       "previous": "Sebelumnya",
       "next": "Berikutnya",
       "page": "Halaman {{ page }}"
-    }
+    },
+    "read_more_link": "Baca selengkapnya",
+    "quick_view": "Lihat cepat",
+    "view_full_details": "Lihat detail lengkap",
+    "view_item": "Lihat item"
   },
   "gift_cards": {
     "issued": {
@@ -326,5 +366,29 @@
       "success_moderated": "Komentar diposting, menunggu moderasi",
       "success": "Komentar diposting"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Hak cipta dilindungi undang-undang."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Kolase gambar dengan teks"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Tambahkan setidaknya satu tab koleksi untuk menampilkan produk."
+    },
+    "icon_with_text": {
+      "empty": "Tambahkan blok ikon untuk menampilkan konten.",
+      "section_aria_label": "Keunggulan toko"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Tambahkan paket ke keranjang",
+      "adding": "Menambahkan…",
+      "added": "Ditambahkan ke keranjang",
+      "error": "Terjadi kesalahan. Coba lagi."
+    }
+  },
+  "search": {
+    "no_results": "Tidak ada hasil ditemukan"
   }
 }

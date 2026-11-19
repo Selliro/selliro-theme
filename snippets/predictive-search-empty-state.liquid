@@ -20,25 +20,83 @@
     <div class="predictive-search-results__inner">
       {% liquid
         assign collection = settings.empty_state_collection | default: collections.all
-        assign default_title = 'content.search_results_resource_products' | t
-        assign title = settings.empty_state_collection.title | default: default_title
+        assign title = 'search_plus.trending' | t
       %}
-      {% paginate collection.products by 4 %}
-        {% assign products = collection.products %}
-        {% comment %} Only show products section if there are products to display {% endcomment %}
-        {% if products.size > 0 %}
-          {% render 'predictive-search-products-list',
-            products_test_id: products_test_id,
-            title: title,
-            products: products,
-            limit: 4
-          %}
-        {% else %}
-          <div class="predictive-search-results__no-results">
-            <p>{{ 'content.no_products_found' | t }}</p>
-          </div>
-        {% endif %}
-      {% endpaginate %}
+      <div class="sp-empty">
+        <div class="sp-empty__side">
+          {%- if settings.search_recent_enabled -%}
+            <search-recent
+              class="sp-recent sp-group"
+              data-skip-subtree-update
+              data-search-url="{{ routes.search_url }}"
+              data-label="{{ 'search_plus.recent' | t | escape }}"
+              data-clear-label="{{ 'search_plus.clear_recent' | t | escape }}"
+              data-remove-label="{{ 'search_plus.remove_recent' | t: term: '[term]' | escape }}"
+            ></search-recent>
+          {%- endif -%}
+
+          {%- if settings.search_popular_terms != blank -%}
+            <div class="sp-group">
+              <h4 class="sp-group__title">{{ 'search_plus.popular' | t }}</h4>
+              {% render 'search-plus-chips' %}
+            </div>
+          {%- endif -%}
+
+          {%- assign quick_menu = linklists[settings.search_quick_links] -%}
+          {%- if quick_menu.links.size > 0 -%}
+            <div class="sp-group">
+              {%- assign quick_title = 'search_plus.quick_links' | t -%}
+              <h4 class="sp-group__title">{{ quick_title }}</h4>
+              <ul
+                class="predictive-search-results__list sp-rows sp-rows--links list-unstyled"
+                role="listbox"
+                aria-label="{{ quick_menu.title | escape }}"
+              >
+                {%- for link in quick_menu.links limit: 6 -%}
+                  <li
+                    class="sp-rows__item"
+                    ref="resultsItems[]"
+                    role="option"
+                  >
+                    <a
+                      class="sp-row sp-row--link"
+                      href="{{ link.url }}"
+                    >
+                      <span class="sp-row__body">
+                        <span class="sp-row__title">{{ link.title | escape }}</span>
+                      </span>
+                      <span
+                        class="sp-row__go"
+                        aria-hidden="true"
+                      >
+                        →
+                      </span>
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <div class="sp-empty__main">
+          {% paginate collection.products by 6 %}
+            {% assign products = collection.products %}
+            {% if products.size > 0 %}
+              {% render 'predictive-search-products-list',
+                products_test_id: products_test_id,
+                title: title,
+                products: products,
+                limit: 6
+              %}
+            {% else %}
+              <div class="predictive-search-results__no-results">
+                <p>{{ 'content.no_products_found' | t }}</p>
+              </div>
+            {% endif %}
+          {% endpaginate %}
+        </div>
+      </div>
     </div>
   {% endif %}
 </div>

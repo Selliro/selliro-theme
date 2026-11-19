@@ -79,9 +79,11 @@ export class AddToCartComponent extends Component {
 
     this.animateAddToCart();
 
+    // The fly to cart animation now runs from assets/cart-fly.js for every add to cart button in the theme.
+    // Horizon's image flyer stays available as a fallback when that script is not loaded.
     const animationEnabled = this.dataset.addToCartAnimation === 'true';
 
-    if (animationEnabled) {
+    if (animationEnabled && !window.WhispoCartFly) {
       this.#animateFlyToCart();
     }
   }

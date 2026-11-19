@@ -176,7 +176,7 @@
       {%- endif -%}
           {%- if collection != blank and collection.products_count > 0 -%}
             {%- for product in collection.products limit: limit -%}
-              <div class="{% if na_use_grid %}new-arrivals-showcase__grid-cell{% else %}swiper-slide new-arrivals-showcase__slide{% endif %}"{% if na_use_grid %} role="listitem"{% endif %}>
+              <div class="{% if na_use_grid %}new-arrivals-showcase__grid-cell{% else %}swiper-slide new-arrivals-showcase__slide{% endif %}"{% if na_use_grid %} role="listitem"{% endif %}{% if tab_index == 0 %} data-reveal-card{% endif %}>
                 {%- render 'new-arrivals-card',
                   product: product,
                   accent: accent,
@@ -190,11 +190,11 @@
             {%- endfor -%}
           {%- else -%}
             {%- for pi in (1..na_demo_slots) -%}
-              <div class="{% if na_use_grid %}new-arrivals-showcase__grid-cell{% else %}swiper-slide new-arrivals-showcase__slide{% endif %}"{% if na_use_grid %} role="listitem"{% endif %}>
+              <div class="{% if na_use_grid %}new-arrivals-showcase__grid-cell{% else %}swiper-slide new-arrivals-showcase__slide{% endif %}"{% if na_use_grid %} role="listitem"{% endif %}{% if tab_index == 0 %} data-reveal-card{% endif %}>
                 <new-arrivals-product-card class="new-arrivals-card new-arrivals-card--sample">
                   <div class="new-arrivals-card__inner">
                     <div class="new-arrivals-card__media">
-                      <span class="new-arrivals-card__media-stack" aria-hidden="true">
+                      <span class="new-arrivals-card__media-stack" aria-hidden="true" data-reveal-zoom>
                         {{ 'product-1' | placeholder_svg_tag: 'new-arrivals-card__img new-arrivals-card__img--placeholder new-arrivals-card__img--primary' }}
                       </span>
                     </div>
@@ -225,7 +225,7 @@
       {%- endif -%}
 
       {%- unless na_use_grid -%}
-      <div class="new-arrivals-showcase__carousel-toolbar">
+      <div class="new-arrivals-showcase__carousel-toolbar"{% if tab_index == 0 %} data-reveal-fade{% endif %}>
         <div class="new-arrivals-showcase__scrollbar" aria-hidden="true">
           <div class="new-arrivals-showcase__scrollbar-rail">
             <div class="new-arrivals-showcase__scrollbar-thumb" data-new-arrivals-progress></div>

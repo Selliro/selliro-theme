@@ -132,13 +132,41 @@
     }
   }
 
+  /**
+   * "Full screen" height: when the slideshow starts within the first screen, fill exactly what is left of it
+   * below the header + announcement bar (and the space under a page-width card), instead of guessing.
+   */
+  const fitFullScreen = (root) => {
+    const slides = root.querySelector('slideshow-slides[size="full"]');
+    if (!slides) return;
+    const update = () => {
+      const top = slides.getBoundingClientRect().top + window.scrollY;
+      if (top > window.innerHeight * 0.6) {
+        root.style.removeProperty('--ss-fill');
+        return;
+      }
+      const below = root.classList.contains('page-width') ? parseFloat(getComputedStyle(root).paddingBottom) || 0 : 0;
+      root.style.setProperty('--ss-fill', `calc(100svh - ${Math.round(top + below)}px)`);
+    };
+    update();
+    window.addEventListener('resize', update, { passive: true });
+    window.addEventListener('load', update, { once: true });
+  };
+
   const init = (scope = document) =>
     scope.querySelectorAll('[data-slideshow-media]:not([data-slideshow-media-ready])').forEach((root) => {
       root.setAttribute('data-slideshow-media-ready', '');
+      fitFullScreen(root);
       new SlideshowMedia(root);
     });
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => init());
   else init();
   document.addEventListener('shopify:section:load', (e) => init(e.target));
+
+  // Theme editor: re-apply Slideshow → Header style when the slideshow (or header) re-renders, is removed or moved
+  const reapplyHeaderStyle = () => setTimeout(() => window.selliroHeaderStyle && window.selliroHeaderStyle(), 0);
+  ['shopify:section:load', 'shopify:section:unload', 'shopify:section:reorder'].forEach((type) =>
+    document.addEventListener(type, reapplyHeaderStyle)
+  );
 })();

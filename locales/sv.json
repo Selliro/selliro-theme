@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Dagar",
+    "hours": "Tim",
+    "minutes": "Min",
+    "seconds": "Sek",
+    "ends_on": "Erbjudandet slutar {{ date }}",
+    "editor_hint": "Lägg till ett slutdatum i avsnittets inställningar för att starta nedräkningen."
+  },
   "collection_hero": {
     "home": "Hem",
     "breadcrumb_label": "Brödsmulor",
@@ -22,6 +30,19 @@
     "savings": "Du sparar",
     "total": "Totalt",
     "view_bundle": "Visa lådan"
+  },
+  "product_3d": {
+    "view_3d": "Visa i 3D",
+    "drag_hint": "Dra för att rotera",
+    "reset": "Återställ vy",
+    "views": "Kameravyer",
+    "front": "Framsida",
+    "side": "Sida",
+    "back": "Baksida",
+    "top": "Ovanifrån",
+    "loading": "Läser in 3D-modell",
+    "editor_hint": "Välj en produkt med en 3D-modell eller klistra in en länk till en .glb-fil för att visa den i 3D.",
+    "position_copied": "Position kopierad – klistra in den i ett funktionsblock."
   },
   "routine_builder": {
     "editor_hint": "Lägg till ett block för ”Tom ruta” för att börja bygga meningen.",
@@ -44,6 +65,9 @@
       "comment": "Kommentar",
       "post_success": "Tack för att du kontaktar oss. Vi återkommer till dig så snart som möjligt.",
       "error_heading": "Justera följande:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Platshållare för logotyp"
     }
   },
   "accessibility": {
@@ -88,7 +112,19 @@
     "increase_quantity": "Öka kvantitet",
     "quantity": "Kvantitet",
     "rating": "Betyget för den här produkten är {{ rating }} av 5",
-    "nested_product": "{{ product_title }} för {{ parent_title }}"
+    "nested_product": "{{ product_title }} för {{ parent_title }}",
+    "announcement_bar_link": "Läs mer",
+    "back_to_top": "Tillbaka till toppen",
+    "quick_view_loading": "Läser in produkt",
+    "before_after_after_alt": "Efter-bild",
+    "before_after_before_alt": "Före-bild",
+    "before_after_before_visible": "före-bild synlig",
+    "before_after_comparison": "Jämförelse av före- och efterbilder",
+    "before_after_slider": "Jämförelsereglage",
+    "before_after_slider_help": "Använd vänster- och högerpilen för att jämföra före- och efterbilderna.",
+    "faq_collapse_answer": "Dölj svar",
+    "faq_expand_answer": "Visa svar",
+    "faq_split_gallery": "Vanliga frågor"
   },
   "actions": {
     "add_to_cart": "Lägg till i varukorgen",
@@ -261,7 +297,11 @@
       "previous": "Föregående",
       "next": "Nästa",
       "page": "Sidan {{ page }}"
-    }
+    },
+    "read_more_link": "Läs mer",
+    "quick_view": "Snabbvy",
+    "view_full_details": "Visa alla detaljer",
+    "view_item": "Visa artikel"
   },
   "gift_cards": {
     "issued": {
@@ -326,5 +366,29 @@
       "success_moderated": "Kommentaren har publicerats, väntar på moderering",
       "success": "Kommentaren har publicerats"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Alla rättigheter förbehållna."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Bild- och textkollage"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Lägg till minst en kollektionsflik för att visa produkter."
+    },
+    "icon_with_text": {
+      "empty": "Lägg till ikonblock för att visa innehåll.",
+      "section_aria_label": "Butikens höjdpunkter"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Lägg paketet i varukorgen",
+      "adding": "Lägger till…",
+      "added": "Tillagd i varukorgen",
+      "error": "Något gick fel. Försök igen."
+    }
+  },
+  "search": {
+    "no_results": "Inga resultat hittades"
   }
 }

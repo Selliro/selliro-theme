@@ -86,9 +86,37 @@
     {%- if block_settings.toggle_overlay -%}
       {% render 'overlay', settings: block_settings %}
     {%- endif -%}
+    {%- if block_settings.product_image != blank -%}
+      {%- liquid
+        assign pi = block_settings.product_image
+        assign pi_classes = 'slide__product slide__product--' | append: block_settings.product_image_position
+        assign pi_style = block_settings.product_image_style | default: 'float'
+        if pi_style == 'float'
+          assign pi_classes = pi_classes | append: ' slide__product--float slide__product--shadow'
+        elsif pi_style == 'shadow'
+          assign pi_classes = pi_classes | append: ' slide__product--shadow'
+        endif
+        if block_settings.product_image_size_mobile == 0
+          assign pi_classes = pi_classes | append: ' slide__product--hide-mobile'
+        endif
+        assign pi_alt = pi.alt | default: block_settings.heading | escape
+      -%}
+      <div
+        class="{{ pi_classes }}"
+        style="--slide-product-size: {{ block_settings.product_image_size }}%; --slide-product-size-mobile: {{ block_settings.product_image_size_mobile }}%; --slide-product-ratio: {{ pi.aspect_ratio | default: 1 }};"
+        {% if block_settings.product_fly %}data-fly-product{% endif %}
+      >
+        <div class="slide__product-inner" data-fly-source>
+          {{ pi | image_url: width: 1400 | image_tag: loading: loading, class: 'slide__product-img', sizes: '(min-width: 750px) 45vw, 70vw', widths: '400, 700, 1000, 1400', alt: pi_alt }}
+        </div>
+      </div>
+      {%- if block_settings.product_fly -%}
+        <script src="{{ 'slide-product-fly.js' | asset_url }}" defer></script>
+      {%- endif -%}
+    {%- endif -%}
   </div>
   <div
-    class="spacing-style slide__content{% if block_settings.inherit_color_scheme == false %} color-{{ block_settings.color_scheme }}{% endif %}{% if preview_image or block_settings.toggle_overlay %} background-transparent{% endif %}"
+    class="spacing-style slide__content{% if block_settings.product_image != blank %} slide__content--product-{{ block_settings.product_image_position | default: 'right' }}{% endif %}{% if block_settings.inherit_color_scheme == false %} color-{{ block_settings.color_scheme }}{% endif %}{% if preview_image or block_settings.toggle_overlay %} background-transparent{% endif %}"
     style="{% render 'spacing-style', settings: block_settings %}"
     {{ block.shopify_attributes }}
   >
@@ -287,6 +315,103 @@
     z-index: 1;
   }
 
+  /* ---- Product image floating on the slide (cut-out PNGs look best) ---- */
+  .slide__product {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    padding-inline: clamp(1rem, 6vw, 7rem);
+    pointer-events: none;
+  }
+
+  .slide__product--right { justify-content: flex-end; }
+  .slide__product--center { justify-content: center; }
+  .slide__product--left { justify-content: flex-start; }
+
+  .slide__product-inner {
+    position: relative;
+    height: var(--slide-product-size, 90%);
+    max-width: 55%;
+    aspect-ratio: var(--slide-product-ratio, 1);
+  }
+
+  .slide__product-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .slide__product--shadow .slide__product-img {
+    filter: drop-shadow(0 28px 34px rgb(0 0 0 / 0.28));
+  }
+
+  .slide__product--float .slide__product-img {
+    animation: slide-product-float 6s ease-in-out infinite;
+  }
+
+  /* While the image is flying to New Arrivals the copy on the slide is hidden. No fade: the flyer takes its
+     place in the same frame, so a fade would show two products for a moment. */
+  .slide__product-inner.is-flying {
+    visibility: hidden;
+  }
+
+  /* Keep the slide copy clear of the product image: reserve the image's side of the slide */
+  @media screen and (min-width: 750px) {
+    .slide__content--product-right .ss-copy {
+      padding-inline-end: calc(min(55%, var(--slide-product-room, 44%)) + 1rem);
+    }
+
+    .slide__content--product-left .ss-copy {
+      padding-inline-start: calc(min(55%, var(--slide-product-room, 44%)) + 1rem);
+    }
+
+    .slide__content--product-center .ss-copy__panel {
+      position: relative;
+      z-index: 3;
+    }
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 1199px) {
+    .slide__product-inner {
+      max-width: 40%;
+    }
+
+    .slide__content--product-right .ss-copy,
+    .slide__content--product-left .ss-copy {
+      --slide-product-room: 40%;
+    }
+  }
+
+  @keyframes slide-product-float {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -2.5%; }
+  }
+
+  @media screen and (max-width: 749px) {
+    .slide__product {
+      align-items: flex-end;
+      padding: 0 0.5rem 2.5rem;
+    }
+
+    .slide__product-inner {
+      height: var(--slide-product-size-mobile, 55%);
+      max-width: 70%;
+    }
+
+    .slide__product--hide-mobile {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide__product--float .slide__product-img {
+      animation: none;
+    }
+  }
+
   /* Split on phones: stack the two panes, or keep only the first */
   @media screen and (max-width: 749px) {
     .slide__panes--split.slide__panes--mobile-stack {
@@ -349,7 +474,7 @@
   .ss-copy__heading {
     margin: 0;
     font-family: var(--font-heading--family);
-    font-weight: var(--ss-heading-weight, 700);
+    font-weight: var(--ss-heading-weight, var(--font-heading--weight, 600));
     font-size: clamp(2rem, 5.2vw, var(--ss-heading-size, 64px));
     line-height: 1.04;
     letter-spacing: -0.02em;
@@ -745,6 +870,90 @@
       "type": "url",
       "id": "button_link_2",
       "label": "t:settings.link"
+    },
+    {
+      "type": "header",
+      "content": "Product image"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product image",
+      "info": "Floats on top of the background image or video. A cut-out (transparent PNG) of the product looks best."
+    },
+    {
+      "type": "select",
+      "id": "product_image_position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "right",
+          "label": "Right"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ],
+      "default": "right",
+      "visible_if": "{{ block.settings.product_image != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "product_image_size",
+      "label": "Size",
+      "min": 30,
+      "max": 120,
+      "step": 5,
+      "unit": "%",
+      "default": 95,
+      "info": "Height of the image compared with the slide.",
+      "visible_if": "{{ block.settings.product_image != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "product_image_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "float",
+          "label": "Floating, with shadow"
+        },
+        {
+          "value": "shadow",
+          "label": "Still, with shadow"
+        },
+        {
+          "value": "plain",
+          "label": "Plain"
+        }
+      ],
+      "default": "float",
+      "visible_if": "{{ block.settings.product_image != blank }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_fly",
+      "label": "Fly into New Arrivals while scrolling",
+      "default": true,
+      "info": "As visitors scroll down, the image travels down the page and lands on the first product of the New Arrivals section. Use a cut-out of that product's own photo for a seamless landing.",
+      "visible_if": "{{ block.settings.product_image != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "product_image_size_mobile",
+      "label": "Size on mobile",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 55,
+      "info": "0% hides the image on mobile.",
+      "visible_if": "{{ block.settings.product_image != blank }}"
     },
     {
       "type": "header",

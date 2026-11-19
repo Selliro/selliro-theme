@@ -35,14 +35,14 @@
           "type": "link_list",
           "settings": {
             "heading": "Collection",
-            "menu": "footer"
+            "menu": "footer-collection"
           }
         },
         "link_list_explore": {
           "type": "link_list",
           "settings": {
             "heading": "Explore",
-            "menu": "footer"
+            "menu": "footer-explore"
           }
         },
         "subscribe": {
@@ -64,6 +64,7 @@
         "subscribe"
       ],
       "settings": {
+        "enable_reveal": true,
         "color_scheme": "scheme-6",
         "color_scheme_bottom": "scheme-5",
         "enable_language_selector": true,
@@ -71,6 +72,12 @@
         "enable_follow_on_shop": false,
         "payment_enable": true,
         "show_policy": false,
+        "wordmark_text": "whispo",
+        "wordmark_font_source": "heading",
+        "wordmark_font": "playfair_display_n4",
+        "wordmark_crop": 10,
+        "wordmark_color": "",
+        "wordmark_animate": true,
         "margin_top": "no-indent",
         "padding_top": "m",
         "padding_bottom": "m",

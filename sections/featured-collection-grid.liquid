@@ -75,19 +75,15 @@
     color: var(--featured-collection-grid-card-text, inherit);
   }
 
+  /* Tablets and phones: an even 2-column grid (see section-featured-collection-grid.css) */
   @media screen and (max-width: 1024px) {
     #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__grid {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__cluster,
     #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__col--right {
       grid-column: auto;
-    }
-  }
-
-  @media screen and (max-width: 640px) {
-    #FeaturedCollectionGrid-{{ section.id }} .featured-collection-grid__grid {
-      grid-template-columns: 1fr;
+      grid-row: auto;
     }
   }
 </style>

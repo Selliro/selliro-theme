@@ -14,7 +14,12 @@
     "deploy": "webpack && shopify theme push",
     "start": "NODE_ENV=development webpack --watch",
     "shopify:push": "shopify theme push",
-    "shopify:pull": "shopify theme pull -o 'templates/*.json'"
+    "shopify:pull": "shopify theme pull -o 'templates/*.json'",
+    "version:patch": "node scripts/bump-version.mjs patch",
+    "version:minor": "node scripts/bump-version.mjs minor",
+    "version:major": "node scripts/bump-version.mjs major",
+    "theme:check": "shopify theme check --path .",
+    "theme:package": "node scripts/package-theme.mjs"
   },
   "keywords": [
     "shopify",

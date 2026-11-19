@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Dias",
+    "hours": "Hrs",
+    "minutes": "Min",
+    "seconds": "Seg",
+    "ends_on": "A oferta termina em {{ date }}",
+    "editor_hint": "Adicione uma data de término nas configurações da seção para iniciar a contagem regressiva."
+  },
   "collection_hero": {
     "home": "Início",
     "breadcrumb_label": "Trilha de navegação",
@@ -22,6 +30,19 @@
     "savings": "Você economiza",
     "total": "Total",
     "view_bundle": "Ver caixa"
+  },
+  "product_3d": {
+    "view_3d": "Ver em 3D",
+    "drag_hint": "Arraste para girar",
+    "reset": "Redefinir visualização",
+    "views": "Visualizações da câmera",
+    "front": "Frente",
+    "side": "Lateral",
+    "back": "Trás",
+    "top": "Topo",
+    "loading": "Carregando modelo 3D",
+    "editor_hint": "Escolha um produto com modelo 3D ou cole um link para um arquivo .glb para exibi-lo em 3D.",
+    "position_copied": "Posição copiada — cole-a em um bloco de recurso."
   },
   "routine_builder": {
     "editor_hint": "Adicione um bloco \"Lacuna\" para começar a montar a frase.",
@@ -44,6 +65,9 @@
       "comment": "Comentário",
       "post_success": "Agradecemos seu contato. Retornaremos o mais rápido possível.",
       "error_heading": "Ajuste o seguinte:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Espaço reservado para logo"
     }
   },
   "accessibility": {
@@ -89,7 +113,19 @@
     "increase_quantity": "Aumentar a quantidade",
     "rating": "A classificação deste produto é {{ rating }} de 5",
     "quantity": "Quantidade",
-    "nested_product": "{{ product_title }} para {{ parent_title }}"
+    "nested_product": "{{ product_title }} para {{ parent_title }}",
+    "announcement_bar_link": "Saiba mais",
+    "back_to_top": "Voltar ao topo",
+    "quick_view_loading": "Carregando produto",
+    "before_after_after_alt": "Imagem depois",
+    "before_after_before_alt": "Imagem antes",
+    "before_after_before_visible": "imagem antes visível",
+    "before_after_comparison": "Comparação de imagens de antes e depois",
+    "before_after_slider": "Controle deslizante de comparação",
+    "before_after_slider_help": "Use as teclas de seta para a esquerda e para a direita para comparar as imagens de antes e depois.",
+    "faq_collapse_answer": "Recolher resposta",
+    "faq_expand_answer": "Expandir resposta",
+    "faq_split_gallery": "Perguntas frequentes"
   },
   "actions": {
     "add_to_cart": "Adicionar ao carrinho",
@@ -266,7 +302,11 @@
       "previous": "Anterior",
       "next": "Próxima",
       "page": "Página {{ page }}"
-    }
+    },
+    "read_more_link": "Ler mais",
+    "quick_view": "Visualização rápida",
+    "view_full_details": "Ver todos os detalhes",
+    "view_item": "Ver item"
   },
   "gift_cards": {
     "issued": {
@@ -332,5 +372,29 @@
       "success_moderated": "O comentário foi publicado, aguardando moderação",
       "success": "Comentário publicado"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Todos os direitos reservados."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Colagem de imagem com texto"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Adicione pelo menos uma aba de coleção para exibir produtos."
+    },
+    "icon_with_text": {
+      "empty": "Adicione blocos de ícones para exibir conteúdo.",
+      "section_aria_label": "Destaques da loja"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Adicionar kit ao carrinho",
+      "adding": "Adicionando…",
+      "added": "Adicionado ao carrinho",
+      "error": "Algo deu errado. Tente novamente."
+    }
+  },
+  "search": {
+    "no_results": "Nenhum resultado encontrado"
   }
 }

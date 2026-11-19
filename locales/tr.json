@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Gün",
+    "hours": "Saat",
+    "minutes": "Dk",
+    "seconds": "Sn",
+    "ends_on": "Teklif {{ date }} tarihinde sona eriyor",
+    "editor_hint": "Geri sayımı başlatmak için bölüm ayarlarına bir bitiş tarihi ekleyin."
+  },
   "collection_hero": {
     "home": "Ana sayfa",
     "breadcrumb_label": "İçerik haritası",
@@ -22,6 +30,19 @@
     "savings": "Tasarrufun",
     "total": "Toplam",
     "view_bundle": "Kutuyu gör"
+  },
+  "product_3d": {
+    "view_3d": "3D olarak görüntüle",
+    "drag_hint": "Döndürmek için sürükleyin",
+    "reset": "Görünümü sıfırla",
+    "views": "Kamera görünümleri",
+    "front": "Ön",
+    "side": "Yan",
+    "back": "Arka",
+    "top": "Üst",
+    "loading": "3D model yükleniyor",
+    "editor_hint": "3D olarak göstermek için 3D modeli olan bir ürün seçin veya bir .glb dosyasının bağlantısını yapıştırın.",
+    "position_copied": "Konum kopyalandı — bir özellik bloğuna yapıştırın."
   },
   "routine_builder": {
     "editor_hint": "Cümleyi oluşturmaya başlamak için bir \"Boşluk\" bloğu ekleyin.",
@@ -44,6 +65,9 @@
       "comment": "Yorum",
       "post_success": "Bizimle iletişime geçtiğiniz için teşekkür ederiz. Mümkün olan en kısa sürede size dönüş yapacağız.",
       "error_heading": "Lütfen aşağıdakileri düzenleyin:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Logo yer tutucusu"
     }
   },
   "accessibility": {
@@ -88,7 +112,19 @@
     "increase_quantity": "Adedi artır",
     "quantity": "Adet",
     "rating": "Bu ürünün puanı 5 üzerinden {{ rating }}",
-    "nested_product": "{{ parent_title }} için {{ product_title }}"
+    "nested_product": "{{ parent_title }} için {{ product_title }}",
+    "announcement_bar_link": "Daha fazla bilgi",
+    "back_to_top": "Başa dön",
+    "quick_view_loading": "Ürün yükleniyor",
+    "before_after_after_alt": "Sonra görseli",
+    "before_after_before_alt": "Önce görseli",
+    "before_after_before_visible": "önce görseli görünüyor",
+    "before_after_comparison": "Önce ve sonra görsel karşılaştırması",
+    "before_after_slider": "Karşılaştırma kaydırıcısı",
+    "before_after_slider_help": "Önce ve sonra görsellerini karşılaştırmak için sol ve sağ ok tuşlarını kullanın.",
+    "faq_collapse_answer": "Yanıtı daralt",
+    "faq_expand_answer": "Yanıtı genişlet",
+    "faq_split_gallery": "Sıkça sorulan sorular"
   },
   "actions": {
     "add_to_cart": "Sepete ekle",
@@ -261,7 +297,11 @@
       "previous": "Önceki",
       "next": "Sonraki",
       "page": "Sayfa {{ page }}"
-    }
+    },
+    "read_more_link": "Devamını oku",
+    "quick_view": "Hızlı görünüm",
+    "view_full_details": "Tüm ayrıntıları görüntüle",
+    "view_item": "Ürünü görüntüle"
   },
   "gift_cards": {
     "issued": {
@@ -326,5 +366,29 @@
       "success_moderated": "Yorum gönderildi, onay bekliyor",
       "success": "Yorum gönderildi"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Tüm hakları saklıdır."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Görsel ve metin kolajı"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Ürünleri göstermek için en az bir koleksiyon sekmesi ekleyin."
+    },
+    "icon_with_text": {
+      "empty": "İçerik göstermek için simge blokları ekleyin.",
+      "section_aria_label": "Mağazanın öne çıkanları"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Seti sepete ekle",
+      "adding": "Ekleniyor…",
+      "added": "Sepete eklendi",
+      "error": "Bir sorun oluştu. Lütfen tekrar deneyin."
+    }
+  },
+  "search": {
+    "no_results": "Sonuç bulunamadı"
   }
 }

@@ -8,6 +8,62 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "image_padding": "Görsel boşluğu",
+    "image_padding_info": "Görseller ile bölüm kenarları arasındaki boşluk. Telefonlarda sayfa kenar boşluğu kullanılır.",
+    "layout_stacked": "Yığılmış: büyük, üst üste binen kartlar",
+    "image_parallax": "Kaydırmada görsel hareketi",
+    "image_parallax_info": "Sayfa kaydırıldıkça görseller çerçevelerinin içinde hafifçe kayar. Kapatmak için 0 yapın.",
+    "timer_style": "Sayaç stili",
+    "timer_tiles": "Kutucuklar",
+    "timer_plain": "Sade",
+    "show_end_date": "Bitiş tarihini sayacın altında göster",
+    "badge_text": "Etiket metni",
+    "badge_text_info": "Sol görselin üzerindeki yuvarlak etikette gösterilir. Gizlemek için boş bırakın.",
+    "d_badge": "%25'e varan indirim",
+    "name": "Geri sayım banner'ı",
+    "layout": "Düzen",
+    "layout_split": "Bölünmüş: her yanda bir görsel",
+    "layout_collage": "Kolaj: üst üste binen görsel kartları",
+    "countdown": "Geri sayım",
+    "end_date": "Bitiş tarihi",
+    "end_date_info": "YYYY-AA-GG biçimi, örneğin 2026-11-27. Mağazanızın saat dilimini kullanır. Geri sayımı gizlemek için boş bırakın.",
+    "end_time": "Bitiş saati",
+    "end_time_info": "24 saat biçimi SS:DD, örneğin 23:59.",
+    "show_labels": "Etiketleri göster (gün, saat, dakika, saniye)",
+    "after_end": "Geri sayım bittiğinde",
+    "after_message": "Mesaj göster",
+    "after_hide": "Bölümü gizle",
+    "after_zeros": "Sıfırları göstermeye devam et",
+    "expired_message": "Mesaj",
+    "d_expired": "Bu teklif sona erdi",
+    "d_eyebrow": "Black Friday indirimi",
+    "d_heading": "Favorilerin, şimdi daha uygun",
+    "d_text": "<p>Günlük cilt bakımı ürünlerinde %25'e varan tasarruf edin. Teklif bitmeden cildinize uygun bir rutin oluşturun.</p>",
+    "d_button": "İndirime göz at",
+    "images": "Görseller",
+    "left_image": "Sol görsel",
+    "left_image_2": "Sol görsel 2",
+    "right_image": "Sağ görsel",
+    "right_image_2": "Sağ görsel 2",
+    "mobile_images": "Mobilde görseller",
+    "show_images": "Metnin üstünde bir sırada göster",
+    "hide_images": "Gizle",
+    "number_size": "Rakam boyutu",
+    "number_color": "Rakam rengi",
+    "number_color_info": "Renk şemasının metin rengini kullanmak için boş bırakın."
+  },
+  "footer_wordmark": {
+    "header": "Altta büyük metin",
+    "text": "Metin",
+    "text_info": "Alt bilginin alt kısmında tam genişlikte, bir kelime logosu gibi çok büyük gösterilir. Gizlemek için boş bırakın.",
+    "font": "Yazı tipi",
+    "crop": "Alttan kırpma",
+    "crop_info": "Harflerin ne kadarının alt kenardan taştığı.",
+    "color": "Renk",
+    "color_info": "Alt bilginin alt kısmının renk şemasını kullanmak için boş bırakın.",
+    "animate": "Harfler kaydırınca yükselir"
+  },
   "slideshow_media": {
     "card_spacing": "Üst ve alt boşluk",
     "card_spacing_info": "Yalnızca sayfa genişliğinde. Slayt gösterisinin üstünde ve altında aynı boşluk kullanılır.",
@@ -388,7 +444,6 @@
     "search": "Ara",
     "section": "Bölüm",
     "selected_variants": "Seçilen varyasyonlar",
-    "shop_the_look": "Bu tarz için alışverişe başlayın",
     "slide": "Slayt",
     "social_media_links": "Sosyal medya bağlantıları",
     "steps": "Adımlar",
@@ -450,7 +505,23 @@
     "blog_posts_editorial": "Blog gönderileri: Editoryal",
     "excerpt": "Alıntı",
     "footer_password": "Şifre altbilgisi",
-    "policies_and_links": "Politikalar ve bağlantılar"
+    "policies_and_links": "Politikalar ve bağlantılar",
+    "column": "Column",
+    "card": "Card",
+    "carousel": "Carousel",
+    "carousel_content": "Carousel content",
+    "featured_product_information": "Featured product",
+    "image_compare": "Image compare",
+    "layered_slideshow": "Layered slideshow",
+    "new_arrivals_showcase": "New arrivals showcase",
+    "product_hotspots": "Product hotspots",
+    "hotspot_product": "Hotspot",
+    "product_sku": "SKU",
+    "quick_order_list": "Quick order list",
+    "slideshow_full_frame": "Slideshow: Full frame",
+    "slideshow_inset": "Slideshow: Inset",
+    "subheading": "Subheading",
+    "comparison_slider": "Comparison slider"
   },
   "settings": {
     "autoplay": "Otomatik oynatma",
@@ -817,10 +888,38 @@
     "custom_mobile_media": "Özel mobil medya",
     "stack_media_on_mobile": "Medyayı üst üste diz",
     "media_type_1": "Medya türü",
-    "media_type_2": "Medya 2 türü"
+    "media_type_2": "Medya 2 türü",
+    "bullseye_color": "Inner color",
+    "card_height": "Card height",
+    "desktop_pagination": "Desktop pagination",
+    "enable_sticky_add_to_cart": "Sticky add to cart bar",
+    "hotspot_color": "Hotspot color",
+    "image_1": "Image 1",
+    "image_2": "Image 2",
+    "desktop_position": "Desktop position",
+    "product_price_typography": "Product price typography",
+    "product_title_typography": "Product title typography",
+    "social_facebook_link": "Facebook URL",
+    "social_instagram_link": "Instagram URL",
+    "social_twitter_link": "X (Twitter) URL",
+    "social_youtube_link": "YouTube URL",
+    "skus": "SKUs",
+    "sticky_add_to_cart": "Sticky add to cart",
+    "submenu_size": "Submenu size",
+    "subtitle": "Subtitle",
+    "variant_per_page": "Variants per page",
+    "full_frame_on_mobile": "Full width on mobile",
+    "full_width": "Full width",
+    "after_image": "After image",
+    "before_image": "Before image",
+    "cs_slider_style": "Slider style",
+    "cs_slider_color": "Slider color",
+    "cs_slider_inner_color": "Slider inner color",
+    "text_on_images": "Text on images",
+    "x_position": "Horizontal position",
+    "y_position": "Vertical position"
   },
   "options": {
-    "adapt_to_image": "Görsele uyarla",
     "apple": "Elma",
     "arrow": "Ok",
     "banana": "Muz",
@@ -1089,7 +1188,12 @@
     "lift": "Yükseltme",
     "reveal": "Göster",
     "scale": "Ölçek",
-    "subtle_zoom": "Yakınlaştırma"
+    "subtle_zoom": "Yakınlaştırma",
+    "announcement_discount": "Discount",
+    "announcement_shipping": "Shipping",
+    "full_frame": "Full frame",
+    "with_hints": "With hints",
+    "below_media": "Below media"
   },
   "content": {
     "background_video": "Arka plan videosu",
@@ -1105,7 +1209,6 @@
     "complementary_products": "Search & Discovery uygulaması kullanılarak tamamlayıcı ürünler ayarlanmalıdır. [Daha fazla bilgi edinin](https://help.shopify.com/manual/online-store/search-and-discovery)",
     "mobile_column_optimization": "Sütunlar, mobil cihazlar için otomatik olarak optimize edilir",
     "content_width": "İçerik genişliği yalnızca bölüm genişliği tam genişliğe ayarlandığında uygulanır.",
-    "adjustments_affect_all_content": "Bu bloktaki tüm içeriklere uygulanır",
     "responsive_font_sizes": "Boyutlar, tüm ekran boyutlarına göre otomatik olarak ölçeklenir",
     "buttons": "Düğmeler",
     "swatches": "Numune parçalar",
@@ -1199,9 +1302,14 @@
     "submenu_feature": "Alt menü özelliği",
     "cart_features": "Sepet özellikleri",
     "email_signup": "E-posta kaydı",
-    "submissions_are_sent_to_store_email_address": "Gönderimler mağazanızın [gönderen e-postası adresine](https://admin.shopify.com/settings/notifications) gönderilir",
     "mobile_media": "Mobil medya",
-    "mobile_media_2": "Mobil medya 2"
+    "mobile_media_2": "Mobil medya 2",
+    "content_layout": "Content layout",
+    "mobile_media_1": "Mobile media 1",
+    "popover": "Popover",
+    "popover_position": "Popover position",
+    "resource_reference_product_sku": "Displays SKU from parent product",
+    "navigation": "Navigation"
   },
   "html_defaults": {
     "share_information_about_your": "<p>Müşterilerinizle markanız hakkında bilgi paylaşın. Ürün açıklaması girin, duyuru paylaşın veya mağazanıza gelen müşterileri karşılayın.</p>",
@@ -1247,7 +1355,18 @@
     "unable_to_accept_returns": "<p>Belirli ürünlerde iade kabul edemiyoruz. Bu ürünler, satın alımdan önce açıkça belirtilecektir.</p>",
     "work_quickly_to_ship": "<p>Siparişinizi mümkün olan en kısa sürede göndermek için hızla çalışacağız. Siparişiniz gönderildiğinde, daha fazla bilgi içeren bir e-posta alacaksınız. Teslimat süreleri konumunuza göre değişiklik gösterir.</p>",
     "join_our_email_list": "<h2>E-posta listemize katılın</h2>",
-    "get_exclusive_deals_and_early_access_to_new_products": "<p>Özel fırsatlar alın ve yeni ürünlere erken erişim sağlayın.</p>"
+    "get_exclusive_deals_and_early_access_to_new_products": "<p>Özel fırsatlar alın ve yeni ürünlere erken erişim sağlayın.</p>",
+    "artistry_in_action": "<p>Artistry in action </p>",
+    "authentic_materials": "<p>Authentic materials, no compromises </p>",
+    "bold_style_recognizable": "<p>Bold style that's recognizable anywhere</p>",
+    "discover_elevated_design": "<p>Discover elevated design </p>",
+    "expert_construction_finish": "<p>Expert construction and an impeccable finish</p>",
+    "featured_collection_h2": "<h2>Featured collection</h2>",
+    "made_to_last": "<p>Made to last </p>",
+    "pieces_better_with_time": "<p>Pieces that only get better with time and wear </p>",
+    "quality_you_can_feel": "<h2>Quality you can feel</h2>",
+    "shop_collection": "<p>Discover our curated collection featuring hand-picked favorites that blend style and quality.</p>",
+    "uncompromising_standards": "<p>Uncompromising standards </p>"
   },
   "text_defaults": {
     "collapsible_row": "Daraltılabilir satır",
@@ -1280,7 +1399,11 @@
     "what_is_return_policy": "İade politikanız nedir?",
     "when_will_order_arrive": "Siparişim ne zaman elime ulaşır?",
     "where_are_products_made": "Ürünleriniz nerede üretiliyor?",
-    "faq": "SSS"
+    "bestsellers": "Bestsellers",
+    "featured_collection": "Featured collection",
+    "new_arrivals": "New arrivals",
+    "shop_the_look": "Shop the look",
+    "trending_now": "Trending now"
   },
   "info": {
     "video_alt_text": "Yardımcı teknoloji kullanan kişiler için videonun içeriğini tarif et",
@@ -1288,7 +1411,6 @@
     "video_external": "YouTube veya Vimeo URL'si kullanın",
     "carousel_layout_on_mobile": "Carousel, mobil cihazlarda kullanılır",
     "carousel_hover_behavior_not_supported": "\"Carousel\" türü, bölüm seviyesinde seçildiğinde \"Carousel\" üzerine gelerek vurgulama desteği bulunmamaktadır",
-    "link_info": "İsteğe bağlı: simgeyi tıklanabilir hale getirir",
     "grid_layout_on_mobile": "Mobil için ızgara düzeni kullanılır",
     "logo_font": "Bir logo seçilmediğinde geçerli olur",
     "checkout_buttons": "Alıcıların daha hızlı ödeme yapmasına olanak sağlar ve dönüşümü artırabilir. [Daha fazla bilgi edinin](https://help.shopify.com/manual/online-store/dynamic-checkout)",
@@ -1299,14 +1421,14 @@
     "manage_languages": "[Dilleri yönet](/admin/settings/languages)",
     "transparent_background": "Okunabilirlik için şeffaf arka plan uygulanmış her bir şablonu inceleyin",
     "aspect_ratio_adjusted": "Bazı düzenlerde ayarlandı",
-    "auto_open_cart_drawer": "Etkinleştirildiğinde sepete ürün eklenmesi durumunda sepet çekmecesi otomatik olarak açılır.",
     "custom_liquid": "Gelişmiş kişiselleştirmeler oluşturmak için uygulama parçacıkları veya başka bir kod ekleyin. [Daha fazla bilgi edinin](https://shopify.dev/docs/api/liquid)",
     "applies_on_image_only": "Yalnızca görseller için geçerlidir",
     "hover_effects": "Ürün ve koleksiyon kartları için geçerlidir",
     "pills_usage": "Uygulanan filtreler, indirim kodları ve arama önerileri için kullanılır",
     "hide_logo_on_home_page_help": "Sabit üstbilgi etkin olduğunda logo görünür kalır",
     "media_type_info": "Özellikler, menü bağlantılarınızdan doldurulur",
-    "logo_height": "Sadece üstbilgi logoyu etkiler"
+    "logo_height": "Sadece üstbilgi logoyu etkiler",
+    "announcement_custom_icon": "Used when Icon is set to Custom."
   },
   "categories": {
     "product_list": "Öne çıkan koleksiyon",
@@ -1327,5 +1449,282 @@
     "other_sections": "Diğer",
     "storytelling": "Hikaye anlatıcılığı",
     "text": "Metin"
+  },
+  "sections": {
+    "all": {
+      "color_scheme": {
+        "label": "Color scheme"
+      },
+      "section-margin": {
+        "header": {
+          "content": "Section margin"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "margin_top": {
+          "label": "Top margin"
+        }
+      },
+      "section-padding": {
+        "header": {
+          "content": "Section padding"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "padding_top": {
+          "label": "Top padding"
+        },
+        "padding_bottom": {
+          "label": "Bottom padding"
+        }
+      },
+      "border": {
+        "header": {
+          "content": "Borders"
+        },
+        "border_enable_top": {
+          "label": "Show top border"
+        },
+        "border_enable_bottom": {
+          "label": "Show bottom border"
+        }
+      },
+      "button": {
+        "header": {
+          "content": "Button"
+        },
+        "label": {
+          "label": "Button label",
+          "info": "Leave blank to hide the button."
+        },
+        "style": {
+          "label": "Button style",
+          "options__1": {
+            "label": "Primary"
+          },
+          "options__2": {
+            "label": "Secondary"
+          },
+          "options__3": {
+            "label": "Tertiary"
+          }
+        }
+      }
+    },
+    "footer": {
+      "name": "Footer",
+      "footer_color_scheme": {
+        "color_scheme_bottom": "Bottom bar color scheme"
+      },
+      "settings": {
+        "header__3": {
+          "content": "Country/region selector"
+        },
+        "header__4": {
+          "info": "To add a country/region, go to your [payment settings](/admin/settings/payments)."
+        },
+        "header__5": {
+          "content": "Language selector"
+        },
+        "header__6": {
+          "info": "Customers can switch languages using the selector in the footer."
+        },
+        "header__7": {
+          "content": "Payment methods"
+        },
+        "header__8": {
+          "content": "Policy links",
+          "info": "To add store policies, go to your [policy settings](/admin/settings/legal)."
+        },
+        "header__9": {
+          "content": "Follow on Shop",
+          "info": "For the button to show, the Shop channel must be installed and Shop Pay activated. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-shop-buttons)"
+        },
+        "enable_language_selector": {
+          "label": "Enable language selector"
+        },
+        "enable_country_selector": {
+          "label": "Enable country/region selector"
+        },
+        "enable_follow_on_shop": {
+          "label": "Enable Follow on Shop"
+        },
+        "payment_enable": {
+          "label": "Show payment icons"
+        },
+        "show_policy": {
+          "label": "Show policy links"
+        }
+      },
+      "blocks": {
+        "link_list": {
+          "name": "Menu",
+          "settings": {
+            "heading": {
+              "label": "Heading",
+              "info": "Heading must be set for the menu to display."
+            },
+            "menu": {
+              "label": "Menu",
+              "info": "Select a navigation menu to display."
+            }
+          }
+        },
+        "logo_info": {
+          "name": "Brand",
+          "settings": {
+            "logo": {
+              "label": "Logo image"
+            },
+            "logo_2": {
+              "label": "Inverse logo",
+              "info": "Shown on dark backgrounds when using two logos."
+            },
+            "logo_width": {
+              "unit": "px",
+              "label": "Logo width"
+            },
+            "description": {
+              "label": "Description"
+            }
+          }
+        },
+        "copyright_show": {
+          "label": "Show copyright and \"Powered by Shopify\""
+        },
+        "subscribe": {
+          "name": "Email signup",
+          "settings": {
+            "additional_text": {
+              "label": "Description"
+            },
+            "heading": {
+              "label": "Heading"
+            },
+            "newsletter_text": {
+              "label": "Compliance text"
+            },
+            "paragraph": {
+              "content": "Shown below the subscription form."
+            }
+          }
+        }
+      }
+    },
+    "new-arrivals-showcase": {
+      "settings": {
+        "product_layout": "Product layout",
+        "heading_scribble": "Heading decoration",
+        "scribble_color": "Decoration color",
+        "tabs_a11y": "Tabs label (accessibility)",
+        "active_tab_background": "Active tab background",
+        "active_tab_text": "Active tab text",
+        "inactive_tab_background": "Inactive tab background",
+        "inactive_tab_text": "Inactive tab text",
+        "promotion_header": "Promotion column",
+        "show_promotion_column": "Show promotion column",
+        "promo_column_width": "Promotion column width",
+        "promo_media_type": {
+          "label": "Promotion media type",
+          "info": "Use a static image, upload an MP4 file, or embed a YouTube/Vimeo video."
+        },
+        "promo_image": "Promotion image",
+        "promo_video": "Promotion video (MP4)",
+        "promo_video_url": {
+          "label": "YouTube or Vimeo",
+          "info": "Paste a supported video URL from YouTube or Vimeo."
+        },
+        "promo_video_autoplay": "Autoplay video",
+        "promo_video_loop": "Loop video",
+        "promo_video_controls": "Show video controls",
+        "promo_badge": "Badge text",
+        "promo_heading": "Promotion heading",
+        "promo_text": "Promotion text",
+        "promo_button": "Button label",
+        "promo_link": "Button link",
+        "products_per_tab": "Products per tab",
+        "new_badge_days": "“New” badge window (days)",
+        "new_badge_text": "“New” badge text",
+        "hover_image_button": "Image hover button label",
+        "fallback_star_count": "Fallback star rating",
+        "star_color": "Star color",
+        "yellow_cta": "Accent yellow (CTA)",
+        "demo_category": "Demo category label",
+        "demo_product_title": "Demo product title",
+        "carousel_header": "Carousel",
+        "slides_visible_mobile": "Slides visible (mobile)",
+        "slides_visible_desktop": "Slides visible (desktop)",
+        "gap_mobile": "Gap (mobile)",
+        "gap_desktop": "Gap (desktop)"
+      },
+      "options": {
+        "layout": {
+          "slider": "Slider",
+          "grid": "Grid"
+        },
+        "scribble": {
+          "none": "None",
+          "squiggle": "Squiggle",
+          "wave": "Wave",
+          "brush": "Brush",
+          "double": "Double",
+          "scribble_underline": "Scribble Underline",
+          "hand_drawn": "Hand-drawn Underline",
+          "sketch": "Sketch Underline",
+          "marker": "Marker Underline",
+          "zigzag": "Zigzag Underline",
+          "arc": "Arc Underline",
+          "dotted": "Dotted Underline",
+          "erratic": "Erratic Underline",
+          "ribbon": "Ribbon Underline"
+        },
+        "promo_media": {
+          "image": "Image",
+          "video_upload": "Uploaded video (MP4)",
+          "video_embed": "YouTube or Vimeo"
+        }
+      },
+      "blocks": {
+        "layout_placeholder": {
+          "name": "Layout preview",
+          "paragraph": "Shows sample products when no collection is selected. Remove this block when your tabs use real collections.",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        },
+        "collection_tab": {
+          "name": "Collection tab",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        }
+      }
+    }
   }
 }

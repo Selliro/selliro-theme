@@ -1677,3 +1677,27 @@
     display: none;
   }
 }
+
+/* Phones & tablets: the floating photos sit beside the sentence on wide screens, but on narrow screens
+   that is right on top of the words and answer chips. Tuck them into the top corners, smaller. */
+@media screen and (max-width: 989px) {
+  .rb-float,
+  .rb-float--2 {
+    top: 0;
+    width: clamp(5.5rem, 16vw, 9rem);
+  }
+
+  .rb-float--1 { left: 1%; }
+  .rb-float--2 { right: 1%; }
+}
+
+@media screen and (max-width: 749px) {
+  .rb-float,
+  .rb-float--2 {
+    top: -1.5rem;
+    width: 22vw;
+  }
+
+  .rb-float--1 { left: -3vw; }
+  .rb-float--2 { right: -3vw; }
+}

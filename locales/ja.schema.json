@@ -8,6 +8,62 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "image_padding": "画像の余白",
+    "image_padding_info": "画像とセクションの端との間隔。スマートフォンではページの余白を使用します。",
+    "layout_stacked": "スタック：大きく重なり合うカード",
+    "image_parallax": "スクロール時の画像の動き",
+    "image_parallax_info": "ページのスクロールに合わせて、画像が枠の中でゆっくり動きます。0 にするとオフになります。",
+    "timer_style": "タイマーのスタイル",
+    "timer_tiles": "タイル",
+    "timer_plain": "シンプル",
+    "show_end_date": "タイマーの下に終了日を表示",
+    "badge_text": "ステッカーのテキスト",
+    "badge_text_info": "左の画像の丸いステッカーに表示されます。空欄にすると非表示になります。",
+    "d_badge": "最大25%オフ",
+    "name": "カウントダウンバナー",
+    "layout": "レイアウト",
+    "layout_split": "分割：左右に画像",
+    "layout_collage": "コラージュ：重なり合う画像カード",
+    "countdown": "カウントダウン",
+    "end_date": "終了日",
+    "end_date_info": "形式は YYYY-MM-DD（例：2026-11-27）。ストアのタイムゾーンを使用します。空欄にするとカウントダウンを非表示にします。",
+    "end_time": "終了時刻",
+    "end_time_info": "24時間形式 HH:MM（例：23:59）。",
+    "show_labels": "ラベルを表示（日、時間、分、秒）",
+    "after_end": "カウントダウン終了後",
+    "after_message": "メッセージを表示",
+    "after_hide": "セクションを非表示",
+    "after_zeros": "ゼロを表示し続ける",
+    "expired_message": "メッセージ",
+    "d_expired": "このセールは終了しました",
+    "d_eyebrow": "ブラックフライデーセール",
+    "d_heading": "お気に入りを、今ならお得に",
+    "d_text": "<p>毎日のスキンケアの必需品が最大25%オフ。セール終了前に、あなたの肌に合うルーティンを揃えましょう。</p>",
+    "d_button": "セールを見る",
+    "images": "画像",
+    "left_image": "左の画像",
+    "left_image_2": "左の画像 2",
+    "right_image": "右の画像",
+    "right_image_2": "右の画像 2",
+    "mobile_images": "モバイルでの画像",
+    "show_images": "テキストの上に横並びで表示",
+    "hide_images": "非表示",
+    "number_size": "数字のサイズ",
+    "number_color": "数字の色",
+    "number_color_info": "空欄にすると配色のテキスト色を使用します。"
+  },
+  "footer_wordmark": {
+    "header": "下部の大きなテキスト",
+    "text": "テキスト",
+    "text_info": "フッター下部の全幅に、ロゴのように大きく表示されます。空欄にすると非表示になります。",
+    "font": "フォント",
+    "crop": "下部の切り取り",
+    "crop_info": "文字の下側がどれだけ下端からはみ出すか。",
+    "color": "色",
+    "color_info": "空欄にするとフッター下部の配色を使用します。",
+    "animate": "スクロールで文字が浮かび上がる"
+  },
   "slideshow_media": {
     "card_spacing": "上下の余白",
     "card_spacing_info": "ページ幅の場合のみ。スライドショーの上下に同じ余白が使われます。",
@@ -382,7 +438,6 @@
     "search": "検索",
     "section": "セクション",
     "selected_variants": "選択されたバリエーション",
-    "shop_the_look": "このルックを購入",
     "slide": "スライド",
     "social_media_links": "SNSのリンク",
     "steps": "手順",
@@ -450,7 +505,23 @@
     "blog_posts_editorial": "ブログ記事：編集",
     "excerpt": "抜粋",
     "footer_password": "パスワードページのフッター",
-    "policies_and_links": "ポリシーとリンク"
+    "policies_and_links": "ポリシーとリンク",
+    "column": "Column",
+    "card": "Card",
+    "carousel": "Carousel",
+    "carousel_content": "Carousel content",
+    "featured_product_information": "Featured product",
+    "image_compare": "Image compare",
+    "layered_slideshow": "Layered slideshow",
+    "new_arrivals_showcase": "New arrivals showcase",
+    "product_hotspots": "Product hotspots",
+    "hotspot_product": "Hotspot",
+    "product_sku": "SKU",
+    "quick_order_list": "Quick order list",
+    "slideshow_full_frame": "Slideshow: Full frame",
+    "slideshow_inset": "Slideshow: Inset",
+    "subheading": "Subheading",
+    "comparison_slider": "Comparison slider"
   },
   "settings": {
     "alignment": "配置",
@@ -817,10 +888,38 @@
     "custom_mobile_media": "カスタムモバイルメディア",
     "stack_media_on_mobile": "メディアを積み重ねる",
     "media_type_1": "メディアの種類",
-    "media_type_2": "メディア2の種類"
+    "media_type_2": "メディア2の種類",
+    "bullseye_color": "Inner color",
+    "card_height": "Card height",
+    "desktop_pagination": "Desktop pagination",
+    "enable_sticky_add_to_cart": "Sticky add to cart bar",
+    "hotspot_color": "Hotspot color",
+    "image_1": "Image 1",
+    "image_2": "Image 2",
+    "desktop_position": "Desktop position",
+    "product_price_typography": "Product price typography",
+    "product_title_typography": "Product title typography",
+    "social_facebook_link": "Facebook URL",
+    "social_instagram_link": "Instagram URL",
+    "social_twitter_link": "X (Twitter) URL",
+    "social_youtube_link": "YouTube URL",
+    "skus": "SKUs",
+    "sticky_add_to_cart": "Sticky add to cart",
+    "submenu_size": "Submenu size",
+    "subtitle": "Subtitle",
+    "variant_per_page": "Variants per page",
+    "full_frame_on_mobile": "Full width on mobile",
+    "full_width": "Full width",
+    "after_image": "After image",
+    "before_image": "Before image",
+    "cs_slider_style": "Slider style",
+    "cs_slider_color": "Slider color",
+    "cs_slider_inner_color": "Slider inner color",
+    "text_on_images": "Text on images",
+    "x_position": "Horizontal position",
+    "y_position": "Vertical position"
   },
   "options": {
-    "adapt_to_image": "画像に合わせる",
     "apple": "リンゴ",
     "arrow": "矢",
     "auto": "自動",
@@ -1089,7 +1188,12 @@
     "lift": "リフト",
     "reveal": "表示する",
     "scale": "拡大",
-    "subtle_zoom": "ズーム"
+    "subtle_zoom": "ズーム",
+    "announcement_discount": "Discount",
+    "announcement_shipping": "Shipping",
+    "full_frame": "Full frame",
+    "with_hints": "With hints",
+    "below_media": "Below media"
   },
   "content": {
     "advanced": "高度",
@@ -1105,7 +1209,6 @@
     "complementary_products": "付加的な商品は、Search & Discoveryアプリを使用して設定する必要があります。[詳しくはこちら](https://help.shopify.com/manual/online-store/search-and-discovery)",
     "mobile_column_optimization": "列はモバイル用に自動で最適化されます",
     "content_width": "コンテンツ幅は、セクション幅が全幅に設定されている場合にのみ適用されます。",
-    "adjustments_affect_all_content": "このブロックのすべてのコンテンツに適用",
     "responsive_font_sizes": "サイズはすべての画面サイズに合わせて自動的に拡大されます",
     "buttons": "ボタン",
     "swatches": "見本",
@@ -1199,9 +1302,14 @@
     "submenu_feature": "サブメニュー機能",
     "cart_features": "カートの特徴",
     "email_signup": "メール登録者",
-    "submissions_are_sent_to_store_email_address": "送信はストストアの [差出人メールアドレス](https://admin.shopify.com/settings/notifications) に送信されます。",
     "mobile_media": "モバイルメディア",
-    "mobile_media_2": "モバイルメディア2"
+    "mobile_media_2": "モバイルメディア2",
+    "content_layout": "Content layout",
+    "mobile_media_1": "Mobile media 1",
+    "popover": "Popover",
+    "popover_position": "Popover position",
+    "resource_reference_product_sku": "Displays SKU from parent product",
+    "navigation": "Navigation"
   },
   "html_defaults": {
     "share_information_about_your": "<p>ブランドに関する情報をお客様と共有します。商品を説明したり、告知をしたり、ストアへのお客様を歓迎したりします。</p>",
@@ -1247,7 +1355,18 @@
     "unable_to_accept_returns": "<p>一部の商品については、返品を承ることができません。対象となる商品には、ご購入前にその旨が明記されています。</p>",
     "work_quickly_to_ship": "<p>ご注文の商品は、できるだけ早く発送できるよう迅速に対応いたします。商品の発送が完了しましたら、詳細を記載したメールをお送りします。配達にかかる日数は、お届け先の地域によって異なります。</p>",
     "join_our_email_list": "<h2>メールリストに参加する</h2>",
-    "get_exclusive_deals_and_early_access_to_new_products": "<p>限定オファーや新製品への早期アクセスを入手してください。</p>"
+    "get_exclusive_deals_and_early_access_to_new_products": "<p>限定オファーや新製品への早期アクセスを入手してください。</p>",
+    "artistry_in_action": "<p>Artistry in action </p>",
+    "authentic_materials": "<p>Authentic materials, no compromises </p>",
+    "bold_style_recognizable": "<p>Bold style that's recognizable anywhere</p>",
+    "discover_elevated_design": "<p>Discover elevated design </p>",
+    "expert_construction_finish": "<p>Expert construction and an impeccable finish</p>",
+    "featured_collection_h2": "<h2>Featured collection</h2>",
+    "made_to_last": "<p>Made to last </p>",
+    "pieces_better_with_time": "<p>Pieces that only get better with time and wear </p>",
+    "quality_you_can_feel": "<h2>Quality you can feel</h2>",
+    "shop_collection": "<p>Discover our curated collection featuring hand-picked favorites that blend style and quality.</p>",
+    "uncompromising_standards": "<p>Uncompromising standards </p>"
   },
   "text_defaults": {
     "button_label": "今すぐ購入",
@@ -1280,14 +1399,17 @@
     "what_is_return_policy": "返品ポリシーはどのような内容ですか？",
     "when_will_order_arrive": "注文した商品はいつ届きますか？",
     "where_are_products_made": "商品はどこで製造されていますか？",
-    "faq": "よくある質問"
+    "bestsellers": "Bestsellers",
+    "featured_collection": "Featured collection",
+    "new_arrivals": "New arrivals",
+    "shop_the_look": "Shop the look",
+    "trending_now": "Trending now"
   },
   "info": {
     "video_alt_text": "支援技術ユーザー向けのビデオを説明する",
     "video_autoplay": "動画はデフォルトでミュートされます",
     "video_external": "YouTubeやVimeoのURLを使う",
     "carousel_layout_on_mobile": "カルーセルはモバイルで使用します",
-    "link_info": "任意：アイコンをクリックできるようになります",
     "carousel_hover_behavior_not_supported": "「Carousel」タイプがセクションレベルで選択されている場合、「Carousel」ホバーは使用できません",
     "grid_layout_on_mobile": "モバイルではグリッドレイアウトが使用されます",
     "logo_font": "ロゴが選択されていない場合にのみ適用されます",
@@ -1299,14 +1421,14 @@
     "manage_languages": "[言語を管理](/admin/settings/languages)",
     "transparent_background": "読みやすいように透明な背景が適用された各テンプレートを確認します",
     "aspect_ratio_adjusted": "一部レイアウトを調整しました",
-    "auto_open_cart_drawer": "有効にすると、商品がカートに追加されたときにカートドロワーが自動的に開きます。",
     "custom_liquid": "アプリのスニペットやその他のコードを追加して、高度なカスタマイズを作成します。[詳しくはこちら](https://shopify.dev/docs/api/liquid)",
     "applies_on_image_only": "画像にのみ適用する",
     "hover_effects": "商品およびコレクションカードに適用する",
     "pills_usage": "適用されたフィルター、割引コード、検索候補に使用されます",
     "hide_logo_on_home_page_help": "スティッキーヘッダーがアクティブな場合、ロゴは表示されたままになります",
     "media_type_info": "Featuresはメニューリンクから入力されます",
-    "logo_height": "ヘッダーロゴにのみ影響します"
+    "logo_height": "ヘッダーロゴにのみ影響します",
+    "announcement_custom_icon": "Used when Icon is set to Custom."
   },
   "categories": {
     "product_list": "特集コレクション",
@@ -1327,5 +1449,282 @@
     "other_sections": "その他",
     "storytelling": "ストーリーテリング",
     "text": "テキスト"
+  },
+  "sections": {
+    "all": {
+      "color_scheme": {
+        "label": "Color scheme"
+      },
+      "section-margin": {
+        "header": {
+          "content": "Section margin"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "margin_top": {
+          "label": "Top margin"
+        }
+      },
+      "section-padding": {
+        "header": {
+          "content": "Section padding"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "padding_top": {
+          "label": "Top padding"
+        },
+        "padding_bottom": {
+          "label": "Bottom padding"
+        }
+      },
+      "border": {
+        "header": {
+          "content": "Borders"
+        },
+        "border_enable_top": {
+          "label": "Show top border"
+        },
+        "border_enable_bottom": {
+          "label": "Show bottom border"
+        }
+      },
+      "button": {
+        "header": {
+          "content": "Button"
+        },
+        "label": {
+          "label": "Button label",
+          "info": "Leave blank to hide the button."
+        },
+        "style": {
+          "label": "Button style",
+          "options__1": {
+            "label": "Primary"
+          },
+          "options__2": {
+            "label": "Secondary"
+          },
+          "options__3": {
+            "label": "Tertiary"
+          }
+        }
+      }
+    },
+    "footer": {
+      "name": "Footer",
+      "footer_color_scheme": {
+        "color_scheme_bottom": "Bottom bar color scheme"
+      },
+      "settings": {
+        "header__3": {
+          "content": "Country/region selector"
+        },
+        "header__4": {
+          "info": "To add a country/region, go to your [payment settings](/admin/settings/payments)."
+        },
+        "header__5": {
+          "content": "Language selector"
+        },
+        "header__6": {
+          "info": "Customers can switch languages using the selector in the footer."
+        },
+        "header__7": {
+          "content": "Payment methods"
+        },
+        "header__8": {
+          "content": "Policy links",
+          "info": "To add store policies, go to your [policy settings](/admin/settings/legal)."
+        },
+        "header__9": {
+          "content": "Follow on Shop",
+          "info": "For the button to show, the Shop channel must be installed and Shop Pay activated. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-shop-buttons)"
+        },
+        "enable_language_selector": {
+          "label": "Enable language selector"
+        },
+        "enable_country_selector": {
+          "label": "Enable country/region selector"
+        },
+        "enable_follow_on_shop": {
+          "label": "Enable Follow on Shop"
+        },
+        "payment_enable": {
+          "label": "Show payment icons"
+        },
+        "show_policy": {
+          "label": "Show policy links"
+        }
+      },
+      "blocks": {
+        "link_list": {
+          "name": "Menu",
+          "settings": {
+            "heading": {
+              "label": "Heading",
+              "info": "Heading must be set for the menu to display."
+            },
+            "menu": {
+              "label": "Menu",
+              "info": "Select a navigation menu to display."
+            }
+          }
+        },
+        "logo_info": {
+          "name": "Brand",
+          "settings": {
+            "logo": {
+              "label": "Logo image"
+            },
+            "logo_2": {
+              "label": "Inverse logo",
+              "info": "Shown on dark backgrounds when using two logos."
+            },
+            "logo_width": {
+              "unit": "px",
+              "label": "Logo width"
+            },
+            "description": {
+              "label": "Description"
+            }
+          }
+        },
+        "copyright_show": {
+          "label": "Show copyright and \"Powered by Shopify\""
+        },
+        "subscribe": {
+          "name": "Email signup",
+          "settings": {
+            "additional_text": {
+              "label": "Description"
+            },
+            "heading": {
+              "label": "Heading"
+            },
+            "newsletter_text": {
+              "label": "Compliance text"
+            },
+            "paragraph": {
+              "content": "Shown below the subscription form."
+            }
+          }
+        }
+      }
+    },
+    "new-arrivals-showcase": {
+      "settings": {
+        "product_layout": "Product layout",
+        "heading_scribble": "Heading decoration",
+        "scribble_color": "Decoration color",
+        "tabs_a11y": "Tabs label (accessibility)",
+        "active_tab_background": "Active tab background",
+        "active_tab_text": "Active tab text",
+        "inactive_tab_background": "Inactive tab background",
+        "inactive_tab_text": "Inactive tab text",
+        "promotion_header": "Promotion column",
+        "show_promotion_column": "Show promotion column",
+        "promo_column_width": "Promotion column width",
+        "promo_media_type": {
+          "label": "Promotion media type",
+          "info": "Use a static image, upload an MP4 file, or embed a YouTube/Vimeo video."
+        },
+        "promo_image": "Promotion image",
+        "promo_video": "Promotion video (MP4)",
+        "promo_video_url": {
+          "label": "YouTube or Vimeo",
+          "info": "Paste a supported video URL from YouTube or Vimeo."
+        },
+        "promo_video_autoplay": "Autoplay video",
+        "promo_video_loop": "Loop video",
+        "promo_video_controls": "Show video controls",
+        "promo_badge": "Badge text",
+        "promo_heading": "Promotion heading",
+        "promo_text": "Promotion text",
+        "promo_button": "Button label",
+        "promo_link": "Button link",
+        "products_per_tab": "Products per tab",
+        "new_badge_days": "“New” badge window (days)",
+        "new_badge_text": "“New” badge text",
+        "hover_image_button": "Image hover button label",
+        "fallback_star_count": "Fallback star rating",
+        "star_color": "Star color",
+        "yellow_cta": "Accent yellow (CTA)",
+        "demo_category": "Demo category label",
+        "demo_product_title": "Demo product title",
+        "carousel_header": "Carousel",
+        "slides_visible_mobile": "Slides visible (mobile)",
+        "slides_visible_desktop": "Slides visible (desktop)",
+        "gap_mobile": "Gap (mobile)",
+        "gap_desktop": "Gap (desktop)"
+      },
+      "options": {
+        "layout": {
+          "slider": "Slider",
+          "grid": "Grid"
+        },
+        "scribble": {
+          "none": "None",
+          "squiggle": "Squiggle",
+          "wave": "Wave",
+          "brush": "Brush",
+          "double": "Double",
+          "scribble_underline": "Scribble Underline",
+          "hand_drawn": "Hand-drawn Underline",
+          "sketch": "Sketch Underline",
+          "marker": "Marker Underline",
+          "zigzag": "Zigzag Underline",
+          "arc": "Arc Underline",
+          "dotted": "Dotted Underline",
+          "erratic": "Erratic Underline",
+          "ribbon": "Ribbon Underline"
+        },
+        "promo_media": {
+          "image": "Image",
+          "video_upload": "Uploaded video (MP4)",
+          "video_embed": "YouTube or Vimeo"
+        }
+      },
+      "blocks": {
+        "layout_placeholder": {
+          "name": "Layout preview",
+          "paragraph": "Shows sample products when no collection is selected. Remove this block when your tabs use real collections.",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        },
+        "collection_tab": {
+          "name": "Collection tab",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        }
+      }
+    }
   }
 }

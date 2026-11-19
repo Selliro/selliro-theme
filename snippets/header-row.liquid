@@ -10,6 +10,7 @@
   @param {string} [logo] - Logo markup
   @param {string} [menu] - Menu markup
   @param {string} [actions] - Header actions markup
+  @param {string} [cta] - Header call-to-action button markup
   @param {string} [localization] - Localization markup
   @param {string} [search] - Search markup
   @param {string} [mobile_search] - Mobile search markup
@@ -31,8 +32,9 @@
     assign item_column = settings[column_key] | default: 'left'
 
     case item
-      when 'actions'
+      when 'actions', 'cta'
         assign item_column = 'right'
+        assign item_row = 'top'
       when 'logo'
         if logo_position != blank
           assign item_column = logo_position
@@ -94,6 +96,8 @@
               {{ mobile_search }}
             {% when 'actions' %}
               {{ actions }}
+            {% when 'cta' %}
+              {{ cta }}
           {% endcase %}
         {% endunless %}
       {% endfor %}

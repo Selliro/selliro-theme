@@ -3,6 +3,8 @@
 {% endcomment %}
 
 {{ 'section-faq-split-gallery.css' | asset_url | stylesheet_tag }}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
 <script src="{{ 'faq-split-gallery.js' | asset_url }}" defer></script>
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
@@ -72,8 +74,9 @@
 -%}
 
 <section
+  data-reveal
   class="section faq-split-gallery color-{{ section.settings.color_scheme }}"
-  id="FAQSplitGallery-{{ section.id }}"
+  id="{% if section.settings.anchor_id != blank %}{{ section.settings.anchor_id | handleize }}{% else %}FAQSplitGallery-{{ section.id }}{% endif %}"
   {% if title != blank %}
     aria-labelledby="FAQSplitGallery-heading-{{ section.id }}"
   {% else %}
@@ -83,6 +86,7 @@
     --fs-pad-top: {{ section.settings.padding_top }}px;
     --fs-pad-bottom: {{ section.settings.padding_bottom }}px;
     --fs-image-radius: {{ section.settings.image_radius }}px;
+    --sr-radius: {{ section.settings.image_radius }}px;
     --faq-parallax-intensity: {{ section.settings.image_scroll_parallax }};
   "
 >
@@ -90,7 +94,7 @@
     <div class="faq-split-gallery__inner{% if gallery_first %} faq-split-gallery__inner--media-first{% endif %}{% unless show_gallery_column %} faq-split-gallery__inner--faq-full{% endunless %}{% if single_gallery_image %} faq-split-gallery__inner--single-media{% endif %}">
       <div class="faq-split-gallery__content">
         {%- if title != blank -%}
-          <h2 class="faq-split-gallery__title" id="FAQSplitGallery-heading-{{ section.id }}">
+          <h2 class="faq-split-gallery__title" data-reveal-title id="FAQSplitGallery-heading-{{ section.id }}">
             {{ title | escape }}
           </h2>
         {%- endif -%}
@@ -115,6 +119,7 @@
               <div
                 class="faq-split-gallery__item{% if is_open %} is-open{% endif %}"
                 data-faq-item
+                data-reveal-fade
                 {{ block.shopify_attributes }}
               >
                 <button
@@ -182,7 +187,7 @@
         <div class="faq-split-gallery__media{% if single_gallery_image %} faq-split-gallery__media--single{% endif %}">
           <div class="faq-split-gallery__media-stack{% if single_gallery_image %} faq-split-gallery__media-stack--single{% endif %}">
             {%- if single_gallery_image -%}
-              <figure class="faq-split-gallery__figure faq-split-gallery__figure--single">
+              <figure class="faq-split-gallery__figure faq-split-gallery__figure--single" data-reveal-card>
                 {{
                   solo_image
                   | image_url: width: 1600
@@ -195,7 +200,7 @@
                 }}
               </figure>
             {%- else -%}
-              <figure class="faq-split-gallery__figure faq-split-gallery__figure--primary">
+              <figure class="faq-split-gallery__figure faq-split-gallery__figure--primary" data-reveal-card>
                 {{
                   left_image
                   | image_url: width: 900
@@ -207,7 +212,7 @@
                     class: 'faq-split-gallery__img'
                 }}
               </figure>
-              <figure class="faq-split-gallery__figure faq-split-gallery__figure--secondary">
+              <figure class="faq-split-gallery__figure faq-split-gallery__figure--secondary" data-reveal-card>
                 {{
                   right_image
                   | image_url: width: 900
@@ -238,6 +243,13 @@
       "id": "title",
       "label": "Heading",
       "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "default": "faq",
+      "info": "Lets a link jump here, e.g. faq → link to /#faq"
     },
     {
       "type": "color_scheme",

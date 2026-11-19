@@ -229,7 +229,7 @@
         "promo_1_enabled": true,
         "promo_1_position": 7,
         "promo_1_span": "1",
-        "promo_1_image": "shopify://shop_images/high-angle-jar-bowl-with-salt.png",
+        "promo_1_image": "shopify://shop_images/whispo-collection-promo-essentials.jpg",
         "promo_1_icon": "leaf",
         "promo_1_heading": "Skincare essentials",
         "promo_1_text": "Build a routine that keeps your skin calm, glowing and protected.",
@@ -245,7 +245,7 @@
       "type": "collection-hero",
       "settings": {
         "use_collection_image": true,
-        "image": "shopify://shop_images/young-woman-doing-her-morning-routine.png",
+        "image": "shopify://shop_images/whispo-collection-hero-flatlay.jpg",
         "height": "medium",
         "overlay_color": "#000000",
         "overlay_opacity": 55,

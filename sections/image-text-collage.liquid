@@ -7,6 +7,13 @@
 {% endcomment %}
 
 {{ 'section-image-text-collage.css' | asset_url | stylesheet_tag }}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+{%- if section.settings.show_badge != false and section.settings.badge_font -%}
+  {% style %}
+    {{ section.settings.badge_font | font_face: font_display: 'swap' }}
+  {% endstyle %}
+{%- endif -%}
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
 
 {%- liquid
   assign img1 = section.settings.image_1
@@ -37,9 +44,13 @@
   endfor
 
   assign collage_layout = section.settings.collage_layout | default: 'stack'
+  assign design = section.settings.design | default: 'collage'
+  if design != 'collage'
+    assign collage_layout = 'stack'
+  endif
 
   assign badge_link = section.settings.badge_link | default: section.settings.button_link
-  assign badge_text = section.settings.badge_text | default: 'EXPLORE MORE ~ EXPLORE MORE ~ '
+  assign badge_text = section.settings.badge_text | default: 'Explore more'
   assign badge_label = section.settings.button_label | default: badge_text | replace: '~', '' | strip
 
   case section.settings.heading_weight
@@ -183,7 +194,8 @@
 {%- endif -%}
 
 <section
-  class="itc itc--layout-{{ collage_layout }}{{ section_classes }} {{ section.settings.section_width | default: 'page-width' }} color-{{ section.settings.color_scheme }}"
+  data-reveal
+  class="itc itc--design-{{ design }} itc--layout-{{ collage_layout }}{{ section_classes }} {{ section.settings.section_width | default: 'page-width' }} color-{{ section.settings.color_scheme }}"
   id="ImageTextCollage-{{ section.id }}"
   {% if section.settings.heading != blank %}
     aria-labelledby="ImageTextCollage-heading-{{ section.id }}"
@@ -200,6 +212,8 @@
     --itc-content-max: {{ section.settings.content_max_width | default: 560 }}px;
     --itc-collage-ratio: {{ section.settings.collage_ratio | default: 118 }};
     --itc-img-radius: {{ section.settings.image_radius | default: 16 }}px;
+    {% if section.settings.background_color != blank %}--itc-frame-color: {{ section.settings.background_color }};{% endif %}
+    --sr-radius: {{ section.settings.image_radius | default: 16 }}px;
     --itc-rot1: {{ section.settings.image_1_rotation | default: 0 }}deg;
     --itc-rot2: {{ section.settings.image_2_rotation | default: 0 }}deg;
     --itc-rot3: {{ section.settings.image_3_rotation | default: 0 }}deg;
@@ -219,6 +233,7 @@
     --itc-badge-top: {{ section.settings.badge_top | default: 50 }}%;
     --itc-badge-left: {{ section.settings.badge_left | default: 78 }}%;
     --itc-badge-speed: {{ section.settings.badge_speed | default: 14 }}s;
+    {% if section.settings.badge_font %}--itc-badge-font: {{ section.settings.badge_font.family }}, {{ section.settings.badge_font.fallback_families }}; --itc-badge-weight: {{ section.settings.badge_font.weight }};{% endif %}
     {% case section.settings.heading_size %}
       {% when 'small'  %}--itc-heading-size: clamp(1.25rem, 2vw, 1.75rem);
       {% when 'medium' %}--itc-heading-size: var(--section-title-size);
@@ -239,7 +254,7 @@
       <div class="itc__collage-wrap{% if stack_mode == 1 %} itc__collage-wrap--solo{% endif %}">
         <div class="itc__stack itc__stack--{{ stack_mode }}">
           {%- if img1 != blank -%}
-            <div class="itc__photo itc__photo--1">
+            <div class="itc__photo itc__photo--1" data-reveal-card>
               {{
                 img1
                 | image_url: width: 1200
@@ -252,13 +267,13 @@
               }}
             </div>
           {%- elsif stack_mode >= 2 -%}
-            <div class="itc__photo itc__photo--1 itc__photo--placeholder" aria-hidden="true">
+            <div class="itc__photo itc__photo--1 itc__photo--placeholder" data-reveal-card aria-hidden="true">
               {{ 'image' | placeholder_svg_tag: 'itc__img itc__img--ph' }}
             </div>
           {%- endif -%}
 
           {%- if img2 != blank -%}
-            <div class="itc__photo itc__photo--2">
+            <div class="itc__photo itc__photo--2" data-reveal-card>
               {{
                 img2
                 | image_url: width: 1200
@@ -271,13 +286,13 @@
               }}
             </div>
           {%- elsif stack_mode >= 2 -%}
-            <div class="itc__photo itc__photo--2 itc__photo--placeholder" aria-hidden="true">
+            <div class="itc__photo itc__photo--2 itc__photo--placeholder" data-reveal-card aria-hidden="true">
               {{ 'image' | placeholder_svg_tag: 'itc__img itc__img--ph' }}
             </div>
           {%- endif -%}
 
           {%- if img3 != blank -%}
-            <div class="itc__photo itc__photo--3">
+            <div class="itc__photo itc__photo--3" data-reveal-card>
               {{
                 img3
                 | image_url: width: 1000
@@ -290,7 +305,7 @@
               }}
             </div>
           {%- elsif stack_mode >= 2 -%}
-            <div class="itc__photo itc__photo--3 itc__photo--placeholder" aria-hidden="true">
+            <div class="itc__photo itc__photo--3 itc__photo--placeholder" data-reveal-card aria-hidden="true">
               {{ 'image' | placeholder_svg_tag: 'itc__img itc__img--ph' }}
             </div>
           {%- endif -%}
@@ -298,38 +313,107 @@
           {%- if stack_mode >= 2 and section.settings.show_badge != false -%}
             {%- liquid
               assign inner_style = section.settings.badge_inner_style | default: 'dashed'
-              assign badge_classes = 'itc-badge itc-badge--inner-' | append: inner_style
+              assign badge_center = section.settings.badge_center | default: 'arrow'
+              assign badge_classes = 'itc-badge itc-badge--inner-' | append: inner_style | append: ' itc-badge--center-' | append: badge_center
               if section.settings.badge_pause_hover != false
                 assign badge_classes = badge_classes | append: ' itc-badge--pause-hover'
               endif
+              if section.settings.badge_outline
+                assign badge_classes = badge_classes | append: ' itc-badge--outline'
+              endif
+
+              case section.settings.badge_separator
+                when 'star'
+                  assign ring_sep = '★'
+                when 'sparkle'
+                  assign ring_sep = '✦'
+                when 'dash'
+                  assign ring_sep = '—'
+                when 'slash'
+                  assign ring_sep = '/'
+                else
+                  assign ring_sep = '•'
+              endcase
+
+              comment
+                Ring text (non-breaking spaces round the separator survive SVG whitespace trimming at the seam):
+                phrases separated by "~" are used as written; a single phrase is repeated
+                automatically so the ring is evenly filled. Font size adapts to the text length.
+              endcomment
+              assign ring_sep_html = '<tspan class="itc-badge__sep">' | append: ring_sep | append: '</tspan>'
+              assign ring_text = ''
+              assign ring_html = ''
+              if badge_text contains '~'
+                assign ring_parts = badge_text | split: '~'
+                for part in ring_parts
+                  assign part_clean = part | strip | upcase
+                  if part_clean != blank
+                    assign ring_text = ring_text | append: part_clean | append: ' ' | append: ring_sep | append: ' '
+                    assign part_safe = part_clean | escape
+                    assign ring_html = ring_html | append: part_safe | append: ' ' | append: ring_sep_html | append: ' '
+                  endif
+                endfor
+              else
+                assign ring_phrase = badge_text | strip | upcase
+                assign ring_phrase_safe = ring_phrase | escape
+                assign ring_phrase_len = ring_phrase | size | plus: 3
+                assign ring_reps = 36 | divided_by: ring_phrase_len
+                if ring_reps < 1
+                  assign ring_reps = 1
+                elsif ring_reps > 6
+                  assign ring_reps = 6
+                endif
+                for i in (1..ring_reps)
+                  assign ring_text = ring_text | append: ring_phrase | append: ' ' | append: ring_sep | append: ' '
+                  assign ring_html = ring_html | append: ring_phrase_safe | append: ' ' | append: ring_sep_html | append: ' '
+                endfor
+              endif
+              assign ring_len = ring_text | size
+              assign ring_size = 520.0 | divided_by: ring_len
+              if ring_size > 13
+                assign ring_size = 13
+              elsif ring_size < 8.5
+                assign ring_size = 8.5
+              endif
             -%}
             {%- if badge_link != blank -%}
-              <a class="{{ badge_classes }}" href="{{ badge_link }}" aria-label="{{ badge_label | escape }}">
+              <a class="{{ badge_classes }}" data-reveal-pop href="{{ badge_link }}" aria-label="{{ badge_label | escape }}">
             {%- else -%}
-              <div class="{{ badge_classes }}" aria-hidden="true">
+              <div class="{{ badge_classes }}" data-reveal-pop aria-hidden="true">
             {%- endif -%}
-              {%- comment -%} Outer text ring — rotates clockwise {%- endcomment -%}
-              <svg class="itc-badge__ring" viewBox="0 0 148 148" aria-hidden="true" focusable="false">
+              {%- comment -%} Outer text ring — letters spread evenly round the circle, turns clockwise {%- endcomment -%}
+              <svg class="itc-badge__ring" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
                 <defs>
-                  <path id="itc-ring-{{ section.id }}" d="M74,74 m-62,0 a62,62 0 1,1 124,0 a62,62 0 1,1 -124,0"/>
+                  <path id="itc-ring-{{ section.id }}" d="M80,80 m-61,0 a61,61 0 1,1 122,0 a61,61 0 1,1 -122,0"/>
                 </defs>
-                <text font-size="12.5" font-weight="700" letter-spacing="1">
-                  <textPath href="#itc-ring-{{ section.id }}" textLength="390" lengthAdjust="spacingAndGlyphs">{{ badge_text | escape }}</textPath>
+                <text font-size="{{ ring_size }}">
+                  <textPath href="#itc-ring-{{ section.id }}" textLength="378" lengthAdjust="spacing">{{ ring_html }}</textPath>
                 </text>
               </svg>
 
-              {%- comment -%} Inner ring — rotates anti-clockwise {%- endcomment -%}
-              <svg class="itc-badge__inner" viewBox="0 0 148 148" aria-hidden="true" focusable="false">
-                <circle class="itc-badge__inner-circle" cx="74" cy="74" r="35" fill="none"/>
-              </svg>
+              {%- comment -%} Thin inner ring — turns anti-clockwise {%- endcomment -%}
+              {%- unless inner_style == 'none' -%}
+                <svg class="itc-badge__inner" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+                  <circle class="itc-badge__inner-circle" cx="80" cy="80" r="45" fill="none"/>
+                </svg>
+              {%- endunless -%}
 
-              <span class="itc-badge__center" aria-hidden="true">
-                <span class="itc-badge__arrow">
-                  <svg width="26" height="15" viewBox="0 0 26 15" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
-                    <path d="M24.7522 7.81408C25.1286 7.40987 25.106 6.7771 24.7018 6.40077L18.1147 0.268001C17.7105 -0.108337 17.0777 -0.0857379 16.7014 0.318476C16.3251 0.72269 16.3477 1.35545 16.7519 1.73179L22.607 7.18314L17.1557 13.0383C16.7794 13.4425 16.802 14.0753 17.2062 14.4516C17.6104 14.8279 18.2431 14.8053 18.6195 14.4011L24.7522 7.81408ZM0.0356445 7.98926L0.0713361 8.98862L24.056 8.13202L24.0204 7.13266L23.9847 6.1333L-4.69983e-05 6.98989L0.0356445 7.98926Z" fill="currentColor"/>
-                  </svg>
+              {%- unless badge_center == 'none' -%}
+                <span class="itc-badge__center" aria-hidden="true">
+                  {%- case badge_center -%}
+                    {%- when 'text' -%}
+                      <span class="itc-badge__center-text">{{ section.settings.badge_center_text | default: badge_label | escape }}</span>
+                    {%- when 'sparkle' -%}
+                      <span class="itc-badge__icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M12 1.5c.5 5.6 4.9 10 10.5 10.5-5.6.5-10 4.9-10.5 10.5C11.5 16.9 7.1 12.5 1.5 12 7.1 11.5 11.5 7.1 12 1.5z"/></svg>
+                      </span>
+                    {%- else -%}
+                      <span class="itc-badge__arrow">
+                        <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      </span>
+                  {%- endcase -%}
                 </span>
-              </span>
+              {%- endunless -%}
             {%- if badge_link != blank -%}
               </a>
             {%- else -%}
@@ -347,10 +431,10 @@
         -%}
           <div class="itc__heading-group">
             {%- if section.settings.show_subtitle and section.settings.subtitle != blank -%}
-              <p class="itc__eyebrow">{{ section.settings.subtitle | escape }}</p>
+              <p class="itc__eyebrow" data-reveal-fade="first">{{ section.settings.subtitle | escape }}</p>
             {%- endif -%}
             {%- if section.settings.heading != blank -%}
-              <h2 class="itc__heading" id="ImageTextCollage-heading-{{ section.id }}">
+              <h2 class="itc__heading" data-reveal-title id="ImageTextCollage-heading-{{ section.id }}">
                 {{- section.settings.heading | escape -}}
               </h2>
             {%- endif -%}
@@ -358,7 +442,7 @@
         {%- endif -%}
 
         {%- if section.settings.show_description and section.settings.description != blank -%}
-          <div class="itc__description rte">{{ section.settings.description }}</div>
+          <div class="itc__description rte" data-reveal-fade>{{ section.settings.description }}</div>
         {%- endif -%}
 
         {%- if section.settings.show_feature_grid and has_feature_blocks -%}
@@ -367,7 +451,7 @@
             {%- for block in section.blocks -%}
               {%- if block.type == 'feature' -%}
                 {%- assign icon_preset = block.settings.icon_preset | default: 'none' -%}
-                <li class="itc__feature" {{ block.shopify_attributes }}>
+                <li class="itc__feature" data-reveal-fade {{ block.shopify_attributes }}>
                   {%- if block.settings.icon != blank -%}
                     <span class="itc__feature-icon itc__feature-icon--{{ icon_style }}" aria-hidden="true">
                       {{
@@ -402,6 +486,7 @@
             <a
               href="{{ section.settings.button_link }}"
               class="{{ btn_class }}"
+              data-reveal-fade
               {% if section.settings.button_new_tab %}
                 target="_blank" rel="noopener"
               {% endif %}
@@ -412,7 +497,7 @@
               {%- endif -%}
             </a>
           {%- else -%}
-            <span class="{{ btn_class }} itc__btn--static">
+            <span class="{{ btn_class }} itc__btn--static" data-reveal-fade>
               {{- section.settings.button_label | escape -}}
             </span>
           {%- endif -%}
@@ -678,8 +763,30 @@
     },
     {
       "type": "select",
+      "id": "design",
+      "label": "Design",
+      "options": [
+        {
+          "value": "collage",
+          "label": "Scattered collage"
+        },
+        {
+          "value": "editorial",
+          "label": "Editorial frame"
+        },
+        {
+          "value": "mosaic",
+          "label": "Mosaic grid"
+        }
+      ],
+      "default": "collage",
+      "info": "Scattered: tilted, overlapping photos. Editorial: one large photo with a framed inset. Mosaic: a clean photo grid."
+    },
+    {
+      "type": "select",
       "id": "collage_layout",
       "label": "Collage layout",
+      "visible_if": "{{ section.settings.design == 'collage' }}",
       "options": [
         {
           "value": "stack",
@@ -1271,8 +1378,47 @@
       "type": "text",
       "id": "badge_text",
       "label": "Badge text",
-      "default": "EXPLORE MORE ~ EXPLORE MORE ~ ",
-      "info": "Repeat the phrase so it fills the ring."
+      "default": "Explore more",
+      "info": "A short phrase is repeated automatically to fill the ring. Use ~ to write several phrases yourself."
+    },
+    {
+      "type": "select",
+      "id": "badge_separator",
+      "label": "Separator",
+      "options": [
+        { "value": "dot", "label": "Dot •" },
+        { "value": "star", "label": "Star ★" },
+        { "value": "sparkle", "label": "Sparkle ✦" },
+        { "value": "dash", "label": "Dash —" },
+        { "value": "slash", "label": "Slash /" }
+      ],
+      "default": "sparkle"
+    },
+    {
+      "type": "font_picker",
+      "id": "badge_font",
+      "label": "Badge font",
+      "default": "outfit_n6"
+    },
+    {
+      "type": "select",
+      "id": "badge_center",
+      "label": "Center",
+      "options": [
+        { "value": "arrow", "label": "Arrow" },
+        { "value": "text", "label": "Short text" },
+        { "value": "sparkle", "label": "Sparkle icon" },
+        { "value": "none", "label": "Nothing" }
+      ],
+      "default": "arrow"
+    },
+    {
+      "type": "text",
+      "id": "badge_center_text",
+      "label": "Center text",
+      "default": "2019",
+      "info": "Keep it short, e.g. a year or \"New\".",
+      "visible_if": "{{ section.settings.badge_center == 'text' }}"
     },
     {
       "type": "url",
@@ -1295,7 +1441,7 @@
     {
       "type": "color",
       "id": "badge_inner_color",
-      "label": "Inner ring color",
+      "label": "Center color",
       "default": "#ffffff"
     },
     {
@@ -1314,10 +1460,20 @@
         {
           "value": "solid",
           "label": "Solid"
+        },
+        {
+          "value": "none",
+          "label": "None"
         }
       ],
       "default": "dashed",
       "info": "Dashed or dotted lets shoppers see the inner ring turning."
+    },
+    {
+      "type": "checkbox",
+      "id": "badge_outline",
+      "label": "Show outer hairline",
+      "default": true
     },
     {
       "type": "range",

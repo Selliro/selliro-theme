@@ -8,6 +8,14 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "天",
+    "hours": "時",
+    "minutes": "分",
+    "seconds": "秒",
+    "ends_on": "優惠截止於 {{ date }}",
+    "editor_hint": "請在區段設定中新增結束日期以開始倒數計時。"
+  },
   "collection_hero": {
     "home": "首頁",
     "breadcrumb_label": "導覽路徑",
@@ -22,6 +30,19 @@
     "savings": "節省",
     "total": "合計",
     "view_bundle": "查看盒子"
+  },
+  "product_3d": {
+    "view_3d": "以 3D 檢視",
+    "drag_hint": "拖曳以旋轉",
+    "reset": "重設檢視",
+    "views": "相機視角",
+    "front": "正面",
+    "side": "側面",
+    "back": "背面",
+    "top": "頂部",
+    "loading": "正在載入 3D 模型",
+    "editor_hint": "選擇具有 3D 模型的產品，或貼上 .glb 檔案連結，即可以 3D 顯示。",
+    "position_copied": "位置已複製——請貼到功能區塊中。"
   },
   "routine_builder": {
     "editor_hint": "新增「空格」區塊即可開始組成句子。",
@@ -44,6 +65,9 @@
       "comment": "留言",
       "post_success": "感謝您聯絡我們。我們會盡快回覆您。",
       "error_heading": "請調整以下內容："
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "標誌預留位置"
     }
   },
   "accessibility": {
@@ -88,7 +112,19 @@
     "increase_quantity": "增加數量",
     "quantity": "數量",
     "rating": "本商品的評分為 {{ rating }}/5",
-    "nested_product": "適用於 {{ parent_title }} 的 {{ product_title }}"
+    "nested_product": "適用於 {{ parent_title }} 的 {{ product_title }}",
+    "announcement_bar_link": "瞭解詳情",
+    "back_to_top": "回到頂端",
+    "quick_view_loading": "正在載入商品",
+    "before_after_after_alt": "使用後圖片",
+    "before_after_before_alt": "使用前圖片",
+    "before_after_before_visible": "使用前圖片可見",
+    "before_after_comparison": "使用前後圖片比較",
+    "before_after_slider": "比較滑桿",
+    "before_after_slider_help": "使用左右方向鍵比較使用前後的圖片。",
+    "faq_collapse_answer": "收合回答",
+    "faq_expand_answer": "展開回答",
+    "faq_split_gallery": "常見問題"
   },
   "actions": {
     "add_to_cart": "加入購物車",
@@ -261,7 +297,11 @@
       "previous": "上一頁",
       "next": "下一頁",
       "page": "第 {{ page }} 頁"
-    }
+    },
+    "read_more_link": "閱讀更多",
+    "quick_view": "快速檢視",
+    "view_full_details": "查看完整詳細資訊",
+    "view_item": "查看商品"
   },
   "gift_cards": {
     "issued": {
@@ -326,5 +366,29 @@
       "success_moderated": "已發布留言，正等待審核",
       "success": "已發布留言"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "保留所有權利。"
+    },
+    "image_text_collage": {
+      "section_aria_label": "圖文拼貼"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "請至少新增一個商品系列分頁以顯示商品。"
+    },
+    "icon_with_text": {
+      "empty": "請新增圖示區塊以顯示內容。",
+      "section_aria_label": "商店亮點"
+    },
+    "beauty_bundle": {
+      "add_bundle": "將組合加入購物車",
+      "adding": "正在加入…",
+      "added": "已加入購物車",
+      "error": "發生錯誤，請再試一次。"
+    }
+  },
+  "search": {
+    "no_results": "找不到結果"
   }
 }

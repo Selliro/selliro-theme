@@ -1,0 +1,414 @@
+/**
+ * Product page extras (blocks/pdp-*.liquid, sections/pdp-*.liquid)
+ *  - [data-pdp-add]      one-tap add to cart (Pair it with) → refreshes Horizon's cart drawer via cart:update
+ *  - <pdp-sticky-bar>    sticky add to cart: mirrors size + price, presses the main Add to cart button
+ *  - <pdp-routine>       routine steps carousel: centre card active, arrows + dots
+ *  - <pdp-routine-stepper> routine "step by step guide": photo stage + numbered steps, auto-advance
+ */
+(() => {
+  if (window.__pdpInit) return;
+  window.__pdpInit = true;
+
+  const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------------------------------------------------------- quick add */
+  const cartAddUrl = () => (window.Theme && window.Theme.routes && window.Theme.routes.cart_add_url) || '/cart/add.js';
+
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-pdp-add]');
+    if (!button || button.disabled) return;
+    event.preventDefault();
+
+    const body = new FormData();
+    body.append('id', button.dataset.variantId);
+    body.append('quantity', '1');
+    const sections = Array.from(document.querySelectorAll('cart-items-component'))
+      .map((node) => node.dataset.sectionId)
+      .filter(Boolean);
+    if (sections.length) body.append('sections', sections.join(','));
+
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    fetch(cartAddUrl(), { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest', Accept: 'text/html' }, body })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.status) {
+          document.dispatchEvent(
+            new CustomEvent('cart:error', { bubbles: true, detail: { sourceId: 'pdp-add', data: { message: json.message, description: json.description } } })
+          );
+          return;
+        }
+        button.classList.add('is-added');
+        setTimeout(() => button.classList.remove('is-added'), 1800);
+        document.dispatchEvent(
+          new CustomEvent('cart:update', {
+            bubbles: true,
+            detail: {
+              resource: {},
+              sourceId: String(button.dataset.variantId),
+              data: { source: 'product-form-component', itemCount: 1, productId: button.dataset.productId, sections: json.sections },
+            },
+          })
+        );
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        button.disabled = false;
+        button.removeAttribute('aria-busy');
+      });
+  });
+
+  /* ---------------------------------------------------------------- sticky add to cart */
+  if (!customElements.get('pdp-sticky-bar')) {
+    class PdpStickyBar extends HTMLElement {
+      connectedCallback() {
+        this.scope = this.closest('.product-information, .shopify-section') || document;
+        this.mainButton = this.scope.querySelector('add-to-cart-component button, button[name="add"], .product-form-buttons button[type="submit"]');
+        this.addButton = this.querySelector('[data-pdp-sticky-add]');
+        this.priceEl = this.querySelector('[data-pdp-sticky-price]');
+        this.variantEl = this.querySelector('[data-pdp-sticky-variant]');
+        this.labelEl = this.querySelector('[data-pdp-sticky-label]');
+        if (!this.mainButton) return;
+
+        this.addButton.addEventListener('click', () => {
+          if (this.mainButton.disabled) {
+            this.mainButton.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'center' });
+            return;
+          }
+          this.mainButton.click();
+        });
+
+        this.observer = new IntersectionObserver(
+          ([entry]) => {
+            const past = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+            this.classList.toggle('is-visible', past);
+            this.setAttribute('aria-hidden', String(!past));
+            this.addButton.tabIndex = past ? 0 : -1;
+          },
+          { threshold: 0 }
+        );
+        this.observer.observe(this.mainButton);
+
+        this.sync = this.sync.bind(this);
+        this.sync();
+        // Horizon re-renders price / buttons on variant change; keep the bar in step
+        this.mutations = new MutationObserver(() => requestAnimationFrame(this.sync));
+        this.mutations.observe(this.scope, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['disabled', 'checked'] });
+        this.scope.addEventListener('change', this.sync);
+      }
+
+      disconnectedCallback() {
+        this.observer?.disconnect();
+        this.mutations?.disconnect();
+      }
+
+      sync() {
+        const fresh = this.scope.querySelector('add-to-cart-component button, button[name="add"], .product-form-buttons button[type="submit"]');
+        if (fresh && fresh !== this.mainButton) {
+          this.observer?.unobserve(this.mainButton);
+          this.mainButton = fresh;
+          this.observer?.observe(fresh);
+        }
+        const price = this.scope.querySelector('product-price .price, product-price');
+        if (price && this.priceEl) {
+          const html = price.innerHTML.trim();
+          if (html && this.priceEl.innerHTML !== html) this.priceEl.innerHTML = html;
+        }
+        if (this.variantEl) {
+          const picked = Array.from(this.scope.querySelectorAll('variant-picker input:checked, variant-picker select'))
+            .map((input) => input.value)
+            .filter(Boolean);
+          if (picked.length) this.variantEl.textContent = picked.join(' / ');
+        }
+        // Sold out / unavailable: show the main button's own wording; otherwise the bar's label
+        if (this.labelEl && this.mainButton) {
+          this.defaultLabel ??= this.labelEl.textContent;
+          const labelNode = this.mainButton.querySelector('.add-to-cart-text__content') || this.mainButton;
+          const mainLabel = labelNode.textContent.replace(/\s+/g, ' ').trim();
+          const next = this.mainButton.disabled && mainLabel ? mainLabel : this.defaultLabel;
+          if (this.labelEl.textContent !== next) this.labelEl.textContent = next;
+          this.addButton.classList.toggle('is-disabled', this.mainButton.disabled);
+        }
+      }
+    }
+    customElements.define('pdp-sticky-bar', PdpStickyBar);
+  }
+
+  /* ---------------------------------------------------------------- routine carousel */
+  if (!customElements.get('pdp-routine')) {
+    class PdpRoutine extends HTMLElement {
+      connectedCallback() {
+        this.track = this.querySelector('[data-pdp-routine-track]');
+        this.cards = Array.from(this.querySelectorAll('[data-pdp-routine-card]'));
+        this.dots = Array.from(this.querySelectorAll('[data-pdp-routine-dot]'));
+        if (!this.track || !this.cards.length) return;
+
+        this.querySelector('[data-pdp-routine-prev]')?.addEventListener('click', () => this.go(this.active - 1));
+        this.querySelector('[data-pdp-routine-next]')?.addEventListener('click', () => this.go(this.active + 1));
+        this.dots.forEach((dot, i) => dot.addEventListener('click', () => this.go(i)));
+        this.cards.forEach((card, i) => card.addEventListener('click', () => i !== this.active && this.go(i)));
+
+        this.onScroll = () => {
+          if (this.frame) return;
+          this.frame = requestAnimationFrame(() => {
+            this.frame = null;
+            const mid = this.track.getBoundingClientRect().left + this.track.clientWidth / 2;
+            let best = 0;
+            let bestDist = Infinity;
+            this.cards.forEach((card, i) => {
+              const r = card.getBoundingClientRect();
+              const d = Math.abs(r.left + r.width / 2 - mid);
+              if (d < bestDist) {
+                bestDist = d;
+                best = i;
+              }
+            });
+            this.setActive(best);
+          });
+        };
+        this.track.addEventListener('scroll', this.onScroll, { passive: true });
+        window.addEventListener('resize', this.onScroll, { passive: true });
+
+        const start = Math.min(this.cards.length - 1, Math.max(0, parseInt(this.dataset.start || '0', 10)));
+        requestAnimationFrame(() => this.go(start, true));
+      }
+
+      disconnectedCallback() {
+        window.removeEventListener('resize', this.onScroll);
+      }
+
+      setActive(i) {
+        if (i === this.active) return;
+        this.active = i;
+        this.cards.forEach((card, k) => {
+          card.classList.toggle('is-active', k === i);
+          card.setAttribute('aria-current', k === i ? 'true' : 'false');
+        });
+        this.dots.forEach((dot, k) => dot.setAttribute('aria-current', k === i ? 'true' : 'false'));
+        const prev = this.querySelector('[data-pdp-routine-prev]');
+        const next = this.querySelector('[data-pdp-routine-next]');
+        if (prev) prev.disabled = i <= 0;
+        if (next) next.disabled = i >= this.cards.length - 1;
+      }
+
+      go(i, instant) {
+        const index = Math.max(0, Math.min(this.cards.length - 1, i));
+        const card = this.cards[index];
+        const left = card.offsetLeft - (this.track.clientWidth - card.offsetWidth) / 2;
+        this.track.scrollTo({ left, behavior: instant || reduced() ? 'auto' : 'smooth' });
+        this.setActive(index);
+      }
+    }
+    customElements.define('pdp-routine', PdpRoutine);
+  }
+
+  /* ---------------------------------------------------------------- routine: step by step guide */
+  if (!customElements.get('pdp-routine-stepper')) {
+    class PdpRoutineStepper extends HTMLElement {
+      connectedCallback() {
+        this.steps = Array.from(this.querySelectorAll('[data-rs-step]'));
+        this.triggers = this.steps.map((step) => step.querySelector('[data-rs-trigger]'));
+        this.panels = this.steps.map((step) => step.querySelector('.pdp-rs__panel'));
+        this.frames = Array.from(this.querySelectorAll('[data-rs-frame]'));
+        this.bars = Array.from(this.querySelectorAll('[data-rs-bar]'));
+        this.current = this.querySelector('[data-rs-current]');
+        this.stage = this.querySelector('[data-rs-stage]');
+        if (!this.steps.length) return;
+
+        this.speed = Math.max(2000, parseInt(this.dataset.speed || '6000', 10));
+        this.active = -1;
+        this.paused = new Set();
+
+        this.triggers.forEach((trigger, i) => {
+          trigger?.addEventListener('click', () => this.go(i, true));
+          trigger?.addEventListener('keydown', (event) => {
+            const keys = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 };
+            if (event.key === 'Home' || event.key === 'End') {
+              event.preventDefault();
+              const to = event.key === 'Home' ? 0 : this.steps.length - 1;
+              this.go(to, true);
+              this.triggers[to]?.focus();
+              return;
+            }
+            if (!(event.key in keys)) return;
+            event.preventDefault();
+            const to = (i + keys[event.key] + this.steps.length) % this.steps.length;
+            this.go(to, true);
+            this.triggers[to]?.focus();
+          });
+        });
+        this.querySelector('[data-rs-prev]')?.addEventListener('click', () => this.step(-1, true));
+        this.querySelector('[data-rs-next]')?.addEventListener('click', () => this.step(1, true));
+
+        // Swipe the photo to change step
+        if (this.stage) {
+          let startX = 0;
+          let startY = 0;
+          let tracking = false;
+          this.stage.addEventListener('pointerdown', (event) => {
+            if (event.target.closest('button')) return;
+            tracking = true;
+            startX = event.clientX;
+            startY = event.clientY;
+          });
+          this.stage.addEventListener('pointerup', (event) => {
+            if (!tracking) return;
+            tracking = false;
+            const dx = event.clientX - startX;
+            if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(event.clientY - startY)) this.step(dx < 0 ? 1 : -1, true);
+          });
+          this.stage.addEventListener('pointercancel', () => (tracking = false));
+        }
+
+        // Auto-advance: pauses on hover, focus, off-screen or hidden tab; stops after the shopper picks a step
+        this.autoplay = this.dataset.autoplay === 'true' && !reduced() && this.steps.length > 1;
+        if (this.autoplay) {
+          this.classList.add('is-playing');
+          this.addEventListener('pointerenter', () => this.pause('hover'));
+          this.addEventListener('pointerleave', () => this.resume('hover'));
+          this.addEventListener('focusin', () => this.pause('focus'));
+          this.addEventListener('focusout', (event) => {
+            if (!this.contains(/** @type {Node} */ (event.relatedTarget))) this.resume('focus');
+          });
+          this.onVisibility = () => (document.hidden ? this.pause('tab') : this.resume('tab'));
+          document.addEventListener('visibilitychange', this.onVisibility);
+          this.pause('view');
+          this.observer = new IntersectionObserver(
+            ([entry]) => (entry.isIntersecting ? this.resume('view') : this.pause('view')),
+            { threshold: 0.35 }
+          );
+          this.observer.observe(this);
+        }
+
+        // Theme editor: selecting a step block opens it
+        this.onBlockSelect = (event) => {
+          const index = this.steps.findIndex((step) => step.contains(event.target) || step === event.target);
+          if (index >= 0) this.go(index, true);
+        };
+        document.addEventListener('shopify:block:select', this.onBlockSelect);
+
+        const start = Math.min(this.steps.length - 1, Math.max(0, parseInt(this.dataset.start || '0', 10)));
+        this.go(start, false, true);
+
+        // Keep the section the same height whichever step is open (no jumping when steps change)
+        this.list = this.querySelector('.pdp-rs__steps');
+        this.reserve = () => {
+          if (!this.list) return;
+          let collapsed = 0;
+          let tallest = 0;
+          this.steps.forEach((step, k) => {
+            const panel = this.panels[k];
+            const inner = panel?.firstElementChild;
+            collapsed += step.offsetHeight - (panel ? panel.offsetHeight : 0);
+            if (inner) tallest = Math.max(tallest, inner.scrollHeight + (k === this.active ? 0 : 20));
+          });
+          const gap = parseFloat(getComputedStyle(this.list).rowGap) || 0;
+          const total = Math.ceil(collapsed + tallest + gap * (this.steps.length - 1));
+          if (this.list.style.minHeight !== `${total}px`) this.list.style.minHeight = `${total}px`;
+        };
+        this.lastWidth = 0;
+        this.sizer = new ResizeObserver(() => {
+          if (this.offsetWidth === this.lastWidth) return;
+          this.lastWidth = this.offsetWidth;
+          this.list.style.minHeight = '';
+          requestAnimationFrame(this.reserve);
+        });
+        this.sizer.observe(this);
+        document.fonts?.ready.then(() => requestAnimationFrame(this.reserve));
+
+        // Load every step photo once the section is close, so any step opens instantly
+        this.loader = new IntersectionObserver(
+          ([entry]) => {
+            if (!entry.isIntersecting) return;
+            this.frames.forEach((frame) => frame.querySelector('img')?.setAttribute('loading', 'eager'));
+            this.loader?.disconnect();
+          },
+          { rootMargin: '400px 0px' }
+        );
+        this.loader.observe(this);
+      }
+
+      disconnectedCallback() {
+        clearTimeout(this.timer);
+        this.observer?.disconnect();
+        this.loader?.disconnect();
+        this.sizer?.disconnect();
+        if (this.onVisibility) document.removeEventListener('visibilitychange', this.onVisibility);
+        if (this.onBlockSelect) document.removeEventListener('shopify:block:select', this.onBlockSelect);
+      }
+
+      step(delta, user) {
+        this.go((this.active + delta + this.steps.length) % this.steps.length, user);
+      }
+
+      go(index, user, initial) {
+        if (user) this.stopAutoplay();
+        const changed = index !== this.active;
+        this.active = index;
+
+        this.steps.forEach((step, k) => {
+          step.classList.toggle('is-active', k === index);
+          step.classList.toggle('is-done', k < index);
+          this.triggers[k]?.setAttribute('aria-expanded', String(k === index));
+          if (this.panels[k]) this.panels[k].inert = k !== index;
+        });
+        this.frames.forEach((frame, k) => {
+          frame.classList.toggle('is-active', k === index);
+          if (k === index) frame.removeAttribute('aria-hidden');
+          else frame.setAttribute('aria-hidden', 'true');
+          // Load the next photo ahead of time
+          if (k === (index + 1) % this.frames.length) frame.querySelector('img')?.setAttribute('loading', 'eager');
+        });
+        this.bars.forEach((bar, k) => {
+          bar.classList.toggle('is-done', k < index);
+          bar.classList.remove('is-active');
+        });
+        if (this.bars[index]) {
+          void this.bars[index].offsetWidth; // restart the fill animation
+          this.bars[index].classList.add('is-active');
+        }
+        if (this.current) this.current.textContent = String(index + 1);
+        if (changed || initial) this.schedule(this.speed);
+      }
+
+      stopAutoplay() {
+        if (!this.autoplay) return;
+        this.autoplay = false;
+        clearTimeout(this.timer);
+        this.classList.remove('is-playing', 'is-paused');
+      }
+
+      schedule(ms) {
+        clearTimeout(this.timer);
+        if (!this.autoplay) return;
+        this.remaining = ms;
+        this.startedAt = performance.now();
+        if (this.paused.size) return;
+        this.timer = setTimeout(() => this.step(1, false), ms);
+      }
+
+      pause(reason) {
+        if (!this.autoplay) return;
+        const wasRunning = this.paused.size === 0;
+        this.paused.add(reason);
+        this.classList.add('is-paused');
+        if (wasRunning) {
+          clearTimeout(this.timer);
+          this.remaining = Math.max(400, this.remaining - (performance.now() - this.startedAt));
+        }
+      }
+
+      resume(reason) {
+        if (!this.autoplay || !this.paused.has(reason)) return;
+        this.paused.delete(reason);
+        if (this.paused.size) return;
+        this.classList.remove('is-paused');
+        this.startedAt = performance.now();
+        clearTimeout(this.timer);
+        this.timer = setTimeout(() => this.step(1, false), this.remaining);
+      }
+    }
+    customElements.define('pdp-routine-stepper', PdpRoutineStepper);
+  }
+})();
+

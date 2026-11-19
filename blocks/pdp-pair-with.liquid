@@ -1,0 +1,191 @@
+{%- doc -%}
+  "Pair it with" — one or two companion products with a one-tap Add button
+  (adds to the cart without leaving the page and refreshes the cart drawer).
+{%- enddoc -%}
+{%- liquid
+  assign picks = block.settings.products
+  if picks == blank or picks.size == 0
+    assign picks = collections.all.products | where: 'available' | slice: 0, 1
+  endif
+-%}
+<div class="pdp-pair" data-pdp-pair {{ block.shopify_attributes }}>
+  {%- if block.settings.heading != blank -%}
+    <p class="pdp-pair__heading">{{ block.settings.heading | escape }}</p>
+  {%- endif -%}
+  <ul class="pdp-pair__list list-unstyled">
+    {%- for item in picks limit: 2 -%}
+      {%- if item.id == closest.product.id -%}{%- continue -%}{%- endif -%}
+      {%- assign variant = item.selected_or_first_available_variant -%}
+      <li class="pdp-pair__item">
+        <a class="pdp-pair__media" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
+          {%- if item.featured_image -%}
+            {{ item.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', width: 64, height: 64, alt: '' }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag }}
+          {%- endif -%}
+        </a>
+        <div class="pdp-pair__info">
+          {%- if item.vendor != blank -%}<span class="pdp-pair__vendor">{{ item.vendor | escape }}</span>{%- endif -%}
+          <a class="pdp-pair__title" href="{{ item.url }}">{{ item.title | escape }}</a>
+          <span class="pdp-pair__price">
+            {{ variant.price | money }}
+            {%- if variant.compare_at_price > variant.price -%}
+              <s>{{ variant.compare_at_price | money }}</s>
+            {%- endif -%}
+          </span>
+        </div>
+        <button
+          type="button"
+          class="pdp-pair__add"
+          data-pdp-add
+          data-variant-id="{{ variant.id }}"
+          data-product-id="{{ item.id }}"
+          {% unless variant.available %}disabled{% endunless %}
+          aria-label="{{ block.settings.button_label | escape }}: {{ item.title | escape }}"
+        >
+          <span class="pdp-pair__add-label">{%- if variant.available -%}{{ block.settings.button_label | escape }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}</span>
+          <span class="pdp-pair__add-done" aria-hidden="true">{%- render 'pdp-icon', icon: 'check' -%}</span>
+        </button>
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+<script src="{{ 'pdp.js' | asset_url }}" defer></script>
+
+{% stylesheet %}
+  .pdp-pair__heading {
+    margin: 0 0 0.6rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .pdp-pair__list {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+  }
+
+  .pdp-pair__item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.6rem 0.75rem 0.6rem 0.6rem;
+    border-radius: 14px;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-foreground) 12%, transparent);
+  }
+
+  .pdp-pair__media img,
+  .pdp-pair__media svg {
+    display: block;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 10px;
+    object-fit: cover;
+    background: color-mix(in srgb, var(--color-foreground) 4%, transparent);
+  }
+
+  .pdp-pair__info {
+    display: grid;
+    gap: 0.1rem;
+    min-width: 0;
+  }
+
+  .pdp-pair__vendor {
+    font-size: 0.625rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .pdp-pair__title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: inherit;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pdp-pair__title:hover {
+    text-decoration: underline;
+  }
+
+  .pdp-pair__price {
+    font-size: 0.8125rem;
+  }
+
+  .pdp-pair__price s {
+    margin-inline-start: 0.3rem;
+    opacity: 0.5;
+  }
+
+  .pdp-pair__add {
+    position: relative;
+    min-width: 4.25rem;
+    min-height: 2.25rem;
+    padding: 0 0.9rem;
+    border: 0;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-primary-button-text);
+    background: var(--color-primary-button-background);
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .pdp-pair__add:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .pdp-pair__add:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .pdp-pair__add-done {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+  }
+
+  .pdp-pair__add-done svg {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .pdp-pair__add.is-added .pdp-pair__add-label {
+    opacity: 0;
+  }
+
+  .pdp-pair__add.is-added .pdp-pair__add-done {
+    opacity: 1;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pair it with",
+  "tag": null,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Pair it with" },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Products",
+      "limit": 2,
+      "info": "Up to two. Leave empty to show a best seller."
+    },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Add" }
+  ],
+  "presets": [{ "name": "Pair it with" }]
+}
+{% endschema %}

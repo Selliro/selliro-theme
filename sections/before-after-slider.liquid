@@ -3,6 +3,8 @@
 {% endcomment %}
 
 {{ 'section-before-after-slider.css' | asset_url | stylesheet_tag }}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
 <script src="{{ 'before-after-slider.js' | asset_url }}" defer></script>
 
 {%- liquid
@@ -54,11 +56,13 @@
 -%}
 
 <section
+  data-reveal
   class="before-after-slider color-{{ section.settings.color_scheme }}"
   id="BeforeAfterSlider-{{ section.id }}"
   {{ section.shopify_attributes }}
   style="
     --before-after-radius: {{ section.settings.image_radius }}px;
+    --sr-radius: {{ section.settings.image_radius }}px;
     --before-after-pad-top: {{ section.settings.padding_top }}px;
     --before-after-pad-bottom: {{ section.settings.padding_bottom }}px;
     --before-after-aspect: {{ aspect_for_frame }} / 1;
@@ -83,6 +87,7 @@
         </span>
         <div
           class="before-after-slider__viewport"
+          data-reveal-card
           data-before-after-root
           data-before-after-viewport
           data-initial-position="{{ section.settings.initial_position }}"
@@ -108,14 +113,14 @@
             {%- endif -%}
             {%- if show_labels and label_after != blank -%}
               <span
-                class="before-after-slider__badge before-after-slider__badge--after before-after-slider__badge--v-{{ section.settings.after_label_vertical }} before-after-slider__badge--h-{{ section.settings.after_label_horizontal }}"
+                class="before-after-slider__badge before-after-slider__badge--after before-after-slider__badge--v-{{ section.settings.after_label_vertical }} before-after-slider__badge--h-{{ section.settings.after_label_horizontal }}" data-reveal-pop
                 aria-hidden="true"
               >
                 {{- label_after | escape -}}
               </span>
             {%- endif -%}
             {%- if caption_after != blank -%}
-              <p class="before-after-slider__caption before-after-slider__caption--after">{{ caption_after | escape }}</p>
+              <p class="before-after-slider__caption before-after-slider__caption--after" data-reveal-pop>{{ caption_after | escape }}</p>
             {%- endif -%}
             <div class="before-after-slider__clip">
               {%- if before_img != blank -%}
@@ -134,14 +139,14 @@
               {%- endif -%}
               {%- if show_labels and label_before != blank -%}
                 <span
-                  class="before-after-slider__badge before-after-slider__badge--before before-after-slider__badge--v-{{ section.settings.before_label_vertical }} before-after-slider__badge--h-{{ section.settings.before_label_horizontal }}"
+                  class="before-after-slider__badge before-after-slider__badge--before before-after-slider__badge--v-{{ section.settings.before_label_vertical }} before-after-slider__badge--h-{{ section.settings.before_label_horizontal }}" data-reveal-pop
                   aria-hidden="true"
                 >
                   {{- label_before | escape -}}
                 </span>
               {%- endif -%}
               {%- if caption_before != blank -%}
-                <p class="before-after-slider__caption before-after-slider__caption--before">{{ caption_before | escape }}</p>
+                <p class="before-after-slider__caption before-after-slider__caption--before" data-reveal-pop>{{ caption_before | escape }}</p>
               {%- endif -%}
             </div>
             <div class="before-after-slider__divider" aria-hidden="true"></div>
@@ -172,13 +177,13 @@
       {%- if has_copy -%}
         <div class="before-after-slider__copy">
           {%- if heading != blank -%}
-            <h2 class="before-after-slider__heading" id="BeforeAfterSlider-heading-{{ section.id }}">
+            <h2 class="before-after-slider__heading" data-reveal-title id="BeforeAfterSlider-heading-{{ section.id }}">
               {{ heading | escape }}
             </h2>
           {%- endif -%}
 
           {%- if section.settings.description != blank -%}
-            <div class="before-after-slider__description rte">{{ section.settings.description }}</div>
+            <div class="before-after-slider__description rte" data-reveal-fade>{{ section.settings.description }}</div>
           {%- endif -%}
 
           {%- if section.settings.button_label != blank -%}
@@ -186,11 +191,12 @@
               <a
                 href="{{ section.settings.button_link }}"
                 class="before-after-slider__btn"
+                data-reveal-fade
               >
                 {{ section.settings.button_label | escape }}
               </a>
             {%- else -%}
-              <span class="before-after-slider__btn before-after-slider__btn--static">
+              <span class="before-after-slider__btn before-after-slider__btn--static" data-reveal-fade>
                 {{ section.settings.button_label | escape }}
               </span>
             {%- endif -%}

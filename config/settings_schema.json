@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "Whispo",
-    "theme_version": "3.0.1",
+    "theme_version": "1.0.0",
     "theme_author": "Selliro",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
@@ -1841,6 +1841,74 @@
         "visible_if": "{{ settings.cart_type == 'drawer' }}"
       },
       {
+        "type": "select",
+        "id": "cart_fly_style",
+        "label": "Add to cart animation",
+        "info": "A small dot or the product image flies from the button to the cart icon. Switch it off in Animations › Add to cart.",
+        "options": [
+          {
+            "value": "dot",
+            "label": "Dot"
+          },
+          {
+            "value": "image",
+            "label": "Product image"
+          }
+        ],
+        "default": "dot",
+        "visible_if": "{{ settings.add_to_cart_animation }}"
+      },
+      {
+        "type": "header",
+        "content": "Cart drawer extras"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_free_shipping_enable",
+        "label": "Show free shipping progress",
+        "default": true,
+        "visible_if": "{{ settings.cart_type == 'drawer' }}"
+      },
+      {
+        "type": "number",
+        "id": "cart_free_shipping_threshold",
+        "label": "Free shipping from",
+        "info": "Order amount in your store's default currency. Match it to your shipping rates.",
+        "default": 50,
+        "visible_if": "{{ settings.cart_type == 'drawer' and settings.cart_free_shipping_enable }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_recommendations_enable",
+        "label": "Show product recommendations",
+        "info": "Uses Shopify's recommendations for the products in the cart.",
+        "default": true,
+        "visible_if": "{{ settings.cart_type == 'drawer' }}"
+      },
+      {
+        "type": "text",
+        "id": "cart_recommendations_heading",
+        "label": "Recommendations heading",
+        "default": "You may also like",
+        "visible_if": "{{ settings.cart_type == 'drawer' and settings.cart_recommendations_enable }}"
+      },
+      {
+        "type": "collection",
+        "id": "cart_recommendations_collection",
+        "label": "Fallback products",
+        "info": "Shown in an empty cart and when Shopify has no recommendations yet. Defaults to all products."
+      },
+      {
+        "type": "range",
+        "id": "cart_recommendations_limit",
+        "label": "Products to show",
+        "min": 2,
+        "max": 10,
+        "step": 1,
+        "default": 6,
+        "visible_if": "{{ settings.cart_type == 'drawer' and settings.cart_recommendations_enable }}"
+      },
+      {
         "type": "header",
         "content": "t:content.cart_features"
       },
@@ -2228,6 +2296,26 @@
         "id": "empty_state_collection",
         "label": "t:settings.empty_state_collection",
         "info": "t:settings.empty_state_collection_info"
+      },
+      {
+        "type": "text",
+        "id": "search_popular_terms",
+        "label": "Popular searches",
+        "info": "Shown as quick chips in the search pop-up and on the search page. Separate with commas.",
+        "default": "Serum, Moisturizer, Sunscreen, Lipstick, Toner"
+      },
+      {
+        "type": "checkbox",
+        "id": "search_recent_enabled",
+        "label": "Show recent searches",
+        "info": "Each shopper sees their own last searches, saved in their browser.",
+        "default": true
+      },
+      {
+        "type": "link_list",
+        "id": "search_quick_links",
+        "label": "Quick links menu",
+        "info": "Optional menu shown in the search pop-up before shoppers type."
       },
       {
         "type": "header",

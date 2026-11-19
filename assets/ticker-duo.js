@@ -10,6 +10,7 @@
  *   data-scroll-boost="true|false"
  *   data-boost-strength="1..10"       → maximum extra speed while scrolling
  *   data-scroll-up="faster|reverse"
+ *   data-pause-hover="true|false"      → a row stops while the pointer is over it
  * and on each .ticker-duo__track:
  *   data-speed="<seconds>"            → seconds for 4 text groups to pass (lower = faster)
  */
@@ -36,6 +37,19 @@
       const strength = Math.min(10, Math.max(1, parseFloat(this.dataset.boostStrength || '5')));
       this.maxExtra = strength * 0.7; // strength 5 → up to 4.5× base speed
       this.reverseOnUp = this.dataset.scrollUp === 'reverse';
+
+      // Pause a row while hovered (eases to a stop and back, rather than snapping)
+      this.rowSpeed = this.tracks.map(() => 1);
+      this.rowTarget = this.tracks.map(() => 1);
+      if (this.dataset.pauseHover === 'true') {
+        this.tracks.forEach((track, i) => {
+          const row = track.closest('.ticker-duo__row') || track;
+          row.addEventListener('pointerenter', () => (this.rowTarget[i] = 0));
+          row.addEventListener('pointerleave', () => (this.rowTarget[i] = 1));
+          row.addEventListener('focusin', () => (this.rowTarget[i] = 0));
+          row.addEventListener('focusout', () => (this.rowTarget[i] = 1));
+        });
+      }
 
       this.positions = this.tracks.map(() => 0);
       this.mult = 1; // current speed multiplier (signed when reversing)
@@ -173,7 +187,8 @@
         const half = this.loopWidths[i];
         if (!half) return;
         const dir = track.classList.contains('is-reverse') ? 1 : -1;
-        let p = this.positions[i] + this.baseSpeeds[i] * this.mult * dir * dt;
+        this.rowSpeed[i] += (this.rowTarget[i] - this.rowSpeed[i]) * (1 - Math.exp(-dt / 0.25));
+        let p = this.positions[i] + this.baseSpeeds[i] * this.mult * this.rowSpeed[i] * dir * dt;
         p %= half;
         if (p > 0) p -= half;
         this.positions[i] = p;

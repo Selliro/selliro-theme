@@ -501,6 +501,17 @@
     grid-column: 2 / 3;
   }
 
+  /* Container no longer uses the .section grid: a one-column grid lets the content
+     wrapper stretch to the hero height so the vertical alignment setting works. */
+  .hero__container.full-width {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .hero__container.full-width > .hero__content-wrapper {
+    grid-column: 1 / -1;
+  }
+
   .hero__content-wrapper {
     position: relative;
     inset: 0;

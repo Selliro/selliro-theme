@@ -447,3 +447,13 @@
     border: 1px solid CanvasText;
   }
 }
+
+/* Phones: the frame follows the photo's shape, which for wide photos leaves a thin strip where the
+   labels crowd the faces. Give it a portrait-friendly height instead (photos cover and stay centred). */
+@media screen and (max-width: 749px) {
+  .before-after-slider__frame {
+    aspect-ratio: auto;
+    height: clamp(320px, 112vw, 480px);
+    max-height: none;
+  }
+}

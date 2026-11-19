@@ -22,6 +22,13 @@
     assign product_grid_class = product_grid_class | append: ' product-information--media-left'
   endif
 
+  # Image / info split (Selliro): "Image column width" when columns aren't equal
+  assign media_width = section.settings.media_width | default: 60
+  assign details_width = 100 | minus: media_width
+  unless section.settings.equal_columns
+    assign product_grid_class = product_grid_class | append: ' product-information__grid--ratio'
+  endunless
+
   if section.settings.equal_columns
     assign product_grid_class = product_grid_class | append: ' product-information__grid--half'
 
@@ -45,7 +52,7 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
   class="product-information section section--{{ content_width }} spacing-style color-{{ section.settings.color_scheme }} relative"
-  style="{% render 'spacing-style', settings: section.settings %} --gap: {{ section.settings.gap }}px;"
+  style="{% render 'spacing-style', settings: section.settings %} --gap: {{ section.settings.gap }}px; --pi-media-fr: {{ media_width }}fr; --pi-details-fr: {{ details_width }}fr;"
 >
   {% if section.settings.desktop_media_position == 'left' and product_has_media %}
     {% assign product_href = '#ProductInformation-' | append: section.id %}
@@ -273,6 +280,17 @@
     }
   }
 
+  /* Image / info split from the "Image column width" setting (e.g. 60% images, 40% info) on laptops and up */
+  @media screen and (min-width: 990px) {
+    .product-information__grid.product-information__grid--ratio:not(:has(.product-information__media:empty)).product-information--media-left {
+      grid-template-columns: minmax(0, var(--pi-media-fr, 2fr)) minmax(0, var(--pi-details-fr, 1fr));
+    }
+
+    .product-information__grid.product-information__grid--ratio:not(:has(.product-information__media:empty)).product-information--media-right {
+      grid-template-columns: minmax(0, var(--pi-details-fr, 1fr)) minmax(0, var(--pi-media-fr, 2fr));
+    }
+  }
+
   .product-information__grid--limit-details .product-details > .group-block {
     max-width: var(--sidebar-width);
   }
@@ -292,7 +310,10 @@
     }
   ],
   "disabled_on": {
-    "groups": ["header", "footer"]
+    "groups": [
+      "header",
+      "footer"
+    ]
   },
   "settings": [
     {
@@ -336,6 +357,18 @@
       "id": "equal_columns",
       "label": "t:settings.equal_columns",
       "default": false
+    },
+    {
+      "type": "range",
+      "id": "media_width",
+      "label": "Image column width",
+      "info": "Share of the row for the product images on desktop; product info gets the rest.",
+      "min": 40,
+      "max": 75,
+      "step": 5,
+      "unit": "%",
+      "default": 60,
+      "visible_if": "{{ section.settings.equal_columns == false }}"
     },
     {
       "type": "checkbox",

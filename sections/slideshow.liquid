@@ -83,15 +83,6 @@
       border-color: rgb(255 255 255 / 0.6);
       background: rgb(255 255 255 / 0.5);
     }
-
-    /* Glass arrows to match */
-    #shopify-section-{{ section.id }} slideshow-arrows .slideshow-control {
-      border: 1px solid rgb(255 255 255 / 0.3);
-      border-radius: 50%;
-      background: rgb(0 0 0 / 0.22);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
   {%- else -%}
     /* No panel: text sits on the media with a soft shadow for legibility */
     #shopify-section-{{ section.id }} .ss-copy--light :is(.ss-copy__heading, .ss-copy__eyebrow, .ss-copy__text) {
@@ -154,10 +145,41 @@
 -%}
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
-  class="spacing-style {{ section.settings.section_width }} color-{{ section.settings.color_scheme }} disable-section-top-offset ss ss--effect-{{ media_effect }} ss--text-{{ content_animation }} ss--{{ content_style }} ss--pagination-{{ pagination }}"
+  class="spacing-style {{ section.settings.section_width }} color-{{ section.settings.color_scheme }} disable-section-top-offset ss ss--effect-{{ media_effect }} ss--text-{{ content_animation }} ss--{{ content_style }} ss--pagination-{{ pagination }}{% if show_arrows %} ss--arrows{% endif %}"
   data-slideshow-media
+  data-ss-header-style="{{ section.settings.header_style | default: 'solid' }}"
   style="{% render 'spacing-padding', settings: section.settings %}"
 >
+  {%- if template.name == 'index' -%}
+    <script>
+      /* Slideshow → Header style: when the home page opens with a slideshow, it decides whether the header
+         is transparent or solid. Runs while the page is still loading, so the header never flashes. */
+      window.selliroHeaderStyle =
+        window.selliroHeaderStyle ||
+        function () {
+          var header = document.getElementById('header-component');
+          var main = document.querySelector('main');
+          if (!header || !main || !header.dataset.transparentMode) return;
+          if (header.dataset.transparentDefault === undefined) {
+            header.dataset.transparentDefault = header.getAttribute('transparent') || '';
+          }
+          var first = main.querySelector(':scope > .shopify-section');
+          var slideshow = first && first.querySelector('[data-ss-header-style]');
+          var on = slideshow
+            ? slideshow.getAttribute('data-ss-header-style') === 'transparent'
+            : header.dataset.transparentDefault !== '';
+          var scheme = header.dataset.transparentScheme;
+          if (on) {
+            header.setAttribute('transparent', header.dataset.transparentDefault || header.dataset.transparentMode);
+            if (scheme) header.classList.add(scheme);
+          } else {
+            header.removeAttribute('transparent');
+            if (scheme) header.classList.remove(scheme);
+          }
+        };
+      window.selliroHeaderStyle();
+    </script>
+  {%- endif -%}
   {% render 'slideshow',
     class: slideshow_class,
     controls: controls,
@@ -179,6 +201,28 @@
     border-radius: var(--ss-radius, 24px);
     overflow: hidden;
     isolation: isolate;
+  }
+
+  /* ---- Under a transparent header (Header → Transparent header), when the slideshow is the first section ---- */
+  /* Keep slide text clear of the floating header */
+  body:has(#header-component[transparent]) main > .shopify-section:first-child > .ss .ss-copy {
+    padding-top: calc(var(--header-height, 0px) + clamp(1rem, 3vw, 2.5rem));
+  }
+
+  /* Optional top shade so the menu stays readable on light images (Header → Top shade) */
+  body:has(#header-component[transparent]) main > .shopify-section:first-child > .ss slideshow-component::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: calc(var(--header-height, 64px) * 2.25);
+    background: linear-gradient(
+      to bottom,
+      rgb(0 0 0 / var(--transparent-header-shade, 0)),
+      rgb(0 0 0 / calc(var(--transparent-header-shade, 0) * 0.45)) 55%,
+      transparent
+    );
+    z-index: 2;
+    pointer-events: none;
   }
 
   /* Text rise animation also covers the built-in slide text */
@@ -231,10 +275,157 @@
     }
   }
 
-  /* Full screen height */
+  /* Full screen height: the screen minus the header (and the space around the card in page width) */
   .ss slideshow-slides[size='full'],
   .ss slideshow-slides[size='full'] slideshow-slide {
-    min-height: 100svh;
+    min-height: var(--ss-fill, calc(100svh - var(--header-height, 0px)));
+  }
+
+  .ss.page-width slideshow-slides[size='full'],
+  .ss.page-width slideshow-slides[size='full'] slideshow-slide {
+    min-height: var(--ss-fill, calc(100svh - var(--header-height, 0px) - var(--ss-inset, 24px) * 2));
+  }
+
+  /* ---- Arrows: always-visible, perfectly round frosted buttons ---- */
+  .ss slideshow-arrows {
+    mix-blend-mode: normal;
+  }
+
+  .ss slideshow-arrows .slideshow-control {
+    display: inline-grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    min-width: 3.25rem;
+    min-height: 3.25rem;
+    padding: 0;
+    border: 1px solid rgb(255 255 255 / 0.35);
+    border-radius: 50%;
+    background-color: rgb(0 0 0 / 0.28);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #fff;
+    opacity: 0.92;
+    transition: background-color 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+  }
+
+  .ss slideshow-arrows .slideshow-control:hover {
+    background-color: rgb(0 0 0 / 0.5);
+    border-color: rgb(255 255 255 / 0.65);
+    opacity: 1;
+  }
+
+  .ss slideshow-arrows .slideshow-control:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+
+  .ss slideshow-arrows .slideshow-control .svg-wrapper {
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .ss slideshow-arrows .slideshow-control svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ---- Pause/play + progress: one frosted pill at the bottom ---- */
+  .ss slideshow-controls[controls-on-media] {
+    left: 50%;
+    right: auto;
+    bottom: clamp(0.75rem, 2vw, 1.25rem);
+    width: auto;
+    min-height: 0;
+    translate: -50% 0;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.75rem 0.3rem 0.3rem;
+    border: 1px solid rgb(255 255 255 / 0.22);
+    border-radius: 999px;
+    background: rgb(0 0 0 / 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    filter: none;
+  }
+
+  .ss slideshow-controls[controls-on-media] :is(.icon-pause, .icon-play) {
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    min-width: 2rem;
+    min-height: 2rem;
+    padding: 0;
+    border-radius: 50%;
+    color: #fff;
+    transition: background-color 0.2s ease;
+  }
+
+  .ss slideshow-controls[controls-on-media] :is(.icon-pause, .icon-play):hover {
+    background-color: rgb(255 255 255 / 0.16);
+  }
+
+  .ss slideshow-controls[controls-on-media] :is(.icon-pause, .icon-play):focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }
+
+  /* Horizon keeps both buttons and only hides the inactive icon — hide the inactive button itself */
+  .ss slideshow-component:not([paused]) slideshow-controls .icon-play,
+  .ss slideshow-component[paused] slideshow-controls .icon-pause {
+    display: none;
+  }
+
+  /* No panel + light text: a soft scrim on the text side keeps it readable on bright photos */
+  .ss--none .ss-copy--light {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .ss--none .ss-copy--light::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(to right, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.22) 38%, transparent 68%);
+  }
+
+  .ss--none .ss-copy--light.ss-copy--h-right::before {
+    background: linear-gradient(to left, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.22) 38%, transparent 68%);
+  }
+
+  .ss--none .ss-copy--light.ss-copy--h-center::before {
+    background: radial-gradient(ellipse 60% 55% at 50% 50%, rgb(0 0 0 / 0.42), transparent 75%);
+  }
+
+  @media screen and (max-width: 749px) {
+    .ss--none .ss-copy--light::before,
+    .ss--none .ss-copy--light.ss-copy--h-right::before {
+      background: linear-gradient(to top, rgb(0 0 0 / 0.55) 0%, rgb(0 0 0 / 0.2) 50%, transparent 80%);
+    }
+  }
+
+  /* Keep slide text clear of the arrows */
+  @media screen and (min-width: 750px) {
+    .ss--arrows .ss-copy {
+      padding-inline: max(clamp(1.25rem, 5.5vw, 6rem), calc(clamp(16px, 2.5vw, 36px) + 3.25rem + 1.75rem));
+    }
+  }
+
+  .ss slideshow-controls[controls-on-media] .slideshow-controls__dots,
+  .ss slideshow-controls[controls-on-media] .slideshow-controls__counter {
+    padding-block: 0;
+    background: none;
+    backdrop-filter: none;
+  }
+
+  /* Phones: swipe and the progress bars navigate — arrows would sit on the text */
+  @media screen and (max-width: 749px) {
+    .ss slideshow-arrows {
+      display: none;
+    }
   }
 
   /* Slow zoom on the showing slide's images */
@@ -495,6 +686,17 @@
         }
       ],
       "default": "full-width"
+    },
+    {
+      "type": "select",
+      "id": "header_style",
+      "label": "Header style",
+      "info": "Used when this slideshow is the first section on the home page. Transparent: the header floats over the slides and turns solid on scroll.",
+      "options": [
+        { "value": "transparent", "label": "Transparent header" },
+        { "value": "solid", "label": "Solid header" }
+      ],
+      "default": "solid"
     },
     {
       "type": "range",

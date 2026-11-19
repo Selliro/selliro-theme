@@ -100,6 +100,69 @@
       e.preventDefault();
       setSplit(next);
     });
+
+    peekOnce(root, viewport, handle, setSplit);
+  }
+
+  /**
+   * First time the slider scrolls into view, sweep the handle a little left, then right, then back,
+   * so shoppers see it can be dragged. Stops for good as soon as they touch it.
+   * Skipped for reduced motion and in the theme editor.
+   * @param {HTMLElement} root
+   * @param {HTMLElement} viewport
+   * @param {HTMLElement} handle
+   * @param {(percent: number) => void} setSplit
+   */
+  function peekOnce(root, viewport, handle, setSplit) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.Shopify && window.Shopify.designMode) return;
+    if (!('IntersectionObserver' in window)) return;
+
+    const start = parseInt(handle.getAttribute('aria-valuenow') || '50', 10);
+    const reach = Math.min(18, start - 5, 95 - start);
+    if (reach < 6) return;
+
+    let frame = 0;
+    let timer = 0;
+    let stopped = false;
+    const stop = () => {
+      stopped = true;
+      cancelAnimationFrame(frame);
+      clearTimeout(timer);
+      io.disconnect();
+    };
+    viewport.addEventListener('pointerdown', stop, { once: true });
+    handle.addEventListener('keydown', stop, { once: true });
+
+    const DURATION = 2200;
+    const ease = (t) => 0.5 - Math.cos(Math.PI * t) / 2;
+    const run = () => {
+      const t0 = performance.now();
+      const step = (now) => {
+        if (stopped) return;
+        const t = Math.min(1, (now - t0) / DURATION);
+        // 0 → -reach → +reach → 0, eased per leg
+        let offset;
+        if (t < 0.25) offset = -reach * ease(t / 0.25);
+        else if (t < 0.75) offset = -reach + 2 * reach * ease((t - 0.25) / 0.5);
+        else offset = reach * (1 - ease((t - 0.75) / 0.25));
+        setSplit(start + offset);
+        if (t < 1) frame = requestAnimationFrame(step);
+        else setSplit(start);
+      };
+      frame = requestAnimationFrame(step);
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        io.disconnect();
+        // Let the image reveal finish first
+        timer = setTimeout(run, root.closest('.sr-anim') ? 1400 : 500);
+      },
+      { threshold: 0.55 }
+    );
+    io.observe(viewport);
   }
 
   function boot() {

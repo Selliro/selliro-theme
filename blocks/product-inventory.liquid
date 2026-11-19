@@ -40,11 +40,36 @@
       assign translation_key = 'content.inventory_out_of_stock'
     endif
   endif
+
+  # Selliro: stock progress bar + urgency messages ([count] = units left)
+  assign show_bar = block_settings.show_progress_bar
+  assign bar_full_at = block_settings.progress_full_at | default: 30
+  case status
+    when 'low'
+      assign bar_pct = inventory_quantity | times: 100 | divided_by: bar_full_at | at_least: 6 | at_most: 100
+      assign custom_text = block_settings.low_stock_text
+    when 'in_stock'
+      if inventory_managed and inventory_quantity > 0
+        assign bar_pct = inventory_quantity | times: 100 | divided_by: bar_full_at | at_least: 6 | at_most: 100
+      else
+        assign bar_pct = 100
+      endif
+      assign custom_text = block_settings.in_stock_text
+    else
+      assign bar_pct = 0
+      assign custom_text = ''
+  endcase
+  if custom_text contains '[count]' and inventory_managed != true
+    assign custom_text = ''
+  endif
+  if custom_text != blank
+    assign custom_text = custom_text | replace: '[count]', inventory_quantity
+  endif
 -%}
 
 <product-inventory
   class="
-    product-inventory spacing-style
+    product-inventory spacing-style{% if show_bar %} product-inventory--bar{% endif %}
     {% if block_settings.type_preset != '' %}{{ block_settings.type_preset }}{% endif%}
   "
   style="{% render 'spacing-style', settings: block_settings %}"
@@ -65,13 +90,20 @@
       role="status"
       aria-label="{{ 'accessibility.inventory_status' | t }}"
     >
-      {%- if show_quantity -%}
+      {%- if custom_text != blank -%}
+        {{ custom_text }}
+      {%- elsif show_quantity -%}
         {{ 'content.inventory_low_stock_show_count' | t: count: inventory_quantity }}
       {%- else -%}
         {{- translation_key | t -}}
       {%- endif -%}
     </span>
   </span>
+  {%- if show_bar -%}
+    <span class="product-inventory__bar product-inventory__bar--{{ status }}" aria-hidden="true">
+      <span class="product-inventory__bar-fill" style="--stock-fill: {{ bar_pct }}%;"></span>
+    </span>
+  {%- endif -%}
 </product-inventory>
 
 {% stylesheet %}
@@ -104,6 +136,68 @@
   .product-inventory__icon circle:first-of-type {
     opacity: 0.3;
   }
+
+  /* Stock progress bar */
+  .product-inventory--bar {
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .product-inventory--bar .product-inventory__text {
+    font-weight: 500;
+  }
+
+  .product-inventory__bar {
+    position: relative;
+    display: block;
+    height: 6px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--color-foreground) 10%, transparent);
+  }
+
+  .product-inventory__bar-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--stock-fill, 0%);
+    border-radius: inherit;
+    background: var(--color-instock, #2f7a3d);
+    transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: stock-bar-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .product-inventory__bar--low .product-inventory__bar-fill {
+    background: linear-gradient(90deg, var(--color-lowstock, #e8833a), color-mix(in srgb, var(--color-lowstock, #e8833a) 70%, #f8d12f));
+  }
+
+  .product-inventory__bar--low .product-inventory__bar-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.45), transparent);
+    translate: -100% 0;
+    animation: stock-bar-shine 2.4s ease-in-out 1.2s infinite;
+  }
+
+  @keyframes stock-bar-in {
+    from {
+      width: 0;
+    }
+  }
+
+  @keyframes stock-bar-shine {
+    to {
+      translate: 100% 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-inventory__bar-fill,
+    .product-inventory__bar-fill::after {
+      animation: none;
+      transition: none;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -129,6 +223,42 @@
       "id": "show_inventory_quantity",
       "label": "t:settings.show_inventory_quantity",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Stock bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_progress_bar",
+      "label": "Show stock progress bar",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "progress_full_at",
+      "label": "Bar is full at",
+      "info": "Stock level that fills the whole bar.",
+      "min": 5,
+      "max": 100,
+      "step": 5,
+      "unit": "pcs",
+      "default": 30,
+      "visible_if": "{{ block.settings.show_progress_bar }}"
+    },
+    {
+      "type": "text",
+      "id": "low_stock_text",
+      "label": "Low stock message",
+      "info": "[count] = units left. Leave empty for the default text.",
+      "default": "Hurry! Only [count] left in stock"
+    },
+    {
+      "type": "text",
+      "id": "in_stock_text",
+      "label": "In stock message",
+      "info": "[count] = units left. Leave empty for the default text.",
+      "default": "In stock, ready to ship"
     },
     {
       "type": "header",
