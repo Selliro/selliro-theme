@@ -14,8 +14,8 @@
    Contents
      1. Article wrapper and tokens
      2. Reading progress
-     3. Head: back link, tags, title, meta
-     4. Featured image
+     3. Header: Split panel or Stacked (back link, tags, title, summary, meta)
+     4. Featured image heights
      5. Layout: share rail + reading column
      6. Post content (rich text)
      7. Footer: tags and share row
@@ -67,84 +67,85 @@
 }
 
 /* ==============================================================================
-   3. Head: back link, tags, title, meta
+   3. Header: Split panel or Stacked (back link, tags, title, summary, meta)
    ============================================================================== */
+/* Shared: the text column of the header */
 .article__head {
+  max-width: 1280px;
+  margin-inline: auto;
+}
+
+.article__intro {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 16px;
+  min-width: 0;
+}
+
+.article__lede {
+  margin: 0;
+  max-width: 52ch;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--article-muted);
+}
+
+/* ---- 3a. Split: soft panel, text beside the image ---- */
+.article__head--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  padding: clamp(20px, 3.5vw, 48px);
+  border-radius: calc(var(--article-radius, 24px) + 8px);
+  background:
+    radial-gradient(70% 90% at 0% 0%, color-mix(in srgb, var(--color-primary-button-background, #f8d12f) 9%, transparent), transparent 70%),
+    var(--article-soft);
+}
+
+.article__head--split .article__intro {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.article__head--split .article__title {
+  max-width: 18ch;
+  font-size: clamp(1.9rem, 3.4vw, 3rem);
+}
+
+.article__head--split :is(.article__tags, .article__meta) {
+  justify-content: flex-start;
+}
+
+.article__head--split .article__hero {
+  margin: 0;
+}
+
+@media screen and (min-width: 990px) {
+  .article__head--split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: center;
+    gap: clamp(32px, 4vw, 64px);
+  }
+
+  .article__head--split.article__head--no-image {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- 3b. Stacked: centred title above a wide image ---- */
+.article__head--stacked .article__intro {
+  align-items: center;
   max-width: 920px;
   margin-inline: auto;
   text-align: center;
 }
 
-/* Back link on the left, quick previous / next buttons on the right */
-.article__topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  width: 100%;
-  margin-bottom: 8px;
+.article__head--stacked .article__lede {
+  margin-inline: auto;
 }
 
-.article__topbar:not(:has(.article__quicknav)) {
-  justify-content: center;
-}
-
-.article__quicknav {
-  display: flex;
-  gap: 8px;
-}
-
-.article__quicknav-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 36px;
-  padding: 0 14px;
-  border: 1px solid var(--article-line);
-  border-radius: 99px;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: rgb(var(--color-foreground-rgb));
-  text-decoration: none;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.3s var(--article-ease);
-}
-
-.article__quicknav-btn:hover {
-  border-color: rgb(var(--color-foreground-rgb));
-  background: rgb(var(--color-foreground-rgb));
-  color: rgb(var(--color-background-rgb));
-}
-
-.article__quicknav-btn:first-child:hover svg {
-  transform: translateX(-2px);
-}
-
-.article__quicknav-btn:last-child:hover svg {
-  transform: translateX(2px);
-}
-
-.article__quicknav-btn svg {
-  transition: transform 0.3s var(--article-ease);
-}
-
-@media screen and (max-width: 749px) {
-  .article__quicknav-btn {
-    width: 36px;
-    padding: 0;
-    justify-content: center;
-  }
-
-  .article__quicknav-text {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-  }
+.article__head--stacked .article__hero {
+  margin: clamp(28px, 4vw, 48px) 0 0;
 }
 
 .article__back {
@@ -261,12 +262,10 @@
 }
 
 /* ==============================================================================
-   4. Featured image
-   A wide picture with a fixed, moderate height (setting "Image height"); "Original" keeps its shape.
+   4. Featured image heights (setting "Image height"; "Original" keeps the picture's own shape)
    ============================================================================== */
 .article__hero {
-  max-width: 1280px;
-  margin: clamp(28px, 4vw, 48px) auto 0;
+  min-width: 0;
 }
 
 .article__hero-img {
@@ -277,30 +276,30 @@
   border-radius: var(--article-radius, 24px);
 }
 
-.article__hero--small {
+/* Stacked: a wide picture with a moderate height */
+.article__head--stacked .article__hero--small {
   --article-hero-h: clamp(200px, 26vw, 340px);
 }
 
-.article__hero--medium {
+.article__head--stacked .article__hero--medium {
   --article-hero-h: clamp(240px, 34vw, 460px);
 }
 
-.article__hero--large {
+.article__head--stacked .article__hero--large {
   --article-hero-h: clamp(280px, 44vw, 600px);
 }
 
-@media screen and (max-width: 749px) {
-  .article__hero--small {
-    --article-hero-h: 200px;
-  }
+/* Split: the picture fills its half of the panel */
+.article__head--split .article__hero--small {
+  --article-hero-h: clamp(220px, 26vw, 320px);
+}
 
-  .article__hero--medium {
-    --article-hero-h: 240px;
-  }
+.article__head--split .article__hero--medium {
+  --article-hero-h: clamp(240px, 32vw, 420px);
+}
 
-  .article__hero--large {
-    --article-hero-h: 300px;
-  }
+.article__head--split .article__hero--large {
+  --article-hero-h: clamp(260px, 38vw, 520px);
 }
 
 /* ==============================================================================
