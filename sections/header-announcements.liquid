@@ -1,20 +1,48 @@
+{%- comment -%}
+  Announcement bar (header group).
+  · Slideshow: one announcement at a time. Transition: slide (from the side), slide up, or fade. Arrows, swipe on
+    touch screens, autoplay that pauses on hover.
+  · Marquee: a continuously scrolling line of announcements. Speed, direction, spacing and an optional separator.
+  · Both: solid colour scheme or a two-colour gradient background.
+  Blocks: _announcement (text, link, icon, typography), social-links.
+  Files:  assets/section-header-announcements.css (styles), assets/announcement-bar.js (slideshow),
+          assets/marquee.js (marquee).
+  Order:  1. CSS   2. Liquid (data + markup)   3. Schema
+{%- endcomment -%}
 
-
-{% liquid
+{%- liquid
   assign animation_style = section.settings.animation_style | default: 'slideshow'
   assign is_marquee = false
   if animation_style == 'marquee'
     assign is_marquee = true
   endif
-%}
 
-{% comment %}
-  Shopify allows only one {% content_for 'blocks' %} per section — capture once and reuse.
-{% endcomment %}
-{% capture announcement_blocks %}
-  {% content_for 'blocks' %}
-{% endcapture %}
+  assign transition = section.settings.slide_transition | default: 'slide' | replace: '_', '-'
+  assign separator = section.settings.separator | default: 'none'
+  assign marquee_speed = section.settings.marquee_speed | default: 5
+  comment
+    marquee.js turns the speed factor into the loop duration (bigger factor = slower), so invert the 1-10 setting
+  endcomment
+  assign marquee_factor = 12 | minus: marquee_speed | times: 2.5
+-%}
 
+{%- comment -%} ============================================================== 1. CSS {%- endcomment -%}
+{{ 'section-header-announcements.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%} Values that come from this section's settings (the rest is in section-header-announcements.css) {%- endcomment -%}
+{% style %}
+  #shopify-section-{{ section.id }} .announcement-bar {
+    {% render 'spacing-padding', settings: section.settings %};
+    --border-bottom-width: {{ section.settings.divider_width }}px;
+    --ab-gap: {{ section.settings.marquee_gap | default: 48 }}px;
+    {%- if section.settings.background_style == 'gradient' %}
+    --ab-gradient-start: {{ section.settings.gradient_start }};
+    --ab-gradient-end: {{ section.settings.gradient_end }};
+    {%- endif %}
+  }
+{% endstyle %}
+
+{%- comment -%} =========================================================== 2. Liquid {%- endcomment -%}
 {% if is_marquee %}
   <script
     src="{{ 'marquee.js' | asset_url }}"
@@ -29,41 +57,58 @@
   ></script>
 {% endif %}
 
+{% comment %}
+  Shopify allows only one {% content_for 'blocks' %} per section — capture once and reuse.
+{% endcomment %}
+{% capture announcement_blocks %}
+  {% content_for 'blocks' %}
+{% endcapture %}
+
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <aside
-  class="announcement-bar spacing-style {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}{% if is_marquee %} announcement-bar--marquee{% endif %}"
-  style="{% render 'spacing-padding', settings: section.settings %}; --border-bottom-width: {{ section.settings.divider_width }}px;"
+  class="
+    announcement-bar spacing-style {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}
+    {% if is_marquee %}announcement-bar--marquee{% if separator != 'none' %} announcement-bar--sep-{{ separator }}{% endif %}{% else %}announcement-bar--slideshow announcement-bar--{{ transition }}{% endif %}
+    {% if section.settings.pause_on_hover %}announcement-bar--pause-hover{% endif %}
+    {% if section.settings.background_style == 'gradient' %}announcement-bar--gradient{% endif %}
+  "
 >
   {% if is_marquee %}
     <marquee-component
       class="announcement-bar__marquee"
-      style="{% render 'spacing-style', settings: section.settings %} --marquee-direction: {{ section.settings.marquee_direction | default: 'normal' }}; --marquee-gap: 48px;"
-      data-speed-factor="{{ section.settings.speed | times: 2.5 | round }}"
+      style="--marquee-direction: {{ section.settings.marquee_direction | default: 'normal' }}; --marquee-gap: var(--ab-gap, 48px);"
+      data-speed-factor="{{ marquee_factor | round }}"
       data-movement-direction="{{ section.settings.marquee_direction | default: 'normal' }}"
     >
-      <div class="marquee__wrapper announcement-bar__marquee-wrapper" ref="wrapper">
-        <div class="marquee__content" ref="content">
-          <div class="marquee__repeated-items announcement-bar__marquee-items" ref="marqueeItems[]">
+      <div
+        class="marquee__wrapper announcement-bar__marquee-wrapper"
+        ref="wrapper"
+      >
+        <div
+          class="marquee__content"
+          ref="content"
+        >
+          <div
+            class="marquee__repeated-items announcement-bar__marquee-items"
+            ref="marqueeItems[]"
+          >
             {{ announcement_blocks }}
           </div>
         </div>
       </div>
     </marquee-component>
   {% else %}
-    {% liquid
-      assign autoplay = false
-      if section.blocks.size > 1
-        assign autoplay = true
-      endif
-    %}
-
     <announcement-bar-component
       class="announcement-bar__slider"
-      {% if autoplay == true %}
-        autoplay="{{ section.settings.speed }}" aria-live="polite"
+      data-direction="next"
+      {% if section.blocks.size > 1 %}
+        autoplay="{{ section.settings.speed }}"
+        aria-live="polite"
+        {% if section.settings.pause_on_hover %}
+          pause-on-hover
+        {% endif %}
       {% endif %}
     >
-
       <div class="announcement-bar__slides">
         {{ announcement_blocks }}
       </div>
@@ -71,172 +116,7 @@
   {% endif %}
 </aside>
 
-{% stylesheet %}
-
-  .announcement-bar {
-    background-color: var(--color-background) !important;
-    color: var(--color-foreground);
-  }
-
-  .announcement-bar__slider {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-
-    @media screen and (max-width: 749px) {
-      grid-column: 1 / -1;
-    }
-  }
-
-  announcement-bar-component.announcement-bar__slider {
-    --button-size: 13px;
-    --icon-size-xs: 14px;
-
-  }
-  .announcement-bar__slides {
-    display: grid;
-    grid: [stack] auto / [stack] auto;
-    width: calc(100% - var(--button-size) * 2);
-    max-width: 680px;
-    margin-inline: auto;
-    position: relative;
-    min-height: var(--minimum-touch-target);
-  }
-
-  .announcement-bar__slides > * {
-    grid-area: stack;
-  }
-
-  /* Absolutely overlay arrows so they align with slides and stay clickable (parent is positioning context) */
-  .announcement-bar__slides slideshow-arrows {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    box-sizing: border-box;
-  }
-
-  .announcement-bar__slides .announcement-bar__slide {
-    z-index: 0;
-  }
-
-  .announcement-bar__slide {
-    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
-    content-visibility: visible;
-
-    &[aria-hidden='true'] {
-      opacity: 0;
-      visibility: hidden;
-    }
-  }
-
-  .announcement-bar__slider slideshow-arrows {
-    padding: 0;
-    mix-blend-mode: normal;
-  }
-
-  .announcement-bar__slider slideshow-arrows .slideshow-control {
-    color: var(--color-foreground);
-  }
-
-  .announcement-bar__slider .slideshow-control {
-    display: flex;
-    padding: 0;
-    width: var(--button-size);
-    height: var(--button-size);
-    min-width: 0;
-    min-height: 0;
-    align-items: center;
-    justify-content: center;
-    opacity: 1;
-    animation: none;
-    flex-shrink: 0;
-
-    @media screen and (min-width: 750px) {
-      --slideshow-control-offset: calc((var(--button-size) - var(--icon-size-xs)) / 2);
-
-      .section--page-width &.slideshow-control--previous {
-        transform: translateX(var(--slideshow-control-offset));
-      }
-    }
-  }
-
-  .announcement-bar__slider .slideshow-control .svg-wrapper {
-    width: var(--icon-size-xs);
-    height: var(--icon-size-xs);
-  }
-
-  .announcement-bar__slide {
-    place-content: center;
-  }
-
-  .announcement-bar__text:first-child {
-    margin: 0;
-  }
-
-  .announcement-bar__link {
-    position: absolute;
-    inset: 0;
-  }
-
-  .announcement-bar--marquee marquee-component {
-    display: block;
-    width: 100%;
-    overflow: hidden;
-  }
-
-  .announcement-bar--marquee .marquee__wrapper {
-    display: flex;
-    width: fit-content;
-    white-space: nowrap;
-  }
-
-  .announcement-bar--marquee .marquee__content {
-    min-width: max-content;
-    display: flex;
-    align-items: center;
-  }
-
-  .announcement-bar--marquee .marquee__repeated-items {
-    min-width: max-content;
-    display: flex;
-    align-items: center;
-    gap: var(--marquee-gap, 2rem);
-  }
-
-  .announcement-bar--marquee .marquee__repeated-items > * {
-    flex-shrink: 0;
-    max-width: none;
-  }
-
-  .announcement-bar--marquee .announcement-bar__marquee-item {
-    white-space: nowrap;
-  }
-
-  .announcement-bar--marquee .announcement-bar__marquee-item .announcement-bar__text {
-    margin: 0;
-  }
-
-  .announcement-bar__slide .announcement-bar__inner {
-    position: relative;
-    z-index: 1;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .announcement-bar--marquee marquee-component:not([data-disabled]) .marquee__wrapper {
-      animation: announcement-marquee-motion var(--marquee-speed, 30s) linear infinite var(--marquee-direction, normal);
-    }
-  }
-
-  @keyframes announcement-marquee-motion {
-    to {
-      transform: translate3d(calc(-50% - (var(--marquee-gap, 2rem) / 2)), 0, 0);
-    }
-  }
-{% endstylesheet %}
-
+{%- comment -%} =========================================================== 3. Schema {%- endcomment -%}
 {% schema %}
 {
   "name": "t:names.announcement_bar",
@@ -255,23 +135,83 @@
     {
       "type": "select",
       "id": "animation_style",
-      "label": "t:settings.style",
+      "label": "Style",
       "options": [
         {
           "value": "slideshow",
-          "label": "slideshow"
+          "label": "Slideshow (one at a time)"
         },
         {
           "value": "marquee",
-          "label": "marquee"
+          "label": "Marquee (scrolling)"
         }
       ],
       "default": "slideshow"
     },
     {
+      "type": "header",
+      "content": "Slideshow",
+      "visible_if": "{{ section.settings.animation_style != 'marquee' }}"
+    },
+    {
+      "type": "select",
+      "id": "slide_transition",
+      "label": "Transition",
+      "options": [
+        {
+          "value": "slide",
+          "label": "Slide"
+        },
+        {
+          "value": "slide_up",
+          "label": "Slide up"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        }
+      ],
+      "default": "slide",
+      "visible_if": "{{ section.settings.animation_style != 'marquee' }}"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Time per announcement",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "unit": "s",
+      "visible_if": "{{ section.settings.animation_style != 'marquee' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show arrows",
+      "default": true,
+      "visible_if": "{{ section.settings.animation_style != 'marquee' }}"
+    },
+    {
+      "type": "header",
+      "content": "Marquee",
+      "visible_if": "{{ section.settings.animation_style == 'marquee' }}"
+    },
+    {
+      "type": "range",
+      "id": "marquee_speed",
+      "label": "Scroll speed",
+      "info": "Higher is faster.",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "visible_if": "{{ section.settings.animation_style == 'marquee' }}"
+    },
+    {
       "type": "select",
       "id": "marquee_direction",
-      "label": "marquee direction",
+      "label": "Direction",
       "options": [
         {
           "value": "normal",
@@ -287,12 +227,45 @@
     },
     {
       "type": "range",
-      "id": "speed",
-      "label": "scroll_speed",
-      "min": 2,
-      "max": 10,
-      "default": 5,
-      "unit": "sec"
+      "id": "marquee_gap",
+      "label": "Space between announcements",
+      "min": 16,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48,
+      "visible_if": "{{ section.settings.animation_style == 'marquee' }}"
+    },
+    {
+      "type": "select",
+      "id": "separator",
+      "label": "Separator",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "dot",
+          "label": "Dot"
+        },
+        {
+          "value": "star",
+          "label": "Star"
+        },
+        {
+          "value": "line",
+          "label": "Line"
+        }
+      ],
+      "default": "none",
+      "visible_if": "{{ section.settings.animation_style == 'marquee' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "default": true
     },
     {
       "type": "header",
@@ -319,6 +292,36 @@
       "id": "color_scheme",
       "default": "scheme-4",
       "label": "t:settings.color_scheme"
+    },
+    {
+      "type": "select",
+      "id": "background_style",
+      "label": "Background",
+      "options": [
+        {
+          "value": "scheme",
+          "label": "Color scheme"
+        },
+        {
+          "value": "gradient",
+          "label": "Gradient"
+        }
+      ],
+      "default": "scheme"
+    },
+    {
+      "type": "color",
+      "id": "gradient_start",
+      "label": "Gradient start",
+      "default": "#fad02c",
+      "visible_if": "{{ section.settings.background_style == 'gradient' }}"
+    },
+    {
+      "type": "color",
+      "id": "gradient_end",
+      "label": "Gradient end",
+      "default": "#f6e7a6",
+      "visible_if": "{{ section.settings.background_style == 'gradient' }}"
     },
     {
       "type": "range",
