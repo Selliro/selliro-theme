@@ -301,12 +301,13 @@
   color: rgb(var(--color-foreground-rgb) / 0.88);
 }
 
-.article__content > * {
-  margin-block: 0;
+/* Spacing works at any depth: pasted content often wraps paragraphs in extra <div> / <section> elements */
+.article__content :where(p, ul, ol, blockquote, figure, table, pre) {
+  margin: 0 0 1.2em;
 }
 
-.article__content > * + * {
-  margin-block-start: 1.2em;
+.article__content :where(p, ul, ol, blockquote, figure, table, pre):last-child {
+  margin-bottom: 0;
 }
 
 .article__content :is(h2, h3, h4) {
@@ -324,7 +325,7 @@
   font-size: clamp(1.25rem, 2vw, 1.5rem);
 }
 
-.article__content :is(h2, h3, h4) + * {
+.article__content :is(h2, h3, h4):first-child {
   margin-block-start: 0;
 }
 
@@ -625,9 +626,11 @@
   text-decoration: underline;
 }
 
+/* Cards keep a comfortable width and centre, so two or three posts both look balanced */
 .article__related-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 400px));
+  justify-content: center;
   gap: 22px;
   margin: 0;
   padding: 0;
