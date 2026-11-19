@@ -12,6 +12,7 @@
     "section": {
       "type": "main-blog-post",
       "settings": {
+        "hero_layout": "split",
         "image_height": "medium",
         "image_radius": 24,
         "content_width": 720,
