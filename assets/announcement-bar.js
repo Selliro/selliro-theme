@@ -21,15 +21,57 @@ export class AnnouncementBar extends Component {
    */
   #interval = undefined;
 
+  /** @type {number | undefined} */
+  #leavingTimer = undefined;
+
   connectedCallback() {
     super.connectedCallback();
 
-    this.addEventListener('mouseenter', this.suspend);
-    this.addEventListener('mouseleave', this.resume);
+    if (this.pauseOnHover) {
+      this.addEventListener('mouseenter', this.suspend);
+      this.addEventListener('mouseleave', this.resume);
+    }
     document.addEventListener('visibilitychange', this.#handleVisibilityChange);
+
+    // Swipe left / right on touch screens
+    this.addEventListener('pointerdown', this.#handlePointerDown);
+    this.addEventListener('pointerup', this.#handlePointerUp);
 
     this.play();
   }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.suspend();
+    clearTimeout(this.#leavingTimer);
+    document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
+  }
+
+  /** Pause while the pointer is over the bar (section setting "Pause on hover"). */
+  get pauseOnHover() {
+    return this.hasAttribute('pause-on-hover');
+  }
+
+  /** @type {{ x: number, y: number } | null} */
+  #pointerStart = null;
+
+  /** @param {PointerEvent} event */
+  #handlePointerDown = (event) => {
+    if (event.pointerType === 'mouse') return;
+    this.#pointerStart = { x: event.clientX, y: event.clientY };
+  };
+
+  /** @param {PointerEvent} event */
+  #handlePointerUp = (event) => {
+    const start = this.#pointerStart;
+    this.#pointerStart = null;
+    if (!start) return;
+    const dx = event.clientX - start.x;
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(event.clientY - start.y)) return;
+    if (dx < 0) this.next();
+    else this.previous();
+    this.resume();
+  };
 
   next() {
     this.current += 1;
@@ -49,7 +91,7 @@ export class AnnouncementBar extends Component {
     this.paused = false;
 
     this.#interval = setInterval(() => {
-      if (this.matches(':hover') || document.hidden) return;
+      if ((this.pauseOnHover && this.matches(':hover')) || document.hidden) return;
 
       this.next();
     }, interval);
@@ -107,16 +149,30 @@ export class AnnouncementBar extends Component {
   }
 
   set current(current) {
+    const slides = this.refs.slides ?? [];
+    // Which way the slides move (CSS: [data-direction]); set before the slides change so they start on the right side
+    this.dataset.direction = current < this.#current ? 'prev' : 'next';
+    void this.offsetWidth;
     this.#current = current;
 
-    let relativeIndex = current % (this.refs.slides ?? []).length;
+    let relativeIndex = current % slides.length;
     if (relativeIndex < 0) {
-      relativeIndex += (this.refs.slides ?? []).length;
+      relativeIndex += slides.length;
     }
 
-    this.refs.slides?.forEach((slide, index) => {
-      slide.setAttribute('aria-hidden', `${index !== relativeIndex}`);
+    slides.forEach((slide, index) => {
+      const wasVisible = slide.getAttribute('aria-hidden') === 'false';
+      const visible = index === relativeIndex;
+      // The slide moving out animates to the other side (CSS: [data-leaving])
+      if (wasVisible && !visible) slide.setAttribute('data-leaving', '');
+      else slide.removeAttribute('data-leaving');
+      slide.setAttribute('aria-hidden', `${!visible}`);
     });
+
+    clearTimeout(this.#leavingTimer);
+    this.#leavingTimer = window.setTimeout(() => {
+      slides.forEach((slide) => slide.removeAttribute('data-leaving'));
+    }, 700);
   }
 
   /**
