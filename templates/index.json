@@ -2061,8 +2061,9 @@
       ],
       "settings": {
         "eyebrow": "Build your routine",
-        "sentence_font_source": "custom",
+        "sentence_font_source": "heading",
         "sentence_font": "playfair_display_n4",
+        "sentence_scale": "section",
         "sentence_size": 64,
         "alignment": "center",
         "placeholder": "choose",
