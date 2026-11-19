@@ -41,6 +41,33 @@
   assign author_initial = article.author | strip | slice: 0 | upcase
 
   assign image_height = section.settings.image_height | default: 'medium'
+
+  comment
+    Previous = the older post, Next = the newer one. At the oldest / newest post the missing side wraps round to
+    the other end of the blog, so both links are always there when the blog has more than one post.
+  endcomment
+  assign prev_post = blog.next_article
+  assign next_post = blog.previous_article
+  if blog.articles_count > 1
+    if prev_post == blank
+      assign prev_post = blog.articles.first
+    endif
+    if next_post == blank
+      assign next_post = blog.articles.last
+    endif
+    if prev_post.id == article.id
+      assign prev_post = nil
+    endif
+    if next_post.id == article.id
+      assign next_post = nil
+    endif
+  endif
+  assign show_pager = false
+  if section.settings.show_navigation
+    if prev_post or next_post
+      assign show_pager = true
+    endif
+  endif
 -%}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
@@ -64,6 +91,7 @@
 
   {%- comment -%} ---------------------------------------------------------------- head {%- endcomment -%}
   <header class="article__head page-width">
+    <div class="article__topbar">
     <a
       class="article__back"
       href="{{ blog.url }}"
@@ -79,6 +107,37 @@
       </svg>
       {{- 'article_plus.back_to_blog' | t: blog: blog.title -}}
     </a>
+
+    {%- if show_pager -%}
+      <nav
+        class="article__quicknav"
+        aria-label="{{ 'article_plus.previous' | t }} / {{ 'article_plus.next' | t }}"
+      >
+        {%- if prev_post -%}
+          <a
+            class="article__quicknav-btn"
+            href="{{ prev_post.url }}"
+            rel="prev"
+            title="{{ 'article_plus.previous' | t }}: {{ prev_post.title | escape }}"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="article__quicknav-text">{{ 'article_plus.previous' | t }}</span>
+          </a>
+        {%- endif -%}
+        {%- if next_post -%}
+          <a
+            class="article__quicknav-btn"
+            href="{{ next_post.url }}"
+            rel="next"
+            title="{{ 'article_plus.next' | t }}: {{ next_post.title | escape }}"
+          >
+            <span class="article__quicknav-text">{{ 'article_plus.next' | t }}</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        {%- endif -%}
+      </nav>
+    {%- endif -%}
+    </div>
 
     {%- if section.settings.show_tags and article.tags.size > 0 -%}
       <ul
@@ -126,7 +185,7 @@
       {%- endif -%}
       {%- if section.settings.show_date -%}
         <span class="article__meta-item">
-          {{- article.published_at | time_tag: format: 'date', itemprop: 'datePublished' -}}
+          {{- article.published_at | time_tag: format: 'date' -}}
         </span>
       {%- endif -%}
       {%- if section.settings.show_reading_time -%}
@@ -263,34 +322,48 @@
       {%- endif -%}
 
       {%- comment -%} ------------------------------------------------ previous / next {%- endcomment -%}
-      {%- if section.settings.show_navigation -%}
-        {%- assign newer = blog.previous_article -%}
-        {%- assign older = blog.next_article -%}
-        {%- if newer or older -%}
-          <nav
-            class="article__pager"
-            aria-label="{{ 'article_plus.previous' | t }} / {{ 'article_plus.next' | t }}"
-          >
-            {%- if older -%}
+      {%- if show_pager -%}
+        <nav
+          class="article__pager"
+          aria-label="{{ 'article_plus.previous' | t }} / {{ 'article_plus.next' | t }}"
+        >
+          {%- for pair in (1..2) -%}
+            {%- liquid
+              if forloop.first
+                assign pager_post = prev_post
+                assign pager_kind = 'prev'
+                assign pager_label = 'article_plus.previous' | t
+              else
+                assign pager_post = next_post
+                assign pager_kind = 'next'
+                assign pager_label = 'article_plus.next' | t
+              endif
+            -%}
+            {%- if pager_post -%}
               <a
-                class="article__pager-link article__pager-link--prev"
-                href="{{ older.url }}"
+                class="article__pager-link article__pager-link--{{ pager_kind }}"
+                href="{{ pager_post.url }}"
+                rel="{{ pager_kind }}"
               >
-                <span class="article__pager-label">← {{ 'article_plus.previous' | t }}</span>
-                <span class="article__pager-title">{{ older.title | escape }}</span>
+                <span class="article__pager-media">
+                  {%- if pager_post.image -%}
+                    {{ pager_post.image | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120, 180, 240', sizes: '96px', alt: '' }}
+                  {%- else -%}
+                    {{ 'blog-apparel-1' | placeholder_svg_tag: 'article__pager-placeholder' }}
+                  {%- endif -%}
+                </span>
+                <span class="article__pager-body">
+                  <span class="article__pager-label">
+                    {%- if pager_kind == 'prev' -%}←&nbsp;{%- endif -%}
+                    {{- pager_label -}}
+                    {%- if pager_kind == 'next' -%}&nbsp;→{%- endif -%}
+                  </span>
+                  <span class="article__pager-title">{{ pager_post.title | escape }}</span>
+                </span>
               </a>
             {%- endif -%}
-            {%- if newer -%}
-              <a
-                class="article__pager-link article__pager-link--next"
-                href="{{ newer.url }}"
-              >
-                <span class="article__pager-label">{{ 'article_plus.next' | t }} →</span>
-                <span class="article__pager-title">{{ newer.title | escape }}</span>
-              </a>
-            {%- endif -%}
-          </nav>
-        {%- endif -%}
+          {%- endfor -%}
+        </nav>
       {%- endif -%}
 
       {%- comment -%} -------------------------------------------------------- comments {%- endcomment -%}
@@ -371,7 +444,11 @@
             class="article__related-heading"
             id="ArticleRelated-{{ section.id }}"
           >
-            {{ section.settings.related_heading | default: 'article_plus.keep_reading' | escape }}
+            {%- assign related_heading = section.settings.related_heading -%}
+            {%- if related_heading == blank -%}
+              {%- assign related_heading = 'article_plus.keep_reading' | t -%}
+            {%- endif -%}
+            {{ related_heading | escape }}
           </h2>
           <a
             class="article__related-all"
