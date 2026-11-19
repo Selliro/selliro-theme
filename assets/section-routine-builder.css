@@ -354,7 +354,7 @@
   /* "Match section headings" sets --rb-font-size to the shared section title size (assets/base.css) */
   font-size: var(--rb-font-size, clamp(2rem, 5.2vw, var(--rb-size, 64px)));
   /* Roomy lines so the answer chips never crowd the line above or below */
-  line-height: 1.75;
+  line-height: 1.55;
   letter-spacing: 0.012em;
   word-spacing: 0.04em;
   text-wrap: balance;
@@ -395,6 +395,8 @@
   background: transparent;
   color: inherit;
   font: inherit;
+  /* The answer chips ("choose") read a little smaller than the sentence around them */
+  font-size: 0.82em;
   font-style: italic;
   line-height: 1.12;
   vertical-align: baseline;
@@ -1417,7 +1419,7 @@
 
   .rb__sentence {
     font-size: var(--rb-font-size, clamp(1.75rem, 8.4vw, 2.5rem));
-    line-height: 1.7;
+    line-height: 1.5;
   }
 
   .rb__tray {
