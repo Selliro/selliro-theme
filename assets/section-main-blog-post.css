@@ -123,13 +123,13 @@
 }
 
 @media screen and (min-width: 990px) {
-  .article__head--split {
+  .article .article__head.article__head--split.page-width {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
     align-items: center;
     gap: clamp(32px, 4vw, 64px);
   }
 
-  .article__head--split.article__head--no-image {
+  .article .article__head.article__head--split.article__head--no-image {
     grid-template-columns: minmax(0, 1fr);
   }
 }
