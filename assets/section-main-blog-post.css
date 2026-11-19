@@ -90,8 +90,9 @@
   color: var(--article-muted);
 }
 
-/* ---- 3a. Split: soft panel, text beside the image ---- */
-.article__head--split {
+/* ---- 3a. Split: soft panel, text beside the image ----
+   Extra specificity: base.css makes every .page-width inside a section transparent. */
+.article .article__head.article__head--split.page-width {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 24px;
