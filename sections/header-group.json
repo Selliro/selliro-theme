@@ -83,9 +83,10 @@
       ],
       "name": "t:names.announcement_bar",
       "settings": {
-        "animation_style": "marquee",
+        "animation_style": "slideshow",
+        "slide_transition": "slide",
         "marquee_direction": "normal",
-        "speed": 7,
+        "speed": 3,
         "section_width": "full-width",
         "color_scheme": "scheme-4",
         "divider_width": 0,
