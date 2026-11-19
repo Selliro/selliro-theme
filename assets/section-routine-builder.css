@@ -353,8 +353,10 @@
   font-weight: var(--rb-weight, 400);
   /* "Match section headings" sets --rb-font-size to the shared section title size (assets/base.css) */
   font-size: var(--rb-font-size, clamp(2rem, 5.2vw, var(--rb-size, 64px)));
-  line-height: 1.36;
-  letter-spacing: var(--rb-tracking, -0.015em);
+  /* Roomy lines so the answer chips never crowd the line above or below */
+  line-height: 1.75;
+  letter-spacing: 0.012em;
+  word-spacing: 0.04em;
   text-wrap: balance;
 }
 
@@ -1415,7 +1417,7 @@
 
   .rb__sentence {
     font-size: var(--rb-font-size, clamp(1.75rem, 8.4vw, 2.5rem));
-    line-height: 1.42;
+    line-height: 1.7;
   }
 
   .rb__tray {
