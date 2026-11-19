@@ -1,0 +1,101 @@
+{%- doc -%}
+  Header call-to-action button ("Take a quiz" by default), driven by the header section's cta_* settings.
+  Rendered twice: first in the header's right column, before the currency selector (desktop), and at the bottom of
+  the menu drawer (mobile).
+
+  @param {string} [variant] - 'header' (default) or 'drawer'
+{%- enddoc -%}
+{%- liquid
+  assign cta = section.settings
+  assign variant = variant | default: 'header'
+  assign cta_url = cta.cta_link | default: '/pages/skin-quiz'
+  assign is_current = false
+  if request.path == cta_url
+    assign is_current = true
+  endif
+  assign button_class = 'button'
+  if cta.cta_style == 'outline'
+    assign button_class = 'button-secondary'
+  endif
+-%}
+{%- if cta.show_cta and cta.cta_label != blank -%}
+  <a
+    href="{{ cta_url }}"
+    class="header-cta header-cta--{{ variant }} header-cta--{{ cta.cta_style | default: 'solid' }} {{ button_class }}{% if variant == 'header' %} mobile:hidden{% endif %}"
+    {% if is_current %}
+      aria-current="page"
+    {% endif %}
+  >
+    {%- if cta.cta_icon -%}
+      <svg
+        class="header-cta__icon"
+        aria-hidden="true"
+        focusable="false"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/>
+        <path d="M19 15l.8 1.9 1.9.8-1.9.8L19 20.4l-.8-1.9-1.9-.8 1.9-.8z"/>
+      </svg>
+    {%- endif -%}
+    <span class="header-cta__label">{{ cta.cta_label | escape }}</span>
+  </a>
+{%- endif -%}
+
+{% stylesheet %}
+  .header-cta {
+    --header-cta-height: 2.5rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    flex: 0 0 auto;
+    min-height: var(--header-cta-height);
+    padding-block: 0;
+    padding-inline: 1.15rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  .header-cta__icon {
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* Sits first in the right column, ahead of the currency selector and search */
+  .header-cta--header {
+    margin-inline-end: var(--gap-xs);
+  }
+
+  .header-cta--drawer {
+    --header-cta-height: 3rem;
+
+    display: flex;
+    width: calc(100% - var(--padding-xl));
+    margin-block: var(--padding-md) var(--padding-sm);
+    font-size: 1rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .header-cta__icon {
+      transition: rotate 0.4s var(--animation-easing, ease);
+    }
+
+    .header-cta:hover .header-cta__icon {
+      rotate: 18deg;
+    }
+  }
+{% endstylesheet %}

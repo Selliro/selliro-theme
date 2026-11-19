@@ -8,6 +8,46 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Dagen",
+    "hours": "Uur",
+    "minutes": "Min",
+    "seconds": "Sec",
+    "ends_on": "Aanbieding eindigt op {{ date }}",
+    "editor_hint": "Voeg een einddatum toe in de sectie-instellingen om de countdown te starten."
+  },
+  "collection_hero": {
+    "home": "Home",
+    "breadcrumb_label": "Kruimelpad",
+    "all": "Alles"
+  },
+  "bundle_builder": {
+    "add_aria": "{{ title }} aan bundel toevoegen",
+    "empty_slot": "Leeg vak",
+    "items_count": "{{ count }} artikelen",
+    "announce_added": "{{ title }} toegevoegd. {{ count }} artikelen in je box.",
+    "announce_removed": "{{ title }} verwijderd. {{ count }} artikelen in je box.",
+    "savings": "Je bespaart",
+    "total": "Totaal",
+    "view_bundle": "Box bekijken"
+  },
+  "product_3d": {
+    "view_3d": "Bekijk in 3D",
+    "drag_hint": "Sleep om te draaien",
+    "reset": "Weergave herstellen",
+    "views": "Camerastandpunten",
+    "front": "Voorkant",
+    "side": "Zijkant",
+    "back": "Achterkant",
+    "top": "Bovenkant",
+    "loading": "3D-model laden",
+    "editor_hint": "Kies een product met een 3D-model of plak een link naar een .glb-bestand om het in 3D te tonen.",
+    "position_copied": "Positie gekopieerd – plak deze in een kenmerkblok."
+  },
+  "routine_builder": {
+    "editor_hint": "Voeg een blok ‘Leeg vak’ toe om de zin te bouwen.",
+    "ready": "Je routine is klaar. {{ count }} aanbevolen producten."
+  },
   "blocks": {
     "load_video": "Video laden: {{ description }}",
     "sold_out": "Uitverkocht",
@@ -25,6 +65,9 @@
       "comment": "Reactie",
       "post_success": "Bedankt dat je contact met ons hebt opgenomen. Je hoort zo snel mogelijk van ons.",
       "error_heading": "Pas het volgende aan:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Tijdelijke aanduiding voor logo"
     }
   },
   "accessibility": {
@@ -69,7 +112,19 @@
     "increase_quantity": "Aantal verhogen",
     "quantity": "Aantal",
     "rating": "Beoordeling van dit product is {{ rating }} van 5",
-    "nested_product": "{{ product_title }} voor {{ parent_title }}"
+    "nested_product": "{{ product_title }} voor {{ parent_title }}",
+    "announcement_bar_link": "Meer informatie",
+    "back_to_top": "Terug naar boven",
+    "quick_view_loading": "Product wordt geladen",
+    "before_after_after_alt": "Afbeelding na",
+    "before_after_before_alt": "Afbeelding voor",
+    "before_after_before_visible": "afbeelding voor zichtbaar",
+    "before_after_comparison": "Vergelijking van voor- en na-afbeeldingen",
+    "before_after_slider": "Vergelijkingsschuifregelaar",
+    "before_after_slider_help": "Gebruik de linker- en rechterpijltjestoetsen om de voor- en na-afbeeldingen te vergelijken.",
+    "faq_collapse_answer": "Antwoord samenvouwen",
+    "faq_expand_answer": "Antwoord uitvouwen",
+    "faq_split_gallery": "Veelgestelde vragen"
   },
   "actions": {
     "add_to_cart": "Aan winkelwagen toevoegen",
@@ -242,7 +297,11 @@
       "previous": "Vorige",
       "next": "Volgende",
       "page": "Pagina {{ page }}"
-    }
+    },
+    "read_more_link": "Lees meer",
+    "quick_view": "Snel bekijken",
+    "view_full_details": "Alle details bekijken",
+    "view_item": "Artikel bekijken"
   },
   "gift_cards": {
     "issued": {
@@ -307,5 +366,29 @@
       "success_moderated": "Reactie geplaatst, in afwachting van moderatie",
       "success": "Reactie geplaatst"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Alle rechten voorbehouden."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Collage met afbeelding en tekst"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Voeg minimaal één collectietabblad toe om producten weer te geven."
+    },
+    "icon_with_text": {
+      "empty": "Voeg pictogramblokken toe om content weer te geven.",
+      "section_aria_label": "Hoogtepunten van de winkel"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Bundel toevoegen aan winkelwagen",
+      "adding": "Toevoegen…",
+      "added": "Toegevoegd aan winkelwagen",
+      "error": "Er is iets misgegaan. Probeer het opnieuw."
+    }
+  },
+  "search": {
+    "no_results": "Geen resultaten gevonden"
   }
 }

@@ -18,9 +18,13 @@ class CartDrawerComponent extends DialogComponent {
   }
 
   #handleCartAdd = () => {
-    if (this.hasAttribute('auto-open')) {
-      this.showDialog();
-    }
+    if (!this.hasAttribute('auto-open')) return;
+    // Let the add to cart animation (cart-fly.js) reach the cart icon first, then open the drawer
+    setTimeout(() => {
+      const flight = window.WhispoCartFly?.pending;
+      if (flight) flight.then(() => this.showDialog());
+      else this.showDialog();
+    }, 0);
   };
 
   open() {

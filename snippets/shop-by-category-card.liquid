@@ -1,0 +1,67 @@
+{% comment %}
+  Renders a single category card (image fills full card, glass text overlay).
+  Used by sections/shop-by-category.liquid
+  Required: block, section. Optional: index (card position, picks the placeholder design)
+{% endcomment %}
+
+{% if block.settings.layout_style == 'image' or block.settings.layout_style == 'default' %}
+  <div class="category-image-wrapper{% if block.settings.image == blank %} category-image-wrapper--placeholder{% endif %}">
+    {% if block.settings.image != blank %}
+      {% assign image = block.settings.image %}
+      {% assign image_alt = image.alt | default: block.settings.title | escape %}
+      <img
+        src="{{ image | image_url: width: 800 }}"
+        srcset="{{ image | image_url: width: 400 }} 400w, {{ image | image_url: width: 600 }} 600w, {{ image | image_url: width: 800 }} 800w, {{ image | image_url: width: 1200 }} 1200w"
+        sizes="(min-width: 990px) 33vw, (min-width: 750px) 50vw, 85vw"
+        alt="{{ image_alt }}"
+        loading="lazy"
+        width="800"
+        height="{{ image.height | times: 800 | divided_by: image.width }}"
+      >
+    {% else %}
+      {%- comment -%} No image yet: Shopify's collection placeholder (6 designs, cycled per card) {%- endcomment -%}
+      {%- assign ph_index = index | default: 1 | minus: 1 | modulo: 6 | plus: 1 -%}
+      <div class="image-placeholder">
+        {{ 'collection-' | append: ph_index | placeholder_svg_tag: 'image-placeholder__svg' }}
+      </div>
+    {% endif %}
+
+    <div class="category-content">
+      {% if block.settings.badge_text != blank %}
+        <span class="category-badge badge-{{ block.settings.badge_type | default: 'neutral' }}">
+          {{ block.settings.badge_text }}
+        </span>
+      {% endif %}
+
+      {% if block.settings.title != blank %}
+        <h3 class="category-title">{{ block.settings.title }}</h3>
+      {% endif %}
+
+      {% if block.settings.description != blank %}
+        <p class="category-description">{{ block.settings.description }}</p>
+      {% endif %}
+
+      {% if block.settings.link_text != blank and block.settings.link != blank %}
+        <span class="category-link">{{ block.settings.link_text }}</span>
+      {% endif %}
+    </div>
+  </div>
+
+{% else %}
+  <div class="category-content category-content--text-only">
+    {% if block.settings.badge_text != blank %}
+      <span class="category-badge badge-{{ block.settings.badge_type | default: 'neutral' }}">
+        {{ block.settings.badge_text }}
+      </span>
+    {% endif %}
+    {% if block.settings.title != blank %}
+      <h3 class="category-title">{{ block.settings.title }}</h3>
+    {% endif %}
+    {% if block.settings.description != blank %}
+      <p class="category-description">{{ block.settings.description }}</p>
+    {% endif %}
+    {% if block.settings.link_text != blank and block.settings.link != blank %}
+      <span class="category-link">{{ block.settings.link_text }}</span>
+    {% endif %}
+  </div>
+{% endif %}

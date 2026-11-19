@@ -8,6 +8,46 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Dni",
+    "hours": "Hod",
+    "minutes": "Min",
+    "seconds": "Sek",
+    "ends_on": "Ponuka končí {{ date }}",
+    "editor_hint": "Pridajte v nastaveniach sekcie dátum konca, aby sa spustilo odpočítavanie."
+  },
+  "collection_hero": {
+    "home": "Domov",
+    "breadcrumb_label": "Navigačná cesta",
+    "all": "Všetko"
+  },
+  "bundle_builder": {
+    "add_aria": "Pridať {{ title }} do balíka",
+    "empty_slot": "Prázdne miesto",
+    "items_count": "{{ count }} položky",
+    "announce_added": "{{ title }} pridané. V krabici: {{ count }} položiek.",
+    "announce_removed": "{{ title }} odstránené. V krabici: {{ count }} položiek.",
+    "savings": "Ušetríte",
+    "total": "Spolu",
+    "view_bundle": "Zobraziť krabicu"
+  },
+  "product_3d": {
+    "view_3d": "Zobraziť v 3D",
+    "drag_hint": "Potiahnutím otočíte",
+    "reset": "Obnoviť pohľad",
+    "views": "Pohľady kamery",
+    "front": "Spredu",
+    "side": "Z boku",
+    "back": "Zozadu",
+    "top": "Zhora",
+    "loading": "Načítava sa 3D model",
+    "editor_hint": "Vyberte produkt s 3D modelom alebo vložte odkaz na súbor .glb, aby sa zobrazil v 3D.",
+    "position_copied": "Pozícia skopírovaná — vložte ju do bloku funkcie."
+  },
+  "routine_builder": {
+    "editor_hint": "Pridajte blok „Medzera“ a začnite tvoriť vetu.",
+    "ready": "Vaša rutina je pripravená. Odporúčané produkty: {{ count }}."
+  },
   "blocks": {
     "load_video": "Načítať video: {{ description }}",
     "sold_out": "Vypredané",
@@ -25,6 +65,9 @@
       "comment": "Komentár",
       "post_success": "Ďakujeme, že ste nás kontaktovali. Budeme sa vám venovať čo najskôr.",
       "error_heading": "Upravte tieto údaje:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Zástupný symbol loga"
     }
   },
   "accessibility": {
@@ -71,7 +114,19 @@
     "rating": "Hodnotenie tohto produktu je {{ rating }} z 5",
     "quantity": "Množstvo",
     "nested_product": "{{ product_title }} pre {{ parent_title }}",
-    "discount_menu": "Zľavové kódy"
+    "discount_menu": "Zľavové kódy",
+    "announcement_bar_link": "Ďalšie informácie",
+    "back_to_top": "Späť nahor",
+    "quick_view_loading": "Načítava sa produkt",
+    "before_after_after_alt": "Obrázok po",
+    "before_after_before_alt": "Obrázok pred",
+    "before_after_before_visible": "viditeľný obrázok pred",
+    "before_after_comparison": "Porovnanie obrázkov pred a po",
+    "before_after_slider": "Posúvač porovnania",
+    "before_after_slider_help": "Pomocou klávesov so šípkami doľava a doprava porovnajte obrázky pred a po.",
+    "faq_collapse_answer": "Zbaliť odpoveď",
+    "faq_expand_answer": "Rozbaliť odpoveď",
+    "faq_split_gallery": "Často kladené otázky"
   },
   "actions": {
     "add_to_cart": "Pridať do košíka",
@@ -252,7 +307,11 @@
       "previous": "Predchádzajúce",
       "next": "Nasledujúce",
       "page": "Stránka {{ page }}"
-    }
+    },
+    "read_more_link": "Čítať ďalej",
+    "quick_view": "Rýchly náhľad",
+    "view_full_details": "Zobraziť všetky podrobnosti",
+    "view_item": "Zobraziť položku"
   },
   "gift_cards": {
     "issued": {
@@ -319,5 +378,29 @@
       "success_moderated": "Komentár zverejnený, čaká na schválenie",
       "success": "Komentár zverejnený"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Všetky práva vyhradené."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Koláž obrázka s textom"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Pridajte aspoň jednu kartu kolekcie, aby sa zobrazili produkty."
+    },
+    "icon_with_text": {
+      "empty": "Pridajte bloky ikon, aby sa zobrazil obsah.",
+      "section_aria_label": "Prednosti obchodu"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Pridať balík do košíka",
+      "adding": "Pridáva sa…",
+      "added": "Pridané do košíka",
+      "error": "Niečo sa pokazilo. Skúste to znova."
+    }
+  },
+  "search": {
+    "no_results": "Nenašli sa žiadne výsledky"
   }
 }

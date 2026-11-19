@@ -8,6 +8,151 @@
  * ------------------------------------------------------------
  */
 {
+  "search_plus": {
+    "placeholder": "Search products, pages, blog posts…",
+    "recent": "Recent searches",
+    "clear_recent": "Clear",
+    "remove_recent": "Remove {{ term }}",
+    "popular": "Popular searches",
+    "quick_links": "Quick links",
+    "trending": "Trending now",
+    "suggestions": "Suggestions",
+    "see_all": "See all",
+    "view_all_html": "View all results for <b>“{{ terms }}”</b>",
+    "no_results_title_html": "No results for <b>“{{ terms }}”</b>",
+    "no_results_text": "Check the spelling, use fewer words, or try one of these:",
+    "kbd_navigate": "to navigate",
+    "kbd_select": "to select",
+    "kbd_close": "to close",
+    "page": "Page",
+    "article": "Blog post",
+    "collection": "Collection",
+    "products_count": {
+      "one": "{{ count }} product",
+      "other": "{{ count }} products"
+    },
+    "heading_empty": "What are you looking for?",
+    "subheading_empty": "Search our products, skincare guides and pages.",
+    "heading_results_html": "Results for <em>“{{ terms }}”</em>",
+    "results_count": {
+      "one": "{{ count }} result",
+      "other": "{{ count }} results"
+    },
+    "tab_all": "All",
+    "tab_products": "Products",
+    "tab_articles": "Blog posts",
+    "tab_pages": "Pages",
+    "articles_pages": "Blog posts & pages",
+    "read_more": "Read more",
+    "no_results_page_title_html": "We couldn't find anything for <em>“{{ terms }}”</em>",
+    "no_results_page_text": "Try a different word or one of our popular searches. Here are some favourites in the meantime.",
+    "you_might_like": "You might like"
+  },
+  "cart_drawer_plus": {
+    "free_shipping_away_html": "You're {{ amount }} away from <b>free shipping</b>",
+    "free_shipping_unlocked_html": "<b>You've unlocked free shipping!</b>",
+    "popular": "Popular right now",
+    "add": "Add",
+    "add_product": "Add {{ product }} to cart",
+    "added": "Added to your cart",
+    "choose_option": "Choose an option",
+    "previous": "Previous",
+    "next": "Next",
+    "empty_text": "Looks like you haven't found your glow yet. Start with our bestsellers.",
+    "secure_checkout": "Secure checkout",
+    "keep_shopping": "Keep shopping",
+    "view": "View"
+  },
+  "countdown_banner": {
+    "days": "Days",
+    "hours": "Hrs",
+    "minutes": "Min",
+    "seconds": "Sec",
+    "ends_on": "Offer ends {{ date }}",
+    "editor_hint": "Add an end date in the section settings to start the countdown."
+  },
+  "collection_hero": {
+    "home": "Home",
+    "breadcrumb_label": "Breadcrumb",
+    "all": "All"
+  },
+  "bundle_builder": {
+    "add_aria": "Add {{ title }} to bundle",
+    "empty_slot": "Empty slot",
+    "items_count": "Items: {{ count }}",
+    "announce_added": "{{ title }} added. Items in your box: {{ count }}.",
+    "announce_removed": "{{ title }} removed. Items in your box: {{ count }}.",
+    "savings": "You save",
+    "total": "Total",
+    "view_bundle": "View box"
+  },
+  "b2b_wholesale": {
+    "tab_calculator": "Bulk pricing",
+    "tab_quote": "Request a quote",
+    "product": "Product",
+    "variant": "Variant",
+    "quantity": "Quantity (units)",
+    "case_pack": "Sold in cases of {{ size }}",
+    "decrease": "Fewer units",
+    "increase": "More units",
+    "tier_units": "{{ qty }}+ units",
+    "tier_off": "{{ discount }} off",
+    "unit_price": "Wholesale unit price",
+    "retail_each": "Retail {{ price }}",
+    "total": "Order total",
+    "savings": "You save",
+    "margin": "Your margin at retail price",
+    "margin_note": "{{ amount }} profit per unit when you sell at {{ price }}",
+    "next_tier": "Add [count] more units to unlock [discount] off",
+    "top_tier": "You've unlocked our best price",
+    "below_min": "Minimum order is [count] units",
+    "contract_pricing": "Your contract pricing",
+    "preview_pricing": "Wholesale price preview · applied once your account is approved",
+    "add_to_cart": "Add to cart",
+    "added": "Added to cart",
+    "quote_this": "Request this quote",
+    "quote_for": "Quote for [quantity] × [product] · est. [total]",
+    "welcome": "Welcome back, {{ name }}",
+    "buying_for": "Buying for {{ company }} · {{ location }}",
+    "view_orders": "View orders",
+    "signed_in_retail": "You're signed in, but this account isn't set up for wholesale yet. Apply below and we'll upgrade it.",
+    "partner_login": "Already a wholesale partner?",
+    "log_in": "Log in",
+    "name": "Your name",
+    "business": "Business name",
+    "email": "Work email",
+    "phone": "Phone",
+    "business_type": "Business type",
+    "type_salon": "Salon or spa",
+    "type_retail": "Retail store",
+    "type_online": "Online shop",
+    "type_distributor": "Distributor",
+    "type_other": "Other",
+    "volume": "Expected monthly order",
+    "message": "Anything else we should know?",
+    "submit": "Send request",
+    "success": "Thank you! Our wholesale team will reply within one business day.",
+    "send_another": "Send another request",
+    "editor_hint": "Choose the products for the calculator in the section settings.",
+    "error": "Something went wrong. Please try again."
+  },
+  "product_3d": {
+    "view_3d": "View in 3D",
+    "drag_hint": "Drag to rotate",
+    "reset": "Reset view",
+    "views": "Camera views",
+    "front": "Front",
+    "side": "Side",
+    "back": "Back",
+    "top": "Top",
+    "loading": "Loading 3D model",
+    "editor_hint": "Choose a product that has a 3D model, or paste a link to a .glb file, to show it in 3D.",
+    "position_copied": "Hotspot position copied — paste it into a feature block."
+  },
+  "routine_builder": {
+    "editor_hint": "Add a “Blank” block to start building the sentence.",
+    "ready": "Your routine is ready. {{ count }} products recommended."
+  },
   "accessibility": {
     "account": "Account",
     "cart": "Cart",
@@ -50,7 +195,19 @@
     "slideshow_play": "Play slideshow",
     "slideshow_previous": "Previous slide",
     "unit_price": "Unit price",
-    "find_country": "Find country"
+    "find_country": "Find country",
+    "announcement_bar_link": "Learn more",
+    "back_to_top": "Back to top",
+    "quick_view_loading": "Loading product",
+    "before_after_after_alt": "After image",
+    "before_after_before_alt": "Before image",
+    "before_after_before_visible": "before image visible",
+    "before_after_comparison": "Before and after image comparison",
+    "before_after_slider": "Comparison slider",
+    "before_after_slider_help": "Use the left and right arrow keys to compare the before and after images.",
+    "faq_collapse_answer": "Collapse answer",
+    "faq_expand_answer": "Expand answer",
+    "faq_split_gallery": "Frequently asked questions"
   },
   "actions": {
     // Quick add button on product cards, shortened version of add to cart
@@ -121,7 +278,10 @@
     "filter": "Filter",
     "load_video": "Load video: {{ description }}",
     "sold_out": "Sold out",
-    "payment_methods": "Payment methods"
+    "payment_methods": "Payment methods",
+    "marquee_logo": {
+      "placeholder_a11y": "Logo placeholder"
+    }
   },
   "blogs": {
     "article": {
@@ -224,6 +384,10 @@
     "recently_viewed_products": "Recently viewed",
     "reviews": "reviews",
     "read_more": "Read more...",
+    "read_more_link": "Read more",
+    "quick_view": "Quick view",
+    "view_full_details": "View full details",
+    "view_item": "View item",
     "search_input_label": "Search",
     "search_input_placeholder": "Search",
     "search": "Search",
@@ -310,6 +474,27 @@
     "blog_post_date": "Date",
     "blog_post_description": "An excerpt of your blog post's content"
   },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "All rights reserved."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Image with text collage"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Add at least one collection tab to display products."
+    },
+    "icon_with_text": {
+      "empty": "Add icon blocks to display content.",
+      "section_aria_label": "Store highlights"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Add bundle to cart",
+      "adding": "Adding…",
+      "added": "Added to cart",
+      "error": "Something went wrong. Try again."
+    }
+  },
   "products": {
     "product": {
       "add_to_cart": "Add to cart",
@@ -325,5 +510,8 @@
       "quantity_maximum": "Maximum of {{ maximum }}",
       "in_cart": "in cart"
     }
+  },
+  "search": {
+    "no_results": "No results found"
   }
 }

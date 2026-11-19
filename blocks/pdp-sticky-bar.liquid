@@ -1,0 +1,159 @@
+{%- doc -%}
+  Sticky add-to-cart bar — slides up from the bottom once the main Add to cart button scrolls away.
+  It mirrors the selected size and price and presses the main button, so the cart, quantity and
+  variant logic stay Horizon's own.
+{%- enddoc -%}
+{%- assign product = closest.product -%}
+<pdp-sticky-bar
+  class="pdp-sticky color-{{ block.settings.color_scheme }}"
+  data-hide-mobile="{{ block.settings.hide_on_mobile }}"
+  aria-hidden="true"
+  {{ block.shopify_attributes }}
+>
+  <div class="pdp-sticky__inner">
+    <div class="pdp-sticky__product">
+      {%- if product.featured_image -%}
+        {{ product.featured_image | image_url: width: 120 | image_tag: loading: 'lazy', width: 44, height: 44, alt: '', class: 'pdp-sticky__image' }}
+      {%- endif -%}
+      <div class="pdp-sticky__text">
+        <span class="pdp-sticky__title">{{ product.title | escape }}</span>
+        <span class="pdp-sticky__variant" data-pdp-sticky-variant>
+          {%- unless product.has_only_default_variant -%}{{ product.selected_or_first_available_variant.title | escape }}{%- endunless -%}
+        </span>
+      </div>
+    </div>
+    <span class="pdp-sticky__price" data-pdp-sticky-price>{{ product.selected_or_first_available_variant.price | money }}</span>
+    <button type="button" class="button pdp-sticky__button" data-pdp-sticky-add tabindex="-1">
+      <span data-pdp-sticky-label>{{ block.settings.button_label | escape }}</span>
+    </button>
+  </div>
+</pdp-sticky-bar>
+
+<script src="{{ 'pdp.js' | asset_url }}" defer></script>
+
+{% stylesheet %}
+  .pdp-sticky {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: calc(var(--layer-sticky, 20) + 1);
+    padding: 0.65rem max(1rem, env(safe-area-inset-left)) calc(0.65rem + env(safe-area-inset-bottom));
+    background: var(--color-background);
+    color: var(--color-foreground);
+    box-shadow: 0 -10px 30px -18px rgb(0 0 0 / 0.35);
+    translate: 0 110%;
+    transition: translate 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .pdp-sticky.is-visible {
+    translate: 0 0;
+  }
+
+  /* Lift the back-to-top button above the bar while it is showing */
+  #progress-wrap {
+    transition: translate 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+  }
+
+  body:has(.pdp-sticky.is-visible) #progress-wrap {
+    translate: 0 calc(-1 * (4.5rem + env(safe-area-inset-bottom)));
+  }
+
+  .pdp-sticky[data-hide-mobile='true'] {
+    @media screen and (max-width: 749px) {
+      display: none;
+    }
+  }
+
+  .pdp-sticky__inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: var(--page-width, 1440px);
+    margin-inline: auto;
+  }
+
+  .pdp-sticky__product {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .pdp-sticky__image {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 8px;
+    object-fit: cover;
+    flex: 0 0 auto;
+  }
+
+  .pdp-sticky__text {
+    display: grid;
+    min-width: 0;
+  }
+
+  .pdp-sticky__title {
+    font-weight: 600;
+    font-size: 0.9375rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pdp-sticky__variant {
+    font-size: 0.75rem;
+    opacity: 0.65;
+  }
+
+  .pdp-sticky__price {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .pdp-sticky__price :is(s, .compare-at-price) {
+    margin-inline-start: 0.35rem;
+    font-weight: 400;
+    opacity: 0.5;
+  }
+
+  .pdp-sticky__button {
+    flex: 0 0 auto;
+    min-height: 2.75rem;
+    padding-inline: 1.75rem;
+    border-radius: 999px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .pdp-sticky__image,
+    .pdp-sticky__variant {
+      display: none;
+    }
+
+    .pdp-sticky__title {
+      font-size: 0.8125rem;
+    }
+
+    .pdp-sticky__button {
+      padding-inline: 1.15rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pdp-sticky {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Sticky add to cart",
+  "tag": null,
+  "settings": [
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Add to cart" },
+    { "type": "checkbox", "id": "hide_on_mobile", "label": "Hide on mobile", "default": false },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" }
+  ],
+  "presets": [{ "name": "Sticky add to cart" }]
+}
+{% endschema %}

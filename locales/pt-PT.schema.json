@@ -8,6 +8,329 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "image_padding": "Espaçamento das imagens",
+    "image_padding_info": "Espaço entre as imagens e os limites da secção. Nos telemóveis é usada a margem da página.",
+    "layout_stacked": "Empilhado: cartões grandes sobrepostos",
+    "image_parallax": "Movimento da imagem ao deslocar",
+    "image_parallax_info": "As imagens deslizam suavemente dentro da moldura ao deslocar a página. Defina 0 para desativar.",
+    "timer_style": "Estilo do temporizador",
+    "timer_tiles": "Blocos",
+    "timer_plain": "Simples",
+    "show_end_date": "Mostrar a data de fim abaixo do temporizador",
+    "badge_text": "Texto do autocolante",
+    "badge_text_info": "Mostrado num autocolante redondo na imagem da esquerda. Deixe vazio para ocultar.",
+    "d_badge": "Até 25% de desconto",
+    "name": "Faixa com contagem decrescente",
+    "layout": "Esquema",
+    "layout_split": "Dividido: uma imagem de cada lado",
+    "layout_collage": "Colagem: cartões de imagem sobrepostos",
+    "countdown": "Contagem decrescente",
+    "end_date": "Data de fim",
+    "end_date_info": "Formato AAAA-MM-DD, por exemplo 2026-11-27. Usa o fuso horário da sua loja. Deixe vazio para ocultar a contagem.",
+    "end_time": "Hora de fim",
+    "end_time_info": "Formato de 24 horas HH:MM, por exemplo 23:59.",
+    "show_labels": "Mostrar etiquetas (dias, horas, minutos, segundos)",
+    "after_end": "Quando a contagem terminar",
+    "after_message": "Mostrar uma mensagem",
+    "after_hide": "Ocultar a secção",
+    "after_zeros": "Continuar a mostrar zeros",
+    "expired_message": "Mensagem",
+    "d_expired": "Esta oferta terminou",
+    "d_eyebrow": "Saldos de Black Friday",
+    "d_heading": "Os seus favoritos, agora por menos",
+    "d_text": "<p>Poupe até 25% em essenciais de cuidados de pele. Crie uma rotina para a sua pele antes de a oferta terminar.</p>",
+    "d_button": "Ver os saldos",
+    "images": "Imagens",
+    "left_image": "Imagem da esquerda",
+    "left_image_2": "Imagem da esquerda 2",
+    "right_image": "Imagem da direita",
+    "right_image_2": "Imagem da direita 2",
+    "mobile_images": "Imagens no telemóvel",
+    "show_images": "Mostrar em linha acima do texto",
+    "hide_images": "Ocultar",
+    "number_size": "Tamanho dos números",
+    "number_color": "Cor dos números",
+    "number_color_info": "Deixe vazio para usar a cor do texto do esquema."
+  },
+  "footer_wordmark": {
+    "header": "Texto grande no rodapé",
+    "text": "Texto",
+    "text_info": "Mostrado em tamanho enorme em toda a largura da parte inferior do rodapé, como um logótipo. Deixe vazio para ocultar.",
+    "font": "Tipo de letra",
+    "crop": "Cortado em baixo",
+    "crop_info": "Quanto das letras ultrapassa o limite inferior.",
+    "color": "Cor",
+    "color_info": "Deixe vazio para usar o esquema de cores da parte inferior do rodapé.",
+    "animate": "Letras surgem ao deslocar"
+  },
+  "slideshow_media": {
+    "card_spacing": "Espaço acima e abaixo",
+    "card_spacing_info": "Apenas na largura da página. É usado o mesmo espaço acima e abaixo da apresentação.",
+    "eyebrow": "Título pequeno",
+    "button_2": "Etiqueta do segundo botão",
+    "text_tone": "Cor do texto",
+    "dark": "Escuro",
+    "content_style": "Estilo do texto",
+    "glass": "Painel de vidro",
+    "no_panel": "Sem painel",
+    "heading_size": "Tamanho do título",
+    "bars": "Barras de progresso",
+    "media_layout": "Esquema de multimédia",
+    "split": "Dividido (dois conteúdos lado a lado)",
+    "split_ratio": "Largura do conteúdo 1",
+    "split_mobile": "Divisão no telemóvel",
+    "stack": "Empilhar em cima e em baixo",
+    "first_only": "Mostrar apenas o conteúdo 1",
+    "mobile_image": "Imagem para telemóvel (opcional)",
+    "mobile_image_info": "Mostrada nos telemóveis em vez da imagem acima.",
+    "media_effect": "Efeito da imagem",
+    "content_animation": "Animação do texto",
+    "rise": "Surgir de baixo",
+    "video_toggle": "Mostrar botão de pausa / reprodução nos vídeos",
+    "video_toggle_info": "Os vídeos estão sem som e em ciclo. Quem prefere menos movimento vê a imagem de capa até carregar em reproduzir."
+  },
+  "collection_grid": {
+    "products_per_row": "Produtos por linha",
+    "products_per_row_info": "Computador. Os tablets mostram até 3.",
+    "promo_header": "Blocos promocionais",
+    "promo_info": "Os blocos aparecem entre os produtos na primeira página da coleção.",
+    "tile_1": "Bloco 1",
+    "tile_2": "Bloco 2",
+    "show_tile": "Mostrar bloco",
+    "position": "Mostrar após o produto número",
+    "span": "Largura",
+    "span_1": "1 coluna",
+    "span_2": "2 colunas",
+    "icon_leaf": "Folha",
+    "icon_sparkle": "Brilho",
+    "icon_droplet": "Gota",
+    "icon_sun": "Sol",
+    "icon_heart": "Coração",
+    "icon_gift": "Presente",
+    "icon_sprout": "Rebento",
+    "icon_star": "Estrela",
+    "d1_heading": "Essenciais de cuidado da pele",
+    "d1_text": "Crie uma rotina que mantém a pele calma, luminosa e protegida.",
+    "d1_button": "Comprar cuidados de pele",
+    "d2_heading": "Proteção solar diária",
+    "d2_text": "FPS leve que fica perfeito por baixo da maquilhagem.",
+    "d2_button": "Descobrir FPS",
+    "media_upload": "Vídeo (carregamento)",
+    "media_mp4": "Vídeo (ligação MP4)",
+    "media_external": "YouTube ou Vimeo",
+    "video_mp4": "URL do vídeo MP4",
+    "video_mp4_info": "Cole uma ligação .mp4 direta, por exemplo do admin da Shopify → Conteúdo → Ficheiros.",
+    "video_url": "URL do YouTube ou Vimeo",
+    "image_poster_info": "Para vídeos, mostrada como capa e quando o visitante prefere menos movimento."
+  },
+  "collection_hero": {
+    "name": "Faixa da coleção",
+    "use_collection_image": "Usar a imagem da coleção quando existir",
+    "fallback_image": "Imagem alternativa",
+    "text_color": "Cor do texto",
+    "title_size": "Tamanho do título",
+    "rounded": "Cantos inferiores arredondados",
+    "details": "Detalhes",
+    "show_breadcrumbs": "Mostrar trilho de navegação",
+    "show_description": "Mostrar descrição da coleção",
+    "show_count": "Mostrar número de produtos",
+    "quick_links_header": "Ligações rápidas",
+    "quick_links_info": "Mostradas abaixo da faixa. A coleção atual fica destacada.",
+    "show_all": "Mostrar ligação \"Todos\"",
+    "show_counts": "Mostrar número de produtos"
+  },
+  "section_spacing": {
+    "header": "Espaçamento das secções",
+    "mode": "Espaço entre secções",
+    "mode_info": "O espaçamento igual dá o mesmo espaço a cada secção. As faixas de ponta a ponta ficam encostadas.",
+    "uniform": "Espaçamento igual (recomendado)",
+    "custom": "Usar o preenchimento de cada secção",
+    "desktop": "Espaço entre secções (computador)",
+    "mobile": "Espaço entre secções (móvel)",
+    "scope": "Aplicar espaçamento igual em",
+    "scope_home": "Página inicial",
+    "scope_all": "Todas as páginas"
+  },
+  "bundle_builder": {
+    "name": "Criador de pack",
+    "content": "Conteúdo",
+    "eyebrow": "Pré-título",
+    "heading": "Título",
+    "text": "Texto",
+    "products_header": "Produtos",
+    "products_info": "Escolha os produtos que os clientes podem adicionar. Deixe vazio para usar uma coleção.",
+    "products_limit": "Produtos a mostrar",
+    "rules": "Regras do pack",
+    "min_items": "Mínimo de artigos para adicionar o pack",
+    "max_items": "Máximo de artigos na caixa",
+    "discount_info": "Mostra a poupança e aplica um código de desconto ao adicionar o pack. Crie os códigos no admin da Shopify → Descontos.",
+    "tier_1": "Nível 1",
+    "tier_2": "Nível 2",
+    "tier_3": "Nível 3",
+    "items_needed": "Artigos necessários",
+    "items_needed_info": "Defina 0 para desativar este nível.",
+    "discount": "Desconto",
+    "discount_code": "Código de desconto",
+    "code_info": "Opcional. Aplicado ao carrinho quando este nível é atingido.",
+    "tier_label": "Etiqueta do nível",
+    "tier_label_info": "[count] e [discount] são substituídos automaticamente.",
+    "add_property": "Agrupar artigos do pack no carrinho",
+    "add_property_info": "Adiciona uma propriedade oculta \"_bundle\" a cada artigo.",
+    "box": "Caixa",
+    "box_title": "Título da caixa",
+    "slots": "Espaços mostrados",
+    "messages_info": "[count] e [discount] são substituídos automaticamente.",
+    "msg_min": "Mensagem antes do mínimo",
+    "msg_more": "Mensagem para o próximo nível",
+    "msg_top": "Mensagem ao atingir o nível máximo",
+    "msg_max": "Mensagem quando a caixa está cheia",
+    "cta_label": "Texto do botão",
+    "success_label": "Texto do botão após adicionar",
+    "show_fill": "Mostrar ligação \"Completar a minha caixa\"",
+    "fill_label": "Texto de \"Completar a minha caixa\"",
+    "note": "Nota abaixo do botão",
+    "show_second_image": "Mostrar segunda imagem ao passar o cursor",
+    "show_compare_price": "Mostrar preço de comparação",
+    "d_eyebrow": "Crie o seu pack e poupe",
+    "d_heading": "Crie o seu pack",
+    "d_text": "<p>A escolha é sua. Com o nosso criador de packs, pode selecionar qualquer combinação dos nossos produtos. A forma mais fácil de agradar a todos.</p>",
+    "d_box_title": "O seu pack",
+    "d_tier_label": "[count] artigos · -[discount]%",
+    "d_msg_min": "Adicione mais [count] produtos para continuar e poupar [discount]",
+    "d_msg_more": "Adicione mais [count] para poupar [discount]",
+    "d_msg_top": "O seu pack está completo, está a poupar [discount]!",
+    "d_msg_max": "Pode escolher até [count] produtos",
+    "d_cta": "Adicionar pack ao carrinho",
+    "d_success": "Pack adicionado ao carrinho",
+    "d_fill": "Completar a minha caixa",
+    "d_note": "Desconto aplicado no checkout",
+    "highlight_word": "Palavra destacada",
+    "highlight_word_info": "Deve corresponder exatamente a uma palavra do título.",
+    "highlight_style": "Estilo do destaque",
+    "hl_none": "Nenhum",
+    "hl_squiggle": "Sublinhado rabiscado",
+    "hl_wave": "Sublinhado em onda",
+    "hl_marker": "Marcador",
+    "hl_circle": "Círculo desenhado à mão",
+    "highlight_color": "Cor do destaque",
+    "d_highlight": "pack",
+    "card_add_label": "Texto do botão do cartão",
+    "d_card_add": "Adicionar ao pack"
+  },
+  "button_fx": {
+    "label": "Animação ao passar o cursor",
+    "info": "Aplica-se aos botões de todo o tema.",
+    "lift_shine": "Elevação e brilho",
+    "fill": "Varrimento de cor",
+    "lift": "Elevação",
+    "none": "Nenhuma"
+  },
+  "routine_builder": {
+    "palette": "Paleta de cores",
+    "palette_sunrise": "Amanhecer",
+    "palette_botanical": "Botânica",
+    "palette_berry": "Frutos vermelhos",
+    "palette_ocean": "Oceano",
+    "palette_custom": "Personalizada (cor de destaque)",
+    "panel_style": "Estilo do fundo",
+    "panel_card": "Cartão arredondado",
+    "panel_open": "Largura total",
+    "accent_info": "Utilizada nos botões de adição rápida e em toda a secção quando a paleta é Personalizada.",
+    "carousel_info": "Quando existirem mais produtos do que colunas, são mostrados num carrossel.",
+    "name": "Criador de rotina",
+    "blank": "Espaço em branco",
+    "sentence": "Frase",
+    "eyebrow": "Pré-título",
+    "sentence_font": "Tipo de letra da frase",
+    "font_custom": "Personalizado (escolha abaixo)",
+    "font_theme_heading": "Tipo de letra dos títulos do tema",
+    "font_theme_accent": "Tipo de letra de destaque do tema",
+    "font_theme_body": "Tipo de letra do texto do tema",
+    "custom_font": "Tipo de letra personalizado",
+    "sentence_size": "Tamanho da frase (computador)",
+    "placeholder": "Texto do espaço vazio",
+    "placeholder_info": "Mostrado num espaço vazio. Cada espaço pode substituí-lo.",
+    "hint": "Sugestão abaixo da frase",
+    "multiple_note": "Nota de escolha múltipla",
+    "done_button": "Botão \"Concluído\" (escolha múltipla)",
+    "design": "Design",
+    "accent_color": "Cor de destaque",
+    "accent_text_color": "Cor do texto sobre o destaque",
+    "mood": "Fundo de ambiente",
+    "mood_info": "Nuvens de cor suaves que assumem as cores das respostas escolhidas.",
+    "mood_intensity": "Intensidade do ambiente",
+    "floating_images": "Imagens flutuantes",
+    "floating_info": "Uma imagem de cada lado. Ao deslocar, sobem da parte inferior do ecrã até ao topo, uma após a outra.",
+    "left_image": "Imagem da esquerda",
+    "right_image": "Imagem da direita",
+    "rises_first": "Imagem que sobe primeiro",
+    "shape_rounded": "Retângulo arredondado",
+    "shape_arch": "Arco",
+    "shape_pebble": "Seixo",
+    "tilt": "Inclinação",
+    "rise_speed": "Velocidade de subida",
+    "rise_speed_info": "Mais alto é mais rápido. 0 mantém as imagens paradas.",
+    "on_mobile": "Em dispositivos móveis",
+    "show_small": "Mostrar pequenas",
+    "hide": "Ocultar",
+    "results": "Resultados",
+    "results_eyebrow": "Pré-título dos resultados",
+    "results_heading": "Título dos resultados",
+    "scroll_to_results": "Deslocar até aos produtos quando a frase estiver completa",
+    "products_to_show": "Produtos a mostrar",
+    "columns_desktop": "Colunas no computador",
+    "fallback_collection": "Coleção de reserva",
+    "fallback_info": "Completa a rotina quando as respostas recomendam poucos produtos.",
+    "show_add_all": "Mostrar botão \"Adicionar rotina ao carrinho\"",
+    "add_all_label": "Texto do botão de rotina",
+    "quick_add_label": "Texto do botão de adição rápida",
+    "reset_label": "Texto da ligação \"Recomeçar\"",
+    "remember": "Memorizar respostas de clientes que regressam",
+    "words_before": "Palavras antes do espaço",
+    "words_after": "Palavras depois do espaço",
+    "words_after_info": "Opcional, por exemplo uma vírgula ou \"todas as manhãs.\"",
+    "block_placeholder_info": "Deixe vazio para usar o texto da secção.",
+    "question": "Pergunta para leitores de ecrã",
+    "question_info": "Lida antes das respostas. Por predefinição, as palavras antes do espaço.",
+    "allow_multiple": "Permitir várias respostas",
+    "answer_1": "Resposta 1",
+    "answer_2": "Resposta 2",
+    "answer_3": "Resposta 3",
+    "answer_4": "Resposta 4",
+    "answer_5": "Resposta 5",
+    "answer_6": "Resposta 6",
+    "mood_color": "Cor de ambiente",
+    "thumbnail_info": "Miniatura pequena opcional.",
+    "recommended_products": "Produtos recomendados",
+    "answer_hide_info": "Deixe vazio para ocultar esta resposta.",
+    "d_eyebrow": "Crie a sua rotina",
+    "d_placeholder": "escolher",
+    "d_hint": "Toque nas palavras sublinhadas para criar a sua rotina",
+    "d_multiple_note": "Escolha quantas quiser",
+    "d_done": "Concluído",
+    "d_results_eyebrow": "Feito para si",
+    "d_results_heading": "A sua rotina está pronta",
+    "d_add_all": "Adicionar rotina ao carrinho",
+    "d_quick_add": "Adicionar ao carrinho",
+    "d_reset": "Recomeçar",
+    "d_before": "A minha pele está",
+    "d_dry": "seca",
+    "d_oily": "oleosa",
+    "d_both": "um pouco das duas",
+    "d_sensitive": "sensível",
+    "p_fix": "Adorava melhorar",
+    "p_have": "e tenho",
+    "p_routine": "para a minha rotina.",
+    "p_dullness": "o tom baço",
+    "p_dryness": "a secura",
+    "p_dark_spots": "as manchas escuras",
+    "p_fine_lines": "as linhas finas",
+    "p_sun_damage": "os danos solares",
+    "p_five": "cinco minutos",
+    "p_ten": "dez minutos",
+    "p_all_time": "todo o tempo do mundo"
+  },
   "names": {
     "404": "404",
     "borders": "Limites",
@@ -113,7 +436,6 @@
     "search": "Pesquisar",
     "section": "Secção",
     "selected_variants": "Variantes selecionadas",
-    "shop_the_look": "Visual Shop",
     "slide": "Diapositivo",
     "social_media_links": "Ligações de redes sociais",
     "steps": "Passos",
@@ -183,7 +505,23 @@
     "blog_posts_editorial": "Publicações no blogue: Editorial",
     "excerpt": "Excerto",
     "footer_password": "Rodapé da palavra-passe",
-    "policies_and_links": "Políticas e links"
+    "policies_and_links": "Políticas e links",
+    "column": "Column",
+    "card": "Card",
+    "carousel": "Carousel",
+    "carousel_content": "Carousel content",
+    "featured_product_information": "Featured product",
+    "image_compare": "Image compare",
+    "layered_slideshow": "Layered slideshow",
+    "new_arrivals_showcase": "New arrivals showcase",
+    "product_hotspots": "Product hotspots",
+    "hotspot_product": "Hotspot",
+    "product_sku": "SKU",
+    "quick_order_list": "Quick order list",
+    "slideshow_full_frame": "Slideshow: Full frame",
+    "slideshow_inset": "Slideshow: Inset",
+    "subheading": "Subheading",
+    "comparison_slider": "Comparison slider"
   },
   "settings": {
     "alignment": "Alinhamento",
@@ -550,10 +888,38 @@
     "custom_mobile_media": "Conteúdo multimédia para móvel personalizado",
     "stack_media_on_mobile": "Empilhar conteúdo multimédia",
     "media_type_1": "Tipo de conteúdo multimédia",
-    "media_type_2": "Tipo de conteúdo multimédia 2"
+    "media_type_2": "Tipo de conteúdo multimédia 2",
+    "bullseye_color": "Inner color",
+    "card_height": "Card height",
+    "desktop_pagination": "Desktop pagination",
+    "enable_sticky_add_to_cart": "Sticky add to cart bar",
+    "hotspot_color": "Hotspot color",
+    "image_1": "Image 1",
+    "image_2": "Image 2",
+    "desktop_position": "Desktop position",
+    "product_price_typography": "Product price typography",
+    "product_title_typography": "Product title typography",
+    "social_facebook_link": "Facebook URL",
+    "social_instagram_link": "Instagram URL",
+    "social_twitter_link": "X (Twitter) URL",
+    "social_youtube_link": "YouTube URL",
+    "skus": "SKUs",
+    "sticky_add_to_cart": "Sticky add to cart",
+    "submenu_size": "Submenu size",
+    "subtitle": "Subtitle",
+    "variant_per_page": "Variants per page",
+    "full_frame_on_mobile": "Full width on mobile",
+    "full_width": "Full width",
+    "after_image": "After image",
+    "before_image": "Before image",
+    "cs_slider_style": "Slider style",
+    "cs_slider_color": "Slider color",
+    "cs_slider_inner_color": "Slider inner color",
+    "text_on_images": "Text on images",
+    "x_position": "Horizontal position",
+    "y_position": "Vertical position"
   },
   "options": {
-    "adapt_to_image": "Adaptar à imagem",
     "apple": "Maçã",
     "arrow": "Seta",
     "auto": "Automático",
@@ -822,7 +1188,12 @@
     "lift": "Elevar",
     "reveal": "Revelar",
     "scale": "Expandir",
-    "subtle_zoom": "Zoom"
+    "subtle_zoom": "Zoom",
+    "announcement_discount": "Discount",
+    "announcement_shipping": "Shipping",
+    "full_frame": "Full frame",
+    "with_hints": "With hints",
+    "below_media": "Below media"
   },
   "content": {
     "advanced": "Avançado",
@@ -838,7 +1209,6 @@
     "complementary_products": "Os produtos complementares têm de ser configurados utilizando a aplicação Search & Discovery. [Saber mais](https://help.shopify.com/manual/online-store/search-and-discovery)",
     "mobile_column_optimization": "As colunas serão otimizadas automaticamente para dispositivos móveis",
     "content_width": "Largura do conteúdo apenas aplicável se a largura da secção estiver definida para largura total.",
-    "adjustments_affect_all_content": "Aplicável a todo o conteúdo neste bloco",
     "responsive_font_sizes": "Os tamanhos são dimensionados automaticamente para todos os tamanhos de ecrã",
     "buttons": "Botões",
     "swatches": "Paletas",
@@ -932,9 +1302,14 @@
     "submenu_feature": "Recurso de submenu",
     "cart_features": "Recursos do carrinho",
     "email_signup": "Registo de e-mail",
-    "submissions_are_sent_to_store_email_address": "As submissões são enviadas para o [endereço de e-mail do remetente](https://admin.shopify.com/settings/notifications) da sua loja",
     "mobile_media": "Conteúdo multimédia para móvel",
-    "mobile_media_2": "Conteúdo multimédia para móvel 2"
+    "mobile_media_2": "Conteúdo multimédia para móvel 2",
+    "content_layout": "Content layout",
+    "mobile_media_1": "Mobile media 1",
+    "popover": "Popover",
+    "popover_position": "Popover position",
+    "resource_reference_product_sku": "Displays SKU from parent product",
+    "navigation": "Navigation"
   },
   "html_defaults": {
     "share_information_about_your": "<p>Partilhe informações sobre a sua marca com os clientes. Descreva um produto, faça comunicados ou dê as boas-vindas aos clientes da loja.</p>",
@@ -980,7 +1355,18 @@
     "unable_to_accept_returns": "<p>Não é possível aceitar devoluções de determinados itens. Estes estarão devidamente assinalados antes da compra.</p>",
     "work_quickly_to_ship": "<p>Faremos os possíveis para enviar a sua encomenda o mais rapidamente possível. Assim que a sua encomenda for enviada, receberá um e-mail com mais informações. Os tempos de entrega variam consoante a sua localização.</p>",
     "join_our_email_list": "<h2>Junte-se à nossa lista de e-mails</h2>",
-    "get_exclusive_deals_and_early_access_to_new_products": "<p>Receba ofertas exclusivas e acesso antecipado a novos produtos.</p>"
+    "get_exclusive_deals_and_early_access_to_new_products": "<p>Receba ofertas exclusivas e acesso antecipado a novos produtos.</p>",
+    "artistry_in_action": "<p>Artistry in action </p>",
+    "authentic_materials": "<p>Authentic materials, no compromises </p>",
+    "bold_style_recognizable": "<p>Bold style that's recognizable anywhere</p>",
+    "discover_elevated_design": "<p>Discover elevated design </p>",
+    "expert_construction_finish": "<p>Expert construction and an impeccable finish</p>",
+    "featured_collection_h2": "<h2>Featured collection</h2>",
+    "made_to_last": "<p>Made to last </p>",
+    "pieces_better_with_time": "<p>Pieces that only get better with time and wear </p>",
+    "quality_you_can_feel": "<h2>Quality you can feel</h2>",
+    "shop_collection": "<p>Discover our curated collection featuring hand-picked favorites that blend style and quality.</p>",
+    "uncompromising_standards": "<p>Uncompromising standards </p>"
   },
   "text_defaults": {
     "button_label": "Comprar agora",
@@ -1013,14 +1399,17 @@
     "what_is_return_policy": "Qual é a política de devoluções?",
     "when_will_order_arrive": "Quando vou receber a minha encomenda?",
     "where_are_products_made": "Onde são fabricados os vossos produtos?",
-    "faq": "Perguntas frequentes"
+    "bestsellers": "Bestsellers",
+    "featured_collection": "Featured collection",
+    "new_arrivals": "New arrivals",
+    "shop_the_look": "Shop the look",
+    "trending_now": "Trending now"
   },
   "info": {
     "video_alt_text": "Descreva o vídeo para utilizadores de tecnologia de apoio",
     "video_autoplay": "O som dos vídeos estará desativado por predefinição",
     "video_external": "Utilizar um URL do YouTube ou Vimeo",
     "carousel_layout_on_mobile": "O carrossel é utilizado num dispositivo móvel",
-    "link_info": "Opcional: torna o ícone clicável",
     "carousel_hover_behavior_not_supported": "Movimento \"Carrossel\" de passar o cursor não é suportado quando o tipo \"Carrossel\" é selecionado no nível de secção",
     "grid_layout_on_mobile": "O esquema de grelha é utilizado para dispositivos móveis",
     "logo_font": "Apenas aplicável quando não é selecionado um logótipo",
@@ -1032,14 +1421,14 @@
     "manage_languages": "[Gerir idiomas](/admin/settings/languages)",
     "transparent_background": "Reveja cada modelo em que é aplicado um fundo transparente para melhor legibilidade",
     "aspect_ratio_adjusted": "Ajustado em alguns esquemas",
-    "auto_open_cart_drawer": "Quando ativado, o painel deslizante do carrinho abre-se automaticamente quando um produto é adicionado ao carrinho.",
     "custom_liquid": "Adicione fragmentos de aplicação ou outro código para criar personalizações avançadas. [Saber mais](https://shopify.dev/docs/api/liquid)",
     "pills_usage": "Utilizado para filtros aplicados, códigos de desconto e sugestões de pesquisa",
     "applies_on_image_only": "Apenas aplicável às imagens",
     "hover_effects": "Aplicável a cartões de produto e coleção",
     "hide_logo_on_home_page_help": "O logótipo permanecerá visível quando o cabeçalho fixo está ativo",
     "media_type_info": "Os recursos são preenchidos a partir dos links do seu menu",
-    "logo_height": "Apenas afeta o logótipo do cabeçalho"
+    "logo_height": "Apenas afeta o logótipo do cabeçalho",
+    "announcement_custom_icon": "Used when Icon is set to Custom."
   },
   "categories": {
     "basic": "Basic",
@@ -1060,5 +1449,282 @@
     "other_sections": "Outro",
     "storytelling": "Contar uma história",
     "text": "Texto"
+  },
+  "sections": {
+    "all": {
+      "color_scheme": {
+        "label": "Color scheme"
+      },
+      "section-margin": {
+        "header": {
+          "content": "Section margin"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "margin_top": {
+          "label": "Top margin"
+        }
+      },
+      "section-padding": {
+        "header": {
+          "content": "Section padding"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "padding_top": {
+          "label": "Top padding"
+        },
+        "padding_bottom": {
+          "label": "Bottom padding"
+        }
+      },
+      "border": {
+        "header": {
+          "content": "Borders"
+        },
+        "border_enable_top": {
+          "label": "Show top border"
+        },
+        "border_enable_bottom": {
+          "label": "Show bottom border"
+        }
+      },
+      "button": {
+        "header": {
+          "content": "Button"
+        },
+        "label": {
+          "label": "Button label",
+          "info": "Leave blank to hide the button."
+        },
+        "style": {
+          "label": "Button style",
+          "options__1": {
+            "label": "Primary"
+          },
+          "options__2": {
+            "label": "Secondary"
+          },
+          "options__3": {
+            "label": "Tertiary"
+          }
+        }
+      }
+    },
+    "footer": {
+      "name": "Footer",
+      "footer_color_scheme": {
+        "color_scheme_bottom": "Bottom bar color scheme"
+      },
+      "settings": {
+        "header__3": {
+          "content": "Country/region selector"
+        },
+        "header__4": {
+          "info": "To add a country/region, go to your [payment settings](/admin/settings/payments)."
+        },
+        "header__5": {
+          "content": "Language selector"
+        },
+        "header__6": {
+          "info": "Customers can switch languages using the selector in the footer."
+        },
+        "header__7": {
+          "content": "Payment methods"
+        },
+        "header__8": {
+          "content": "Policy links",
+          "info": "To add store policies, go to your [policy settings](/admin/settings/legal)."
+        },
+        "header__9": {
+          "content": "Follow on Shop",
+          "info": "For the button to show, the Shop channel must be installed and Shop Pay activated. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-shop-buttons)"
+        },
+        "enable_language_selector": {
+          "label": "Enable language selector"
+        },
+        "enable_country_selector": {
+          "label": "Enable country/region selector"
+        },
+        "enable_follow_on_shop": {
+          "label": "Enable Follow on Shop"
+        },
+        "payment_enable": {
+          "label": "Show payment icons"
+        },
+        "show_policy": {
+          "label": "Show policy links"
+        }
+      },
+      "blocks": {
+        "link_list": {
+          "name": "Menu",
+          "settings": {
+            "heading": {
+              "label": "Heading",
+              "info": "Heading must be set for the menu to display."
+            },
+            "menu": {
+              "label": "Menu",
+              "info": "Select a navigation menu to display."
+            }
+          }
+        },
+        "logo_info": {
+          "name": "Brand",
+          "settings": {
+            "logo": {
+              "label": "Logo image"
+            },
+            "logo_2": {
+              "label": "Inverse logo",
+              "info": "Shown on dark backgrounds when using two logos."
+            },
+            "logo_width": {
+              "unit": "px",
+              "label": "Logo width"
+            },
+            "description": {
+              "label": "Description"
+            }
+          }
+        },
+        "copyright_show": {
+          "label": "Show copyright and \"Powered by Shopify\""
+        },
+        "subscribe": {
+          "name": "Email signup",
+          "settings": {
+            "additional_text": {
+              "label": "Description"
+            },
+            "heading": {
+              "label": "Heading"
+            },
+            "newsletter_text": {
+              "label": "Compliance text"
+            },
+            "paragraph": {
+              "content": "Shown below the subscription form."
+            }
+          }
+        }
+      }
+    },
+    "new-arrivals-showcase": {
+      "settings": {
+        "product_layout": "Product layout",
+        "heading_scribble": "Heading decoration",
+        "scribble_color": "Decoration color",
+        "tabs_a11y": "Tabs label (accessibility)",
+        "active_tab_background": "Active tab background",
+        "active_tab_text": "Active tab text",
+        "inactive_tab_background": "Inactive tab background",
+        "inactive_tab_text": "Inactive tab text",
+        "promotion_header": "Promotion column",
+        "show_promotion_column": "Show promotion column",
+        "promo_column_width": "Promotion column width",
+        "promo_media_type": {
+          "label": "Promotion media type",
+          "info": "Use a static image, upload an MP4 file, or embed a YouTube/Vimeo video."
+        },
+        "promo_image": "Promotion image",
+        "promo_video": "Promotion video (MP4)",
+        "promo_video_url": {
+          "label": "YouTube or Vimeo",
+          "info": "Paste a supported video URL from YouTube or Vimeo."
+        },
+        "promo_video_autoplay": "Autoplay video",
+        "promo_video_loop": "Loop video",
+        "promo_video_controls": "Show video controls",
+        "promo_badge": "Badge text",
+        "promo_heading": "Promotion heading",
+        "promo_text": "Promotion text",
+        "promo_button": "Button label",
+        "promo_link": "Button link",
+        "products_per_tab": "Products per tab",
+        "new_badge_days": "“New” badge window (days)",
+        "new_badge_text": "“New” badge text",
+        "hover_image_button": "Image hover button label",
+        "fallback_star_count": "Fallback star rating",
+        "star_color": "Star color",
+        "yellow_cta": "Accent yellow (CTA)",
+        "demo_category": "Demo category label",
+        "demo_product_title": "Demo product title",
+        "carousel_header": "Carousel",
+        "slides_visible_mobile": "Slides visible (mobile)",
+        "slides_visible_desktop": "Slides visible (desktop)",
+        "gap_mobile": "Gap (mobile)",
+        "gap_desktop": "Gap (desktop)"
+      },
+      "options": {
+        "layout": {
+          "slider": "Slider",
+          "grid": "Grid"
+        },
+        "scribble": {
+          "none": "None",
+          "squiggle": "Squiggle",
+          "wave": "Wave",
+          "brush": "Brush",
+          "double": "Double",
+          "scribble_underline": "Scribble Underline",
+          "hand_drawn": "Hand-drawn Underline",
+          "sketch": "Sketch Underline",
+          "marker": "Marker Underline",
+          "zigzag": "Zigzag Underline",
+          "arc": "Arc Underline",
+          "dotted": "Dotted Underline",
+          "erratic": "Erratic Underline",
+          "ribbon": "Ribbon Underline"
+        },
+        "promo_media": {
+          "image": "Image",
+          "video_upload": "Uploaded video (MP4)",
+          "video_embed": "YouTube or Vimeo"
+        }
+      },
+      "blocks": {
+        "layout_placeholder": {
+          "name": "Layout preview",
+          "paragraph": "Shows sample products when no collection is selected. Remove this block when your tabs use real collections.",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        },
+        "collection_tab": {
+          "name": "Collection tab",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        }
+      }
+    }
   }
 }

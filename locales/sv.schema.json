@@ -8,6 +8,329 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "image_padding": "Bildavstånd",
+    "image_padding_info": "Avstånd mellan bilderna och avsnittets kanter. På telefoner används sidmarginalen.",
+    "layout_stacked": "Staplad: stora överlappande kort",
+    "image_parallax": "Bildrörelse vid scrollning",
+    "image_parallax_info": "Bilderna glider mjukt i sina ramar när sidan scrollas. Ställ in på 0 för att stänga av.",
+    "timer_style": "Timerstil",
+    "timer_tiles": "Rutor",
+    "timer_plain": "Enkel",
+    "show_end_date": "Visa slutdatumet under timern",
+    "badge_text": "Klistermärkestext",
+    "badge_text_info": "Visas på ett runt klistermärke på vänster bild. Lämna tomt för att dölja.",
+    "d_badge": "Upp till 25 % rabatt",
+    "name": "Nedräkningsbanner",
+    "layout": "Layout",
+    "layout_split": "Delad: en bild på varje sida",
+    "layout_collage": "Collage: överlappande bildkort",
+    "countdown": "Nedräkning",
+    "end_date": "Slutdatum",
+    "end_date_info": "Format ÅÅÅÅ-MM-DD, till exempel 2026-11-27. Använder butikens tidszon. Lämna tomt för att dölja nedräkningen.",
+    "end_time": "Sluttid",
+    "end_time_info": "24-timmarsformat TT:MM, till exempel 23:59.",
+    "show_labels": "Visa etiketter (dagar, timmar, minuter, sekunder)",
+    "after_end": "När nedräkningen tar slut",
+    "after_message": "Visa ett meddelande",
+    "after_hide": "Dölj avsnittet",
+    "after_zeros": "Fortsätt visa nollor",
+    "expired_message": "Meddelande",
+    "d_expired": "Det här erbjudandet har upphört",
+    "d_eyebrow": "Black Friday-rea",
+    "d_heading": "Dina favoriter, nu billigare",
+    "d_text": "<p>Spara upp till 25 % på hudvård för vardagen. Sätt ihop en rutin för din hud innan erbjudandet tar slut.</p>",
+    "d_button": "Till rean",
+    "images": "Bilder",
+    "left_image": "Vänster bild",
+    "left_image_2": "Vänster bild 2",
+    "right_image": "Höger bild",
+    "right_image_2": "Höger bild 2",
+    "mobile_images": "Bilder på mobil",
+    "show_images": "Visa i en rad ovanför texten",
+    "hide_images": "Dölj",
+    "number_size": "Sifferstorlek",
+    "number_color": "Sifferfärg",
+    "number_color_info": "Lämna tomt för att använda färgschemats textfärg."
+  },
+  "footer_wordmark": {
+    "header": "Stor text längst ned",
+    "text": "Text",
+    "text_info": "Visas jättestort över hela bredden längst ned i sidfoten, som ett ordmärke. Lämna tomt för att dölja.",
+    "font": "Typsnitt",
+    "crop": "Avskuret nedtill",
+    "crop_info": "Hur mycket av bokstäverna som går utanför nederkanten.",
+    "color": "Färg",
+    "color_info": "Lämna tomt för att använda färgschemat längst ned i sidfoten.",
+    "animate": "Bokstäverna glider upp vid scrollning"
+  },
+  "slideshow_media": {
+    "card_spacing": "Avstånd ovanför och nedanför",
+    "card_spacing_info": "Endast vid sidbredd. Samma avstånd används ovanför och nedanför bildspelet.",
+    "eyebrow": "Liten rubrik",
+    "button_2": "Etikett för andra knappen",
+    "text_tone": "Textfärg",
+    "dark": "Mörk",
+    "content_style": "Textstil",
+    "glass": "Glaspanel",
+    "no_panel": "Ingen panel",
+    "heading_size": "Rubrikstorlek",
+    "bars": "Förloppsstaplar",
+    "media_layout": "Medielayout",
+    "split": "Delad (två medier sida vid sida)",
+    "split_ratio": "Bredd på media 1",
+    "split_mobile": "Delning på mobil",
+    "stack": "Stapla över och under",
+    "first_only": "Visa endast media 1",
+    "mobile_image": "Mobilbild (valfri)",
+    "mobile_image_info": "Visas på telefoner i stället för bilden ovan.",
+    "media_effect": "Bildeffekt",
+    "content_animation": "Textanimering",
+    "rise": "Glid upp",
+    "video_toggle": "Visa paus-/uppspelningsknapp på videor",
+    "video_toggle_info": "Videor är ljudlösa och loopar. Besökare som föredrar mindre rörelse ser omslagsbilden tills de trycker på spela upp."
+  },
+  "collection_grid": {
+    "products_per_row": "Produkter per rad",
+    "products_per_row_info": "Dator. Surfplattor visar upp till 3.",
+    "promo_header": "Kampanjrutor",
+    "promo_info": "Rutorna visas mellan produkterna på kollektionens första sida.",
+    "tile_1": "Ruta 1",
+    "tile_2": "Ruta 2",
+    "show_tile": "Visa ruta",
+    "position": "Visa efter produkt nummer",
+    "span": "Bredd",
+    "span_1": "1 kolumn",
+    "span_2": "2 kolumner",
+    "icon_leaf": "Blad",
+    "icon_sparkle": "Gnista",
+    "icon_droplet": "Droppe",
+    "icon_sun": "Sol",
+    "icon_heart": "Hjärta",
+    "icon_gift": "Present",
+    "icon_sprout": "Grodd",
+    "icon_star": "Stjärna",
+    "d1_heading": "Hudvårdsfavoriter",
+    "d1_text": "Bygg en rutin som håller huden lugn, lysande och skyddad.",
+    "d1_button": "Handla hudvård",
+    "d2_heading": "Solskydd för varje dag",
+    "d2_text": "Lätt SPF som fungerar fint under smink.",
+    "d2_button": "Upptäck SPF",
+    "media_upload": "Video (uppladdning)",
+    "media_mp4": "Video (MP4-länk)",
+    "media_external": "YouTube eller Vimeo",
+    "video_mp4": "URL för MP4-video",
+    "video_mp4_info": "Klistra in en direkt .mp4-länk, t.ex. från Shopify-admin → Innehåll → Filer.",
+    "video_url": "URL för YouTube eller Vimeo",
+    "image_poster_info": "För videor visas den som omslagsbild och när besökare föredrar mindre rörelse."
+  },
+  "collection_hero": {
+    "name": "Kollektionsbanner",
+    "use_collection_image": "Använd kollektionens bild om den finns",
+    "fallback_image": "Reservbild",
+    "text_color": "Textfärg",
+    "title_size": "Rubrikstorlek",
+    "rounded": "Rundade nedre hörn",
+    "details": "Detaljer",
+    "show_breadcrumbs": "Visa brödsmulor",
+    "show_description": "Visa kollektionsbeskrivning",
+    "show_count": "Visa antal produkter",
+    "quick_links_header": "Snabblänkar",
+    "quick_links_info": "Visas som länkar under bannern. Den aktuella kollektionen markeras.",
+    "show_all": "Visa länken ”Alla”",
+    "show_counts": "Visa antal produkter"
+  },
+  "section_spacing": {
+    "header": "Avstånd mellan avsnitt",
+    "mode": "Avstånd mellan avsnitt",
+    "mode_info": "Lika avstånd ger alla avsnitt samma mellanrum. Banners kant till kant ligger kvar tätt.",
+    "uniform": "Lika avstånd (rekommenderas)",
+    "custom": "Använd varje avsnitts egen utfyllnad",
+    "desktop": "Avstånd mellan avsnitt (dator)",
+    "mobile": "Avstånd mellan avsnitt (mobil)",
+    "scope": "Använd lika avstånd på",
+    "scope_home": "Startsida",
+    "scope_all": "Alla sidor"
+  },
+  "bundle_builder": {
+    "name": "Paketbyggare",
+    "content": "Innehåll",
+    "eyebrow": "Överrubrik",
+    "heading": "Rubrik",
+    "text": "Text",
+    "products_header": "Produkter",
+    "products_info": "Välj de produkter kunderna kan lägga till. Lämna tomt för att använda en kollektion.",
+    "products_limit": "Produkter att visa",
+    "rules": "Paketregler",
+    "min_items": "Minsta antal artiklar för att lägga till paketet",
+    "max_items": "Max antal artiklar i lådan",
+    "discount_info": "Visar besparingen och tillämpar en rabattkod när paketet läggs till. Skapa matchande rabattkoder i Shopify-admin → Rabatter.",
+    "tier_1": "Nivå 1",
+    "tier_2": "Nivå 2",
+    "tier_3": "Nivå 3",
+    "items_needed": "Antal artiklar som krävs",
+    "items_needed_info": "Ange 0 för att stänga av nivån.",
+    "discount": "Rabatt",
+    "discount_code": "Rabattkod",
+    "code_info": "Valfritt. Tillämpas på varukorgen när nivån nås.",
+    "tier_label": "Nivåetikett",
+    "tier_label_info": "[count] och [discount] ersätts automatiskt.",
+    "add_property": "Gruppera paketartiklar i varukorgen",
+    "add_property_info": "Lägger till en dold egenskap ”_bundle” på varje artikel.",
+    "box": "Låda",
+    "box_title": "Lådans rubrik",
+    "slots": "Visade platser",
+    "messages_info": "[count] och [discount] ersätts automatiskt.",
+    "msg_min": "Meddelande före minimum",
+    "msg_more": "Meddelande för nästa nivå",
+    "msg_top": "Meddelande när högsta nivån nås",
+    "msg_max": "Meddelande när lådan är full",
+    "cta_label": "Knapptext",
+    "success_label": "Knapptext efter tillägg",
+    "show_fill": "Visa länken ”Fyll min låda”",
+    "fill_label": "Text för ”Fyll min låda”",
+    "note": "Notering under knappen",
+    "show_second_image": "Visa andra bilden vid hovring",
+    "show_compare_price": "Visa jämförpris",
+    "d_eyebrow": "Paketera och spara",
+    "d_heading": "Bygg ditt paket",
+    "d_text": "<p>Valet är ditt. Med vår paketbyggare kan du välja vilken kombination som helst av våra produkter. Det enklaste sättet att göra alla glada.</p>",
+    "d_box_title": "Ditt paket",
+    "d_tier_label": "[count] artiklar · [discount] % rabatt",
+    "d_msg_min": "Lägg till [count] produkter till för att fortsätta och spara [discount]",
+    "d_msg_more": "Lägg till [count] till och spara [discount]",
+    "d_msg_top": "Ditt paket är klart, du sparar [discount]!",
+    "d_msg_max": "Du kan välja upp till [count] produkter",
+    "d_cta": "Lägg paketet i varukorgen",
+    "d_success": "Paketet har lagts i varukorgen",
+    "d_fill": "Fyll min låda",
+    "d_note": "Rabatten dras i kassan",
+    "highlight_word": "Framhävt ord",
+    "highlight_word_info": "Måste exakt matcha ett ord i rubriken.",
+    "highlight_style": "Stil för framhävning",
+    "hl_none": "Ingen",
+    "hl_squiggle": "Krumelurunderstrykning",
+    "hl_wave": "Vågig understrykning",
+    "hl_marker": "Överstrykningspenna",
+    "hl_circle": "Handritad cirkel",
+    "highlight_color": "Färg för framhävning",
+    "d_highlight": "paket",
+    "card_add_label": "Knapptext på kort",
+    "d_card_add": "Lägg till i paketet"
+  },
+  "button_fx": {
+    "label": "Hovringsanimation",
+    "info": "Gäller knappar i hela temat.",
+    "lift_shine": "Lyft och glans",
+    "fill": "Färgsvep",
+    "lift": "Lyft",
+    "none": "Ingen"
+  },
+  "routine_builder": {
+    "palette": "Färgpalett",
+    "palette_sunrise": "Soluppgång",
+    "palette_botanical": "Botanisk",
+    "palette_berry": "Bär",
+    "palette_ocean": "Hav",
+    "palette_custom": "Anpassad (accentfärg)",
+    "panel_style": "Bakgrundsstil",
+    "panel_card": "Rundat kort",
+    "panel_open": "Full bredd",
+    "accent_info": "Används för knapparna för snabbtillägg och för hela avsnittet när paletten är Anpassad.",
+    "carousel_info": "När det finns fler produkter än kolumner visas de som en karusell.",
+    "name": "Rutinbyggare",
+    "blank": "Tom ruta",
+    "sentence": "Mening",
+    "eyebrow": "Överrubrik",
+    "sentence_font": "Typsnitt för meningen",
+    "font_custom": "Anpassat (välj nedan)",
+    "font_theme_heading": "Temats rubriktypsnitt",
+    "font_theme_accent": "Temats accenttypsnitt",
+    "font_theme_body": "Temats brödtexttypsnitt",
+    "custom_font": "Anpassat typsnitt",
+    "sentence_size": "Meningens storlek (dator)",
+    "placeholder": "Text i tom ruta",
+    "placeholder_info": "Visas i en tom ruta. Varje ruta kan ersätta den.",
+    "hint": "Tips under meningen",
+    "multiple_note": "Notering vid flerval",
+    "done_button": "Knappen ”Klar” (flerval)",
+    "design": "Design",
+    "accent_color": "Accentfärg",
+    "accent_text_color": "Textfärg på accent",
+    "mood": "Stämningsbakgrund",
+    "mood_info": "Mjuka färgmoln som tar färgerna från de valda svaren.",
+    "mood_intensity": "Stämningsintensitet",
+    "floating_images": "Svävande bilder",
+    "floating_info": "En bild på varje sida. När sidan rullas stiger de från skärmens nederkant till överkanten, en i taget.",
+    "left_image": "Vänster bild",
+    "right_image": "Höger bild",
+    "rises_first": "Bild som stiger först",
+    "shape_rounded": "Rundad rektangel",
+    "shape_arch": "Båge",
+    "shape_pebble": "Sten",
+    "tilt": "Lutning",
+    "rise_speed": "Stighastighet",
+    "rise_speed_info": "Högre är snabbare. 0 håller bilderna stilla.",
+    "on_mobile": "På mobil",
+    "show_small": "Visa små",
+    "hide": "Dölj",
+    "results": "Resultat",
+    "results_eyebrow": "Överrubrik för resultat",
+    "results_heading": "Rubrik för resultat",
+    "scroll_to_results": "Rulla till produkterna när meningen är klar",
+    "products_to_show": "Produkter att visa",
+    "columns_desktop": "Kolumner på dator",
+    "fallback_collection": "Reservkollektion",
+    "fallback_info": "Fyller på rutinen när svaren rekommenderar för få produkter.",
+    "show_add_all": "Visa knappen ”Lägg rutinen i varukorgen”",
+    "add_all_label": "Text på rutinknappen",
+    "quick_add_label": "Text på snabbköpsknappen",
+    "reset_label": "Text på länken ”Börja om”",
+    "remember": "Kom ihåg svar för återkommande kunder",
+    "words_before": "Ord före den tomma rutan",
+    "words_after": "Ord efter den tomma rutan",
+    "words_after_info": "Valfritt, t.ex. ett kommatecken eller ”varje morgon.”",
+    "block_placeholder_info": "Lämna tomt för att använda avsnittets text.",
+    "question": "Fråga för skärmläsare",
+    "question_info": "Läses upp ovanför svaren. Standard är orden före den tomma rutan.",
+    "allow_multiple": "Tillåt flera svar",
+    "answer_1": "Svar 1",
+    "answer_2": "Svar 2",
+    "answer_3": "Svar 3",
+    "answer_4": "Svar 4",
+    "answer_5": "Svar 5",
+    "answer_6": "Svar 6",
+    "mood_color": "Stämningsfärg",
+    "thumbnail_info": "Valfri liten miniatyrbild.",
+    "recommended_products": "Rekommenderade produkter",
+    "answer_hide_info": "Lämna tomt för att dölja detta svar.",
+    "d_eyebrow": "Bygg din rutin",
+    "d_placeholder": "välj",
+    "d_hint": "Tryck på de understrukna orden för att bygga din rutin",
+    "d_multiple_note": "Välj så många du vill",
+    "d_done": "Klar",
+    "d_results_eyebrow": "Gjord för dig",
+    "d_results_heading": "Din rutin är klar",
+    "d_add_all": "Lägg rutinen i varukorgen",
+    "d_quick_add": "Lägg i varukorg",
+    "d_reset": "Börja om",
+    "d_before": "Min hud känns",
+    "d_dry": "torr",
+    "d_oily": "fet",
+    "d_both": "lite av båda",
+    "d_sensitive": "känslig",
+    "p_fix": "Jag vill gärna förbättra",
+    "p_have": "och jag har",
+    "p_routine": "för min rutin.",
+    "p_dullness": "glanslöshet",
+    "p_dryness": "torrhet",
+    "p_dark_spots": "mörka fläckar",
+    "p_fine_lines": "fina linjer",
+    "p_sun_damage": "solskador",
+    "p_five": "fem minuter",
+    "p_ten": "tio minuter",
+    "p_all_time": "all tid i världen"
+  },
   "names": {
     "404": "404",
     "borders": "Gränser",
@@ -112,7 +435,6 @@
     "search": "Sökning",
     "section": "Avsnitt",
     "selected_variants": "Valda varianter",
-    "shop_the_look": "Köp looken",
     "slide": "Bild",
     "social_media_links": "Länkar till sociala medier",
     "spacer": "Separator",
@@ -183,7 +505,23 @@
     "blog_posts_editorial": "Bloggposter: redaktionellt",
     "excerpt": "Utdrag",
     "footer_password": "Lösenordssidfot",
-    "policies_and_links": "Policyer och länkar"
+    "policies_and_links": "Policyer och länkar",
+    "column": "Column",
+    "card": "Card",
+    "carousel": "Carousel",
+    "carousel_content": "Carousel content",
+    "featured_product_information": "Featured product",
+    "image_compare": "Image compare",
+    "layered_slideshow": "Layered slideshow",
+    "new_arrivals_showcase": "New arrivals showcase",
+    "product_hotspots": "Product hotspots",
+    "hotspot_product": "Hotspot",
+    "product_sku": "SKU",
+    "quick_order_list": "Quick order list",
+    "slideshow_full_frame": "Slideshow: Full frame",
+    "slideshow_inset": "Slideshow: Inset",
+    "subheading": "Subheading",
+    "comparison_slider": "Comparison slider"
   },
   "settings": {
     "alignment": "Justering",
@@ -547,12 +885,41 @@
     "empty_cart_button_link": "Knapplänk för att tömma varukorg",
     "auto_load_products": "Ladda produkter automatiskt vid rullning",
     "products_per_page": "Produkter per sida",
-    "block_link": "Blocklänk",
     "custom_mobile_media": "Anpassade mobilmedia",
-    "stack_media_on_mobile": "Stapla media"
+    "stack_media_on_mobile": "Stapla media",
+    "bullseye_color": "Inner color",
+    "card_height": "Card height",
+    "desktop_pagination": "Desktop pagination",
+    "enable_sticky_add_to_cart": "Sticky add to cart bar",
+    "hotspot_color": "Hotspot color",
+    "image_1": "Image 1",
+    "image_2": "Image 2",
+    "desktop_position": "Desktop position",
+    "product_price_typography": "Product price typography",
+    "product_title_typography": "Product title typography",
+    "social_facebook_link": "Facebook URL",
+    "social_instagram_link": "Instagram URL",
+    "social_twitter_link": "X (Twitter) URL",
+    "social_youtube_link": "YouTube URL",
+    "skus": "SKUs",
+    "sticky_add_to_cart": "Sticky add to cart",
+    "submenu_size": "Submenu size",
+    "subtitle": "Subtitle",
+    "variant_per_page": "Variants per page",
+    "media_type_1": "Media type",
+    "media_type_2": "Media 2 type",
+    "full_frame_on_mobile": "Full width on mobile",
+    "full_width": "Full width",
+    "after_image": "After image",
+    "before_image": "Before image",
+    "cs_slider_style": "Slider style",
+    "cs_slider_color": "Slider color",
+    "cs_slider_inner_color": "Slider inner color",
+    "text_on_images": "Text on images",
+    "x_position": "Horizontal position",
+    "y_position": "Vertical position"
   },
   "options": {
-    "adapt_to_image": "Anpassa till bild",
     "apple": "Äpple",
     "arrow": "Pil",
     "auto": "Automatisk",
@@ -821,7 +1188,12 @@
     "lift": "Lyft",
     "reveal": "Visa",
     "scale": "Skala",
-    "subtle_zoom": "Zooma"
+    "subtle_zoom": "Zooma",
+    "announcement_discount": "Discount",
+    "announcement_shipping": "Shipping",
+    "full_frame": "Full frame",
+    "with_hints": "With hints",
+    "below_media": "Below media"
   },
   "content": {
     "advanced": "Avancerat",
@@ -837,7 +1209,6 @@
     "complementary_products": "Kompletterande produkter måste konfigureras med Search & Discovery-appen. [Mer information](https://help.shopify.com/manual/online-store/search-and-discovery)",
     "mobile_column_optimization": "Kolumner optimeras automatiskt för mobilen",
     "content_width": "Sidobredd tillämpas endast när avsnittsbredden är inställd till full bredd.",
-    "adjustments_affect_all_content": "Gäller allt innehåll i det här blocket",
     "responsive_font_sizes": "Storleken justeras automatiskt för att passa alla skärmstorlekar",
     "buttons": "Knappar",
     "swatches": "Prover",
@@ -932,7 +1303,13 @@
     "cart_features": "Varukorgsfunktioner",
     "email_signup": "E-postregistrering",
     "mobile_media": "Mobilmedia",
-    "mobile_media_2": "Mobilmedia 2"
+    "mobile_media_2": "Mobilmedia 2",
+    "content_layout": "Content layout",
+    "mobile_media_1": "Mobile media 1",
+    "popover": "Popover",
+    "popover_position": "Popover position",
+    "resource_reference_product_sku": "Displays SKU from parent product",
+    "navigation": "Navigation"
   },
   "html_defaults": {
     "share_information_about_your": "<p>Dela information om ditt varumärke med dina kunder. Beskriv en produkt, gör tillkännagivanden eller välkomna kunder till din butik.</p>",
@@ -978,7 +1355,18 @@
     "unable_to_accept_returns": "<p>Vi kan inte ta emot returer för vissa artiklar. Dessa kommer att vara tydligt märkta före köp.</p>",
     "work_quickly_to_ship": "<p>Vi arbetar snabbt för att skicka din order så snart som möjligt. När din order har skickats får du ett e-postmeddelande med mer information. Leveranstiderna varierar beroende på var du befinner dig.</p>",
     "join_our_email_list": "<h2>Gå med i vår e-postlista</h2>",
-    "get_exclusive_deals_and_early_access_to_new_products": "<p>Få exklusiva erbjudanden och tidig tillgång till nya produkter.</p>"
+    "get_exclusive_deals_and_early_access_to_new_products": "<p>Få exklusiva erbjudanden och tidig tillgång till nya produkter.</p>",
+    "artistry_in_action": "<p>Artistry in action </p>",
+    "authentic_materials": "<p>Authentic materials, no compromises </p>",
+    "bold_style_recognizable": "<p>Bold style that's recognizable anywhere</p>",
+    "discover_elevated_design": "<p>Discover elevated design </p>",
+    "expert_construction_finish": "<p>Expert construction and an impeccable finish</p>",
+    "featured_collection_h2": "<h2>Featured collection</h2>",
+    "made_to_last": "<p>Made to last </p>",
+    "pieces_better_with_time": "<p>Pieces that only get better with time and wear </p>",
+    "quality_you_can_feel": "<h2>Quality you can feel</h2>",
+    "shop_collection": "<p>Discover our curated collection featuring hand-picked favorites that blend style and quality.</p>",
+    "uncompromising_standards": "<p>Uncompromising standards </p>"
   },
   "text_defaults": {
     "button_label": "Shoppa nu",
@@ -1011,14 +1399,17 @@
     "what_is_return_policy": "Vilken är returpolicyn?",
     "when_will_order_arrive": "När kommer min order?",
     "where_are_products_made": "Var tillverkas era produkter?",
-    "faq": "FAQ"
+    "bestsellers": "Bestsellers",
+    "featured_collection": "Featured collection",
+    "new_arrivals": "New arrivals",
+    "shop_the_look": "Shop the look",
+    "trending_now": "Trending now"
   },
   "info": {
     "video_alt_text": "Beskriv videon för användare av hjälpmedelsteknik",
     "video_autoplay": "Videor har ljudet avstängt som standard",
     "video_external": "Använd en YouTube- eller en Vimeo-URL",
     "carousel_layout_on_mobile": "Karusell används på mobil",
-    "link_info": "Valfritt: gör ikonen klickbar",
     "carousel_hover_behavior_not_supported": "Karusellhovring stöds inte när karuselltyp väljs på avsnittsnivå",
     "checkout_buttons": "Snabbar upp kassan för köpare och kan förbättra konverteringen. [Mer information](https://help.shopify.com/manual/online-store/dynamic-checkout)",
     "custom_heading": "Anpassad rubrik",
@@ -1030,14 +1421,14 @@
     "manage_languages": "[Hantera språk](/admin/settings/languages)",
     "transparent_background": "Granska varje mall där transparent bakgrund tillämpas beträffande läslighet",
     "aspect_ratio_adjusted": "Justerat i vissa layouter",
-    "auto_open_cart_drawer": "När detta är aktiverat öppnas varukorgspanelen automatiskt när en produkt läggs till i varukorgen.",
     "custom_liquid": "Lägg till appfragment eller annan kod för att skapa avancerade anpassningar. [Mer information](https://shopify.dev/docs/api/liquid)",
     "pills_usage": "Används för använda filter, rabattkoder och sökförslag",
     "applies_on_image_only": "Gäller endast för bilder",
     "hover_effects": "Gäller produkt- och produktseriekort",
     "hide_logo_on_home_page_help": "Logotypen förblir synlig när fast sidhuvud är aktivt",
     "media_type_info": "Funktioner fylls i från dina menylänkar",
-    "logo_height": "Påverkar endast logotyp i sidhuvud"
+    "logo_height": "Påverkar endast logotyp i sidhuvud",
+    "announcement_custom_icon": "Used when Icon is set to Custom."
   },
   "categories": {
     "basic": "Basic",
@@ -1058,5 +1449,282 @@
     "other_sections": "Övrigt",
     "storytelling": "Berättande",
     "text": "Text"
+  },
+  "sections": {
+    "all": {
+      "color_scheme": {
+        "label": "Color scheme"
+      },
+      "section-margin": {
+        "header": {
+          "content": "Section margin"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "margin_top": {
+          "label": "Top margin"
+        }
+      },
+      "section-padding": {
+        "header": {
+          "content": "Section padding"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "padding_top": {
+          "label": "Top padding"
+        },
+        "padding_bottom": {
+          "label": "Bottom padding"
+        }
+      },
+      "border": {
+        "header": {
+          "content": "Borders"
+        },
+        "border_enable_top": {
+          "label": "Show top border"
+        },
+        "border_enable_bottom": {
+          "label": "Show bottom border"
+        }
+      },
+      "button": {
+        "header": {
+          "content": "Button"
+        },
+        "label": {
+          "label": "Button label",
+          "info": "Leave blank to hide the button."
+        },
+        "style": {
+          "label": "Button style",
+          "options__1": {
+            "label": "Primary"
+          },
+          "options__2": {
+            "label": "Secondary"
+          },
+          "options__3": {
+            "label": "Tertiary"
+          }
+        }
+      }
+    },
+    "footer": {
+      "name": "Footer",
+      "footer_color_scheme": {
+        "color_scheme_bottom": "Bottom bar color scheme"
+      },
+      "settings": {
+        "header__3": {
+          "content": "Country/region selector"
+        },
+        "header__4": {
+          "info": "To add a country/region, go to your [payment settings](/admin/settings/payments)."
+        },
+        "header__5": {
+          "content": "Language selector"
+        },
+        "header__6": {
+          "info": "Customers can switch languages using the selector in the footer."
+        },
+        "header__7": {
+          "content": "Payment methods"
+        },
+        "header__8": {
+          "content": "Policy links",
+          "info": "To add store policies, go to your [policy settings](/admin/settings/legal)."
+        },
+        "header__9": {
+          "content": "Follow on Shop",
+          "info": "For the button to show, the Shop channel must be installed and Shop Pay activated. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-shop-buttons)"
+        },
+        "enable_language_selector": {
+          "label": "Enable language selector"
+        },
+        "enable_country_selector": {
+          "label": "Enable country/region selector"
+        },
+        "enable_follow_on_shop": {
+          "label": "Enable Follow on Shop"
+        },
+        "payment_enable": {
+          "label": "Show payment icons"
+        },
+        "show_policy": {
+          "label": "Show policy links"
+        }
+      },
+      "blocks": {
+        "link_list": {
+          "name": "Menu",
+          "settings": {
+            "heading": {
+              "label": "Heading",
+              "info": "Heading must be set for the menu to display."
+            },
+            "menu": {
+              "label": "Menu",
+              "info": "Select a navigation menu to display."
+            }
+          }
+        },
+        "logo_info": {
+          "name": "Brand",
+          "settings": {
+            "logo": {
+              "label": "Logo image"
+            },
+            "logo_2": {
+              "label": "Inverse logo",
+              "info": "Shown on dark backgrounds when using two logos."
+            },
+            "logo_width": {
+              "unit": "px",
+              "label": "Logo width"
+            },
+            "description": {
+              "label": "Description"
+            }
+          }
+        },
+        "copyright_show": {
+          "label": "Show copyright and \"Powered by Shopify\""
+        },
+        "subscribe": {
+          "name": "Email signup",
+          "settings": {
+            "additional_text": {
+              "label": "Description"
+            },
+            "heading": {
+              "label": "Heading"
+            },
+            "newsletter_text": {
+              "label": "Compliance text"
+            },
+            "paragraph": {
+              "content": "Shown below the subscription form."
+            }
+          }
+        }
+      }
+    },
+    "new-arrivals-showcase": {
+      "settings": {
+        "product_layout": "Product layout",
+        "heading_scribble": "Heading decoration",
+        "scribble_color": "Decoration color",
+        "tabs_a11y": "Tabs label (accessibility)",
+        "active_tab_background": "Active tab background",
+        "active_tab_text": "Active tab text",
+        "inactive_tab_background": "Inactive tab background",
+        "inactive_tab_text": "Inactive tab text",
+        "promotion_header": "Promotion column",
+        "show_promotion_column": "Show promotion column",
+        "promo_column_width": "Promotion column width",
+        "promo_media_type": {
+          "label": "Promotion media type",
+          "info": "Use a static image, upload an MP4 file, or embed a YouTube/Vimeo video."
+        },
+        "promo_image": "Promotion image",
+        "promo_video": "Promotion video (MP4)",
+        "promo_video_url": {
+          "label": "YouTube or Vimeo",
+          "info": "Paste a supported video URL from YouTube or Vimeo."
+        },
+        "promo_video_autoplay": "Autoplay video",
+        "promo_video_loop": "Loop video",
+        "promo_video_controls": "Show video controls",
+        "promo_badge": "Badge text",
+        "promo_heading": "Promotion heading",
+        "promo_text": "Promotion text",
+        "promo_button": "Button label",
+        "promo_link": "Button link",
+        "products_per_tab": "Products per tab",
+        "new_badge_days": "“New” badge window (days)",
+        "new_badge_text": "“New” badge text",
+        "hover_image_button": "Image hover button label",
+        "fallback_star_count": "Fallback star rating",
+        "star_color": "Star color",
+        "yellow_cta": "Accent yellow (CTA)",
+        "demo_category": "Demo category label",
+        "demo_product_title": "Demo product title",
+        "carousel_header": "Carousel",
+        "slides_visible_mobile": "Slides visible (mobile)",
+        "slides_visible_desktop": "Slides visible (desktop)",
+        "gap_mobile": "Gap (mobile)",
+        "gap_desktop": "Gap (desktop)"
+      },
+      "options": {
+        "layout": {
+          "slider": "Slider",
+          "grid": "Grid"
+        },
+        "scribble": {
+          "none": "None",
+          "squiggle": "Squiggle",
+          "wave": "Wave",
+          "brush": "Brush",
+          "double": "Double",
+          "scribble_underline": "Scribble Underline",
+          "hand_drawn": "Hand-drawn Underline",
+          "sketch": "Sketch Underline",
+          "marker": "Marker Underline",
+          "zigzag": "Zigzag Underline",
+          "arc": "Arc Underline",
+          "dotted": "Dotted Underline",
+          "erratic": "Erratic Underline",
+          "ribbon": "Ribbon Underline"
+        },
+        "promo_media": {
+          "image": "Image",
+          "video_upload": "Uploaded video (MP4)",
+          "video_embed": "YouTube or Vimeo"
+        }
+      },
+      "blocks": {
+        "layout_placeholder": {
+          "name": "Layout preview",
+          "paragraph": "Shows sample products when no collection is selected. Remove this block when your tabs use real collections.",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        },
+        "collection_tab": {
+          "name": "Collection tab",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        }
+      }
+    }
   }
 }

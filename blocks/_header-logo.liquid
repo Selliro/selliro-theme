@@ -12,11 +12,26 @@
     assign use_inverse_logo = true
   endif
 
+  # Logo shown while the header is transparent: this block's own pick first, then the theme's inverse logo
   if use_inverse_logo
-    if settings.logo_inverse != blank
+    if block_settings.transparent_logo != blank
+      assign inverse_logo = block_settings.transparent_logo
+    elsif settings.logo_inverse != blank
       assign inverse_logo = settings.logo_inverse
     else
       assign inverse_logo = settings.logo
+    endif
+  endif
+
+  # On the home page a first-section slideshow can switch the header to transparent itself
+  # (Slideshow → Header style), so keep the transparent logo ready; CSS only shows it while transparent.
+  if use_inverse_logo == false and template.name == 'index'
+    if block_settings.transparent_logo != blank
+      assign inverse_logo = block_settings.transparent_logo
+      assign use_inverse_logo = true
+    elsif settings.logo_inverse != blank
+      assign inverse_logo = settings.logo_inverse
+      assign use_inverse_logo = true
     endif
   endif
 %}
@@ -148,6 +163,12 @@
     {
       "type": "paragraph",
       "content": "t:content.edit_logo_in_theme_settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "transparent_logo",
+      "label": "Transparent header logo",
+      "info": "Shown while the header sits over a banner, e.g. a white version of your logo. Turn on the transparent header in the Header section settings."
     },
     {
       "type": "header",

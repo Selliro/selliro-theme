@@ -116,6 +116,11 @@
   type="module"
   fetchpriority="low"
 ></script>
+<script
+  src="{{ 'dialog.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
 {% if settings.show_add_discount_code %}
   <script
     src="{{ 'cart-discount.js' | asset_url }}"
@@ -123,11 +128,6 @@
     fetchpriority="low"
   ></script>
 {% endif %}
-<script
-  src="{{ 'dialog.js' | asset_url }}"
-  type="module"
-  fetchpriority="low"
-></script>
 <script
   src="{{ 'variant-picker.js' | asset_url }}"
   type="module"
@@ -247,6 +247,15 @@
   defer="defer"
 ></script>
 
+<script
+  src="{{ 'swiper-bundle.min.js' | asset_url }}"
+  defer
+></script>
+<script
+  src="{{ 'carousel-swiper.js' | asset_url }}"
+  defer
+></script>
+
 <script>
   const basePath = 'https://cdn.shopify.com/static/themes/horizon/placeholders';
   const Theme = {
@@ -280,5 +289,13 @@
     template: {
       name: '{{ template }}',
     },
+    cartFly: {
+      enabled: {{ settings.add_to_cart_animation | json }},
+      style: {{ settings.cart_fly_style | default: 'dot' | json }},
+    },
   };
 </script>
+<script
+  src="{{ 'cart-fly.js' | asset_url }}"
+  defer
+></script>

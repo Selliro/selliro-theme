@@ -8,6 +8,46 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "일",
+    "hours": "시간",
+    "minutes": "분",
+    "seconds": "초",
+    "ends_on": "혜택 종료: {{ date }}",
+    "editor_hint": "카운트다운을 시작하려면 섹션 설정에서 종료 날짜를 추가하세요."
+  },
+  "collection_hero": {
+    "home": "홈",
+    "breadcrumb_label": "탐색 경로",
+    "all": "전체"
+  },
+  "bundle_builder": {
+    "add_aria": "{{ title }}을(를) 번들에 추가",
+    "empty_slot": "빈 칸",
+    "items_count": "{{ count }}개",
+    "announce_added": "{{ title }}을(를) 추가했습니다. 박스에 {{ count }}개가 있습니다.",
+    "announce_removed": "{{ title }}을(를) 삭제했습니다. 박스에 {{ count }}개가 있습니다.",
+    "savings": "절약 금액",
+    "total": "합계",
+    "view_bundle": "박스 보기"
+  },
+  "product_3d": {
+    "view_3d": "3D로 보기",
+    "drag_hint": "드래그하여 회전",
+    "reset": "보기 초기화",
+    "views": "카메라 보기",
+    "front": "정면",
+    "side": "측면",
+    "back": "후면",
+    "top": "위",
+    "loading": "3D 모델 불러오는 중",
+    "editor_hint": "3D 모델이 있는 제품을 선택하거나 .glb 파일 링크를 붙여 넣으면 3D로 표시됩니다.",
+    "position_copied": "위치가 복사되었습니다. 특징 블록에 붙여 넣으세요."
+  },
+  "routine_builder": {
+    "editor_hint": "‘빈칸’ 블록을 추가하여 문장 만들기를 시작하세요.",
+    "ready": "루틴이 완성되었습니다. 추천 제품 {{ count }}개."
+  },
   "blocks": {
     "load_video": "동영상 로드: {{ description }}",
     "sold_out": "품절",
@@ -25,6 +65,9 @@
       "comment": "댓글",
       "post_success": "문의해 주셔서 감사합니다. 최대한 빨리 답변드리겠습니다.",
       "error_heading": "다음을 조정하세요."
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "로고 자리 표시자"
     }
   },
   "accessibility": {
@@ -69,7 +112,19 @@
     "increase_quantity": "수량 증가",
     "quantity": "수량",
     "rating": "이 제품의 평점은 5점 만점에 {{ rating }}점입니다",
-    "nested_product": "{{ parent_title }}용 {{ product_title }}"
+    "nested_product": "{{ parent_title }}용 {{ product_title }}",
+    "announcement_bar_link": "자세히 알아보기",
+    "back_to_top": "맨 위로",
+    "quick_view_loading": "제품 불러오는 중",
+    "before_after_after_alt": "애프터 이미지",
+    "before_after_before_alt": "비포 이미지",
+    "before_after_before_visible": "비포 이미지 표시됨",
+    "before_after_comparison": "비포 앤 애프터 이미지 비교",
+    "before_after_slider": "비교 슬라이더",
+    "before_after_slider_help": "왼쪽 및 오른쪽 화살표 키를 사용하여 비포 이미지와 애프터 이미지를 비교하세요.",
+    "faq_collapse_answer": "답변 접기",
+    "faq_expand_answer": "답변 펼치기",
+    "faq_split_gallery": "자주 묻는 질문"
   },
   "actions": {
     "add_to_cart": "카트에 추가",
@@ -242,7 +297,11 @@
       "previous": "이전",
       "next": "다음",
       "page": "{{ page }}페이지"
-    }
+    },
+    "read_more_link": "더 읽기",
+    "quick_view": "빠른 보기",
+    "view_full_details": "전체 세부 정보 보기",
+    "view_item": "상품 보기"
   },
   "gift_cards": {
     "issued": {
@@ -307,5 +366,29 @@
       "success_moderated": "댓글이 게시되었습니다. 조정 대기 중입니다",
       "success": "댓글 게시됨"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "All rights reserved."
+    },
+    "image_text_collage": {
+      "section_aria_label": "이미지와 텍스트 콜라주"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "제품을 표시하려면 컬렉션 탭을 하나 이상 추가하세요."
+    },
+    "icon_with_text": {
+      "empty": "콘텐츠를 표시하려면 아이콘 블록을 추가하세요.",
+      "section_aria_label": "스토어 하이라이트"
+    },
+    "beauty_bundle": {
+      "add_bundle": "세트를 장바구니에 추가",
+      "adding": "추가하는 중…",
+      "added": "장바구니에 추가됨",
+      "error": "문제가 발생했습니다. 다시 시도하세요."
+    }
+  },
+  "search": {
+    "no_results": "검색 결과 없음"
   }
 }

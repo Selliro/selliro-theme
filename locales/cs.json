@@ -8,6 +8,46 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Dny",
+    "hours": "Hod",
+    "minutes": "Min",
+    "seconds": "Sek",
+    "ends_on": "Nabídka končí {{ date }}",
+    "editor_hint": "Přidejte v nastavení sekce datum konce, aby se spustil odpočet."
+  },
+  "collection_hero": {
+    "home": "Domů",
+    "breadcrumb_label": "Drobečková navigace",
+    "all": "Vše"
+  },
+  "bundle_builder": {
+    "add_aria": "Přidat {{ title }} do balíčku",
+    "empty_slot": "Prázdné místo",
+    "items_count": "{{ count }} položky",
+    "announce_added": "{{ title }} přidáno. V krabici: {{ count }} položek.",
+    "announce_removed": "{{ title }} odebráno. V krabici: {{ count }} položek.",
+    "savings": "Ušetříte",
+    "total": "Celkem",
+    "view_bundle": "Zobrazit krabici"
+  },
+  "product_3d": {
+    "view_3d": "Zobrazit ve 3D",
+    "drag_hint": "Přetažením otočíte",
+    "reset": "Obnovit pohled",
+    "views": "Pohledy kamery",
+    "front": "Zepředu",
+    "side": "Z boku",
+    "back": "Zezadu",
+    "top": "Shora",
+    "loading": "Načítání 3D modelu",
+    "editor_hint": "Vyberte produkt s 3D modelem nebo vložte odkaz na soubor .glb, aby se zobrazil ve 3D.",
+    "position_copied": "Pozice zkopírována — vložte ji do bloku funkce."
+  },
+  "routine_builder": {
+    "editor_hint": "Přidejte blok „Mezera“ a začněte sestavovat větu.",
+    "ready": "Vaše rutina je připravena. Doporučené produkty: {{ count }}."
+  },
   "blocks": {
     "load_video": "Načíst video: {{ description }}",
     "sold_out": "Vyprodáno",
@@ -25,6 +65,9 @@
       "comment": "Komentář",
       "post_success": "Děkujeme, že jste nás kontaktovali. Ozveme se vám co možná nejdříve.",
       "error_heading": "Upravte prosím následující informace:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Zástupný symbol loga"
     }
   },
   "accessibility": {
@@ -71,7 +114,19 @@
     "increase_quantity": "Zvýšit množství",
     "rating": "Hodnocení tohoto produktu je {{ rating }} z 5",
     "quantity": "Množství",
-    "nested_product": "{{ product_title }} pro {{ parent_title }}"
+    "nested_product": "{{ product_title }} pro {{ parent_title }}",
+    "announcement_bar_link": "Další informace",
+    "back_to_top": "Zpět nahoru",
+    "quick_view_loading": "Načítání produktu",
+    "before_after_after_alt": "Obrázek po",
+    "before_after_before_alt": "Obrázek před",
+    "before_after_before_visible": "viditelný obrázek před",
+    "before_after_comparison": "Porovnání obrázků před a po",
+    "before_after_slider": "Posuvník porovnání",
+    "before_after_slider_help": "Pomocí kláves se šipkami doleva a doprava porovnejte obrázky před a po.",
+    "faq_collapse_answer": "Sbalit odpověď",
+    "faq_expand_answer": "Rozbalit odpověď",
+    "faq_split_gallery": "Často kladené otázky"
   },
   "actions": {
     "add_to_cart": "Přidat do košíku",
@@ -252,7 +307,11 @@
       "previous": "Předchozí",
       "next": "Další",
       "page": "Strana {{ page }}"
-    }
+    },
+    "read_more_link": "Číst dále",
+    "quick_view": "Rychlý náhled",
+    "view_full_details": "Zobrazit všechny podrobnosti",
+    "view_item": "Zobrazit položku"
   },
   "gift_cards": {
     "issued": {
@@ -319,5 +378,29 @@
       "success_moderated": "Komentář odeslán, čeká na schválení",
       "success": "Komentář zveřejněn"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Všechna práva vyhrazena."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Koláž obrázku s textem"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Přidejte alespoň jednu kartu kolekce, aby se zobrazily produkty."
+    },
+    "icon_with_text": {
+      "empty": "Přidejte bloky ikon, aby se zobrazil obsah.",
+      "section_aria_label": "Přednosti obchodu"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Přidat sadu do košíku",
+      "adding": "Přidávání…",
+      "added": "Přidáno do košíku",
+      "error": "Něco se pokazilo. Zkuste to znovu."
+    }
+  },
+  "search": {
+    "no_results": "Nebyly nalezeny žádné výsledky"
   }
 }

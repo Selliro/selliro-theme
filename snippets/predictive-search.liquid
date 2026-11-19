@@ -15,6 +15,12 @@
   type="module"
   fetchpriority="low"
 ></script>
+<script
+  src="{{ 'search-plus.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+{{ 'search-plus.css' | asset_url | stylesheet_tag }}
 
 <predictive-search-component
   class="predictive-search color-{{ settings.popover_color_scheme }}{% if class != blank %} {{ class | strip }}{% endif %}"
@@ -54,7 +60,7 @@
           aria-haspopup="listbox"
           aria-autocomplete="list"
           autocomplete="off"
-          placeholder="{{ 'content.search_input_placeholder' | t }}"
+          placeholder="{{ 'search_plus.placeholder' | t }}"
           ref="searchInput"
           on:input="/search"
           on:keydown="/onSearchKeyDown"
@@ -76,6 +82,10 @@
         >
           {{ 'actions.clear' | t }}
         </button>
+        <kbd
+          class="sp-kbd sp-kbd--esc"
+          aria-hidden="true"
+        >Esc</kbd>
       </div>
       <button
         type="button"
@@ -105,9 +115,18 @@
       </div>
 
       <div class="predictive-search-form__footer">
+        <span
+          class="sp-hints"
+          aria-hidden="true"
+        >
+          <span class="sp-hints__item"><kbd class="sp-kbd">↑</kbd><kbd class="sp-kbd">↓</kbd> {{ 'search_plus.kbd_navigate' | t }}</span>
+          <span class="sp-hints__item"><kbd class="sp-kbd">↵</kbd> {{ 'search_plus.kbd_select' | t }}</span>
+          <span class="sp-hints__item"><kbd class="sp-kbd">Esc</kbd> {{ 'search_plus.kbd_close' | t }}</span>
+        </span>
         <button
           class="button button-primary predictive-search__search-button"
           ref="viewAllButton"
+          data-view-all-template="{{ 'search_plus.view_all_html' | t: terms: '[terms]' | escape }}"
         >
           {{ 'content.search_results_view_all' | t }}
         </button>

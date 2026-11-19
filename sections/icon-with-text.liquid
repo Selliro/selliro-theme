@@ -1,0 +1,291 @@
+{% comment %}
+  Icon with text — grid of columns (icon, heading, body, link). Color scheme + blocks.
+{% endcomment %}
+
+{{ 'section-icon-with-text.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign cols = section.settings.columns_desktop | default: 4
+  if cols < 2
+    assign cols = 2
+  elsif cols > 4
+    assign cols = 4
+  endif
+  assign section_show_read_more = true
+  if section.settings.show_read_more == false or section.settings.show_link == false
+    assign section_show_read_more = false
+  endif
+-%}
+
+<section
+  class="icon-with-text color-{{ section.settings.color_scheme }}{% if section.settings.show_dividers %} icon-with-text--dividers{% endif %}"
+  id="IconWithText-{{ section.id }}"
+  {{ section.shopify_attributes }}
+  style="
+    --iwt-pad-top: {{ section.settings.padding_top }}px;
+    --iwt-pad-bottom: {{ section.settings.padding_bottom }}px;
+    --iwt-cols: {{ cols }};
+  "
+  {% if section.settings.heading != blank %}
+    aria-labelledby="IconWithText-heading-{{ section.id }}"
+  {% else %}
+    aria-label="{{ 'sections.icon_with_text.section_aria_label' | t }}"
+  {% endif %}
+>
+  <div class="section-container">
+    {%- if section.settings.heading != blank -%}
+      <header class="icon-with-text__header">
+        <h2 class="icon-with-text__section-title" id="IconWithText-heading-{{ section.id }}">
+          {{ section.settings.heading | escape }}
+        </h2>
+      </header>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="icon-with-text__grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'icon_text' -%}
+            <article class="icon-with-text__col" {{ block.shopify_attributes }}>
+              {%- if block.settings.icon != blank -%}
+                <div class="icon-with-text__icon">
+                  {%- assign icon_alt = block.settings.icon_alt | default: block.settings.title | escape -%}
+                  {{
+                    block.settings.icon
+                    | image_url: width: 160
+                    | image_tag:
+                      loading: 'lazy',
+                      widths: '80, 120, 160',
+                      sizes: '80px',
+                      alt: icon_alt,
+                      class: 'icon-with-text__icon-img'
+                  }}
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.title != blank -%}
+                <h3 class="icon-with-text__title">{{ block.settings.title | escape }}</h3>
+              {%- endif -%}
+
+              {%- if section.settings.show_body and block.settings.text != blank -%}
+                <div class="icon-with-text__text rte">{{ block.settings.text }}</div>
+              {%- endif -%}
+
+              {%- liquid
+                assign show_read_more_block = true
+                if block.settings.show_read_more == false
+                  assign show_read_more_block = false
+                endif
+              -%}
+              {%- if section_show_read_more and show_read_more_block and block.settings.link_label != blank -%}
+                {%- if block.settings.link != blank -%}
+                  <a href="{{ block.settings.link }}" class="icon-with-text__link">
+                    {{- block.settings.link_label | escape -}}
+                  </a>
+                {%- else -%}
+                  <span class="icon-with-text__link icon-with-text__link--static">
+                    {{- block.settings.link_label | escape -}}
+                  </span>
+                {%- endif -%}
+              {%- endif -%}
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <p class="icon-with-text__empty">
+        {{ 'sections.icon_with_text.empty' | t }}
+      </p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Icon with text",
+  "tag": "section",
+  "class": "section icon-with-text-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section heading",
+      "info": "Optional. Leave blank to hide."
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Columns on large screens",
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dividers",
+      "label": "Show column dividers",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Column content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_body",
+      "label": "Show description text",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_read_more",
+      "label": "Show read more links",
+      "default": true,
+      "info": "Turn off to hide all read more links. You can still hide read more per column in each block."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 56
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon_text",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon image",
+          "info": "PNG or SVG-style artwork; transparent background works best."
+        },
+        {
+          "type": "text",
+          "id": "icon_alt",
+          "label": "Icon alt text",
+          "info": "For accessibility. Defaults to the column title if empty."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Feature title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description",
+          "default": "<p>Add a short supporting sentence for this feature.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Read more"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_read_more",
+          "label": "Show read more",
+          "default": true,
+          "info": "Requires “Show read more links” in section settings."
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Read more label",
+          "default": "Read more"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Read more link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icon with text",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "columns_desktop": 4,
+        "show_dividers": true,
+        "show_body": true,
+        "show_read_more": true
+      },
+      "blocks": [
+        {
+          "type": "icon_text",
+          "settings": {
+            "title": "Natural Ingredients",
+            "text": "<p>Praesent in nunc vel urna laoreet efficitur. Morbi ullamcorper odio vel ligula viverra, sed fermentum elit porta.</p>",
+            "link_label": "Read more"
+          }
+        },
+        {
+          "type": "icon_text",
+          "settings": {
+            "title": "Fragrance Free",
+            "text": "<p>Praesent in nunc vel urna laoreet efficitur. Morbi ullamcorper odio vel ligula viverra, sed fermentum elit porta.</p>",
+            "link_label": "Read more"
+          }
+        },
+        {
+          "type": "icon_text",
+          "settings": {
+            "title": "Allergy Tested",
+            "text": "<p>Praesent in nunc vel urna laoreet efficitur. Morbi ullamcorper odio vel ligula viverra, sed fermentum elit porta.</p>",
+            "link_label": "Read more"
+          }
+        },
+        {
+          "type": "icon_text",
+          "settings": {
+            "title": "Paraben Free",
+            "text": "<p>Praesent in nunc vel urna laoreet efficitur. Morbi ullamcorper odio vel ligula viverra, sed fermentum elit porta.</p>",
+            "link_label": "Read more"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

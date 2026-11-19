@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap");
+
 * {
   box-sizing: border-box;
 }
@@ -10,6 +12,7 @@ body {
   margin: 0;
   min-height: 100svh;
   font-variation-settings: 'slnt' 0;
+  overflow-x: clip;
 }
 
 :root {
@@ -394,11 +397,14 @@ p:empty {
 }
 
 /* Make the actual section background transparent, and instead apply it to a separate sibling element to enable stacking with hero shadow  */
-.shopify-section:not(.header-section) :is(.section, .cart__summary-container) {
+.shopify-section:not(.header-section) :is(.section, .page-width, .full-width, .cart__summary-container) {
   background: transparent;
 }
 
-.shopify-section:not(.header-section):has(.section) {
+.shopify-section:not(.header-section):has(.section, .page-width, .full-width),
+/* Any section that renders a .section-background must contain it; otherwise the absolutely
+   positioned background stretches to <main> and paints over earlier sections' backgrounds. */
+.shopify-section:not(.header-section):has(> .section-background) {
   position: relative;
 }
 
@@ -955,9 +961,11 @@ summary::-webkit-details-marker {
   display: none;
 }
 
-/* When header is transparent, pull the first main content section up to sit under the floating header */
+/* When header is transparent, the first main section sits directly under the floating header.
+   Selliro: it starts right below the announcement bar instead of being pulled up behind it
+   (the header itself floats over the section, so no negative margin is needed). */
 body:has(.header[transparent]) .content-for-layout > .shopify-section:first-child {
-  margin-top: calc(var(--header-group-height) * -1);
+  margin-top: 0;
 }
 
 body:has(.header[transparent]) #header-group > .header-section {
@@ -1394,7 +1402,7 @@ button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
 }
 
 .button-unstyled {
-  display: block;
+  display: absolute;
   padding: 0;
   background-color: inherit;
   color: inherit;
@@ -1489,6 +1497,12 @@ summary {
   cursor: pointer;
   list-style: none;
   padding-block: var(--padding-sm);
+}
+
+/* assets/tailwind.css (preflight) resets summary to display: list-item, which broke Horizon's
+   accordion headers (icon stuck to the text). A child selector out-ranks that reset. */
+details > summary {
+  display: flex;
 }
 
 summary:hover {
@@ -3357,6 +3371,15 @@ slideshow-container {
   container-type: inline-size;
 }
 
+/* Overlay arrows on media (out of flow so slides fill height; pointer-events:none passes drag to slides) */
+slideshow-component > slideshow-container > slideshow-arrows {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
 /*
  * Slideshow Controls
  */
@@ -3756,8 +3779,7 @@ slideshow-arrows {
   --cursor-previous: w-resize;
   --cursor-next: e-resize;
 
-  position: absolute;
-  inset: 0;
+  position: relative;
   display: flex;
   z-index: var(--layer-heightened);
   pointer-events: none;
@@ -3819,8 +3841,9 @@ slideshow-arrows .slideshow-control.slideshow-control--style-none {
   opacity: 1;
 }
 
-:not(.media-gallery--carousel)
-  > :is(slideshow-component:hover, slideshow-component:focus-within):not(:has(slideshow-controls:hover))
+/* Descendant combinator: slideshow may sit under .section / wrappers, not only as direct child of :not() */
+.shopify-section:not(.media-gallery--carousel)
+  slideshow-component:is(:hover, :focus-within):not(:has(slideshow-controls:hover))
   > slideshow-container
   > slideshow-arrows
   .slideshow-control {
@@ -4295,4 +4318,400 @@ text-component {
   .h6.h6 select {
     font-size: max(1rem, 100%);
   }
+}
+
+.progress-wrap {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  height: 44px;
+  width: 44px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50px;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 400ms linear;
+  mix-blend-mode: difference;
+  /* Reset native <button> styles */
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  appearance: none;
+}
+
+.progress-wrap:focus-visible {
+  outline: var(--focus-outline-width, 2px) solid currentcolor;
+  outline-offset: 3px;
+  mix-blend-mode: normal;
+}
+
+.progress-wrap.active-progress {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.progress-wrap__icon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  color: #ccc;
+  z-index: 1;
+}
+
+.progress-circle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progress-wrap svg.progress-circle path {
+  stroke: #ccc;
+  stroke-width: 4;
+  fill: none;
+  transition: stroke-dashoffset 10ms linear;
+}
+
+/* Slideshow glass card + arrow position: see sections/slideshow.liquid (per-section settings) */
+
+body .blur-div {
+  backdrop-filter: blur(10px);
+  bottom: 0;
+  flex: none;
+  height: 100px;
+  left: 0;
+  mask: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%) add;
+  -webkit-mask: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%) add;
+  overflow: visible;
+  position: fixed;
+  right: 0;
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* ── Page-width utility container ──
+   Uses the same tokens as `.section--page-width` (header, cart, collection, etc.)
+   so content edges line up across every section:
+   --page-width already includes the page margin on both sides. */
+.page-width {
+  width: 100%;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--page-margin);
+}
+
+/* ── Full-width utility container ── */
+.full-width {
+  width: 100%;
+}
+
+/* ==========================================================================
+   Button hover animations
+   Theme settings → Buttons → Hover animation (body class: btn-fx--{style})
+   Applies to theme buttons and the call-to-action buttons used by custom sections.
+   Only owns transform / shine background / drop shadow / transition, so each button keeps its colors.
+   ========================================================================== */
+
+:root {
+  --btn-fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --btn-fx-speed: 0.35s;
+  --btn-fx-shine: rgb(255 255 255 / 0.38);
+  --btn-fx-shadow: 0 12px 24px -12px rgb(0 0 0 / 0.38), 0 4px 10px -6px rgb(0 0 0 / 0.18);
+}
+
+/* Every call-to-action button the effects target (pointer-hover state is listed separately below) */
+:is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift)
+  :is(
+    .button:not(.button-unstyled, .menu-list__link),
+    .button-secondary,
+    button.shopify-payment-button__button--unbranded,
+    .mega-promo__button--accent,
+    .rb__add-all,
+    .rb__done,
+    .new-arrivals-showcase__promo-btn,
+    .itc__btn:not(.itc__btn--static),
+    .custom-banner__button,
+    .reveal-image__btn,
+    .shop-the-look__bundle-btn,
+    .before-after-slider__btn:not(.before-after-slider__btn--static),
+    .vertical-rich-text-section__button
+  ) {
+  background-repeat: no-repeat;
+  transition: color var(--btn-fx-speed) var(--btn-fx-ease), background-color var(--btn-fx-speed) var(--btn-fx-ease),
+    border-color var(--btn-fx-speed) var(--btn-fx-ease), box-shadow var(--btn-fx-speed) var(--btn-fx-ease),
+    transform var(--btn-fx-speed) var(--btn-fx-ease), background-position 0.75s var(--btn-fx-ease),
+    background-size 0.5s var(--btn-fx-ease), opacity 0.2s ease, filter 0.2s ease;
+}
+
+/* ---- Shine: a soft light band waits off the left edge, sweeps across on hover */
+.btn-fx--lift-shine
+  :is(
+    .button:not(.button-unstyled, .menu-list__link),
+    .button-secondary,
+    button.shopify-payment-button__button--unbranded,
+    .mega-promo__button--accent,
+    .rb__add-all,
+    .rb__done,
+    .new-arrivals-showcase__promo-btn,
+    .new-arrivals-card__quick-add-btn,
+    .itc__btn:not(.itc__btn--static),
+    .custom-banner__button,
+    .reveal-image__btn,
+    .shop-the-look__bundle-btn,
+    .before-after-slider__btn:not(.before-after-slider__btn--static),
+    .vertical-rich-text-section__button
+  ) {
+  background-image: linear-gradient(110deg, transparent 0 38%, var(--btn-fx-shine) 50%, transparent 62% 100%);
+  background-size: 250% 100%;
+  background-position: 120% 0;
+}
+
+/* ---- Color sweep: a tint of the text color fills from the left */
+.btn-fx--fill
+  :is(
+    .button:not(.button-unstyled, .menu-list__link),
+    .button-secondary,
+    button.shopify-payment-button__button--unbranded,
+    .mega-promo__button--accent,
+    .rb__add-all,
+    .rb__done,
+    .new-arrivals-showcase__promo-btn,
+    .new-arrivals-card__quick-add-btn,
+    .itc__btn:not(.itc__btn--static),
+    .custom-banner__button,
+    .reveal-image__btn,
+    .shop-the-look__bundle-btn,
+    .before-after-slider__btn:not(.before-after-slider__btn--static),
+    .vertical-rich-text-section__button
+  ) {
+  background-image: linear-gradient(color-mix(in srgb, currentColor 16%, transparent), color-mix(in srgb, currentColor 16%, transparent));
+  background-size: 0% 100%;
+  background-position: 0 0;
+}
+
+/* ---- Hover state (desktop pointers + keyboard focus) */
+@media (hover: hover) {
+  .btn-fx--lift-shine
+    :is(
+      .button:not(.button-unstyled, .menu-list__link, :disabled, [aria-disabled='true']),
+      .button-secondary:not(:disabled, [aria-disabled='true']),
+      button.shopify-payment-button__button--unbranded:not(:disabled),
+      .rb__add-all:not(:disabled),
+      .rb__done,
+      .new-arrivals-showcase__promo-btn:not(:disabled),
+      .new-arrivals-card__quick-add-btn:not(:disabled),
+      .itc__btn:not(.itc__btn--static),
+      .custom-banner__button,
+      .reveal-image__btn,
+      .shop-the-look__bundle-btn:not(:disabled),
+      .before-after-slider__btn:not(.before-after-slider__btn--static),
+      .vertical-rich-text-section__button
+    ):hover,
+  .btn-fx--lift-shine .mega-promo:hover .mega-promo__button--accent {
+    background-position: -20% 0;
+  }
+
+  .btn-fx--fill
+    :is(
+      .button:not(.button-unstyled, .menu-list__link, :disabled, [aria-disabled='true']),
+      .button-secondary:not(:disabled, [aria-disabled='true']),
+      button.shopify-payment-button__button--unbranded:not(:disabled),
+      .rb__add-all:not(:disabled),
+      .rb__done,
+      .new-arrivals-showcase__promo-btn:not(:disabled),
+      .new-arrivals-card__quick-add-btn:not(:disabled),
+      .itc__btn:not(.itc__btn--static),
+      .custom-banner__button,
+      .reveal-image__btn,
+      .shop-the-look__bundle-btn:not(:disabled),
+      .before-after-slider__btn:not(.before-after-slider__btn--static),
+      .vertical-rich-text-section__button
+    ):hover,
+  .btn-fx--fill .mega-promo:hover .mega-promo__button--accent {
+    background-size: 100% 100%;
+  }
+
+  /* Lift + soft shadow (not on the card quick-add bar, which already slides in) */
+  :is(.btn-fx--lift-shine, .btn-fx--lift)
+    :is(
+      .button-secondary:not(:disabled, [aria-disabled='true']),
+      .rb__add-all:not(:disabled),
+      .rb__done,
+      .new-arrivals-showcase__promo-btn:not(:disabled),
+      .itc__btn:not(.itc__btn--static),
+      .custom-banner__button,
+      .reveal-image__btn,
+      .shop-the-look__bundle-btn:not(:disabled),
+      .before-after-slider__btn:not(.before-after-slider__btn--static),
+      .vertical-rich-text-section__button
+    ):hover,
+  :is(.btn-fx--lift-shine, .btn-fx--lift) .mega-promo:hover .mega-promo__button--accent {
+    transform: translateY(-2px);
+    box-shadow: var(--btn-fx-shadow);
+  }
+
+  /* Horizon buttons draw their border with an inset shadow — keep it while adding the drop shadow */
+  :is(.btn-fx--lift-shine, .btn-fx--lift)
+    :is(.button:not(.button-unstyled, .menu-list__link, :disabled, [aria-disabled='true']), button.shopify-payment-button__button--unbranded:not(:disabled)):hover,
+  :is(.btn-fx--lift-shine, .btn-fx--lift) .button-secondary:not(:disabled, [aria-disabled='true']):hover {
+    transform: translateY(-2px);
+    box-shadow: inset 0 0 0 var(--button-border-width) var(--button-border-color), var(--btn-fx-shadow);
+  }
+
+  /* Arrow / trailing icons nudge forward */
+  :is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift)
+    :is(.button, .button-secondary, .rb__add-all, .itc__btn, .custom-banner__button, .reveal-image__btn):hover
+    > svg:last-child {
+    transform: translateX(3px);
+  }
+}
+
+/* Keyboard users get the same feedback */
+:is(.btn-fx--lift-shine, .btn-fx--lift)
+  :is(.button:not(.button-unstyled, .menu-list__link), .button-secondary, .rb__add-all, .rb__done, .itc__btn, .custom-banner__button, .reveal-image__btn, .shop-the-look__bundle-btn):focus-visible {
+  transform: translateY(-2px);
+}
+
+/* Press: a quick, tactile push */
+:is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift)
+  :is(
+    .button:not(.button-unstyled, .menu-list__link, :disabled, [aria-disabled='true']),
+    .button-secondary:not(:disabled),
+    .rb__add-all:not(:disabled),
+    .rb__done,
+    .new-arrivals-showcase__promo-btn:not(:disabled),
+    .itc__btn:not(.itc__btn--static),
+    .custom-banner__button,
+    .reveal-image__btn,
+    .shop-the-look__bundle-btn:not(:disabled),
+    .before-after-slider__btn:not(.before-after-slider__btn--static)
+  ):active {
+  transform: translateY(0) scale(0.97);
+  transition-duration: 0.08s;
+}
+
+:is(.button, .button-secondary, .rb__add-all, .itc__btn, .custom-banner__button, .reveal-image__btn) > svg {
+  transition: transform var(--btn-fx-speed, 0.35s) var(--btn-fx-ease, ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) :is(.button, .button-secondary, .rb__add-all, .rb__done, .itc__btn, .custom-banner__button, .reveal-image__btn, .shop-the-look__bundle-btn, .before-after-slider__btn, .mega-promo__button--accent, .new-arrivals-showcase__promo-btn, .new-arrivals-card__quick-add-btn, .vertical-rich-text-section__button),
+  :is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) :is(.button, .button-secondary, .rb__add-all, .rb__done, .itc__btn, .custom-banner__button, .reveal-image__btn, .shop-the-look__bundle-btn, .before-after-slider__btn, .mega-promo__button--accent, .new-arrivals-showcase__promo-btn, .new-arrivals-card__quick-add-btn, .vertical-rich-text-section__button):is(:hover, :active, :focus-visible) {
+    transform: none !important;
+    background-image: none !important;
+    transition-property: color, background-color, border-color, box-shadow;
+  }
+}
+
+/* ==========================================================================
+   Equal section spacing
+   Theme settings → Page layout → Section spacing (body class: section-spacing--uniform)
+
+   Every content section gets half the gap above and below its content, so two neighbouring
+   sections are always exactly one gap apart — and sections with a background color keep
+   breathing room inside it. Edge-to-edge banners (custom banner, slideshow, reveal image)
+   stay flush; the section next to one takes the full gap on that side instead.
+   Overrides each section's own top/bottom padding (that setting returns when the mode is
+   switched to "Use each section's own padding").
+   ========================================================================== */
+
+.section-spacing--uniform {
+  --ss: var(--section-space, 96px);
+}
+
+@media screen and (max-width: 749px) {
+  .section-spacing--uniform {
+    --ss: var(--section-space-mobile, 56px);
+  }
+}
+
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .custom-banner, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper {
+  padding-top: calc(var(--ss) / 2) !important;
+  padding-bottom: calc(var(--ss) / 2) !important;
+}
+
+/* After a flush banner, or at the very start/end of the page: the full gap on that side */
+.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .custom-banner, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
+.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
+.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
+.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper,
+.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .custom-banner, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
+.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
+.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
+.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper {
+  padding-top: var(--ss) !important;
+}
+.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .custom-banner, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
+.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
+.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
+.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper {
+  padding-bottom: var(--ss) !important;
+}
+
+/* Before a flush banner: the banner adds the other half of the gap as margin (banners stacked
+   directly on each other, or at the very top, stay touching) */
+.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)):not(:first-child) {
+  margin-top: calc(var(--ss) / 2);
+}
+
+.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) {
+  margin-top: 0;
+}
+
+/* Page-width slideshow = an inset card: the same space above and below it, inside the section's own
+   color scheme (Slideshow → "Space above and below", 24px by default). Overrides the uniform gap, whether
+   the slideshow comes first, follows a flush banner, or follows a regular section. */
+.section-spacing--uniform main > .shopify-section:has(> .ss.page-width) > .ss.page-width,
+.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:has(> .ss.page-width) > .ss.page-width,
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) + .shopify-section:has(> .ss.page-width) > .ss.page-width,
+.section-spacing--uniform main > .shopify-section:first-child:has(> .ss.page-width) > .ss.page-width,
+.section-spacing--uniform main > .shopify-section:last-child:has(> .ss.page-width) > .ss.page-width {
+  padding-top: var(--ss-inset, 24px) !important;
+  padding-bottom: var(--ss-inset, 24px) !important;
+}
+
+/* Under a transparent header the first page-width slideshow runs up to the announcement bar, so the
+   header floats over the image (not over the page background). Its top corners square off to meet it. */
+body:has(#header-component[transparent]).section-spacing--uniform main > .shopify-section:first-child:has(> .ss.page-width) > .ss.page-width,
+body:has(#header-component[transparent]) main > .shopify-section:first-child:has(> .ss.page-width) > .ss.page-width {
+  padding-top: 0 !important;
+}
+
+body:has(#header-component[transparent]) main > .shopify-section:first-child > .ss.page-width slideshow-component {
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+}
+
+/* ==========================================================================
+   Section titles — one shared scale for every homepage section heading
+   (New Arrivals, Shop by category, Build your Bundle, Beauty Cream Bundles,
+   FAQ, Testimonials, Latest Stories, Image + text collage).
+   Hero/display headings (banner, slideshow, reveal image, routine sentence) keep their own sizes.
+   ========================================================================== */
+:root {
+  --section-title-size: clamp(1.65rem, 3.2vw, 2.35rem);
+  --section-title-weight: 600;
+  --section-title-leading: 1.12;
+  --section-title-tracking: -0.02em;
+}
+
+/* Slideshow / gallery arrows and controls are icon buttons, not call-to-actions:
+   no shine sweep, lift or shadow from the button hover effects (the shine showed as a flash). */
+:is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) .slideshow-control.slideshow-control,
+:is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) .slideshow-control.slideshow-control:is(:hover, :active, :focus-visible) {
+  background-image: none;
+  box-shadow: none;
+  transform: none;
 }

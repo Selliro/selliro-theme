@@ -8,6 +8,46 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Dage",
+    "hours": "Timer",
+    "minutes": "Min",
+    "seconds": "Sek",
+    "ends_on": "Tilbuddet slutter {{ date }}",
+    "editor_hint": "Tilføj en slutdato i sektionens indstillinger for at starte nedtællingen."
+  },
+  "collection_hero": {
+    "home": "Forside",
+    "breadcrumb_label": "Brødkrumme",
+    "all": "Alle"
+  },
+  "bundle_builder": {
+    "add_aria": "Føj {{ title }} til bundlet",
+    "empty_slot": "Tom plads",
+    "items_count": "{{ count }} varer",
+    "announce_added": "{{ title }} tilføjet. {{ count }} varer i din boks.",
+    "announce_removed": "{{ title }} fjernet. {{ count }} varer i din boks.",
+    "savings": "Du sparer",
+    "total": "I alt",
+    "view_bundle": "Se boks"
+  },
+  "product_3d": {
+    "view_3d": "Se i 3D",
+    "drag_hint": "Træk for at rotere",
+    "reset": "Nulstil visning",
+    "views": "Kameravisninger",
+    "front": "Forfra",
+    "side": "Fra siden",
+    "back": "Bagfra",
+    "top": "Ovenfra",
+    "loading": "Indlæser 3D-model",
+    "editor_hint": "Vælg et produkt med en 3D-model, eller indsæt et link til en .glb-fil for at vise det i 3D.",
+    "position_copied": "Position kopieret – indsæt den i en funktionsblok."
+  },
+  "routine_builder": {
+    "editor_hint": "Tilføj en blok med et \"tomt felt\" for at begynde at bygge sætningen.",
+    "ready": "Din rutine er klar. {{ count }} anbefalede produkter."
+  },
   "blocks": {
     "load_video": "Indlæs video: {{ description }}",
     "sold_out": "Udsolgt",
@@ -25,6 +65,9 @@
       "comment": "Kommentar",
       "post_success": "Tak for din henvendelse. Vi kontakter dig hurtigst muligt.",
       "error_heading": "Juster følgende:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Pladsholder for logo"
     }
   },
   "accessibility": {
@@ -69,7 +112,19 @@
     "increase_quantity": "Øg antal",
     "quantity": "Antal",
     "rating": "Bedømmelsen af dette produkt er {{ rating }} ud af 5",
-    "nested_product": "{{ product_title }} for {{ parent_title }}"
+    "nested_product": "{{ product_title }} for {{ parent_title }}",
+    "announcement_bar_link": "Få mere at vide",
+    "back_to_top": "Tilbage til toppen",
+    "quick_view_loading": "Indlæser produkt",
+    "before_after_after_alt": "Efter-billede",
+    "before_after_before_alt": "Før-billede",
+    "before_after_before_visible": "før-billede synligt",
+    "before_after_comparison": "Sammenligning af før- og efterbilleder",
+    "before_after_slider": "Sammenligningsskyder",
+    "before_after_slider_help": "Brug venstre og højre piletast til at sammenligne før- og efterbillederne.",
+    "faq_collapse_answer": "Skjul svar",
+    "faq_expand_answer": "Vis svar",
+    "faq_split_gallery": "Ofte stillede spørgsmål"
   },
   "actions": {
     "add_to_cart": "Læg i indkøbskurven",
@@ -242,7 +297,11 @@
       "previous": "Forrige",
       "next": "Næste",
       "page": "Side {{ page }}"
-    }
+    },
+    "read_more_link": "Læs mere",
+    "quick_view": "Hurtig visning",
+    "view_full_details": "Se alle detaljer",
+    "view_item": "Se vare"
   },
   "gift_cards": {
     "issued": {
@@ -307,5 +366,29 @@
       "success_moderated": "Kommentaren blev indsendt og afventer moderering",
       "success": "Kommentaren blev indsendt"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Alle rettigheder forbeholdes."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Billede med tekstcollage"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Tilføj mindst én kollektionsfane for at vise produkter."
+    },
+    "icon_with_text": {
+      "empty": "Tilføj ikonblokke for at vise indhold.",
+      "section_aria_label": "Butikkens højdepunkter"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Læg pakken i kurven",
+      "adding": "Tilføjer…",
+      "added": "Lagt i kurven",
+      "error": "Noget gik galt. Prøv igen."
+    }
+  },
+  "search": {
+    "no_results": "Ingen resultater fundet"
   }
 }

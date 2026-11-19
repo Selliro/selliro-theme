@@ -3,7 +3,7 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 <div
   class="
-    section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}
+    {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}
     {% if section.settings.section_height != "" %} {{ section.settings.section_height | prepend: "section--height-" }}{% endif %}
   "
 >

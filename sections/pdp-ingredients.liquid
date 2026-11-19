@@ -1,0 +1,618 @@
+{%- comment -%}
+  What's inside — key ingredients arranged around a product image (left / right columns on desktop,
+  image on top and a two-column list on mobile). Each ingredient is a block with a photo, name and benefit.
+{%- endcomment -%}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign product_image = section.settings.image
+  if product_image == blank and product.featured_image
+    assign product_image = product.featured_image
+  endif
+  assign product_alt = product_image.alt | default: product.title
+  assign half = section.blocks.size | plus: 1 | divided_by: 2
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="pdp-ingredients {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  data-reveal
+  style="--pdp-ing-pad-top: {{ section.settings.padding_top }}px; --pdp-ing-pad-bottom: {{ section.settings.padding_bottom }}px; --pdp-ing-halo: {{ section.settings.halo_color | default: '#f6eadb' }};"
+>
+  <header class="pdp-ingredients__header">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="pdp-ingredients__eyebrow" data-reveal-fade="first">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="pdp-ingredients__heading" data-reveal-title>{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="pdp-ingredients__text rte" data-reveal-fade>{{ section.settings.text }}</div>
+    {%- endif -%}
+  </header>
+
+  {%- if section.settings.layout == 'orbit' -%}
+    {%- liquid
+      assign orbit_count = section.blocks.size | at_most: 6
+      assign orbit_rows = orbit_count | plus: 1 | divided_by: 2
+    -%}
+    <div class="pdp-orbit pdp-orbit--rows-{{ orbit_rows }}">
+      <div class="pdp-orbit__frame">
+        <div class="pdp-orbit__stage" aria-hidden="true">
+          <span class="pdp-orbit__ring" data-reveal-pop></span>
+          <div class="pdp-orbit__media" data-reveal-pop>
+            {%- if product_image != blank -%}
+              {{ product_image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '400, 600, 800, 1000', sizes: '(min-width: 990px) 28vw, 70vw', alt: '' }}
+            {%- else -%}
+              {{ 'product-apparel-1' | placeholder_svg_tag }}
+            {%- endif -%}
+          </div>
+        </div>
+
+        <ol class="pdp-orbit__list list-unstyled">
+          {%- for block in section.blocks limit: 6 -%}
+            {%- liquid
+              # 1 top-left, 2 top-right, 3 middle-left … numbers sit on the ring at fixed angles
+              assign i = forloop.index0
+              assign row = i | divided_by: 2
+              assign is_right = i | modulo: 2
+              case orbit_rows
+                when 1
+                  assign sx = 1
+                  assign dy = 0
+                when 2
+                  assign sx = 0.866
+                  if row == 0
+                    assign dy = -0.5
+                  else
+                    assign dy = 0.5
+                  endif
+                else
+                  case row
+                    when 0
+                      assign sx = 0.7071
+                      assign dy = -0.7071
+                    when 1
+                      assign sx = 1
+                      assign dy = 0
+                    else
+                      assign sx = 0.7071
+                      assign dy = 0.7071
+                  endcase
+              endcase
+              if is_right == 1
+                assign side = 'right'
+                assign dx = sx
+              else
+                assign side = 'left'
+                assign dx = sx | times: -1
+              endif
+            -%}
+            <li
+              class="pdp-orbit__item pdp-orbit__item--{{ side }}"
+              style="--dx: {{ dx }}; --dy: {{ dy }};"
+              data-reveal-fade
+              {{ block.shopify_attributes }}
+            >
+              <span class="pdp-orbit__num" aria-hidden="true">{{ forloop.index }}</span>
+              <div class="pdp-orbit__copy">
+                <h3 class="pdp-orbit__name">{{ block.settings.name | escape }}</h3>
+                {%- if block.settings.benefit != blank -%}
+                  <p class="pdp-orbit__benefit">{{ block.settings.benefit | escape }}</p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ol>
+      </div>
+    </div>
+  {%- else -%}
+  <div class="pdp-ingredients__layout">
+    <div class="pdp-ingredients__visual" data-reveal-pop>
+      <span class="pdp-ingredients__halo" aria-hidden="true"></span>
+      {%- if product_image != blank -%}
+        {{ product_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 540, 720, 900', sizes: '(min-width: 990px) 30vw, 70vw', class: 'pdp-ingredients__image', alt: product_alt }}
+      {%- else -%}
+        {{ 'product-apparel-1' | placeholder_svg_tag: 'pdp-ingredients__image' }}
+      {%- endif -%}
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- liquid
+        if forloop.index <= half
+          assign side = 'left'
+        else
+          assign side = 'right'
+        endif
+      -%}
+      <div class="pdp-ingredients__item pdp-ingredients__item--{{ side }}" data-reveal-fade {{ block.shopify_attributes }}>
+        <span class="pdp-ingredients__thumb" aria-hidden="true">
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 200 | image_tag: loading: 'lazy', width: 80, height: 80, alt: '' }}
+          {%- else -%}
+            {%- render 'pdp-icon', icon: 'leaf' -%}
+          {%- endif -%}
+        </span>
+        <div class="pdp-ingredients__copy">
+          <h3 class="pdp-ingredients__name">{{ block.settings.name | escape }}</h3>
+          {%- if block.settings.benefit != blank -%}
+            <p class="pdp-ingredients__benefit">{{ block.settings.benefit | escape }}</p>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+  .pdp-ingredients {
+    position: relative;
+    padding-block: var(--pdp-ing-pad-top) var(--pdp-ing-pad-bottom);
+  }
+
+  .pdp-ingredients__header {
+    max-width: 40rem;
+    margin: 0 auto clamp(2rem, 5vw, 3.5rem);
+    text-align: center;
+  }
+
+  .pdp-ingredients__eyebrow {
+    margin: 0 0 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .pdp-ingredients__heading {
+    margin: 0;
+    font-size: var(--section-title-size);
+    font-weight: var(--section-title-weight);
+    line-height: var(--section-title-leading);
+    letter-spacing: var(--section-title-tracking);
+  }
+
+  .pdp-ingredients__text {
+    margin-block-start: 0.75rem;
+    opacity: 0.75;
+  }
+
+  .pdp-ingredients__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.75rem 1rem;
+  }
+
+  .pdp-ingredients__visual {
+    position: relative;
+    grid-column: 1 / -1;
+    display: grid;
+    place-items: center;
+    width: min(72vw, 22rem);
+    margin-inline: auto;
+    aspect-ratio: 1;
+  }
+
+  .pdp-ingredients__halo {
+    position: absolute;
+    inset: 6%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 45%, var(--pdp-ing-halo) 0 60%, color-mix(in srgb, var(--pdp-ing-halo) 55%, transparent) 61% 100%);
+  }
+
+  .pdp-ingredients__image {
+    position: relative;
+    width: 82%;
+    height: 82%;
+    object-fit: contain;
+    border-radius: 50%;
+  }
+
+  .pdp-ingredients__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    text-align: center;
+  }
+
+  .pdp-ingredients__thumb {
+    display: grid;
+    place-items: center;
+    width: 4.25rem;
+    height: 4.25rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--color-foreground) 5%, transparent);
+    box-shadow: 0 10px 24px -14px rgb(0 0 0 / 0.45);
+  }
+
+  .pdp-ingredients__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pdp-ingredients__thumb svg {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .pdp-ingredients__name {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .pdp-ingredients__benefit {
+    margin: 0.3rem 0 0;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    opacity: 0.75;
+  }
+
+  /* Desktop: ingredients in two columns either side of the product image */
+  @media screen and (min-width: 990px) {
+    .pdp-ingredients__layout {
+      grid-template-columns: minmax(0, 1fr) minmax(18rem, 26rem) minmax(0, 1fr);
+      grid-auto-flow: dense;
+      align-items: center;
+      gap: 2.75rem 3rem;
+    }
+
+    .pdp-ingredients__visual {
+      grid-column: 2;
+      grid-row: 1 / span 3;
+      width: 100%;
+    }
+
+    .pdp-ingredients__item--left {
+      grid-column: 1;
+      flex-direction: row-reverse;
+      text-align: end;
+    }
+
+    .pdp-ingredients__item--right {
+      grid-column: 3;
+      flex-direction: row;
+      text-align: start;
+    }
+
+    .pdp-ingredients__item {
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .pdp-ingredients__thumb {
+      flex: 0 0 auto;
+      width: 4.75rem;
+      height: 4.75rem;
+    }
+  }
+
+  /* ---------------------------------------------------------------- Orbit layout
+     Round image inside a thin ring; numbered circles sit on the ring with the ingredient beside each. */
+  .pdp-orbit {
+    --orbit-copy: 17rem;
+    --orbit-badge: 3.75rem;
+    --orbit-gap: 1.6rem;
+    --orbit-line: color-mix(in srgb, var(--color-foreground) 14%, transparent);
+
+    container-type: inline-size;
+  }
+
+  .pdp-orbit__frame {
+    position: relative;
+  }
+
+  .pdp-orbit__stage {
+    position: relative;
+    width: min(78vw, 22rem);
+    aspect-ratio: 1;
+    margin-inline: auto;
+  }
+
+  .pdp-orbit__ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid var(--orbit-line);
+  }
+
+  .pdp-orbit__media {
+    position: absolute;
+    inset: 13%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--pdp-ing-halo);
+    box-shadow: 0 30px 60px -40px rgb(0 0 0 / 0.45);
+  }
+
+  .pdp-orbit__media :is(img, svg) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .pdp-orbit__num {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: var(--orbit-badge);
+    height: var(--orbit-badge);
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 45%, transparent);
+    background: var(--color-background);
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-foreground);
+  }
+
+  .pdp-orbit__name {
+    margin: 0;
+    font-family: var(--font-body--family);
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .pdp-orbit__benefit {
+    margin: 0.55rem 0 0;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    opacity: 0.78;
+  }
+
+  /* Phones & tablets: ring on top, numbered list underneath */
+  .pdp-orbit__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem 1.25rem;
+    margin: 2.25rem 0 0;
+  }
+
+  .pdp-orbit__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+
+  .pdp-orbit__item .pdp-orbit__num {
+    --orbit-badge: 2.5rem;
+    font-size: 0.875rem;
+  }
+
+  @media screen and (max-width: 599px) {
+    .pdp-orbit__list {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Laptops and up: numbers on the ring, copy outside it */
+  @container (min-width: 960px) {
+    .pdp-orbit__frame {
+      --orbit-size: clamp(20rem, calc(100cqw - 2 * (var(--orbit-copy) + var(--orbit-badge) + var(--orbit-gap) + 2rem)), 36rem);
+
+      width: var(--orbit-size);
+      height: var(--orbit-size);
+      margin: 0 auto calc(var(--orbit-badge) + 1rem);
+    }
+
+    .pdp-orbit__stage {
+      position: absolute;
+      inset: 0;
+      width: auto;
+    }
+
+    .pdp-orbit__list {
+      position: absolute;
+      inset: 0;
+      display: block;
+      margin: 0;
+    }
+
+    .pdp-orbit__item {
+      position: absolute;
+      left: calc(50% + var(--dx) * 50%);
+      top: calc(50% + var(--dy) * 50%);
+      display: block;
+      width: 0;
+      height: 0;
+    }
+
+    .pdp-orbit__item .pdp-orbit__num {
+      --orbit-badge: 3.75rem;
+
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translate(-50%, -50%);
+      font-size: 1rem;
+    }
+
+    .pdp-orbit__copy {
+      position: absolute;
+      top: calc(var(--orbit-badge) / -2 - 0.35rem);
+      width: var(--orbit-copy);
+    }
+
+    .pdp-orbit__item--left .pdp-orbit__copy {
+      right: calc(var(--orbit-badge) / 2 + var(--orbit-gap));
+    }
+
+    .pdp-orbit__item--right .pdp-orbit__copy {
+      left: calc(var(--orbit-badge) / 2 + var(--orbit-gap));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Ingredients spotlight",
+  "class": "pdp-ingredients-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "orbit",
+          "label": "Orbit — numbered ring"
+        },
+        {
+          "value": "classic",
+          "label": "Classic — ingredient photos"
+        }
+      ],
+      "default": "orbit",
+      "info": "Orbit shows up to 6 ingredients."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The formula"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What's inside?"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Center image",
+      "info": "Round centre image, e.g. a product texture swatch. Defaults to the product's main image."
+    },
+    {
+      "type": "color",
+      "id": "halo_color",
+      "label": "Circle color",
+      "default": "#f6eadb"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Used by the Classic layout."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Vitamin C"
+        },
+        {
+          "type": "text",
+          "id": "benefit",
+          "label": "Benefit",
+          "default": "Brightens dull skin and evens out tone."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Ingredients spotlight",
+      "blocks": [
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Vitamin C",
+            "benefit": "Brightens dull skin and evens out tone."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Niacinamide",
+            "benefit": "Refines pores and fades dark spots."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Licorice root",
+            "benefit": "Calms redness and soothes the skin."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Hyaluronic acid",
+            "benefit": "Holds moisture for plump, bouncy skin."
+          }
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "product",
+      "page",
+      "index"
+    ]
+  }
+}
+{% endschema %}

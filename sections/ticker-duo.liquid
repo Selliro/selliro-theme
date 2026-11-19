@@ -1,0 +1,924 @@
+{% comment %}
+  Ticker Duo — up to two endless marquee rows (assets/ticker-duo.js).
+  Each row shows text, images, or text with images between the words. Text can be solid,
+  outlined (letter borders only) or alternate between the two.
+{% endcomment %}
+
+{{ 'section-ticker-duo.css' | asset_url | stylesheet_tag }}
+
+<ticker-duo
+  class="ticker-duo {{ section.settings.section_width }} color-{{ section.settings.color_scheme }} ticker-duo--{{ section.settings.layout | default: 'tilted' }}{% if section.settings.edge_fade %} ticker-duo--fade{% endif %}"
+  id="ticker-duo-{{ section.id }}"
+  data-scroll-boost="{{ section.settings.scroll_boost }}"
+  data-boost-strength="{{ section.settings.scroll_boost_strength }}"
+  data-scroll-up="{{ section.settings.scroll_up_behavior }}"
+  data-pause-hover="{{ section.settings.pause_on_hover }}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="ticker-duo__stack" style="gap: {{ section.settings.row_gap }}px;">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign bs = block.settings
+        assign content = bs.content_type | default: 'text'
+        assign text_style = bs.text_style | default: 'solid'
+        assign separator = bs.separator | default: 'icon'
+
+        comment
+          Images 1–8 → count them (accessed by key so the list stays editor-friendly)
+        endcomment
+        assign image_count = 0
+        for n in (1..8)
+          assign key = 'image_' | append: n
+          if bs[key] != blank
+            assign image_count = image_count | plus: 1
+          endif
+        endfor
+        if content != 'text' and image_count == 0
+          assign content = 'text'
+        endif
+
+        comment
+          Text items for "Text + images": split on commas, or on • if there are no commas
+        endcomment
+        if bs.text contains ','
+          assign items = bs.text | split: ','
+        elsif bs.text contains '•'
+          assign items = bs.text | split: '•'
+        else
+          assign items = bs.text | split: '~~~'
+        endif
+        assign item_count = items.size
+        if content == 'mixed' and item_count == 0
+          assign content = 'images'
+        endif
+
+        case separator
+          when 'sparkle'
+            assign sep_char = '✦'
+          when 'star'
+            assign sep_char = '★'
+          when 'dot'
+            assign sep_char = '•'
+          when 'dash'
+            assign sep_char = '—'
+          else
+            assign sep_char = ''
+        endcase
+
+        assign row_classes = 'ticker-duo__row color-' | append: bs.color_scheme | append: ' ticker-duo__row--' | append: content
+        if bs.image_grayscale
+          assign row_classes = row_classes | append: ' ticker-duo__row--grayscale'
+        endif
+        assign image_shape = bs.image_shape | default: 'natural'
+        assign img_h = bs.image_height | default: 64
+        assign img_w2 = img_h | times: 4
+      -%}
+      {%- capture typo -%}{% render 'typography-style', settings: bs %}{%- endcapture -%}
+      {%- capture separator_markup -%}
+        {%- if separator == 'icon' and bs.icon != blank -%}
+          <span class="ticker-duo__icon" aria-hidden="true">
+            {{ bs.icon | image_url: width: 128 | image_tag: loading: 'eager', alt: '', widths: '64, 128', sizes: '64px' }}
+          </span>
+        {%- elsif sep_char != '' -%}
+          <span class="ticker-duo__sep" aria-hidden="true" style="{{ typo }}">{{ sep_char }}</span>
+        {%- endif -%}
+      {%- endcapture -%}
+      <div
+        class="{{ row_classes }}"
+        style="padding-top: {{ bs.padding_top }}px; padding-bottom: {{ bs.padding_bottom }}px; --td-gap: {{ bs.item_gap | default: 16 }}px; --td-icon: {{ bs.icon_size | default: 20 }}px; --td-img-h: {{ img_h }}px; --td-stroke: {{ bs.outline_width | default: 1 }}px; {% unless section.settings.layout == 'straight' %}transform: rotate({{ bs.rotation }}deg);{% endunless %}"
+        {{ block.shopify_attributes }}
+      >
+        {%- if bs.link != blank -%}
+          <a class="ticker-duo__link" href="{{ bs.link }}" aria-label="{{ bs.text | default: bs.textarea | strip_html | escape }}">
+        {%- endif -%}
+        <div class="ticker-duo__scroll">
+          <div class="ticker-duo__track{% if bs.direction == 'reverse' %} is-reverse{% endif %}" data-speed="{{ bs.speed }}">
+            {%- for i in (1..8) -%}
+              {%- liquid
+                assign group_odd = forloop.index | modulo: 2
+                assign text_class = 'ticker-duo__text'
+                if text_style == 'outline'
+                  assign text_class = text_class | append: ' is-outline'
+                elsif text_style == 'alternate' and group_odd == 0
+                  assign text_class = text_class | append: ' is-outline'
+                endif
+              -%}
+              <div class="ticker-duo__group"{% unless forloop.first %} aria-hidden="true"{% endunless %}>
+                {%- case content -%}
+                  {%- when 'images' -%}
+                    {%- for n in (1..8) -%}
+                      {%- assign key = 'image_' | append: n -%}
+                      {%- assign img = bs[key] -%}
+                      {%- if img != blank -%}
+                        <span class="ticker-duo__media ticker-duo__media--{{ image_shape }}">
+                          {{ img | image_url: width: img_w2 | image_tag: loading: 'eager', alt: img.alt, sizes: '200px', widths: '120, 240, 480' }}
+                        </span>
+                        {{- separator_markup -}}
+                      {%- endif -%}
+                    {%- endfor -%}
+
+                  {%- when 'mixed' -%}
+                    {%- liquid
+                      assign steps = item_count
+                      if image_count > steps
+                        assign steps = image_count
+                      endif
+                    -%}
+                    {%- for k in (1..steps) -%}
+                      {%- liquid
+                        assign item_index = k | minus: 1 | modulo: item_count
+                        assign item = items[item_index] | strip
+                        assign image_pick = k | minus: 1 | modulo: image_count | plus: 1
+                        assign seen = 0
+                        assign img = nil
+                        for n in (1..8)
+                          assign key = 'image_' | append: n
+                          if bs[key] != blank
+                            assign seen = seen | plus: 1
+                            if seen == image_pick
+                              assign img = bs[key]
+                            endif
+                          endif
+                        endfor
+                        assign k_odd = k | modulo: 2
+                        assign item_class = 'ticker-duo__text'
+                        if text_style == 'outline'
+                          assign item_class = item_class | append: ' is-outline'
+                        elsif text_style == 'alternate' and k_odd == 0
+                          assign item_class = item_class | append: ' is-outline'
+                        endif
+                      -%}
+                      {%- if item != blank -%}
+                        <span class="{{ item_class }}" style="{{ typo }}">{{ item }}</span>
+                      {%- endif -%}
+                      {%- if img != blank -%}
+                        <span class="ticker-duo__media ticker-duo__media--{{ image_shape }}">
+                          {{ img | image_url: width: img_w2 | image_tag: loading: 'eager', alt: img.alt, sizes: '200px', widths: '120, 240, 480' }}
+                        </span>
+                      {%- endif -%}
+                    {%- endfor -%}
+
+                  {%- else -%}
+                    {%- if bs.text != blank -%}
+                      <span class="{{ text_class }}" style="{{ typo }}">{{ bs.text }}</span>
+                    {%- endif -%}
+                    {%- if bs.textarea != blank -%}
+                      <span class="{{ text_class }} ticker-duo__text--long" style="{{ typo }}">{{ bs.textarea }}</span>
+                    {%- endif -%}
+                    {{- separator_markup -}}
+                {%- endcase -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+        {%- if bs.link != blank -%}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</ticker-duo>
+
+<script src="{{ 'ticker-duo.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Ticker Duo",
+  "tag": "section",
+  "class": "section-ticker-duo",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "tilted",
+          "label": "Tilted ribbons (uses each row's rotation)"
+        },
+        {
+          "value": "straight",
+          "label": "Straight bands"
+        }
+      ],
+      "default": "tilted"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 12,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "row_gap",
+      "label": "Row gap",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 6,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Scroll effect"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll_boost",
+      "label": "Speed up while scrolling",
+      "info": "Rows move faster while the page scrolls, then ease back to normal speed.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "scroll_boost_strength",
+      "label": "Scroll speed boost",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "visible_if": "{{ section.settings.scroll_boost }}"
+    },
+    {
+      "type": "select",
+      "id": "scroll_up_behavior",
+      "label": "When scrolling up",
+      "options": [
+        {
+          "value": "faster",
+          "label": "Speed up (same direction)"
+        },
+        {
+          "value": "reverse",
+          "label": "Reverse direction"
+        }
+      ],
+      "default": "faster",
+      "visible_if": "{{ section.settings.scroll_boost }}"
+    },
+    {
+      "type": "header",
+      "content": "Motion"
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause on hover",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "edge_fade",
+      "label": "Fade the row edges",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ticker_row",
+      "name": "Ticker row",
+      "settings": [
+        {
+          "type": "select",
+          "id": "content_type",
+          "label": "Row content",
+          "options": [
+            {
+              "value": "text",
+              "label": "Text"
+            },
+            {
+              "value": "images",
+              "label": "Images"
+            },
+            {
+              "value": "mixed",
+              "label": "Text with images"
+            }
+          ],
+          "default": "text",
+          "info": "Text with images places one image after each word or phrase."
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "40% Off On Booking",
+          "info": "For Text with images, separate items with commas, e.g. Cleanser, Serum, Toner.",
+          "visible_if": "{{ block.settings.content_type != 'images' }}"
+        },
+        {
+          "type": "textarea",
+          "id": "textarea",
+          "label": "Extra text",
+          "visible_if": "{{ block.settings.content_type == 'text' }}"
+        },
+        {
+          "type": "header",
+          "content": "Text style"
+        },
+        {
+          "type": "select",
+          "id": "text_style",
+          "label": "Text style",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "outline",
+              "label": "Outline only"
+            },
+            {
+              "value": "alternate",
+              "label": "Alternate solid and outline"
+            }
+          ],
+          "default": "solid",
+          "info": "Outline shows only the letter borders. Works best with larger text sizes.",
+          "visible_if": "{{ block.settings.content_type != 'images' }}"
+        },
+        {
+          "type": "range",
+          "id": "outline_width",
+          "label": "Outline thickness",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "unit": "px",
+          "default": 1,
+          "visible_if": "{{ block.settings.content_type != 'images' and block.settings.text_style != 'solid' }}"
+        },
+        {
+          "type": "select",
+          "id": "type_preset",
+          "label": "t:settings.preset",
+          "options": [
+            {
+              "value": "rte",
+              "label": "t:options.default"
+            },
+            {
+              "value": "paragraph",
+              "label": "t:options.paragraph"
+            },
+            {
+              "value": "h1",
+              "label": "t:options.h1"
+            },
+            {
+              "value": "h2",
+              "label": "t:options.h2"
+            },
+            {
+              "value": "h3",
+              "label": "t:options.h3"
+            },
+            {
+              "value": "h4",
+              "label": "t:options.h4"
+            },
+            {
+              "value": "h5",
+              "label": "t:options.h5"
+            },
+            {
+              "value": "h6",
+              "label": "t:options.h6"
+            },
+            {
+              "value": "custom",
+              "label": "t:options.custom"
+            }
+          ],
+          "default": "rte",
+          "info": "t:info.edit_presets_in_theme_settings",
+          "visible_if": "{{ block.settings.content_type != 'images' }}"
+        },
+        {
+          "type": "select",
+          "id": "font",
+          "label": "t:settings.font",
+          "options": [
+            {
+              "value": "var(--font-body--family)",
+              "label": "t:options.body"
+            },
+            {
+              "value": "var(--font-subheading--family)",
+              "label": "t:options.subheading"
+            },
+            {
+              "value": "var(--font-heading--family)",
+              "label": "t:options.heading"
+            },
+            {
+              "value": "var(--font-accent--family)",
+              "label": "t:options.accent"
+            }
+          ],
+          "default": "var(--font-body--family)",
+          "visible_if": "{{ block.settings.content_type != 'images' and block.settings.type_preset == 'custom' }}"
+        },
+        {
+          "type": "select",
+          "id": "font_size",
+          "label": "t:settings.size",
+          "options": [
+            {
+              "value": "",
+              "label": "t:options.default"
+            },
+            {
+              "value": "0.625rem",
+              "label": "10px"
+            },
+            {
+              "value": "0.75rem",
+              "label": "12px"
+            },
+            {
+              "value": "0.875rem",
+              "label": "14px"
+            },
+            {
+              "value": "1rem",
+              "label": "16px"
+            },
+            {
+              "value": "1.125rem",
+              "label": "18px"
+            },
+            {
+              "value": "1.25rem",
+              "label": "20px"
+            },
+            {
+              "value": "1.5rem",
+              "label": "24px"
+            },
+            {
+              "value": "2rem",
+              "label": "32px"
+            },
+            {
+              "value": "2.5rem",
+              "label": "40px"
+            },
+            {
+              "value": "3rem",
+              "label": "48px"
+            },
+            {
+              "value": "3.5rem",
+              "label": "56px"
+            },
+            {
+              "value": "4.5rem",
+              "label": "72px"
+            },
+            {
+              "value": "5.5rem",
+              "label": "88px"
+            },
+            {
+              "value": "7.5rem",
+              "label": "120px"
+            },
+            {
+              "value": "9.5rem",
+              "label": "152px"
+            },
+            {
+              "value": "11.5rem",
+              "label": "184px"
+            }
+          ],
+          "default": "1rem",
+          "visible_if": "{{ block.settings.content_type != 'images' and block.settings.type_preset == 'custom' }}"
+        },
+        {
+          "type": "select",
+          "id": "line_height",
+          "label": "t:settings.line_height",
+          "options": [
+            {
+              "value": "tight",
+              "label": "t:options.tight"
+            },
+            {
+              "value": "normal",
+              "label": "t:options.normal"
+            },
+            {
+              "value": "loose",
+              "label": "t:options.loose"
+            }
+          ],
+          "default": "normal",
+          "visible_if": "{{ block.settings.content_type != 'images' and block.settings.type_preset == 'custom' }}"
+        },
+        {
+          "type": "select",
+          "id": "letter_spacing",
+          "label": "t:settings.letter_spacing",
+          "options": [
+            {
+              "value": "tight",
+              "label": "t:options.tight"
+            },
+            {
+              "value": "normal",
+              "label": "t:options.normal"
+            },
+            {
+              "value": "loose",
+              "label": "t:options.loose"
+            }
+          ],
+          "default": "normal",
+          "visible_if": "{{ block.settings.content_type != 'images' and block.settings.type_preset == 'custom' }}"
+        },
+        {
+          "type": "select",
+          "id": "case",
+          "label": "t:settings.case",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:options.default"
+            },
+            {
+              "value": "uppercase",
+              "label": "t:options.uppercase"
+            }
+          ],
+          "default": "none",
+          "visible_if": "{{ block.settings.content_type != 'images' and block.settings.type_preset == 'custom' }}"
+        },
+        {
+          "type": "select",
+          "id": "wrap",
+          "label": "t:settings.wrap",
+          "options": [
+            {
+              "value": "pretty",
+              "label": "t:options.pretty"
+            },
+            {
+              "value": "balance",
+              "label": "t:options.balance"
+            },
+            {
+              "value": "nowrap",
+              "label": "t:options.none"
+            }
+          ],
+          "visible_if": "{{ block.settings.content_type != 'images' and block.settings.type_preset == 'custom' }}"
+        },
+        {
+          "type": "header",
+          "content": "Images"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Image 1",
+          "visible_if": "{{ block.settings.content_type != 'text' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Image 2",
+          "visible_if": "{{ block.settings.content_type != 'text' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Image 3",
+          "visible_if": "{{ block.settings.content_type != 'text' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "Image 4",
+          "visible_if": "{{ block.settings.content_type != 'text' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_5",
+          "label": "Image 5",
+          "visible_if": "{{ block.settings.content_type != 'text' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_6",
+          "label": "Image 6",
+          "visible_if": "{{ block.settings.content_type != 'text' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_7",
+          "label": "Image 7",
+          "visible_if": "{{ block.settings.content_type != 'text' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_8",
+          "label": "Image 8",
+          "visible_if": "{{ block.settings.content_type != 'text' }}"
+        },
+        {
+          "type": "range",
+          "id": "image_height",
+          "label": "Image height",
+          "min": 24,
+          "max": 200,
+          "step": 4,
+          "unit": "px",
+          "default": 64,
+          "visible_if": "{{ block.settings.content_type != 'text' }}"
+        },
+        {
+          "type": "select",
+          "id": "image_shape",
+          "label": "Image shape",
+          "options": [
+            {
+              "value": "natural",
+              "label": "Original"
+            },
+            {
+              "value": "rounded",
+              "label": "Rounded"
+            },
+            {
+              "value": "circle",
+              "label": "Circle"
+            }
+          ],
+          "default": "natural",
+          "visible_if": "{{ block.settings.content_type != 'text' }}"
+        },
+        {
+          "type": "checkbox",
+          "id": "image_grayscale",
+          "label": "Show images in grayscale",
+          "info": "Images turn to color when hovered — good for brand logos.",
+          "default": false,
+          "visible_if": "{{ block.settings.content_type != 'text' }}"
+        },
+        {
+          "type": "header",
+          "content": "Separator"
+        },
+        {
+          "type": "select",
+          "id": "separator",
+          "label": "Separator",
+          "options": [
+            {
+              "value": "icon",
+              "label": "Uploaded icon"
+            },
+            {
+              "value": "sparkle",
+              "label": "Sparkle ✦"
+            },
+            {
+              "value": "star",
+              "label": "Star ★"
+            },
+            {
+              "value": "dot",
+              "label": "Dot •"
+            },
+            {
+              "value": "dash",
+              "label": "Dash —"
+            },
+            {
+              "value": "none",
+              "label": "None"
+            }
+          ],
+          "default": "icon",
+          "info": "Shown between repeats of the text, or between images.",
+          "visible_if": "{{ block.settings.content_type != 'mixed' }}"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Separator icon",
+          "visible_if": "{{ block.settings.content_type != 'mixed' and block.settings.separator == 'icon' }}"
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "label": "Icon size",
+          "min": 12,
+          "max": 64,
+          "step": 2,
+          "unit": "px",
+          "default": 20,
+          "visible_if": "{{ block.settings.content_type != 'mixed' and block.settings.separator == 'icon' }}"
+        },
+        {
+          "type": "range",
+          "id": "item_gap",
+          "label": "Space between items",
+          "min": 8,
+          "max": 96,
+          "step": 4,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Row link",
+          "info": "Makes the whole row clickable."
+        },
+        {
+          "type": "header",
+          "content": "Motion"
+        },
+        {
+          "type": "select",
+          "id": "direction",
+          "label": "Direction",
+          "options": [
+            {
+              "value": "forward",
+              "label": "Forward"
+            },
+            {
+              "value": "reverse",
+              "label": "Reverse"
+            }
+          ],
+          "default": "forward"
+        },
+        {
+          "type": "range",
+          "id": "speed",
+          "label": "Speed (seconds)",
+          "min": 10,
+          "max": 60,
+          "step": 1,
+          "default": 28,
+          "unit": "s"
+        },
+        {
+          "type": "header",
+          "content": "Row style"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "label": "Row padding top",
+          "min": 0,
+          "max": 40,
+          "step": 2,
+          "default": 6,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "label": "Row padding bottom",
+          "min": 0,
+          "max": 40,
+          "step": 2,
+          "default": 6,
+          "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "rotation",
+          "label": "Row rotation",
+          "min": -6,
+          "max": 6,
+          "step": 1,
+          "default": 0,
+          "unit": "deg",
+          "info": "Used by the Tilted ribbons layout."
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Color scheme",
+          "default": "scheme-2"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ticker Duo",
+      "blocks": [
+        {
+          "type": "ticker_row",
+          "settings": {
+            "text": "40% Off On Booking",
+            "speed": 24,
+            "direction": "forward",
+            "color_scheme": "scheme-2"
+          }
+        },
+        {
+          "type": "ticker_row",
+          "settings": {
+            "text": "Face Mask  •  Cleanser  •  Hair Care  •  Sun Protection  •  Toner / Mist  •  Skin Care",
+            "speed": 32,
+            "direction": "reverse",
+            "color_scheme": "scheme-1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Ticker Duo — outline",
+      "settings": {
+        "layout": "straight",
+        "edge_fade": true
+      },
+      "blocks": [
+        {
+          "type": "ticker_row",
+          "settings": {
+            "text": "Clean beauty",
+            "text_style": "outline",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "3.5rem",
+            "line_height": "tight",
+            "separator": "sparkle",
+            "item_gap": 32,
+            "speed": 30,
+            "direction": "forward",
+            "padding_top": 10,
+            "padding_bottom": 10,
+            "color_scheme": "scheme-1"
+          }
+        },
+        {
+          "type": "ticker_row",
+          "settings": {
+            "text": "Cleanser, Serum, Toner, Moisturiser, Sun care",
+            "content_type": "text",
+            "text_style": "alternate",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "2rem",
+            "separator": "dot",
+            "item_gap": 24,
+            "speed": 36,
+            "direction": "reverse",
+            "color_scheme": "scheme-1"
+          }
+        }
+      ]
+    }
+  ],
+  "max_blocks": 2
+}
+{% endschema %}

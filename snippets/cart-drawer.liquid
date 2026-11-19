@@ -13,6 +13,27 @@
   type="module"
   fetchpriority="low"
 ></script>
+<script
+  src="{{ 'cart-drawer-plus.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+{{ 'cart-drawer-plus.css' | asset_url | stylesheet_tag }}
+
+{%- capture cart_recommendations -%}
+  {%- if settings.cart_recommendations_enable -%}
+    <cart-recommendations
+      class="cart-drawer__recs"
+      data-skip-subtree-update
+      data-product-id="{{ cart.items.first.product_id }}"
+      data-cart-key="{{ cart.items | map: 'key' | join: ',' | md5 }}"
+      data-recs-url="{{ routes.product_recommendations_url }}"
+      data-root-url="{{ routes.root_url }}"
+      data-limit="{{ settings.cart_recommendations_limit }}"
+      data-view-label="{{ 'cart_drawer_plus.view' | t }}"
+    ></cart-recommendations>
+  {%- endif -%}
+{%- endcapture -%}
 
 <cart-drawer-component
   class="cart-drawer"
@@ -34,7 +55,7 @@
 
   <dialog
     ref="dialog"
-    class="cart-drawer__dialog dialog-modal dialog-drawer color-{{ settings.drawer_color_scheme }}{% if cart.empty? %} cart-drawer--empty{%endif%}"
+    class="cart-drawer__dialog cart-drawer__dialog--plus dialog-modal dialog-drawer color-{{ settings.drawer_color_scheme }}{% if cart.empty? %} cart-drawer--empty{%endif%}"
     aria-labelledby="{% if cart.empty? %}cart-drawer-heading-empty{% else %}cart-drawer-heading{% endif %}"
     scroll-lock
   >
@@ -61,16 +82,40 @@
             class="cart-drawer__content motion-reduce"
             aria-label="{{ 'accessibility.cart' | t }}"
           >
-            <h2
-              class="cart-drawer__heading h3 cart-drawer__heading--empty"
-              id="cart-drawer-heading-empty"
-            >
-              {{ 'content.your_cart_is_empty' | t }}
-            </h2>
+            <div class="cart-drawer__empty">
+              <span
+                class="cart-drawer__empty-icon"
+                aria-hidden="true"
+              >
+                <svg
+                  viewBox="0 0 64 64"
+                  width="64"
+                  height="64"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M14 22h36l-3 30a4 4 0 0 1-4 3.6H21A4 4 0 0 1 17 52z"/>
+                  <path d="M24 26v-6a8 8 0 0 1 16 0v6"/>
+                  <path class="cart-drawer__empty-spark" d="M50 8v6M47 11h6M12 30v4M10 32h4"/>
+                </svg>
+              </span>
+              <h2
+                class="cart-drawer__heading h3 cart-drawer__heading--empty"
+                id="cart-drawer-heading-empty"
+              >
+                {{ 'content.your_cart_is_empty' | t }}
+              </h2>
+              <p class="cart-drawer__empty-text">{{ 'cart_drawer_plus.empty_text' | t }}</p>
 
-            <div class="cart-drawer__items">
-              {% render 'cart-products' %}
+              <div class="cart-drawer__items">
+                {% render 'cart-products' %}
+              </div>
             </div>
+
+            {{ cart_recommendations }}
           </div>
         {%- else -%}
           <div
@@ -105,7 +150,11 @@
             <scroll-hint
               class="cart-drawer__items"
             >
+              {%- if settings.cart_free_shipping_enable and settings.cart_free_shipping_threshold > 0 -%}
+                {% render 'cart-free-shipping' %}
+              {%- endif -%}
               {% render 'cart-products' %}
+              {{ cart_recommendations }}
             </scroll-hint>
 
             <div

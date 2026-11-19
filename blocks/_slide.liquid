@@ -7,8 +7,12 @@
 {% capture children %}
   {% liquid
     assign preview_image = block_settings.image_1
-    if block_settings.media_type_1 == 'video'
-      assign preview_image = block_settings.video_1.preview_image
+    if block_settings.media_type_1 == 'video' and block_settings.video_1 != blank
+      assign preview_image = block_settings.video_1.preview_image | default: block_settings.image_1
+    endif
+    assign is_split = false
+    if block_settings.media_layout == 'split'
+      assign is_split = true
     endif
   %}
   {% if section.settings.slide_height == 'adapt_image' and block_index == 0 and preview_image != blank %}
@@ -25,83 +29,157 @@
   {% endif %}
 
   <div class="slide__image-container">
+    {%- liquid
+      assign media_sizes = '100vw'
+      if is_split
+        assign media_sizes = '(min-width: 750px) 50vw, 100vw'
+      endif
+      assign loading = 'lazy'
+      if block_index == 0 and section_index <= 3
+        assign loading = 'eager'
+      endif
+      assign fetchpriority = 'low'
+      if block_index == 0 and section_index == 1
+        assign fetchpriority = 'high'
+      endif
+      # Does this slide actually play a video? (empty video sources fall back to the image)
+      assign slide_has_video = false
+      assign slots = '1'
+      if is_split
+        assign slots = '1,2'
+      endif
+      assign slot_list = slots | split: ','
+      for n in slot_list
+        assign k_type = 'media_type_' | append: n
+        assign k_video = 'video_' | append: n
+        assign k_mp4 = 'video_url_' | append: n
+        assign k_ext = 'video_external_' | append: n
+        case block_settings[k_type]
+          when 'video'
+            if block_settings[k_video] != blank
+              assign slide_has_video = true
+            endif
+          when 'mp4'
+            if block_settings[k_mp4] != blank
+              assign slide_has_video = true
+            endif
+          when 'external'
+            if block_settings[k_ext] != blank
+              assign slide_has_video = true
+            endif
+        endcase
+      endfor
+      assign show_toggle = section.settings.video_toggle
+      if show_toggle == nil
+        assign show_toggle = true
+      endif
+    -%}
+    <div
+      class="slide__panes{% if is_split %} slide__panes--split slide__panes--mobile-{{ block_settings.split_mobile | default: 'stack' }}{% endif %}"
+      {% if is_split %}style="--slide-split: {{ block_settings.split_ratio | default: 50 }}%;"{% endif %}
+    >
+      {% render 'slide-media', settings: block_settings, n: 1, loading: loading, fetchpriority: fetchpriority, sizes: media_sizes %}
+      {%- if is_split -%}
+        {% render 'slide-media', settings: block_settings, n: 2, loading: loading, fetchpriority: 'low', sizes: media_sizes %}
+      {%- endif -%}
+    </div>
     {%- if block_settings.toggle_overlay -%}
       {% render 'overlay', settings: block_settings %}
     {%- endif -%}
-    {%- if preview_image -%}
+    {%- if block_settings.product_image != blank -%}
       {%- liquid
-        assign height = preview_image.width | divided_by: preview_image.aspect_ratio | round
-        assign media_width_desktop = '100vw'
-        assign media_width_mobile = '100vw'
-        assign sizes = '(min-width: 750px) ' | append: media_width_desktop | append: ', ' | append: media_width_mobile
-        assign lazy_sizes = 'auto, ' | append: sizes
-        assign widths = '832, 1200, 1600, 1920, 2560, 3840'
-      %}
-
-      {%- liquid
-        assign loading = 'lazy'
-
-        if block_index == 0 and section_index <= 3
-          assign loading = 'eager'
-          assign sizes = lazy_sizes
+        assign pi = block_settings.product_image
+        assign pi_classes = 'slide__product slide__product--' | append: block_settings.product_image_position
+        assign pi_style = block_settings.product_image_style | default: 'float'
+        if pi_style == 'float'
+          assign pi_classes = pi_classes | append: ' slide__product--float slide__product--shadow'
+        elsif pi_style == 'shadow'
+          assign pi_classes = pi_classes | append: ' slide__product--shadow'
         endif
-
-        assign fetchpriority = 'low'
-        if block_index == 0 and section_index == 1
-          assign fetchpriority = 'high'
+        if block_settings.product_image_size_mobile == 0
+          assign pi_classes = pi_classes | append: ' slide__product--hide-mobile'
         endif
+        assign pi_alt = pi.alt | default: block_settings.heading | escape
       -%}
-
-      {%- if block_settings.media_type_1 == 'image' -%}
-        {{
-          block_settings.image_1
-          | image_url: width: 3840
-          | image_tag: height: height, sizes: sizes, widths: widths, class: 'slide__image', loading: loading, fetchpriority: fetchpriority
-        }}
-      {%- else -%}
-        {%- if block_settings.video_1.preview_image -%}
-
-          {{
-            block_settings.video_1.preview_image
-            | image_url: width: 3840
-            | image_tag:
-              height: height,
-              sizes: sizes,
-              widths: widths,
-              loading: loading,
-              class: 'slide__video-poster',
-              fetchpriority: fetchpriority
-          }}
-        {%- endif -%}
-        {{
-          block_settings.video_1
-          | video_tag: poster: nil, autoplay: true, loop: true, controls: false, muted: true, class: 'slide__video'
-        }}
+      <div
+        class="{{ pi_classes }}"
+        style="--slide-product-size: {{ block_settings.product_image_size }}%; --slide-product-size-mobile: {{ block_settings.product_image_size_mobile }}%; --slide-product-ratio: {{ pi.aspect_ratio | default: 1 }};"
+        {% if block_settings.product_fly %}data-fly-product{% endif %}
+      >
+        <div class="slide__product-inner" data-fly-source>
+          {{ pi | image_url: width: 1400 | image_tag: loading: loading, class: 'slide__product-img', sizes: '(min-width: 750px) 45vw, 70vw', widths: '400, 700, 1000, 1400', alt: pi_alt }}
+        </div>
+      </div>
+      {%- if block_settings.product_fly -%}
+        <script src="{{ 'slide-product-fly.js' | asset_url }}" defer></script>
       {%- endif -%}
-    {%- else -%}
-      {%- liquid
-        assign modulo_result = block_index | modulo: 2
-        assign placeholder_variant = 2 | minus: modulo_result
-        assign placeholder_name = 'hero-apparel-' | append: placeholder_variant
-      -%}
-      {{ placeholder_name | placeholder_svg_tag: 'slide__image' }}
     {%- endif -%}
   </div>
   <div
-    class="spacing-style slide__content{% if block_settings.inherit_color_scheme == false %} color-{{ block_settings.color_scheme }}{% endif %}{% if preview_image or block_settings.toggle_overlay %} background-transparent{% endif %}"
+    class="spacing-style slide__content{% if block_settings.product_image != blank %} slide__content--product-{{ block_settings.product_image_position | default: 'right' }}{% endif %}{% if block_settings.inherit_color_scheme == false %} color-{{ block_settings.color_scheme }}{% endif %}{% if preview_image or block_settings.toggle_overlay %} background-transparent{% endif %}"
     style="{% render 'spacing-style', settings: block_settings %}"
     {{ block.shopify_attributes }}
   >
+    {%- liquid
+      assign copy_align = block_settings.text_align | default: 'left'
+      assign copy_position = block_settings.text_position | default: 'center'
+      assign copy_tone = block_settings.text_tone | default: 'light'
+      assign has_copy = false
+      if block_settings.eyebrow != blank or block_settings.heading != blank or block_settings.subheading != blank or block_settings.button_label_1 != blank or block_settings.button_label_2 != blank
+        assign has_copy = true
+      endif
+    -%}
+    {%- if has_copy -%}
+      <div class="ss-copy ss-copy--h-{{ copy_align }} ss-copy--v-{{ copy_position }} ss-copy--{{ copy_tone }}">
+        <div class="ss-copy__panel">
+          {%- if block_settings.eyebrow != blank -%}
+            <p class="ss-copy__eyebrow">{{ block_settings.eyebrow | escape }}</p>
+          {%- endif -%}
+          {%- if block_settings.heading != blank -%}
+            <h2 class="ss-copy__heading">{{ block_settings.heading | escape }}</h2>
+          {%- endif -%}
+          {%- if block_settings.subheading != blank -%}
+            <p class="ss-copy__text">{{ block_settings.subheading | escape | newline_to_br }}</p>
+          {%- endif -%}
+          {%- if block_settings.button_label_1 != blank or block_settings.button_label_2 != blank -%}
+            <div class="ss-copy__buttons">
+              {%- if block_settings.button_label_1 != blank -%}
+                <a class="button ss-copy__btn" href="{{ block_settings.button_link_1 | default: routes.all_products_collection_url }}">
+                  {{- block_settings.button_label_1 | escape -}}
+                </a>
+              {%- endif -%}
+              {%- if block_settings.button_label_2 != blank -%}
+                <a class="button-secondary ss-copy__btn ss-copy__btn--secondary" href="{{ block_settings.button_link_2 | default: routes.all_products_collection_url }}">
+                  {{- block_settings.button_label_2 | escape -}}
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+    {%- comment -%} Any extra theme blocks added to the slide (text, buttons, groups…) {%- endcomment -%}
     <div
-      class="group-block-content
-      layout-panel-flex
-      layout-panel-flex--{{ block_settings.content_direction }}
-      {% if block_settings.vertical_on_mobile %}mobile-column{% endif %}"
-      style="{% render 'layout-panel-style', settings: block_settings %}"
+      class="group-block-content layout-panel-flex layout-panel-flex--column slide__blocks"
+      style="--flex-direction: column; --horizontal-alignment: {{ copy_align | replace: 'left', 'flex-start' | replace: 'right', 'flex-end' }}; --vertical-alignment: center; --gap: 12px;"
     >
       {% content_for 'blocks' %}
     </div>
   </div>
+  {%- if slide_has_video and show_toggle -%}
+    <button
+      type="button"
+      class="slide__video-toggle"
+      data-slide-toggle
+      aria-pressed="false"
+      aria-label="{{ 'accessibility.pause_video' | t | escape }}"
+      data-label-pause="{{ 'accessibility.pause_video' | t | escape }}"
+      data-label-play="{{ 'accessibility.play_video' | t | escape }}"
+    >
+      <svg class="slide__video-toggle-pause" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 4h3v12H6zM11 4h3v12h-3z" fill="currentColor"/></svg>
+      <svg class="slide__video-toggle-play" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true" focusable="false"><path d="M6 4.5v11l9-5.5z" fill="currentColor"/></svg>
+    </button>
+  {%- endif -%}
 {% endcapture %}
 
 {%- capture class -%}
@@ -130,6 +208,359 @@
 
   .slide__content.background-transparent {
     background-color: transparent;
+  }
+
+  .slide__panes {
+    position: absolute;
+    inset: 0;
+    display: flex;
+  }
+
+  .slide__media {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+    container-type: size;
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+  }
+
+  .slide__panes--split > .slide__media:first-child {
+    flex: 0 0 var(--slide-split, 50%);
+  }
+
+  .slide__media > picture,
+  .slide__media > picture > img,
+  .slide__media > .slide__image,
+  .slide__media > .slide__video,
+  .slide__media > .slide__video-poster,
+  .slide__media > placeholder-image,
+  .slide__media > svg {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .slide__media > .slide__video {
+    z-index: 1;
+  }
+
+  /* YouTube / Vimeo: scale the 16:9 player so it always covers the pane */
+  .slide__embed {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .slide__iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100cqw, 177.78cqh);
+    height: max(100cqh, 56.25cqw);
+    border: 0;
+    translate: -50% -50%;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .slide__media.is-playing .slide__iframe {
+    opacity: 1;
+  }
+
+  .slide__video-toggle {
+    position: absolute;
+    z-index: calc(var(--layer-flat, 1) + 2);
+    right: 1rem;
+    bottom: 1rem;
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid rgb(255 255 255 / 0.4);
+    border-radius: 50%;
+    background: rgb(0 0 0 / 0.38);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .slide__video-toggle:hover {
+    background: rgb(0 0 0 / 0.55);
+    transform: scale(1.05);
+  }
+
+  .slide__video-toggle:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+  }
+
+  .slide__video-toggle-play,
+  .slide__video-toggle[aria-pressed='true'] .slide__video-toggle-pause {
+    display: none;
+  }
+
+  .slide__video-toggle[aria-pressed='true'] .slide__video-toggle-play {
+    display: block;
+  }
+
+  .slide__image-container > .overlay {
+    z-index: 1;
+  }
+
+  /* ---- Product image floating on the slide (cut-out PNGs look best) ---- */
+  .slide__product {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    padding-inline: clamp(1rem, 6vw, 7rem);
+    pointer-events: none;
+  }
+
+  .slide__product--right { justify-content: flex-end; }
+  .slide__product--center { justify-content: center; }
+  .slide__product--left { justify-content: flex-start; }
+
+  .slide__product-inner {
+    position: relative;
+    height: var(--slide-product-size, 90%);
+    max-width: 55%;
+    aspect-ratio: var(--slide-product-ratio, 1);
+  }
+
+  .slide__product-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .slide__product--shadow .slide__product-img {
+    filter: drop-shadow(0 28px 34px rgb(0 0 0 / 0.28));
+  }
+
+  .slide__product--float .slide__product-img {
+    animation: slide-product-float 6s ease-in-out infinite;
+  }
+
+  /* While the image is flying to New Arrivals the copy on the slide is hidden. No fade: the flyer takes its
+     place in the same frame, so a fade would show two products for a moment. */
+  .slide__product-inner.is-flying {
+    visibility: hidden;
+  }
+
+  /* Keep the slide copy clear of the product image: reserve the image's side of the slide */
+  @media screen and (min-width: 750px) {
+    .slide__content--product-right .ss-copy {
+      padding-inline-end: calc(min(55%, var(--slide-product-room, 44%)) + 1rem);
+    }
+
+    .slide__content--product-left .ss-copy {
+      padding-inline-start: calc(min(55%, var(--slide-product-room, 44%)) + 1rem);
+    }
+
+    .slide__content--product-center .ss-copy__panel {
+      position: relative;
+      z-index: 3;
+    }
+  }
+
+  @media screen and (min-width: 750px) and (max-width: 1199px) {
+    .slide__product-inner {
+      max-width: 40%;
+    }
+
+    .slide__content--product-right .ss-copy,
+    .slide__content--product-left .ss-copy {
+      --slide-product-room: 40%;
+    }
+  }
+
+  @keyframes slide-product-float {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -2.5%; }
+  }
+
+  @media screen and (max-width: 749px) {
+    .slide__product {
+      align-items: flex-end;
+      padding: 0 0.5rem 2.5rem;
+    }
+
+    .slide__product-inner {
+      height: var(--slide-product-size-mobile, 55%);
+      max-width: 70%;
+    }
+
+    .slide__product--hide-mobile {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide__product--float .slide__product-img {
+      animation: none;
+    }
+  }
+
+  /* Split on phones: stack the two panes, or keep only the first */
+  @media screen and (max-width: 749px) {
+    .slide__panes--split.slide__panes--mobile-stack {
+      flex-direction: column;
+    }
+
+    .slide__panes--split.slide__panes--mobile-stack > .slide__media:first-child {
+      flex: 1 1 0;
+    }
+
+    .slide__panes--split.slide__panes--mobile-first > .slide__media:nth-child(2) {
+      display: none;
+    }
+
+    .slide__video-toggle {
+      right: 0.75rem;
+      bottom: 0.75rem;
+    }
+  }
+
+  /* ---- Built-in slide text (heading, small heading, text, buttons) ---- */
+  .ss-copy {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    padding: clamp(1.5rem, 5vw, 5rem) clamp(1.25rem, 5.5vw, 6rem);
+    box-sizing: border-box;
+  }
+
+  .ss-copy--h-left { justify-content: flex-start; text-align: start; }
+  .ss-copy--h-center { justify-content: center; text-align: center; }
+  .ss-copy--h-right { justify-content: flex-end; text-align: end; }
+  .ss-copy--v-top { align-items: flex-start; }
+  .ss-copy--v-center { align-items: center; }
+  .ss-copy--v-bottom { align-items: flex-end; }
+
+  .ss-copy__panel {
+    display: grid;
+    gap: clamp(0.75rem, 1.4vw, 1.1rem);
+    max-width: min(46rem, 100%);
+    justify-items: start;
+  }
+
+  .ss-copy--h-center .ss-copy__panel { justify-items: center; }
+  .ss-copy--h-right .ss-copy__panel { justify-items: end; }
+
+  .ss-copy--light { --ss-ink: #ffffff; --ss-ink-soft: rgb(255 255 255 / 0.88); }
+  .ss-copy--dark { --ss-ink: #141414; --ss-ink-soft: rgb(20 20 20 / 0.8); }
+
+  .ss-copy__eyebrow {
+    margin: 0;
+    font-size: clamp(0.8125rem, 1.1vw, 0.9375rem);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ss-ink);
+  }
+
+  .ss-copy__heading {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-weight: var(--ss-heading-weight, var(--font-heading--weight, 600));
+    font-size: clamp(2rem, 5.2vw, var(--ss-heading-size, 64px));
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    text-transform: var(--ss-heading-case, none);
+    text-wrap: balance;
+    color: var(--ss-ink);
+  }
+
+  .ss-copy__text {
+    margin: 0;
+    max-width: 38rem;
+    font-size: clamp(1rem, 1.3vw, 1.1875rem);
+    line-height: 1.5;
+    color: var(--ss-ink-soft);
+    text-wrap: pretty;
+  }
+
+  .ss-copy__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .ss-copy--h-center .ss-copy__buttons { justify-content: center; }
+  .ss-copy--h-right .ss-copy__buttons { justify-content: flex-end; }
+
+  .ss-copy__btn {
+    min-height: 3.25rem;
+    padding-inline: clamp(1.5rem, 2.4vw, 2.25rem);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  /* Main button on media: white on light-text slides, near-black on dark-text slides
+     (the section's custom button colors override this) */
+  .ss-copy--light .ss-copy__btn:not(.ss-copy__btn--secondary) {
+    --button-background-color: #ffffff;
+    --button-border-color: #ffffff;
+    --button-color: #111111;
+  }
+
+  .ss-copy--light .ss-copy__btn:not(.ss-copy__btn--secondary):hover {
+    --button-background-color: rgb(255 255 255 / 0.86);
+    --button-border-color: rgb(255 255 255 / 0.86);
+    --button-color: #111111;
+  }
+
+  .ss-copy--dark .ss-copy__btn:not(.ss-copy__btn--secondary),
+  .ss-copy--dark .ss-copy__btn:not(.ss-copy__btn--secondary):hover {
+    --button-background-color: #141414;
+    --button-border-color: #141414;
+    --button-color: #ffffff;
+  }
+
+  /* Second button on media: outlined in the text color */
+  .ss-copy__btn--secondary {
+    --button-color: var(--ss-ink);
+    --button-background-color: transparent;
+    --button-border-color: var(--ss-ink);
+    border: 1.5px solid var(--ss-ink);
+  }
+
+  .ss-copy__btn--secondary:hover {
+    --button-color: var(--ss-ink);
+    --button-background-color: color-mix(in srgb, var(--ss-ink) 14%, transparent);
+  }
+
+  /* Extra theme blocks: hidden when there are none */
+  .slide__blocks:not(:has(*)) {
+    display: none;
+  }
+
+  .slide__content:has(.ss-copy) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ss-copy {
+      padding: 2.5rem 1.25rem 3.5rem;
+    }
+
+    .ss-copy__btn {
+      min-height: 3rem;
+    }
   }
 
   slideshow-slide > .slide__image-container {
@@ -184,7 +615,15 @@
         },
         {
           "value": "video",
-          "label": "t:options.video"
+          "label": "t:collection_grid.media_upload"
+        },
+        {
+          "value": "mp4",
+          "label": "t:collection_grid.media_mp4"
+        },
+        {
+          "value": "external",
+          "label": "t:collection_grid.media_external"
         }
       ],
       "default": "image"
@@ -193,6 +632,13 @@
       "type": "image_picker",
       "id": "image_1",
       "label": "t:settings.image",
+      "info": "t:collection_grid.image_poster_info"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile_1",
+      "label": "t:slideshow_media.mobile_image",
+      "info": "t:slideshow_media.mobile_image_info",
       "visible_if": "{{ block.settings.media_type_1 == 'image' }}"
     },
     {
@@ -202,39 +648,156 @@
       "visible_if": "{{ block.settings.media_type_1 == 'video' }}"
     },
     {
+      "type": "url",
+      "id": "video_url_1",
+      "label": "t:collection_grid.video_mp4",
+      "info": "t:collection_grid.video_mp4_info",
+      "visible_if": "{{ block.settings.media_type_1 == 'mp4' }}"
+    },
+    {
+      "type": "video_url",
+      "id": "video_external_1",
+      "label": "t:collection_grid.video_url",
+      "accept": ["youtube", "vimeo"],
+      "visible_if": "{{ block.settings.media_type_1 == 'external' }}"
+    },
+    {
+      "type": "select",
+      "id": "media_layout",
+      "label": "t:slideshow_media.media_layout",
+      "options": [
+        {
+          "value": "full",
+          "label": "t:options.full"
+        },
+        {
+          "value": "split",
+          "label": "t:slideshow_media.split"
+        }
+      ],
+      "default": "full"
+    },
+    {
       "type": "header",
-      "content": "t:content.layout"
+      "content": "t:content.media_2",
+      "visible_if": "{{ block.settings.media_layout == 'split' }}"
     },
     {
       "type": "select",
-      "id": "content_direction",
-      "label": "t:settings.direction",
+      "id": "media_type_2",
+      "label": "t:settings.type",
       "options": [
         {
-          "value": "column",
-          "label": "t:options.vertical"
+          "value": "image",
+          "label": "t:options.image"
         },
         {
-          "value": "row",
-          "label": "t:options.horizontal"
+          "value": "video",
+          "label": "t:collection_grid.media_upload"
+        },
+        {
+          "value": "mp4",
+          "label": "t:collection_grid.media_mp4"
+        },
+        {
+          "value": "external",
+          "label": "t:collection_grid.media_external"
         }
       ],
-      "default": "column"
+      "default": "video",
+      "visible_if": "{{ block.settings.media_layout == 'split' }}"
     },
     {
-      "type": "checkbox",
-      "id": "vertical_on_mobile",
-      "label": "t:settings.vertical_on_mobile",
-      "default": true,
-      "visible_if": "{{ block.settings.content_direction == 'row' }}"
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "t:settings.image",
+      "info": "t:collection_grid.image_poster_info",
+      "visible_if": "{{ block.settings.media_layout == 'split' }}"
+    },
+    {
+      "type": "video",
+      "id": "video_2",
+      "label": "t:settings.video",
+      "visible_if": "{{ block.settings.media_layout == 'split' and block.settings.media_type_2 == 'video' }}"
+    },
+    {
+      "type": "url",
+      "id": "video_url_2",
+      "label": "t:collection_grid.video_mp4",
+      "info": "t:collection_grid.video_mp4_info",
+      "visible_if": "{{ block.settings.media_layout == 'split' and block.settings.media_type_2 == 'mp4' }}"
+    },
+    {
+      "type": "video_url",
+      "id": "video_external_2",
+      "label": "t:collection_grid.video_url",
+      "accept": ["youtube", "vimeo"],
+      "visible_if": "{{ block.settings.media_layout == 'split' and block.settings.media_type_2 == 'external' }}"
     },
     {
       "type": "select",
-      "id": "horizontal_alignment",
+      "id": "split_ratio",
+      "label": "t:slideshow_media.split_ratio",
+      "options": [
+        {
+          "value": "50",
+          "label": "50 / 50"
+        },
+        {
+          "value": "60",
+          "label": "60 / 40"
+        },
+        {
+          "value": "40",
+          "label": "40 / 60"
+        }
+      ],
+      "default": "50",
+      "visible_if": "{{ block.settings.media_layout == 'split' }}"
+    },
+    {
+      "type": "select",
+      "id": "split_mobile",
+      "label": "t:slideshow_media.split_mobile",
+      "options": [
+        {
+          "value": "stack",
+          "label": "t:slideshow_media.stack"
+        },
+        {
+          "value": "first",
+          "label": "t:slideshow_media.first_only"
+        }
+      ],
+      "default": "stack",
+      "visible_if": "{{ block.settings.media_layout == 'split' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:slideshow_media.eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:settings.heading"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "t:settings.text"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
       "label": "t:settings.alignment",
       "options": [
         {
-          "value": "flex-start",
+          "value": "left",
           "label": "t:options.left"
         },
         {
@@ -242,24 +805,19 @@
           "label": "t:options.center"
         },
         {
-          "value": "flex-end",
+          "value": "right",
           "label": "t:options.right"
-        },
-        {
-          "value": "space-between",
-          "label": "t:options.space_between"
         }
       ],
-      "default": "flex-start",
-      "visible_if": "{{ block.settings.content_direction == 'row' }}"
+      "default": "left"
     },
     {
       "type": "select",
-      "id": "vertical_alignment",
+      "id": "text_position",
       "label": "t:settings.position",
       "options": [
         {
-          "value": "flex-start",
+          "value": "top",
           "label": "t:options.top"
         },
         {
@@ -267,75 +825,135 @@
           "label": "t:options.center"
         },
         {
-          "value": "flex-end",
+          "value": "bottom",
           "label": "t:options.bottom"
         }
       ],
-      "default": "center",
-      "visible_if": "{{ block.settings.content_direction == 'row' }}"
-    },
-    {
-      "type": "checkbox",
-      "id": "align_baseline",
-      "label": "t:settings.align_baseline",
-      "default": false,
-      "visible_if": "{{ block.settings.vertical_alignment == 'flex-end' }}"
+      "default": "center"
     },
     {
       "type": "select",
-      "id": "horizontal_alignment_flex_direction_column",
-      "label": "t:settings.alignment",
+      "id": "text_tone",
+      "label": "t:slideshow_media.text_tone",
       "options": [
         {
-          "value": "flex-start",
-          "label": "t:options.left"
+          "value": "light",
+          "label": "t:options.light"
         },
         {
-          "value": "center",
-          "label": "t:options.center"
-        },
-        {
-          "value": "flex-end",
-          "label": "t:options.right"
+          "value": "dark",
+          "label": "t:slideshow_media.dark"
         }
       ],
-      "default": "flex-start",
-      "visible_if": "{{ block.settings.content_direction != 'row' }}"
+      "default": "light"
+    },
+    {
+      "type": "header",
+      "content": "t:content.buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_label_1",
+      "label": "t:settings.label"
+    },
+    {
+      "type": "url",
+      "id": "button_link_1",
+      "label": "t:settings.link"
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "t:slideshow_media.button_2"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "t:settings.link"
+    },
+    {
+      "type": "header",
+      "content": "Product image"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_image",
+      "label": "Product image",
+      "info": "Floats on top of the background image or video. A cut-out (transparent PNG) of the product looks best."
     },
     {
       "type": "select",
-      "id": "vertical_alignment_flex_direction_column",
-      "label": "t:settings.position",
+      "id": "product_image_position",
+      "label": "Position",
       "options": [
         {
-          "value": "flex-start",
-          "label": "t:options.top"
+          "value": "right",
+          "label": "Right"
         },
         {
           "value": "center",
-          "label": "t:options.center"
+          "label": "Center"
         },
         {
-          "value": "flex-end",
-          "label": "t:options.bottom"
-        },
-        {
-          "value": "space-between",
-          "label": "t:options.space_between"
+          "value": "left",
+          "label": "Left"
         }
       ],
-      "default": "center",
-      "visible_if": "{{ block.settings.content_direction == 'column' }}"
+      "default": "right",
+      "visible_if": "{{ block.settings.product_image != blank }}"
     },
     {
       "type": "range",
-      "id": "gap",
-      "label": "t:settings.gap",
+      "id": "product_image_size",
+      "label": "Size",
+      "min": 30,
+      "max": 120,
+      "step": 5,
+      "unit": "%",
+      "default": 95,
+      "info": "Height of the image compared with the slide.",
+      "visible_if": "{{ block.settings.product_image != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "product_image_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "float",
+          "label": "Floating, with shadow"
+        },
+        {
+          "value": "shadow",
+          "label": "Still, with shadow"
+        },
+        {
+          "value": "plain",
+          "label": "Plain"
+        }
+      ],
+      "default": "float",
+      "visible_if": "{{ block.settings.product_image != blank }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_fly",
+      "label": "Fly into New Arrivals while scrolling",
+      "default": true,
+      "info": "As visitors scroll down, the image travels down the page and lands on the first product of the New Arrivals section. Use a cut-out of that product's own photo for a seamless landing.",
+      "visible_if": "{{ block.settings.product_image != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "product_image_size_mobile",
+      "label": "Size on mobile",
       "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 12
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 55,
+      "info": "0% hides the image on mobile.",
+      "visible_if": "{{ block.settings.product_image != blank }}"
     },
     {
       "type": "header",
@@ -450,50 +1068,16 @@
     {
       "name": "t:names.slide",
       "settings": {
-        "horizontal_alignment_flex_direction_column": "center"
-      },
-      "blocks": {
-        "group": {
-          "type": "group",
-          "settings": {
-            "horizontal_alignment_flex_direction_column": "center",
-            "width": "custom",
-            "custom_width": 50,
-            "width_mobile": "custom",
-            "inherit_color_scheme": false,
-            "color_scheme": "scheme-6",
-            "custom_width_mobile": 85,
-            "padding-inline-start": 48,
-            "padding-inline-end": 48,
-            "padding-block-start": 48,
-            "padding-block-end": 48
-          },
-          "blocks": {
-            "heading": {
-              "type": "text",
-              "settings": {
-                "text": "t:html_defaults.new_arrivals_h2"
-              }
-            },
-            "text": {
-              "type": "text",
-              "settings": {
-                "text": "t:html_defaults.latest_products",
-                "padding-block-end": 20
-              }
-            },
-            "button": {
-              "type": "button",
-              "settings": {
-                "label": "t:text_defaults.shop_now_button_label",
-                "link": "shopify://collections/all"
-              }
-            }
-          },
-          "block_order": ["heading", "text", "button"]
-        }
-      },
-      "block_order": ["group"]
+        "eyebrow": "New season",
+        "heading": "Glow from within",
+        "subheading": "Clean, gentle skincare made for every day.",
+        "text_align": "left",
+        "button_label_1": "Shop now",
+        "button_link_1": "shopify://collections/all",
+        "toggle_overlay": true,
+        "overlay_style": "gradient",
+        "overlay_color": "#00000066"
+      }
     }
   ]
 }

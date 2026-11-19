@@ -8,6 +8,329 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "image_padding": "圖片間距",
+    "image_padding_info": "圖片與區段邊緣之間的距離。手機上使用頁面邊距。",
+    "layout_stacked": "疊放：大尺寸重疊卡片",
+    "image_parallax": "捲動時的圖片移動",
+    "image_parallax_info": "頁面捲動時，圖片會在框內輕輕滑動。設為 0 即關閉。",
+    "timer_style": "計時器樣式",
+    "timer_tiles": "方塊",
+    "timer_plain": "簡潔",
+    "show_end_date": "在計時器下方顯示結束日期",
+    "badge_text": "貼紙文字",
+    "badge_text_info": "顯示在左側圖片的圓形貼紙上。留空即隱藏。",
+    "d_badge": "最高折扣 25%",
+    "name": "倒數計時橫幅",
+    "layout": "版面配置",
+    "layout_split": "分割：兩側各一張圖片",
+    "layout_collage": "拼貼：重疊的圖片卡片",
+    "countdown": "倒數計時",
+    "end_date": "結束日期",
+    "end_date_info": "格式為 YYYY-MM-DD，例如 2026-11-27。使用您商店的時區。留空即隱藏倒數計時。",
+    "end_time": "結束時間",
+    "end_time_info": "24 小時制 HH:MM，例如 23:59。",
+    "show_labels": "顯示標籤（天、時、分、秒）",
+    "after_end": "倒數結束後",
+    "after_message": "顯示訊息",
+    "after_hide": "隱藏此區段",
+    "after_zeros": "繼續顯示零",
+    "expired_message": "訊息",
+    "d_expired": "此優惠已結束",
+    "d_eyebrow": "黑色星期五特賣",
+    "d_heading": "你的心頭好，現在更划算",
+    "d_text": "<p>日常保養必備品最高省 25%。在優惠結束前，為你的肌膚打造專屬保養流程。</p>",
+    "d_button": "選購特賣",
+    "images": "圖片",
+    "left_image": "左側圖片",
+    "left_image_2": "左側圖片 2",
+    "right_image": "右側圖片",
+    "right_image_2": "右側圖片 2",
+    "mobile_images": "行動裝置上的圖片",
+    "show_images": "在文字上方並排顯示",
+    "hide_images": "隱藏",
+    "number_size": "數字大小",
+    "number_color": "數字顏色",
+    "number_color_info": "留空即使用配色方案的文字顏色。"
+  },
+  "footer_wordmark": {
+    "header": "底部大字",
+    "text": "文字",
+    "text_info": "以文字標誌的形式，在頁尾底部全寬超大顯示。留空即隱藏。",
+    "font": "字型",
+    "crop": "底部裁切",
+    "crop_info": "字母超出下緣的比例。",
+    "color": "顏色",
+    "color_info": "留空即使用頁尾底部的配色方案。",
+    "animate": "捲動時字母浮現"
+  },
+  "slideshow_media": {
+    "card_spacing": "上下間距",
+    "card_spacing_info": "僅適用於頁面寬度。投影片上方和下方使用相同的間距。",
+    "eyebrow": "小標題",
+    "button_2": "第二個按鈕標籤",
+    "text_tone": "文字顏色",
+    "dark": "深色",
+    "content_style": "文字樣式",
+    "glass": "玻璃面板",
+    "no_panel": "無面板",
+    "heading_size": "標題大小",
+    "bars": "進度列",
+    "media_layout": "媒體版面",
+    "split": "分割（兩個媒體並排）",
+    "split_ratio": "媒體 1 寬度",
+    "split_mobile": "行動裝置上的分割",
+    "stack": "上下堆疊",
+    "first_only": "僅顯示媒體 1",
+    "mobile_image": "行動裝置圖片（選填）",
+    "mobile_image_info": "在手機上取代上方的圖片顯示。",
+    "media_effect": "圖片效果",
+    "content_animation": "文字動畫",
+    "rise": "由下浮現",
+    "video_toggle": "在影片上顯示暫停 / 播放按鈕",
+    "video_toggle_info": "影片會靜音並循環播放。偏好減少動態效果的訪客在按下播放前會看到封面圖片。"
+  },
+  "collection_grid": {
+    "products_per_row": "每列商品數",
+    "products_per_row_info": "桌面版。平板最多顯示 3 個。",
+    "promo_header": "促銷卡片",
+    "promo_info": "卡片會顯示在商品系列第一頁的商品之間。",
+    "tile_1": "卡片 1",
+    "tile_2": "卡片 2",
+    "show_tile": "顯示卡片",
+    "position": "顯示在第幾個商品之後",
+    "span": "寬度",
+    "span_1": "1 欄",
+    "span_2": "2 欄",
+    "icon_leaf": "葉子",
+    "icon_sparkle": "閃光",
+    "icon_droplet": "水滴",
+    "icon_sun": "太陽",
+    "icon_heart": "愛心",
+    "icon_gift": "禮物",
+    "icon_sprout": "嫩芽",
+    "icon_star": "星星",
+    "d1_heading": "保養必備",
+    "d1_text": "打造讓肌膚保持舒緩、透亮與受保護的保養流程。",
+    "d1_button": "選購保養品",
+    "d2_heading": "日常防曬",
+    "d2_text": "輕盈防曬，妝前疊擦也服貼。",
+    "d2_button": "探索防曬",
+    "media_upload": "影片（上傳）",
+    "media_mp4": "影片（MP4 連結）",
+    "media_external": "YouTube 或 Vimeo",
+    "video_mp4": "MP4 影片網址",
+    "video_mp4_info": "貼上直接的 .mp4 連結，例如來自 Shopify 管理介面 → 內容 → 檔案。",
+    "video_url": "YouTube 或 Vimeo 網址",
+    "image_poster_info": "影片時作為封面圖，並在訪客偏好減少動態效果時顯示。"
+  },
+  "collection_hero": {
+    "name": "商品系列橫幅",
+    "use_collection_image": "若商品系列有圖片則使用該圖片",
+    "fallback_image": "備用圖片",
+    "text_color": "文字顏色",
+    "title_size": "標題大小",
+    "rounded": "底部圓角",
+    "details": "詳細資訊",
+    "show_breadcrumbs": "顯示導覽路徑",
+    "show_description": "顯示商品系列說明",
+    "show_count": "顯示商品數量",
+    "quick_links_header": "快速連結",
+    "quick_links_info": "顯示於橫幅下方。目前的商品系列會被標示。",
+    "show_all": "顯示「全部」連結",
+    "show_counts": "顯示商品數量"
+  },
+  "section_spacing": {
+    "header": "區段間距",
+    "mode": "區段之間的間距",
+    "mode_info": "等距會讓每個區段使用相同的間距。滿版橫幅維持緊貼。",
+    "uniform": "等距（建議）",
+    "custom": "使用各區段自己的內距",
+    "desktop": "區段間距（桌面版）",
+    "mobile": "區段間距（行動裝置）",
+    "scope": "將等距套用於",
+    "scope_home": "首頁",
+    "scope_all": "所有頁面"
+  },
+  "bundle_builder": {
+    "name": "組合套組產生器",
+    "content": "內容",
+    "eyebrow": "小標題",
+    "heading": "標題",
+    "text": "文字",
+    "products_header": "商品",
+    "products_info": "選擇顧客可加入的商品。留空即使用商品系列。",
+    "products_limit": "顯示的商品數",
+    "rules": "套組規則",
+    "min_items": "加入套組的最少件數",
+    "max_items": "盒子最多件數",
+    "discount_info": "加入套組時顯示節省金額並套用折扣碼。請在 Shopify 管理介面 →「折扣」中建立對應的折扣碼。",
+    "tier_1": "級距 1",
+    "tier_2": "級距 2",
+    "tier_3": "級距 3",
+    "items_needed": "所需件數",
+    "items_needed_info": "設為 0 可關閉此級距。",
+    "discount": "折扣",
+    "discount_code": "折扣碼",
+    "code_info": "選填。達到此級距時套用至購物車。",
+    "tier_label": "級距標籤",
+    "tier_label_info": "[count] 和 [discount] 會自動替換。",
+    "add_property": "在購物車中將套組商品分組",
+    "add_property_info": "為每件商品新增隱藏屬性「_bundle」。",
+    "box": "盒子",
+    "box_title": "盒子標題",
+    "slots": "顯示的格數",
+    "messages_info": "[count] 和 [discount] 會自動替換。",
+    "msg_min": "達到最少件數前的訊息",
+    "msg_more": "下一級距訊息",
+    "msg_top": "達到最高級距時的訊息",
+    "msg_max": "盒子已滿時的訊息",
+    "cta_label": "按鈕文字",
+    "success_label": "加入後的按鈕文字",
+    "show_fill": "顯示「填滿我的盒子」連結",
+    "fill_label": "「填滿我的盒子」文字",
+    "note": "按鈕下方說明",
+    "show_second_image": "懸停時顯示第二張圖片",
+    "show_compare_price": "顯示原價",
+    "d_eyebrow": "組合購更划算",
+    "d_heading": "打造你的套組",
+    "d_text": "<p>選擇權在你。使用我們的套組產生器，你可以從我們的商品中任意搭配。讓每個人都滿意的最簡單方式。</p>",
+    "d_box_title": "你的套組",
+    "d_tier_label": "[count] 件 · 折 [discount]%",
+    "d_msg_min": "再加入 [count] 件商品即可繼續並節省 [discount]",
+    "d_msg_more": "再加 [count] 件可省 [discount]",
+    "d_msg_top": "套組已完成，你省下了 [discount]！",
+    "d_msg_max": "最多可選擇 [count] 件商品",
+    "d_cta": "將套組加入購物車",
+    "d_success": "套組已加入購物車",
+    "d_fill": "填滿我的盒子",
+    "d_note": "折扣將於結帳時套用",
+    "highlight_word": "強調詞",
+    "highlight_word_info": "必須與標題中的某個詞完全相同。",
+    "highlight_style": "強調樣式",
+    "hl_none": "無",
+    "hl_squiggle": "手繪波浪底線",
+    "hl_wave": "波浪底線",
+    "hl_marker": "螢光筆",
+    "hl_circle": "手繪圓圈",
+    "highlight_color": "強調顏色",
+    "d_highlight": "套組",
+    "card_add_label": "卡片按鈕文字",
+    "d_card_add": "加入套組"
+  },
+  "button_fx": {
+    "label": "懸停動畫",
+    "info": "套用至整個佈景主題的按鈕。",
+    "lift_shine": "上浮與光澤",
+    "fill": "顏色掃過",
+    "lift": "上浮",
+    "none": "無"
+  },
+  "routine_builder": {
+    "palette": "配色方案",
+    "palette_sunrise": "日出",
+    "palette_botanical": "植物",
+    "palette_berry": "莓果",
+    "palette_ocean": "海洋",
+    "palette_custom": "自訂（強調色）",
+    "panel_style": "背景樣式",
+    "panel_card": "圓角卡片",
+    "panel_open": "全寬",
+    "accent_info": "用於快速加入按鈕；當配色方案為「自訂」時用於整個區段。",
+    "carousel_info": "當商品數量多於欄數時，將以輪播方式顯示。",
+    "name": "保養流程產生器",
+    "blank": "空格",
+    "sentence": "句子",
+    "eyebrow": "小標題",
+    "sentence_font": "句子字型",
+    "font_custom": "自訂（在下方選擇）",
+    "font_theme_heading": "佈景主題標題字型",
+    "font_theme_accent": "佈景主題強調字型",
+    "font_theme_body": "佈景主題內文字型",
+    "custom_font": "自訂字型",
+    "sentence_size": "句子大小（桌面版）",
+    "placeholder": "空格預留文字",
+    "placeholder_info": "顯示在空格中。每個空格都可以覆寫。",
+    "hint": "句子下方提示",
+    "multiple_note": "複選說明",
+    "done_button": "「完成」按鈕（複選）",
+    "design": "設計",
+    "accent_color": "強調色",
+    "accent_text_color": "強調色上的文字顏色",
+    "mood": "氛圍背景",
+    "mood_info": "柔和的色彩雲，會呈現所選答案的顏色。",
+    "mood_intensity": "氛圍強度",
+    "floating_images": "浮動圖片",
+    "floating_info": "左右各一張圖片。頁面捲動時，它們依序從螢幕底部上升到頂部。",
+    "left_image": "左側圖片",
+    "right_image": "右側圖片",
+    "rises_first": "先上升的圖片",
+    "shape_rounded": "圓角矩形",
+    "shape_arch": "拱形",
+    "shape_pebble": "卵石形",
+    "tilt": "傾斜",
+    "rise_speed": "上升速度",
+    "rise_speed_info": "數值越大越快。0 表示圖片保持靜止。",
+    "on_mobile": "行動裝置",
+    "show_small": "縮小顯示",
+    "hide": "隱藏",
+    "results": "結果",
+    "results_eyebrow": "結果小標題",
+    "results_heading": "結果標題",
+    "scroll_to_results": "句子完成後捲動到商品",
+    "products_to_show": "顯示的商品數",
+    "columns_desktop": "桌面版欄數",
+    "fallback_collection": "備用商品系列",
+    "fallback_info": "當答案推薦的商品太少時補充流程。",
+    "show_add_all": "顯示「將流程加入購物車」按鈕",
+    "add_all_label": "流程按鈕文字",
+    "quick_add_label": "快速加入按鈕文字",
+    "reset_label": "「重新開始」連結文字",
+    "remember": "為回訪顧客記住答案",
+    "words_before": "空格前的文字",
+    "words_after": "空格後的文字",
+    "words_after_info": "選填，例如逗號或「每天早上。」",
+    "block_placeholder_info": "留空即使用區段的預留文字。",
+    "question": "螢幕閱讀器問題",
+    "question_info": "在答案前朗讀。預設為空格前的文字。",
+    "allow_multiple": "允許多個答案",
+    "answer_1": "答案 1",
+    "answer_2": "答案 2",
+    "answer_3": "答案 3",
+    "answer_4": "答案 4",
+    "answer_5": "答案 5",
+    "answer_6": "答案 6",
+    "mood_color": "氛圍顏色",
+    "thumbnail_info": "選填的小縮圖。",
+    "recommended_products": "推薦商品",
+    "answer_hide_info": "留空可隱藏此答案。",
+    "d_eyebrow": "打造你的保養流程",
+    "d_placeholder": "選擇",
+    "d_hint": "點選有底線的詞語來打造你的保養流程",
+    "d_multiple_note": "可任意複選",
+    "d_done": "完成",
+    "d_results_eyebrow": "為你打造",
+    "d_results_heading": "你的保養流程已完成",
+    "d_add_all": "將流程加入購物車",
+    "d_quick_add": "加入購物車",
+    "d_reset": "重新開始",
+    "d_before": "我的肌膚感覺",
+    "d_dry": "乾燥",
+    "d_oily": "油膩",
+    "d_both": "兩者都有一點",
+    "d_sensitive": "敏感",
+    "p_fix": "我想改善",
+    "p_have": "而我有",
+    "p_routine": "用來保養。",
+    "p_dullness": "暗沉",
+    "p_dryness": "乾燥",
+    "p_dark_spots": "斑點",
+    "p_fine_lines": "細紋",
+    "p_sun_damage": "曬傷",
+    "p_five": "五分鐘",
+    "p_ten": "十分鐘",
+    "p_all_time": "大把時間"
+  },
   "names": {
     "404": "404",
     "borders": "邊框",
@@ -111,7 +434,6 @@
     "search": "搜尋",
     "section": "區段",
     "selected_variants": "已選取子類",
-    "shop_the_look": "商店外觀",
     "slide": "投影片",
     "social_media_links": "社群媒體連結",
     "spacer": "空白區域",
@@ -183,7 +505,23 @@
     "blog_posts_editorial": "部落格貼文：編輯",
     "excerpt": "摘錄",
     "footer_password": "密碼頁面頁尾",
-    "policies_and_links": "政策與連結"
+    "policies_and_links": "政策與連結",
+    "column": "Column",
+    "card": "Card",
+    "carousel": "Carousel",
+    "carousel_content": "Carousel content",
+    "featured_product_information": "Featured product",
+    "image_compare": "Image compare",
+    "layered_slideshow": "Layered slideshow",
+    "new_arrivals_showcase": "New arrivals showcase",
+    "product_hotspots": "Product hotspots",
+    "hotspot_product": "Hotspot",
+    "product_sku": "SKU",
+    "quick_order_list": "Quick order list",
+    "slideshow_full_frame": "Slideshow: Full frame",
+    "slideshow_inset": "Slideshow: Inset",
+    "subheading": "Subheading",
+    "comparison_slider": "Comparison slider"
   },
   "settings": {
     "alignment": "對齊方式",
@@ -547,12 +885,41 @@
     "empty_cart_button_link": "清空購物車按鈕連結",
     "auto_load_products": "捲動時自動載入產品",
     "products_per_page": "每頁產品數",
-    "block_link": "區塊連結",
     "custom_mobile_media": "自訂行動媒體",
-    "stack_media_on_mobile": "堆疊媒體"
+    "stack_media_on_mobile": "堆疊媒體",
+    "bullseye_color": "Inner color",
+    "card_height": "Card height",
+    "desktop_pagination": "Desktop pagination",
+    "enable_sticky_add_to_cart": "Sticky add to cart bar",
+    "hotspot_color": "Hotspot color",
+    "image_1": "Image 1",
+    "image_2": "Image 2",
+    "desktop_position": "Desktop position",
+    "product_price_typography": "Product price typography",
+    "product_title_typography": "Product title typography",
+    "social_facebook_link": "Facebook URL",
+    "social_instagram_link": "Instagram URL",
+    "social_twitter_link": "X (Twitter) URL",
+    "social_youtube_link": "YouTube URL",
+    "skus": "SKUs",
+    "sticky_add_to_cart": "Sticky add to cart",
+    "submenu_size": "Submenu size",
+    "subtitle": "Subtitle",
+    "variant_per_page": "Variants per page",
+    "media_type_1": "Media type",
+    "media_type_2": "Media 2 type",
+    "full_frame_on_mobile": "Full width on mobile",
+    "full_width": "Full width",
+    "after_image": "After image",
+    "before_image": "Before image",
+    "cs_slider_style": "Slider style",
+    "cs_slider_color": "Slider color",
+    "cs_slider_inner_color": "Slider inner color",
+    "text_on_images": "Text on images",
+    "x_position": "Horizontal position",
+    "y_position": "Vertical position"
   },
   "options": {
-    "adapt_to_image": "配合圖片",
     "apple": "蘋果",
     "arrow": "箭頭",
     "auto": "自動",
@@ -821,7 +1188,12 @@
     "lift": "提升",
     "reveal": "顯示",
     "scale": "縮放比例",
-    "subtle_zoom": "縮放"
+    "subtle_zoom": "縮放",
+    "announcement_discount": "Discount",
+    "announcement_shipping": "Shipping",
+    "full_frame": "Full frame",
+    "with_hints": "With hints",
+    "below_media": "Below media"
   },
   "content": {
     "advanced": "進階",
@@ -837,7 +1209,6 @@
     "complementary_products": "配套商品必須使用 Search & Discovery 應用程式進行設定。[瞭解詳情](https://help.shopify.com/manual/online-store/search-and-discovery)",
     "mobile_column_optimization": "行動版的圖片會自動調整欄位",
     "content_width": "僅在區段寬度設為全寬度時，內容寬度才適用。",
-    "adjustments_affect_all_content": "套用於此區塊中的所有內容",
     "responsive_font_sizes": "尺寸會根據所有螢幕尺寸自動縮放",
     "buttons": "按鈕",
     "swatches": "色樣",
@@ -932,7 +1303,13 @@
     "cart_features": "購物車功能",
     "email_signup": "電子郵件訂閱",
     "mobile_media": "行動媒體",
-    "mobile_media_2": "行動媒體 2"
+    "mobile_media_2": "行動媒體 2",
+    "content_layout": "Content layout",
+    "mobile_media_1": "Mobile media 1",
+    "popover": "Popover",
+    "popover_position": "Popover position",
+    "resource_reference_product_sku": "Displays SKU from parent product",
+    "navigation": "Navigation"
   },
   "html_defaults": {
     "share_information_about_your": "<p>和顧客分享品牌資訊、描述商品、進行公告，或歡迎顧客光臨您的商店。</p>",
@@ -978,7 +1355,18 @@
     "unable_to_accept_returns": "<p>部分品項無法接受退貨，我們會在購買前清楚標示。</p>",
     "work_quickly_to_ship": "<p>我們會儘快為您出貨。訂單出貨後，系統會寄送電子郵件提供更多資訊。配送時間會依您的所在國家/地區而有所不同。</p>",
     "join_our_email_list": "<h2>加入我們的郵件列表</h2>",
-    "get_exclusive_deals_and_early_access_to_new_products": "<p>獲取獨家優惠和新產品的早期訪問權。</p>"
+    "get_exclusive_deals_and_early_access_to_new_products": "<p>獲取獨家優惠和新產品的早期訪問權。</p>",
+    "artistry_in_action": "<p>Artistry in action </p>",
+    "authentic_materials": "<p>Authentic materials, no compromises </p>",
+    "bold_style_recognizable": "<p>Bold style that's recognizable anywhere</p>",
+    "discover_elevated_design": "<p>Discover elevated design </p>",
+    "expert_construction_finish": "<p>Expert construction and an impeccable finish</p>",
+    "featured_collection_h2": "<h2>Featured collection</h2>",
+    "made_to_last": "<p>Made to last </p>",
+    "pieces_better_with_time": "<p>Pieces that only get better with time and wear </p>",
+    "quality_you_can_feel": "<h2>Quality you can feel</h2>",
+    "shop_collection": "<p>Discover our curated collection featuring hand-picked favorites that blend style and quality.</p>",
+    "uncompromising_standards": "<p>Uncompromising standards </p>"
   },
   "text_defaults": {
     "button_label": "來去逛逛",
@@ -1011,10 +1399,13 @@
     "what_is_return_policy": "退貨政策是什麼？",
     "when_will_order_arrive": "您的訂單何時會送達？",
     "where_are_products_made": "商品在哪裡製造？",
-    "faq": "常見問題"
+    "bestsellers": "Bestsellers",
+    "featured_collection": "Featured collection",
+    "new_arrivals": "New arrivals",
+    "shop_the_look": "Shop the look",
+    "trending_now": "Trending now"
   },
   "info": {
-    "link_info": "選用：使圖示可點按",
     "carousel_layout_on_mobile": "行動裝置上會顯示輪播",
     "video_alt_text": "請為使用輔助技術的使用者説明影片內容",
     "video_autoplay": "影片將預設為靜音",
@@ -1030,14 +1421,14 @@
     "manage_languages": "[管理語言](/admin/settings/languages)",
     "transparent_background": "檢視每個套用透明背景的範本，以確保易讀性",
     "aspect_ratio_adjusted": "已在部分版面配置中調整",
-    "auto_open_cart_drawer": "啟用後，當商品加入購物車時，購物車導覽匣會自動開啟。",
     "custom_liquid": "新增應用程式程式碼片段或其他程式碼，以建立進階自訂內容。[瞭解詳情](https://shopify.dev/docs/api/liquid)",
     "pills_usage": "用於顯示已套用的篩選條件、折扣代碼與搜尋建議",
     "applies_on_image_only": "僅適用於圖片",
     "hover_effects": "適用於商品及商品系列卡片",
     "hide_logo_on_home_page_help": "啟用固定式頁首時仍顯示標誌",
     "media_type_info": "自您的選單連結填入的功能",
-    "logo_height": "僅影響頁首標誌"
+    "logo_height": "僅影響頁首標誌",
+    "announcement_custom_icon": "Used when Icon is set to Custom."
   },
   "categories": {
     "basic": "基礎",
@@ -1058,5 +1449,282 @@
     "other_sections": "其他",
     "storytelling": "故事行銷",
     "text": "文字"
+  },
+  "sections": {
+    "all": {
+      "color_scheme": {
+        "label": "Color scheme"
+      },
+      "section-margin": {
+        "header": {
+          "content": "Section margin"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "margin_top": {
+          "label": "Top margin"
+        }
+      },
+      "section-padding": {
+        "header": {
+          "content": "Section padding"
+        },
+        "options__1": {
+          "label": "None"
+        },
+        "options__2": {
+          "label": "Extra small"
+        },
+        "options__3": {
+          "label": "Small"
+        },
+        "options__4": {
+          "label": "Medium"
+        },
+        "options__5": {
+          "label": "Large"
+        },
+        "padding_top": {
+          "label": "Top padding"
+        },
+        "padding_bottom": {
+          "label": "Bottom padding"
+        }
+      },
+      "border": {
+        "header": {
+          "content": "Borders"
+        },
+        "border_enable_top": {
+          "label": "Show top border"
+        },
+        "border_enable_bottom": {
+          "label": "Show bottom border"
+        }
+      },
+      "button": {
+        "header": {
+          "content": "Button"
+        },
+        "label": {
+          "label": "Button label",
+          "info": "Leave blank to hide the button."
+        },
+        "style": {
+          "label": "Button style",
+          "options__1": {
+            "label": "Primary"
+          },
+          "options__2": {
+            "label": "Secondary"
+          },
+          "options__3": {
+            "label": "Tertiary"
+          }
+        }
+      }
+    },
+    "footer": {
+      "name": "Footer",
+      "footer_color_scheme": {
+        "color_scheme_bottom": "Bottom bar color scheme"
+      },
+      "settings": {
+        "header__3": {
+          "content": "Country/region selector"
+        },
+        "header__4": {
+          "info": "To add a country/region, go to your [payment settings](/admin/settings/payments)."
+        },
+        "header__5": {
+          "content": "Language selector"
+        },
+        "header__6": {
+          "info": "Customers can switch languages using the selector in the footer."
+        },
+        "header__7": {
+          "content": "Payment methods"
+        },
+        "header__8": {
+          "content": "Policy links",
+          "info": "To add store policies, go to your [policy settings](/admin/settings/legal)."
+        },
+        "header__9": {
+          "content": "Follow on Shop",
+          "info": "For the button to show, the Shop channel must be installed and Shop Pay activated. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-shop-buttons)"
+        },
+        "enable_language_selector": {
+          "label": "Enable language selector"
+        },
+        "enable_country_selector": {
+          "label": "Enable country/region selector"
+        },
+        "enable_follow_on_shop": {
+          "label": "Enable Follow on Shop"
+        },
+        "payment_enable": {
+          "label": "Show payment icons"
+        },
+        "show_policy": {
+          "label": "Show policy links"
+        }
+      },
+      "blocks": {
+        "link_list": {
+          "name": "Menu",
+          "settings": {
+            "heading": {
+              "label": "Heading",
+              "info": "Heading must be set for the menu to display."
+            },
+            "menu": {
+              "label": "Menu",
+              "info": "Select a navigation menu to display."
+            }
+          }
+        },
+        "logo_info": {
+          "name": "Brand",
+          "settings": {
+            "logo": {
+              "label": "Logo image"
+            },
+            "logo_2": {
+              "label": "Inverse logo",
+              "info": "Shown on dark backgrounds when using two logos."
+            },
+            "logo_width": {
+              "unit": "px",
+              "label": "Logo width"
+            },
+            "description": {
+              "label": "Description"
+            }
+          }
+        },
+        "copyright_show": {
+          "label": "Show copyright and \"Powered by Shopify\""
+        },
+        "subscribe": {
+          "name": "Email signup",
+          "settings": {
+            "additional_text": {
+              "label": "Description"
+            },
+            "heading": {
+              "label": "Heading"
+            },
+            "newsletter_text": {
+              "label": "Compliance text"
+            },
+            "paragraph": {
+              "content": "Shown below the subscription form."
+            }
+          }
+        }
+      }
+    },
+    "new-arrivals-showcase": {
+      "settings": {
+        "product_layout": "Product layout",
+        "heading_scribble": "Heading decoration",
+        "scribble_color": "Decoration color",
+        "tabs_a11y": "Tabs label (accessibility)",
+        "active_tab_background": "Active tab background",
+        "active_tab_text": "Active tab text",
+        "inactive_tab_background": "Inactive tab background",
+        "inactive_tab_text": "Inactive tab text",
+        "promotion_header": "Promotion column",
+        "show_promotion_column": "Show promotion column",
+        "promo_column_width": "Promotion column width",
+        "promo_media_type": {
+          "label": "Promotion media type",
+          "info": "Use a static image, upload an MP4 file, or embed a YouTube/Vimeo video."
+        },
+        "promo_image": "Promotion image",
+        "promo_video": "Promotion video (MP4)",
+        "promo_video_url": {
+          "label": "YouTube or Vimeo",
+          "info": "Paste a supported video URL from YouTube or Vimeo."
+        },
+        "promo_video_autoplay": "Autoplay video",
+        "promo_video_loop": "Loop video",
+        "promo_video_controls": "Show video controls",
+        "promo_badge": "Badge text",
+        "promo_heading": "Promotion heading",
+        "promo_text": "Promotion text",
+        "promo_button": "Button label",
+        "promo_link": "Button link",
+        "products_per_tab": "Products per tab",
+        "new_badge_days": "“New” badge window (days)",
+        "new_badge_text": "“New” badge text",
+        "hover_image_button": "Image hover button label",
+        "fallback_star_count": "Fallback star rating",
+        "star_color": "Star color",
+        "yellow_cta": "Accent yellow (CTA)",
+        "demo_category": "Demo category label",
+        "demo_product_title": "Demo product title",
+        "carousel_header": "Carousel",
+        "slides_visible_mobile": "Slides visible (mobile)",
+        "slides_visible_desktop": "Slides visible (desktop)",
+        "gap_mobile": "Gap (mobile)",
+        "gap_desktop": "Gap (desktop)"
+      },
+      "options": {
+        "layout": {
+          "slider": "Slider",
+          "grid": "Grid"
+        },
+        "scribble": {
+          "none": "None",
+          "squiggle": "Squiggle",
+          "wave": "Wave",
+          "brush": "Brush",
+          "double": "Double",
+          "scribble_underline": "Scribble Underline",
+          "hand_drawn": "Hand-drawn Underline",
+          "sketch": "Sketch Underline",
+          "marker": "Marker Underline",
+          "zigzag": "Zigzag Underline",
+          "arc": "Arc Underline",
+          "dotted": "Dotted Underline",
+          "erratic": "Erratic Underline",
+          "ribbon": "Ribbon Underline"
+        },
+        "promo_media": {
+          "image": "Image",
+          "video_upload": "Uploaded video (MP4)",
+          "video_embed": "YouTube or Vimeo"
+        }
+      },
+      "blocks": {
+        "layout_placeholder": {
+          "name": "Layout preview",
+          "paragraph": "Shows sample products when no collection is selected. Remove this block when your tabs use real collections.",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        },
+        "collection_tab": {
+          "name": "Collection tab",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        }
+      }
+    }
   }
 }

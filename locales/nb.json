@@ -8,6 +8,46 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Dager",
+    "hours": "Timer",
+    "minutes": "Min",
+    "seconds": "Sek",
+    "ends_on": "Tilbudet slutter {{ date }}",
+    "editor_hint": "Legg til en sluttdato i seksjonsinnstillingene for å starte nedtellingen."
+  },
+  "collection_hero": {
+    "home": "Hjem",
+    "breadcrumb_label": "Brødsmulesti",
+    "all": "Alle"
+  },
+  "bundle_builder": {
+    "add_aria": "Legg {{ title }} i pakken",
+    "empty_slot": "Tom plass",
+    "items_count": "{{ count }} varer",
+    "announce_added": "{{ title }} lagt til. {{ count }} varer i boksen.",
+    "announce_removed": "{{ title }} fjernet. {{ count }} varer i boksen.",
+    "savings": "Du sparer",
+    "total": "Totalt",
+    "view_bundle": "Se boksen"
+  },
+  "product_3d": {
+    "view_3d": "Se i 3D",
+    "drag_hint": "Dra for å rotere",
+    "reset": "Tilbakestill visning",
+    "views": "Kameravisninger",
+    "front": "Forfra",
+    "side": "Fra siden",
+    "back": "Bakfra",
+    "top": "Ovenfra",
+    "loading": "Laster inn 3D-modell",
+    "editor_hint": "Velg et produkt med en 3D-modell, eller lim inn en lenke til en .glb-fil for å vise det i 3D.",
+    "position_copied": "Posisjon kopiert – lim den inn i en funksjonsblokk."
+  },
+  "routine_builder": {
+    "editor_hint": "Legg til en «Tomt felt»-blokk for å begynne å bygge setningen.",
+    "ready": "Rutinen din er klar. {{ count }} anbefalte produkter."
+  },
   "blocks": {
     "load_video": "Last inn video: {{ description }}",
     "sold_out": "Utsolgt",
@@ -25,6 +65,9 @@
       "comment": "Kommentar",
       "post_success": "Takk for at du kontaktet oss. Vi svarer så snart som mulig.",
       "error_heading": "Juster følgende:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Plassholder for logo"
     }
   },
   "accessibility": {
@@ -69,7 +112,19 @@
     "increase_quantity": "Øk antallet",
     "quantity": "Antall",
     "rating": "Vurderingen av dette produktet er {{ rating }} av 5",
-    "nested_product": "{{ product_title }} for {{ parent_title }}"
+    "nested_product": "{{ product_title }} for {{ parent_title }}",
+    "announcement_bar_link": "Finn ut mer",
+    "back_to_top": "Tilbake til toppen",
+    "quick_view_loading": "Laster inn produkt",
+    "before_after_after_alt": "Etter-bilde",
+    "before_after_before_alt": "Før-bilde",
+    "before_after_before_visible": "før-bilde synlig",
+    "before_after_comparison": "Sammenligning av før- og etterbilder",
+    "before_after_slider": "Sammenligningsglidebryter",
+    "before_after_slider_help": "Bruk venstre og høyre piltast for å sammenligne før- og etterbildene.",
+    "faq_collapse_answer": "Skjul svar",
+    "faq_expand_answer": "Vis svar",
+    "faq_split_gallery": "Ofte stilte spørsmål"
   },
   "actions": {
     "add_to_cart": "Legg i handlekurv",
@@ -242,7 +297,11 @@
       "previous": "Forrige",
       "next": "Neste",
       "page": "Side {{ page }}"
-    }
+    },
+    "read_more_link": "Les mer",
+    "quick_view": "Hurtigvisning",
+    "view_full_details": "Se alle detaljer",
+    "view_item": "Se vare"
   },
   "gift_cards": {
     "issued": {
@@ -307,5 +366,29 @@
       "success_moderated": "Kommentar lagt ut, venter på moderering",
       "success": "Kommentar lagt ut"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Med enerett."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Bilde med tekstkollasje"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Legg til minst én kolleksjonsfane for å vise produkter."
+    },
+    "icon_with_text": {
+      "empty": "Legg til ikonblokker for å vise innhold.",
+      "section_aria_label": "Butikkens høydepunkter"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Legg pakken i handlekurven",
+      "adding": "Legger til…",
+      "added": "Lagt i handlekurven",
+      "error": "Noe gikk galt. Prøv igjen."
+    }
+  },
+  "search": {
+    "no_results": "Fant ingen resultater"
   }
 }

@@ -1,0 +1,113 @@
+{%- doc -%}
+  Two small offer cards side by side (free shipping, first-order discount …).
+{%- enddoc -%}
+<div
+  class="pdp-promos"
+  style="--pdp-promo-bg: {{ block.settings.background | default: '#fbf3df' }}; --pdp-promo-fg: {{ block.settings.text_color | default: '#2b2317' }};"
+  {{ block.shopify_attributes }}
+>
+  {%- for i in (1..2) -%}
+    {%- liquid
+      assign k_title = 'title_' | append: i
+      assign k_text = 'text_' | append: i
+      assign k_icon = 'icon_' | append: i
+      assign title = block.settings[k_title]
+      assign text = block.settings[k_text]
+    -%}
+    {%- if title != blank or text != blank -%}
+      <div class="pdp-promos__card">
+        <span class="pdp-promos__icon" aria-hidden="true">{%- render 'pdp-icon', icon: block.settings[k_icon] -%}</span>
+        <div>
+          {%- if title != blank -%}<p class="pdp-promos__title">{{ title | escape }}</p>{%- endif -%}
+          {%- if text != blank -%}<p class="pdp-promos__text">{{ text | escape }}</p>{%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+  {%- endfor -%}
+</div>
+
+{% stylesheet %}
+  .pdp-promos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: 0.6rem;
+  }
+
+  .pdp-promos__card {
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    padding: 0.9rem 1rem;
+    border-radius: 14px;
+    background: var(--pdp-promo-bg);
+    color: var(--pdp-promo-fg);
+  }
+
+  .pdp-promos__icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
+  .pdp-promos__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .pdp-promos__title {
+    margin: 0 0 0.2rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.3;
+  }
+
+  .pdp-promos__text {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    opacity: 0.8;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Offer cards",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon_1",
+      "label": "Card 1 icon",
+      "options": [
+        { "value": "truck", "label": "Truck" },
+        { "value": "gift", "label": "Gift" },
+        { "value": "sparkle", "label": "Sparkle" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "shield", "label": "Shield" }
+      ],
+      "default": "truck"
+    },
+    { "type": "text", "id": "title_1", "label": "Card 1 title", "default": "Free shipping + gift" },
+    { "type": "text", "id": "text_1", "label": "Card 1 text", "default": "Free delivery and a travel-size cleanser on orders over $60." },
+    {
+      "type": "select",
+      "id": "icon_2",
+      "label": "Card 2 icon",
+      "options": [
+        { "value": "truck", "label": "Truck" },
+        { "value": "gift", "label": "Gift" },
+        { "value": "sparkle", "label": "Sparkle" },
+        { "value": "leaf", "label": "Leaf" },
+        { "value": "shield", "label": "Shield" }
+      ],
+      "default": "sparkle"
+    },
+    { "type": "text", "id": "title_2", "label": "Card 2 title", "default": "20% off your first order" },
+    { "type": "text", "id": "text_2", "label": "Card 2 text", "default": "Applied automatically at checkout. No code needed." },
+    { "type": "color", "id": "background", "label": "Card background", "default": "#fbf3df" },
+    { "type": "color", "id": "text_color", "label": "Card text", "default": "#2b2317" }
+  ],
+  "presets": [{ "name": "Offer cards" }]
+}
+{% endschema %}

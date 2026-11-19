@@ -1,3 +1,20 @@
+{%- doc -%}
+  Renders one header row (top or bottom) split into left / center / right columns.
+
+  @param {string} row - 'top' or 'bottom'
+  @param {string} order - Comma-separated list of items to place
+  @param {object} settings - The header section settings
+  @param {string} [logo_position] - Overrides settings.logo_position (set by the header layout preset)
+  @param {string} [menu_position] - Overrides settings.menu_position (set by the header layout preset)
+  @param {string} [first] - Markup rendered first in the left column (mobile drawer toggle)
+  @param {string} [logo] - Logo markup
+  @param {string} [menu] - Menu markup
+  @param {string} [actions] - Header actions markup
+  @param {string} [cta] - Header call-to-action button markup
+  @param {string} [localization] - Localization markup
+  @param {string} [search] - Search markup
+  @param {string} [mobile_search] - Mobile search markup
+{%- enddoc -%}
 {%- liquid
   assign order = order | split: ','
   assign left = ''
@@ -15,8 +32,17 @@
     assign item_column = settings[column_key] | default: 'left'
 
     case item
-      when 'actions'
+      when 'actions', 'cta'
         assign item_column = 'right'
+        assign item_row = 'top'
+      when 'logo'
+        if logo_position != blank
+          assign item_column = logo_position
+        endif
+      when 'menu'
+        if menu_position != blank
+          assign item_column = menu_position
+        endif
     endcase
 
     if item_row == row
@@ -70,6 +96,8 @@
               {{ mobile_search }}
             {% when 'actions' %}
               {{ actions }}
+            {% when 'cta' %}
+              {{ cta }}
           {% endcase %}
         {% endunless %}
       {% endfor %}

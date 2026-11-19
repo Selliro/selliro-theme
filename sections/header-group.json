@@ -18,13 +18,14 @@
           "type": "_announcement",
           "name": "t:names.announcement",
           "settings": {
-            "text": "Shop our latest arrivals!",
+            "text": "Biggest Sale of the Year! Up to 60% OFF - BLACKFRIDAY",
             "link": "",
+            "icon_type": "none",
             "font": "var(--font-body--family)",
-            "font_size": "0.75rem",
-            "weight": "",
+            "font_size": "0.875rem",
+            "weight": "700",
             "letter_spacing": "normal",
-            "case": "none"
+            "case": "uppercase"
           },
           "blocks": {}
         },
@@ -32,26 +33,44 @@
           "type": "_announcement",
           "name": "t:names.announcement",
           "settings": {
-            "text": "Shop our latest arrivals! 2",
+            "text": "",
             "link": "",
+            "icon_type": "custom",
+            "icon_image": "shopify://shop_images/whispo-icon-delivery.png",
             "font": "var(--font-body--family)",
-            "font_size": "0.75rem",
-            "weight": "",
+            "font_size": "0.875rem",
+            "weight": "700",
             "letter_spacing": "normal",
-            "case": "none"
+            "case": "uppercase"
           },
           "blocks": {}
         },
         "announcement_BxgCk9": {
           "type": "_announcement",
           "settings": {
-            "text": "Welcome to our store",
+            "text": "Free shipping over $40",
             "link": "",
-            "font": "var(--font-subheading--family)",
-            "font_size": "0.75rem",
-            "weight": "",
+            "icon_type": "none",
+            "font": "var(--font-body--family)",
+            "font_size": "0.875rem",
+            "weight": "700",
             "letter_spacing": "normal",
-            "case": "none"
+            "case": "uppercase"
+          },
+          "blocks": {}
+        },
+        "announcement_pricetag": {
+          "type": "_announcement",
+          "settings": {
+            "text": "",
+            "link": "",
+            "icon_type": "custom",
+            "icon_image": "shopify://shop_images/whispo-icon-sale-tag.png",
+            "font": "var(--font-body--family)",
+            "font_size": "0.875rem",
+            "weight": "700",
+            "letter_spacing": "normal",
+            "case": "uppercase"
           },
           "blocks": {}
         }
@@ -59,16 +78,19 @@
       "block_order": [
         "announcement_EURP7f",
         "announcement_NBNfar",
-        "announcement_BxgCk9"
+        "announcement_BxgCk9",
+        "announcement_pricetag"
       ],
       "name": "t:names.announcement_bar",
       "settings": {
-        "speed": 5,
-        "section_width": "page-width",
-        "color_scheme": "scheme-1",
-        "divider_width": 2,
-        "padding-block-start": 15,
-        "padding-block-end": 15
+        "animation_style": "marquee",
+        "marquee_direction": "normal",
+        "speed": 7,
+        "section_width": "full-width",
+        "color_scheme": "scheme-4",
+        "divider_width": 0,
+        "padding-block-start": 10,
+        "padding-block-end": 10
       }
     },
     "header_section": {
@@ -79,6 +101,7 @@
           "static": true,
           "settings": {
             "hide_logo_on_home_page": false,
+            "transparent_logo": "shopify://shop_images/whispo-logo-white.svg",
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
@@ -92,14 +115,41 @@
           "settings": {
             "menu": "main-menu",
             "color_scheme": "",
-            "type_font_primary_size": "0.875rem",
-            "menu_font_style": "inverse",
+            "type_font_primary_size": "1rem",
+            "menu_font_style": "bold_heading",
             "type_font_primary_link": "body",
             "type_case_primary_link": "none",
-            "menu_style": "featured_products",
+            "show_dropdown_icon": true,
+            "menu_hover_style": "underline",
+            "menu_style": "promo_cards",
             "featured_products_aspect_ratio": "4 / 5",
             "featured_collections_aspect_ratio": "16 / 9",
-            "image_border_radius": 0,
+            "image_border_radius": 16,
+            "promo_aspect_ratio": "16 / 9",
+            "promo_content_position": "top_left",
+            "promo_heading_size": "medium",
+            "promo_text_color": "#ffffff",
+            "promo_overlay_style": "gradient",
+            "promo_overlay_color": "#000000",
+            "promo_overlay_opacity": 55,
+            "promo_button_style": "accent",
+            "promo_button_bg": "#f8d12f",
+            "promo_button_text": "#000000",
+            "promo_heading_weight": "700",
+            "submenu_divider": true,
+            "promo_1_menu_item": "Shop",
+            "promo_1_image": "shopify://shop_images/whispo-menu-holiday-set.jpg",
+            "promo_1_subheading": "Big Savings",
+            "promo_1_heading": "Holiday Set Deal",
+            "promo_1_button_label": "Shop now",
+            "promo_1_link": "shopify://collections/all",
+            "promo_2_menu_item": "Shop",
+            "promo_2_image": "shopify://shop_images/whispo-menu-moisturizer-edit.jpg",
+            "promo_2_subheading": "New collection",
+            "promo_2_heading": "The Moisturizer Edit",
+            "promo_2_button_label": "Explore collection",
+            "promo_2_link": "shopify://collections/moisturizer",
+            "submenu_radius": 16,
             "navigation_bar": false,
             "color_scheme_navigation_bar": "",
             "drawer_accordion": false,
@@ -110,6 +160,7 @@
         }
       },
       "settings": {
+        "header_layout": "logo_left_menu_center",
         "logo_position": "left",
         "menu_position": "left",
         "menu_row": "top",
@@ -126,6 +177,11 @@
         "section_width": "page-width",
         "section_height": "standard",
         "enable_sticky_header": "always",
+        "show_cta": true,
+        "cta_label": "Take a quiz",
+        "cta_link": "shopify://pages/skin-quiz",
+        "cta_style": "solid",
+        "cta_icon": true,
         "divider_width": 0,
         "divider_size": "page-width",
         "border_width": 0,
@@ -137,7 +193,8 @@
         "enable_transparent_header_product": false,
         "product_color_scheme": "default",
         "enable_transparent_header_collection": false,
-        "collection_color_scheme": "default"
+        "collection_color_scheme": "default",
+        "transparent_shade": 30
       }
     }
   },

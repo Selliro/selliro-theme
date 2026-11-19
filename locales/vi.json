@@ -8,6 +8,46 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Ngày",
+    "hours": "Giờ",
+    "minutes": "Phút",
+    "seconds": "Giây",
+    "ends_on": "Ưu đãi kết thúc vào {{ date }}",
+    "editor_hint": "Thêm ngày kết thúc trong cài đặt mục để bắt đầu đếm ngược."
+  },
+  "collection_hero": {
+    "home": "Trang chủ",
+    "breadcrumb_label": "Đường dẫn",
+    "all": "Tất cả"
+  },
+  "bundle_builder": {
+    "add_aria": "Thêm {{ title }} vào gói",
+    "empty_slot": "Ô trống",
+    "items_count": "{{ count }} sản phẩm",
+    "announce_added": "Đã thêm {{ title }}. Có {{ count }} sản phẩm trong hộp.",
+    "announce_removed": "Đã xóa {{ title }}. Có {{ count }} sản phẩm trong hộp.",
+    "savings": "Bạn tiết kiệm",
+    "total": "Tổng",
+    "view_bundle": "Xem hộp"
+  },
+  "product_3d": {
+    "view_3d": "Xem ở dạng 3D",
+    "drag_hint": "Kéo để xoay",
+    "reset": "Đặt lại góc nhìn",
+    "views": "Góc máy",
+    "front": "Trước",
+    "side": "Bên",
+    "back": "Sau",
+    "top": "Trên",
+    "loading": "Đang tải mô hình 3D",
+    "editor_hint": "Chọn sản phẩm có mô hình 3D hoặc dán liên kết tới tệp .glb để hiển thị ở dạng 3D.",
+    "position_copied": "Đã sao chép vị trí — dán vào một khối tính năng."
+  },
+  "routine_builder": {
+    "editor_hint": "Thêm khối “Chỗ trống” để bắt đầu tạo câu.",
+    "ready": "Quy trình của bạn đã sẵn sàng. {{ count }} sản phẩm được đề xuất."
+  },
   "blocks": {
     "load_video": "Tải video: {{ description }}",
     "sold_out": "Hết hàng",
@@ -25,6 +65,9 @@
       "comment": "Nhận xét",
       "post_success": "Cảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ liên hệ lại với bạn trong thời gian sớm nhất.",
       "error_heading": "Vui lòng điều chỉnh các mục sau:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Phần giữ chỗ logo"
     }
   },
   "accessibility": {
@@ -69,7 +112,19 @@
     "rating": "Sản phẩm này được đánh giá {{ rating }}/5",
     "quantity": "Số lượng",
     "nested_product": "{{ product_title }} cho {{ parent_title }}",
-    "discount_menu": "Mã giảm giá"
+    "discount_menu": "Mã giảm giá",
+    "announcement_bar_link": "Tìm hiểu thêm",
+    "back_to_top": "Trở lên đầu trang",
+    "quick_view_loading": "Đang tải sản phẩm",
+    "before_after_after_alt": "Ảnh sau",
+    "before_after_before_alt": "Ảnh trước",
+    "before_after_before_visible": "đang hiển thị ảnh trước",
+    "before_after_comparison": "So sánh ảnh trước và sau",
+    "before_after_slider": "Thanh trượt so sánh",
+    "before_after_slider_help": "Dùng phím mũi tên trái và phải để so sánh ảnh trước và sau.",
+    "faq_collapse_answer": "Thu gọn câu trả lời",
+    "faq_expand_answer": "Mở rộng câu trả lời",
+    "faq_split_gallery": "Câu hỏi thường gặp"
   },
   "actions": {
     "add_to_cart": "Thêm vào giỏ hàng",
@@ -242,7 +297,11 @@
       "previous": "Trước",
       "next": "Tiếp",
       "page": "Trang {{ page }}"
-    }
+    },
+    "read_more_link": "Đọc thêm",
+    "quick_view": "Xem nhanh",
+    "view_full_details": "Xem toàn bộ chi tiết",
+    "view_item": "Xem mặt hàng"
   },
   "gift_cards": {
     "issued": {
@@ -307,5 +366,29 @@
       "success_moderated": "Nhận xét đã được đăng, đang chờ kiểm duyệt",
       "success": "Nhận xét đã được đăng"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Bảo lưu mọi quyền."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Ảnh ghép kèm văn bản"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Thêm ít nhất một tab bộ sưu tập để hiển thị sản phẩm."
+    },
+    "icon_with_text": {
+      "empty": "Thêm khối biểu tượng để hiển thị nội dung.",
+      "section_aria_label": "Điểm nổi bật của cửa hàng"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Thêm combo vào giỏ hàng",
+      "adding": "Đang thêm…",
+      "added": "Đã thêm vào giỏ hàng",
+      "error": "Đã xảy ra lỗi. Vui lòng thử lại."
+    }
+  },
+  "search": {
+    "no_results": "Không tìm thấy kết quả"
   }
 }

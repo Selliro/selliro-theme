@@ -1,0 +1,187 @@
+{% assign image = block.settings.image %}
+
+{% liquid
+  assign logo_max_h = block.settings.max_height
+  assign logo_max_w = block.settings.max_width
+
+  if image != blank
+    assign ar_raw = block.settings.aspect_ratio | strip | downcase
+    if ar_raw == blank or ar_raw == 'auto'
+      assign image_aspect_ratio = image.aspect_ratio
+    else
+      assign image_aspect_ratio = block.settings.aspect_ratio | strip | plus: 0
+      if image_aspect_ratio <= 0
+        assign image_aspect_ratio = image.aspect_ratio
+      endif
+    endif
+
+    assign default_image_url = image 
+    assign noscript_image_url = image
+  endif
+
+  assign image_id = 'marquee-logo-' | append: block.id
+%}
+
+<div
+  class="marquee-logo-block"
+  {% if image != blank %}
+    style="--marquee-logo-max-height: {{ logo_max_h }}px; --marquee-logo-ar: {{ image_aspect_ratio }}; --marquee-logo-max-w: {{ logo_max_w }}px;"
+  {% else %}
+    style="--marquee-logo-max-height: {{ logo_max_h }}px; --marquee-logo-ar: 2.5; --marquee-logo-max-w: {{ logo_max_w }}px;"
+  {% endif %}
+  {{ block.shopify_attributes }}
+>
+  {% if image != blank %}
+    {% capture logo_inner %}
+      {% render 'shopify-responsive-image',
+        image: image,
+        image_id: image_id,
+        image_aspect_ratio: image_aspect_ratio,
+        default_image_url: default_image_url,
+        noscript_image_url: noscript_image_url,
+        max_width: logo_max_w,
+        max_height: logo_max_h,
+        wrapper_class: 'marquee-logo-block__responsive',
+        image_class: 'marquee-logo-block__img',
+        contain: true
+      %}
+    {% endcapture %}
+
+    {% if block.settings.link != blank %}
+      <a
+        class="marquee-logo-block__link"
+        href="{{ block.settings.link }}"
+      >
+        {{ logo_inner }}
+      </a>
+    {% else %}
+      {{ logo_inner }}
+    {% endif %}
+  {% else %}
+    <div class="marquee-logo-block__placeholder-inner">
+      <svg
+        class="marquee-logo-block__placeholder-icon"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <rect x="2.5" y="4.5" width="19" height="15" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.25"/>
+        <circle cx="8" cy="10" r="1.25" fill="currentColor"/>
+        <path d="M3 18 L9.5 11.5 L14 15.5 L21 8.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="visually-hidden">{{ 'blocks.marquee_logo.placeholder_a11y' | t }}</span>
+    </div>
+  {% endif %}
+</div>
+
+{% stylesheet %}
+  .marquee-logo-block {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .marquee-logo-block__link {
+    display: flex;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Snippet uses a % padding box; intrinsic width comes from shopify-responsive-image inline rules. */
+  .marquee-logo-block__responsive.responsive-image__wrapper {
+    flex-shrink: 0;
+    width: min(
+      var(--marquee-logo-max-w, 320px),
+      max(2.5rem, calc(var(--marquee-logo-max-height, 72px) * var(--marquee-logo-ar, 1)))
+    );
+    max-width: 100%;
+  }
+
+  .marquee-logo-block__responsive :is(img, .responsive-image__image) {
+    object-fit: contain;
+  }
+
+  .marquee-logo-block__placeholder-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    height: var(--marquee-logo-max-height, 58px);
+    width: min(
+      var(--marquee-logo-max-w, 320px),
+      max(2.5rem, calc(var(--marquee-logo-max-height, 72px) * var(--marquee-logo-ar, 2.5)))
+    );
+    max-width: 100%;
+    padding: 0.25rem;
+    color: rgb(var(--color-foreground-rgb) / var(--opacity-40));
+  }
+
+  .marquee-logo-block__placeholder-icon {
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  .marquee-logo-block__placeholder-hint {
+    font-size: var(--font-size--small);
+    white-space: nowrap;
+    opacity: 0.75;
+    line-height: 1.1;
+    text-align: center;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Brand logo",
+  "tag": null,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "aspect_ratio",
+      "label": "Aspect ratio",
+      "info": "Decimal: width divided by height (e.g. 1.78 for 16:9). Leave blank for the file’s natural ratio."
+    },
+    {
+      "type": "range",
+      "id": "max_height",
+      "label": "Max height",
+      "min": 30,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "default": 58
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 100,
+      "max": 300,
+      "step": 2,
+      "unit": "px",
+      "default": 262
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand logo"
+    }
+  ]
+}
+{% endschema %}

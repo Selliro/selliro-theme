@@ -8,6 +8,46 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Jours",
+    "hours": "H",
+    "minutes": "Min",
+    "seconds": "Sec",
+    "ends_on": "L'offre se termine le {{ date }}",
+    "editor_hint": "Ajoutez une date de fin dans les paramètres de la section pour lancer le compte à rebours."
+  },
+  "collection_hero": {
+    "home": "Accueil",
+    "breadcrumb_label": "Fil d'Ariane",
+    "all": "Tout"
+  },
+  "bundle_builder": {
+    "add_aria": "Ajouter {{ title }} au lot",
+    "empty_slot": "Emplacement vide",
+    "items_count": "{{ count }} articles",
+    "announce_added": "{{ title }} ajouté. {{ count }} articles dans votre box.",
+    "announce_removed": "{{ title }} retiré. {{ count }} articles dans votre box.",
+    "savings": "Vous économisez",
+    "total": "Total",
+    "view_bundle": "Voir la box"
+  },
+  "product_3d": {
+    "view_3d": "Voir en 3D",
+    "drag_hint": "Faites glisser pour pivoter",
+    "reset": "Réinitialiser la vue",
+    "views": "Vues de la caméra",
+    "front": "Face",
+    "side": "Côté",
+    "back": "Dos",
+    "top": "Dessus",
+    "loading": "Chargement du modèle 3D",
+    "editor_hint": "Choisissez un produit doté d’un modèle 3D ou collez un lien vers un fichier .glb pour l’afficher en 3D.",
+    "position_copied": "Position copiée : collez-la dans un bloc de caractéristique."
+  },
+  "routine_builder": {
+    "editor_hint": "Ajoutez un bloc « Blanc » pour commencer la phrase.",
+    "ready": "Votre routine est prête. {{ count }} produits recommandés."
+  },
   "blocks": {
     "load_video": "Charger la vidéo : {{ description }}",
     "sold_out": "Épuisé",
@@ -25,6 +65,9 @@
       "comment": "Commentaire",
       "post_success": "Merci de nous avoir contactés. Nous vous répondrons dès que possible.",
       "error_heading": "Veuillez ajuster les éléments suivants :"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Espace réservé du logo"
     }
   },
   "accessibility": {
@@ -70,7 +113,19 @@
     "increase_quantity": "Augmenter la quantité",
     "quantity": "Quantité",
     "rating": "La note de ce produit est {{ rating }} sur 5",
-    "nested_product": "{{ product_title }} pour {{ parent_title }}"
+    "nested_product": "{{ product_title }} pour {{ parent_title }}",
+    "announcement_bar_link": "En savoir plus",
+    "back_to_top": "Retour en haut",
+    "quick_view_loading": "Chargement du produit",
+    "before_after_after_alt": "Image après",
+    "before_after_before_alt": "Image avant",
+    "before_after_before_visible": "image avant visible",
+    "before_after_comparison": "Comparaison d’images avant et après",
+    "before_after_slider": "Curseur de comparaison",
+    "before_after_slider_help": "Utilisez les flèches gauche et droite pour comparer les images avant et après.",
+    "faq_collapse_answer": "Masquer la réponse",
+    "faq_expand_answer": "Afficher la réponse",
+    "faq_split_gallery": "Questions fréquentes"
   },
   "actions": {
     "add_to_cart": "Ajouter au panier",
@@ -247,7 +302,11 @@
       "previous": "Précédent",
       "next": "Suivant",
       "page": "Page {{ page }}"
-    }
+    },
+    "read_more_link": "En savoir plus",
+    "quick_view": "Aperçu rapide",
+    "view_full_details": "Voir tous les détails",
+    "view_item": "Voir l’article"
   },
   "gift_cards": {
     "issued": {
@@ -313,5 +372,29 @@
       "success_moderated": "Commentaire publié, en attente de modération",
       "success": "Commentaire publié"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Tous droits réservés."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Collage image et texte"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Ajoutez au moins un onglet de collection pour afficher des produits."
+    },
+    "icon_with_text": {
+      "empty": "Ajoutez des blocs d’icônes pour afficher du contenu.",
+      "section_aria_label": "Points forts de la boutique"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Ajouter le lot au panier",
+      "adding": "Ajout en cours…",
+      "added": "Ajouté au panier",
+      "error": "Un problème est survenu. Veuillez réessayer."
+    }
+  },
+  "search": {
+    "no_results": "Aucun résultat trouvé"
   }
 }

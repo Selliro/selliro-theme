@@ -690,6 +690,44 @@
     /* Make the height match the height of the model-viewer */
     height: 100vh;
   }
+
+  /* Selliro: on the product page the main image's arrows stay hidden until the gallery is hovered
+     (or focused with the keyboard), then fade and slide in. Touch screens keep them visible. */
+  @media (hover: hover) {
+    .product-information .media-gallery--carousel slideshow-container > slideshow-arrows .slideshow-control {
+      opacity: 0;
+      /* Horizon's own hover/focus slide-in animation would override the fade below */
+      animation: none !important;
+      transition:
+        opacity 0.3s ease,
+        translate 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .product-information .media-gallery--carousel slideshow-container > slideshow-arrows .slideshow-control:first-child {
+      translate: -10px 0;
+    }
+
+    .product-information .media-gallery--carousel slideshow-container > slideshow-arrows .slideshow-control:last-child {
+      translate: 10px 0;
+    }
+
+    .product-information .media-gallery--carousel slideshow-container:is(:hover, :has(:focus-visible)) > slideshow-arrows .slideshow-control {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: reduce) {
+    .product-information .media-gallery--carousel slideshow-container > slideshow-arrows .slideshow-control {
+      translate: none;
+      transition: opacity 0.2s ease;
+    }
+  }
+
+  /* Selliro: a little more room between the product page thumbnails */
+  .product-information .media-gallery--carousel .slideshow-controls__thumbnails {
+    gap: 0.6rem;
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -853,7 +891,7 @@
       "id": "thumbnail_width",
       "label": "t:settings.width",
       "min": 44,
-      "max": 72,
+      "max": 120,
       "step": 1,
       "unit": "px",
       "default": 64,

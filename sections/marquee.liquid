@@ -9,39 +9,42 @@
 {% assign gap_between_elements = section.settings.gap_between_elements %}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<marquee-component
-  class="section spacing-style gap-style color-{{ section.settings.color_scheme }}"
-  style="
-    {%- render 'spacing-style', settings: section.settings %};
-    {% render 'gap-style', value: gap_between_elements, name: 'marquee-gap' %}
-    --marquee-direction: {{ section.settings.movement_direction }};
-  "
-  data-speed-factor="25"
-  data-movement-direction="{{ section.settings.movement_direction }}"
+<div
+  class="section color-{{ section.settings.color_scheme }} {% if section.settings.use_container %} section--page-width{% else %} section--full-width{% endif %}"
+
 >
-  <div
-    class="marquee__wrapper"
-    ref="wrapper"
+  <marquee-component
+    style="--marquee-direction: {{ section.settings.movement_direction }};{%- render 'spacing-style', settings: section.settings %};
+    {% render 'gap-style', value: gap_between_elements, name: 'marquee-gap' %};{% if section.settings.use_container %}background-color: {{ section.settings.background_color }};{% endif %}"
+    data-speed-factor="25"
+    data-movement-direction="{{ section.settings.movement_direction }}"
+    class="spacing-style gap-style"
   >
     <div
-      class="marquee__content"
-      ref="content"
+      class="marquee__wrapper{% if section.settings.show_fade %} marquee__wrapper--faded{% endif %}"
+      ref="wrapper"
     >
       <div
-        class="marquee__repeated-items"
-        ref="marqueeItems[]"
+        class="marquee__content"
+        ref="content"
       >
-        {% content_for 'blocks' %}
+        <div
+          class="marquee__repeated-items"
+          ref="marqueeItems[]"
+        >
+          {% content_for 'blocks' %}
+        </div>
       </div>
     </div>
-  </div>
-</marquee-component>
+  </marquee-component>
+</div>
 
 {% stylesheet %}
   marquee-component {
     display: block;
     width: 100%;
     overflow: hidden;
+    position: relative;
   }
 
   .marquee__wrapper {
@@ -70,7 +73,7 @@
     display: flex;
     gap: var(--marquee-gap);
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   .marquee__repeated-items > * {
@@ -88,11 +91,16 @@
       transform: translate3d(calc(-50% - (var(--marquee-gap) / 2)), 0, 0);
     }
   }
+  marquee-component:has(.marquee__wrapper--faded) {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 70px, #000 calc(100% - 70px), transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0, #000 70px, #000 calc(100% - 70px), transparent 100%);
+  }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:names.marquee",
+  "class": "section-wrapper marquee-section",
   "disabled_on": {
     "groups": ["header", "footer"]
   },
@@ -107,10 +115,26 @@
       "type": "logo"
     },
     {
+      "type": "marquee-logo"
+    },
+    {
       "type": "_divider"
     }
   ],
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "use_container",
+      "label": "Constrain to page width",
+      "info": "When enabled, the marquee matches the theme page width and uses the color scheme below. When disabled, it spans the full width without section color styling.",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Container background color",
+      "visible_if": "{{ section.settings.use_container }}"
+    },
     {
       "type": "select",
       "id": "movement_direction",
@@ -126,6 +150,12 @@
         }
       ],
       "default": "normal"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_fade",
+      "label": "Show gradient left and right ",
+      "default": true
     },
     {
       "type": "color_scheme",

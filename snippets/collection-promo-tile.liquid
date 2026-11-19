@@ -1,0 +1,153 @@
+{%- doc -%}
+  Promotion tile shown between products in the collection grid (main-collection section).
+
+  @param {object} section - The main collection section (tile settings live there)
+  @param {number} index - Tile number (1 or 2)
+{%- enddoc -%}
+{%- liquid
+  assign p = 'promo_' | append: index | append: '_'
+  assign k = p | append: 'image'
+  assign tile_image = section.settings[k]
+  assign k = p | append: 'icon'
+  assign tile_icon = section.settings[k] | default: 'none'
+  assign k = p | append: 'heading'
+  assign tile_heading = section.settings[k]
+  assign k = p | append: 'text'
+  assign tile_text = section.settings[k]
+  assign k = p | append: 'button_label'
+  assign tile_button = section.settings[k]
+  assign k = p | append: 'link'
+  assign tile_link = section.settings[k]
+  assign k = p | append: 'bg_color'
+  assign tile_bg = section.settings[k] | default: '#3b4a2f'
+  assign k = p | append: 'text_color'
+  assign tile_fg = section.settings[k] | default: '#ffffff'
+  assign k = p | append: 'overlay'
+  assign tile_overlay = section.settings[k] | default: 0 | times: 0.01
+  assign k = p | append: 'span'
+  assign tile_span = section.settings[k] | default: 1
+  assign k = p | append: 'media'
+  assign tile_media = section.settings[k] | default: 'image'
+  assign k = p | append: 'video'
+  assign tile_video = section.settings[k]
+  assign k = p | append: 'video_mp4'
+  assign tile_mp4 = section.settings[k]
+  assign k = p | append: 'video_url'
+  assign tile_video_url = section.settings[k]
+
+  # Fall back to the image when the chosen video source is empty
+  assign media_kind = 'image'
+  if tile_media == 'video' and tile_video != blank
+    assign media_kind = 'video'
+  elsif tile_media == 'mp4' and tile_mp4 != blank
+    assign media_kind = 'mp4'
+  elsif tile_media == 'external' and tile_video_url != blank
+    assign media_kind = 'external'
+  endif
+  assign has_media = false
+  if media_kind != 'image' or tile_image != blank
+    assign has_media = true
+  endif
+-%}
+<div
+  data-cp-tile
+  class="collection-promo{% if has_media %} collection-promo--image{% endif %}{% if media_kind != 'image' %} collection-promo--video{% endif %}"
+  style="--cp-bg: {{ tile_bg }}; --cp-fg: {{ tile_fg }}; --cp-overlay: {{ tile_overlay }};"
+  data-span="{{ tile_span }}"
+>
+  {%- if has_media -%}
+    <div class="collection-promo__media" aria-hidden="true" data-cp-media="{{ media_kind }}">
+      {%- if tile_image != blank -%}
+        {{
+          tile_image
+          | image_url: width: 1200
+          | image_tag:
+            loading: 'lazy',
+            widths: '400, 600, 800, 1200',
+            sizes: '(min-width: 1100px) 25vw, (min-width: 750px) 33vw, 50vw',
+            alt: '',
+            class: 'collection-promo__img collection-promo__poster'
+        }}
+      {%- endif -%}
+
+      {%- case media_kind -%}
+        {%- when 'video' -%}
+          {{
+            tile_video
+            | video_tag:
+              image_size: '1200x',
+              autoplay: false,
+              loop: true,
+              muted: true,
+              controls: false,
+              playsinline: true,
+              preload: 'none',
+              class: 'collection-promo__video'
+          }}
+        {%- when 'mp4' -%}
+          <video
+            class="collection-promo__video"
+            muted
+            loop
+            playsinline
+            preload="none"
+            {% if tile_image != blank %}poster="{{ tile_image | image_url: width: 1200 }}"{% endif %}
+          >
+            <source data-src="{{ tile_mp4 }}" type="video/mp4">
+          </video>
+        {%- when 'external' -%}
+          {%- liquid
+            assign vid_id = tile_video_url.id
+            if tile_video_url.type == 'youtube'
+              assign embed = 'https://www.youtube-nocookie.com/embed/' | append: vid_id | append: '?autoplay=1&mute=1&loop=1&playlist=' | append: vid_id | append: '&controls=0&modestbranding=1&playsinline=1&rel=0&enablejsapi=1'
+            else
+              assign embed = 'https://player.vimeo.com/video/' | append: vid_id | append: '?background=1&autoplay=1&muted=1&loop=1&autopause=0&dnt=1'
+            endif
+          -%}
+          <iframe
+            class="collection-promo__iframe"
+            data-cp-iframe="{{ tile_video_url.type }}"
+            data-src="{{ embed }}"
+            title=""
+            tabindex="-1"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+      {%- endcase -%}
+      <span class="collection-promo__overlay"></span>
+    </div>
+  {%- endif -%}
+
+  {%- if media_kind != 'image' -%}
+    <button
+      type="button"
+      class="collection-promo__toggle"
+      data-cp-toggle
+      aria-pressed="false"
+      data-label-pause="{{ 'accessibility.pause_video' | t | escape }}"
+      data-label-play="{{ 'accessibility.play_video' | t | escape }}"
+      aria-label="{{ 'accessibility.pause_video' | t | escape }}"
+    >
+      <svg class="collection-promo__toggle-pause" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false"><path d="M5 3.5v9M11 3.5v9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg class="collection-promo__toggle-play" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false"><path d="M5 3.2v9.6L12.5 8 5 3.2Z" fill="currentColor"/></svg>
+    </button>
+  {%- endif -%}
+
+  <div class="collection-promo__content">
+    {%- if tile_icon != 'none' -%}
+      <span class="collection-promo__icon" aria-hidden="true">{% render 'itc-feature-icon', icon: tile_icon %}</span>
+    {%- endif -%}
+    {%- if tile_heading != blank -%}
+      <h2 class="collection-promo__heading">{{ tile_heading | escape }}</h2>
+    {%- endif -%}
+    {%- if tile_text != blank -%}
+      <p class="collection-promo__text">{{ tile_text | escape }}</p>
+    {%- endif -%}
+    {%- if tile_button != blank -%}
+      <a class="collection-promo__button" href="{{ tile_link | default: routes.all_products_collection_url }}">
+        <span>{{ tile_button | escape }}</span>
+        <svg viewBox="0 0 20 20" width="16" height="16" fill="none" aria-hidden="true" focusable="false"><path d="M4 10h11m0 0-4.5-4.5M15 10l-4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    {%- endif -%}
+  </div>
+</div>

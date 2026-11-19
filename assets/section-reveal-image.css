@@ -1,0 +1,231 @@
+/* ==============================================
+   Reveal Image — sticky scroll expand
+   The section acts as the scroll space.
+   JS sets section height = 100vh + scroll_dist
+   and switches the pin between absolute/fixed
+   so it works regardless of parent overflow.
+   ============================================== */
+
+reveal-image-section {
+  display: block;
+}
+
+.reveal-image {
+  position: relative;            /* pin uses absolute inside this */
+  padding-top:    var(--ri-pad-top,    0px);
+  padding-bottom: var(--ri-pad-bottom, 0px);
+  /* Height is set by JS; this is the no-JS fallback */
+  min-height: 100vh;
+}
+
+/* ── Pin ──────────────────────────────────────
+   Starts as position:absolute (top: 0 of section).
+   JS switches to position:fixed during animation,
+   then back to absolute (bottom: 0) when done.   */
+.reveal-image__pin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: rgb(var(--color-background));
+}
+
+/* ── Expanding frame ──────────────────────────
+   clip-path is set by JS.
+   Fallback (no JS): show full image.             */
+.reveal-image__frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+  will-change: clip-path;
+}
+
+/* ── Media ────────────────────────────────────*/
+.reveal-image__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+svg.reveal-image__media {
+  color: rgb(var(--color-foreground) / 0.1);
+}
+
+.reveal-image__media--placeholder {
+  object-fit: cover;
+}
+
+/* Video embed (YouTube / Vimeo iframe) */
+.reveal-image__embed {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.reveal-image__embed iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  min-width: 177.78%;
+  min-height: 56.25%;
+  transform: translate(-50%, -50%);
+  border: 0;
+  pointer-events: none;
+}
+
+/* ── Overlay ──────────────────────────────────*/
+.reveal-image__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to top,
+    rgb(0 0 0 / calc(var(--ri-overlay, 0.35) * 1.6)) 0%,
+    rgb(0 0 0 / calc(var(--ri-overlay, 0.35) * 0.5)) 45%,
+    rgb(0 0 0 / calc(var(--ri-overlay, 0.35) * 0.08)) 100%
+  );
+  pointer-events: none;
+}
+
+/* ── Content ──────────────────────────────────
+   Centered over the frame. Opacity driven by JS
+   — starts at 0, fades in at 50% expansion.     */
+.reveal-image__content {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  color: #fff;
+  pointer-events: none;
+  opacity: 1;   /* no-JS fallback; JS sets to 0 */
+}
+
+.reveal-image__content > * {
+  pointer-events: auto;
+}
+
+/* Horizontal alignment */
+.reveal-image__content--left   { align-items: flex-start; text-align: left; }
+.reveal-image__content--center { align-items: center;     text-align: center; }
+.reveal-image__content--right  { align-items: flex-end;   text-align: right; }
+
+/* Vertical alignment */
+.reveal-image__content--v-top    { justify-content: flex-start; padding-top: clamp(2rem, 5vw, 4.5rem); }
+.reveal-image__content--v-middle { justify-content: center; }
+.reveal-image__content--v-bottom { justify-content: flex-end; padding-bottom: clamp(2rem, 5vw, 4.5rem); }
+
+/* ── Typography ───────────────────────────────*/
+.reveal-image__heading {
+  margin: 0;
+  font-size: clamp(2.2rem, 5.5vw, 5.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: inherit;
+  max-width: 22ch;
+}
+
+.reveal-image__content--center .reveal-image__heading {
+  max-width: 28ch;
+}
+
+.reveal-image__subheading {
+  margin: 0;
+  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+  line-height: 1.6;
+  color: rgb(255 255 255 / 0.88);
+  max-width: 44ch;
+}
+
+/* ── Button ───────────────────────────────────*/
+.reveal-image__btn {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  padding: 0.8rem 2.2rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 999px;
+  transition:
+    background 0.22s ease,
+    color      0.22s ease,
+    border-color 0.22s ease;
+}
+
+.reveal-image__btn--outline_light {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgb(255 255 255 / 0.65);
+}
+.reveal-image__btn--outline_light:hover {
+  background: rgb(255 255 255 / 0.18);
+  border-color: #fff;
+}
+
+.reveal-image__btn--solid_light {
+  background: #fff;
+  color: #111;
+  border: 1.5px solid transparent;
+}
+.reveal-image__btn--solid_light:hover { background: rgb(255 255 255 / 0.88); }
+
+.reveal-image__btn--solid_dark {
+  background: #111;
+  color: #fff;
+  border: 1.5px solid transparent;
+}
+.reveal-image__btn--solid_dark:hover { background: #333; }
+
+/* ── Reduced motion ───────────────────────────*/
+@media (prefers-reduced-motion: reduce) {
+  .reveal-image {
+    min-height: 100vh;
+  }
+
+  .reveal-image__pin {
+    position: relative;
+    height: 100vh;
+  }
+
+  .reveal-image__frame {
+    clip-path: none !important;
+  }
+
+  .reveal-image__content {
+    opacity: 1 !important;
+  }
+}
+
+/* ── Responsive ───────────────────────────────*/
+@media (max-width: 749px) {
+  .reveal-image__heading {
+    font-size: clamp(1.75rem, 8vw, 3rem);
+  }
+
+  .reveal-image__subheading {
+    font-size: 0.93rem;
+  }
+
+  .reveal-image__btn {
+    padding: 0.7rem 1.75rem;
+  }
+
+  .reveal-image__content--right {
+    align-items: flex-start;
+    text-align: left;
+  }
+}

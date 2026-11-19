@@ -1,0 +1,364 @@
+{%- liquid
+  assign media_type    = section.settings.media_type | default: 'image'
+  assign text_pos      = section.settings.text_position | default: 'center'
+  assign text_vpos     = section.settings.text_vertical | default: 'middle'
+  assign overlay_pct   = section.settings.overlay_opacity | default: 35
+  assign btn_style     = section.settings.button_style | default: 'outline_light'
+  assign scroll_dist   = section.settings.scroll_distance | default: 1000
+  assign start_inset_v = section.settings.start_inset   | default: 35
+  assign start_inset_h = section.settings.start_inset_h | default: 25
+  assign radius_start  = section.settings.border_radius_start | default: 16
+  assign radius_end    = section.settings.border_radius_end   | default: 0
+  assign overlay_dec   = overlay_pct | divided_by: 100.0
+
+  assign has_content = false
+  if section.settings.heading != blank or section.settings.subheading != blank or section.settings.button_label != blank
+    assign has_content = true
+  endif
+-%}
+
+{{ 'section-reveal-image.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-reveal-image.js' | asset_url }}" type="module"></script>
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<reveal-image-section
+  class="reveal-image color-{{ section.settings.color_scheme }}"
+  id="RevealImage-{{ section.id }}"
+  data-scroll-dist="{{ scroll_dist }}"
+  data-v-start="{{ start_inset_v }}"
+  data-h-start="{{ start_inset_h }}"
+  data-radius-start="{{ radius_start }}"
+  data-radius-end="{{ radius_end }}"
+  style="
+    --ri-pad-top: {{ section.settings.padding_top }}px;
+    --ri-pad-bottom: {{ section.settings.padding_bottom }}px;
+    --ri-overlay: {{ overlay_dec }};
+  "
+  {{ section.shopify_attributes }}
+>
+  <div class="reveal-image__pin" aria-hidden="false">
+
+    <div class="reveal-image__frame">
+
+      {%- if media_type == 'video' -%}
+
+        {%- if section.settings.video != blank -%}
+          {{
+            section.settings.video
+            | video_tag:
+              class: 'reveal-image__media reveal-image__media--video',
+              autoplay: true,
+              loop: true,
+              muted: true,
+              playsinline: true,
+              controls: false
+          }}
+
+        {%- elsif section.settings.video_url != blank -%}
+          {%- assign vurl = section.settings.video_url -%}
+          <div class="reveal-image__embed" aria-hidden="true">
+            {%- if vurl.type == 'youtube' -%}
+              <iframe
+                src="https://www.youtube.com/embed/{{ vurl.id }}?autoplay=1&mute=1&loop=1&playlist={{ vurl.id }}&controls=0&rel=0&modestbranding=1"
+                allow="autoplay; fullscreen"
+                allowfullscreen
+                frameborder="0"
+                class="reveal-image__media"
+                title="{{ section.settings.heading | default: 'Video' | escape }}"
+                loading="lazy"
+              ></iframe>
+            {%- elsif vurl.type == 'vimeo' -%}
+              <iframe
+                src="https://player.vimeo.com/video/{{ vurl.id }}?autoplay=1&muted=1&loop=1&background=1"
+                allow="autoplay; fullscreen"
+                allowfullscreen
+                frameborder="0"
+                class="reveal-image__media"
+                title="{{ section.settings.heading | default: 'Video' | escape }}"
+                loading="lazy"
+              ></iframe>
+            {%- endif -%}
+          </div>
+
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'reveal-image__media reveal-image__media--placeholder' }}
+        {%- endif -%}
+
+      {%- else -%}
+
+        {%- if section.settings.image != blank -%}
+          {{
+            section.settings.image
+            | image_url: width: 3200
+            | image_tag:
+              class: 'reveal-image__media',
+              loading: 'eager',
+              widths: '640, 960, 1280, 1600, 1920, 2560, 3200',
+              sizes: '100vw',
+              alt: section.settings.image.alt | default: section.settings.heading | default: ''
+          }}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'reveal-image__media reveal-image__media--placeholder' }}
+        {%- endif -%}
+
+      {%- endif -%}
+
+      {%- if overlay_pct > 0 -%}
+        <div class="reveal-image__overlay" aria-hidden="true"></div>
+      {%- endif -%}
+
+      {%- if has_content -%}
+        <div class="reveal-image__content reveal-image__content--{{ text_pos }} reveal-image__content--v-{{ text_vpos }}">
+          {%- if section.settings.heading != blank -%}
+            <h2 class="reveal-image__heading">{{ section.settings.heading | escape }}</h2>
+          {%- endif -%}
+          {%- if section.settings.subheading != blank -%}
+            <p class="reveal-image__subheading">{{ section.settings.subheading | escape }}</p>
+          {%- endif -%}
+          {%- if section.settings.button_label != blank -%}
+            <a
+              class="reveal-image__btn reveal-image__btn--{{ btn_style }}"
+              href="{{ section.settings.button_url | default: '#' }}"
+            >
+              {{- section.settings.button_label | escape -}}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</reveal-image-section>
+
+{% schema %}
+{
+  "name": "Reveal image",
+  "tag": "section",
+  "class": "reveal-image-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media type",
+      "options": [
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "visible_if": "{{ section.settings.media_type == 'image' }}"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video (hosted)",
+      "info": "Upload an .mp4 video file.",
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "Video URL (YouTube / Vimeo)",
+      "accept": ["youtube", "vimeo"],
+      "info": "Used when no hosted video is set.",
+      "visible_if": "{{ section.settings.media_type == 'video' }}"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Discover the Collection"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Crafted with intention. Worn with purpose."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "outline_light", "label": "Outline – light" },
+        { "value": "solid_light",   "label": "Solid – light" },
+        { "value": "solid_dark",    "label": "Solid – dark" }
+      ],
+      "default": "outline_light"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Text – horizontal",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "text_vertical",
+      "label": "Text – vertical",
+      "options": [
+        { "value": "top",    "label": "Top" },
+        { "value": "middle", "label": "Middle" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "middle"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "scroll_distance",
+      "label": "Scroll distance",
+      "info": "Pixels of scroll to complete the expansion once pinned. Higher = slower reveal.",
+      "min": 400,
+      "max": 2000,
+      "step": 100,
+      "unit": "px",
+      "default": 1000
+    },
+    {
+      "type": "range",
+      "id": "start_inset",
+      "label": "Vertical crop (start)",
+      "info": "Top & bottom crop at the start. Higher = shorter starting strip.",
+      "min": 5,
+      "max": 45,
+      "step": 1,
+      "unit": "%",
+      "default": 35
+    },
+    {
+      "type": "range",
+      "id": "start_inset_h",
+      "label": "Horizontal crop (start)",
+      "info": "Left & right crop at the start. Higher = narrower starting frame.",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "%",
+      "default": 25
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay darkness",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 35
+    },
+    {
+      "type": "range",
+      "id": "border_radius_start",
+      "label": "Corner radius (start)",
+      "info": "Border radius of the frame before expansion.",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "border_radius_end",
+      "label": "Corner radius (end)",
+      "info": "Border radius when fully expanded.",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Reveal image",
+      "settings": {
+        "media_type": "image",
+        "heading": "Discover the Collection",
+        "subheading": "Crafted with intention. Worn with purpose.",
+        "button_label": "Shop Now",
+        "button_style": "outline_light",
+        "text_position": "center",
+        "text_vertical": "middle",
+        "scroll_distance": 1000,
+        "start_inset": 35,
+        "start_inset_h": 25,
+        "overlay_opacity": 35,
+        "border_radius_start": 16,
+        "border_radius_end": 0,
+        "color_scheme": "scheme-1"
+      }
+    }
+  ]
+}
+{% endschema %}

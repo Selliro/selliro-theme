@@ -1,0 +1,189 @@
+{%- doc -%}
+  Icon badges — a row of up to five small promises (Vegan, Cruelty free, Recyclable …).
+  Each badge uses a built-in line icon or an uploaded image.
+{%- enddoc -%}
+<ul class="pdp-badges list-unstyled" {{ block.shopify_attributes }}>
+  {%- for i in (1..5) -%}
+    {%- liquid
+      assign k_icon = 'icon_' | append: i
+      assign k_image = 'image_' | append: i
+      assign k_label = 'label_' | append: i
+      assign icon = block.settings[k_icon] | default: 'none'
+      assign image = block.settings[k_image]
+      assign label = block.settings[k_label]
+    -%}
+    {%- if label != blank -%}
+      <li class="pdp-badges__item">
+        <span class="pdp-badges__icon" aria-hidden="true">
+          {%- if image != blank -%}
+            {{ image | image_url: width: 96 | image_tag: loading: 'lazy', width: 28, height: 28, alt: '' }}
+          {%- else -%}
+            {%- render 'pdp-icon', icon: icon -%}
+          {%- endif -%}
+        </span>
+        <span class="pdp-badges__label">{{ label | escape }}</span>
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+</ul>
+
+{% stylesheet %}
+  .pdp-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.25rem;
+    margin: 0;
+  }
+
+  .pdp-badges__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 3.75rem;
+    text-align: center;
+    font-size: 0.6875rem;
+    letter-spacing: 0.02em;
+    line-height: 1.25;
+  }
+
+  .pdp-badges__icon {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-foreground) 22%, transparent);
+  }
+
+  .pdp-badges__icon :is(svg, img) {
+    width: 1.35rem;
+    height: 1.35rem;
+    object-fit: contain;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Icon badges",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Badge 1"
+    },
+    {
+      "type": "select",
+      "id": "icon_1",
+      "label": "Icon",
+      "options": [
+        { "value": "leaf", "label": "Leaf / vegan" },
+        { "value": "rabbit", "label": "Cruelty free" },
+        { "value": "recycle", "label": "Recyclable" },
+        { "value": "drop", "label": "Drop / hydrating" },
+        { "value": "shield", "label": "Dermatologist tested" },
+        { "value": "flask", "label": "Clean formula" },
+        { "value": "sun", "label": "Sun / SPF" },
+        { "value": "sparkle", "label": "Sparkle / glow" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "leaf"
+    },
+    { "type": "image_picker", "id": "image_1", "label": "Custom icon" },
+    { "type": "text", "id": "label_1", "label": "Label", "default": "Vegan" },
+    {
+      "type": "header",
+      "content": "Badge 2"
+    },
+    {
+      "type": "select",
+      "id": "icon_2",
+      "label": "Icon",
+      "options": [
+        { "value": "leaf", "label": "Leaf / vegan" },
+        { "value": "rabbit", "label": "Cruelty free" },
+        { "value": "recycle", "label": "Recyclable" },
+        { "value": "drop", "label": "Drop / hydrating" },
+        { "value": "shield", "label": "Dermatologist tested" },
+        { "value": "flask", "label": "Clean formula" },
+        { "value": "sun", "label": "Sun / SPF" },
+        { "value": "sparkle", "label": "Sparkle / glow" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "rabbit"
+    },
+    { "type": "image_picker", "id": "image_2", "label": "Custom icon" },
+    { "type": "text", "id": "label_2", "label": "Label", "default": "Cruelty free" },
+    {
+      "type": "header",
+      "content": "Badge 3"
+    },
+    {
+      "type": "select",
+      "id": "icon_3",
+      "label": "Icon",
+      "options": [
+        { "value": "leaf", "label": "Leaf / vegan" },
+        { "value": "rabbit", "label": "Cruelty free" },
+        { "value": "recycle", "label": "Recyclable" },
+        { "value": "drop", "label": "Drop / hydrating" },
+        { "value": "shield", "label": "Dermatologist tested" },
+        { "value": "flask", "label": "Clean formula" },
+        { "value": "sun", "label": "Sun / SPF" },
+        { "value": "sparkle", "label": "Sparkle / glow" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "shield"
+    },
+    { "type": "image_picker", "id": "image_3", "label": "Custom icon" },
+    { "type": "text", "id": "label_3", "label": "Label", "default": "Derm tested" },
+    {
+      "type": "header",
+      "content": "Badge 4"
+    },
+    {
+      "type": "select",
+      "id": "icon_4",
+      "label": "Icon",
+      "options": [
+        { "value": "leaf", "label": "Leaf / vegan" },
+        { "value": "rabbit", "label": "Cruelty free" },
+        { "value": "recycle", "label": "Recyclable" },
+        { "value": "drop", "label": "Drop / hydrating" },
+        { "value": "shield", "label": "Dermatologist tested" },
+        { "value": "flask", "label": "Clean formula" },
+        { "value": "sun", "label": "Sun / SPF" },
+        { "value": "sparkle", "label": "Sparkle / glow" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "recycle"
+    },
+    { "type": "image_picker", "id": "image_4", "label": "Custom icon" },
+    { "type": "text", "id": "label_4", "label": "Label", "default": "Recyclable" },
+    {
+      "type": "header",
+      "content": "Badge 5"
+    },
+    {
+      "type": "select",
+      "id": "icon_5",
+      "label": "Icon",
+      "options": [
+        { "value": "leaf", "label": "Leaf / vegan" },
+        { "value": "rabbit", "label": "Cruelty free" },
+        { "value": "recycle", "label": "Recyclable" },
+        { "value": "drop", "label": "Drop / hydrating" },
+        { "value": "shield", "label": "Dermatologist tested" },
+        { "value": "flask", "label": "Clean formula" },
+        { "value": "sun", "label": "Sun / SPF" },
+        { "value": "sparkle", "label": "Sparkle / glow" },
+        { "value": "none", "label": "None" }
+      ],
+      "default": "flask"
+    },
+    { "type": "image_picker", "id": "image_5", "label": "Custom icon" },
+    { "type": "text", "id": "label_5", "label": "Label", "default": "Paraben free" }
+  ],
+  "presets": [{ "name": "Icon badges" }]
+}
+{% endschema %}

@@ -8,6 +8,46 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "Tage",
+    "hours": "Std",
+    "minutes": "Min",
+    "seconds": "Sek",
+    "ends_on": "Angebot endet am {{ date }}",
+    "editor_hint": "Füge in den Abschnittseinstellungen ein Enddatum hinzu, um den Countdown zu starten."
+  },
+  "collection_hero": {
+    "home": "Startseite",
+    "breadcrumb_label": "Brotkrumen",
+    "all": "Alle"
+  },
+  "bundle_builder": {
+    "add_aria": "{{ title }} zum Bundle hinzufügen",
+    "empty_slot": "Leerer Platz",
+    "items_count": "{{ count }} Artikel",
+    "announce_added": "{{ title }} hinzugefügt. {{ count }} Artikel in deiner Box.",
+    "announce_removed": "{{ title }} entfernt. {{ count }} Artikel in deiner Box.",
+    "savings": "Du sparst",
+    "total": "Gesamt",
+    "view_bundle": "Box ansehen"
+  },
+  "product_3d": {
+    "view_3d": "In 3D ansehen",
+    "drag_hint": "Zum Drehen ziehen",
+    "reset": "Ansicht zurücksetzen",
+    "views": "Kameraansichten",
+    "front": "Vorne",
+    "side": "Seite",
+    "back": "Hinten",
+    "top": "Oben",
+    "loading": "3D-Modell wird geladen",
+    "editor_hint": "Wähle ein Produkt mit 3D-Modell oder füge einen Link zu einer .glb-Datei ein, um es in 3D anzuzeigen.",
+    "position_copied": "Position kopiert – füge sie in einen Merkmal-Block ein."
+  },
+  "routine_builder": {
+    "editor_hint": "Füge einen Block „Lücke“ hinzu, um mit dem Satz zu beginnen.",
+    "ready": "Deine Routine ist fertig. {{ count }} empfohlene Produkte."
+  },
   "blocks": {
     "load_video": "Video laden: {{ description }}",
     "sold_out": "Ausverkauft",
@@ -25,6 +65,9 @@
       "comment": "Kommentar",
       "post_success": "Danke, dass du uns kontaktiert hast. Wir werden uns so schnell wie möglich bei dir melden.",
       "error_heading": "Bitte passe Folgendes an:"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "Logo-Platzhalter"
     }
   },
   "accessibility": {
@@ -69,7 +112,19 @@
     "increase_quantity": "Menge erhöhen",
     "quantity": "Anzahl",
     "rating": "Die Bewertung für dieses Produkts lautet {{ rating }} von 5 Sternen",
-    "nested_product": "{{ product_title }} für {{ parent_title }}"
+    "nested_product": "{{ product_title }} für {{ parent_title }}",
+    "announcement_bar_link": "Mehr erfahren",
+    "back_to_top": "Zurück nach oben",
+    "quick_view_loading": "Produkt wird geladen",
+    "before_after_after_alt": "Nachher-Bild",
+    "before_after_before_alt": "Vorher-Bild",
+    "before_after_before_visible": "Vorher-Bild sichtbar",
+    "before_after_comparison": "Vorher-Nachher-Bildvergleich",
+    "before_after_slider": "Vergleichsregler",
+    "before_after_slider_help": "Verwende die linke und rechte Pfeiltaste, um das Vorher- und Nachher-Bild zu vergleichen.",
+    "faq_collapse_answer": "Antwort ausblenden",
+    "faq_expand_answer": "Antwort einblenden",
+    "faq_split_gallery": "Häufig gestellte Fragen"
   },
   "actions": {
     "add_to_cart": "In den Warenkorb legen",
@@ -242,7 +297,11 @@
       "previous": "Zurück",
       "next": "Weiter",
       "page": "Seite {{ page }}"
-    }
+    },
+    "read_more_link": "Weiterlesen",
+    "quick_view": "Schnellansicht",
+    "view_full_details": "Alle Details ansehen",
+    "view_item": "Artikel ansehen"
   },
   "gift_cards": {
     "issued": {
@@ -307,5 +366,29 @@
       "success_moderated": "Kommentar gepostet, Moderation ausstehend",
       "success": "Kommentar gepostet"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "Alle Rechte vorbehalten."
+    },
+    "image_text_collage": {
+      "section_aria_label": "Bild-Text-Collage"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "Füge mindestens einen Kollektions-Tab hinzu, um Produkte anzuzeigen."
+    },
+    "icon_with_text": {
+      "empty": "Füge Symbol-Blöcke hinzu, um Inhalte anzuzeigen.",
+      "section_aria_label": "Shop-Highlights"
+    },
+    "beauty_bundle": {
+      "add_bundle": "Set in den Warenkorb legen",
+      "adding": "Wird hinzugefügt…",
+      "added": "In den Warenkorb gelegt",
+      "error": "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+    }
+  },
+  "search": {
+    "no_results": "Keine Ergebnisse gefunden"
   }
 }

@@ -38,85 +38,8 @@
       </div>
 
       {% if predictive_search.performed %}
-        {%- if search_results_count > 0 -%}
-          {% assign shared_results_index = 0 %}
-          {% if predictive_search.resources.queries.size > 0 %}
-            {% assign shared_results_index = shared_results_index
-              | plus: predictive_search.resources.collections.size
-            %}
-            <ul
-              class="predictive-search-results__list predictive-search-results__wrapper predictive-search-results__wrapper-queries list-unstyled"
-              role="listbox"
-              aria-labelledby="predictive-search-queries"
-            >
-              {%- for resource in predictive_search.resources.queries -%}
-                <li
-                  class="predictive-search-results__card--query"
-                  ref="resultsItems[]"
-                  data-search-result-index="search-results-{{ shared_results_index | plus: forloop.index }}"
-                  on:keydown="/onSearchKeyDown"
-                >
-                  <a
-                    class="pills__pill predictive-search-results__pill"
-                    href="{{ resource.url }}"
-                  >
-                    <span
-                      aria-label="{{ resource.text }}"
-                    >
-                      {{ resource.styled_text }}
-                    </span>
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-          {% if predictive_search.resources.products.size > 0 %}
-            {%- liquid
-              assign title = 'content.search_results_resource_products' | t
-              assign products = predictive_search.resources.products
-              render 'predictive-search-products-list', title: title, products: products
-            -%}
-          {% endif %}
-
-          {% if predictive_search.resources.collections.size > 0 %}
-            {% assign shared_results_index = shared_results_index | plus: predictive_search.resources.articles.size %}
-            {% assign resource_title = 'content.search_results_resource_collections' | t %}
-
-            {% render 'predictive-search-resource-carousel',
-              title: resource_title,
-              resource_type: 'collection',
-              resources: predictive_search.resources.collections
-            %}
-          {% endif %}
-
-          {% if predictive_search.resources.pages.size > 0 %}
-            {% assign shared_results_index = shared_results_index | plus: predictive_search.resources.products.size %}
-            {% assign resource_title = 'content.search_results_resource_pages' | t %}
-
-            {% render 'predictive-search-resource-carousel',
-              title: resource_title,
-              resource_type: 'page',
-              resources: predictive_search.resources.pages
-            %}
-          {% endif %}
-
-          {% if predictive_search.resources.articles.size > 0 %}
-            {% assign shared_results_index = shared_results_index | plus: predictive_search.resources.pages.size %}
-            {% assign resource_title = 'content.search_results_resource_articles' | t %}
-
-            {% render 'predictive-search-resource-carousel',
-              title: resource_title,
-              resource_type: 'article',
-              resources: predictive_search.resources.articles
-            %}
-          {% endif %}
-        {% else %}
-          <p class="predictive-search-results__no-results">
-            {{ 'content.search_results_no_results' | t: terms: predictive_search.terms }}
-          </p>
-        {% endif %}
+        {% render 'search-plus-results', results: predictive_search %}
       {% else %}
-        {% assign shared_results_index = 0 %}
         {%- liquid
           assign title = 'content.recently_viewed_products' | t
           assign products = search.results

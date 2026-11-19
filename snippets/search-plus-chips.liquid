@@ -1,0 +1,51 @@
+{%- doc -%}
+  Popular search chips from Theme settings › Search › Popular searches (comma separated).
+
+  @param {string} [class] - Extra classes for the list
+  @param {boolean} [page] - true on the search results page (no pop-up keyboard navigation hooks)
+{%- enddoc -%}
+{%- assign terms_list = settings.search_popular_terms | split: ',' -%}
+{%- if terms_list.size > 0 -%}
+  <ul
+    class="sp-chips list-unstyled{% unless page %} predictive-search-results__list{% endunless %}{% if class != blank %} {{ class }}{% endif %}"
+    {% unless page %}
+      role="listbox"
+    {% endunless %}
+    aria-label="{{ 'search_plus.popular' | t }}"
+  >
+    {%- for raw in terms_list limit: 8 -%}
+      {%- assign term = raw | strip -%}
+      {%- if term != blank -%}
+        <li
+          class="sp-chips__item"
+          style="--i: {{ forloop.index0 }};"
+          {% unless page %}
+            ref="resultsItems[]"
+            role="option"
+          {% endunless %}
+        >
+          <a
+            class="sp-chip"
+            href="{{ routes.search_url }}?q={{ term | url_encode }}&options%5Bprefix%5D=last"
+          >
+            <svg
+              class="sp-chip__icon"
+              viewBox="0 0 20 20"
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 13.5 8 8.5l3 3 6-6"/><path d="M13 5.5h4v4"/>
+            </svg>
+            {{- term | escape -}}
+          </a>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

@@ -8,6 +8,46 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "วัน",
+    "hours": "ชม.",
+    "minutes": "นาที",
+    "seconds": "วินาที",
+    "ends_on": "ข้อเสนอสิ้นสุด {{ date }}",
+    "editor_hint": "เพิ่มวันที่สิ้นสุดในการตั้งค่าของส่วนเพื่อเริ่มการนับถอยหลัง"
+  },
+  "collection_hero": {
+    "home": "หน้าแรก",
+    "breadcrumb_label": "เส้นทางนำทาง",
+    "all": "ทั้งหมด"
+  },
+  "bundle_builder": {
+    "add_aria": "เพิ่ม {{ title }} ลงในชุด",
+    "empty_slot": "ช่องว่าง",
+    "items_count": "{{ count }} ชิ้น",
+    "announce_added": "เพิ่ม {{ title }} แล้ว มี {{ count }} ชิ้นในกล่องของคุณ",
+    "announce_removed": "นำ {{ title }} ออกแล้ว มี {{ count }} ชิ้นในกล่องของคุณ",
+    "savings": "คุณประหยัด",
+    "total": "รวม",
+    "view_bundle": "ดูกล่อง"
+  },
+  "product_3d": {
+    "view_3d": "ดูแบบ 3 มิติ",
+    "drag_hint": "ลากเพื่อหมุน",
+    "reset": "รีเซ็ตมุมมอง",
+    "views": "มุมกล้อง",
+    "front": "ด้านหน้า",
+    "side": "ด้านข้าง",
+    "back": "ด้านหลัง",
+    "top": "ด้านบน",
+    "loading": "กำลังโหลดโมเดล 3 มิติ",
+    "editor_hint": "เลือกสินค้าที่มีโมเดล 3 มิติ หรือวางลิงก์ไปยังไฟล์ .glb เพื่อแสดงแบบ 3 มิติ",
+    "position_copied": "คัดลอกตำแหน่งแล้ว วางลงในบล็อกคุณสมบัติ"
+  },
+  "routine_builder": {
+    "editor_hint": "เพิ่มบล็อก \"ช่องว่าง\" เพื่อเริ่มสร้างประโยค",
+    "ready": "รูทีนของคุณพร้อมแล้ว สินค้าแนะนำ {{ count }} รายการ"
+  },
   "blocks": {
     "load_video": "โหลดวิดีโอ: {{ description }}",
     "sold_out": "ขายหมดแล้ว",
@@ -25,6 +65,9 @@
       "comment": "ความคิดเห็น",
       "post_success": "ขอบคุณที่ติดต่อเรา เราจะติดต่อกลับหาคุณโดยเร็วที่สุด",
       "error_heading": "โปรดแก้ไขข้อมูลดังต่อไปนี้"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "ตัวยึดตำแหน่งโลโก้"
     }
   },
   "accessibility": {
@@ -69,7 +112,19 @@
     "increase_quantity": "เพิ่มจำนวน",
     "quantity": "จำนวน",
     "rating": "คะแนนสำหรับสินค้านี้คือ {{ rating }} จาก 5",
-    "nested_product": "{{ product_title }} สำหรับ {{ parent_title }}"
+    "nested_product": "{{ product_title }} สำหรับ {{ parent_title }}",
+    "announcement_bar_link": "ดูข้อมูลเพิ่มเติม",
+    "back_to_top": "กลับไปด้านบน",
+    "quick_view_loading": "กำลังโหลดสินค้า",
+    "before_after_after_alt": "รูปภาพหลัง",
+    "before_after_before_alt": "รูปภาพก่อน",
+    "before_after_before_visible": "แสดงรูปภาพก่อน",
+    "before_after_comparison": "การเปรียบเทียบรูปภาพก่อนและหลัง",
+    "before_after_slider": "แถบเลื่อนเปรียบเทียบ",
+    "before_after_slider_help": "ใช้ปุ่มลูกศรซ้ายและขวาเพื่อเปรียบเทียบรูปภาพก่อนและหลัง",
+    "faq_collapse_answer": "ยุบคำตอบ",
+    "faq_expand_answer": "ขยายคำตอบ",
+    "faq_split_gallery": "คำถามที่พบบ่อย"
   },
   "actions": {
     "add_to_cart": "เพิ่มลงในตะกร้าสินค้า",
@@ -242,7 +297,11 @@
       "previous": "ก่อนหน้า",
       "next": "ถัดไป",
       "page": "หน้า {{ page }}"
-    }
+    },
+    "read_more_link": "อ่านเพิ่มเติม",
+    "quick_view": "ดูอย่างรวดเร็ว",
+    "view_full_details": "ดูรายละเอียดทั้งหมด",
+    "view_item": "ดูสินค้า"
   },
   "gift_cards": {
     "issued": {
@@ -307,5 +366,29 @@
       "success_moderated": "ความคิดเห็นถูกโพสต์แล้ว กำลังรอการตรวจสอบ",
       "success": "ความคิดเห็นถูกโพสต์แล้ว"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "สงวนลิขสิทธิ์"
+    },
+    "image_text_collage": {
+      "section_aria_label": "ภาพตัดปะรูปภาพพร้อมข้อความ"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "เพิ่มแท็บคอลเลกชันอย่างน้อยหนึ่งแท็บเพื่อแสดงสินค้า"
+    },
+    "icon_with_text": {
+      "empty": "เพิ่มบล็อกไอคอนเพื่อแสดงเนื้อหา",
+      "section_aria_label": "จุดเด่นของร้านค้า"
+    },
+    "beauty_bundle": {
+      "add_bundle": "เพิ่มชุดสินค้าลงในตะกร้า",
+      "adding": "กำลังเพิ่ม…",
+      "added": "เพิ่มลงในตะกร้าแล้ว",
+      "error": "เกิดข้อผิดพลาด โปรดลองอีกครั้ง"
+    }
+  },
+  "search": {
+    "no_results": "ไม่พบผลลัพธ์"
   }
 }

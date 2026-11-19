@@ -8,6 +8,46 @@
  * ------------------------------------------------------------
  */
 {
+  "countdown_banner": {
+    "days": "日",
+    "hours": "時間",
+    "minutes": "分",
+    "seconds": "秒",
+    "ends_on": "セール終了：{{ date }}",
+    "editor_hint": "カウントダウンを開始するには、セクション設定で終了日を追加してください。"
+  },
+  "collection_hero": {
+    "home": "ホーム",
+    "breadcrumb_label": "パンくずリスト",
+    "all": "すべて"
+  },
+  "bundle_builder": {
+    "add_aria": "{{ title }}をバンドルに追加",
+    "empty_slot": "空き枠",
+    "items_count": "{{ count }}点",
+    "announce_added": "{{ title }}を追加しました。ボックス内: {{ count }}点。",
+    "announce_removed": "{{ title }}を削除しました。ボックス内: {{ count }}点。",
+    "savings": "割引額",
+    "total": "合計",
+    "view_bundle": "ボックスを見る"
+  },
+  "product_3d": {
+    "view_3d": "3Dで見る",
+    "drag_hint": "ドラッグして回転",
+    "reset": "表示をリセット",
+    "views": "カメラビュー",
+    "front": "正面",
+    "side": "側面",
+    "back": "背面",
+    "top": "上面",
+    "loading": "3Dモデルを読み込み中",
+    "editor_hint": "3Dモデルのある商品を選ぶか、.glbファイルへのリンクを貼り付けると3Dで表示されます。",
+    "position_copied": "位置をコピーしました。特徴ブロックに貼り付けてください。"
+  },
+  "routine_builder": {
+    "editor_hint": "「空欄」ブロックを追加して文章を作り始めましょう。",
+    "ready": "ルーティンが完成しました。おすすめ商品: {{ count }}点。"
+  },
   "blocks": {
     "load_video": "ビデオを読み込む: {{ description }}",
     "sold_out": "売り切れ",
@@ -25,6 +65,9 @@
       "comment": "コメント",
       "post_success": "お問い合わせいただきありがとうございます。早急に返信いたします。",
       "error_heading": "以下を確認してください。"
+    },
+    "marquee_logo": {
+      "placeholder_a11y": "ロゴのプレースホルダー"
     }
   },
   "accessibility": {
@@ -69,7 +112,19 @@
     "increase_quantity": "数量を増やす",
     "quantity": "数量",
     "rating": "この商品の評価は、5段階中{{ rating }}です",
-    "nested_product": "{{ parent_title }}向けの{{ product_title }}"
+    "nested_product": "{{ parent_title }}向けの{{ product_title }}",
+    "announcement_bar_link": "詳細はこちら",
+    "back_to_top": "トップへ戻る",
+    "quick_view_loading": "商品を読み込み中",
+    "before_after_after_alt": "アフター画像",
+    "before_after_before_alt": "ビフォー画像",
+    "before_after_before_visible": "ビフォー画像を表示中",
+    "before_after_comparison": "ビフォー・アフター画像の比較",
+    "before_after_slider": "比較スライダー",
+    "before_after_slider_help": "左右の矢印キーでビフォー画像とアフター画像を比較できます。",
+    "faq_collapse_answer": "回答を閉じる",
+    "faq_expand_answer": "回答を開く",
+    "faq_split_gallery": "よくある質問"
   },
   "actions": {
     "add_to_cart": "カートに追加",
@@ -242,7 +297,11 @@
       "previous": "前へ",
       "next": "次へ",
       "page": "{{ page }}ページ"
-    }
+    },
+    "read_more_link": "続きを読む",
+    "quick_view": "クイックビュー",
+    "view_full_details": "詳細をすべて表示",
+    "view_item": "商品を見る"
   },
   "gift_cards": {
     "issued": {
@@ -307,5 +366,29 @@
       "success_moderated": "コメントを投稿しました。承認待ちです",
       "success": "コメントを投稿しました"
     }
+  },
+  "sections": {
+    "footer": {
+      "all_rights_reserved": "All rights reserved."
+    },
+    "image_text_collage": {
+      "section_aria_label": "画像とテキストのコラージュ"
+    },
+    "new_arrivals_showcase": {
+      "no_tabs": "商品を表示するには、コレクションタブを1つ以上追加してください。"
+    },
+    "icon_with_text": {
+      "empty": "コンテンツを表示するには、アイコンブロックを追加してください。",
+      "section_aria_label": "ストアの特長"
+    },
+    "beauty_bundle": {
+      "add_bundle": "セットをカートに追加",
+      "adding": "追加中…",
+      "added": "カートに追加しました",
+      "error": "問題が発生しました。もう一度お試しください。"
+    }
+  },
+  "search": {
+    "no_results": "結果が見つかりません"
   }
 }

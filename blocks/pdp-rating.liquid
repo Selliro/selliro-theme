@@ -1,0 +1,123 @@
+{%- doc -%}
+  Rating line — stars, score and review count. Uses the product's review metafield
+  (reviews.rating / reviews.rating_count, filled by most review apps) and falls back to the block's values.
+{%- enddoc -%}
+{%- liquid
+  assign rating = block.settings.rating | default: 4.8
+  assign count = block.settings.count
+  if block.settings.use_metafield and closest.product.metafields.reviews.rating.value != blank
+    assign rating = closest.product.metafields.reviews.rating.value.rating | round: 1
+    assign count = closest.product.metafields.reviews.rating_count.value
+  endif
+  assign rating_pct = rating | times: 20
+-%}
+<a
+  class="pdp-rating"
+  href="{{ block.settings.link | default: '#reviews' }}"
+  style="--pdp-star: {{ block.settings.star_color | default: '#e6b800' }}; --pdp-rating: {{ rating_pct }}%;"
+  {{ block.shopify_attributes }}
+>
+  <span class="pdp-rating__stars" aria-hidden="true">
+    <span class="pdp-rating__stars-fill">★★★★★</span>★★★★★
+  </span>
+  <span class="pdp-rating__score">{{ rating }}</span>
+  {%- if count != blank -%}
+    <span class="pdp-rating__count">({{ count }} {{ block.settings.count_label | escape }})</span>
+  {%- endif -%}
+  <span class="visually-hidden">{{ rating }} / 5</span>
+</a>
+
+{% stylesheet %}
+  .pdp-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.8125rem;
+    color: var(--color-foreground);
+    text-decoration: none;
+    width: fit-content;
+  }
+
+  .pdp-rating__stars {
+    position: relative;
+    display: inline-block;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    color: color-mix(in srgb, var(--color-foreground) 18%, transparent);
+  }
+
+  .pdp-rating__stars-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--pdp-rating);
+    overflow: hidden;
+    white-space: nowrap;
+    color: var(--pdp-star);
+  }
+
+  .pdp-rating__score {
+    font-weight: 600;
+  }
+
+  .pdp-rating__count {
+    color: color-mix(in srgb, var(--color-foreground) 65%, transparent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in srgb, var(--color-foreground) 30%, transparent);
+  }
+
+  .pdp-rating:hover .pdp-rating__count {
+    color: var(--color-foreground);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Rating",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "use_metafield",
+      "label": "Use review app rating when available",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "rating",
+      "label": "Rating",
+      "min": 1,
+      "max": 5,
+      "step": 0.1,
+      "default": 4.8
+    },
+    {
+      "type": "text",
+      "id": "count",
+      "label": "Review count",
+      "default": "1,240"
+    },
+    {
+      "type": "text",
+      "id": "count_label",
+      "label": "Count label",
+      "default": "reviews"
+    },
+    {
+      "type": "text",
+      "id": "link",
+      "label": "Link",
+      "info": "Where the rating scrolls to, e.g. #reviews",
+      "default": "#reviews"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#e6b800"
+    }
+  ],
+  "presets": [{ "name": "Rating" }]
+}
+{% endschema %}

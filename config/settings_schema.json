@@ -1,9 +1,9 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Horizon",
-    "theme_version": "3.1.0",
-    "theme_author": "Shopify",
+    "theme_name": "Whispo",
+    "theme_version": "1.0.0",
+    "theme_author": "Selliro",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
   },
@@ -53,6 +53,35 @@
         "type": "image_picker",
         "id": "favicon",
         "label": "t:settings.favicon"
+      }
+    ]
+  },
+  {
+    "name": "t:content.social_media",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "t:names.social_media_links"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook_link",
+        "label": "t:settings.social_facebook_link"
+      },
+      {
+        "type": "url",
+        "id": "social_twitter_link",
+        "label": "t:settings.social_twitter_link"
+      },
+      {
+        "type": "url",
+        "id": "social_instagram_link",
+        "label": "t:settings.social_instagram_link"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube_link",
+        "label": "t:settings.social_youtube_link"
       }
     ]
   },
@@ -1379,6 +1408,54 @@
           }
         ],
         "default": "narrow"
+      },
+      {
+        "type": "header",
+        "content": "t:section_spacing.header"
+      },
+      {
+        "type": "select",
+        "id": "section_spacing_mode",
+        "label": "t:section_spacing.mode",
+        "info": "t:section_spacing.mode_info",
+        "options": [
+          { "value": "uniform", "label": "t:section_spacing.uniform" },
+          { "value": "custom", "label": "t:section_spacing.custom" }
+        ],
+        "default": "uniform"
+      },
+      {
+        "type": "range",
+        "id": "section_spacing_desktop",
+        "label": "t:section_spacing.desktop",
+        "min": 0,
+        "max": 200,
+        "step": 4,
+        "unit": "px",
+        "default": 96,
+        "visible_if": "{{ settings.section_spacing_mode == 'uniform' }}"
+      },
+      {
+        "type": "range",
+        "id": "section_spacing_mobile",
+        "label": "t:section_spacing.mobile",
+        "min": 0,
+        "max": 160,
+        "step": 4,
+        "unit": "px",
+        "default": 56,
+        "visible_if": "{{ settings.section_spacing_mode == 'uniform' }}"
+      },
+      {
+        "type": "select",
+        "id": "section_spacing_scope",
+        "label": "t:section_spacing.scope",
+        "options": [
+          { "value": "home", "label": "t:section_spacing.scope_home" },
+          { "value": "all", "label": "t:section_spacing.scope_all" }
+        ],
+        "default": "home",
+        "visible_if": "{{ settings.section_spacing_mode == 'uniform' }}"
       }
     ]
   },
@@ -1389,6 +1466,30 @@
         "type": "checkbox",
         "id": "page_transition_enabled",
         "label": "t:settings.page_transition_enabled",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Page effects"
+      },
+      {
+        "type": "checkbox",
+        "id": "custom_cursor_enabled",
+        "label": "Custom cursor",
+        "info": "Only shown on devices with a mouse.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "back_to_top_enabled",
+        "label": "Back to top button with scroll progress",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "bottom_blur_enabled",
+        "label": "Blur bottom edge of screen",
+        "info": "Adds a frosted fade over content at the bottom of the viewport.",
         "default": true
       },
       {
@@ -1528,6 +1629,19 @@
   {
     "name": "t:names.buttons",
     "settings": [
+      {
+        "type": "select",
+        "id": "button_hover_effect",
+        "label": "t:button_fx.label",
+        "info": "t:button_fx.info",
+        "options": [
+          { "value": "lift-shine", "label": "t:button_fx.lift_shine" },
+          { "value": "fill", "label": "t:button_fx.fill" },
+          { "value": "lift", "label": "t:button_fx.lift" },
+          { "value": "none", "label": "t:button_fx.none" }
+        ],
+        "default": "lift-shine"
+      },
       {
         "type": "header",
         "content": "t:options.button_primary"
@@ -1725,6 +1839,74 @@
         "label": "t:settings.auto_open_cart_drawer",
         "default": false,
         "visible_if": "{{ settings.cart_type == 'drawer' }}"
+      },
+      {
+        "type": "select",
+        "id": "cart_fly_style",
+        "label": "Add to cart animation",
+        "info": "A small dot or the product image flies from the button to the cart icon. Switch it off in Animations › Add to cart.",
+        "options": [
+          {
+            "value": "dot",
+            "label": "Dot"
+          },
+          {
+            "value": "image",
+            "label": "Product image"
+          }
+        ],
+        "default": "dot",
+        "visible_if": "{{ settings.add_to_cart_animation }}"
+      },
+      {
+        "type": "header",
+        "content": "Cart drawer extras"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_free_shipping_enable",
+        "label": "Show free shipping progress",
+        "default": true,
+        "visible_if": "{{ settings.cart_type == 'drawer' }}"
+      },
+      {
+        "type": "number",
+        "id": "cart_free_shipping_threshold",
+        "label": "Free shipping from",
+        "info": "Order amount in your store's default currency. Match it to your shipping rates.",
+        "default": 50,
+        "visible_if": "{{ settings.cart_type == 'drawer' and settings.cart_free_shipping_enable }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_recommendations_enable",
+        "label": "Show product recommendations",
+        "info": "Uses Shopify's recommendations for the products in the cart.",
+        "default": true,
+        "visible_if": "{{ settings.cart_type == 'drawer' }}"
+      },
+      {
+        "type": "text",
+        "id": "cart_recommendations_heading",
+        "label": "Recommendations heading",
+        "default": "You may also like",
+        "visible_if": "{{ settings.cart_type == 'drawer' and settings.cart_recommendations_enable }}"
+      },
+      {
+        "type": "collection",
+        "id": "cart_recommendations_collection",
+        "label": "Fallback products",
+        "info": "Shown in an empty cart and when Shopify has no recommendations yet. Defaults to all products."
+      },
+      {
+        "type": "range",
+        "id": "cart_recommendations_limit",
+        "label": "Products to show",
+        "min": 2,
+        "max": 10,
+        "step": 1,
+        "default": 6,
+        "visible_if": "{{ settings.cart_type == 'drawer' and settings.cart_recommendations_enable }}"
       },
       {
         "type": "header",
@@ -2114,6 +2296,26 @@
         "id": "empty_state_collection",
         "label": "t:settings.empty_state_collection",
         "info": "t:settings.empty_state_collection_info"
+      },
+      {
+        "type": "text",
+        "id": "search_popular_terms",
+        "label": "Popular searches",
+        "info": "Shown as quick chips in the search pop-up and on the search page. Separate with commas.",
+        "default": "Serum, Moisturizer, Sunscreen, Lipstick, Toner"
+      },
+      {
+        "type": "checkbox",
+        "id": "search_recent_enabled",
+        "label": "Show recent searches",
+        "info": "Each shopper sees their own last searches, saved in their browser.",
+        "default": true
+      },
+      {
+        "type": "link_list",
+        "id": "search_quick_links",
+        "label": "Quick links menu",
+        "info": "Optional menu shown in the search pop-up before shoppers type."
       },
       {
         "type": "header",

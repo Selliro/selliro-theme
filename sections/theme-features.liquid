@@ -1,0 +1,1527 @@
+{%- comment -%}
+  Theme features — a showcase / directory of what the theme can do.
+  · Hero: eyebrow, heading (one word can be highlighted), text, headline numbers, two buttons.
+  · Finder: category chips (with counts) and a live search; the result count updates as you filter.
+  · Feature cards: screenshot, category, badge (New / Unique / Popular / Built-in), title, text, up to three
+    highlights and a "See it live" link. Cards can be wide (two columns) to spotlight signature features.
+  · Closing call to action.
+  Blocks: stat, feature.   Files: assets/theme-features.js (+ shared assets/section-reveal.*)
+{%- endcomment -%}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
+<script src="{{ 'theme-features.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign stats = section.blocks | where: 'type', 'stat'
+  assign features = section.blocks | where: 'type', 'feature'
+  assign category_values = 'homepage,merchandising,product,storytelling,interactive,b2b,global' | split: ','
+  assign category_labels = section.settings.category_labels | newline_to_br | split: '<br />'
+
+  assign heading = section.settings.heading | escape
+  assign highlight = section.settings.highlight_word | strip | escape
+  if highlight != blank and heading contains highlight
+    assign highlight_html = '<span class="tf__hl">' | append: highlight | append: '</span>'
+    assign heading = heading | replace_first: highlight, highlight_html
+  endif
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="tf {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  data-reveal
+  style="--tf-pad-top: {{ section.settings.padding_top }}px; --tf-pad-bottom: {{ section.settings.padding_bottom }}px; --tf-accent: {{ section.settings.accent_color | default: '#f8d12f' }}; --tf-card: {{ section.settings.card_color | default: '#ffffff' }}; --tf-radius: {{ section.settings.radius }}px;"
+>
+  {%- comment -%} ======================================================== hero {%- endcomment -%}
+  {%- liquid
+    assign has_hero = false
+    if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.text != blank or section.settings.button_label_1 != blank or section.settings.button_label_2 != blank or stats.size > 0
+      assign has_hero = true
+    endif
+  -%}
+  {%- liquid
+    assign hero_style = section.settings.hero_style | default: 'centered'
+    assign hero_image = section.settings.hero_image
+    if hero_style != 'centered' and hero_image == blank and hero_style == 'background'
+      assign hero_style = 'banner'
+    endif
+    assign banner_dark = true
+    if section.settings.banner_color != blank
+      assign banner_brightness = section.settings.banner_color | color_brightness
+      if banner_brightness > 150
+        assign banner_dark = false
+      endif
+    endif
+  -%}
+  {%- capture hero_copy -%}
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="tf__eyebrow" data-reveal-fade="first">
+        <span class="tf__eyebrow-dot" aria-hidden="true"></span>
+        {{- section.settings.eyebrow | escape -}}
+      </p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h1 class="tf__heading" data-reveal-title>{{ heading }}</h1>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="tf__intro rte" data-reveal-fade>{{ section.settings.text }}</div>
+    {%- endif -%}
+
+    {%- if section.settings.button_label_1 != blank or section.settings.button_label_2 != blank -%}
+      <div class="tf__buttons" data-reveal-fade>
+        {%- if section.settings.button_label_1 != blank -%}
+          <a class="button tf__btn tf__btn--primary" href="{{ section.settings.button_link_1 | default: '#tf-finder' }}">
+            {{- section.settings.button_label_1 | escape -}}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if section.settings.button_label_2 != blank -%}
+          <a class="button-secondary tf__btn tf__btn--ghost" href="{{ section.settings.button_link_2 | default: routes.root_url }}">{{ section.settings.button_label_2 | escape }}</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- if has_hero or hero_image != blank -%}
+  <header class="tf__hero tf__hero--{{ hero_style }}">
+    {%- if hero_style == 'centered' -%}
+      {{ hero_copy }}
+      {%- if hero_image != blank -%}
+        <div class="tf__hero-media" data-reveal-rise>
+          {{ hero_image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '800, 1200, 1600, 2000, 2400', sizes: '(min-width: 1200px) 1100px, 100vw', class: 'tf__hero-img', alt: hero_image.alt | default: section.settings.heading }}
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div
+        class="tf__banner tf__banner--media-{{ section.settings.banner_media_position }}{% if banner_dark %} tf__banner--dark{% else %} tf__banner--light{% endif %}"
+        style="{% if section.settings.banner_color != blank %}--tf-banner: {{ section.settings.banner_color }};{% endif %} --tf-overlay: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"
+        data-reveal-rise
+      >
+        {%- if hero_style == 'background' -%}
+          <div class="tf__banner-bg" aria-hidden="true">
+            {{ hero_image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '800, 1200, 1600, 2000, 2400', sizes: '100vw', alt: '' }}
+          </div>
+        {%- else -%}
+          <span class="tf__banner-glow" aria-hidden="true"></span>
+        {%- endif -%}
+        <div class="tf__banner-copy">{{ hero_copy }}</div>
+        {%- if hero_style == 'banner' and hero_image != blank -%}
+          <div class="tf__banner-media">
+            {{ hero_image | image_url: width: 2000 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600, 900, 1200, 1600, 2000', sizes: '(min-width: 990px) 55vw, 100vw', class: 'tf__banner-img', alt: hero_image.alt | default: section.settings.heading }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if stats.size > 0 -%}
+      <dl class="tf__stats" data-reveal-fade style="--tf-stats: {{ stats.size }};">
+        {%- for block in stats -%}
+          <div class="tf__stat" {{ block.shopify_attributes }}>
+            <dt class="tf__stat-label">{{ block.settings.label | escape }}</dt>
+            <dd class="tf__stat-value">{{ block.settings.value | escape }}</dd>
+          </div>
+        {%- endfor -%}
+      </dl>
+    {%- endif -%}
+  </header>
+  {%- endif -%}
+
+  {%- comment -%} ======================================================== finder {%- endcomment -%}
+  {%- if features.size > 0 or request.design_mode -%}
+  <theme-features class="tf__finder" id="tf-finder" data-empty-text="{{ section.settings.empty_text | escape }}" data-count-text="{{ section.settings.count_text | escape }}">
+    <div class="tf__toolbar">
+      <div class="tf__chips" role="toolbar" aria-label="{{ section.settings.filter_label | escape }}">
+        <button type="button" class="tf__chip is-active" data-tf-filter="all" aria-pressed="true">
+          {{- section.settings.all_label | escape -}}
+          <span class="tf__chip-count">{{ features.size }}</span>
+        </button>
+        {%- for value in category_values -%}
+          {%- assign in_cat = 0 -%}
+          {%- for f in features -%}
+            {%- if f.settings.category == value -%}{%- assign in_cat = in_cat | plus: 1 -%}{%- endif -%}
+          {%- endfor -%}
+          {%- if in_cat > 0 -%}
+            {%- assign label = category_labels[forloop.index0] | strip | default: value -%}
+            <button type="button" class="tf__chip" data-tf-filter="{{ value }}" aria-pressed="false">
+              {{- label | escape -}}
+              <span class="tf__chip-count">{{ in_cat }}</span>
+            </button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <label class="tf__search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span class="visually-hidden">{{ section.settings.search_placeholder | escape }}</span>
+        <input type="search" class="tf__search-input" placeholder="{{ section.settings.search_placeholder | escape }}" autocomplete="off" data-tf-search>
+      </label>
+    </div>
+    <p class="tf__count" data-tf-count aria-live="polite"></p>
+
+    {%- if features.size == 0 -%}
+      <p class="tf__empty">Add feature blocks to build the showcase.</p>
+    {%- endif -%}
+
+    <ul class="tf__grid" role="list" data-tf-grid>
+      {%- for block in features -%}
+        {%- liquid
+          assign cat_index = 0
+          for value in category_values
+            if value == block.settings.category
+              assign cat_index = forloop.index0
+            endif
+          endfor
+          assign cat_label = category_labels[cat_index] | strip | default: block.settings.category
+          assign lines = block.settings.highlights | newline_to_br | split: '<br />'
+          assign search_text = block.settings.title | append: ' ' | append: block.settings.text | append: ' ' | append: block.settings.highlights | append: ' ' | append: cat_label | downcase | strip_newlines | escape
+        -%}
+        <li
+          class="tf__card{% if block.settings.size == 'wide' %} tf__card--wide{% endif %}"
+          data-tf-card
+          data-category="{{ block.settings.category }}"
+          data-search="{{ search_text }}"
+          data-reveal-card
+          {{ block.shopify_attributes }}
+        >
+          <a class="tf__card-link" href="{{ block.settings.link | default: '#' }}"{% if block.settings.link == blank %} tabindex="-1" aria-hidden="true"{% endif %}>
+            <span class="visually-hidden">{{ block.settings.title | escape }}</span>
+          </a>
+          <div class="tf__media">
+            {%- if block.settings.image != blank -%}
+              {%- if block.settings.size == 'wide' -%}
+                {{ block.settings.image | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '500, 800, 1100, 1400', sizes: '(min-width: 990px) 66vw, 100vw', class: 'tf__img', alt: block.settings.image.alt | default: block.settings.title }}
+              {%- else -%}
+                {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '400, 600, 900', sizes: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw', class: 'tf__img', alt: block.settings.image.alt | default: block.settings.title }}
+              {%- endif -%}
+            {%- else -%}
+              {{ 'image' | placeholder_svg_tag: 'tf__placeholder' }}
+            {%- endif -%}
+            <span class="tf__tag">{{ cat_label | escape }}</span>
+            {%- if block.settings.badge != 'none' -%}
+              <span class="tf__badge tf__badge--{{ block.settings.badge }}">
+                {%- case block.settings.badge -%}
+                  {%- when 'new' -%}{{ section.settings.badge_new | escape }}
+                  {%- when 'unique' -%}{{ section.settings.badge_unique | escape }}
+                  {%- when 'popular' -%}{{ section.settings.badge_popular | escape }}
+                  {%- when 'builtin' -%}{{ section.settings.badge_builtin | escape }}
+                {%- endcase -%}
+              </span>
+            {%- endif -%}
+          </div>
+          <div class="tf__body">
+            {%- if block.settings.title != blank -%}
+              <h3 class="tf__title">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <p class="tf__text">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+            {%- if block.settings.highlights != blank -%}
+              <ul class="tf__points" role="list">
+                {%- for line in lines limit: 3 -%}
+                  {%- assign line = line | strip -%}
+                  {%- if line != blank -%}
+                    <li>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      {{ line | escape }}
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+            {%- if block.settings.link != blank and section.settings.link_label != blank -%}
+              <span class="tf__more" aria-hidden="true">
+                {{- section.settings.link_label | escape -}}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            {%- endif -%}
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+    <p class="tf__empty" data-tf-empty hidden></p>
+  </theme-features>
+  {%- endif -%}
+
+  {%- comment -%} ======================================================== closing CTA {%- endcomment -%}
+  {%- if section.settings.cta_heading != blank -%}
+    <div class="tf__cta" data-reveal-rise>
+      <div class="tf__cta-copy">
+        <h2 class="tf__cta-heading">{{ section.settings.cta_heading | escape }}</h2>
+        {%- if section.settings.cta_text != blank -%}
+          <p class="tf__cta-text">{{ section.settings.cta_text | escape }}</p>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.cta_label != blank -%}
+        <a class="tf__cta-btn" href="{{ section.settings.cta_link | default: routes.root_url }}">
+          {{- section.settings.cta_label | escape -}}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{% stylesheet %}
+  .tf {
+    --tf-line: color-mix(in srgb, var(--color-foreground) 11%, transparent);
+    --tf-soft: color-mix(in srgb, var(--color-foreground) 5%, transparent);
+    --tf-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    padding-block: var(--tf-pad-top) var(--tf-pad-bottom);
+  }
+
+  /* ---------------------------------------------------------------- hero */
+  .tf__hero {
+    display: grid;
+    justify-items: center;
+    max-width: 52rem;
+    margin: 0 auto clamp(2.5rem, 6vw, 4.5rem);
+    text-align: center;
+  }
+
+  .tf__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin: 0 0 1.1rem;
+    padding: 0.45rem 0.95rem;
+    border: 1px solid var(--tf-line);
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .tf__eyebrow-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--tf-accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--tf-accent) 30%, transparent);
+  }
+
+  .tf__heading {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    font-weight: var(--section-title-weight, 600);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  .tf__hl {
+    position: relative;
+    display: inline-block;
+    z-index: 0;
+  }
+
+  .tf__hl::after {
+    content: '';
+    position: absolute;
+    inset: 58% -0.08em 0.06em;
+    z-index: -1;
+    border-radius: 0.2em;
+    background: var(--tf-accent);
+    transform: skewX(-8deg);
+  }
+
+  .tf__intro {
+    max-width: 38rem;
+    margin-top: 1.1rem;
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+    opacity: 0.75;
+  }
+
+  .tf__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+
+  .tf__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .tf__stats {
+    display: grid;
+    grid-template-columns: repeat(var(--tf-stats, 4), minmax(0, 1fr));
+    gap: 0;
+    width: 100%;
+    margin: clamp(2rem, 4vw, 3rem) 0 0;
+    border: 1px solid var(--tf-line);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .tf__stat {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.2rem;
+    margin: 0;
+    padding: 1.1rem 0.75rem;
+  }
+
+  .tf__stat + .tf__stat {
+    border-inline-start: 1px solid var(--tf-line);
+  }
+
+  .tf__stat-value {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.6rem, 3vw, 2.25rem);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .tf__stat-label {
+    font-size: 0.8rem;
+    opacity: 0.65;
+  }
+
+
+  /* ---------------------------------------------------------------- hero image (centered style) */
+  .tf__hero-media {
+    width: 100%;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+
+  .tf__hero-img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* ---------------------------------------------------------------- banner hero */
+  .tf__hero--banner,
+  .tf__hero--background {
+    max-width: none;
+    justify-items: stretch;
+    text-align: start;
+  }
+
+  .tf__banner {
+    --tf-banner: #161616;
+    --tf-banner-pad: clamp(1.75rem, 5vw, 4.5rem);
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    min-height: clamp(26rem, 44vw, 38rem);
+    padding: var(--tf-banner-pad);
+    padding-bottom: 0;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: calc(var(--tf-radius) + 10px);
+    background: var(--tf-banner);
+  }
+
+  .tf__banner--dark {
+    color: #fff;
+  }
+
+  .tf__banner--light {
+    color: #161616;
+  }
+
+  .tf__banner-glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(55% 70% at 85% 30%, color-mix(in srgb, var(--tf-accent) 38%, transparent), transparent 70%),
+      radial-gradient(40% 50% at 0% 100%, color-mix(in srgb, var(--tf-accent) 18%, transparent), transparent 70%);
+    pointer-events: none;
+  }
+
+  .tf__banner-copy {
+    position: relative;
+    align-self: center;
+    padding-bottom: var(--tf-banner-pad);
+  }
+
+  .tf__banner .tf__eyebrow {
+    border-color: currentColor;
+    border-color: color-mix(in srgb, currentColor 30%, transparent);
+  }
+
+  .tf__banner .tf__heading {
+    color: inherit;
+    font-size: clamp(2.2rem, 4.6vw, 4rem);
+  }
+
+  .tf__banner .tf__hl::after {
+    opacity: 0.95;
+  }
+
+  /* On dark banners the highlighted words take the accent color over a slim underline (a half-height bar
+     behind dark text would leave the top of the letters unreadable) */
+  .tf__banner--dark .tf__hl {
+    color: var(--tf-accent);
+  }
+
+  .tf__banner--dark .tf__hl::after,
+  .tf__hero--background .tf__hl::after {
+    inset: auto -0.02em -0.02em;
+    height: 0.09em;
+    border-radius: 999px;
+    transform: none;
+  }
+
+  .tf__hero--background .tf__hl {
+    color: var(--tf-accent);
+  }
+
+  .tf__banner .tf__intro {
+    margin-inline: 0;
+    opacity: 0.8;
+  }
+
+  .tf__banner .tf__buttons {
+    justify-content: flex-start;
+  }
+
+  .tf__banner--dark .tf__btn--primary {
+    --button-background-color: var(--tf-accent);
+    --button-border-color: var(--tf-accent);
+    --button-color: #111;
+  }
+
+  .tf__banner--dark .tf__btn--ghost {
+    --button-color: #fff;
+    --button-background-color: transparent;
+    --button-border-color: rgb(255 255 255 / 0.55);
+    border: 1px solid rgb(255 255 255 / 0.55);
+  }
+
+  .tf__banner--dark .tf__btn--ghost:hover {
+    --button-background-color: rgb(255 255 255 / 0.12);
+  }
+
+  /* The image rises from the bottom edge of the banner */
+  .tf__banner-media {
+    position: relative;
+    align-self: end;
+    margin-right: calc(var(--tf-banner-pad) * -0.6);
+  }
+
+  .tf__banner-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    translate: 0 4%;
+    filter: drop-shadow(0 30px 50px rgb(0 0 0 / 0.35));
+    animation: tf-rise 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .tf__banner--media-left {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+
+  .tf__banner--media-left .tf__banner-media {
+    order: -1;
+    margin-right: 0;
+    margin-left: calc(var(--tf-banner-pad) * -0.6);
+  }
+
+  /* Background image style */
+  .tf__hero--background .tf__banner {
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 0.25fr);
+    padding-bottom: var(--tf-banner-pad);
+    color: #fff;
+  }
+
+  .tf__hero--background .tf__banner-copy {
+    padding-bottom: 0;
+  }
+
+  .tf__banner-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .tf__banner-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .tf__banner-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgb(0 0 0 / var(--tf-overlay, 0.55)) 0%, rgb(0 0 0 / calc(var(--tf-overlay, 0.55) * 0.35)) 70%, transparent 100%);
+  }
+
+  .tf__hero--background .tf__btn--primary {
+    --button-background-color: var(--tf-accent);
+    --button-border-color: var(--tf-accent);
+    --button-color: #111;
+  }
+
+  .tf__hero--background .tf__btn--ghost {
+    --button-color: #fff;
+    --button-background-color: transparent;
+    --button-border-color: rgb(255 255 255 / 0.6);
+    border: 1px solid rgb(255 255 255 / 0.6);
+  }
+
+  /* Numbers sit in a row just under the banner */
+  .tf__hero--banner .tf__stats,
+  .tf__hero--background .tf__stats {
+    width: min(100%, 60rem);
+    margin: clamp(1.25rem, 2.5vw, 2rem) auto 0;
+    background: var(--color-background);
+    text-align: center;
+  }
+
+  @keyframes tf-rise {
+    from {
+      opacity: 0;
+      translate: 0 14%;
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    .tf__banner,
+    .tf__banner--media-left,
+    .tf__hero--background .tf__banner {
+      grid-template-columns: minmax(0, 1fr);
+      min-height: 0;
+      text-align: center;
+    }
+
+    .tf__banner .tf__buttons {
+      justify-content: center;
+    }
+
+    .tf__banner .tf__intro {
+      margin-inline: auto;
+    }
+
+    .tf__banner-copy {
+      padding-bottom: 0;
+      justify-self: center;
+      max-width: 40rem;
+    }
+
+    .tf__banner-media,
+    .tf__banner--media-left .tf__banner-media {
+      order: 2;
+      margin: 0 calc(var(--tf-banner-pad) * -0.4);
+    }
+
+    .tf__hero--background .tf__banner {
+      padding-block: clamp(3rem, 12vw, 5rem);
+    }
+
+    .tf__banner-bg::after {
+      background: rgb(0 0 0 / var(--tf-overlay, 0.55));
+    }
+  }
+
+
+  @media (prefers-reduced-motion: reduce) {
+    .tf__banner-img {
+      animation: none;
+    }
+  }
+
+  /* ---------------------------------------------------------------- toolbar */
+  .tf__finder {
+    display: block;
+    scroll-margin-top: calc(var(--header-height, 72px) + 16px);
+  }
+
+  .tf__toolbar {
+    position: sticky;
+    top: calc(var(--header-height, 0px) + 0.5rem);
+    z-index: 3;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    padding: 0.6rem;
+    border: 1px solid var(--tf-line);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-background) 88%, transparent);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 14px 36px -28px rgb(0 0 0 / 0.45);
+  }
+
+  .tf__chips {
+    display: flex;
+    gap: 0.35rem;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tf__chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tf__chip {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.6rem;
+    padding: 0 1rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.25s, color 0.25s;
+  }
+
+  .tf__chip:hover {
+    background: var(--tf-soft);
+  }
+
+  .tf__chip.is-active {
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .tf__chip-count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding: 0 0.4rem;
+    border-radius: 999px;
+    background: var(--tf-soft);
+    font-size: 0.72rem;
+  }
+
+  .tf__chip.is-active .tf__chip-count {
+    background: var(--tf-accent);
+    color: #111;
+  }
+
+  .tf__search {
+    position: relative;
+    display: flex;
+    flex: 0 1 17rem;
+    align-items: center;
+    min-width: 12rem;
+  }
+
+  .tf__search svg {
+    position: absolute;
+    left: 0.9rem;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .tf__search-input {
+    width: 100%;
+    min-height: 2.6rem;
+    padding: 0 1rem 0 2.6rem;
+    border: 1px solid var(--tf-line);
+    border-radius: 999px;
+    background: var(--color-background);
+    color: inherit;
+    font: inherit;
+    font-size: 0.9375rem;
+  }
+
+  .tf__search-input:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 1px;
+  }
+
+  .tf__count {
+    margin: 1.1rem 0 1.25rem;
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+
+  /* ---------------------------------------------------------------- grid */
+  .tf__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-flow: dense;
+    gap: clamp(1rem, 2vw, 1.5rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tf__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--tf-line);
+    border-radius: var(--tf-radius);
+    background: var(--tf-card);
+    color: #161616;
+    transition: translate 0.45s var(--tf-ease), box-shadow 0.45s var(--tf-ease), border-color 0.3s;
+  }
+
+  .tf__card[hidden] {
+    display: none;
+  }
+
+  .tf__card.is-entering {
+    animation: tf-in 0.45s var(--tf-ease) both;
+  }
+
+  .tf__card-link {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  .tf__card-link:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: -2px;
+    border-radius: var(--tf-radius);
+  }
+
+  @media (hover: hover) {
+    .tf__card:hover {
+      translate: 0 -4px;
+      border-color: rgb(0 0 0 / 0.16);
+      box-shadow: 0 26px 50px -34px rgb(0 0 0 / 0.45);
+    }
+
+    .tf__card:hover .tf__img {
+      scale: 1.04;
+    }
+
+    .tf__card:hover .tf__more svg {
+      translate: 4px 0;
+    }
+  }
+
+  .tf__media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-bottom: 1px solid rgb(0 0 0 / 0.06);
+    background: #f3efe7;
+  }
+
+  .tf__img,
+  .tf__placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transition: scale 0.9s var(--tf-ease);
+  }
+
+  .tf__placeholder {
+    fill: rgb(0 0 0 / 0.25);
+  }
+
+  .tf__tag,
+  .tf__badge {
+    position: absolute;
+    top: 0.85rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .tf__tag {
+    left: 0.85rem;
+    background: rgb(255 255 255 / 0.92);
+    color: #161616;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 14px -6px rgb(0 0 0 / 0.3);
+  }
+
+  .tf__badge {
+    right: 0.85rem;
+    background: #161616;
+    color: #fff;
+  }
+
+  .tf__badge--new {
+    background: var(--tf-accent);
+    color: #111;
+  }
+
+  .tf__badge--unique {
+    background: #2b2bd9;
+    color: #fff;
+  }
+
+  .tf__badge--builtin {
+    background: #fff;
+    color: #161616;
+  }
+
+  .tf__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding: clamp(1.1rem, 2vw, 1.4rem);
+  }
+
+  .tf__title {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .tf__text {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    opacity: 0.72;
+  }
+
+  .tf__points {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.82rem;
+  }
+
+  .tf__points li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.45rem;
+  }
+
+  .tf__points svg {
+    flex: none;
+    margin-top: 0.15rem;
+    padding: 2px;
+    box-sizing: content-box;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--tf-accent) 45%, #fff);
+  }
+
+  .tf__more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: auto;
+    padding-top: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .tf__more svg {
+    transition: translate 0.3s var(--tf-ease);
+  }
+
+  /* Wide card: image beside the text */
+  @media screen and (min-width: 990px) {
+    .tf__card--wide {
+      grid-column: span 2;
+      display: grid;
+      grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+    }
+
+    .tf__card--wide .tf__media {
+      aspect-ratio: auto;
+      min-height: 100%;
+      border-bottom: 0;
+      border-inline-end: 1px solid rgb(0 0 0 / 0.06);
+    }
+
+    .tf__card--wide .tf__img {
+      object-position: left top;
+    }
+
+    .tf__card--wide .tf__body {
+      justify-content: center;
+      padding: clamp(1.5rem, 2.5vw, 2.25rem);
+    }
+
+    .tf__card--wide .tf__title {
+      font-size: clamp(1.4rem, 2vw, 1.75rem);
+    }
+  }
+
+  .tf__empty {
+    padding: 3rem 1rem;
+    border: 1px dashed var(--tf-line);
+    border-radius: var(--tf-radius);
+    text-align: center;
+    opacity: 0.7;
+  }
+
+  .tf__empty[hidden] {
+    display: none;
+  }
+
+  /* ---------------------------------------------------------------- CTA */
+  .tf__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 2rem;
+    padding: clamp(1.75rem, 4vw, 3rem);
+    border-radius: calc(var(--tf-radius) + 6px);
+    background:
+      radial-gradient(60% 120% at 100% 0%, color-mix(in srgb, var(--tf-accent) 45%, transparent), transparent 60%),
+      #161616;
+    color: #fff;
+  }
+
+  .tf__finder + .tf__cta,
+  .tf__hero + .tf__cta {
+    margin-top: clamp(3rem, 7vw, 5rem);
+  }
+
+  .tf__cta-copy {
+    max-width: 38rem;
+  }
+
+  .tf__cta-heading {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+    font-weight: 600;
+    line-height: 1.1;
+    color: #fff;
+  }
+
+  .tf__cta-text {
+    margin: 0.75rem 0 0;
+    opacity: 0.75;
+  }
+
+  .tf__cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 3.25rem;
+    padding: 0 1.75rem;
+    border-radius: 999px;
+    background: var(--tf-accent);
+    color: #111;
+    font-weight: 700;
+    text-decoration: none;
+    transition: translate 0.3s var(--tf-ease), box-shadow 0.3s;
+  }
+
+  .tf__cta-btn:hover {
+    translate: 0 -2px;
+    box-shadow: 0 16px 30px -18px color-mix(in srgb, var(--tf-accent) 80%, #000);
+  }
+
+  /* ---------------------------------------------------------------- responsive */
+  /* Desktop: chips and search share one row; the chips scroll sideways if they run out of room */
+  @media screen and (min-width: 990px) {
+    .tf__toolbar {
+      flex-wrap: nowrap;
+    }
+
+    .tf__chips {
+      flex: 1 1 auto;
+    }
+
+    .tf__search {
+      flex: 0 0 15rem;
+      min-width: 0;
+    }
+  }
+
+  @media screen and (max-width: 989px) {
+    .tf__toolbar {
+      border-radius: 24px;
+    }
+
+    .tf__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tf__card--wide {
+      grid-column: span 2;
+    }
+
+    .tf__card--wide .tf__media {
+      aspect-ratio: 16 / 8;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .tf__stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tf__stat:nth-child(3) {
+      border-inline-start: 0;
+    }
+
+    .tf__stat:nth-child(n + 3) {
+      border-top: 1px solid var(--tf-line);
+    }
+
+    .tf__toolbar {
+      position: static;
+      border-radius: 22px;
+    }
+
+    .tf__chips {
+      width: 100%;
+    }
+
+    .tf__search {
+      flex: 1 1 100%;
+    }
+
+    .tf__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .tf__card--wide {
+      grid-column: auto;
+    }
+
+    .tf__card--wide .tf__media {
+      aspect-ratio: 16 / 10;
+    }
+
+    .tf__cta-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  @keyframes tf-in {
+    from {
+      opacity: 0;
+      translate: 0 14px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tf__card,
+    .tf__img,
+    .tf__card.is-entering {
+      animation: none;
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Theme features",
+  "tag": "div",
+  "class": "tf-section",
+  "max_blocks": 50,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "select",
+      "id": "hero_style",
+      "label": "Hero style",
+      "options": [
+        {
+          "value": "centered",
+          "label": "Centered"
+        },
+        {
+          "value": "banner",
+          "label": "Banner with image"
+        },
+        {
+          "value": "background",
+          "label": "Background image"
+        }
+      ],
+      "default": "centered",
+      "info": "Banner with image: text beside the image on a colored banner. Background image: the image fills the banner."
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image",
+      "info": "A transparent PNG (e.g. device mockups) works best for \"Banner with image\"."
+    },
+    {
+      "type": "select",
+      "id": "banner_media_position",
+      "label": "Image position",
+      "options": [
+        {
+          "value": "right",
+          "label": "Right"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ],
+      "default": "right",
+      "visible_if": "{{ section.settings.hero_style == 'banner' }}"
+    },
+    {
+      "type": "color",
+      "id": "banner_color",
+      "label": "Banner color",
+      "default": "#161616",
+      "info": "Text turns white on dark colors.",
+      "visible_if": "{{ section.settings.hero_style == 'banner' }}"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Image overlay",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 55,
+      "visible_if": "{{ section.settings.hero_style == 'background' }}"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Theme features"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Everything your store needs to sell more"
+    },
+    {
+      "type": "text",
+      "id": "highlight_word",
+      "label": "Highlighted words",
+      "default": "sell more",
+      "info": "Part of the heading to underline with the accent color."
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Explore every section, block and tool built into the theme.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label_1",
+      "label": "First button",
+      "default": "Explore features"
+    },
+    {
+      "type": "url",
+      "id": "button_link_1",
+      "label": "First button link",
+      "info": "Leave empty to jump to the feature finder."
+    },
+    {
+      "type": "text",
+      "id": "button_label_2",
+      "label": "Second button",
+      "default": "View the live store"
+    },
+    {
+      "type": "url",
+      "id": "button_link_2",
+      "label": "Second button link"
+    },
+    {
+      "type": "header",
+      "content": "Feature finder"
+    },
+    {
+      "type": "textarea",
+      "id": "category_labels",
+      "label": "Category names",
+      "default": "Homepage & hero\nMerchandising\nProduct page\nStorytelling\nInteractive & quizzes\nWholesale & B2B\nStore-wide",
+      "info": "One per line, in this order: homepage, merchandising, product page, storytelling, interactive, wholesale, store-wide."
+    },
+    {
+      "type": "text",
+      "id": "all_label",
+      "label": "\"All\" filter",
+      "default": "All features"
+    },
+    {
+      "type": "text",
+      "id": "filter_label",
+      "label": "Filter label (screen readers)",
+      "default": "Filter features by category"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search features"
+    },
+    {
+      "type": "text",
+      "id": "count_text",
+      "label": "Result count",
+      "default": "Showing [count] of [total] features",
+      "info": "[count] and [total] are replaced with numbers."
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "No results message",
+      "default": "No features match your search. Try another word or category."
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Card link label",
+      "default": "See it live"
+    },
+    {
+      "type": "text",
+      "id": "badge_new",
+      "label": "\"New\" badge",
+      "default": "New"
+    },
+    {
+      "type": "text",
+      "id": "badge_unique",
+      "label": "\"Unique\" badge",
+      "default": "Unique"
+    },
+    {
+      "type": "text",
+      "id": "badge_popular",
+      "label": "\"Popular\" badge",
+      "default": "Popular"
+    },
+    {
+      "type": "text",
+      "id": "badge_builtin",
+      "label": "\"Built-in\" badge",
+      "default": "Built-in"
+    },
+    {
+      "type": "header",
+      "content": "Closing call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "Heading",
+      "default": "Ready to build your store?"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Text",
+      "default": "Every feature is editable in the theme editor: no code, no apps."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Start shopping"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#f8d12f"
+    },
+    {
+      "type": "color",
+      "id": "card_color",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Headline number",
+      "settings": [
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Number",
+          "default": "40+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "sections & blocks"
+        }
+      ]
+    },
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Screenshot"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature name"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Description",
+          "default": "What it does and why it helps you sell."
+        },
+        {
+          "type": "textarea",
+          "id": "highlights",
+          "label": "Highlights",
+          "info": "One per line. The first three are shown."
+        },
+        {
+          "type": "select",
+          "id": "category",
+          "label": "Category",
+          "options": [
+            { "value": "homepage", "label": "Homepage & hero" },
+            { "value": "merchandising", "label": "Merchandising" },
+            { "value": "product", "label": "Product page" },
+            { "value": "storytelling", "label": "Storytelling" },
+            { "value": "interactive", "label": "Interactive & quizzes" },
+            { "value": "b2b", "label": "Wholesale & B2B" },
+            { "value": "global", "label": "Store-wide" }
+          ],
+          "default": "homepage"
+        },
+        {
+          "type": "select",
+          "id": "badge",
+          "label": "Badge",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "new", "label": "New" },
+            { "value": "unique", "label": "Unique" },
+            { "value": "popular", "label": "Popular" },
+            { "value": "builtin", "label": "Built-in" }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Card size",
+          "options": [
+            { "value": "normal", "label": "Normal" },
+            { "value": "wide", "label": "Wide (spotlight)" }
+          ],
+          "default": "normal"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "\"See it live\" link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Theme features",
+      "category": "Storytelling",
+      "blocks": [
+        { "type": "stat", "settings": { "value": "40+", "label": "sections & blocks" } },
+        { "type": "stat", "settings": { "value": "30", "label": "signature features" } },
+        { "type": "stat", "settings": { "value": "0", "label": "apps needed" } },
+        { "type": "stat", "settings": { "value": "100%", "label": "editable, no code" } },
+        { "type": "feature", "settings": { "title": "Feature one", "category": "homepage", "badge": "new", "size": "wide" } },
+        { "type": "feature", "settings": { "title": "Feature two", "category": "merchandising" } },
+        { "type": "feature", "settings": { "title": "Feature three", "category": "product" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
