@@ -4439,7 +4439,6 @@ body .blur-div {
     .rb__done,
     .new-arrivals-showcase__promo-btn,
     .itc__btn:not(.itc__btn--static),
-    .custom-banner__button,
     .reveal-image__btn,
     .shop-the-look__bundle-btn,
     .before-after-slider__btn:not(.before-after-slider__btn--static),
@@ -4464,7 +4463,6 @@ body .blur-div {
     .new-arrivals-showcase__promo-btn,
     .new-arrivals-card__quick-add-btn,
     .itc__btn:not(.itc__btn--static),
-    .custom-banner__button,
     .reveal-image__btn,
     .shop-the-look__bundle-btn,
     .before-after-slider__btn:not(.before-after-slider__btn--static),
@@ -4487,7 +4485,6 @@ body .blur-div {
     .new-arrivals-showcase__promo-btn,
     .new-arrivals-card__quick-add-btn,
     .itc__btn:not(.itc__btn--static),
-    .custom-banner__button,
     .reveal-image__btn,
     .shop-the-look__bundle-btn,
     .before-after-slider__btn:not(.before-after-slider__btn--static),
@@ -4510,7 +4507,6 @@ body .blur-div {
       .new-arrivals-showcase__promo-btn:not(:disabled),
       .new-arrivals-card__quick-add-btn:not(:disabled),
       .itc__btn:not(.itc__btn--static),
-      .custom-banner__button,
       .reveal-image__btn,
       .shop-the-look__bundle-btn:not(:disabled),
       .before-after-slider__btn:not(.before-after-slider__btn--static),
@@ -4530,7 +4526,6 @@ body .blur-div {
       .new-arrivals-showcase__promo-btn:not(:disabled),
       .new-arrivals-card__quick-add-btn:not(:disabled),
       .itc__btn:not(.itc__btn--static),
-      .custom-banner__button,
       .reveal-image__btn,
       .shop-the-look__bundle-btn:not(:disabled),
       .before-after-slider__btn:not(.before-after-slider__btn--static),
@@ -4548,7 +4543,6 @@ body .blur-div {
       .rb__done,
       .new-arrivals-showcase__promo-btn:not(:disabled),
       .itc__btn:not(.itc__btn--static),
-      .custom-banner__button,
       .reveal-image__btn,
       .shop-the-look__bundle-btn:not(:disabled),
       .before-after-slider__btn:not(.before-after-slider__btn--static),
@@ -4569,7 +4563,7 @@ body .blur-div {
 
   /* Arrow / trailing icons nudge forward */
   :is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift)
-    :is(.button, .button-secondary, .rb__add-all, .itc__btn, .custom-banner__button, .reveal-image__btn):hover
+    :is(.button, .button-secondary, .rb__add-all, .itc__btn, .reveal-image__btn):hover
     > svg:last-child {
     transform: translateX(3px);
   }
@@ -4577,7 +4571,7 @@ body .blur-div {
 
 /* Keyboard users get the same feedback */
 :is(.btn-fx--lift-shine, .btn-fx--lift)
-  :is(.button:not(.button-unstyled, .menu-list__link), .button-secondary, .rb__add-all, .rb__done, .itc__btn, .custom-banner__button, .reveal-image__btn, .shop-the-look__bundle-btn):focus-visible {
+  :is(.button:not(.button-unstyled, .menu-list__link), .button-secondary, .rb__add-all, .rb__done, .itc__btn, .reveal-image__btn, .shop-the-look__bundle-btn):focus-visible {
   transform: translateY(-2px);
 }
 
@@ -4590,7 +4584,6 @@ body .blur-div {
     .rb__done,
     .new-arrivals-showcase__promo-btn:not(:disabled),
     .itc__btn:not(.itc__btn--static),
-    .custom-banner__button,
     .reveal-image__btn,
     .shop-the-look__bundle-btn:not(:disabled),
     .before-after-slider__btn:not(.before-after-slider__btn--static)
@@ -4599,13 +4592,13 @@ body .blur-div {
   transition-duration: 0.08s;
 }
 
-:is(.button, .button-secondary, .rb__add-all, .itc__btn, .custom-banner__button, .reveal-image__btn) > svg {
+:is(.button, .button-secondary, .rb__add-all, .itc__btn, .reveal-image__btn) > svg {
   transition: transform var(--btn-fx-speed, 0.35s) var(--btn-fx-ease, ease);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) :is(.button, .button-secondary, .rb__add-all, .rb__done, .itc__btn, .custom-banner__button, .reveal-image__btn, .shop-the-look__bundle-btn, .before-after-slider__btn, .mega-promo__button--accent, .new-arrivals-showcase__promo-btn, .new-arrivals-card__quick-add-btn, .vertical-rich-text-section__button),
-  :is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) :is(.button, .button-secondary, .rb__add-all, .rb__done, .itc__btn, .custom-banner__button, .reveal-image__btn, .shop-the-look__bundle-btn, .before-after-slider__btn, .mega-promo__button--accent, .new-arrivals-showcase__promo-btn, .new-arrivals-card__quick-add-btn, .vertical-rich-text-section__button):is(:hover, :active, :focus-visible) {
+  :is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) :is(.button, .button-secondary, .rb__add-all, .rb__done, .itc__btn, .reveal-image__btn, .shop-the-look__bundle-btn, .before-after-slider__btn, .mega-promo__button--accent, .new-arrivals-showcase__promo-btn, .new-arrivals-card__quick-add-btn, .vertical-rich-text-section__button),
+  :is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) :is(.button, .button-secondary, .rb__add-all, .rb__done, .itc__btn, .reveal-image__btn, .shop-the-look__bundle-btn, .before-after-slider__btn, .mega-promo__button--accent, .new-arrivals-showcase__promo-btn, .new-arrivals-card__quick-add-btn, .vertical-rich-text-section__button):is(:hover, :active, :focus-visible) {
     transform: none !important;
     background-image: none !important;
     transition-property: color, background-color, border-color, box-shadow;
@@ -4634,39 +4627,39 @@ body .blur-div {
   }
 }
 
-.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .custom-banner, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
-.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
-.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
-.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper {
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper {
   padding-top: calc(var(--ss) / 2) !important;
   padding-bottom: calc(var(--ss) / 2) !important;
 }
 
 /* After a flush banner, or at the very start/end of the page: the full gap on that side */
-.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .custom-banner, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
-.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
-.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
-.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper,
-.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .custom-banner, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
-.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
-.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
-.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper {
+.section-spacing--uniform main > .shopify-section:is(:has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
+.section-spacing--uniform main > .shopify-section:is(:has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
+.section-spacing--uniform main > .shopify-section:is(:has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
+.section-spacing--uniform main > .shopify-section:is(:has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper,
+.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
+.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
+.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
+.section-spacing--uniform main > .shopify-section:first-child:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper {
   padding-top: var(--ss) !important;
 }
-.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .custom-banner, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
-.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
-.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
-.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper {
+.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > :not(.section-background, .na-qv-drawer, .rb-floats, .itc__bg-media, .itc__pattern, .itc__tint-defs, .section, .reveal-image, .spacing-style.full-width, script, style, link, template, svg, [hidden]),
+.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > .section:not(:has(> .spacing-style, > .custom-section-content)),
+.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .spacing-style,
+.section-spacing--uniform main > .shopify-section:last-child:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) > .section > .custom-section-content > .section-content-wrapper {
   padding-bottom: var(--ss) !important;
 }
 
 /* Before a flush banner: the banner adds the other half of the gap as margin (banners stacked
    directly on each other, or at the very top, stay touching) */
-.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)):not(:first-child) {
+.section-spacing--uniform main > .shopify-section:is(:has(> .spacing-style.full-width), :has(> .reveal-image)):not(:first-child) {
   margin-top: calc(var(--ss) / 2);
 }
 
-.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) {
+.section-spacing--uniform main > .shopify-section:is(:has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:is(:has(> .spacing-style.full-width), :has(> .reveal-image)) {
   margin-top: 0;
 }
 
@@ -4674,8 +4667,8 @@ body .blur-div {
    color scheme (Slideshow → "Space above and below", 24px by default). Overrides the uniform gap, whether
    the slideshow comes first, follows a flush banner, or follows a regular section. */
 .section-spacing--uniform main > .shopify-section:has(> .ss.page-width) > .ss.page-width,
-.section-spacing--uniform main > .shopify-section:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:has(> .ss.page-width) > .ss.page-width,
-.section-spacing--uniform main > .shopify-section:not(:is(:has(> .custom-banner), :has(> .spacing-style.full-width), :has(> .reveal-image))) + .shopify-section:has(> .ss.page-width) > .ss.page-width,
+.section-spacing--uniform main > .shopify-section:is(:has(> .spacing-style.full-width), :has(> .reveal-image)) + .shopify-section:has(> .ss.page-width) > .ss.page-width,
+.section-spacing--uniform main > .shopify-section:not(:is(:has(> .spacing-style.full-width), :has(> .reveal-image))) + .shopify-section:has(> .ss.page-width) > .ss.page-width,
 .section-spacing--uniform main > .shopify-section:first-child:has(> .ss.page-width) > .ss.page-width,
 .section-spacing--uniform main > .shopify-section:last-child:has(> .ss.page-width) > .ss.page-width {
   padding-top: var(--ss-inset, 24px) !important;
