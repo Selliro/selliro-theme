@@ -455,6 +455,81 @@
   }
 }
 
+/* ── Simple gallery: every image in one column, no thumbnails (new-arrivals-quick-view.js simplifyGallery).
+   The images scroll with the drawer; the product info beside them stays in view. ── */
+.na-qv-drawer__body .product-information__media.na-qv-media--simple {
+  position: static;
+  max-height: none;
+  overflow: visible;
+}
+
+.na-qv-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.na-qv-gallery__item {
+  margin: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgb(var(--color-foreground-rgb) / 0.04);
+}
+
+.na-qv-gallery__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 48rem) {
+  .na-qv-drawer__body [data-product-grid-content]:has(.na-qv-media--simple) > .product-details {
+    position: sticky;
+    top: 0;
+  }
+}
+
+/* Phones: a swipe row of images above the info */
+@media (max-width: 47.9375rem) {
+  .na-qv-gallery {
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: -1.35rem;
+    padding-inline: 1.35rem;
+    scroll-padding-inline: 1.35rem;
+  }
+
+  .na-qv-gallery::-webkit-scrollbar {
+    display: none;
+  }
+
+  .na-qv-gallery__item {
+    flex: 0 0 78%;
+    scroll-snap-align: start;
+  }
+
+  .na-qv-gallery__item:only-child {
+    flex-basis: 100%;
+  }
+}
+
+/* ── Essentials only (new-arrivals-quick-view.js trimDetails) ── */
+/* Description: two lines, no Read more */
+.na-qv-drawer__body .pdp-read-more {
+  --pdp-clamp: 2 !important;
+}
+
+.na-qv-drawer__body .pdp-read-more__toggle {
+  display: none !important;
+}
+
+/* The stock message shows above the buttons ("Hurry! Only 6 left in stock"); the bar below is the duplicate */
+.na-qv-drawer__body .product-details product-inventory {
+  display: none;
+}
+
 /* ── "View full details" link ── */
 .na-qv-view-details {
   display: inline-flex;
