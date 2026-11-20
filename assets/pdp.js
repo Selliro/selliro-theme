@@ -63,7 +63,26 @@
   if (!customElements.get('pdp-sticky-bar')) {
     class PdpStickyBar extends HTMLElement {
       connectedCallback() {
-        this.scope = this.closest('.product-information, .shopify-section') || document;
+        // The product column (position: sticky) and #MainContent (footer reveal) are stacking
+        // contexts, so inside them the bar's z-index can't beat later sections and their text
+        // paints over it. Move the bar to <body>; connectedCallback runs again there.
+        if (this.parentElement !== document.body) {
+          this.home = this.closest('.product-information, .shopify-section') || document;
+          this.homeSection = this.closest('.shopify-section');
+          // A re-render (theme editor, product swap) brings a fresh bar: it replaces the old one
+          document.querySelectorAll('body > pdp-sticky-bar').forEach((old) => old !== this && old.remove());
+          this.moving = true;
+          document.body.append(this);
+          return;
+        }
+        if (this.observer) return;
+
+        this.scope = this.home || document;
+        // Theme editor: the bar no longer sits in its section, so drop it when the section goes
+        this.onUnload = (/** @type {Event} */ event) => {
+          if (event.target instanceof Node && this.homeSection && event.target.contains(this.homeSection)) this.remove();
+        };
+        document.addEventListener('shopify:section:unload', this.onUnload);
         this.mainButton = this.scope.querySelector('add-to-cart-component button, button[name="add"], .product-form-buttons button[type="submit"]');
         this.addButton = this.querySelector('[data-pdp-sticky-add]');
         this.priceEl = this.querySelector('[data-pdp-sticky-price]');
@@ -99,8 +118,15 @@
       }
 
       disconnectedCallback() {
+        if (this.moving) {
+          this.moving = false;
+          return;
+        }
         this.observer?.disconnect();
         this.mutations?.disconnect();
+        this.scope?.removeEventListener('change', this.sync);
+        if (this.onUnload) document.removeEventListener('shopify:section:unload', this.onUnload);
+        this.observer = undefined;
       }
 
       sync() {
