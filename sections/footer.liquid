@@ -384,7 +384,6 @@
     <div
       class="footer-wordmark{% if section.settings.wordmark_animate %} footer-wordmark--animate{% endif %}"
       data-footer-wordmark
-      data-max-height="{{ section.settings.wordmark_max_height | default: 30 }}"
       style="--fw-family: {{ wm_family }}; --fw-weight: {{ wm_weight }}; --fw-crop: {{ wm_crop }};{% if section.settings.wordmark_color != blank %} --fw-color: {{ section.settings.wordmark_color }};{% endif %}"
       aria-hidden="true"
     >
@@ -395,8 +394,7 @@
 </div>
 
 {% stylesheet %}
-  /* Big wordmark across the bottom of the footer (sized to the full width by footer-wordmark.js, capped by
-     "Maximum height" so the footer still fits on wide, short screens; then it sits centred) */
+  /* Big wordmark across the full width of the footer bottom (sized by footer-wordmark.js) */
   .footer-wordmark {
     --fw-leading: 0.8;
 
@@ -649,17 +647,6 @@
       "min": 0,
       "max": 60,
       "step": 5,
-      "unit": "%",
-      "default": 30
-    },
-    {
-      "type": "range",
-      "id": "wordmark_max_height",
-      "label": "t:footer_wordmark.max_height",
-      "info": "t:footer_wordmark.max_height_info",
-      "min": 15,
-      "max": 60,
-      "step": 1,
       "unit": "%",
       "default": 30
     },
