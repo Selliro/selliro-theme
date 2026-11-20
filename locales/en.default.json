@@ -8,6 +8,31 @@
  * ------------------------------------------------------------
  */
 {
+  "collections_plus": {
+    "collections_count": {
+      "one": "{{ count }} collection",
+      "other": "{{ count }} collections"
+    },
+    "products_count": {
+      "one": "{{ count }} product",
+      "other": "{{ count }} products"
+    },
+    "find_placeholder": "Find a collection…",
+    "find_label": "Find a collection",
+    "sort_label": "Sort by",
+    "sort_featured": "Featured",
+    "sort_az": "Name, A–Z",
+    "sort_za": "Name, Z–A",
+    "sort_products": "Most products",
+    "showing_html": "Showing <b>{{ count }}</b> collections",
+    "showing_js": "Showing [count] collections",
+    "showing_one_js": "Showing 1 collection",
+    "shop_now": "Shop now",
+    "no_match": "No collection matches your search.",
+    "clear": "Clear search",
+    "empty_title": "No collections yet",
+    "empty_text": "Collections you add in Products › Collections will show here."
+  },
   "blog_plus": {
     "all": "All",
     "categories": "Categories",
