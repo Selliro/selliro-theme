@@ -157,6 +157,7 @@
   <blog-list-view
     class="blog-list__body"
     data-default-view="{{ section.settings.default_view }}"
+    data-view="{{ section.settings.default_view }}"
   >
     {%- paginate blog.articles by per_page -%}
       {%- liquid
