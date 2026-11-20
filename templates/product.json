@@ -1749,9 +1749,9 @@
   },
   "order": [
     "main",
-    "natural_banner",
     "ingredients",
     "routine",
+    "natural_banner",
     "promises",
     "facts",
     "results",
