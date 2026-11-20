@@ -73,6 +73,17 @@
       split(root);
       refit();
       root.classList.add('is-ready');
+      // Stacked footer reveal (body[data-footer-reveal="pin"], sections/footer.liquid): the wordmark sits
+      // under the footer card at first, so the letters rise when the card has moved off it ("footer:stack").
+      if (document.body.getAttribute('data-footer-reveal') === 'pin') {
+        const onStack = (/** @type {Event} */ event) => {
+          if (!(/** @type {CustomEvent} */ (event).detail || {}).bottomShown) return;
+          document.removeEventListener('footer:stack', onStack);
+          root.classList.add('is-in');
+        };
+        document.addEventListener('footer:stack', onStack);
+        return;
+      }
       const io = new IntersectionObserver(
         (entries) => {
           if (!entries.some((e) => e.isIntersecting)) return;

@@ -7,7 +7,10 @@
   // Reveal footer (the pattern Shopify's Concept theme uses): the footer sits pinned under the page
   // (position: sticky; bottom: 0, behind #MainContent) and the page lifts off it as you reach the end.
   // Sticky leaves the layout alone (no body padding), so nothing jumps when the mode changes.
-  //   data-footer-reveal="pin"   the footer fits under the sticky header: pinned reveal
+  //   data-footer-reveal="pin"   the footer fits under the sticky header: pinned reveal, in two layers:
+  //                              1. the page lifts off the main footer card (logo, menus, newsletter),
+  //                              2. the card then rises with the page and uncovers the copyright bar and
+  //                                 wordmark underneath. Scrolling back up plays it in reverse.
   //   data-footer-reveal="rise"  taller than that (phones, short windows): pinning would put its top out
   //                              of reach, so it rises into view instead, a short slide tied to scroll
   //   (no attribute)             theme editor or reduced motion: a normal footer
@@ -18,6 +21,10 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   var mode = '';
   var frame = 0;
+  var main = document.getElementById('MainContent');
+  var card = footer.querySelector('.footer-main'); // top layer
+  var under = footer.querySelector('.footer__content-bottom'); // copyright bar + wordmark, beneath it
+  var underShown = false;
 
   function headerOffset() {
     var header = document.querySelector('#header-component');
@@ -26,8 +33,26 @@
     return pos === 'sticky' || pos === 'fixed' ? header.offsetHeight : 0;
   }
 
+  // Pinned: the card covers the bottom layer, then rises glued to the page's bottom edge to uncover it.
+  // r = how much of the footer the page has uncovered; card offset = min(height of the bottom layer, H - r).
+  function stack() {
+    if (!card || !under || !main) return;
+    var vh = window.innerHeight;
+    var H = footer.offsetHeight;
+    var hidden = under.offsetHeight;
+    var r = Math.max(0, Math.min(H, vh - main.getBoundingClientRect().bottom));
+    var offset = Math.max(0, Math.min(hidden, H - r));
+    card.style.transform = offset > 0.5 ? 'translate3d(0,' + offset.toFixed(1) + 'px,0)' : '';
+    var shown = offset < hidden * 0.5;
+    if (shown !== underShown) {
+      underShown = shown;
+      document.dispatchEvent(new CustomEvent('footer:stack', { detail: { bottomShown: shown } }));
+    }
+  }
+
   function rise() {
     frame = 0;
+    if (mode === 'pin') return stack();
     if (mode !== 'rise') return;
     var rect = footer.getBoundingClientRect();
     var vh = window.innerHeight;
@@ -43,6 +68,7 @@
     if (next !== mode) {
       mode = next;
       footer.style.transform = '';
+      if (card) card.style.transform = '';
       if (mode) body.setAttribute('data-footer-reveal', mode);
       else body.removeAttribute('data-footer-reveal');
       body.classList.toggle('footer-reveal-on', Boolean(mode));
@@ -51,7 +77,7 @@
   }
 
   window.addEventListener('scroll', function () {
-    if (mode === 'rise' && !frame) frame = requestAnimationFrame(rise);
+    if (mode && !frame) frame = requestAnimationFrame(rise);
   }, { passive: true });
   window.addEventListener('resize', sync, { passive: true });
   if (reduce.addEventListener) reduce.addEventListener('change', sync);

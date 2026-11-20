@@ -579,8 +579,9 @@
    FOOTER REVEAL (sections/footer.liquid script sets body[data-footer-reveal])
    Like Shopify's Concept theme: #MainContent (z-index 1, solid background) scrolls up off the footer,
    which waits underneath.
-   · pin:  the footer fits on screen: position sticky, bottom 0, so it's pinned under the page and fully
-           uncovered at the end. Sticky keeps the normal layout (no body padding, no jump when switching).
+   · pin:  the footer fits on screen: position sticky, bottom 0, so it's pinned under the page. Two layers:
+           the page lifts off the main card first, then the card rises with the page and uncovers the
+           copyright bar + wordmark beneath it. Sticky keeps the normal layout (no body padding, no jump).
    · rise: taller than the screen: stays in the normal flow and slides up from under the page as it
            scrolls in (transform set by the script), so every part of it stays reachable.
    ===================================================== */
@@ -595,6 +596,12 @@ body[data-footer-reveal='pin'] .shopify-section.shopify-section-group-footer-gro
   position: sticky;
   bottom: 0;
   z-index: 0;
+}
+
+/* Pinned: the main card is the top layer; the script slides it over the copyright bar + wordmark and
+   back up as you scroll (transform). */
+body[data-footer-reveal='pin'] .footer-main {
+  will-change: transform;
 }
 
 body[data-footer-reveal='rise'] .shopify-section.shopify-section-group-footer-group.shopify-section-group-footer-group {
