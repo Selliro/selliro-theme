@@ -4701,9 +4701,13 @@ body:has(#header-component[transparent]) main > .shopify-section:first-child > .
 }
 
 /* Slideshow / gallery arrows and controls are icon buttons, not call-to-actions:
-   no shine sweep, lift or shadow from the button hover effects (the shine showed as a flash). */
+   no shine sweep, lift or shadow from the button hover effects (the shine showed as a flash).
+   Same for the country / language / currency selectors (header "USD" dropdown, drawer, footer):
+   they're text links that happen to carry Horizon's .button class. */
 :is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) .slideshow-control.slideshow-control,
-:is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) .slideshow-control.slideshow-control:is(:hover, :active, :focus-visible) {
+:is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) .slideshow-control.slideshow-control:is(:hover, :active, :focus-visible),
+:is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) .button.localization-selector,
+:is(.btn-fx--lift-shine, .btn-fx--fill, .btn-fx--lift) .button.localization-selector:is(:hover, :active, :focus-visible) {
   background-image: none;
   box-shadow: none;
   transform: none;
