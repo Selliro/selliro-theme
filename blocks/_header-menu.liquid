@@ -1007,6 +1007,178 @@
     /* preserves the inherited grid layout when this submenu wrapper is used */
     display: contents;
   }
+
+  /* ---------------------------------------------------------------------------------------------
+     Classic dropdown (Submenu layout: Dropdown, or Automatic for items without much to show).
+     Markup: snippets/header-menu.liquid (.menu-list__submenu--dropdown). header-menu.js opens it
+     like a mega menu, but keeps the full-width background closed.
+       [Shop v]
+       ┌──────────────┐
+       │ Foundation   │  ┌───────────┐
+       │ Lips       › │──│ Lipstick  │   <- third-level links fly out to the side
+       └──────────────┘  └───────────┘
+     --------------------------------------------------------------------------------------------- */
+  .menu-list__list-item--dropdown:where(:not([slot='overflow'])) {
+    position: relative;
+  }
+
+  .menu-list__list-item--dropdown:where(:not([slot='overflow'])) > .menu-list__submenu--dropdown {
+    position: absolute;
+    top: 100%;
+    left: calc(-1 * var(--padding-md, 0.75rem));
+    width: max-content;
+    min-width: 13.5rem;
+    max-width: 22rem;
+    padding: 0.85rem 0 0; /* invisible bridge between the link and the panel, so hover isn't lost */
+    background: transparent;
+    box-shadow: none;
+    clip-path: none;
+    opacity: 0;
+    translate: 0 6px;
+    visibility: hidden;
+    transition: opacity 0.2s ease, translate 0.3s var(--submenu-ease, ease), visibility 0s linear 0.3s;
+    z-index: var(--layer-header-menu);
+  }
+
+  .menu-list__list-item--dropdown:where(:not([slot='overflow'])):has(> .menu-list__link[aria-expanded='true']) > .menu-list__submenu--dropdown,
+  .menu-list__list-item--dropdown:where(:not([slot='overflow'])):focus-within > .menu-list__submenu--dropdown {
+    opacity: 1;
+    translate: 0 0;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  /* Items near the right end open towards the left, so the panel stays on screen */
+  .menu-list__list-item--dropdown:where(:not([slot='overflow'])):nth-last-child(-n + 3) > .menu-list__submenu--dropdown {
+    left: auto;
+    right: calc(-1 * var(--padding-md, 0.75rem));
+  }
+
+  .menu-dropdown {
+    padding: 0.5rem;
+    border-radius: max(var(--submenu-radius, 0px), 12px);
+    background-color: var(--color-background);
+    box-shadow: 0 22px 44px -18px rgb(0 0 0 / 0.28), 0 0 0 1px rgb(var(--color-foreground-rgb) / 0.07);
+  }
+
+  .menu-dropdown__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+  }
+
+  .menu-dropdown__item {
+    position: relative;
+  }
+
+  .menu-dropdown__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    padding: 0.55rem 0.8rem;
+    border-radius: 8px;
+    font-family: var(--menu-child-font-family);
+    font-style: var(--menu-child-font-style);
+    font-weight: var(--menu-child-font-weight);
+    font-size: var(--menu-child-font-size);
+    line-height: var(--menu-child-font-line-height);
+    text-transform: var(--menu-child-font-case);
+    color: var(--menu-child-font-color, var(--color-foreground));
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .menu-dropdown__link:is(:hover, :focus-visible),
+  .menu-dropdown__item--has-children:is(:hover, :focus-within) > .menu-dropdown__link {
+    background-color: rgb(var(--color-foreground-rgb) / 0.05);
+    color: var(--menu-child-active-font-color, var(--color-foreground));
+  }
+
+  .menu-dropdown__link--active {
+    color: var(--menu-child-active-font-color, var(--color-foreground));
+    font-weight: 600;
+  }
+
+  .menu-dropdown__caret {
+    flex-shrink: 0;
+    opacity: 0.6;
+  }
+
+  /* Third level: opens beside its parent link */
+  .menu-dropdown__flyout {
+    position: absolute;
+    top: -0.5rem;
+    left: calc(100% + 0.5rem);
+    min-width: 12rem;
+    margin: 0;
+    padding: 0.5rem;
+    border-radius: max(var(--submenu-radius, 0px), 12px);
+    background-color: var(--color-background);
+    box-shadow: 0 22px 44px -18px rgb(0 0 0 / 0.28), 0 0 0 1px rgb(var(--color-foreground-rgb) / 0.07);
+    opacity: 0;
+    translate: -4px 0;
+    visibility: hidden;
+    transition: opacity 0.18s ease, translate 0.25s var(--submenu-ease, ease), visibility 0s linear 0.25s;
+  }
+
+  /* Bridge across the gap, so moving to the fly-out doesn't close it */
+  .menu-dropdown__flyout::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -0.75rem;
+    width: 0.75rem;
+  }
+
+  .menu-dropdown__item--has-children:is(:hover, :focus-within) > .menu-dropdown__flyout {
+    opacity: 1;
+    translate: 0 0;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .menu-list__list-item--dropdown:nth-last-child(-n + 3) .menu-dropdown__flyout {
+    left: auto;
+    right: calc(100% + 0.5rem);
+  }
+
+  .menu-list__list-item--dropdown:nth-last-child(-n + 3) .menu-dropdown__flyout::before {
+    left: auto;
+    right: -0.75rem;
+  }
+
+  /* Inside the "More" overflow panel: a plain list, third level indented underneath */
+  .menu-list__list-item--dropdown[slot='overflow'] .menu-dropdown {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .menu-list__list-item--dropdown[slot='overflow'] .menu-dropdown__flyout {
+    position: static;
+    padding: 0 0 0 1rem;
+    background: none;
+    box-shadow: none;
+    opacity: 1;
+    translate: none;
+    visibility: inherit;
+  }
+
+  .menu-list__list-item--dropdown[slot='overflow'] .menu-dropdown__caret {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu-list__submenu--dropdown,
+    .menu-dropdown__flyout {
+      translate: none !important;
+      transition-duration: 0s !important;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -1152,6 +1324,27 @@
     {
       "type": "header",
       "content": "t:content.submenu_feature"
+    },
+    {
+      "type": "select",
+      "id": "submenu_layout",
+      "label": "Submenu layout",
+      "info": "Mega menu: a full-width panel. Dropdown: a small list under the menu item; third-level links open to the side. Automatic: mega menu only for items with third-level links, images or promo cards, dropdown for the rest.",
+      "options": [
+        {
+          "value": "mega",
+          "label": "Mega menu"
+        },
+        {
+          "value": "dropdown",
+          "label": "Dropdown"
+        },
+        {
+          "value": "auto",
+          "label": "Automatic"
+        }
+      ],
+      "default": "mega"
     },
     {
       "type": "select",
