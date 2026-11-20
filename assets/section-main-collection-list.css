@@ -294,6 +294,10 @@
   }
 }
 
+.coll-list__grid[hidden] {
+  display: none;
+}
+
 .coll-list__item {
   display: flex;
   min-width: 0;

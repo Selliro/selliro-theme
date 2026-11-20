@@ -87,7 +87,13 @@
 
       if (this.status) {
         const template = visible === 1 ? this.dataset.showingOne : this.dataset.showing;
-        if (template) this.status.textContent = template.replace('[count]', String(visible));
+        if (template) {
+          // "Showing [count] collections" -> Showing <b>3</b> collections
+          const [before, after = ''] = template.split('[count]');
+          const count = document.createElement('b');
+          count.textContent = String(visible);
+          this.status.replaceChildren(before, ...(template.includes('[count]') ? [count, after] : []));
+        }
       }
     }
   }
