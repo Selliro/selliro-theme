@@ -126,6 +126,15 @@
   }
 }
 
+/* The product page's "Image column width" split (product-information__grid--ratio, 60/40 on laptops)
+   is copied in with the grid and would squeeze the details column here: use an even split instead. */
+@media (min-width: 48rem) {
+  .na-qv-drawer__body
+    .product-information__grid.product-information__grid--ratio:not(:has(.product-information__media:empty))[data-product-grid-content] {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
 .na-qv-drawer__body .product-information__media {
   position: sticky;
   top: 0;

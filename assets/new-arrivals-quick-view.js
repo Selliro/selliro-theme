@@ -190,6 +190,10 @@
       drawerCloseTimers.delete(drawer);
     }
 
+    // The footer reveal makes #MainContent a stacking context (z-index 1), so inside it the drawer sits
+    // under the site header. Move it to <body> the first time it opens.
+    if (drawer.parentElement !== document.body) document.body.appendChild(drawer);
+
     previousActiveElement =
       trigger || (document.activeElement instanceof HTMLElement ? document.activeElement : null);
     activeDrawer = drawer;
@@ -470,9 +474,18 @@
   });
 
   // Theme editor: never leave the page scroll-locked when the section is re-rendered or removed.
+  // The drawer may have been moved to <body>, so match it by its section id as well.
   document.addEventListener('shopify:section:unload', function (ev) {
-    if (activeDrawer && ev.target instanceof Element && ev.target.contains(activeDrawer)) {
-      closeDrawer(activeDrawer);
-    }
+    var detail = /** @type {any} */ (ev).detail;
+    var sectionId = detail && detail.sectionId;
+    if (!(ev.target instanceof Element)) return;
+    var section = ev.target;
+    document.querySelectorAll('[data-na-qv-drawer]').forEach(function (drawer) {
+      var belongs = section.contains(drawer) || (sectionId && drawer.getAttribute('data-section-id') === sectionId);
+      if (!belongs) return;
+      if (activeDrawer === drawer) closeDrawer(drawer);
+      // A moved drawer is left behind when its section re-renders: the new render brings its own
+      if (drawer.parentElement === document.body) drawer.remove();
+    });
   });
 })();
