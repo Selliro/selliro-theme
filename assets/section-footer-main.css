@@ -10,7 +10,8 @@
   --footer-main-bg: #222;
   --footer-main-fg: #fff;
   --footer-main-muted: rgb(255 255 255 / 0.68);
-  --footer-main-accent: #f5c518;
+  --footer-main-accent: #fad02c; /* brand yellow: announcement bar, highlights */
+  --footer-main-line: rgb(255 255 255 / 0.16);
   position: relative;
   z-index: 2;
   background: var(--footer-main-bg);
@@ -28,7 +29,7 @@
 }
 
 /* Extends 24px upward (= border-radius of .footer-main) behind the rounded corners,
-   filling the transparent corner areas with the bottom bar's own background (#333). */
+   filling the transparent corner areas with the bottom bar's own background (its colour scheme). */
 .footer__content-bottom::before {
   content: '';
   pointer-events: none;
@@ -38,7 +39,7 @@
   inset-inline: 0;
   width: 100%;
   height: calc(100% + 24px);
-  background-color: #333333;
+  background-color: var(--color-background, #333333);
   z-index: -1;
 }
 
@@ -573,6 +574,106 @@
   height: 1rem;
   fill: currentColor;
   color: #fff;
+}
+
+/* ==========================================================================
+   Brand finish
+   Dark card (menus, newsletter) with the brand yellow as the accent, over a bottom layer in its own
+   colour scheme (yellow by default) carrying the copyright bar and the full-width wordmark —
+   like the yellow announcement bar at the top of every page.
+   ========================================================================== */
+
+/* Menus: column titles in small caps, links light up with a yellow underline */
+.footer-main__nav-title {
+  color: rgb(255 255 255 / 0.5);
+  letter-spacing: 0.14em;
+}
+
+.footer-main__nav-list a {
+  color: rgb(255 255 255 / 0.86);
+  background: linear-gradient(var(--footer-main-accent), var(--footer-main-accent)) no-repeat 0 100% / 0 1.5px;
+  transition: color 0.2s ease, background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.footer-main__nav-list a:is(:hover, :focus-visible) {
+  color: #fff;
+  background-size: 100% 1.5px;
+}
+
+.footer-main__tagline {
+  color: rgb(255 255 255 / 0.68);
+}
+
+/* Newsletter: quiet field, yellow button */
+.footer-main__input-row {
+  border-color: var(--footer-main-line);
+  background: rgb(255 255 255 / 0.05);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.footer-main__input-row:focus-within {
+  border-color: var(--footer-main-accent);
+  background: rgb(255 255 255 / 0.08);
+}
+
+.footer-main__subscribe-btn {
+  background: var(--footer-main-accent);
+  color: #111;
+  font-weight: 700;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-main__subscribe-btn:is(:hover, :focus-visible) {
+  background: #fff;
+}
+
+/* Social icons: thin rings, filled yellow on hover */
+.footer-main__social-link {
+  border-color: var(--footer-main-line);
+}
+
+.footer-main__social-link:hover {
+  border-color: var(--footer-main-accent);
+  background: var(--footer-main-accent);
+}
+
+.footer-main__social-link:hover svg {
+  color: #111;
+}
+
+/* Language / country pills match the field */
+.footer-main__localization .footer-main__localization-toggle,
+.footer-main__localization-pill--language .language-selector {
+  border-color: var(--footer-main-line);
+}
+
+/* Bottom layer: everything takes its colours from the bottom colour scheme (black on yellow by default) */
+.footer__content-bottom {
+  color: rgb(var(--color-foreground-rgb));
+}
+
+.footer__content-bottom .footer-main__inline-copyright--bottom {
+  color: rgb(var(--color-foreground-rgb) / 0.78);
+  font-size: 0.75rem;
+}
+
+.footer__content-bottom .footer-main__inline-copyright--bottom a,
+.footer__content-bottom .footer-main__policy-link {
+  color: rgb(var(--color-foreground-rgb));
+  text-underline-offset: 3px;
+}
+
+.footer__content-bottom .footer-main__bottom-bar {
+  padding-block-end: clamp(0.5rem, 1.5vw, 1rem);
+  border-bottom: 1px solid rgb(var(--color-foreground-rgb) / 0.16);
+}
+
+.footer__content-bottom .footer-main__payment-icon {
+  border-radius: 4px;
+}
+
+.footer__content-bottom .footer-wordmark {
+  color: var(--fw-color, rgb(var(--color-foreground-rgb)));
 }
 
 /* =====================================================
