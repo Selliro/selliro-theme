@@ -72,7 +72,7 @@
         "enable_follow_on_shop": false,
         "payment_enable": true,
         "show_policy": false,
-        "wordmark_text": "whispo",
+        "wordmark_text": "",
         "wordmark_font_source": "body",
         "wordmark_font": "playfair_display_n4",
         "wordmark_case": "uppercase",
