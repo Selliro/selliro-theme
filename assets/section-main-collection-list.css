@@ -261,6 +261,22 @@
   border-color: rgb(var(--color-foreground-rgb) / 0.4);
 }
 
+/* Phones: status and sort share one row (the "Sort by" label is read by screen readers only) */
+@media screen and (max-width: 749px) {
+  .coll-list__toolbar {
+    flex-wrap: nowrap;
+  }
+
+  .coll-list__sort label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
 .coll-list__select svg {
   position: absolute;
   right: 15px;
@@ -491,13 +507,17 @@
   }
 
   .coll-list__grid--editorial:not([data-plain]) .coll-list__item--featured .coll-card__media {
-    aspect-ratio: auto;
-    min-height: 100%;
+    aspect-ratio: 5 / 4;
   }
 
   .coll-list__grid--editorial:not([data-plain]) .coll-list__item--featured .coll-card__body {
     justify-content: center;
+    gap: 10px;
     padding: 32px;
+  }
+
+  .coll-list__grid--editorial:not([data-plain]) .coll-list__item--featured .coll-card__cta {
+    margin-top: 10px;
   }
 }
 
