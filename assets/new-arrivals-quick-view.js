@@ -192,8 +192,15 @@
     }
 
     // The footer reveal makes #MainContent a stacking context (z-index 1), so inside it the drawer sits
-    // under the site header. Move it to <body> the first time it opens.
-    if (drawer.parentElement !== document.body) document.body.appendChild(drawer);
+    // under the site header. Move it to <body> the first time it opens, inside a .shopify-section wrapper:
+    // Horizon's product form, price and stock listen for variant changes on their closest section.
+    if (!drawer.closest('[data-na-qv-portal]')) {
+      var portal = document.createElement('div');
+      portal.className = 'shopify-section na-qv-portal';
+      portal.setAttribute('data-na-qv-portal', '');
+      document.body.appendChild(portal);
+      portal.appendChild(drawer);
+    }
 
     previousActiveElement =
       trigger || (document.activeElement instanceof HTMLElement ? document.activeElement : null);
@@ -564,7 +571,8 @@
       if (!belongs) return;
       if (activeDrawer === drawer) closeDrawer(drawer);
       // A moved drawer is left behind when its section re-renders: the new render brings its own
-      if (drawer.parentElement === document.body) drawer.remove();
+      var portal = drawer.closest('[data-na-qv-portal]');
+      if (portal) portal.remove();
     });
   });
 })();
