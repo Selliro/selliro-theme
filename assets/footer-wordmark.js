@@ -68,9 +68,10 @@
       // Scroll-linked: the letters rise one after another as the wordmark is uncovered, and only finish
       // when all of it is in view (the end of the page). --fw-q = share of the wordmark uncovered (0–1).
       // Whatever covers it counts: the page above (#MainContent) and, in the stacked footer reveal
-      // (sections/footer.liquid), the footer card sliding up off it. Scrolling back up hides them again.
+      // (sections/footer.liquid), the footer card and copyright bar sliding up off it. Scrolling back up hides them again.
       const main = document.getElementById('MainContent');
-      const card = root.closest('.shopify-section')?.querySelector('.footer-main');
+      const section = root.closest('.shopify-section');
+      const covers = section ? [...section.querySelectorAll('.footer-main, .footer__content-bottom > .footer__page-width')] : [];
       let frame = 0;
       let last = -1;
       const update = () => {
@@ -83,7 +84,7 @@
         }
         let cover = 0;
         if (main) cover = Math.max(cover, main.getBoundingClientRect().bottom);
-        if (card) cover = Math.max(cover, card.getBoundingClientRect().bottom);
+        covers.forEach((el) => (cover = Math.max(cover, el.getBoundingClientRect().bottom)));
         const visible = Math.min(rect.bottom, vh) - Math.max(rect.top, cover);
         const q = Math.max(0, Math.min(1, visible / Math.max(1, rect.height)));
         const rounded = Math.round(q * 1000) / 1000;

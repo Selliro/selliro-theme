@@ -7,10 +7,12 @@
   // Reveal footer (the pattern Shopify's Concept theme uses): the footer sits pinned under the page
   // (position: sticky; bottom: 0, behind #MainContent) and the page lifts off it as you reach the end.
   // Sticky leaves the layout alone (no body padding), so nothing jumps when the mode changes.
-  //   data-footer-reveal="pin"   the footer fits under the sticky header: pinned reveal, in two layers:
-  //                              1. the page lifts off the main footer card (logo, menus, newsletter),
-  //                              2. the card then rises with the page and uncovers the copyright bar and
-  //                                 wordmark underneath. Scrolling back up plays it in reverse.
+  //   data-footer-reveal="pin"   the footer fits the screen: pinned reveal, in two layers:
+  //                              1. the page lifts off the footer (card with logo, menus, newsletter, and the
+  //                                 copyright bar under it), pinned at the bottom of the screen,
+  //                              2. footer and copyright bar then rise with the page and uncover the big
+  //                                 wordmark underneath, its letters rising as it shows (footer-wordmark.js).
+  //                              Scrolling back up plays it in reverse.
   //   data-footer-reveal="rise"  taller than that (phones, short windows): pinning would put its top out
   //                              of reach, so it rises into view instead, a short slide tied to scroll
   //   (no attribute)             theme editor or reduced motion: a normal footer
@@ -26,7 +28,8 @@
   var frame = 0;
   var main = document.getElementById('MainContent');
   var card = null; // top layer: .footer-main (found once parsed: this script runs before the footer markup)
-  var under = null; // beneath it: .footer__content-bottom (copyright bar + wordmark)
+  var bar = null; // …and the copyright bar under it (.footer__content-bottom > .footer__page-width)
+  var under = null; // beneath them: the wordmark ([data-footer-wordmark]; or the bottom area if there's none)
   var underShown = false;
 
   var inZone = false;
@@ -43,18 +46,21 @@
   }
 
 
-  // Pinned: the card covers the bottom layer, then rises glued to the page's bottom edge to uncover it.
-  // r = how much of the footer the page has uncovered; card offset = min(height of the bottom layer, H - r).
+  // Pinned: card + copyright bar sit over the wordmark, then rise glued to the page's bottom edge to uncover it.
+  // r = how much of the footer the page has uncovered; offset = min(wordmark height, H - r).
   function stack() {
     card = card || footer.querySelector('.footer-main');
-    under = under || footer.querySelector('.footer__content-bottom');
-    if (!card || !under || !main) return;
+    bar = bar || footer.querySelector('.footer__content-bottom > .footer__page-width');
+    under = under || footer.querySelector('[data-footer-wordmark]');
+    if (!card || !main) return;
     var vh = window.innerHeight;
     var H = footer.offsetHeight;
-    var hidden = under.offsetHeight;
+    var hidden = under ? under.offsetHeight : 0;
     var r = Math.max(0, Math.min(H, vh - main.getBoundingClientRect().bottom));
     var offset = Math.max(0, Math.min(hidden, H - r));
-    card.style.transform = offset > 0.5 ? 'translate3d(0,' + offset.toFixed(1) + 'px,0)' : '';
+    var t = offset > 0.5 ? 'translate3d(0,' + offset.toFixed(1) + 'px,0)' : '';
+    card.style.transform = t;
+    if (bar) bar.style.transform = t;
     var shown = offset < hidden * 0.5;
     if (shown !== underShown) {
       underShown = shown;
@@ -82,8 +88,9 @@
     if (next !== mode) {
       mode = next;
       footer.style.transform = '';
-      var top = footer.querySelector('.footer-main');
-      if (top) top.style.transform = '';
+      footer.querySelectorAll('.footer-main, .footer__content-bottom > .footer__page-width').forEach(function (el) {
+        el.style.transform = '';
+      });
       if (mode) body.setAttribute('data-footer-reveal', mode);
       else body.removeAttribute('data-footer-reveal');
       body.classList.toggle('footer-reveal-on', Boolean(mode));
