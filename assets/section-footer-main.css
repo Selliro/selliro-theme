@@ -676,6 +676,19 @@
   color: var(--fw-color, rgb(var(--color-foreground-rgb)));
 }
 
+/* Back-to-top button (base.css, mix-blend-mode: difference) would turn blue-violet over the yellow layer:
+   plain black while that layer is on screen */
+body.footer-wordmark-visible:not([data-footer-reveal='pin']) .progress-wrap,
+body[data-footer-reveal='pin']:has([data-footer-bottom-shown]) .progress-wrap {
+  mix-blend-mode: normal;
+}
+
+body.footer-wordmark-visible:not([data-footer-reveal='pin']) .progress-wrap :is(.progress-wrap__icon, svg.progress-circle path),
+body[data-footer-reveal='pin']:has([data-footer-bottom-shown]) .progress-wrap :is(.progress-wrap__icon, svg.progress-circle path) {
+  color: #111;
+  stroke: #111;
+}
+
 /* =====================================================
    FOOTER REVEAL (sections/footer.liquid script sets body[data-footer-reveal])
    Like Shopify's Concept theme: #MainContent (z-index 1, solid background) scrolls up off the footer,
