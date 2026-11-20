@@ -126,6 +126,13 @@
   }
 }
 
+/* The product page places its columns on its own page grid (e.g. phones: .product-details { grid-column: 2 / 3 }).
+   Here that adds a phantom column and squeezes the images to 0px: let the drawer's grid place them. */
+.na-qv-drawer__body .product-information__grid[data-product-grid-content] > :is(.product-information__media, .product-details) {
+  grid-column: auto;
+  grid-row: auto;
+}
+
 /* The product page's "Image column width" split (product-information__grid--ratio, 60/40 on laptops)
    is copied in with the grid and would squeeze the details column here: use an even split instead. */
 @media (min-width: 48rem) {
