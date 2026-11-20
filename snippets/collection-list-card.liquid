@@ -1,0 +1,78 @@
+{%- doc -%}
+  One collection on the collections page (sections/main-collection-list.liquid).
+  Same look as the homepage "Shop by category" cards: warm rounded card, product count, heading-font title.
+
+  @param {object} collection - The collection
+  @param {object} settings - The section settings
+  @param {boolean} [featured] - Large first card (Editorial layout)
+  @param {number} [index] - Position in the list (stagger and "Featured" sort order)
+{%- enddoc -%}
+{%- liquid
+  assign desc_words = 14
+  if featured
+    assign desc_words = 26
+  endif
+  assign desc = collection.description | strip_html | strip | truncatewords: desc_words
+  assign image = collection.featured_image
+  if featured
+    assign sizes = '(min-width: 990px) 62vw, 94vw'
+  else
+    assign sizes = '(min-width: 990px) 30vw, (min-width: 750px) 45vw, 50vw'
+  endif
+-%}
+<li
+  class="coll-list__item{% if featured %} coll-list__item--featured{% endif %}"
+  data-coll-item
+  data-title="{{ collection.title | downcase | escape }}"
+  data-count="{{ collection.products_count }}"
+  data-index="{{ index | default: 0 }}"
+  data-reveal-card
+>
+  <a
+    class="coll-card"
+    href="{{ collection.url }}"
+  >
+    <span class="coll-card__media">
+      {%- if image != blank -%}
+        {{
+          image
+          | image_url: width: 1600
+          | image_tag:
+            loading: 'lazy',
+            widths: '360, 540, 720, 1000, 1400, 1600',
+            sizes: sizes,
+            class: 'coll-card__image',
+            alt: collection.title
+        }}
+      {%- else -%}
+        {{ 'collection-1' | placeholder_svg_tag: 'coll-card__image coll-card__placeholder' }}
+      {%- endif -%}
+    </span>
+
+    <span class="coll-card__body">
+      {%- if settings.show_count -%}
+        <span class="coll-card__eyebrow">
+          {{- 'collections_plus.products_count' | t: count: collection.products_count -}}
+        </span>
+      {%- endif -%}
+
+      <span class="coll-card__title{% if settings.capitalize_titles %} coll-card__title--cap{% endif %}">
+        {{- collection.title | escape -}}
+      </span>
+
+      {%- if settings.show_description and desc != blank -%}
+        <span class="coll-card__desc">{{ desc }}</span>
+      {%- endif -%}
+
+      <span class="coll-card__cta">
+        {{- 'collections_plus.shop_now' | t -}}
+        <span
+          class="coll-card__arrow"
+          aria-hidden="true"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </span>
+    </span>
+  </a>
+</li>
