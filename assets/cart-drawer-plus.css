@@ -1,4 +1,5 @@
-/* Cart drawer: floating panel, motion, free shipping bar, item cards, recommendations, empty state.
+/* Cart drawer: floating panel, motion, free shipping bar, compact item cards, summary, "Close" badge,
+   recommendations, empty state.
    Markup: snippets/cart-drawer.liquid, snippets/cart-free-shipping.liquid, sections/cart-recommendations.liquid */
 
 .cart-drawer__dialog--plus {
