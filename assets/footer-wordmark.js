@@ -1,6 +1,7 @@
 /**
  * Footer wordmark (sections/footer.liquid): sizes the text so it spans the full footer width,
- * whatever its length, and (optionally) lets the letters rise in when the footer scrolls into view.
+ * whatever its length, but no taller than "Maximum height" (% of the screen height, data-max-height),
+ * and (optionally) lets the letters rise in when the footer scrolls into view.
  */
 (() => {
   if (window.__footerWordmarkInit) return;
@@ -17,7 +18,17 @@
     text.style.setProperty('--fw-size', '100px');
     const width = text.getBoundingClientRect().width;
     if (!width) return;
-    const size = Math.floor((available / width) * 100 * 100) / 100;
+    let size = Math.floor((available / width) * 100 * 100) / 100;
+    // Cap by the screen height ("Maximum height", % of the viewport): the visible letters are about
+    // leading × (1 − crop) × font-size tall. Keeps the footer short enough to stay pinned under the page.
+    const maxShare = parseFloat(root.dataset.maxHeight || '');
+    if (maxShare > 0) {
+      const leading = parseFloat(styles.getPropertyValue('--fw-leading')) || 0.8;
+      const crop = parseFloat(styles.getPropertyValue('--fw-crop')) || 0;
+      const visible = leading * (1 - crop);
+      const cap = (window.innerHeight * maxShare) / 100 / visible;
+      if (cap > 0 && size > cap) size = Math.floor(cap * 100) / 100;
+    }
     text.style.setProperty('--fw-size', `${size}px`);
   };
 
@@ -43,6 +54,7 @@
       refit();
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
       if ('ResizeObserver' in window) new ResizeObserver(refit).observe(root);
+      window.addEventListener('resize', refit, { passive: true }); // the height cap follows the window height
 
       // The theme's "blur bottom edge of screen" effect would always sit on top of the wordmark
       // (it is at the very bottom of the page) — fade the blur out while the wordmark is on screen.

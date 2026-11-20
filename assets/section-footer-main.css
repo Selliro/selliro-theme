@@ -576,28 +576,30 @@
 }
 
 /* =====================================================
-   STICKY FOOTER REVEAL
-   Footer is fixed at viewport bottom (z-index 0).
-   Main content (z-index 1 + background) scrolls over it.
-   JS sets body padding-bottom = footer height so the
-   page stays fully scrollable and the footer is revealed
-   once all page content has scrolled away.
+   FOOTER REVEAL (sections/footer.liquid script sets body[data-footer-reveal])
+   Like Shopify's Concept theme: #MainContent (z-index 1, solid background) scrolls up off the footer,
+   which waits underneath.
+   · pin:  the footer fits on screen: position sticky, bottom 0, so it's pinned under the page and fully
+           uncovered at the end. Sticky keeps the normal layout (no body padding, no jump when switching).
+   · rise: taller than the screen: stays in the normal flow and slides up from under the page as it
+           scrolls in (transform set by the script), so every part of it stays reachable.
    ===================================================== */
-/* Only while the reveal is active (set by the footer script, and only when the footer fits on
-   screen) — a fixed footer taller than the viewport would show above the header on phones. */
-body.footer-reveal-on .shopify-section-group-footer-group {
-  position: fixed !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  z-index: 0;
-}
-
 body.footer-reveal-on #MainContent {
   position: relative;
   z-index: 1;
   background-color: var(--color-background, #fff);
+}
+
+body[data-footer-reveal='pin'] .shopify-section-group-footer-group {
+  position: sticky;
+  bottom: 0;
+  z-index: 0;
+}
+
+body[data-footer-reveal='rise'] .shopify-section-group-footer-group {
+  position: relative;
+  z-index: 0;
+  will-change: transform;
 }
 
 #header-group {
