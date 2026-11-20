@@ -758,6 +758,13 @@ body[data-footer-zone] #header-group .header-section {
   translate: 0 -100%;
 }
 
+/* …and the "blur the bottom edge of the screen" strip (layout/theme.liquid .blur-div) fades out, so the
+   copyright bar isn't blurred (with or without the wordmark) */
+body[data-footer-zone] .blur-div {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
 /* Disable reveal effect in the Shopify theme editor */
 .shopify-design-mode .shopify-section-group-footer-group {
   position: static !important;
