@@ -1022,14 +1022,15 @@
     position: relative;
   }
 
-  .menu-list__list-item--dropdown:where(:not([slot='overflow'])) > .menu-list__submenu--dropdown {
+  /* .header-menu-nav prefix: outranks the mega menu's panel and divider rules (full width, clip-path, inset line) */
+  .header-menu-nav .menu-list__list-item--dropdown:where(:not([slot='overflow'])) > .menu-list__submenu--dropdown {
     position: absolute;
     top: 100%;
     left: calc(-1 * var(--padding-md, 0.75rem));
     width: max-content;
     min-width: 13.5rem;
     max-width: 22rem;
-    padding: 0.85rem 0 0; /* invisible bridge between the link and the panel, so hover isn't lost */
+    padding: 1.6rem 0 0; /* invisible bridge from the link to the panel (opens just below the header bar) */
     background: transparent;
     box-shadow: none;
     clip-path: none;
@@ -1040,8 +1041,8 @@
     z-index: var(--layer-header-menu);
   }
 
-  .menu-list__list-item--dropdown:where(:not([slot='overflow'])):has(> .menu-list__link[aria-expanded='true']) > .menu-list__submenu--dropdown,
-  .menu-list__list-item--dropdown:where(:not([slot='overflow'])):focus-within > .menu-list__submenu--dropdown {
+  .header-menu-nav .menu-list__list-item--dropdown:where(:not([slot='overflow'])):has(> .menu-list__link[aria-expanded='true']) > .menu-list__submenu--dropdown,
+  .header-menu-nav .menu-list__list-item--dropdown:where(:not([slot='overflow'])):focus-within > .menu-list__submenu--dropdown {
     opacity: 1;
     translate: 0 0;
     visibility: visible;
@@ -1049,7 +1050,7 @@
   }
 
   /* Items near the right end open towards the left, so the panel stays on screen */
-  .menu-list__list-item--dropdown:where(:not([slot='overflow'])):nth-last-child(-n + 3) > .menu-list__submenu--dropdown {
+  .header-menu-nav .menu-list__list-item--dropdown:where(:not([slot='overflow'])):nth-last-child(-n + 3) > .menu-list__submenu--dropdown {
     left: auto;
     right: calc(-1 * var(--padding-md, 0.75rem));
   }
