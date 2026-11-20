@@ -496,11 +496,29 @@
 }
 
 /* ── Simple gallery: every image in one column, no thumbnails (new-arrivals-quick-view.js simplifyGallery).
-   The images scroll with the drawer; the product info beside them stays in view. ── */
-.na-qv-drawer__body .product-information__media.na-qv-media--simple {
-  position: static;
-  max-height: none;
-  overflow: visible;
+   Desktop: the image column is as tall as the drawer and scrolls on its own when there are more images
+   than fit (thin scrollbar as a hint), so the product info beside it stays put. ── */
+@media (min-width: 48rem) {
+  .na-qv-drawer__body .product-information__media.na-qv-media--simple {
+    position: sticky;
+    top: 0;
+    max-height: calc(100dvh - 6.5rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color-foreground-rgb) / 0.25) transparent;
+    padding-inline-end: 2px;
+  }
+
+  .na-qv-drawer__body .product-information__media.na-qv-media--simple::-webkit-scrollbar {
+    display: block;
+    width: 4px;
+  }
+
+  .na-qv-drawer__body .product-information__media.na-qv-media--simple::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgb(var(--color-foreground-rgb) / 0.25);
+  }
 }
 
 .na-qv-gallery {
@@ -522,16 +540,6 @@
   height: auto;
 }
 
-/* Several images: they scroll, the product info beside them stays put (it needs its own height for that,
-   not the row's full height) */
-@media (min-width: 48rem) {
-  .na-qv-drawer__body [data-product-grid-content]:has(.na-qv-media--simple) > .product-details {
-    position: sticky;
-    top: 0;
-    height: auto;
-    align-self: start;
-  }
-}
 
 /* Phones: a swipe row of images above the info */
 @media (max-width: 47.9375rem) {
