@@ -288,7 +288,7 @@
 
 .na-qv-drawer__body .buy-buttons-block .product-form-buttons {
   display: grid;
-  grid-template-columns: 8.75rem minmax(0, 1fr);
+  grid-template-columns: 7.5rem minmax(0, 1fr);
   gap: 0.8rem;
   align-items: stretch;
 }
@@ -356,7 +356,7 @@
 
 .na-qv-drawer__body .buy-buttons-block quantity-selector-component {
   min-width: 0;
-  max-width: 8.75rem;
+  max-width: 7.5rem;
 }
 
 .na-qv-drawer__body .buy-buttons-block .quantity-selector {
@@ -370,6 +370,7 @@
   font-size: 1.05rem;
   font-weight: 600;
   white-space: nowrap; /* "Add to cart" on one line beside the quantity box */
+  padding-inline: 1rem;
 }
 
 .na-qv-drawer__body .shopify-payment-button__button {
