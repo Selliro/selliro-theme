@@ -1,65 +1,302 @@
+{%- comment -%}
+  Collections page (list-collections template) — "Shop all collections".
+  · Header panel: eyebrow, title with an optional highlighted word (same as the homepage headings),
+    description, collection count and a "Find a collection" box that filters the cards as you type.
+  · Toolbar: what is showing and a Sort menu (Featured, Name A–Z / Z–A, Most products).
+  · Cards: the homepage "Shop by category" look — warm rounded card, product count, heading-font title,
+    short description, "Shop now" arrow. Editorial layout makes the first collection a large card.
+  · Collections: all collections (paginated) or a hand-picked list; empty collections can be hidden.
+  Files:  assets/section-main-collection-list.css (styles), assets/section-main-collection-list.js (find + sort),
+          snippets/collection-list-card.liquid (a card); shared: section-reveal.*, text-highlight.*
+  Order:  1. CSS   2. Liquid (data + markup)   3. Schema
+{%- endcomment -%}
 
+{%- comment -%} ============================================================== 1. CSS {%- endcomment -%}
+{{ 'section-main-collection-list.css' | asset_url | stylesheet_tag }}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+{{ 'text-highlight.css' | asset_url | stylesheet_tag }}
 
-{% liquid
-  assign section_collections = collections
-  assign max_items = 20
-%}
+{%- comment -%} Values that come from this section's settings (the rest is in section-main-collection-list.css) {%- endcomment -%}
+{% style %}
+  #shopify-section-{{ section.id }} .coll-list {
+    --coll-pad-top: {{ section.settings.padding-block-start }}px;
+    --coll-pad-bottom: {{ section.settings.padding-block-end }}px;
+    --coll-columns: {{ section.settings.columns }};
+    --coll-columns-mobile: {{ section.settings.mobile_columns }};
+    --coll-ratio: {{ section.settings.image_ratio | default: '4 / 3' }};
+    --coll-card-bg: {{ section.settings.card_bg | default: '#f0ece6' }};
+    --coll-card-text: {{ section.settings.card_text | default: '#111111' }};
+    --text-hl-color: {{ section.settings.highlight_color | default: '#f8d12f' }};
+  }
+{% endstyle %}
+
+{%- comment -%} =========================================================== 2. Liquid {%- endcomment -%}
+<script
+  src="{{ 'section-main-collection-list.js' | asset_url }}"
+  defer
+></script>
+<script
+  src="{{ 'section-reveal.js' | asset_url }}"
+  defer
+></script>
+<script
+  src="{{ 'text-highlight.js' | asset_url }}"
+  defer
+></script>
+
+{%- liquid
+  assign per_page = section.settings.per_page | default: 12
+  assign use_manual = false
+  if section.settings.source == 'manual' and section.settings.collection_list != blank
+    assign use_manual = true
+  endif
+
+  assign heading = section.settings.title | escape
+  assign hl_word = section.settings.highlight_word | strip | escape
+  assign hl_style = section.settings.highlight_style | default: 'none'
+  if hl_word != blank and hl_style != 'none' and heading contains hl_word
+    capture hl_markup
+      render 'text-highlight', word: hl_word, style: hl_style
+    endcapture
+    assign heading = heading | replace_first: hl_word, hl_markup
+  endif
+-%}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-
-<div
-  class="
-    section
-    section--{{ section.settings.section_width }}
-    color-{{ section.settings.color_scheme }}
-    section-resource-list
-    spacing-style
-    gap-style
-  "
-  style="
-    {% render 'spacing-style', settings: section.settings %}
-    {% render 'gap-style', value: section.settings.gap %}
-  "
+<collection-list-page
+  class="coll-list color-{{ section.settings.color_scheme }}"
+  data-reveal
+  data-showing="{{ 'collections_plus.showing_js' | t | escape }}"
+  data-showing-one="{{ 'collections_plus.showing_one_js' | t | escape }}"
 >
-  <div class="section-resource-list__content">
-    {%- content_for 'blocks' -%}
-  </div>
+  {%- paginate collections by per_page -%}
+    {%- liquid
+      if use_manual
+        assign list = section.settings.collection_list
+      else
+        assign list = collections
+      endif
 
-  {% if section_collections == null %}
-    {% for i in (1..max_items) %}
-      {% assign section_collections = section_collections | append: ', ' %}
-    {% endfor %}
+      # Count what will be shown (empty collections can be hidden)
+      assign shown = 0
+      for c in list
+        if section.settings.hide_empty and c.products_count == 0
+          continue
+        endif
+        assign shown = shown | plus: 1
+      endfor
 
-    {% assign section_collections = section_collections | split: ',' %}
-  {% endif %}
+      assign total = shown
+      if use_manual == false and paginate.pages > 1
+        assign total = paginate.items
+      endif
 
-  {% capture list_items %}
-    {% for collection in section_collections limit: max_items %}
-      <div class="resource-list__item">
-        {% content_for 'block', type: '_collection-card', id: 'static-collection-card', closest.collection: collection %}
+      assign editorial = false
+      if section.settings.layout == 'editorial' and shown >= 3 and paginate.current_page == 1
+        assign editorial = true
+      endif
+    -%}
+
+    {%- comment -%} -------------------------------------------------------- header {%- endcomment -%}
+    <header class="coll-list__hero">
+      <div class="coll-list__hero-text">
+        {%- if section.settings.eyebrow != blank -%}
+          <p
+            class="coll-list__eyebrow"
+            data-reveal-fade
+          >
+            {{ section.settings.eyebrow | escape }}
+          </p>
+        {%- endif -%}
+        <h1
+          class="coll-list__title"
+          data-reveal-title
+        >
+          {{ heading }}
+        </h1>
+        {%- if section.settings.description != blank -%}
+          <div
+            class="coll-list__description rte"
+            data-reveal-fade
+          >
+            {{ section.settings.description }}
+          </div>
+        {%- endif -%}
+        <p
+          class="coll-list__count"
+          data-reveal-fade
+        >
+          {{ 'collections_plus.collections_count' | t: count: total }}
+        </p>
       </div>
-      {% unless forloop.last %}
-        <!--@list/split-->
-      {% endunless %}
-    {% endfor %}
-  {% endcapture %}
 
-  {% liquid
-    # Create an array from the list items to be used for different layout types
-    assign list_items_array = list_items | strip | split: '<!--@list/split-->'
-  %}
+      {%- if section.settings.show_find and shown > 1 -%}
+        <div
+          class="coll-list__find"
+          role="search"
+          data-reveal-fade
+        >
+          <label
+            class="visually-hidden"
+            for="CollectionFind-{{ section.id }}"
+          >
+            {{- 'collections_plus.find_label' | t -}}
+          </label>
+          <svg
+            class="coll-list__find-icon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.6-3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <input
+            id="CollectionFind-{{ section.id }}"
+            class="coll-list__find-input"
+            type="search"
+            placeholder="{{ 'collections_plus.find_placeholder' | t }}"
+            autocomplete="off"
+            data-coll-find
+          >
+        </div>
+      {%- endif -%}
+    </header>
 
-  {% render 'resource-list',
-    list_items: list_items,
-    list_items_array: list_items_array,
-    settings: section.settings,
-    carousel_ref: 'mainCollectionList',
-    slide_count: max_items,
-    content_type: 'collections',
-    test_id: 'collections-list-grid'
-  %}
-</div>
+    {%- if shown == 0 -%}
+      {%- comment -%} --------------------------------------------------- empty {%- endcomment -%}
+      <div class="coll-list__body">
+        <div class="coll-list__empty">
+          <h2 class="coll-list__empty-title">{{ 'collections_plus.empty_title' | t }}</h2>
+          <p class="coll-list__empty-text">{{ 'collections_plus.empty_text' | t }}</p>
+        </div>
+      </div>
+    {%- else -%}
+      <div class="coll-list__body">
+        {%- comment -%} ---------------------------------------------------- toolbar {%- endcomment -%}
+        <div class="coll-list__toolbar">
+          <p
+            class="coll-list__status"
+            role="status"
+            data-coll-status
+          >
+            {{ 'collections_plus.showing_html' | t: count: shown }}
+          </p>
 
+          {%- if section.settings.show_sort and shown > 1 -%}
+            <div class="coll-list__sort">
+              <label for="CollectionSort-{{ section.id }}">{{ 'collections_plus.sort_label' | t }}</label>
+              <div class="coll-list__select">
+                <select
+                  id="CollectionSort-{{ section.id }}"
+                  data-coll-sort
+                >
+                  <option value="featured">{{ 'collections_plus.sort_featured' | t }}</option>
+                  <option value="az">{{ 'collections_plus.sort_az' | t }}</option>
+                  <option value="za">{{ 'collections_plus.sort_za' | t }}</option>
+                  <option value="products">{{ 'collections_plus.sort_products' | t }}</option>
+                </select>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} ------------------------------------------------------ cards {%- endcomment -%}
+        <ul
+          class="coll-list__grid list-unstyled{% if editorial %} coll-list__grid--editorial{% endif %}"
+          role="list"
+          data-coll-grid
+        >
+          {%- assign n = 0 -%}
+          {%- for c in list -%}
+            {%- if section.settings.hide_empty and c.products_count == 0 -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- liquid
+              assign is_featured = false
+              if editorial and n == 0
+                assign is_featured = true
+              endif
+            -%}
+            {% render 'collection-list-card', collection: c, settings: section.settings, featured: is_featured, index: n %}
+            {%- assign n = n | plus: 1 -%}
+          {%- endfor -%}
+        </ul>
+
+        <div
+          class="coll-list__nomatch"
+          data-coll-nomatch
+          hidden
+        >
+          <p>{{ 'collections_plus.no_match' | t }}</p>
+          <button
+            type="button"
+            class="coll-list__clear"
+            data-coll-clear
+          >
+            {{- 'collections_plus.clear' | t -}}
+          </button>
+        </div>
+
+        {%- comment -%} ------------------------------------------------- pagination {%- endcomment -%}
+        {%- if use_manual == false and paginate.pages > 1 -%}
+          <nav
+            class="coll-list__pagination"
+            aria-label="{{ 'content.pagination.nav_label' | t }}"
+          >
+            {%- if paginate.previous -%}
+              <a
+                class="coll-list__page"
+                href="{{ paginate.previous.url }}"
+                aria-label="{{ 'content.pagination.previous' | t }}"
+              >
+                ←
+              </a>
+            {%- endif -%}
+            {%- for part in paginate.parts -%}
+              {%- if part.is_link -%}
+                <a
+                  class="coll-list__page"
+                  href="{{ part.url }}"
+                  aria-label="{{ 'content.pagination.page' | t: page: part.title }}"
+                >
+                  {{- part.title -}}
+                </a>
+              {%- elsif part.title == paginate.current_page -%}
+                <span
+                  class="coll-list__page is-current"
+                  aria-current="page"
+                >
+                  {{- part.title -}}
+                </span>
+              {%- else -%}
+                <span class="coll-list__page coll-list__page--gap">{{ part.title }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if paginate.next -%}
+              <a
+                class="coll-list__page"
+                href="{{ paginate.next.url }}"
+                aria-label="{{ 'content.pagination.next' | t }}"
+              >
+                →
+              </a>
+            {%- endif -%}
+          </nav>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  {%- endpaginate -%}
+
+  {%- comment -%} Blocks added in the theme editor (and app blocks) {%- endcomment -%}
+  <div class="coll-list__blocks">
+    {% content_for 'blocks' %}
+  </div>
+</collection-list-page>
+
+{%- comment -%} =========================================================== 3. Schema {%- endcomment -%}
 {% schema %}
 {
   "name": "t:names.collection_list",
@@ -70,225 +307,227 @@
     },
     {
       "type": "@app"
-    },
-    {
-      "type": "text"
-    },
-    {
-      "type": "icon"
-    },
-    {
-      "type": "image"
-    },
-    {
-      "type": "button"
-    },
-    {
-      "type": "video"
-    },
-    {
-      "type": "group"
-    },
-    {
-      "type": "spacer"
-    },
-    {
-      "type": "_divider"
     }
   ],
-  "disabled_on": {
-    "groups": ["header", "footer"]
-  },
   "settings": [
     {
       "type": "header",
-      "content": "t:content.cards_layout"
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Shop by category"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Shop all collections"
+    },
+    {
+      "type": "text",
+      "id": "highlight_word",
+      "label": "Highlighted word",
+      "info": "A word from the heading to decorate, like the homepage headings.",
+      "default": "collections"
     },
     {
       "type": "select",
-      "id": "layout_type",
-      "label": "t:settings.layout_type",
+      "id": "highlight_style",
+      "label": "t:bundle_builder.highlight_style",
       "options": [
         {
-          "value": "grid",
-          "label": "t:options.grid"
+          "value": "squiggle",
+          "label": "t:bundle_builder.hl_squiggle"
         },
         {
-          "value": "carousel",
-          "label": "t:options.carousel"
+          "value": "wave",
+          "label": "t:bundle_builder.hl_wave"
         },
         {
-          "value": "bento",
-          "label": "t:options.bento"
+          "value": "marker",
+          "label": "t:bundle_builder.hl_marker"
         },
         {
-          "value": "editorial",
-          "label": "t:options.editorial"
+          "value": "circle",
+          "label": "t:bundle_builder.hl_circle"
+        },
+        {
+          "value": "none",
+          "label": "t:bundle_builder.hl_none"
         }
       ],
-      "default": "grid"
+      "default": "marker"
+    },
+    {
+      "type": "color",
+      "id": "highlight_color",
+      "label": "t:bundle_builder.highlight_color",
+      "default": "#f8d12f"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Skincare, sun care and make-up, grouped so you can find your next favourite fast.</p>"
     },
     {
       "type": "checkbox",
-      "id": "carousel_on_mobile",
-      "label": "t:settings.carousel_on_mobile",
-      "default": false,
-      "visible_if": "{{ section.settings.layout_type != 'carousel' }}"
+      "id": "show_find",
+      "label": "Show \"Find a collection\" box",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Collections"
+    },
+    {
+      "type": "select",
+      "id": "source",
+      "label": "Show",
+      "options": [
+        {
+          "value": "all",
+          "label": "All collections"
+        },
+        {
+          "value": "manual",
+          "label": "Selected collections"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "type": "collection_list",
+      "id": "collection_list",
+      "label": "Selected collections",
+      "info": "Used when Show is set to Selected collections."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_empty",
+      "label": "Hide collections with no products",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "per_page",
+      "label": "Collections per page",
+      "min": 6,
+      "max": 48,
+      "step": 6,
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sort",
+      "label": "Show sort menu",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "editorial",
+          "label": "Editorial (first collection large)"
+        },
+        {
+          "value": "grid",
+          "label": "Even grid"
+        }
+      ],
+      "default": "editorial"
     },
     {
       "type": "range",
       "id": "columns",
-      "label": "t:settings.columns",
-      "min": 1,
-      "max": 8,
+      "label": "Columns on desktop",
+      "min": 2,
+      "max": 4,
       "step": 1,
-      "default": 4,
-      "visible_if": "{{ section.settings.layout_type == 'grid' or section.settings.layout_type == 'carousel' }}"
+      "default": 3
     },
     {
       "type": "select",
       "id": "mobile_columns",
-      "label": "t:settings.mobile_columns",
+      "label": "Columns on mobile",
       "options": [
         {
           "value": "1",
-          "label": "t:options.one_number"
+          "label": "1"
         },
         {
           "value": "2",
-          "label": "t:options.two_number"
+          "label": "2"
         }
       ],
-      "default": "2",
-      "visible_if": "{{ section.settings.layout_type == 'grid' and section.settings.carousel_on_mobile == false }}"
+      "default": "2"
     },
     {
-      "type": "range",
-      "id": "columns_gap",
-      "label": "t:settings.horizontal_gap",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 8,
-      "visible_if": "{{ section.settings.layout_type == 'grid' or section.settings.layout_type == 'carousel' }}"
-    },
-    {
-      "type": "range",
-      "id": "bento_gap",
-      "label": "t:settings.gap",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 8,
-      "visible_if": "{{ section.settings.layout_type == 'bento' }}"
-    },
-    {
-      "type": "range",
-      "id": "rows_gap",
-      "label": "t:settings.vertical_gap",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 8,
-      "visible_if": "{{ section.settings.layout_type == 'grid'}}"
-    },
-    {
-      "type": "range",
-      "id": "max_collections",
-      "label": "t:settings.collection_count",
-      "min": 1,
-      "max": 16,
-      "step": 1,
-      "default": 4,
-      "visible_if": "{{ section.settings.layout_type == 'editorial' }}"
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image shape",
+      "options": [
+        {
+          "value": "4 / 3",
+          "label": "Landscape"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait"
+        }
+      ],
+      "default": "4 / 3"
     },
     {
       "type": "header",
-      "content": "t:content.carousel_navigation",
-      "visible_if": "{{ section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+      "content": "Cards"
     },
     {
-      "type": "select",
-      "id": "icons_style",
-      "label": "t:settings.icon",
-      "options": [
-        {
-          "value": "arrow",
-          "label": "t:options.arrows"
-        },
-        {
-          "value": "chevron",
-          "label": "t:options.chevrons"
-        },
-        {
-          "value": "arrows_large",
-          "label": "t:options.arrows_large"
-        },
-        {
-          "value": "chevron_large",
-          "label": "t:options.chevron_large"
-        },
-        {
-          "value": "none",
-          "label": "t:options.none"
-        }
-      ],
-      "default": "arrow",
-      "visible_if": "{{ section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+      "type": "checkbox",
+      "id": "show_count",
+      "label": "Show product count",
+      "default": true
     },
     {
-      "type": "select",
-      "id": "icons_shape",
-      "label": "t:settings.icon_background",
-      "options": [
-        {
-          "value": "none",
-          "label": "t:options.none"
-        },
-        {
-          "value": "circle",
-          "label": "t:options.circle"
-        },
-        {
-          "value": "square",
-          "label": "t:options.square"
-        }
-      ],
-      "default": "none",
-      "visible_if": "{{ section.settings.icons_style != 'none' and section.settings.layout_type == 'carousel' or section.settings.carousel_on_mobile == true }}"
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "capitalize_titles",
+      "label": "Capitalise first letter of titles",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card background",
+      "default": "#f0ece6"
+    },
+    {
+      "type": "color",
+      "id": "card_text",
+      "label": "Card text",
+      "default": "#111111"
     },
     {
       "type": "header",
-      "content": "t:content.section_layout"
-    },
-    {
-      "type": "select",
-      "id": "section_width",
-      "label": "t:settings.width",
-      "options": [
-        {
-          "value": "page-width",
-          "label": "t:options.page"
-        },
-        {
-          "value": "full-width",
-          "label": "t:options.full"
-        }
-      ],
-      "default": "page-width"
-    },
-    {
-      "type": "range",
-      "id": "gap",
-      "label": "t:settings.gap",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 12
+      "content": "t:content.appearance"
     },
     {
       "type": "color_scheme",
@@ -308,7 +547,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 0
+      "default": 24
     },
     {
       "type": "range",
@@ -318,7 +557,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 0
+      "default": 72
     }
   ]
 }
