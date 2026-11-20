@@ -34,7 +34,8 @@
 
 /* ------------------------------------------------------------------ open / close */
 .cart-drawer .cart-drawer__dialog--plus[open] {
-  animation: cdp-in 0.6s var(--cdp-ease) both;
+  /* backwards, not both: a transform left on the panel after the slide-in would clip the "Close" badge */
+  animation: cdp-in 0.6s var(--cdp-ease) backwards;
 }
 
 .cart-drawer .cart-drawer__dialog--plus.dialog-closing {
