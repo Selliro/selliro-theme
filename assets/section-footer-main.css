@@ -683,6 +683,15 @@
   border-end-end-radius: 24px;
 }
 
+/* Capitals sit fully inside the card, with room under them */
+.footer-main > .footer-wordmark--caps {
+  padding-bottom: clamp(1.5rem, 3.2vw, 2.75rem);
+}
+
+.footer-main > .footer-wordmark--caps .footer-wordmark__text {
+  font-weight: 600;
+}
+
 /* Back-to-top button (base.css, mix-blend-mode: difference) would turn blue-violet over the yellow layer:
    plain black while that layer is on screen */
 body.footer-wordmark-visible:not([data-footer-reveal='pin']) .progress-wrap,
