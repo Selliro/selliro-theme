@@ -295,6 +295,7 @@
    5. Toolbar (status, clear, view switch)
    ============================================================================== */
 .blog-list__body {
+  display: block; /* <blog-list-view> is a custom element (inline by default) */
   margin-top: 28px;
 }
 
@@ -309,11 +310,8 @@
 }
 
 .blog-list__status {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
   margin: 0;
+  line-height: 28px;
   font-size: 0.9rem;
   color: var(--blog-muted);
 }
@@ -328,6 +326,8 @@
   align-items: center;
   gap: 6px;
   min-height: 28px;
+  margin-left: 10px;
+  vertical-align: middle;
   padding: 0 12px;
   border-radius: 99px;
   background: var(--blog-soft);
