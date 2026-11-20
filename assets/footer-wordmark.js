@@ -61,30 +61,30 @@
       split(root);
       refit();
       root.classList.add('is-ready');
-      // Stacked footer reveal (body[data-footer-reveal="pin"], sections/footer.liquid): the wordmark sits
-      // under the footer card at first, so the letters rise when the card has moved off it ("footer:stack").
-      if (document.body.getAttribute('data-footer-reveal') === 'pin') {
-        if (root.closest('[data-footer-bottom-shown]')) {
-          root.classList.add('is-in'); // already uncovered (e.g. the page was reloaded at the bottom)
-          return;
-        }
-        const onStack = (/** @type {Event} */ event) => {
-          if (!(/** @type {CustomEvent} */ (event).detail || {}).bottomShown) return;
-          document.removeEventListener('footer:stack', onStack);
-          root.classList.add('is-in');
-        };
-        document.addEventListener('footer:stack', onStack);
-        return;
-      }
+      // Letters rise once the wordmark is really in view. In the stacked footer reveal
+      // (body[data-footer-reveal="pin"], sections/footer.liquid) it sits under the footer card at first,
+      // so there it waits until the card has moved off it ("footer:stack" / [data-footer-bottom-shown]).
+      // The mode can change after start-up (e.g. once this script has sized the text), so both are watched.
+      const covered = () =>
+        document.body.getAttribute('data-footer-reveal') === 'pin' && !root.closest('[data-footer-bottom-shown]');
+      let inView = false;
+      const reveal = () => {
+        root.classList.add('is-in');
+        io.disconnect();
+        document.removeEventListener('footer:stack', onStack);
+      };
+      const onStack = (/** @type {Event} */ event) => {
+        if ((/** @type {CustomEvent} */ (event).detail || {}).bottomShown) reveal();
+      };
       const io = new IntersectionObserver(
         (entries) => {
-          if (!entries.some((e) => e.isIntersecting)) return;
-          io.disconnect();
-          root.classList.add('is-in');
+          inView = entries.some((e) => e.isIntersecting);
+          if (inView && !covered()) reveal();
         },
         { threshold: 0.25 }
       );
       io.observe(root);
+      document.addEventListener('footer:stack', onStack);
     });
   };
 
