@@ -67,6 +67,12 @@
         // contexts, so inside them the bar's z-index can't beat later sections and their text
         // paints over it. Move the bar to <body>; connectedCallback runs again there.
         if (this.parentElement !== document.body) {
+          // Quick add / quick view copy the product grid (this bar included) into a pop-up:
+          // that copy stays hidden and leaves the page's own bar alone
+          if (this.closest('dialog, quick-add-modal, [data-product-grid-content] [data-product-grid-content]') || !this.closest('#MainContent')) {
+            this.hidden = true;
+            return;
+          }
           this.home = this.closest('.product-information, .shopify-section') || document;
           this.homeSection = this.closest('.shopify-section');
           // A re-render (theme editor, product swap) brings a fresh bar: it replaces the old one
