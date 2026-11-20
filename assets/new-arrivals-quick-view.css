@@ -362,6 +362,7 @@
   border-radius: 999px;
   font-size: 1.05rem;
   font-weight: 600;
+  white-space: nowrap; /* "Add to cart" on one line beside the quantity box */
 }
 
 .na-qv-drawer__body .shopify-payment-button__button {
