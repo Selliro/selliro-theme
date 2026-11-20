@@ -1,7 +1,6 @@
 /**
  * Footer wordmark (sections/footer.liquid): sizes the text so it spans the full footer width,
- * whatever its length, and (optionally) lets the letters rise in one by one as you scroll it into view
- * (scroll-linked: --fw-q, see setup).
+ * whatever its length, and (optionally) lets the letters rise in one by one when it comes into view.
  */
 (() => {
   if (window.__footerWordmarkInit) return;
@@ -62,40 +61,16 @@
       split(root);
       refit();
       root.classList.add('is-ready');
-      const text = root.querySelector('[data-footer-wordmark-text]');
-      if (text) text.style.setProperty('--fw-n', String(text.children.length || 1));
-
-      // Scroll-linked: the letters rise one after another as the wordmark is uncovered, and only finish
-      // when all of it is in view (the end of the page). --fw-q = share of the wordmark uncovered (0–1).
-      // Whatever covers it counts: the page above (#MainContent) and, in the stacked footer reveal
-      // (sections/footer.liquid), the footer card and copyright bar sliding up off it. Scrolling back up hides them again.
-      const main = document.getElementById('MainContent');
-      const section = root.closest('.shopify-section');
-      const covers = section ? [...section.querySelectorAll('.footer-main, .footer__content-bottom > .footer__page-width')] : [];
-      let frame = 0;
-      let last = -1;
-      const update = () => {
-        frame = 0;
-        const rect = root.getBoundingClientRect();
-        const vh = window.innerHeight;
-        if (rect.top > vh || rect.bottom < 0) {
-          if (last !== 0 && rect.top > vh) root.style.setProperty('--fw-q', (last = 0).toString());
-          return;
-        }
-        let cover = 0;
-        if (main) cover = Math.max(cover, main.getBoundingClientRect().bottom);
-        covers.forEach((el) => (cover = Math.max(cover, el.getBoundingClientRect().bottom)));
-        const visible = Math.min(rect.bottom, vh) - Math.max(rect.top, cover);
-        const q = Math.max(0, Math.min(1, visible / Math.max(1, rect.height)));
-        const rounded = Math.round(q * 1000) / 1000;
-        if (rounded !== last) root.style.setProperty('--fw-q', String((last = rounded)));
-      };
-      const queue = () => {
-        if (!frame) frame = requestAnimationFrame(update);
-      };
-      window.addEventListener('scroll', queue, { passive: true });
-      window.addEventListener('resize', queue, { passive: true });
-      update();
+      // Letters rise in once, the first time the wordmark is well in view
+      const io = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((e) => e.isIntersecting)) return;
+          io.disconnect();
+          root.classList.add('is-in');
+        },
+        { threshold: 0.4 }
+      );
+      io.observe(root);
     });
   };
 

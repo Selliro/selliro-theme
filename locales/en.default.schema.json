@@ -54,14 +54,14 @@
     "number_color_info": "Leave empty to use the color scheme text color."
   },
   "footer_wordmark": {
-    "header": "Big text at the bottom",
+    "header": "Big text at the bottom of the footer",
     "text": "Text",
-    "text_info": "Shown huge across the full width of the footer bottom, like a wordmark. Leave empty to hide.",
+    "text_info": "Shown huge across the full width of the bottom of the footer, like a wordmark. Leave empty to hide.",
     "font": "Font",
     "crop": "Cut off at the bottom",
     "crop_info": "How much of the letters runs off the bottom edge.",
     "color": "Color",
-    "color_info": "Leave empty to use the footer bottom color scheme.",
+    "color_info": "Leave empty to use the footer text color.",
     "animate": "Letters rise in on scroll"
   },
   "slideshow_media": {
