@@ -12,7 +12,8 @@
   //                              the bottom of the screen, 100 % = end of the page):
   //                              0–30 %   footer card + copyright bar slide up over the last section, fully in
   //                                       view at 30 % (faster than the page, so the two overlap),
-  //                              30–100 % they move on up to their place and uncover the big wordmark
+  //                              30–50 %  they stay there (the last section still meets them, no gap),
+  //                              50–100 % they move on up to their place and uncover the big wordmark
   //                                       underneath; its letters rise as it shows (footer-wordmark.js).
   //                              Scrolling back up plays it in reverse.
   //   data-footer-reveal="rise"  taller than that (phones, short windows): pinning would put its top out
@@ -52,7 +53,8 @@
   // place: H at 0 % (just below the screen), the wordmark's height at 30 % (sheet fully in view at the
   // bottom), 0 at the end. The wordmark only shows below the sheet (clip-path), so nothing of the footer
   // covers the page before the sheet gets there.
-  var SHEET_IN = 0.3;
+  var SHEET_IN = 0.3; // sheet fully in view
+  var WORDMARK_FROM = 0.5; // sheet starts moving on, uncovering the wordmark
   function stack() {
     card = card || footer.querySelector('.footer-main');
     bar = bar || footer.querySelector('.footer__content-bottom > .footer__page-width');
@@ -64,12 +66,16 @@
     var W = Math.max(0, H - S);
     var r = Math.max(0, Math.min(H, vh - main.getBoundingClientRect().bottom));
     var p = H > 0 ? r / H : 1;
+    // Hold no longer than the page still reaches the sheet (r <= S), so no gap opens above it
+    var from = Math.max(SHEET_IN, Math.min(WORDMARK_FROM, H > 0 ? S / H : 0));
     var offset;
     if (p <= SHEET_IN) {
       var e = p / SHEET_IN;
       offset = H - S * (1 - (1 - e) * (1 - e)); // ease-out: rises quickly, settles softly
+    } else if (p <= from) {
+      offset = W;
     } else {
-      offset = W * (1 - (p - SHEET_IN) / (1 - SHEET_IN));
+      offset = W * (1 - (p - from) / (1 - from));
     }
     var t = offset > 0.5 ? 'translate3d(0,' + offset.toFixed(1) + 'px,0)' : '';
     card.style.transform = t;
