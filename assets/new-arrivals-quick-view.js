@@ -1,7 +1,8 @@
 /**
  * New Arrivals quick view drawer.
  *
- * Fetches the product page, clones its product grid (media + details) into the drawer.
+ * Fetches the product page, clones its product grid (media + details) into the drawer, trimmed to the
+ * essentials (see KEEP_IN_DETAILS) with the images in one simple column (see simplifyGallery).
  * - Opens immediately with a skeleton, prefetches on hover/focus, caches per URL.
  * - Focus is trapped inside the dialog and restored to the trigger on close.
  * - Variant changes inside the drawer never rewrite the current page URL.
@@ -268,6 +269,9 @@
       el.setAttribute('data-template-product-match', 'false');
     });
 
+    trimDetails(grid);
+    simplifyGallery(grid);
+
     // "View full details" link, like every major theme's quick view.
     var label = drawer.getAttribute('data-label-view-details');
     var details = grid.querySelector('.product-details');
@@ -284,6 +288,81 @@
         details.appendChild(link);
       }
     }
+  }
+
+  /*
+   * The quick view shows the essentials only: vendor, title, rating, price, a 2-line description,
+   * variants, stock ("Hurry! Only 6 left"), quantity + Add to cart + Buy it now, and View full details.
+   * Everything else on the product page (benefits, tags, badges, Pair it with, How to use / Ingredients
+   * accordions, promos, payment icons, sticky bar…) stays on the product page.
+   */
+  var KEEP_IN_DETAILS = [
+    '.view-product-title',
+    'rte-formatter.text-block', // eyebrow / vendor line
+    '.text-block[class*="__title"]',
+    '.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6)', // product title, whatever the block is called
+    '.pdp-rating',
+    'product-price',
+    'pdp-read-more',
+    '.text-block[class*="__description"]',
+    'variant-picker',
+    'swatches-variant-picker-component',
+    '.buy-buttons-block',
+    'product-inventory', // hidden: its text feeds the stock line above the buttons
+    '[data-na-qv-view-details]',
+  ].join(',');
+
+  /** @param {Element} grid */
+  function trimDetails(grid) {
+    var details = grid.querySelector('.product-details');
+    if (!details) return;
+    var content = details.querySelector('.group-block-content') || details;
+    Array.prototype.slice.call(content.children).forEach(function (el) {
+      if (/^(SCRIPT|STYLE|LINK|TEMPLATE)$/.test(el.tagName)) return;
+      if (!el.matches(KEEP_IN_DETAILS)) el.remove();
+    });
+    // Anything of the above that sat inside a kept group
+    details.querySelectorAll('pdp-sticky-bar, .pdp-pair, pdp-pair-carousel, .accordion, .pdp-promos, .pdp-badges, .payment-icons, local-pickup').forEach(function (el) {
+      el.remove();
+    });
+  }
+
+  /*
+   * One column of images, no thumbnails or slideshow: every product image, stacked (a swipe row on phones).
+   * Videos / 3D models have no image here and are left out; if there is no image at all the gallery stays as is.
+   */
+  /** @param {Element} grid */
+  function simplifyGallery(grid) {
+    var media = grid.querySelector('.product-information__media');
+    if (!media) return;
+    var seen = {};
+    var images = [];
+    media.querySelectorAll('img.product-media__image, .product-media img').forEach(function (img) {
+      if (!(img instanceof HTMLImageElement) || img.closest('slideshow-controls')) return;
+      var key = (img.getAttribute('src') || '').split('?')[0].replace(/_\d+x\d*(?=\.)/, '');
+      if (!key || seen[key]) return;
+      seen[key] = true;
+      images.push(img);
+    });
+    if (!images.length) return;
+
+    var gallery = document.createElement('div');
+    gallery.className = 'na-qv-gallery';
+    gallery.setAttribute('data-na-qv-gallery', '');
+    images.forEach(function (img, index) {
+      var item = document.createElement('figure');
+      item.className = 'na-qv-gallery__item';
+      var copy = /** @type {HTMLImageElement} */ (img.cloneNode(false));
+      copy.className = 'na-qv-gallery__image';
+      copy.removeAttribute('style');
+      copy.setAttribute('sizes', '(min-width: 768px) 340px, 82vw');
+      copy.setAttribute('loading', index < 2 ? 'eager' : 'lazy');
+      if (!copy.getAttribute('alt')) copy.setAttribute('alt', '');
+      item.appendChild(copy);
+      gallery.appendChild(item);
+    });
+    media.replaceChildren(gallery);
+    media.classList.add('na-qv-media--simple');
   }
 
   /**
