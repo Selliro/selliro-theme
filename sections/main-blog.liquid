@@ -232,10 +232,10 @@
           </a>
         </div>
       {%- else -%}
-        {%- if show_featured -%}
-          {% render 'blog-list-card', post: blog.articles.first, blog: blog, settings: section.settings, featured: true %}
-        {%- endif -%}
-
+        {%- comment -%}
+          One list for every post, so the grid / list switch changes all of them.
+          The featured post (newest, first page of All) is the first item and spans the full row in grid view.
+        {%- endcomment -%}
         <ul
           class="blog-list__grid list-unstyled"
           role="list"
@@ -243,11 +243,14 @@
         >
           {%- for post in blog.articles -%}
             {%- if show_featured and forloop.first -%}
-              {%- continue -%}
+              <li class="blog-list__item blog-list__item--featured">
+                {% render 'blog-list-card', post: post, blog: blog, settings: section.settings, featured: true %}
+              </li>
+            {%- else -%}
+              <li class="blog-list__item">
+                {% render 'blog-list-card', post: post, blog: blog, settings: section.settings, index: forloop.index0 %}
+              </li>
             {%- endif -%}
-            <li class="blog-list__item">
-              {% render 'blog-list-card', post: post, blog: blog, settings: section.settings, index: forloop.index0 %}
-            </li>
           {%- endfor -%}
         </ul>
 
