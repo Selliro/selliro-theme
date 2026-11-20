@@ -3,6 +3,8 @@
  *   <cart-shipping-progress>  free shipping bar; converts the threshold when the shopper uses another currency
  *   <cart-recommendations>    "You may also like" row with quick add, rendered from sections/cart-recommendations
  *   added-item highlight      the row of a product that was just added pulses once
+ *   close badge               desktop: a round "Close" badge follows the mouse over the dimmed page
+ *                             outside the panel (a click there already closes the drawer)
  *
  * The drawer is re-rendered (morphed) after every cart change. <cart-recommendations> carries
  * data-skip-subtree-update, so the morph leaves its products alone; it reloads itself when its data-cart-key
@@ -294,6 +296,80 @@ document.addEventListener(ThemeEvents.cartUpdate, (event) => {
     });
   }, 80);
 });
+
+/* ------------------------------------------------------------- close badge */
+{
+  const finePointer = window.matchMedia('(min-width: 750px) and (hover: hover) and (pointer: fine)');
+  let targetX = 0;
+  let targetY = 0;
+  let x = 0;
+  let y = 0;
+  let frame = 0;
+  /** @type {HTMLElement | null} */
+  let badge = null;
+
+  const openDrawer = () => document.querySelector('.cart-drawer__dialog--plus[open]:not(.dialog-closing)');
+
+  const hide = () => {
+    document.querySelectorAll('[data-cdp-cursor][data-on]').forEach((el) => el.removeAttribute('data-on'));
+    badge = null;
+  };
+
+  const place = () => {
+    if (badge) badge.style.translate = `${x}px ${y}px`;
+  };
+
+  // Eases the badge towards the pointer so it trails it smoothly
+  const step = () => {
+    x += (targetX - x) * 0.28;
+    y += (targetY - y) * 0.28;
+    place();
+    frame = Math.abs(targetX - x) + Math.abs(targetY - y) > 0.3 ? requestAnimationFrame(step) : 0;
+  };
+
+  document.addEventListener(
+    'pointermove',
+    (event) => {
+      const dialog = openDrawer();
+      if (!dialog || !finePointer.matches || event.pointerType !== 'mouse') return hide();
+
+      const rect = dialog.getBoundingClientRect();
+      const outside =
+        event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+      if (!outside) return hide();
+
+      const el = /** @type {HTMLElement | null} */ (dialog.querySelector('[data-cdp-cursor]'));
+      if (!el) return;
+      targetX = event.clientX;
+      targetY = event.clientY;
+      if (badge !== el || !el.hasAttribute('data-on')) {
+        // Appearing: start right at the pointer instead of flying in from the last spot
+        badge = el;
+        x = targetX;
+        y = targetY;
+        place();
+        el.setAttribute('data-on', '');
+        return;
+      }
+      if (prefersReducedMotion()) {
+        x = targetX;
+        y = targetY;
+        place();
+      } else if (!frame) {
+        frame = requestAnimationFrame(step);
+      }
+    },
+    { passive: true }
+  );
+
+  document.documentElement.addEventListener('mouseleave', hide);
+  document.addEventListener('pointerdown', (event) => {
+    // The click outside closes the drawer; let the badge shrink away with it
+    if (badge && event.pointerType === 'mouse') requestAnimationFrame(() => !openDrawer() && hide());
+  });
+  document.addEventListener('dialog:close', hide);
+  document.addEventListener('keydown', (event) => event.key === 'Escape' && hide());
+}
 
 if (!customElements.get('cart-shipping-progress')) customElements.define('cart-shipping-progress', CartShippingProgress);
 if (!customElements.get('cart-recommendations')) customElements.define('cart-recommendations', CartRecommendations);
