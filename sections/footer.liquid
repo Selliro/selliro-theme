@@ -8,20 +8,16 @@
   // (position: sticky; bottom: 0, behind #MainContent) and the page lifts off it as you reach the end.
   // Sticky leaves the layout alone (no body padding), so nothing jumps when the mode changes.
   //   data-footer-reveal="pin"   the footer fits the screen. It's pinned at the bottom of the screen, above the
-  //                              page, and plays out with the scroll (0 % = the page's last section reaches
-  //                              the bottom of the screen, 100 % = end of the page):
-  //                              0–30 %   footer card + copyright bar slide up over the last section, fully in
-  //                                       view at 30 % (faster than the page, so the two overlap),
-  //                              30–50 %  they stay there (the last section still meets them, no gap),
-  //                              50–100 % they move on up to their place and uncover the big wordmark
-  //                                       underneath; its letters rise as it shows (footer-wordmark.js).
-  //                              Scrolling back up plays it in reverse.
+  //                              page: as the last section reaches the bottom of the screen, the footer (card
+  //                              with menus, newsletter and wordmark + the copyright bar) slides up over it and
+  //                              is fully in view after 30 % of the remaining scroll; the page then finishes
+  //                              moving up behind it. Scrolling back up plays it in reverse.
   //   data-footer-reveal="rise"  taller than that (phones, short windows): pinning would put its top out
   //                              of reach, so it rises into view instead, a short slide tied to scroll
   //   (no attribute)             theme editor or reduced motion: a normal footer
   // While the footer is on screen the sticky header slides away (body[data-footer-zone]), so the footer
   // gets the whole screen and is fully visible at the end. Nothing scrolls on its own: the footer only
-  // moves with the shopper's scroll (the wordmark letters follow it too, see footer-wordmark.js).
+  // moves with the shopper's scroll.
   if (document.documentElement.classList.contains('shopify-design-mode')) return;
   var footer = document.querySelector('.shopify-section-group-footer-group');
   if (!footer) return;
@@ -30,9 +26,8 @@
   var mode = '';
   var frame = 0;
   var main = document.getElementById('MainContent');
-  var card = null; // top layer: .footer-main (found once parsed: this script runs before the footer markup)
-  var bar = null; // …and the copyright bar under it (.footer__content-bottom > .footer__page-width)
-  var under = null; // beneath them: the wordmark ([data-footer-wordmark]; or the bottom area if there's none)
+  var parts = null; // the card (.footer-main) and the copyright bar (.footer__content-bottom), moved together
+                     // (found once parsed: this script runs before the footer markup)
   var underShown = false;
 
   var inZone = false;
@@ -49,45 +44,20 @@
   }
 
 
-  // Pinned: see the timeline above. offset = how far the card + copyright bar ("sheet") sit below their
-  // place: H at 0 % (just below the screen), the wordmark's height at 30 % (sheet fully in view at the
-  // bottom), 0 at the end. The wordmark only shows below the sheet (clip-path), so nothing of the footer
-  // covers the page before the sheet gets there.
-  var SHEET_IN = 0.3; // sheet fully in view
-  var WORDMARK_FROM = 0.5; // sheet starts moving on, uncovering the wordmark
+  // Pinned: offset = how far the footer sits below its place: its height at 0 % (just below the screen),
+  // 0 from 30 % on (fully in view). Ease-out: it comes up quickly and settles softly.
+  var SHEET_IN = 0.3;
   function stack() {
-    card = card || footer.querySelector('.footer-main');
-    bar = bar || footer.querySelector('.footer__content-bottom > .footer__page-width');
-    under = under || footer.querySelector('[data-footer-wordmark]');
-    if (!card || !main) return;
+    if (!parts || !parts.length) parts = footer.querySelectorAll('.footer-main, .footer__content-bottom');
+    if (!parts.length || !main) return;
     var vh = window.innerHeight;
     var H = footer.offsetHeight;
-    var S = card.offsetHeight + (bar ? bar.offsetHeight : 0);
-    var W = Math.max(0, H - S);
     var r = Math.max(0, Math.min(H, vh - main.getBoundingClientRect().bottom));
     var p = H > 0 ? r / H : 1;
-    // Hold no longer than the page still reaches the sheet (r <= S), so no gap opens above it
-    var from = Math.max(SHEET_IN, Math.min(WORDMARK_FROM, H > 0 ? S / H : 0));
-    var offset;
-    if (p <= SHEET_IN) {
-      var e = p / SHEET_IN;
-      offset = H - S * (1 - (1 - e) * (1 - e)); // ease-out: rises quickly, settles softly
-    } else if (p <= from) {
-      offset = W;
-    } else {
-      offset = W * (1 - (p - from) / (1 - from));
-    }
+    var e = Math.min(1, p / SHEET_IN);
+    var offset = H * (1 - (1 - (1 - e) * (1 - e)));
     var t = offset > 0.5 ? 'translate3d(0,' + offset.toFixed(1) + 'px,0)' : '';
-    card.style.transform = t;
-    if (bar) bar.style.transform = t;
-
-    var clipped = 0;
-    if (under) {
-      var sheetBottom = footer.getBoundingClientRect().top + S + offset;
-      var u = under.getBoundingClientRect();
-      clipped = Math.max(0, Math.min(u.height, sheetBottom - u.top));
-      under.style.clipPath = clipped > 0.5 ? 'inset(' + clipped.toFixed(1) + 'px 0 0 0)' : '';
-    }
+    for (var i = 0; i < parts.length; i++) parts[i].style.transform = t;
     var shown = p >= SHEET_IN * 0.85; // the yellow copyright bar has reached the bottom of the screen
     if (shown !== underShown) {
       underShown = shown;
@@ -115,11 +85,9 @@
     if (next !== mode) {
       mode = next;
       footer.style.transform = '';
-      footer.querySelectorAll('.footer-main, .footer__content-bottom > .footer__page-width').forEach(function (el) {
+      footer.querySelectorAll('.footer-main, .footer__content-bottom').forEach(function (el) {
         el.style.transform = '';
       });
-      var wm = footer.querySelector('[data-footer-wordmark]');
-      if (wm) wm.style.clipPath = '';
       if (mode) body.setAttribute('data-footer-reveal', mode);
       else body.removeAttribute('data-footer-reveal');
       body.classList.toggle('footer-reveal-on', Boolean(mode));
@@ -358,6 +326,41 @@
     {%- endif -%}
     </div>
   </div>
+  {%- comment -%} Big wordmark across the full width of the bottom of the card {%- endcomment -%}
+  {%- if section.settings.wordmark_text != blank -%}
+    {%- liquid
+      assign wm_source = section.settings.wordmark_font_source | default: 'heading'
+      case wm_source
+        when 'body'
+          assign wm_family = 'var(--font-body--family)'
+          assign wm_weight = 'var(--font-body--weight)'
+        when 'accent'
+          assign wm_family = 'var(--font-accent--family)'
+          assign wm_weight = 'var(--font-accent--weight)'
+        when 'custom'
+          assign wm_family = section.settings.wordmark_font.family | append: ', ' | append: section.settings.wordmark_font.fallback_families
+          assign wm_weight = section.settings.wordmark_font.weight
+        else
+          assign wm_family = 'var(--font-heading--family)'
+          assign wm_weight = 'var(--font-heading--weight)'
+      endcase
+      assign wm_crop = section.settings.wordmark_crop | default: 30 | divided_by: 100.0
+    -%}
+    {%- if wm_source == 'custom' -%}
+      {% style %}
+        {{ section.settings.wordmark_font | font_face: font_display: 'swap' }}
+      {% endstyle %}
+    {%- endif -%}
+    <div
+      class="footer-wordmark{% if section.settings.wordmark_animate %} footer-wordmark--animate{% endif %}"
+      data-footer-wordmark
+      style="--fw-family: {{ wm_family }}; --fw-weight: {{ wm_weight }}; --fw-crop: {{ wm_crop }};{% if section.settings.wordmark_color != blank %} --fw-color: {{ section.settings.wordmark_color }};{% endif %}"
+      aria-hidden="true"
+    >
+      <span class="footer-wordmark__text" data-footer-wordmark-text>{{ section.settings.wordmark_text | escape }}</span>
+    </div>
+    <script src="{{ 'footer-wordmark.js' | asset_url }}" defer></script>
+  {%- endif -%}
 </div>
 
 <div
@@ -409,44 +412,10 @@
       </div>
     </div>
   </div>
-  {%- if section.settings.wordmark_text != blank -%}
-    {%- liquid
-      assign wm_source = section.settings.wordmark_font_source | default: 'heading'
-      case wm_source
-        when 'body'
-          assign wm_family = 'var(--font-body--family)'
-          assign wm_weight = 'var(--font-body--weight)'
-        when 'accent'
-          assign wm_family = 'var(--font-accent--family)'
-          assign wm_weight = 'var(--font-accent--weight)'
-        when 'custom'
-          assign wm_family = section.settings.wordmark_font.family | append: ', ' | append: section.settings.wordmark_font.fallback_families
-          assign wm_weight = section.settings.wordmark_font.weight
-        else
-          assign wm_family = 'var(--font-heading--family)'
-          assign wm_weight = 'var(--font-heading--weight)'
-      endcase
-      assign wm_crop = section.settings.wordmark_crop | default: 30 | divided_by: 100.0
-    -%}
-    {%- if wm_source == 'custom' -%}
-      {% style %}
-        {{ section.settings.wordmark_font | font_face: font_display: 'swap' }}
-      {% endstyle %}
-    {%- endif -%}
-    <div
-      class="footer-wordmark{% if section.settings.wordmark_animate %} footer-wordmark--animate{% endif %}"
-      data-footer-wordmark
-      style="--fw-family: {{ wm_family }}; --fw-weight: {{ wm_weight }}; --fw-crop: {{ wm_crop }};{% if section.settings.wordmark_color != blank %} --fw-color: {{ section.settings.wordmark_color }};{% endif %}"
-      aria-hidden="true"
-    >
-      <span class="footer-wordmark__text" data-footer-wordmark-text>{{ section.settings.wordmark_text | escape }}</span>
-    </div>
-    <script src="{{ 'footer-wordmark.js' | asset_url }}" defer></script>
-  {%- endif -%}
 </div>
 
 {% stylesheet %}
-  /* Big wordmark across the full width of the footer bottom (sized by footer-wordmark.js) */
+  /* Big wordmark across the full width of the bottom of the footer card (sized by footer-wordmark.js) */
   .footer-wordmark {
     --fw-leading: 0.8;
 
@@ -488,21 +457,19 @@
     opacity: 0;
   }
 
-  /* Letters rise one after another, following the scroll (footer-wordmark.js sets --fw-q: 0 = covered,
-     1 = all in view). Each letter starts a little after the previous one (--fw-stagger) and they all
-     finish together at the end of the page. */
+  /* Letters rise in one after another, once, when the wordmark comes into view (footer-wordmark.js) */
   @media (prefers-reduced-motion: no-preference) {
-    .footer-wordmark--animate.is-ready .footer-wordmark__letter {
-      --fw-stagger: 0.12;
-      --fw-lp: clamp(
-        0,
-        calc(var(--fw-q, 0) * (1 + (var(--fw-n, 6) - 1) * var(--fw-stagger)) - var(--fw-i, 0) * var(--fw-stagger)),
-        1
-      );
+    .footer-wordmark--animate.is-ready:not(.is-in) .footer-wordmark__letter {
+      opacity: 0;
+      translate: 0 0.3em;
+    }
 
-      opacity: var(--fw-lp);
-      translate: 0 calc((1 - var(--fw-lp)) * 0.5em);
-      transition: opacity 0.15s linear, translate 0.15s linear;
+    .footer-wordmark--animate.is-in .footer-wordmark__letter {
+      opacity: 1;
+      translate: 0 0;
+      transition:
+        opacity 0.8s ease calc(var(--fw-i, 0) * 70ms),
+        translate 1.2s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--fw-i, 0) * 70ms);
     }
   }
 
