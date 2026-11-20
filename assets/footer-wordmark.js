@@ -1,6 +1,7 @@
 /**
  * Footer wordmark (sections/footer.liquid): sizes the text so it spans the full footer width,
- * whatever its length, and (optionally) lets the letters rise in when the footer scrolls into view.
+ * whatever its length, and (optionally) lets the letters rise in one by one as you scroll it into view
+ * (scroll-linked: --fw-q, see setup).
  */
 (() => {
   if (window.__footerWordmarkInit) return;
@@ -61,30 +62,39 @@
       split(root);
       refit();
       root.classList.add('is-ready');
-      // Letters rise once the wordmark is really in view. In the stacked footer reveal
-      // (body[data-footer-reveal="pin"], sections/footer.liquid) it sits under the footer card at first,
-      // so there it waits until the card has moved off it ("footer:stack" / [data-footer-bottom-shown]).
-      // The mode can change after start-up (e.g. once this script has sized the text), so both are watched.
-      const covered = () =>
-        document.body.getAttribute('data-footer-reveal') === 'pin' && !root.closest('[data-footer-bottom-shown]');
-      let inView = false;
-      const reveal = () => {
-        root.classList.add('is-in');
-        io.disconnect();
-        document.removeEventListener('footer:stack', onStack);
+      const text = root.querySelector('[data-footer-wordmark-text]');
+      if (text) text.style.setProperty('--fw-n', String(text.children.length || 1));
+
+      // Scroll-linked: the letters rise one after another as the wordmark is uncovered, and only finish
+      // when all of it is in view (the end of the page). --fw-q = share of the wordmark uncovered (0–1).
+      // Whatever covers it counts: the page above (#MainContent) and, in the stacked footer reveal
+      // (sections/footer.liquid), the footer card sliding up off it. Scrolling back up hides them again.
+      const main = document.getElementById('MainContent');
+      const card = root.closest('.shopify-section')?.querySelector('.footer-main');
+      let frame = 0;
+      let last = -1;
+      const update = () => {
+        frame = 0;
+        const rect = root.getBoundingClientRect();
+        const vh = window.innerHeight;
+        if (rect.top > vh || rect.bottom < 0) {
+          if (last !== 0 && rect.top > vh) root.style.setProperty('--fw-q', (last = 0).toString());
+          return;
+        }
+        let cover = 0;
+        if (main) cover = Math.max(cover, main.getBoundingClientRect().bottom);
+        if (card) cover = Math.max(cover, card.getBoundingClientRect().bottom);
+        const visible = Math.min(rect.bottom, vh) - Math.max(rect.top, cover);
+        const q = Math.max(0, Math.min(1, visible / Math.max(1, rect.height)));
+        const rounded = Math.round(q * 1000) / 1000;
+        if (rounded !== last) root.style.setProperty('--fw-q', String((last = rounded)));
       };
-      const onStack = (/** @type {Event} */ event) => {
-        if ((/** @type {CustomEvent} */ (event).detail || {}).bottomShown) reveal();
+      const queue = () => {
+        if (!frame) frame = requestAnimationFrame(update);
       };
-      const io = new IntersectionObserver(
-        (entries) => {
-          inView = entries.some((e) => e.isIntersecting);
-          if (inView && !covered()) reveal();
-        },
-        { threshold: 0.25 }
-      );
-      io.observe(root);
-      document.addEventListener('footer:stack', onStack);
+      window.addEventListener('scroll', queue, { passive: true });
+      window.addEventListener('resize', queue, { passive: true });
+      update();
     });
   };
 

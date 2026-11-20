@@ -15,8 +15,8 @@
   //                              of reach, so it rises into view instead, a short slide tied to scroll
   //   (no attribute)             theme editor or reduced motion: a normal footer
   // While the footer is on screen the sticky header slides away (body[data-footer-zone]), so the footer
-  // gets the whole screen and is fully visible at the end. And once you've scrolled about a third of the
-  // way into it and stop, the page glides on to the end, so the whole footer shows.
+  // gets the whole screen and is fully visible at the end. Nothing scrolls on its own: the footer only
+  // moves with the shopper's scroll (the wordmark letters follow it too, see footer-wordmark.js).
   if (document.documentElement.classList.contains('shopify-design-mode')) return;
   var footer = document.querySelector('.shopify-section-group-footer-group');
   if (!footer) return;
@@ -30,21 +30,6 @@
   var underShown = false;
 
   var inZone = false;
-  var lastY = window.scrollY;
-  var direction = 0;
-  var gliding = false;
-  var idle = 0;
-  var GLIDE_FROM = 0.3; // share of the footer reveal after which a pause glides on to the end
-
-  // How far the footer reveal has got: 0 = the page's bottom edge at the bottom of the screen, 1 = page end
-  function revealProgress() {
-    if (!main) return 0;
-    var vh = window.innerHeight;
-    var start = main.getBoundingClientRect().bottom + window.scrollY - vh;
-    var end = document.documentElement.scrollHeight - vh;
-    if (end - start < 1) return 0;
-    return (window.scrollY - start) / (end - start);
-  }
 
   // Header out of the way while the footer is showing (a little hysteresis so it doesn't flicker)
   function zone() {
@@ -57,20 +42,6 @@
     }
   }
 
-  function settle() {
-    idle = 0;
-    if (gliding) {
-      gliding = false;
-      return;
-    }
-    if (!mode || direction <= 0) return;
-    if (footer.contains(document.activeElement) && document.activeElement !== document.body) return;
-    var p = revealProgress();
-    if (p >= GLIDE_FROM && p < 0.995) {
-      gliding = true;
-      window.scrollTo({ top: document.documentElement.scrollHeight - window.innerHeight, behavior: 'smooth' });
-    }
-  }
 
   // Pinned: the card covers the bottom layer, then rises glued to the page's bottom edge to uncover it.
   // r = how much of the footer the page has uncovered; card offset = min(height of the bottom layer, H - r).
@@ -87,8 +58,7 @@
     var shown = offset < hidden * 0.5;
     if (shown !== underShown) {
       underShown = shown;
-      footer.toggleAttribute('data-footer-bottom-shown', shown); // read by footer-wordmark.js on start-up
-      document.dispatchEvent(new CustomEvent('footer:stack', { detail: { bottomShown: shown } }));
+      footer.toggleAttribute('data-footer-bottom-shown', shown); // styles the back-to-top button
     }
   }
 
@@ -126,17 +96,8 @@
   }
 
   window.addEventListener('scroll', function () {
-    var y = window.scrollY;
-    if (y !== lastY) direction = y > lastY ? 1 : -1;
-    lastY = y;
     if (mode && !frame) frame = requestAnimationFrame(rise);
-    // "scrollend" where supported, otherwise a short pause
-    if (!('onscrollend' in window)) {
-      clearTimeout(idle);
-      idle = setTimeout(settle, 160);
-    }
   }, { passive: true });
-  window.addEventListener('scrollend', settle, { passive: true });
   window.addEventListener('resize', sync, { passive: true });
   if (reduce.addEventListener) reduce.addEventListener('change', sync);
   if ('ResizeObserver' in window) new ResizeObserver(sync).observe(footer);
@@ -491,18 +452,21 @@
     opacity: 0;
   }
 
+  /* Letters rise one after another, following the scroll (footer-wordmark.js sets --fw-q: 0 = covered,
+     1 = all in view). Each letter starts a little after the previous one (--fw-stagger) and they all
+     finish together at the end of the page. */
   @media (prefers-reduced-motion: no-preference) {
-    .footer-wordmark--animate.is-ready:not(.is-in) .footer-wordmark__letter {
-      opacity: 0;
-      translate: 0 0.35em;
-    }
+    .footer-wordmark--animate.is-ready .footer-wordmark__letter {
+      --fw-stagger: 0.12;
+      --fw-lp: clamp(
+        0,
+        calc(var(--fw-q, 0) * (1 + (var(--fw-n, 6) - 1) * var(--fw-stagger)) - var(--fw-i, 0) * var(--fw-stagger)),
+        1
+      );
 
-    .footer-wordmark--animate.is-in .footer-wordmark__letter {
-      opacity: 1;
-      translate: 0 0;
-      transition:
-        opacity 0.7s ease calc(var(--fw-i, 0) * 60ms),
-        translate 1.1s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--fw-i, 0) * 60ms);
+      opacity: var(--fw-lp);
+      translate: 0 calc((1 - var(--fw-lp)) * 0.5em);
+      transition: opacity 0.15s linear, translate 0.15s linear;
     }
   }
 
