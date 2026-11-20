@@ -75,6 +75,7 @@
         "wordmark_text": "whispo",
         "wordmark_font_source": "body",
         "wordmark_font": "playfair_display_n4",
+        "wordmark_case": "uppercase",
         "wordmark_crop": 0,
         "wordmark_color": "",
         "wordmark_animate": true,
