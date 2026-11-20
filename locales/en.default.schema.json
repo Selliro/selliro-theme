@@ -62,7 +62,11 @@
     "crop_info": "How much of the letters runs off the bottom edge.",
     "color": "Color",
     "color_info": "Leave empty to use the footer text color.",
-    "animate": "Letters rise in on scroll"
+    "animate": "Letters rise in on scroll",
+    "case": "Letter case",
+    "case_info": "Capitals are much shorter than lowercase letters at the same width, so the word takes less height.",
+    "case_as_typed": "As typed",
+    "case_uppercase": "Capitals"
   },
   "slideshow_media": {
     "card_spacing": "Space above and below",

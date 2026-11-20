@@ -700,9 +700,8 @@ body[data-footer-reveal='pin']:has([data-footer-bottom-shown]) .progress-wrap :i
    FOOTER REVEAL (sections/footer.liquid script sets body[data-footer-reveal])
    Like Shopify's Concept theme: #MainContent (z-index 1, solid background) scrolls up off the footer,
    which waits underneath.
-   · pin:  the footer fits on screen: position sticky, bottom 0, pinned at the bottom of the screen above the
-           page. The card + copyright bar slide up over the last section (fully in view at 30 % of the
-           scroll), then move on to their place and uncover the wordmark beneath (see sections/footer.liquid).
+   · pin:  the footer fits on screen: position sticky, bottom 0, pinned at the bottom of the screen behind the
+           page; the sections scroll up over it and it rises slowly into place (see sections/footer.liquid).
            Sticky keeps the normal layout (no body padding, no jump).
    · rise: taller than the screen: stays in the normal flow and slides up from under the page as it
            scrolls in (transform set by the script), so every part of it stays reachable.
@@ -714,20 +713,18 @@ body.footer-reveal-on #MainContent {
 }
 
 /* Class repeated: outranks base.css .shopify-section:not(.header-section):has(…) { position: relative } */
-/* Pinned at the bottom of the screen and above the page: the card and the copyright bar are moved by the
-   script (transform), so the box itself lets clicks through; overflow clip keeps the parts parked below
-   the screen from lengthening the page. */
+/* Pinned at the bottom of the screen, behind the page (#MainContent is z-index 1 with a solid background):
+   the sections scroll up over it. The card and the copyright bar rise slowly into place (transform, set by
+   the script); overflow clip keeps the part still below the screen from lengthening the page. */
 body[data-footer-reveal='pin'] .shopify-section.shopify-section-group-footer-group.shopify-section-group-footer-group {
   position: sticky;
   bottom: 0;
-  z-index: 2;
+  z-index: 0;
   overflow: clip;
-  pointer-events: none;
 }
 
 body[data-footer-reveal='pin'] .footer-main,
 body[data-footer-reveal='pin'] .footer__content-bottom {
-  pointer-events: auto;
   will-change: transform;
 }
 
