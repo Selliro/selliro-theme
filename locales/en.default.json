@@ -8,6 +8,29 @@
  * ------------------------------------------------------------
  */
 {
+  "blog_plus": {
+    "all": "All",
+    "categories": "Categories",
+    "search_placeholder": "Search articles…",
+    "search_label": "Search the blog",
+    "posts_count": {
+      "one": "{{ count }} post",
+      "other": "{{ count }} posts"
+    },
+    "showing_html": "Showing <b>{{ count }}</b> posts",
+    "in_category_html": "Posts in <b>{{ tag }}</b>",
+    "clear": "Clear",
+    "view_grid": "Grid view",
+    "view_list": "List view",
+    "featured": "Featured",
+    "read_article": "Read article",
+    "no_posts_title": "No posts here yet",
+    "no_posts_text": "There are no posts in this category yet. Have a look at everything else we've written.",
+    "see_all": "See all posts",
+    "previous_page": "Previous page",
+    "next_page": "Next page",
+    "page": "Page {{ page }}"
+  },
   "article_plus": {
     "back_to_blog": "Back to {{ blog }}",
     "min_read": {
