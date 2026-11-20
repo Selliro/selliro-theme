@@ -305,6 +305,9 @@ document.addEventListener(ThemeEvents.cartUpdate, (event) => {
   let x = 0;
   let y = 0;
   let frame = 0;
+  // The panel is the badge's positioning box, so measure where translate 0 0 lands and offset from there
+  let originX = 0;
+  let originY = 0;
   /** @type {HTMLElement | null} */
   let badge = null;
 
@@ -316,7 +319,7 @@ document.addEventListener(ThemeEvents.cartUpdate, (event) => {
   };
 
   const place = () => {
-    if (badge) badge.style.translate = `${x}px ${y}px`;
+    if (badge) badge.style.translate = `${x - originX}px ${y - originY}px`;
   };
 
   // Eases the badge towards the pointer so it trails it smoothly
@@ -345,6 +348,10 @@ document.addEventListener(ThemeEvents.cartUpdate, (event) => {
       if (badge !== el || !el.hasAttribute('data-on')) {
         // Appearing: start right at the pointer instead of flying in from the last spot
         badge = el;
+        el.style.translate = '0px 0px';
+        const home = el.getBoundingClientRect();
+        originX = home.left + home.width / 2;
+        originY = home.top + home.height / 2;
         x = targetX;
         y = targetY;
         place();
@@ -363,11 +370,9 @@ document.addEventListener(ThemeEvents.cartUpdate, (event) => {
   );
 
   document.documentElement.addEventListener('mouseleave', hide);
-  document.addEventListener('pointerdown', (event) => {
-    // The click outside closes the drawer; let the badge shrink away with it
-    if (badge && event.pointerType === 'mouse') requestAnimationFrame(() => !openDrawer() && hide());
-  });
-  document.addEventListener('dialog:close', hide);
+  // A click outside closes the drawer, as does Escape: the badge shrinks away with it
+  // (and isn't left switched on for the next time the cart opens)
+  document.addEventListener('pointerdown', () => badge && hide());
   document.addEventListener('keydown', (event) => event.key === 'Escape' && hide());
 }
 
