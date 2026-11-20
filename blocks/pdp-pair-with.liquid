@@ -1,20 +1,86 @@
 {%- doc -%}
-  "Pair it with" — one or two companion products with a one-tap Add button
+  "Pair it with" — companion products with a one-tap Add button
   (adds to the cart without leaving the page and refreshes the cart drawer).
+  Up to two products show as stacked cards; three or more become a swipeable carousel
+  with arrows and dots (<pdp-pair-carousel> in assets/pdp.js). "Layout" can force either one.
 {%- enddoc -%}
 {%- liquid
   assign picks = block.settings.products
   if picks == blank or picks.size == 0
-    assign picks = collections.all.products | where: 'available' | slice: 0, 1
+    assign picks = collections.all.products | where: 'available' | slice: 0, 3
+  endif
+  assign max_items = block.settings.max_products | default: 6
+
+  # Count the cards that will show (the product on this page is skipped)
+  assign shown = 0
+  for item in picks
+    if item.id == closest.product.id
+      continue
+    endif
+    if shown >= max_items
+      break
+    endif
+    assign shown = shown | plus: 1
+  endfor
+
+  assign layout = block.settings.layout | default: 'auto'
+  assign is_carousel = false
+  if layout == 'carousel' and shown > 1
+    assign is_carousel = true
+  elsif layout == 'auto' and shown > 2
+    assign is_carousel = true
+  endif
+  assign wrapper = 'div'
+  if is_carousel
+    assign wrapper = 'pdp-pair-carousel'
   endif
 -%}
-<div class="pdp-pair" data-pdp-pair {{ block.shopify_attributes }}>
-  {%- if block.settings.heading != blank -%}
-    <p class="pdp-pair__heading">{{ block.settings.heading | escape }}</p>
-  {%- endif -%}
-  <ul class="pdp-pair__list list-unstyled">
-    {%- for item in picks limit: 2 -%}
+{%- if shown > 0 -%}
+<{{ wrapper }}
+  class="pdp-pair{% if is_carousel %} pdp-pair--carousel{% endif %}"
+  data-pdp-pair
+  {{ block.shopify_attributes }}
+>
+  <div class="pdp-pair__head">
+    {%- if block.settings.heading != blank -%}
+      <p class="pdp-pair__heading">{{ block.settings.heading | escape }}</p>
+    {%- endif -%}
+    {%- if is_carousel -%}
+      <div class="pdp-pair__nav">
+        <button
+          type="button"
+          class="pdp-pair__arrow"
+          data-pair-prev
+          aria-label="{{ 'accessibility.slideshow_previous' | t }}"
+          disabled
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 6-6 6 6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button
+          type="button"
+          class="pdp-pair__arrow"
+          data-pair-next
+          aria-label="{{ 'accessibility.slideshow_next' | t }}"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <ul
+    class="pdp-pair__list list-unstyled"
+    {% if is_carousel %}
+      data-pair-track
+      tabindex="0"
+      aria-label="{{ block.settings.heading | default: 'Pair it with' | escape }}"
+    {% endif %}
+  >
+    {%- assign n = 0 -%}
+    {%- for item in picks -%}
       {%- if item.id == closest.product.id -%}{%- continue -%}{%- endif -%}
+      {%- if n >= max_items -%}{%- break -%}{%- endif -%}
+      {%- assign n = n | plus: 1 -%}
       {%- assign variant = item.selected_or_first_available_variant -%}
       <li class="pdp-pair__item">
         <a class="pdp-pair__media" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
@@ -49,13 +115,39 @@
       </li>
     {%- endfor -%}
   </ul>
-</div>
+
+  {%- if is_carousel -%}
+    <div
+      class="pdp-pair__dots"
+      data-pair-dots
+      aria-hidden="true"
+    >
+      {%- for i in (1..shown) -%}
+        <span class="pdp-pair__dot{% if forloop.first %} is-active{% endif %}" data-pair-dot="{{ forloop.index0 }}"></span>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</{{ wrapper }}>
+{%- endif -%}
 
 <script src="{{ 'pdp.js' | asset_url }}" defer></script>
 
 {% stylesheet %}
-  .pdp-pair__heading {
+  .pdp-pair {
+    display: block;
+    min-width: 0;
+  }
+
+  .pdp-pair__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
     margin: 0 0 0.6rem;
+  }
+
+  .pdp-pair__heading {
+    margin: 0;
     font-size: 0.875rem;
     font-weight: 600;
   }
@@ -157,6 +249,88 @@
     opacity: 0;
   }
 
+  /* ---- Carousel (3+ products): one card per view with a peek of the next ---- */
+  .pdp-pair__nav {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .pdp-pair--carousel.is-static .pdp-pair__nav,
+  .pdp-pair--carousel.is-static .pdp-pair__dots {
+    display: none;
+  }
+
+  .pdp-pair__arrow {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-foreground);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-foreground) 22%, transparent);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .pdp-pair__arrow:hover:not(:disabled) {
+    background: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .pdp-pair__arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .pdp-pair--carousel .pdp-pair__list {
+    display: flex;
+    gap: 0.6rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding: 1px; /* keeps the card outline visible at the edges */
+  }
+
+  .pdp-pair--carousel .pdp-pair__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pdp-pair--carousel .pdp-pair__list:focus-visible {
+    outline: 2px solid var(--color-foreground);
+    outline-offset: 3px;
+    border-radius: 14px;
+  }
+
+  .pdp-pair--carousel .pdp-pair__item {
+    flex: 0 0 min(calc(100% - 2.75rem), 26rem);
+    scroll-snap-align: start;
+  }
+
+  .pdp-pair__dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.35rem;
+    margin-top: 0.7rem;
+  }
+
+  .pdp-pair__dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 99px;
+    background: color-mix(in srgb, var(--color-foreground) 22%, transparent);
+    cursor: pointer;
+    transition: width 0.3s ease, background 0.3s ease;
+  }
+
+  .pdp-pair__dot.is-active {
+    width: 1.1rem;
+    background: var(--color-foreground);
+  }
+
   .pdp-pair__add-done svg {
     width: 1.1rem;
     height: 1.1rem;
@@ -181,8 +355,28 @@
       "type": "product_list",
       "id": "products",
       "label": "Products",
-      "limit": 2,
-      "info": "Up to two. Leave empty to show a best seller."
+      "limit": 8,
+      "info": "The product being viewed is skipped. Leave empty to show best sellers."
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Products to show",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "auto", "label": "Auto (carousel for 3 or more)" },
+        { "value": "list", "label": "Stacked list" },
+        { "value": "carousel", "label": "Carousel" }
+      ],
+      "default": "auto"
     },
     { "type": "text", "id": "button_label", "label": "Button label", "default": "Add" }
   ],
