@@ -52,6 +52,17 @@
     line-height: 1.25;
   }
 
+  /* Phones: keep all five on one row */
+  @media screen and (max-width: 480px) {
+    .pdp-badges {
+      gap: 0.75rem 0.25rem;
+    }
+
+    .pdp-badges__item {
+      min-width: 3.6rem;
+    }
+  }
+
   .pdp-badges__icon {
     display: grid;
     place-items: center;
