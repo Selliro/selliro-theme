@@ -9,7 +9,7 @@
      --blog-ratio                        card image shape (aspect-ratio)
      --blog-columns                      cards per row on desktop
 
-   Breakpoints: 1100px (all desktop columns), 990px (hero side by side), 750px (tablet / phone).
+   Breakpoints: 1100px (all desktop columns), 990px (hero and featured side by side), 750px (tablet / phone).
 
    Contents
      1. Wrapper and tokens
@@ -20,7 +20,7 @@
      6. Grid
      7. Post card
      8. Featured card
-     9. List view
+     9. List view (all sizes; compact rows on phones)
     10. Empty state
     11. Pagination
     12. Entrance animation and reduced motion
@@ -381,13 +381,6 @@
   color: rgb(var(--color-background-rgb));
 }
 
-/* The list view has no room on phones, so the switch is hidden there */
-@media screen and (max-width: 749px) {
-  .blog-list__views {
-    display: none;
-  }
-}
-
 /* ==============================================================================
    6. Grid
    ============================================================================== */
@@ -414,6 +407,12 @@
 
 .blog-list__item {
   display: flex;
+}
+
+/* Featured post: first item, spans the whole row in grid view */
+.blog-list__item--featured {
+  grid-column: 1 / -1;
+  margin-bottom: 8px;
 }
 
 /* ==============================================================================
@@ -591,7 +590,6 @@
    Newest post, image beside the text on desktop.
    ============================================================================== */
 .blog-card--featured {
-  margin-bottom: 36px;
   padding: 12px;
   border: 1px solid var(--blog-line);
   border-radius: calc(var(--blog-radius) + 8px);
@@ -634,7 +632,6 @@
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
     align-items: center;
     gap: clamp(28px, 4vw, 56px);
-    margin-bottom: 48px;
   }
 
   .blog-card--featured .blog-card__media {
@@ -651,47 +648,118 @@
 }
 
 /* ==============================================================================
-   9. List view (tablet and desktop)
-   One post per row: image on the left, text on the right.
+   9. List view
+   One post per row. Applies to every card, the featured one included, so the
+   switch always changes what is on screen.
+   Tablet / desktop: image left, text right.  Phone: compact rows with a square thumbnail.
    ============================================================================== */
+blog-list-view[data-view='list'] .blog-list__grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+blog-list-view[data-view='list'] .blog-list__item--featured {
+  margin-bottom: 0;
+}
+
+blog-list-view[data-view='list'] .blog-list__item + .blog-list__item {
+  border-top: 1px solid var(--blog-line);
+}
+
+/* the featured card drops its framed box and becomes a normal row */
+blog-list-view[data-view='list'] .blog-list__item .blog-card {
+  display: grid;
+  align-items: center;
+  margin: 0;
+  padding: 24px 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+blog-list-view[data-view='list'] .blog-list__item:first-child .blog-card {
+  padding-top: 4px;
+}
+
+blog-list-view[data-view='list'] .blog-list__item .blog-card__media {
+  aspect-ratio: var(--blog-ratio, 16 / 10);
+}
+
+blog-list-view[data-view='list'] .blog-list__item .blog-card__body {
+  gap: 10px;
+  padding: 0;
+}
+
+blog-list-view[data-view='list'] .blog-list__item .blog-card__title {
+  font-size: clamp(1.3rem, 2vw, 1.65rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+blog-list-view[data-view='list'] .blog-list__item .blog-card__excerpt {
+  max-width: 62ch;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  font-size: 0.925rem;
+}
+
+blog-list-view[data-view='list'] .blog-list__item .blog-card__cta {
+  min-height: 0;
+  margin-top: 4px;
+  padding: 6px 0 0;
+  border-radius: 0;
+  background: none;
+  color: rgb(var(--color-foreground-rgb));
+}
+
 @media screen and (min-width: 750px) {
-  blog-list-view[data-view='list'] .blog-list__grid {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-  }
-
-  blog-list-view[data-view='list'] .blog-list__item + .blog-list__item {
-    border-top: 1px solid var(--blog-line);
-  }
-
   blog-list-view[data-view='list'] .blog-list__item .blog-card {
-    display: grid;
     grid-template-columns: minmax(220px, 34%) minmax(0, 1fr);
-    align-items: center;
     gap: clamp(24px, 3.5vw, 48px);
-    padding-block: 24px;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  blog-list-view[data-view='list'] .blog-list__item .blog-card {
+    grid-template-columns: 104px minmax(0, 1fr);
+    align-items: start;
+    gap: 14px;
+    padding: 16px 0;
   }
 
-  blog-list-view[data-view='list'] .blog-list__item:first-child .blog-card {
-    padding-top: 4px;
+  blog-list-view[data-view='list'] .blog-list__item .blog-card__media {
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
   }
 
   blog-list-view[data-view='list'] .blog-list__item .blog-card__body {
-    padding: 0;
+    gap: 6px;
   }
 
   blog-list-view[data-view='list'] .blog-list__item .blog-card__title {
-    font-size: clamp(1.3rem, 2vw, 1.65rem);
+    font-size: 1.02rem;
   }
 
-  blog-list-view[data-view='list'] .blog-list__item .blog-card__excerpt {
-    max-width: 62ch;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
+  blog-list-view[data-view='list'] .blog-list__item :is(.blog-card__excerpt, .blog-card__cta) {
+    display: none;
   }
 
-  blog-list-view[data-view='list'] .blog-list__item .blog-card__cta {
-    margin-top: 4px;
+  blog-list-view[data-view='list'] .blog-list__item .blog-card__tag {
+    min-height: 20px;
+    padding: 0 8px;
+    font-size: 0.62rem;
+  }
+
+  blog-list-view[data-view='list'] .blog-list__item .blog-card__meta {
+    font-size: 0.75rem;
+  }
+
+  blog-list-view[data-view='list'] .blog-list__item .blog-card__badge {
+    top: 6px;
+    left: 6px;
+    min-height: 18px;
+    padding: 0 6px;
+    font-size: 0.55rem;
   }
 }
 
@@ -788,10 +856,16 @@ a.blog-list__page:hover {
   }
 }
 
-.blog-list__grid .blog-card,
-.blog-card--featured {
+.blog-list__grid .blog-card {
   animation: blog-card-in 0.55s var(--blog-ease) both;
   animation-delay: calc(min(var(--i, 0), 8) * 60ms);
+}
+
+/* Switching views: section-main-blog.js morphs each card from its old place to its new
+   one with the View Transitions API (names are set only while the switch runs). */
+::view-transition-group(*) {
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
