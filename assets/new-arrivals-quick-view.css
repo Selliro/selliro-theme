@@ -502,7 +502,7 @@
   .na-qv-drawer__body .product-information__media.na-qv-media--simple {
     position: sticky;
     top: 0;
-    max-height: calc(100dvh - 6.5rem);
+    max-height: calc(100dvh - 7rem); /* drawer header + body padding */
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: thin;
