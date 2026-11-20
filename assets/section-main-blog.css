@@ -862,8 +862,9 @@ a.blog-list__page:hover {
 }
 
 /* Switching views: section-main-blog.js morphs each card from its old place to its new
-   one with the View Transitions API (names are set only while the switch runs). */
-::view-transition-group(*) {
+   one with the View Transitions API. Names and the "blog-card" class are set only while
+   the switch runs, so other page transitions in the theme are not affected. */
+::view-transition-group(*.blog-card) {
   animation-duration: 0.45s;
   animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
