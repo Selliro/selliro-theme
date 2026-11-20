@@ -729,6 +729,16 @@ body[data-footer-reveal='rise'] .shopify-section.shopify-section-group-footer-gr
   z-index: 10;
 }
 
+/* Footer on screen (body[data-footer-zone], set by the footer script): the sticky header slides up out of
+   the way so the footer has the whole screen; it comes back as soon as you scroll up off the footer. */
+#header-group .header-section {
+  transition: translate 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body[data-footer-zone] #header-group .header-section {
+  translate: 0 -100%;
+}
+
 /* Disable reveal effect in the Shopify theme editor */
 .shopify-design-mode .shopify-section-group-footer-group {
   position: static !important;

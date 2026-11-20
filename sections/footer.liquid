@@ -14,6 +14,9 @@
   //   data-footer-reveal="rise"  taller than that (phones, short windows): pinning would put its top out
   //                              of reach, so it rises into view instead, a short slide tied to scroll
   //   (no attribute)             theme editor or reduced motion: a normal footer
+  // While the footer is on screen the sticky header slides away (body[data-footer-zone]), so the footer
+  // gets the whole screen and is fully visible at the end. And once you've scrolled about a third of the
+  // way into it and stop, the page glides on to the end, so the whole footer shows.
   if (document.documentElement.classList.contains('shopify-design-mode')) return;
   var footer = document.querySelector('.shopify-section-group-footer-group');
   if (!footer) return;
@@ -26,11 +29,47 @@
   var under = null; // beneath it: .footer__content-bottom (copyright bar + wordmark)
   var underShown = false;
 
-  function headerOffset() {
-    var header = document.querySelector('#header-component');
-    if (!header) return 0;
-    var pos = getComputedStyle(header.closest('.header-section') || header).position;
-    return pos === 'sticky' || pos === 'fixed' ? header.offsetHeight : 0;
+  var inZone = false;
+  var lastY = window.scrollY;
+  var direction = 0;
+  var gliding = false;
+  var idle = 0;
+  var GLIDE_FROM = 0.3; // share of the footer reveal after which a pause glides on to the end
+
+  // How far the footer reveal has got: 0 = the page's bottom edge at the bottom of the screen, 1 = page end
+  function revealProgress() {
+    if (!main) return 0;
+    var vh = window.innerHeight;
+    var start = main.getBoundingClientRect().bottom + window.scrollY - vh;
+    var end = document.documentElement.scrollHeight - vh;
+    if (end - start < 1) return 0;
+    return (window.scrollY - start) / (end - start);
+  }
+
+  // Header out of the way while the footer is showing (a little hysteresis so it doesn't flicker)
+  function zone() {
+    if (!main) return;
+    var uncovered = window.innerHeight - main.getBoundingClientRect().bottom;
+    var next = inZone ? uncovered > 8 : uncovered > 24;
+    if (next !== inZone) {
+      inZone = next;
+      body.toggleAttribute('data-footer-zone', inZone);
+    }
+  }
+
+  function settle() {
+    idle = 0;
+    if (gliding) {
+      gliding = false;
+      return;
+    }
+    if (!mode || direction <= 0) return;
+    if (footer.contains(document.activeElement) && document.activeElement !== document.body) return;
+    var p = revealProgress();
+    if (p >= GLIDE_FROM && p < 0.995) {
+      gliding = true;
+      window.scrollTo({ top: document.documentElement.scrollHeight - window.innerHeight, behavior: 'smooth' });
+    }
   }
 
   // Pinned: the card covers the bottom layer, then rises glued to the page's bottom edge to uncover it.
@@ -55,6 +94,7 @@
 
   function rise() {
     frame = 0;
+    zone();
     if (mode === 'pin') return stack();
     if (mode !== 'rise') return;
     var rect = footer.getBoundingClientRect();
@@ -67,7 +107,8 @@
   }
 
   function sync() {
-    var next = reduce.matches ? '' : footer.offsetHeight <= window.innerHeight - headerOffset() ? 'pin' : 'rise';
+    // The header slides away while the footer shows, so it only has to fit the screen
+    var next = reduce.matches ? '' : footer.offsetHeight <= window.innerHeight ? 'pin' : 'rise';
     if (next !== mode) {
       mode = next;
       footer.style.transform = '';
@@ -76,13 +117,26 @@
       if (mode) body.setAttribute('data-footer-reveal', mode);
       else body.removeAttribute('data-footer-reveal');
       body.classList.toggle('footer-reveal-on', Boolean(mode));
+      if (!mode && inZone) {
+        inZone = false;
+        body.removeAttribute('data-footer-zone');
+      }
     }
     rise();
   }
 
   window.addEventListener('scroll', function () {
+    var y = window.scrollY;
+    if (y !== lastY) direction = y > lastY ? 1 : -1;
+    lastY = y;
     if (mode && !frame) frame = requestAnimationFrame(rise);
+    // "scrollend" where supported, otherwise a short pause
+    if (!('onscrollend' in window)) {
+      clearTimeout(idle);
+      idle = setTimeout(settle, 160);
+    }
   }, { passive: true });
+  window.addEventListener('scrollend', settle, { passive: true });
   window.addEventListener('resize', sync, { passive: true });
   if (reduce.addEventListener) reduce.addEventListener('change', sync);
   if ('ResizeObserver' in window) new ResizeObserver(sync).observe(footer);
