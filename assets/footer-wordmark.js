@@ -64,6 +64,10 @@
       // Stacked footer reveal (body[data-footer-reveal="pin"], sections/footer.liquid): the wordmark sits
       // under the footer card at first, so the letters rise when the card has moved off it ("footer:stack").
       if (document.body.getAttribute('data-footer-reveal') === 'pin') {
+        if (root.closest('[data-footer-bottom-shown]')) {
+          root.classList.add('is-in'); // already uncovered (e.g. the page was reloaded at the bottom)
+          return;
+        }
         const onStack = (/** @type {Event} */ event) => {
           if (!(/** @type {CustomEvent} */ (event).detail || {}).bottomShown) return;
           document.removeEventListener('footer:stack', onStack);

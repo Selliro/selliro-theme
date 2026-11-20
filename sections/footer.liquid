@@ -48,6 +48,7 @@
     var shown = offset < hidden * 0.5;
     if (shown !== underShown) {
       underShown = shown;
+      footer.toggleAttribute('data-footer-bottom-shown', shown); // read by footer-wordmark.js on start-up
       document.dispatchEvent(new CustomEvent('footer:stack', { detail: { bottomShown: shown } }));
     }
   }
