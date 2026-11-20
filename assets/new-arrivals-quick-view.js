@@ -332,7 +332,8 @@
     var textNode = stock.querySelector('.na-qv-inline-stock__text');
     if (textNode) textNode.textContent = inventoryText;
 
-    if (anchor instanceof Element) buyButtonsBlock.insertBefore(stock, anchor);
+    // The buttons sit inside the product form, not directly in the block: insert next to them
+    if (anchor instanceof Element && anchor.parentNode) anchor.parentNode.insertBefore(stock, anchor);
     else buyButtonsBlock.prepend(stock);
   }
 
@@ -390,8 +391,13 @@
         content.replaceChildren(grid);
         content.removeAttribute('aria-busy');
         content.scrollTop = 0;
-        syncVariant(content, variantId);
-        renderInlineStock(content);
+        // Extras only: if one of them fails, keep the quick view open rather than leaving the page
+        try {
+          syncVariant(content, variantId);
+          renderInlineStock(content);
+        } catch (error) {
+          console.warn('Quick view:', error);
+        }
       })
       .catch(function () {
         if (token !== requestToken) return;
