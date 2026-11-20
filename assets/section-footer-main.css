@@ -590,13 +590,14 @@ body.footer-reveal-on #MainContent {
   background-color: var(--color-background, #fff);
 }
 
-body[data-footer-reveal='pin'] .shopify-section-group-footer-group {
+/* Class repeated: outranks base.css .shopify-section:not(.header-section):has(…) { position: relative } */
+body[data-footer-reveal='pin'] .shopify-section.shopify-section-group-footer-group.shopify-section-group-footer-group {
   position: sticky;
   bottom: 0;
   z-index: 0;
 }
 
-body[data-footer-reveal='rise'] .shopify-section-group-footer-group {
+body[data-footer-reveal='rise'] .shopify-section.shopify-section-group-footer-group.shopify-section-group-footer-group {
   position: relative;
   z-index: 0;
   will-change: transform;
