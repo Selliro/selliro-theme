@@ -522,7 +522,9 @@
 }
 
 /* ------------------------------------------- "Close" badge that follows the pointer */
-/* Shown over the dimmed page outside the panel (desktop mouse only); a click there closes the cart. */
+/* Shown over the dimmed page outside the panel (desktop mouse only); a click there closes the cart.
+   Same look as the quick view's (assets/new-arrivals-quick-view.css .na-qv-cursor-close):
+   a white circle with a black ×, standing in for the pointer. */
 .cart-drawer__cursor {
   display: none;
 }
@@ -533,22 +535,20 @@
     top: 0;
     left: 0;
     z-index: 2;
-    display: flex;
-    flex-direction: column;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    width: 84px;
-    height: 84px;
-    margin: -42px 0 0 -42px;
+    inline-size: 3.8rem;
+    block-size: 3.8rem;
+    margin: -1.9rem 0 0 -1.9rem;
     border-radius: 50%;
-    background: rgb(var(--color-foreground-rgb));
-    color: rgb(var(--color-background-rgb));
-    box-shadow: 0 16px 36px -14px rgb(0 0 0 / 0.55);
+    background: #fff;
+    color: #000;
+    box-shadow: 0 8px 20px rgb(0 0 0 / 24%);
     pointer-events: none;
     opacity: 0;
-    scale: 0.4;
-    transition: opacity 0.25s ease, scale 0.4s var(--cdp-ease, ease);
+    scale: 0.8;
+    transition: opacity 0.16s ease, scale 0.16s ease;
   }
 
   .cart-drawer__cursor[data-on] {
@@ -557,57 +557,32 @@
   }
 
   .cart-drawer__cursor .svg-wrapper {
-    width: 18px;
-    height: 18px;
+    inline-size: 1.2rem;
+    block-size: 1.2rem;
   }
 
   .cart-drawer__cursor svg {
-    width: 100%;
-    height: 100%;
-  }
-
-  .cart-drawer__cursor-label {
-    font-family: var(--font-body--family);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    inline-size: 100%;
+    block-size: 100%;
+    color: #000;
+    stroke: #000;
   }
 
   /* The badge stands in for the pointer while it's over the page */
+  .cart-drawer__dialog--plus:has(.cart-drawer__cursor[data-on]),
   .cart-drawer__dialog--plus:has(.cart-drawer__cursor[data-on])::backdrop {
     cursor: none;
   }
+
+  .cart-drawer__dialog--plus:has(.cart-drawer__cursor[data-on]) .cart-drawer__inner {
+    cursor: auto;
+  }
 }
 
-.cart-drawer__dialog--plus .cart__checkout-button {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  min-height: 56px;
-  border-radius: 99px;
-  font-size: 1.125rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  transition: transform 0.35s var(--cdp-ease), box-shadow 0.35s ease;
-}
-
-.cart-drawer__dialog--plus .cart__checkout-button::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(110deg, transparent 30%, rgb(255 255 255 / 0.28) 50%, transparent 70%);
-  transform: translateX(-110%);
-  transition: transform 0.9s var(--cdp-ease);
-}
-
-.cart-drawer__dialog--plus .cart__checkout-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 14px 26px -14px rgb(0 0 0 / 0.55);
-}
-
-.cart-drawer__dialog--plus .cart__checkout-button:hover::after {
-  transform: translateX(110%);
+@media (prefers-reduced-motion: reduce) {
+  .cart-drawer__cursor {
+    transition: none;
+  }
 }
 
 /* --------------------------------------------------------------- recommendations */

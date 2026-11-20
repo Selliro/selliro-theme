@@ -168,8 +168,8 @@
     </div>
 
     {%- comment -%}
-      Desktop: a round "Close" badge follows the pointer over the dimmed page outside the panel,
-      showing that a click there closes the cart (cart-drawer-plus.js moves it).
+      Desktop: a round close badge (white circle, ×) follows the pointer over the dimmed page outside
+      the panel, showing that a click there closes the cart. Same as the quick view's; cart-drawer-plus.js moves it.
     {%- endcomment -%}
     <span
       class="cart-drawer__cursor"
@@ -179,7 +179,6 @@
       <span class="svg-wrapper">
         {{- 'icon-close.svg' | inline_asset_content -}}
       </span>
-      <span class="cart-drawer__cursor-label">{{ 'actions.close' | t }}</span>
     </span>
   </dialog>
 </cart-drawer-component>

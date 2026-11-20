@@ -3,8 +3,8 @@
  *   <cart-shipping-progress>  free shipping bar; converts the threshold when the shopper uses another currency
  *   <cart-recommendations>    "You may also like" row with quick add, rendered from sections/cart-recommendations
  *   added-item highlight      the row of a product that was just added pulses once
- *   close badge               desktop: a round "Close" badge follows the mouse over the dimmed page
- *                             outside the panel (a click there already closes the drawer)
+ *   close badge               desktop: a white round × follows the mouse over the dimmed page outside
+ *                             the panel (a click there already closes the drawer); same as the quick view's
  *
  * The drawer is re-rendered (morphed) after every cart change. <cart-recommendations> carries
  * data-skip-subtree-update, so the morph leaves its products alone; it reloads itself when its data-cart-key
@@ -298,14 +298,11 @@ document.addEventListener(ThemeEvents.cartUpdate, (event) => {
 });
 
 /* ------------------------------------------------------------- close badge */
+// Same behaviour as the quick view's close cursor (assets/new-arrivals-quick-view.js): it sits on the
+// pointer while the mouse is over the dimmed page and hides over the panel.
 {
   const finePointer = window.matchMedia('(min-width: 750px) and (hover: hover) and (pointer: fine)');
-  let targetX = 0;
-  let targetY = 0;
-  let x = 0;
-  let y = 0;
-  let frame = 0;
-  // The panel is the badge's positioning box, so measure where translate 0 0 lands and offset from there
+  // The panel is the badge's positioning box while it slides in, so measure where translate 0 0 lands
   let originX = 0;
   let originY = 0;
   /** @type {HTMLElement | null} */
@@ -316,18 +313,6 @@ document.addEventListener(ThemeEvents.cartUpdate, (event) => {
   const hide = () => {
     document.querySelectorAll('[data-cdp-cursor][data-on]').forEach((el) => el.removeAttribute('data-on'));
     badge = null;
-  };
-
-  const place = () => {
-    if (badge) badge.style.translate = `${x - originX}px ${y - originY}px`;
-  };
-
-  // Eases the badge towards the pointer so it trails it smoothly
-  const step = () => {
-    x += (targetX - x) * 0.28;
-    y += (targetY - y) * 0.28;
-    place();
-    frame = Math.abs(targetX - x) + Math.abs(targetY - y) > 0.3 ? requestAnimationFrame(step) : 0;
   };
 
   document.addEventListener(
@@ -343,34 +328,21 @@ document.addEventListener(ThemeEvents.cartUpdate, (event) => {
 
       const el = /** @type {HTMLElement | null} */ (dialog.querySelector('[data-cdp-cursor]'));
       if (!el) return;
-      targetX = event.clientX;
-      targetY = event.clientY;
       if (badge !== el || !el.hasAttribute('data-on')) {
-        // Appearing: start right at the pointer instead of flying in from the last spot
         badge = el;
         el.style.translate = '0px 0px';
         const home = el.getBoundingClientRect();
         originX = home.left + home.width / 2;
         originY = home.top + home.height / 2;
-        x = targetX;
-        y = targetY;
-        place();
         el.setAttribute('data-on', '');
-        return;
       }
-      if (prefersReducedMotion()) {
-        x = targetX;
-        y = targetY;
-        place();
-      } else if (!frame) {
-        frame = requestAnimationFrame(step);
-      }
+      el.style.translate = `${event.clientX - originX}px ${event.clientY - originY}px`;
     },
     { passive: true }
   );
 
   document.documentElement.addEventListener('mouseleave', hide);
-  // A click outside closes the drawer, as does Escape: the badge shrinks away with it
+  // A click outside closes the drawer, as does Escape: the badge goes with it
   // (and isn't left switched on for the next time the cart opens)
   document.addEventListener('pointerdown', () => badge && hide());
   document.addEventListener('keydown', (event) => event.key === 'Escape' && hide());
