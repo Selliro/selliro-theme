@@ -578,9 +578,8 @@
 
 /* ==========================================================================
    Brand finish
-   Dark card (menus, newsletter) with the brand yellow as the accent, over a bottom layer in its own
-   colour scheme (yellow by default) carrying the copyright bar and the full-width wordmark —
-   like the yellow announcement bar at the top of every page.
+   Dark card (menus, newsletter, full-width wordmark) with the brand yellow as the accent, over a copyright
+   bar in its own colour scheme (yellow by default), like the yellow announcement bar at the top of every page.
    ========================================================================== */
 
 /* Menus: column titles in small caps, links light up with a yellow underline */
@@ -661,11 +660,6 @@
 .footer__content-bottom .footer-main__policy-link {
   color: rgb(var(--color-foreground-rgb));
   text-underline-offset: 3px;
-}
-
-.footer__content-bottom .footer-main__bottom-bar {
-  padding-block-end: clamp(0.5rem, 1.5vw, 1rem);
-  border-bottom: 1px solid rgb(var(--color-foreground-rgb) / 0.16);
 }
 
 .footer__content-bottom .footer-main__payment-icon {
