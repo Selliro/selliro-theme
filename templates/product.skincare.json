@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -185,9 +194,14 @@
                 "heading": "Pair it with",
                 "products": [
                   "luxury-face-creams",
-                  "glass-skin-overnight-mask"
+                  "glass-skin-overnight-mask",
+                  "brightening-serum",
+                  "luminous-balance-toner",
+                  "comfort-matte-bullet-lipstick"
                 ],
-                "button_label": "Add"
+                "button_label": "Add",
+                "max_products": 6,
+                "layout": "auto"
               }
             },
             "accordion": {
