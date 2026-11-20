@@ -310,8 +310,10 @@
     '.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6)', // product title, whatever the block is called
     '.pdp-rating',
     'product-price',
+    '.pdp-tags', // category tags, e.g. "Exfoliation & Masks"
     'pdp-read-more',
     '.text-block[class*="__description"]',
+    '.pdp-benefits', // key benefits: "Clean, skin-loving formula", "Vegan and cruelty free"…
     'variant-picker',
     'swatches-variant-picker-component',
     '.buy-buttons-block',
@@ -409,17 +411,27 @@
     var hasOutOfStockIcon = !!productInventory.querySelector('.product-inventory__icon-out_of_stock');
     if (!inventoryText || hasOutOfStockIcon) return;
 
+    // In stock: a soft green badge with a check. Low stock: amber, a clock, and how much is left (the
+    // product-inventory bar's fill level). Out of stock shows nothing here (the button says Sold out).
+    var isLow = !!productInventory.querySelector('.product-inventory__icon-low');
+    var fillEl = productInventory.querySelector('.product-inventory__bar-fill');
+    var fill = fillEl instanceof HTMLElement ? parseFloat(fillEl.style.getPropertyValue('--stock-fill')) : NaN;
+
     var anchor = buyButtonsBlock.querySelector('.product-form-buttons');
     var stock = document.createElement('div');
-    stock.className = 'na-qv-inline-stock';
+    stock.className = 'na-qv-stock ' + (isLow ? 'na-qv-stock--low' : 'na-qv-stock--in');
     stock.setAttribute('data-na-qv-inline-stock', '');
     stock.innerHTML =
-      '<div class="na-qv-inline-stock__text-wrap">' +
-      '<span class="na-qv-inline-stock__icon" aria-hidden="true">✓</span>' +
-      '<span class="na-qv-inline-stock__text"></span>' +
-      '</div>' +
-      '<span class="na-qv-inline-stock__line" aria-hidden="true"></span>';
-    var textNode = stock.querySelector('.na-qv-inline-stock__text');
+      '<span class="na-qv-stock__icon" aria-hidden="true">' +
+      (isLow
+        ? '<svg viewBox="0 0 20 20" width="16" height="16" fill="none"><circle cx="10" cy="10" r="7.25" stroke="currentColor" stroke-width="1.6"/><path d="M10 6v4.25l2.75 1.75" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        : '<svg viewBox="0 0 20 20" width="16" height="16" fill="none"><path d="m5.5 10.4 3 2.9 6-6.3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>') +
+      '</span>' +
+      '<span class="na-qv-stock__text"></span>' +
+      (isLow && !isNaN(fill)
+        ? '<span class="na-qv-stock__meter" aria-hidden="true"><span style="width:' + Math.max(6, Math.min(100, fill)) + '%"></span></span>'
+        : '');
+    var textNode = stock.querySelector('.na-qv-stock__text');
     if (textNode) textNode.textContent = inventoryText;
 
     // The buttons sit inside the product form, not directly in the block: insert next to them
