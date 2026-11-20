@@ -298,9 +298,9 @@
   }
 
   /*
-   * The quick view shows the essentials only: vendor, title, rating, price, a 2-line description,
-   * variants, stock ("Hurry! Only 6 left"), quantity + Add to cart + Buy it now, and View full details.
-   * Everything else on the product page (benefits, tags, badges, Pair it with, How to use / Ingredients
+   * The quick view shows the essentials only: vendor, title, rating, price, tags, a short description,
+   * key benefits, variants, stock ("Hurry! Only 6 left"), quantity + Add to cart + Buy it now, View full details.
+   * Everything else on the product page (badges, Pair it with, How to use / Ingredients
    * accordions, promos, payment icons, sticky bar…) stays on the product page.
    */
   var KEEP_IN_DETAILS = [
