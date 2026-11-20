@@ -458,9 +458,16 @@
     margin-block: -0.14em -0.2em; /* fallback: roughly the space above and below the capitals */
   }
 
+  /* Where supported, trim exactly to the capitals (on the word and on each letter: the letters are their
+     own boxes once split for the rise-in) */
   @supports (text-box: trim-both cap alphabetic) {
     .footer-wordmark--caps .footer-wordmark__text {
       margin-block: 0;
+      text-box: trim-both cap alphabetic;
+    }
+
+    .footer-wordmark--caps .footer-wordmark__letter {
+      line-height: 1;
       text-box: trim-both cap alphabetic;
     }
   }
