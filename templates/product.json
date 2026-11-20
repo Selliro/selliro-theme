@@ -6,8 +6,7 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */
-{
+ */{
   "sections": {
     "main": {
       "type": "product-information",
@@ -313,9 +312,14 @@
                 "heading": "Pair it with",
                 "products": [
                   "luxury-face-creams",
-                  "glass-skin-overnight-mask"
+                  "glass-skin-overnight-mask",
+                  "brightening-serum",
+                  "luminous-balance-toner",
+                  "comfort-matte-bullet-lipstick"
                 ],
-                "button_label": "Add"
+                "button_label": "Add",
+                "max_products": 6,
+                "layout": "auto"
               },
               "blocks": {}
             },
@@ -568,7 +572,7 @@
         "image": "shopify://shop_images/pdp-botanical-forest.jpg",
         "video_url": "",
         "heading": "100% natural actives",
-        "subheading": "Made in harmony with nature — powered by botanicals, backed by science.",
+        "subheading": "Made in harmony with nature \u2014 powered by botanicals, backed by science.",
         "button_label": "",
         "button_url": "",
         "button_style": "outline_light",
@@ -701,7 +705,7 @@
           "settings": {
             "image": "shopify://shop_images/routine-moisturize.jpg",
             "title": "Moisturise",
-            "text": "Seal it all in with a light moisturiser — and SPF by day.",
+            "text": "Seal it all in with a light moisturiser \u2014 and SPF by day.",
             "duration": "20 sec",
             "tip": "In the morning, finish with SPF 30 or higher.",
             "product": "luxury-face-creams",
@@ -1415,7 +1419,7 @@
           "type": "row",
           "settings": {
             "label": "Application area",
-            "value": "Face, neck and décolleté",
+            "value": "Face, neck and d\u00e9collet\u00e9",
             "indent": false
           }
         },
@@ -1544,7 +1548,7 @@
       ],
       "settings": {
         "heading": "Why it's different",
-        "text": "Clean, effective skincare without the harsh extras — at a fair price.",
+        "text": "Clean, effective skincare without the harsh extras \u2014 at a fair price.",
         "product": "",
         "our_title": "",
         "other_1_title": "Drugstore brand",
@@ -1676,14 +1680,14 @@
           "type": "faq_entry",
           "settings": {
             "question": "When will I see results?",
-            "answer": "<p>Most people notice a difference within 2–4 weeks of daily use.</p>"
+            "answer": "<p>Most people notice a difference within 2\u20134 weeks of daily use.</p>"
           }
         },
         "faq_3": {
           "type": "faq_entry",
           "settings": {
             "question": "Are your products vegan and cruelty free?",
-            "answer": "<p>Yes — every product is vegan and never tested on animals.</p>"
+            "answer": "<p>Yes \u2014 every product is vegan and never tested on animals.</p>"
           }
         },
         "faq_4": {

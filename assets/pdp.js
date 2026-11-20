@@ -4,6 +4,7 @@
  *  - <pdp-sticky-bar>    sticky add to cart: mirrors size + price, presses the main Add to cart button
  *  - <pdp-routine>       routine steps carousel: centre card active, arrows + dots
  *  - <pdp-routine-stepper> routine "step by step guide": photo stage + numbered steps, auto-advance
+ *  - <pdp-pair-carousel> "Pair it with" when it has 3+ products: swipe / arrows / dots, one card per view
  */
 (() => {
   if (window.__pdpInit) return;
@@ -409,6 +410,90 @@
       }
     }
     customElements.define('pdp-routine-stepper', PdpRoutineStepper);
+  }
+
+  /* ------------------------------------------------------- pair it with carousel */
+  if (!customElements.get('pdp-pair-carousel')) {
+    class PdpPairCarousel extends HTMLElement {
+      connectedCallback() {
+        this.track = /** @type {HTMLElement | null} */ (this.querySelector('[data-pair-track]'));
+        if (!this.track) return;
+        this.prev = /** @type {HTMLButtonElement | null} */ (this.querySelector('[data-pair-prev]'));
+        this.next = /** @type {HTMLButtonElement | null} */ (this.querySelector('[data-pair-next]'));
+        this.dots = /** @type {HTMLElement[]} */ (Array.from(this.querySelectorAll('[data-pair-dot]')));
+
+        this.onScroll = () => {
+          if (!this.frame) this.frame = requestAnimationFrame(() => this.update());
+        };
+        this.onClick = (/** @type {MouseEvent} */ event) => {
+          const target = event.target instanceof Element ? event.target : null;
+          if (!target) return;
+          if (target.closest('[data-pair-prev]')) this.go(this.index() - 1);
+          else if (target.closest('[data-pair-next]')) this.go(this.index() + 1);
+          else {
+            const dot = /** @type {HTMLElement | null} */ (target.closest('[data-pair-dot]'));
+            if (dot) this.go(Number(dot.dataset.pairDot));
+          }
+        };
+        this.onKey = (/** @type {KeyboardEvent} */ event) => {
+          if (event.target !== this.track) return;
+          if (event.key === 'ArrowRight') this.go(this.index() + 1);
+          else if (event.key === 'ArrowLeft') this.go(this.index() - 1);
+          else return;
+          event.preventDefault();
+        };
+
+        this.track.addEventListener('scroll', this.onScroll, { passive: true });
+        this.addEventListener('click', this.onClick);
+        this.addEventListener('keydown', this.onKey);
+        this.resizer = new ResizeObserver(() => this.update());
+        this.resizer.observe(this.track);
+        this.update();
+      }
+
+      disconnectedCallback() {
+        this.track?.removeEventListener('scroll', this.onScroll);
+        this.removeEventListener('click', this.onClick);
+        this.removeEventListener('keydown', this.onKey);
+        this.resizer?.disconnect();
+      }
+
+      /** Distance from one card to the next (card width + gap) */
+      stepSize() {
+        const items = this.track ? this.track.children : null;
+        if (!items || items.length < 2) return this.track ? this.track.clientWidth : 1;
+        return Math.max(1, /** @type {HTMLElement} */ (items[1]).offsetLeft - /** @type {HTMLElement} */ (items[0]).offsetLeft);
+      }
+
+      index() {
+        if (!this.track) return 0;
+        const max = this.track.scrollWidth - this.track.clientWidth;
+        // at the very end the last card counts as current even if it can't snap to the start
+        if (this.track.scrollLeft >= max - 2) return (this.dots || []).length - 1;
+        return Math.round(this.track.scrollLeft / this.stepSize());
+      }
+
+      /** @param {number} i */
+      go(i) {
+        if (!this.track) return;
+        const count = this.track.children.length;
+        const target = Math.max(0, Math.min(count - 1, i));
+        this.track.scrollTo({ left: target * this.stepSize(), behavior: reduced() ? 'auto' : 'smooth' });
+      }
+
+      update() {
+        this.frame = 0;
+        if (!this.track) return;
+        const max = this.track.scrollWidth - this.track.clientWidth;
+        // everything fits (wide column): hide the arrows and dots
+        this.classList.toggle('is-static', max <= 2);
+        const current = this.index();
+        if (this.prev) this.prev.disabled = this.track.scrollLeft <= 2;
+        if (this.next) this.next.disabled = this.track.scrollLeft >= max - 2;
+        (this.dots || []).forEach((dot, i) => dot.classList.toggle('is-active', i === current));
+      }
+    }
+    customElements.define('pdp-pair-carousel', PdpPairCarousel);
   }
 })();
 
