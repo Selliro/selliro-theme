@@ -88,7 +88,7 @@
       clipped = Math.max(0, Math.min(u.height, sheetBottom - u.top));
       under.style.clipPath = clipped > 0.5 ? 'inset(' + clipped.toFixed(1) + 'px 0 0 0)' : '';
     }
-    var shown = under ? clipped < under.offsetHeight * 0.5 : p > SHEET_IN;
+    var shown = p >= SHEET_IN * 0.85; // the yellow copyright bar has reached the bottom of the screen
     if (shown !== underShown) {
       underShown = shown;
       footer.toggleAttribute('data-footer-bottom-shown', shown); // styles the back-to-top button
