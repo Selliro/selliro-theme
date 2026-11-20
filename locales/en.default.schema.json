@@ -62,7 +62,9 @@
     "crop_info": "How much of the letters runs off the bottom edge.",
     "color": "Color",
     "color_info": "Leave empty to use the footer bottom color scheme.",
-    "animate": "Letters rise in on scroll"
+    "animate": "Letters rise in on scroll",
+    "max_height": "Maximum height",
+    "max_height_info": "Share of the screen height the text may take. On wide screens it would otherwise grow so tall that the footer no longer fits under the page; it then sits centred."
   },
   "slideshow_media": {
     "card_spacing": "Space above and below",

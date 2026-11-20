@@ -4,44 +4,59 @@
 {%- if section.settings.enable_reveal -%}
 <script>
 (function () {
-  // "Reveal" footer: the page content slides up off a fixed footer.
-  // Skipped in the theme editor, and only applied while the footer fits inside the
-  // viewport; otherwise its lower part (policies, copyright) would be unreachable.
+  // Reveal footer (the pattern Shopify's Concept theme uses): the footer sits pinned under the page
+  // (position: sticky; bottom: 0, behind #MainContent) and the page lifts off it as you reach the end.
+  // Sticky leaves the layout alone (no body padding), so nothing jumps when the mode changes.
+  //   data-footer-reveal="pin"   the footer fits under the sticky header: pinned reveal
+  //   data-footer-reveal="rise"  taller than that (phones, short windows): pinning would put its top out
+  //                              of reach, so it rises into view instead, a short slide tied to scroll
+  //   (no attribute)             theme editor or reduced motion: a normal footer
   if (document.documentElement.classList.contains('shopify-design-mode')) return;
   var footer = document.querySelector('.shopify-section-group-footer-group');
   if (!footer) return;
+  var body = document.body;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var mode = '';
+  var frame = 0;
 
-  var PROPS = ['position', 'bottom', 'left', 'right', 'width', 'z-index'];
-  var applied = false;
-
-  function apply() {
-    footer.style.setProperty('position', 'fixed', 'important');
-    footer.style.setProperty('bottom', '0', 'important');
-    footer.style.setProperty('left', '0', 'important');
-    footer.style.setProperty('right', '0', 'important');
-    footer.style.setProperty('width', '100%', 'important');
-    footer.style.setProperty('z-index', '0', 'important');
-    document.body.classList.add('footer-reveal-on');
-    applied = true;
+  function headerOffset() {
+    var header = document.querySelector('#header-component');
+    if (!header) return 0;
+    var pos = getComputedStyle(header.closest('.header-section') || header).position;
+    return pos === 'sticky' || pos === 'fixed' ? header.offsetHeight : 0;
   }
 
-  function reset() {
-    PROPS.forEach(function (prop) { footer.style.removeProperty(prop); });
-    document.body.classList.remove('footer-reveal-on');
-    document.body.style.paddingBottom = '';
-    applied = false;
+  function rise() {
+    frame = 0;
+    if (mode !== 'rise') return;
+    var rect = footer.getBoundingClientRect();
+    var vh = window.innerHeight;
+    if (rect.top > vh || rect.bottom < 0) return;
+    var travel = Math.min(rect.height, vh);
+    var shift = Math.min(vh * 0.22, rect.height * 0.3);
+    var progress = Math.max(0, Math.min(1, (vh - rect.top) / travel));
+    footer.style.transform = 'translate3d(0,' + (-(1 - progress) * shift).toFixed(1) + 'px,0)';
   }
 
   function sync() {
-    var fits = footer.offsetHeight <= window.innerHeight * 0.9;
-    if (fits && !applied) apply();
-    if (!fits && applied) reset();
-    document.body.style.paddingBottom = applied ? footer.offsetHeight + 'px' : '';
+    var next = reduce.matches ? '' : footer.offsetHeight <= window.innerHeight - headerOffset() ? 'pin' : 'rise';
+    if (next !== mode) {
+      mode = next;
+      footer.style.transform = '';
+      if (mode) body.setAttribute('data-footer-reveal', mode);
+      else body.removeAttribute('data-footer-reveal');
+      body.classList.toggle('footer-reveal-on', Boolean(mode));
+    }
+    rise();
   }
 
-  sync();
-  new ResizeObserver(sync).observe(footer);
+  window.addEventListener('scroll', function () {
+    if (mode === 'rise' && !frame) frame = requestAnimationFrame(rise);
+  }, { passive: true });
   window.addEventListener('resize', sync, { passive: true });
+  if (reduce.addEventListener) reduce.addEventListener('change', sync);
+  if ('ResizeObserver' in window) new ResizeObserver(sync).observe(footer);
+  sync();
 })();
 </script>
 {%- endif -%}
@@ -340,6 +355,7 @@
     <div
       class="footer-wordmark{% if section.settings.wordmark_animate %} footer-wordmark--animate{% endif %}"
       data-footer-wordmark
+      data-max-height="{{ section.settings.wordmark_max_height | default: 30 }}"
       style="--fw-family: {{ wm_family }}; --fw-weight: {{ wm_weight }}; --fw-crop: {{ wm_crop }};{% if section.settings.wordmark_color != blank %} --fw-color: {{ section.settings.wordmark_color }};{% endif %}"
       aria-hidden="true"
     >
@@ -350,7 +366,8 @@
 </div>
 
 {% stylesheet %}
-  /* Big wordmark across the bottom of the footer (sized to the full width by footer-wordmark.js) */
+  /* Big wordmark across the bottom of the footer (sized to the full width by footer-wordmark.js, capped by
+     "Maximum height" so the footer still fits on wide, short screens; then it sits centred) */
   .footer-wordmark {
     --fw-leading: 0.8;
 
@@ -493,7 +510,7 @@
       "type": "checkbox",
       "id": "enable_reveal",
       "label": "Reveal footer on scroll",
-      "info": "The page slides up to uncover the footer. Turned off automatically when the footer is taller than the screen.",
+      "info": "The page slides up to uncover the footer, which stays pinned underneath. When the footer is taller than the screen it rises into view instead.",
       "default": true
     },
     {
@@ -603,6 +620,17 @@
       "min": 0,
       "max": 60,
       "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "wordmark_max_height",
+      "label": "t:footer_wordmark.max_height",
+      "info": "t:footer_wordmark.max_height_info",
+      "min": 15,
+      "max": 60,
+      "step": 1,
       "unit": "%",
       "default": 30
     },
