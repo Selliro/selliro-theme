@@ -32,7 +32,7 @@
     class="coll-card"
     href="{{ collection.url }}"
   >
-    <span class="coll-card__media">
+    <div class="coll-card__media">
       {%- if image != blank -%}
         {{
           image
@@ -47,21 +47,21 @@
       {%- else -%}
         {{ 'collection-1' | placeholder_svg_tag: 'coll-card__image coll-card__placeholder' }}
       {%- endif -%}
-    </span>
+    </div>
 
-    <span class="coll-card__body">
+    <div class="coll-card__body">
       {%- if settings.show_count -%}
         <span class="coll-card__eyebrow">
           {{- 'collections_plus.products_count' | t: count: collection.products_count -}}
         </span>
       {%- endif -%}
 
-      <span class="coll-card__title{% if settings.capitalize_titles %} coll-card__title--cap{% endif %}">
+      <h2 class="coll-card__title{% if settings.capitalize_titles %} coll-card__title--cap{% endif %}">
         {{- collection.title | escape -}}
-      </span>
+      </h2>
 
       {%- if settings.show_description and desc != blank -%}
-        <span class="coll-card__desc">{{ desc }}</span>
+        <p class="coll-card__desc">{{ desc }}</p>
       {%- endif -%}
 
       <span class="coll-card__cta">
@@ -73,6 +73,6 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
       </span>
-    </span>
+    </div>
   </a>
 </li>
