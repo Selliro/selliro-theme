@@ -39,7 +39,7 @@
 -%}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div class="blog-list color-{{ section.settings.color_scheme }}">
+<div class="blog-list blog-list--{{ section.settings.section_width | default: 'page-width' }} color-{{ section.settings.color_scheme }}">
   {%- comment -%} ------------------------------------------------------------ header {%- endcomment -%}
   <header class="blog-list__hero">
     <div class="blog-list__hero-text">
@@ -460,6 +460,22 @@
     {
       "type": "header",
       "content": "t:content.appearance"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
     },
     {
       "type": "color_scheme",

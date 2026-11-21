@@ -36,25 +36,25 @@
   --blog-soft: rgb(var(--color-foreground-rgb) / 0.045);
   --blog-accent: var(--color-primary-button-background, #f8d12f);
   --blog-radius: 20px;
-  --blog-gutter: 16px;
+  /* Same side margin as the header, footer and other sections (base.css --page-margin: 16px / 40px) */
+  --blog-gutter: var(--page-margin, 16px);
 
   display: block;
   padding-block: var(--blog-pad-top, 24px) var(--blog-pad-bottom, 72px);
 }
 
-@media screen and (min-width: 750px) {
-  .blog-list {
-    --blog-gutter: 40px;
-  }
-}
-
-/* Every part of the page shares one centred column */
+/* Every part of the page shares one centred column, as wide as the header and footer content:
+   "Page" width = the theme's page width (Theme settings → Layout), "Full" = the whole screen minus the margin */
 .blog-list__hero,
 .blog-list__cats,
 .blog-list__body,
 .blog-list__blocks {
-  width: min(1280px, calc(100% - var(--blog-gutter) * 2));
+  width: min(calc(var(--page-width, 1440px) - var(--blog-gutter) * 2), calc(100% - var(--blog-gutter) * 2));
   margin-inline: auto;
+}
+
+.blog-list--full-width :is(.blog-list__hero, .blog-list__cats, .blog-list__body, .blog-list__blocks) {
+  width: calc(100% - var(--blog-gutter) * 2);
 }
 
 .blog-list__blocks:empty {
