@@ -6,42 +6,15 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
-    "collection_list_Wfgh3m": {
-      "type": "main-collection-list",
-      "blocks": {},
-      "block_order": [],
-      "name": "Collection list",
-      "settings": {
-        "eyebrow": "Shop by category",
-        "title": "Shop all collections",
-        "highlight_word": "collections",
-        "highlight_style": "marker",
-        "highlight_color": "#f8d12f",
-        "description": "<p>Skincare, sun care and make-up, grouped so you can find your next favourite fast.</p>",
-        "show_find": true,
-        "source": "all",
-        "collection_list": [],
-        "hide_empty": true,
-        "per_page": 12,
-        "show_sort": true,
-        "layout": "editorial",
-        "columns": 3,
-        "mobile_columns": "2",
-        "image_ratio": "4 / 3",
-        "show_count": true,
-        "show_description": true,
-        "capitalize_titles": true,
-        "card_bg": "#f0ece6",
-        "card_text": "#111111",
-        "color_scheme": "",
-        "padding-block-start": 24,
-        "padding-block-end": 72
-      }
+    "main": {
+      "type": "collections",
+      "settings": {}
     }
   },
   "order": [
-    "collection_list_Wfgh3m"
+    "main"
   ]
 }

@@ -6,32 +6,12 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "main": {
-      "type": "main-blog",
-      "blocks": {},
-      "block_order": [],
-      "settings": {
-        "eyebrow": "The journal",
-        "description": "<p>Skincare guides, simple routines and honest advice from the Whispo team.</p>",
-        "show_search": true,
-        "show_categories": true,
-        "show_view_toggle": true,
-        "default_view": "grid",
-        "show_featured": true,
-        "posts_per_page": 9,
-        "columns": 3,
-        "image_ratio": "16 / 10",
-        "show_card_tags": true,
-        "show_excerpt": true,
-        "show_author": false,
-        "show_date": true,
-        "show_reading_time": true,
-        "color_scheme": "",
-        "padding-block-start": 24,
-        "padding-block-end": 72
-      }
+      "type": "blog",
+      "settings": {}
     }
   },
   "order": [
