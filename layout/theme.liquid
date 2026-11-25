@@ -1,83 +1,110 @@
 <!doctype html>
-{%- comment -%}
-  Whispo — main layout.
-  head: meta and SEO (snippets/meta-tags), design tokens (snippets/css-variables), base styles, the JS module
-        import map and theme data for scripts (window.Whispo: routes, money format, strings).
-  body: skip link, header section group, <main id="MainContent">, footer section group.
-  <html> classes: no-js → js (assets/theme.js), animations-reveal / animations-hover (Theme settings →
-  Animations), shopify-design-mode in the theme editor.
-{%- endcomment -%}
 <html
-  class="no-js{% if settings.animations_reveal %} animations-reveal{% endif %}{% if settings.animations_hover %} animations-hover{% endif %}{% if request.design_mode %} shopify-design-mode{% endif %}"
+  class="no-js{% if request.design_mode %} shopify-design-mode{% endif %}"
   lang="{{ request.locale.iso_code }}"
 >
   <head>
-    {% render 'meta-tags' %}
-
-    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
     {%- if settings.favicon != blank -%}
-      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
+      <link
+        rel="icon"
+        type="image/png"
+        href="{{ settings.favicon | image_url: width: 32, height: 32 }}"
+      >
     {%- endif -%}
 
-    {%- unless settings.type_body_font.system? -%}
-      {{ settings.type_body_font | font_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: true }}
-    {%- endunless -%}
-    {%- unless settings.type_heading_font.system? -%}
-      {{ settings.type_heading_font | font_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: true }}
-    {%- endunless -%}
+    {% comment %} This a way to wait for main content to load when navigating to a new page so that the view transitions can work consistently {% endcomment %}
+    <link
+      rel="expect"
+      href="#MainContent"
+      blocking="render"
+      id="view-transition-render-blocker"
+    >
 
-    {% render 'css-variables' %}
-    {{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
+    {%- render 'meta-tags' -%}
+    {%- render 'stylesheets' -%}
+    {%- render 'fonts' -%}
+    {%- render 'scripts' -%}
+    {%- render 'theme-styles-variables' -%}
+    {%- render 'color-schemes' -%}
 
-    <script type="importmap">
-      {
-        "imports": {
-          "@whispo/component": "{{ 'component.js' | asset_url }}",
-          "@whispo/utilities": "{{ 'utilities.js' | asset_url }}",
-          "@whispo/events": "{{ 'events.js' | asset_url }}"
-        }
-      }
-    </script>
-    <link rel="modulepreload" href="{{ 'component.js' | asset_url }}">
-    <link rel="modulepreload" href="{{ 'utilities.js' | asset_url }}">
-    <script src="{{ 'theme.js' | asset_url }}" type="module"></script>
-
-    <script>
-      window.Whispo = {
-        routes: {
-          root: {{ routes.root_url | json }},
-          cart: {{ routes.cart_url | json }},
-          cartAdd: {{ routes.cart_add_url | json }},
-          cartChange: {{ routes.cart_change_url | json }},
-          cartUpdate: {{ routes.cart_update_url | json }},
-          search: {{ routes.search_url | json }},
-          predictiveSearch: {{ routes.predictive_search_url | json }},
-          productRecommendations: {{ routes.product_recommendations_url | json }}
-        },
-        moneyFormat: {{ shop.money_format | json }},
-        cartType: {{ settings.cart_type | json }},
-        strings: {
-          addToCart: {{ 'products.add_to_cart' | t | json }},
-          soldOut: {{ 'products.sold_out' | t | json }},
-          unavailable: {{ 'products.unavailable' | t | json }},
-          cartError: {{ 'cart.error' | t | json }},
-          quantityError: {{ 'cart.quantity_error' | t | json }}
-        }
-      };
-    </script>
+    {% if request.design_mode %}
+      {%- render 'theme-editor' -%}
+    {% endif %}
 
     {{ content_for_header }}
+    {{ 'tailwind.css' | asset_url | stylesheet_tag }}
+    {%- if settings.custom_cursor_enabled -%}
+      {{ 'custom-cursor.css' | asset_url | stylesheet_tag }}
+    {%- endif -%}
   </head>
 
-  <body class="color-{{ settings.color_schemes.first.id | default: 'scheme-1' }}">
-    <a class="skip-link visually-hidden-focusable" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+  {%- liquid
+    assign section_spacing_class = ''
+    if settings.section_spacing_mode == 'uniform'
+      if settings.section_spacing_scope == 'all' or template.name == 'index'
+        assign section_spacing_class = ' section-spacing--uniform'
+      endif
+    endif
+  -%}
+  <body
+    class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }} btn-fx--{{ settings.button_hover_effect | default: 'lift-shine' }}{{ section_spacing_class }}"
+    style="--section-space: {{ settings.section_spacing_desktop | default: 96 }}px; --section-space-mobile: {{ settings.section_spacing_mobile | default: 56 }}px;"
+  >
+    {%- if settings.custom_cursor_enabled -%}
+      <div class="mouseCursor cursor-outer" aria-hidden="true"></div>
+      <div class="mouseCursor cursor-inner" aria-hidden="true"></div>
+    {%- endif -%}
+    {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
+    <div id="header-group">
+      {% sections 'header-group' %}
+    </div>
 
-    {% sections 'header-group' %}
+    <script
+      src="{{ 'critical.js' | asset_url }}"
+      type="module"
+      async
+      blocking="render"
+    ></script>
 
-    <main id="MainContent" role="main" tabindex="-1">
+    <main
+      id="MainContent"
+      class="content-for-layout"
+      role="main"
+      data-page-transition-enabled="{{ settings.page_transition_enabled }}"
+      data-product-transition="{{ settings.transition_to_main_product }}"
+      data-template="{{ template }}"
+    >
       {{ content_for_layout }}
     </main>
 
     {% sections 'footer-group' %}
+
+    {% render 'search-modal' %}
+
+    {%- if settings.custom_cursor_enabled -%}
+      <script src="{{ 'custom-cursor.js' | asset_url }}" defer></script>
+    {%- endif -%}
+
+    {%- if settings.back_to_top_enabled -%}
+      <button
+        type="button"
+        class="progress-wrap"
+        id="progress-wrap"
+        aria-label="{{ 'accessibility.back_to_top' | t }}"
+        tabindex="-1"
+      >
+        <svg class="progress-circle svg-content" width="100%" height="100%" viewBox="-1 -1 102 102" aria-hidden="true" focusable="false">
+          <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98"></path>
+        </svg>
+        <svg class="progress-wrap__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
+      <script src="{{ 'scroll-progress.js' | asset_url }}" defer></script>
+    {%- endif -%}
+
+    {%- if settings.bottom_blur_enabled -%}
+      <div class="blur-div" aria-hidden="true"></div>
+    {%- endif -%}
   </body>
 </html>
