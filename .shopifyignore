@@ -1,4 +1,4 @@
-Add all the files that you want to ignore while pushing to the shopify theme here
+# Files that are not part of the theme (never uploaded to Shopify)
 
 .babelrc
 ./*.js
@@ -7,7 +7,6 @@ package.json
 package-lock.json
 ./scss
 ./js
-templates/gift_card.liquid
 
 .cursor/.claude/*
 .claude/*
