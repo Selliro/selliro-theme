@@ -137,7 +137,10 @@ class HeaderMenu extends Component {
       submenu = this.overflowMenu;
     }
 
-    const submenuHeight = submenu ? Math.max(submenu.offsetHeight, overflowMenuHeight) : 0;
+    // A classic dropdown (data-submenu-dropdown) draws its own small panel under the item:
+    // the full-width submenu background stays closed for it
+    const isDropdown = isDefaultSlot && submenu?.hasAttribute('data-submenu-dropdown');
+    const submenuHeight = submenu && !isDropdown ? Math.max(submenu.offsetHeight, overflowMenuHeight) : 0;
 
     this.style.setProperty('--submenu-height', `${submenuHeight}px`);
     this.style.setProperty('--submenu-opacity', '1');

@@ -95,8 +95,9 @@
   }
 
   .pdp-read-more__toggle {
-    margin-block-start: 0.35rem;
-    padding: 0;
+    /* 24px tap area: 3px padding above and below, cancelled by the margins (position unchanged) */
+    margin-block: calc(0.35rem - 3px) -3px;
+    padding: 3px 0;
     border: 0;
     background: none;
     color: var(--color-foreground);

@@ -170,7 +170,7 @@
       "settings": {
         "media_type_1": "video",
         "image_1": "shopify://shop_images/story-studio-hero.jpg",
-        "video_1": "shopify://files/videos/video_banner_!.mp4",
+        "video_1": "shopify://files/videos/1103779_1080p_4k_1280x720.mp4",
         "media_type_2": "image",
         "stack_media_on_mobile": false,
         "custom_mobile_media": false,
@@ -411,7 +411,7 @@
         "y2020": {
           "type": "milestone",
           "settings": {
-            "image": "shopify://shop_images/skincare-serum-drop.jpg",
+            "image": "shopify://shop_images/whispo-story-test-batches.jpg",
             "label": "2020",
             "heading": "Our first serum, perfected",
             "text": "<p>After 40+ test batches with dermatologists, our Brightening Vitamin C Serum launches — and sells out in three weeks.</p>",
@@ -433,7 +433,7 @@
         "y2025": {
           "type": "milestone",
           "settings": {
-            "image": "shopify://shop_images/skincare-shelf.jpg",
+            "image": "shopify://shop_images/whispo-story-morning-ritual.jpg",
             "label": "Today",
             "heading": "A ritual for 12,000+ people",
             "text": "<p>Still independent and still made in small batches, Whispo is now part of thousands of morning and evening routines around the world.</p>",
@@ -1175,7 +1175,7 @@
         "image": "shopify://shop_images/story-ingredients-flatlay.jpg",
         "image_position": "right",
         "show_stars": true,
-        "eyebrow": "Loved by 12,000+ customers",
+        "eyebrow": "Made with care",
         "heading": "Whispo at a glance",
         "text": "<p>Everything we make is guided by the same promises we made on day one.</p>",
         "note": "Certified clean formulas. Free from parabens, sulfates and synthetic fragrance.",
@@ -1211,196 +1211,6 @@
         "padding_top": 0,
         "padding_bottom": 0
       }
-    },
-    "story_cta": {
-      "type": "hero",
-      "blocks": {
-        "eyebrow": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Begin your ritual</p>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "custom",
-            "font": "var(--font-body--family)",
-            "font_size": "0.875rem",
-            "line_height": "normal",
-            "letter_spacing": "loose",
-            "case": "uppercase",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "heading": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Your skin's new favourite<br>ritual starts here.</p>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "balance",
-            "color": "var(--color-foreground-heading)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "intro": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Not sure where to start? Answer a few quick questions and we'll build a routine made for your skin.</p>",
-            "width": "100%",
-            "max_width": "narrow",
-            "alignment": "center",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground-heading)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "buttons": {
-          "type": "group",
-          "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "center",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "center",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "padding-block-start": 12,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "btn_0": {
-              "type": "button",
-              "settings": {
-                "label": "Take the skin quiz",
-                "link": "shopify://pages/skin-quiz",
-                "open_in_new_tab": false,
-                "style_class": "button",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            },
-            "btn_1": {
-              "type": "button",
-              "settings": {
-                "label": "Shop all",
-                "link": "shopify://collections/all",
-                "open_in_new_tab": false,
-                "style_class": "button-secondary",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "btn_0",
-            "btn_1"
-          ]
-        }
-      },
-      "block_order": [
-        "eyebrow",
-        "heading",
-        "intro",
-        "buttons"
-      ],
-      "settings": {
-        "media_type_1": "image",
-        "image_1": "shopify://shop_images/whispo-story-cta-ritual.jpg",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "center",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "page-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-6",
-        "toggle_overlay": true,
-        "overlay_color": "#0f1a0f66",
-        "overlay_style": "solid",
-        "gradient_direction": "to bottom",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 96,
-        "padding-block-end": 96
-      }
     }
   },
   "order": [
@@ -1410,7 +1220,6 @@
     "story_timeline",
     "story_promises",
     "story_glance",
-    "story_reveal",
-    "story_cta"
+    "story_reveal"
   ]
 }

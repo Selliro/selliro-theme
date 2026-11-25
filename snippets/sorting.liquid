@@ -9,6 +9,13 @@
   @param {boolean} should_use_select_on_mobile - Whether to use a select element for the sorting component on mobile
   @param {string} section_id - The section ID
 {%- enddoc -%}
+{%- liquid
+  # The sorting renders more than once (filter bar, mobile drawer, overflow): its ids include the suffix
+  assign sort_uid = section_id
+  if suffix != blank
+    assign sort_uid = section_id | append: '-' | append: suffix
+  endif
+-%}
 
 <sorting-filter-component
   class="sorting-filter{% if filter_style == 'horizontal' %} sorting-filter__horizontal{% endif %}"
@@ -30,14 +37,14 @@
 
   <div class="sorting-filter__container {% if should_use_select_on_mobile %} desktop:hidden {% else %} hidden {% endif %}">
     <label
-      for="sort-select-{{ section_id }}"
+      for="sort-select-{{ sort_uid }}"
       class="facets__label"
     >
       {{- 'actions.sort' | t -}}
     </label>
     <div class="sorting-filter__select-wrapper">
       <select
-        id="sort-select-{{ section_id }}"
+        id="sort-select-{{ sort_uid }}"
         name="sort_by"
         class="sorting-filter__select"
         {% if should_use_select_on_mobile == false %}
@@ -76,7 +83,7 @@
   >
     <details
       ref="details"
-      id="Sorting-{{ section_id }}"
+      id="Sorting-{{ sort_uid }}"
       data-default-sort-by="{{ default_sort_by }}"
       class="facets__panel {% if should_use_select_on_mobile %} mobile:hidden {% endif %}"
       data-auto-close-details="desktop,mobile"
@@ -86,12 +93,12 @@
         class="facets__summary"
         role="button"
         aria-expanded="false"
-        aria-controls="sorting-options-{{ section_id }}"
+        aria-controls="sorting-options-{{ sort_uid }}"
         ref="summary"
       >
         <span
           class="facets__label"
-          id="sort-label-{{ section_id }}"
+          id="sort-label-{{ sort_uid }}"
         >
           {{- 'actions.sort' | t -}}
         </span>
@@ -105,15 +112,15 @@
         </span>
       </summary>
       <floating-panel-component
-        id="sorting-options-{{ section_id }}"
+        id="sorting-options-{{ sort_uid }}"
         class="sorting-filter__options color-{{ settings.popover_color_scheme }}"
         role="listbox"
-        aria-labelledby="sort-label-{{ section_id }}"
+        aria-labelledby="sort-label-{{ sort_uid }}"
         ref="listbox"
       >
         {% for option in results.sort_options %}
           <label
-            for="sort-option-{{ option.value }}-{{ section_id }}"
+            for="sort-option-{{ option.value }}-{{ sort_uid }}"
           >
             <div
               class="sorting-filter__option"
@@ -124,7 +131,7 @@
               <input
                 type="radio"
                 name="sort_by"
-                id="sort-option-{{ option.value }}-{{ section_id }}"
+                id="sort-option-{{ option.value }}-{{ sort_uid }}"
                 {% if suffix != blank %}
                   form="FacetFiltersForm--{{ section_id }}-{{ suffix }}"
                 {% endif %}

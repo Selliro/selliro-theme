@@ -12,6 +12,12 @@
 {%- enddoc -%}
 
 {% liquid
+  # The filters render twice (bar + mobile drawer): the drawer copy gets its own ids
+  assign id_suffix = ''
+  if in_drawer
+    assign id_suffix = '-drawer'
+  endif
+
   assign is_swatch = false
   assign swatch_index = filter.values | find_index: 'swatch'
 
@@ -39,7 +45,7 @@
   data-filter-param-name="{{ filter.param_name | escape | replace: '.', '-' }}"
 >
   <details
-    id="Facet-Details-{{ sectionId }}-{{ filter.param_name | escape | replace: '.', '-' }}"
+    id="Facet-Details-{{ sectionId }}-{{ filter.param_name | escape | replace: '.', '-' }}{{ id_suffix }}"
     class="facets__panel"
     {% if filter_style == 'horizontal' %}
       data-auto-close-details="desktop"
@@ -108,11 +114,11 @@
         data-close-on-resize
       {% endunless %}
       class="facets__inputs facets__panel-content details-content{% if filter_style == 'horizontal' %} color-{{ settings.popover_color_scheme }}{% endif %}"
-      id="facet-inputs-{{ filter.param_name | escape | replace: '.', '-' }}"
+      id="facet-inputs-{{ filter.param_name | escape | replace: '.', '-' }}{{ id_suffix }}"
     >
       <facet-inputs-component
         on:change="/updateFilters"
-        id="facet-inputs-component-{{ filter.param_name | escape | replace: '.', '-' }}"
+        id="facet-inputs-component-{{ filter.param_name | escape | replace: '.', '-' }}{{ id_suffix }}"
       >
         {% liquid
           assign has_active_values = false
@@ -186,7 +192,7 @@
             endif
           %}
           <ul
-            id="filters-list-{{ sectionId }}-{{ filter.param_name | escape | replace: '.', '-' }}"
+            id="filters-list-{{ sectionId }}-{{ filter.param_name | escape | replace: '.', '-' }}{{ id_suffix }}"
             class="facets__inputs-list{% if should_use_pills %} facets__inputs-list--grid{% endif %} list-unstyled{% if is_swatch %} facets__inputs-list--swatches{% if show_swatch_label %} facets__inputs-list--swatches-grid{% endif %}{% endif %}{% if is_image %} facets__inputs-list--images{% endif %}"
             {% if is_swatch %}
               style="--swatch-columns: {{ swatch_columns }};"
@@ -391,7 +397,7 @@
             ref="showMoreButton"
             on:click="/toggle"
             aria-expanded="false"
-            aria-controls="filters-list-{{ sectionId }}-{{ filter.param_name | escape | replace: '.', '-' }}"
+            aria-controls="filters-list-{{ sectionId }}-{{ filter.param_name | escape | replace: '.', '-' }}{{ id_suffix }}"
           >
             <span class="svg-wrapper icon-plus">
               {{- 'icon-plus.svg' | inline_asset_content -}}

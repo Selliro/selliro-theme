@@ -1,5 +1,7 @@
 {%- comment -%}
-  3D product showcase — an interactive 3D model of a product on a styled stage.
+  3D product — split: an interactive 3D model of a product on a styled stage.
+  · Layout: Split (text and features beside the model, model on the left or right) or Showcase (features arranged
+    around the model).
   · Model: the chosen product's first 3D model, or a link to any .glb file (e.g. uploaded to Content › Files).
   · Stage: glow / orbit rings / floor grid / plain backdrop, optional outline word behind the model,
     "360°" chip, live angle readout, drag hint, camera view buttons (front / side / back / top / reset), AR button.
@@ -15,7 +17,7 @@
 
 {%- liquid
   assign p3d_product = section.settings.product
-  assign layout = section.settings.layout | default: 'showcase'
+  assign layout = section.settings.layout | default: 'split'
   assign backdrop = section.settings.backdrop | default: 'glow'
   assign count = section.blocks.size
   assign rows = count | plus: 1 | divided_by: 2
@@ -1350,7 +1352,7 @@
 
 {% schema %}
 {
-  "name": "3D product",
+  "name": "3D product — split",
   "tag": "div",
   "class": "section-wrapper",
   "max_blocks": 6,
@@ -1432,15 +1434,15 @@
       "label": "Layout",
       "options": [
         {
-          "value": "showcase",
-          "label": "Showcase — features around the model"
-        },
-        {
           "value": "split",
           "label": "Split — text beside the model"
+        },
+        {
+          "value": "showcase",
+          "label": "Showcase — features around the model"
         }
       ],
-      "default": "showcase"
+      "default": "split"
     },
     {
       "type": "select",
@@ -1741,7 +1743,7 @@
         {
           "type": "text",
           "id": "title",
-          "label": "Title",
+          "label": "Heading",
           "default": "Feature"
         },
         {
@@ -1794,8 +1796,14 @@
   ],
   "presets": [
     {
-      "name": "3D product",
+      "name": "3D product — split",
       "category": "Product",
+      "settings": {
+        "layout": "split",
+        "backdrop": "rings",
+        "stage_color": "#1c1a17",
+        "background_text": ""
+      },
       "blocks": [
         {
           "type": "feature",
@@ -1831,45 +1839,6 @@
             "text": "Pop in a refill pod and keep the jar for years.",
             "view_angle": -120,
             "view_height": 0
-          }
-        }
-      ]
-    },
-    {
-      "name": "3D product — split",
-      "category": "Product",
-      "settings": {
-        "layout": "split",
-        "backdrop": "rings",
-        "stage_color": "#1c1a17",
-        "background_text": ""
-      },
-      "blocks": [
-        {
-          "type": "feature",
-          "settings": {
-            "title": "Whipped, cloud-light texture",
-            "text": "Melts in on contact and leaves skin soft, never greasy.",
-            "view_angle": 0,
-            "view_height": 45
-          }
-        },
-        {
-          "type": "feature",
-          "settings": {
-            "title": "Polished silver lid",
-            "text": "A weighty screw-top that seals in freshness.",
-            "view_angle": 135,
-            "view_height": 15
-          }
-        },
-        {
-          "type": "feature",
-          "settings": {
-            "title": "Porcelain-finish jar",
-            "text": "Glossy, heavy glass that keeps light and air out.",
-            "view_angle": 90,
-            "view_height": 10
           }
         }
       ]

@@ -16,6 +16,11 @@
     assign color_scheme_classes = color_scheme_classes | append: ' color-scheme-matches-parent'
   endif
 
+  # Submenu layout (Selliro): 'mega' = full-width panel for every item (Horizon default),
+  # 'dropdown' = a small list under the item (third-level links fly out to the side),
+  # 'auto' = mega menu only where there's more to show (third-level links, images, promo cards), dropdown otherwise
+  assign submenu_layout = block_settings.submenu_layout | default: 'mega'
+
   if block_settings.menu_style == 'featured_collections'
     assign ratio = block_settings.featured_collections_aspect_ratio
   elsif block_settings.menu_style == 'featured_products'
@@ -25,9 +30,45 @@
 
 {% capture children %}
   {% for link in block_settings.menu.links %}
+    {%- liquid
+      assign use_dropdown = false
+      if link.links != blank
+        if submenu_layout == 'dropdown'
+          assign use_dropdown = true
+        elsif submenu_layout == 'auto'
+          assign use_dropdown = true
+          for child in link.links
+            if child.links != blank
+              assign use_dropdown = false
+              break
+            endif
+          endfor
+          case menu_content_type
+            when 'collection_images', 'featured_products', 'featured_collections'
+              assign use_dropdown = false
+            when 'promo_cards'
+              # A promo card meant for this item (or for every item) needs the mega menu
+              assign link_title_handle = link.title | handleize
+              for i in (1..2)
+                assign key_prefix = 'promo_' | append: i | append: '_'
+                assign key_image = key_prefix | append: 'image'
+                assign key_heading = key_prefix | append: 'heading'
+                assign key_target = key_prefix | append: 'menu_item'
+                if block_settings[key_image] == blank and block_settings[key_heading] == blank
+                  continue
+                endif
+                assign promo_target = block_settings[key_target] | strip | handleize
+                if promo_target == blank or promo_target == link.handle or promo_target == link_title_handle
+                  assign use_dropdown = false
+                endif
+              endfor
+          endcase
+        endif
+      endif
+    -%}
     <li
       role="presentation"
-      class="menu-list__list-item"
+      class="menu-list__list-item{% if use_dropdown %} menu-list__list-item--dropdown{% endif %}"
       on:focus="/activate"
       on:blur="/deactivate"
       on:pointerenter="/activate"
@@ -51,7 +92,61 @@
           </span>
         {%- endif -%}
       </a>
-      {%- if link.links != blank -%}
+      {%- if use_dropdown -%}
+        <div
+          class="menu-list__submenu menu-list__submenu--dropdown{{ color_scheme_classes }}"
+          ref="submenu[]"
+          data-submenu-dropdown
+        >
+          <div
+            id="submenu-{{ forloop.index }}"
+            class="menu-dropdown"
+            style="{% render 'submenu-font-styles', settings: block_settings %}"
+          >
+            <ul
+              class="menu-dropdown__list list-unstyled"
+              role="list"
+            >
+              {%- for child in link.links -%}
+                <li class="menu-dropdown__item{% if child.links != blank %} menu-dropdown__item--has-children{% endif %}">
+                  <a
+                    href="{{ child.url }}"
+                    class="menu-dropdown__link{% if child.active %} menu-dropdown__link--active{% endif %}"
+                    {% if child.current %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    <span>{{ child.title }}</span>
+                    {%- if child.links != blank -%}
+                      <svg class="menu-dropdown__caret" viewBox="0 0 12 12" width="12" height="12" fill="none" aria-hidden="true" focusable="false"><path d="M4.5 2.5 8 6l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    {%- endif -%}
+                  </a>
+                  {%- if child.links != blank -%}
+                    <ul
+                      class="menu-dropdown__flyout list-unstyled"
+                      role="list"
+                    >
+                      {%- for grandchild in child.links -%}
+                        <li class="menu-dropdown__item">
+                          <a
+                            href="{{ grandchild.url }}"
+                            class="menu-dropdown__link{% if grandchild.active %} menu-dropdown__link--active{% endif %}"
+                            {% if grandchild.current %}
+                              aria-current="page"
+                            {% endif %}
+                          >
+                            {{- grandchild.title -}}
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        </div>
+      {%- elsif link.links != blank -%}
         <div class="menu-list__submenu{{ color_scheme_classes }}" ref="submenu[]">
           <div
             id="submenu-{{ forloop.index }}"

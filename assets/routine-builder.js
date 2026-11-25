@@ -435,7 +435,11 @@
 
       // One running index across words and blanks, so the sentence reads in left to right.
       let i = 0;
-      Array.from(sentence.children).forEach((child) => {
+      // Chips with punctuation sit inside a .rb__pair wrapper; walk into it so the order stays left to right
+      const parts = Array.from(sentence.children).flatMap((child) =>
+        child.classList.contains('rb__pair') ? Array.from(child.children) : [child]
+      );
+      parts.forEach((child) => {
         if (child.classList.contains('rb__words')) i = this.splitWords(child, i);
         else if (child.classList.contains('rb__blank')) child.style.setProperty('--i', String(i++));
       });

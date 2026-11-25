@@ -49,7 +49,7 @@
     root.setAttribute('data-reveal-ready', '');
     let words = 0;
     root.querySelectorAll('[data-reveal-title]').forEach((t) => (words = Math.max(words, splitTitle(t))));
-    const headEnd = 0.15 + words * 0.08;
+    const headEnd = 0.1 + words * 0.045;
     root.style.setProperty('--sr-head-end', `${headEnd}s`);
     const stagger = (selector) => {
       const els = root.querySelectorAll(selector);
@@ -68,10 +68,10 @@
     root.classList.add('sr-anim');
     // Longest chain (in ms) — after that the root hands back to the normal styles
     return Math.max(
-      2600 + Math.min(cards.length, MAX_STAGGER) * 120 + headEnd * 1000,
-      (headEnd + fades * 0.1 + 1) * 1000,
-      (1 + pops * 0.12 + 0.8) * 1000,
-      (headEnd + 0.1 + rises * 0.15 + 1.2) * 1000
+      1300 + Math.min(cards.length, MAX_STAGGER) * 70 + headEnd * 1000,
+      (headEnd + fades * 0.06 + 0.7) * 1000,
+      (0.55 + pops * 0.07 + 0.5) * 1000,
+      (headEnd + 0.05 + rises * 0.08 + 0.8) * 1000
     );
   };
 
@@ -88,11 +88,11 @@
           const root = entry.target;
           root.classList.add('is-in');
           // Hand back to the normal styles once everything has landed, so hover effects run without delays.
-          setTimeout(() => root.classList.remove('sr-anim', 'is-in'), Number(root.dataset.revealDuration || 3000));
+          setTimeout(() => root.classList.remove('sr-anim', 'is-in'), Number(root.dataset.revealDuration || 2000));
         }),
       // Start once the section's top is a little way up the screen. (A ratio threshold such as 0.12 can never be
       // reached by sections taller than ~8 screens, e.g. long feature grids on phones, which then stayed hidden.)
-      { threshold: 0, rootMargin: '0px 0px -12% 0px' }
+      { threshold: 0, rootMargin: '0px 0px -4% 0px' }
     );
     roots.forEach((root) => {
       root.dataset.revealDuration = String(Math.round(prepare(root)));

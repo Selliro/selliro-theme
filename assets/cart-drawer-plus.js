@@ -3,6 +3,8 @@
  *   <cart-shipping-progress>  free shipping bar; converts the threshold when the shopper uses another currency
  *   <cart-recommendations>    "You may also like" row with quick add, rendered from sections/cart-recommendations
  *   added-item highlight      the row of a product that was just added pulses once
+ *   close badge               desktop: a white round × follows the mouse over the dimmed page outside
+ *                             the panel (a click there already closes the drawer); same as the quick view's
  *
  * The drawer is re-rendered (morphed) after every cart change. <cart-recommendations> carries
  * data-skip-subtree-update, so the morph leaves its products alone; it reloads itself when its data-cart-key
@@ -294,6 +296,57 @@ document.addEventListener(ThemeEvents.cartUpdate, (event) => {
     });
   }, 80);
 });
+
+/* ------------------------------------------------------------- close badge */
+// Same behaviour as the quick view's close cursor (assets/new-arrivals-quick-view.js): it sits on the
+// pointer while the mouse is over the dimmed page and hides over the panel.
+{
+  const finePointer = window.matchMedia('(min-width: 750px) and (hover: hover) and (pointer: fine)');
+  // The panel is the badge's positioning box while it slides in, so measure where translate 0 0 lands
+  let originX = 0;
+  let originY = 0;
+  /** @type {HTMLElement | null} */
+  let badge = null;
+
+  const openDrawer = () => document.querySelector('.cart-drawer__dialog--plus[open]:not(.dialog-closing)');
+
+  const hide = () => {
+    document.querySelectorAll('[data-cdp-cursor][data-on]').forEach((el) => el.removeAttribute('data-on'));
+    badge = null;
+  };
+
+  document.addEventListener(
+    'pointermove',
+    (event) => {
+      const dialog = openDrawer();
+      if (!dialog || !finePointer.matches || event.pointerType !== 'mouse') return hide();
+
+      const rect = dialog.getBoundingClientRect();
+      const outside =
+        event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+      if (!outside) return hide();
+
+      const el = /** @type {HTMLElement | null} */ (dialog.querySelector('[data-cdp-cursor]'));
+      if (!el) return;
+      if (badge !== el || !el.hasAttribute('data-on')) {
+        badge = el;
+        el.style.translate = '0px 0px';
+        const home = el.getBoundingClientRect();
+        originX = home.left + home.width / 2;
+        originY = home.top + home.height / 2;
+        el.setAttribute('data-on', '');
+      }
+      el.style.translate = `${event.clientX - originX}px ${event.clientY - originY}px`;
+    },
+    { passive: true }
+  );
+
+  document.documentElement.addEventListener('mouseleave', hide);
+  // A click outside closes the drawer, as does Escape: the badge goes with it
+  // (and isn't left switched on for the next time the cart opens)
+  document.addEventListener('pointerdown', () => badge && hide());
+  document.addEventListener('keydown', (event) => event.key === 'Escape' && hide());
+}
 
 if (!customElements.get('cart-shipping-progress')) customElements.define('cart-shipping-progress', CartShippingProgress);
 if (!customElements.get('cart-recommendations')) customElements.define('cart-recommendations', CartRecommendations);

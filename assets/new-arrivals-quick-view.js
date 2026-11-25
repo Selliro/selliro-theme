@@ -1,7 +1,8 @@
 /**
  * New Arrivals quick view drawer.
  *
- * Fetches the product page, clones its product grid (media + details) into the drawer.
+ * Fetches the product page, clones its product grid (media + details) into the drawer, trimmed to the
+ * essentials (see KEEP_IN_DETAILS) with the images in one simple column (see simplifyGallery).
  * - Opens immediately with a skeleton, prefetches on hover/focus, caches per URL.
  * - Focus is trapped inside the dialog and restored to the trigger on close.
  * - Variant changes inside the drawer never rewrite the current page URL.
@@ -190,6 +191,17 @@
       drawerCloseTimers.delete(drawer);
     }
 
+    // The footer reveal makes #MainContent a stacking context (z-index 1), so inside it the drawer sits
+    // under the site header. Move it to <body> the first time it opens, inside a .shopify-section wrapper:
+    // Horizon's product form, price and stock listen for variant changes on their closest section.
+    if (!drawer.closest('[data-na-qv-portal]')) {
+      var portal = document.createElement('div');
+      portal.className = 'shopify-section na-qv-portal';
+      portal.setAttribute('data-na-qv-portal', '');
+      document.body.appendChild(portal);
+      portal.appendChild(drawer);
+    }
+
     previousActiveElement =
       trigger || (document.activeElement instanceof HTMLElement ? document.activeElement : null);
     activeDrawer = drawer;
@@ -264,6 +276,9 @@
       el.setAttribute('data-template-product-match', 'false');
     });
 
+    trimDetails(grid);
+    simplifyGallery(grid);
+
     // "View full details" link, like every major theme's quick view.
     var label = drawer.getAttribute('data-label-view-details');
     var details = grid.querySelector('.product-details');
@@ -280,6 +295,83 @@
         details.appendChild(link);
       }
     }
+  }
+
+  /*
+   * The quick view shows the essentials only: vendor, title, rating, price, tags, a short description,
+   * key benefits, variants, stock ("Hurry! Only 6 left"), quantity + Add to cart + Buy it now, View full details.
+   * Everything else on the product page (badges, Pair it with, How to use / Ingredients
+   * accordions, promos, payment icons, sticky bar…) stays on the product page.
+   */
+  var KEEP_IN_DETAILS = [
+    '.view-product-title',
+    'rte-formatter.text-block', // eyebrow / vendor line
+    '.text-block[class*="__title"]',
+    '.text-block:is(.h1, .h2, .h3, .h4, .h5, .h6)', // product title, whatever the block is called
+    '.pdp-rating',
+    'product-price',
+    '.pdp-tags', // category tags, e.g. "Exfoliation & Masks"
+    'pdp-read-more',
+    '.text-block[class*="__description"]',
+    '.pdp-benefits', // key benefits: "Clean, skin-loving formula", "Vegan and cruelty free"…
+    'variant-picker',
+    'swatches-variant-picker-component',
+    '.buy-buttons-block',
+    'product-inventory', // hidden: its text feeds the stock line above the buttons
+    '[data-na-qv-view-details]',
+  ].join(',');
+
+  /** @param {Element} grid */
+  function trimDetails(grid) {
+    var details = grid.querySelector('.product-details');
+    if (!details) return;
+    var content = details.querySelector('.group-block-content') || details;
+    Array.prototype.slice.call(content.children).forEach(function (el) {
+      if (/^(SCRIPT|STYLE|LINK|TEMPLATE)$/.test(el.tagName)) return;
+      if (!el.matches(KEEP_IN_DETAILS)) el.remove();
+    });
+    // Anything of the above that sat inside a kept group
+    details.querySelectorAll('pdp-sticky-bar, .pdp-pair, pdp-pair-carousel, .accordion, .pdp-promos, .pdp-badges, .payment-icons, local-pickup').forEach(function (el) {
+      el.remove();
+    });
+  }
+
+  /*
+   * One column of images, no thumbnails or slideshow: every product image, stacked (a swipe row on phones).
+   * Videos / 3D models have no image here and are left out; if there is no image at all the gallery stays as is.
+   */
+  /** @param {Element} grid */
+  function simplifyGallery(grid) {
+    var media = grid.querySelector('.product-information__media');
+    if (!media) return;
+    var seen = {};
+    var images = [];
+    media.querySelectorAll('img.product-media__image, .product-media img').forEach(function (img) {
+      if (!(img instanceof HTMLImageElement) || img.closest('slideshow-controls')) return;
+      var key = (img.getAttribute('src') || '').split('?')[0].replace(/_\d+x\d*(?=\.)/, '');
+      if (!key || seen[key]) return;
+      seen[key] = true;
+      images.push(img);
+    });
+    if (!images.length) return;
+
+    var gallery = document.createElement('div');
+    gallery.className = 'na-qv-gallery';
+    gallery.setAttribute('data-na-qv-gallery', '');
+    images.forEach(function (img, index) {
+      var item = document.createElement('figure');
+      item.className = 'na-qv-gallery__item';
+      var copy = /** @type {HTMLImageElement} */ (img.cloneNode(false));
+      copy.className = 'na-qv-gallery__image';
+      copy.removeAttribute('style');
+      copy.setAttribute('sizes', '(min-width: 768px) 340px, 82vw');
+      copy.setAttribute('loading', index < 2 ? 'eager' : 'lazy');
+      if (!copy.getAttribute('alt')) copy.setAttribute('alt', '');
+      item.appendChild(copy);
+      gallery.appendChild(item);
+    });
+    media.replaceChildren(gallery);
+    media.classList.add('na-qv-media--simple');
   }
 
   /**
@@ -319,20 +411,31 @@
     var hasOutOfStockIcon = !!productInventory.querySelector('.product-inventory__icon-out_of_stock');
     if (!inventoryText || hasOutOfStockIcon) return;
 
+    // In stock: a soft green badge with a check. Low stock: amber, a clock, and how much is left (the
+    // product-inventory bar's fill level). Out of stock shows nothing here (the button says Sold out).
+    var isLow = !!productInventory.querySelector('.product-inventory__icon-low');
+    var fillEl = productInventory.querySelector('.product-inventory__bar-fill');
+    var fill = fillEl instanceof HTMLElement ? parseFloat(fillEl.style.getPropertyValue('--stock-fill')) : NaN;
+
     var anchor = buyButtonsBlock.querySelector('.product-form-buttons');
     var stock = document.createElement('div');
-    stock.className = 'na-qv-inline-stock';
+    stock.className = 'na-qv-stock ' + (isLow ? 'na-qv-stock--low' : 'na-qv-stock--in');
     stock.setAttribute('data-na-qv-inline-stock', '');
     stock.innerHTML =
-      '<div class="na-qv-inline-stock__text-wrap">' +
-      '<span class="na-qv-inline-stock__icon" aria-hidden="true">✓</span>' +
-      '<span class="na-qv-inline-stock__text"></span>' +
-      '</div>' +
-      '<span class="na-qv-inline-stock__line" aria-hidden="true"></span>';
-    var textNode = stock.querySelector('.na-qv-inline-stock__text');
+      '<span class="na-qv-stock__icon" aria-hidden="true">' +
+      (isLow
+        ? '<svg viewBox="0 0 20 20" width="16" height="16" fill="none"><circle cx="10" cy="10" r="7.25" stroke="currentColor" stroke-width="1.6"/><path d="M10 6v4.25l2.75 1.75" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        : '<svg viewBox="0 0 20 20" width="16" height="16" fill="none"><path d="m5.5 10.4 3 2.9 6-6.3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>') +
+      '</span>' +
+      '<span class="na-qv-stock__text"></span>' +
+      (isLow && !isNaN(fill)
+        ? '<span class="na-qv-stock__meter" aria-hidden="true"><span style="width:' + Math.max(6, Math.min(100, fill)) + '%"></span></span>'
+        : '');
+    var textNode = stock.querySelector('.na-qv-stock__text');
     if (textNode) textNode.textContent = inventoryText;
 
-    if (anchor instanceof Element) buyButtonsBlock.insertBefore(stock, anchor);
+    // The buttons sit inside the product form, not directly in the block: insert next to them
+    if (anchor instanceof Element && anchor.parentNode) anchor.parentNode.insertBefore(stock, anchor);
     else buyButtonsBlock.prepend(stock);
   }
 
@@ -390,8 +493,13 @@
         content.replaceChildren(grid);
         content.removeAttribute('aria-busy');
         content.scrollTop = 0;
-        syncVariant(content, variantId);
-        renderInlineStock(content);
+        // Extras only: if one of them fails, keep the quick view open rather than leaving the page
+        try {
+          syncVariant(content, variantId);
+          renderInlineStock(content);
+        } catch (error) {
+          console.warn('Quick view:', error);
+        }
       })
       .catch(function () {
         if (token !== requestToken) return;
@@ -464,9 +572,19 @@
   });
 
   // Theme editor: never leave the page scroll-locked when the section is re-rendered or removed.
+  // The drawer may have been moved to <body>, so match it by its section id as well.
   document.addEventListener('shopify:section:unload', function (ev) {
-    if (activeDrawer && ev.target instanceof Element && ev.target.contains(activeDrawer)) {
-      closeDrawer(activeDrawer);
-    }
+    var detail = /** @type {any} */ (ev).detail;
+    var sectionId = detail && detail.sectionId;
+    if (!(ev.target instanceof Element)) return;
+    var section = ev.target;
+    document.querySelectorAll('[data-na-qv-drawer]').forEach(function (drawer) {
+      var belongs = section.contains(drawer) || (sectionId && drawer.getAttribute('data-section-id') === sectionId);
+      if (!belongs) return;
+      if (activeDrawer === drawer) closeDrawer(drawer);
+      // A moved drawer is left behind when its section re-renders: the new render brings its own
+      var portal = drawer.closest('[data-na-qv-portal]');
+      if (portal) portal.remove();
+    });
   });
 })();

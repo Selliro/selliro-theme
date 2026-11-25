@@ -85,6 +85,13 @@ module.exports = {
 
 //treeshake and watch on development
 if (mode === 'development') {
+  if (!storeUrl || !themeId) {
+    console.error(
+      '\n✗ STORE_URL and THEME_ID are missing. Copy "sampleenv" to ".env" and fill in your store and theme ID,\n' +
+        '  for example STORE_URL=whispo-demo.myshopify.com and THEME_ID=185735086445.\n'
+    );
+    process.exit(1);
+  }
   module.exports.devtool = false;
   module.exports.plugins.push(
     new WebpackShellPluginNext({

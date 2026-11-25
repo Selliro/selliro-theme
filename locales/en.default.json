@@ -8,6 +8,108 @@
  * ------------------------------------------------------------
  */
 {
+  "store_locator": {
+    "search_label": "Search stores",
+    "search_placeholder": "City, postcode or store name",
+    "use_location": "Use my location",
+    "locating": "Finding you…",
+    "location_error": "We couldn't get your location. Check your browser's location permission.",
+    "location_unsupported": "Your browser can't share your location.",
+    "sorted_nearest": "nearest first",
+    "filter_label": "Store type",
+    "all": "All",
+    "stores_count": {
+      "one": "{{ count }} store",
+      "other": "{{ count }} stores"
+    },
+    "showing_js": "Showing [count] of [total] stores",
+    "showing_one_js": "Showing 1 of [total] stores",
+    "distance_km": "[distance] km away",
+    "distance_mi": "[distance] mi away",
+    "open_now": "Open now",
+    "closes_at": "Closes at [time]",
+    "opens_at": "Opens at [time]",
+    "closed_now": "Closed now",
+    "hours": "Opening hours",
+    "services": "Services",
+    "directions": "Directions",
+    "email": "Email",
+    "opens_new_tab": "(opens in a new tab)",
+    "map_title": "Map showing {{ store }}",
+    "map_title_js": "Map showing [store]",
+    "no_results": "No stores match your search",
+    "no_results_text": "Try another city or postcode, or clear the search.",
+    "clear": "Clear search",
+    "empty_title": "Stores coming soon",
+    "empty_text": "Add stores to this section in the theme editor."
+  },
+  "collections_plus": {
+    "collections_count": {
+      "one": "{{ count }} collection",
+      "other": "{{ count }} collections"
+    },
+    "products_count": {
+      "one": "{{ count }} product",
+      "other": "{{ count }} products"
+    },
+    "find_placeholder": "Find a collection…",
+    "find_label": "Find a collection",
+    "sort_label": "Sort by",
+    "sort_featured": "Featured",
+    "sort_az": "Name, A–Z",
+    "sort_za": "Name, Z–A",
+    "sort_products": "Most products",
+    "showing_html": "Showing <b>{{ count }}</b> collections",
+    "showing_js": "Showing [count] collections",
+    "showing_one_js": "Showing 1 collection",
+    "shop_now": "Shop now",
+    "no_match": "No collection matches your search.",
+    "clear": "Clear search",
+    "empty_title": "No collections yet",
+    "empty_text": "Collections you add in Products › Collections will show here."
+  },
+  "blog_plus": {
+    "all": "All",
+    "categories": "Categories",
+    "search_placeholder": "Search articles…",
+    "search_label": "Search the blog",
+    "posts_count": {
+      "one": "{{ count }} post",
+      "other": "{{ count }} posts"
+    },
+    "showing_html": "Showing <b>{{ count }}</b> posts",
+    "in_category_html": "Posts in <b>{{ tag }}</b>",
+    "clear": "Clear",
+    "view_grid": "Grid view",
+    "view_list": "List view",
+    "featured": "Featured",
+    "read_article": "Read article",
+    "no_posts_title": "No posts here yet",
+    "no_posts_text": "There are no posts in this category yet. Have a look at everything else we've written.",
+    "see_all": "See all posts",
+    "previous_page": "Previous page",
+    "next_page": "Next page",
+    "page": "Page {{ page }}"
+  },
+  "article_plus": {
+    "back_to_blog": "Back to {{ blog }}",
+    "min_read": {
+      "one": "{{ count }} min read",
+      "other": "{{ count }} min read"
+    },
+    "by_author": "By {{ author }}",
+    "share": "Share",
+    "share_on": "Share on {{ network }}",
+    "share_email": "Share by email",
+    "copy_link": "Copy link",
+    "copied": "Link copied",
+    "tagged": "Tagged",
+    "previous": "Previous post",
+    "next": "Next post",
+    "keep_reading": "Keep reading",
+    "read_article": "Read article",
+    "reading_progress": "Reading progress"
+  },
   "search_plus": {
     "placeholder": "Search products, pages, blog posts…",
     "recent": "Recent searches",

@@ -25,7 +25,7 @@
   endfor
 
   assign accent = section.settings.accent_color | default: '#f8d12f'
-  assign font_source = section.settings.sentence_font_source | default: 'custom'
+  assign font_source = section.settings.sentence_font_source | default: 'heading'
   case font_source
     when 'heading'
       assign sentence_family = 'var(--font-heading--family)'
@@ -55,6 +55,13 @@
     --rb-family: {{ sentence_family }};
     --rb-weight: {{ sentence_weight }};
     --rb-size: {{ section.settings.sentence_size }}px;
+    {%- if section.settings.sentence_scale != 'custom' %}
+    --rb-font-size: var(--section-title-size);
+    --rb-measure: 30ch;
+    {%- if font_source == 'heading' %}
+    --rb-weight: var(--section-title-weight);
+    {%- endif %}
+    {%- endif %}
     --rb-columns: {{ section.settings.results_columns }};
     --rb-radius: {{ section.settings.card_radius }}px;
     --rb-mood-strength: {{ section.settings.mood_strength | times: 0.01 }};
@@ -158,6 +165,16 @@
               <span class="rb__words">{{ block.settings.before | escape }} </span>
             {%- endif -%}
             {%- assign tint = b_index | modulo: 3 | plus: 1 -%}
+            {%- liquid
+              assign after_text = block.settings.after | strip
+              assign first_char = after_text | slice: 0
+              assign is_punct = false
+              if first_char == ',' or first_char == '.' or first_char == '!' or first_char == '?' or first_char == ';' or first_char == ':'
+                assign is_punct = true
+              endif
+            -%}
+            {%- comment -%} A chip and the punctuation right after it never split across lines {%- endcomment -%}
+            {%- if is_punct -%}<span class="rb__pair">{%- endif -%}
             <button
               type="button"
               class="rb__blank"
@@ -177,16 +194,15 @@
                 <svg class="rb__blank-caret" viewBox="0 0 12 12" width="12" height="12" fill="none" focusable="false"><path d="M2.5 4.5 6 8l3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
             </button>
-            {%- liquid
-              assign after_text = block.settings.after | strip
-              assign first_char = after_text | slice: 0
-              assign is_punct = false
-              if first_char == ',' or first_char == '.' or first_char == '!' or first_char == '?' or first_char == ';' or first_char == ':'
-                assign is_punct = true
-              endif
-            -%}
-            {%- if after_text != blank -%}
-              <span class="rb__words{% if is_punct %} rb__words--punct{% endif %}">{% unless is_punct %} {% endunless %}{{ after_text | escape }}</span>
+            {%- if is_punct -%}
+              {%- assign punct = after_text | slice: 0 -%}
+              {%- assign rest = after_text | remove_first: punct | strip -%}
+              <span class="rb__words rb__words--punct">{{ punct | escape }}</span></span>
+              {%- if rest != blank -%}
+                <span class="rb__words"> {{ rest | escape }}</span>
+              {%- endif -%}
+            {%- elsif after_text != blank -%}
+              <span class="rb__words"> {{ after_text | escape }}</span>
             {%- endif -%}
             {{- ' ' -}}
             {%- assign b_index = b_index | plus: 1 -%}
@@ -428,7 +444,7 @@
           "label": "t:routine_builder.font_theme_body"
         }
       ],
-      "default": "custom"
+      "default": "heading"
     },
     {
       "type": "font_picker",
@@ -438,6 +454,23 @@
       "visible_if": "{{ section.settings.sentence_font_source == 'custom' }}"
     },
     {
+      "type": "select",
+      "id": "sentence_scale",
+      "label": "Sentence size",
+      "options": [
+        {
+          "value": "section",
+          "label": "Match section headings"
+        },
+        {
+          "value": "custom",
+          "label": "Custom size"
+        }
+      ],
+      "default": "section",
+      "info": "Match section headings uses the same size and weight as the other section titles."
+    },
+    {
       "type": "range",
       "id": "sentence_size",
       "label": "t:routine_builder.sentence_size",
@@ -445,7 +478,8 @@
       "max": 96,
       "step": 2,
       "unit": "px",
-      "default": 64
+      "default": 64,
+      "visible_if": "{{ section.settings.sentence_scale == 'custom' }}"
     },
     {
       "type": "select",

@@ -366,7 +366,32 @@
 .sr-anim.is-in .featured-collection-grid__card-body {
   opacity: 1;
   translate: 0 0;
-  transition: opacity 0.7s ease calc(0.75s + var(--sr-i, 0) * 0.12s), translate 0.9s cubic-bezier(0.22, 1, 0.36, 1) calc(0.75s + var(--sr-i, 0) * 0.12s);
+  transition: opacity 0.45s ease calc(0.45s + var(--sr-i, 0) * 0.07s), translate 0.6s cubic-bezier(0.22, 1, 0.36, 1) calc(0.45s + var(--sr-i, 0) * 0.07s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-collection-grid__card,
+  .featured-collection-grid__card-image,
+  .featured-collection-grid__card-title a {
+    transition: none;
+  }
+
+  .sr-anim .featured-collection-grid__card-body {
+    opacity: 1;
+    translate: none;
+  }
+}
+
+/* Scroll-in animation: assets/section-reveal.css. Card text follows its card in. */
+.sr-anim .featured-collection-grid__card-body {
+  opacity: 0;
+  translate: 0 18px;
+}
+
+.sr-anim.is-in .featured-collection-grid__card-body {
+  opacity: 1;
+  translate: 0 0;
+  transition: opacity 0.45s ease calc(0.45s + var(--sr-i, 0) * 0.07s), translate 0.6s cubic-bezier(0.22, 1, 0.36, 1) calc(0.45s + var(--sr-i, 0) * 0.07s);
 }
 
 @media (prefers-reduced-motion: reduce) {

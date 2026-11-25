@@ -46,6 +46,7 @@
   {% endif %}
   href="{{ routes.root_url }}"
   class="size-style spacing-style header-logo"
+  aria-label="{{ shop.name | escape }}"
   style="
     {% render 'size-style', settings: block_settings %}
     {% render 'spacing-style', settings: block_settings %}

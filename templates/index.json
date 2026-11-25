@@ -9,143 +9,6 @@
  */
 {
   "sections": {
-    "custom_banner_YeXbn3": {
-      "type": "custom-banner",
-      "blocks": {
-        "slide_FF3yJ7": {
-          "type": "slide",
-          "settings": {
-            "media_type": "video",
-            "video_source_type": "cdn",
-            "video_url_youtube": "",
-            "video_url_vimeo": "",
-            "video_cdn_url": "https://cdn.shopify.com/videos/c/o/v/e8180474765d4be4a48837cb9cd38e0f.mp4",
-            "image_desktop": "shopify://shop_images/whispo-banner-kind-desktop.jpg",
-            "image_mobile": "shopify://shop_images/whispo-banner-kind-mobile.jpg",
-            "aspect_ratio_desktop": "2",
-            "aspect_ratio_mobile": "0.917",
-            "split_side_type": "text",
-            "split_text_position": "left",
-            "split_text_background_color": "#f5f5f5",
-            "split_enable_gradient": false,
-            "split_side_text": "",
-            "split_side_video_source_type": "youtube",
-            "split_side_video_url_youtube": "",
-            "split_side_video_url_vimeo": "",
-            "split_side_video_cdn_url": "",
-            "content_alignment": "left",
-            "caption": "COSMETICS",
-            "caption_color": "#ffffff",
-            "caption_font_size": 18,
-            "heading": "Be kind to your skin, your skin reflect kindness towards you",
-            "heading_color": "#ffffff",
-            "heading_font_size": 45,
-            "subheading": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            "subheading_color": "#ffffff",
-            "subheading_font_size": 16,
-            "button_label": "SHOP NOW",
-            "button_link": "shopify://collections/all",
-            "button_text_color": "#000000",
-            "button_font_size": 16,
-            "button_background_color": "#fad02c",
-            "button_border_color": "#fad02c"
-          }
-        },
-        "slide_Gqr8Tw": {
-          "type": "slide",
-          "settings": {
-            "media_type": "video",
-            "video_source_type": "cdn",
-            "video_url_youtube": "https://www.youtube.com/watch?v=bUM3MScTXgo",
-            "video_url_vimeo": "",
-            "video_cdn_url": "https://cdn.shopify.com/videos/c/o/v/e7334b1b22f3488986c4f1caad2c9eda.mp4",
-            "aspect_ratio_desktop": "2",
-            "aspect_ratio_mobile": "0.92",
-            "split_side_type": "text",
-            "split_text_position": "left",
-            "split_text_background_color": "#f5f5f5",
-            "split_enable_gradient": false,
-            "split_side_text": "",
-            "split_side_video_source_type": "youtube",
-            "split_side_video_url_youtube": "",
-            "split_side_video_url_vimeo": "",
-            "split_side_video_cdn_url": "",
-            "content_alignment": "left",
-            "caption": "COSMETICS",
-            "caption_color": "#ffffff",
-            "caption_font_size": 16,
-            "heading": "Be kind to your skin, your skin reflect kindness towards you",
-            "heading_color": "#ffffff",
-            "heading_font_size": 62,
-            "subheading": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            "subheading_color": "#ffffff",
-            "subheading_font_size": 18,
-            "button_label": "SHOP NOW",
-            "button_link": "",
-            "button_text_color": "#111111",
-            "button_font_size": 16,
-            "button_background_color": "#ffffff",
-            "button_border_color": "#ffffff"
-          }
-        },
-        "slide_fGECCF": {
-          "type": "slide",
-          "settings": {
-            "media_type": "video",
-            "video_source_type": "vimeo",
-            "video_url_youtube": "https://www.youtube.com/watch?v=bUM3MScTXgo",
-            "video_url_vimeo": "https://vimeo.com/15069551",
-            "video_cdn_url": "https://cdn.shopify.com/videos/c/o/v/e7334b1b22f3488986c4f1caad2c9eda.mp4",
-            "aspect_ratio_desktop": "2",
-            "aspect_ratio_mobile": "0.92",
-            "split_side_type": "text",
-            "split_text_position": "left",
-            "split_text_background_color": "#f5f5f5",
-            "split_enable_gradient": false,
-            "split_side_text": "",
-            "split_side_video_source_type": "youtube",
-            "split_side_video_url_youtube": "",
-            "split_side_video_url_vimeo": "",
-            "split_side_video_cdn_url": "",
-            "content_alignment": "left",
-            "caption": "COSMETICS",
-            "caption_color": "#ffffff",
-            "caption_font_size": 16,
-            "heading": "Be kind to your skin, your skin reflect kindness towards you",
-            "heading_color": "#ffffff",
-            "heading_font_size": 62,
-            "subheading": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            "subheading_color": "#ffffff",
-            "subheading_font_size": 18,
-            "button_label": "SHOP NOW",
-            "button_link": "",
-            "button_text_color": "#111111",
-            "button_font_size": 16,
-            "button_background_color": "#ffffff",
-            "button_border_color": "#ffffff"
-          }
-        }
-      },
-      "block_order": [
-        "slide_FF3yJ7",
-        "slide_Gqr8Tw",
-        "slide_fGECCF"
-      ],
-      "disabled": true,
-      "name": "Custom banner",
-      "settings": {
-        "enable_container": false,
-        "video_autoplay": true,
-        "slideshow_mode": "manual",
-        "enable_infinite_loop": false,
-        "slideshow_speed": 5,
-        "aspect_ratio_desktop": "16/7",
-        "aspect_ratio_mobile": "4/5",
-        "color_scheme": "",
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
-    },
     "slideshow_AnCCTe": {
       "type": "slideshow",
       "blocks": {
@@ -686,7 +549,7 @@
             "overlay_color": "#00000026",
             "overlay_style": "solid",
             "gradient_direction": "to top",
-            "link": "#",
+            "link": "",
             "open_in_new_tab": false,
             "placeholder": "",
             "padding-block-start": 0,
@@ -1758,7 +1621,7 @@
         "padding_bottom": 64
       }
     },
-    "product_3d_showcase": {
+    "product_3d_bC9kEE": {
       "type": "product-3d",
       "blocks": {
         "f_cap": {
@@ -1812,6 +1675,7 @@
         "f_lining",
         "f_refill"
       ],
+      "name": "3D product — split",
       "settings": {
         "eyebrow": "360° view",
         "heading": "See it from every angle",
@@ -1825,10 +1689,10 @@
         "stage_height": 600,
         "stage_height_mobile": 420,
         "radius": 28,
-        "backdrop": "glow",
-        "stage_color": "#f3efe7",
+        "backdrop": "rings",
+        "stage_color": "#1c1a17",
         "accent_color": "#f8d12f",
-        "background_text": "360°",
+        "background_text": "",
         "shadow_intensity": 10,
         "exposure": 10,
         "auto_rotate": true,
@@ -2061,8 +1925,9 @@
       ],
       "settings": {
         "eyebrow": "Build your routine",
-        "sentence_font_source": "custom",
+        "sentence_font_source": "heading",
         "sentence_font": "playfair_display_n4",
+        "sentence_scale": "section",
         "sentence_size": 64,
         "alignment": "center",
         "placeholder": "choose",
@@ -2107,7 +1972,7 @@
       "settings": {
         "media_type": "video",
         "image": "shopify://shop_images/whispo-reveal-collection.jpg",
-        "video": "shopify://files/videos/product_video.mp4",
+        "video": "shopify://files/videos/1103779_1080p_4k_1280x720.mp4",
         "video_url": "",
         "heading": "Discover the Collection",
         "subheading": "Crafted with intention. Worn with purpose.",
@@ -2620,10 +2485,118 @@
         "padding_top": 48,
         "padding_bottom": 48
       }
+    },
+    "store_locator": {
+      "type": "store-locator",
+      "blocks": {
+        "store_soho": {
+          "type": "store",
+          "settings": {
+            "name": "Whispo Flagship Soho",
+            "store_type": "Flagship store",
+            "badge": "Skin lab",
+            "address": "21 Greek Street\nLondon W1D 4DZ",
+            "phone": "+44 20 7946 0123",
+            "email": "",
+            "hours": "Mon–Sat: 10:00–20:00\nSun: 12:00–18:00",
+            "services": "Free skin consultation, Facials, Click & collect",
+            "latitude": "51.5139",
+            "longitude": "-0.1316",
+            "map_query": ""
+          }
+        },
+        "store_covent": {
+          "type": "store",
+          "settings": {
+            "name": "Whispo Covent Garden",
+            "store_type": "Whispo store",
+            "badge": "",
+            "address": "8 Neal Street\nLondon WC2H 9PU",
+            "phone": "+44 20 7946 0456",
+            "email": "",
+            "hours": "Mon–Fri: 09:30–19:30\nSat: 10:00–19:00\nSun: 11:00–17:00",
+            "services": "Click & collect, Gift wrapping",
+            "latitude": "51.5145",
+            "longitude": "-0.1263",
+            "map_query": ""
+          }
+        },
+        "store_kensington": {
+          "type": "store",
+          "settings": {
+            "name": "Glow Studio Spa",
+            "store_type": "Partner spa",
+            "badge": "New",
+            "address": "140 Kensington High Street\nLondon W8 7RL",
+            "phone": "+44 20 7946 0789",
+            "email": "",
+            "hours": "Tue–Sat: 09:00–20:00\nSun: 10:00–16:00\nMon: Closed",
+            "services": "Whispo facials, Skin consultation",
+            "latitude": "51.5009",
+            "longitude": "-0.1925",
+            "map_query": ""
+          }
+        },
+        "store_islington": {
+          "type": "store",
+          "settings": {
+            "name": "Greenleaf Pharmacy",
+            "store_type": "Stockist",
+            "badge": "",
+            "address": "62 Upper Street\nLondon N1 0NY",
+            "phone": "+44 20 7946 0321",
+            "email": "",
+            "hours": "Mon–Sat: 08:30–21:00\nSun: 10:00–18:00",
+            "services": "",
+            "latitude": "51.5383",
+            "longitude": "-0.1027",
+            "map_query": ""
+          }
+        },
+        "store_canary": {
+          "type": "store",
+          "settings": {
+            "name": "Whispo Canary Wharf",
+            "store_type": "Whispo store",
+            "badge": "Click & collect",
+            "address": "Unit 14, Jubilee Place\nLondon E14 5NY",
+            "phone": "+44 20 7946 0654",
+            "email": "",
+            "hours": "Mon–Fri: 08:00–20:00\nSat: 10:00–18:00\nSun: 12:00–18:00",
+            "services": "Click & collect, Express pick-up",
+            "latitude": "51.5033",
+            "longitude": "-0.0186",
+            "map_query": ""
+          }
+        }
+      },
+      "block_order": [
+        "store_soho",
+        "store_covent",
+        "store_kensington",
+        "store_islington",
+        "store_canary"
+      ],
+      "settings": {
+        "eyebrow": "Visit us",
+        "heading": "Find a Whispo store near you",
+        "text": "<p>Try our bestsellers in person, book a free skin consultation and pick up online orders at our stores and partner spas.</p>",
+        "show_search": true,
+        "show_locate": true,
+        "show_filters": true,
+        "distance_unit": "km",
+        "show_map": true,
+        "map_zoom": 15,
+        "map_height": 600,
+        "accent_color": "#f8d12f",
+        "radius": 20,
+        "color_scheme": "scheme-1",
+        "padding_top": 48,
+        "padding_bottom": 72
+      }
     }
   },
   "order": [
-    "custom_banner_YeXbn3",
     "slideshow_AnCCTe",
     "hero_jVaWmY",
     "product_list_fa6P9H",
@@ -2635,7 +2608,7 @@
     "countdown_banner_bf",
     "bundle_builder_box",
     "before_after_slider_CUEk9V",
-    "product_3d_showcase",
+    "product_3d_bC9kEE",
     "product_story_ritual",
     "routine_builder_main",
     "reveal_image_yFL9GW",
@@ -2643,6 +2616,7 @@
     "b2b_wholesale",
     "faq_split_gallery_LpzKU4",
     "client_trust_testimonials_D4AhAL",
+    "store_locator",
     "marquee_xXM4Hr",
     "featured_blog_posts_8riExY"
   ]

@@ -724,3 +724,16 @@ a.itc-badge:hover .itc-badge__center {
   .itc__btn:hover   { transform: none; }
   .itc--hover-lift .itc__stack .itc__photo:hover { translate: none; }
 }
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .itc-badge__ring,
+  .itc-badge__inner,
+  .itc-badge__icon { animation: none; }
+  .itc__photo,
+  .itc__btn,
+  .itc-badge,
+  .itc-badge__arrow { transition: none; }
+  .itc__btn:hover   { transform: none; }
+  .itc--hover-lift .itc__stack .itc__photo:hover { translate: none; }
+}

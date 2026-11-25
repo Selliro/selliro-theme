@@ -126,6 +126,24 @@
   }
 }
 
+/* The product page places its columns on its own page grid (e.g. phones: .product-details { grid-column: 2 / 3 }).
+   Here that adds a phantom column and squeezes the images to 0px: let the drawer's grid place them. */
+.na-qv-drawer__body .product-information__grid[data-product-grid-content] > :is(.product-information__media, .product-details) {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+/* The product page's "Image column width" split (product-information__grid--ratio, 60/40 on laptops)
+   is copied in with the grid and would squeeze the details column here. Images a little narrower than
+   the info instead (about 45 / 55). */
+@media (min-width: 48rem) {
+  .na-qv-drawer__body .product-information__grid[data-product-grid-content]:has(.na-qv-media--simple),
+  .na-qv-drawer__body
+    .product-information__grid.product-information__grid--ratio:not(:has(.product-information__media:empty))[data-product-grid-content] {
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
+  }
+}
+
 .na-qv-drawer__body .product-information__media {
   position: sticky;
   top: 0;
@@ -234,45 +252,65 @@
   gap: 0.8rem;
 }
 
-.na-qv-inline-stock {
+.na-qv-stock {
+  --na-qv-stock: 46 125 50; /* in stock: green */
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.6rem;
   margin-bottom: 0.9rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 12px;
+  background: rgb(var(--na-qv-stock) / 0.08);
+  color: rgb(var(--na-qv-stock));
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
-.na-qv-inline-stock__text-wrap {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  color: rgb(109 152 84);
-  font-size: 1.05rem;
-  font-weight: 500;
-  line-height: 1.2;
+.na-qv-stock--low {
+  --na-qv-stock: 180 95 6; /* low stock: amber */
 }
 
-.na-qv-inline-stock__icon {
-  inline-size: 1.75rem;
-  block-size: 1.75rem;
+.na-qv-stock__icon {
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
   border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgb(109 152 84);
-  color: #fff;
-  font-size: 1.05rem;
-  font-weight: 700;
+  background: rgb(var(--na-qv-stock) / 0.14);
 }
 
-.na-qv-inline-stock__line {
+.na-qv-stock__icon svg {
   display: block;
-  inline-size: 100%;
-  block-size: 0.45rem;
-  margin-top: 0.85rem;
+}
+
+.na-qv-stock__text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Low stock: how much is left */
+.na-qv-stock__meter {
+  flex: 1 0 100%;
+  block-size: 4px;
   border-radius: 999px;
-  background: rgb(109 152 84);
+  background: rgb(var(--na-qv-stock) / 0.16);
+  overflow: hidden;
+}
+
+.na-qv-stock__meter > span {
+  display: block;
+  block-size: 100%;
+  border-radius: inherit;
+  background: rgb(var(--na-qv-stock));
 }
 
 .na-qv-drawer__body .buy-buttons-block .product-form-buttons {
   display: grid;
-  grid-template-columns: 8.75rem minmax(0, 1fr);
+  grid-template-columns: 7.5rem minmax(0, 1fr);
   gap: 0.8rem;
   align-items: stretch;
 }
@@ -340,7 +378,7 @@
 
 .na-qv-drawer__body .buy-buttons-block quantity-selector-component {
   min-width: 0;
-  max-width: 8.75rem;
+  max-width: 7.5rem;
 }
 
 .na-qv-drawer__body .buy-buttons-block .quantity-selector {
@@ -348,16 +386,36 @@
   border-radius: 10px;
 }
 
-.na-qv-drawer__body .buy-buttons-block .product-form-buttons .button {
-  min-height: 4rem;
+/* Add to cart and Buy it now: same height, font, size and weight */
+.na-qv-drawer__body .buy-buttons-block .product-form-buttons .button,
+.na-qv-drawer__body .buy-buttons-block .shopify-payment-button__button {
+  min-height: 3.5rem;
   border-radius: 999px;
-  font-size: 1.05rem;
+  font-family: var(--font-body--family);
+  font-size: 1rem;
   font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  white-space: nowrap; /* "Add to cart" on one line beside the quantity box */
+  padding-inline: 1rem;
 }
 
-.na-qv-drawer__body .shopify-payment-button__button {
-  min-height: 3.95rem;
-  border-radius: 999px;
+.na-qv-drawer__body .buy-buttons-block quantity-selector-component .quantity-selector {
+  min-height: 3.5rem;
+}
+
+/* Buy it now: outline only (Shopify's own button styles are strong, hence !important) */
+.na-qv-drawer__body .buy-buttons-block .shopify-payment-button__button--unbranded {
+  background: transparent !important;
+  background-image: none !important;
+  color: var(--color-foreground) !important;
+  border: 1.5px solid var(--color-foreground) !important;
+  box-shadow: none !important;
+  transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.na-qv-drawer__body .buy-buttons-block .shopify-payment-button__button--unbranded:hover:not([disabled]) {
+  background: rgb(var(--color-foreground-rgb) / 0.06) !important;
 }
 
 .na-qv-drawer__body .buy-buttons-block .shopify-payment-button,
@@ -435,6 +493,104 @@
   .na-qv-cursor-close {
     transition: none;
   }
+}
+
+/* ── Simple gallery: every image in one column, no thumbnails (new-arrivals-quick-view.js simplifyGallery).
+   Desktop: the image column is as tall as the drawer and scrolls on its own when there are more images
+   than fit (thin scrollbar as a hint), so the product info beside it stays put. ── */
+@media (min-width: 48rem) {
+  .na-qv-drawer__body .product-information__media.na-qv-media--simple {
+    position: sticky;
+    top: 0;
+    max-height: calc(100dvh - 7rem); /* drawer header + body padding */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--color-foreground-rgb) / 0.25) transparent;
+    padding-inline-end: 2px;
+  }
+
+  .na-qv-drawer__body .product-information__media.na-qv-media--simple::-webkit-scrollbar {
+    display: block;
+    width: 4px;
+  }
+
+  .na-qv-drawer__body .product-information__media.na-qv-media--simple::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: rgb(var(--color-foreground-rgb) / 0.25);
+  }
+}
+
+.na-qv-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.na-qv-gallery__item {
+  margin: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgb(var(--color-foreground-rgb) / 0.04);
+}
+
+.na-qv-gallery__image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+
+/* Phones: a swipe row of images above the info */
+@media (max-width: 47.9375rem) {
+  .na-qv-gallery {
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: -1.35rem;
+    padding-inline: 1.35rem;
+    scroll-padding-inline: 1.35rem;
+  }
+
+  .na-qv-gallery::-webkit-scrollbar {
+    display: none;
+  }
+
+  .na-qv-gallery {
+    align-items: flex-start;
+  }
+
+  .na-qv-gallery__item {
+    flex: 0 0 78%;
+    scroll-snap-align: start;
+  }
+
+  .na-qv-gallery__item:only-child {
+    flex-basis: 100%;
+  }
+}
+
+/* ── Essentials only (new-arrivals-quick-view.js trimDetails) ── */
+/* Compact title for the quick view (the product page's display size is too big here) */
+.na-qv-drawer__body .product-details .text-block:is(.h1, .h2, .h3)[class*="__title"],
+.na-qv-drawer__body .product-details .text-block:is(.h1, .h2, .h3)[class*="__title"] > * {
+  font-size: clamp(1.5rem, 1.9vw, 2rem);
+  line-height: 1.12;
+}
+
+/* Description: three lines, no Read more */
+.na-qv-drawer__body .pdp-read-more {
+  --pdp-clamp: 3 !important;
+}
+
+.na-qv-drawer__body .pdp-read-more__toggle {
+  display: none !important;
+}
+
+/* The stock message shows above the buttons ("Hurry! Only 6 left in stock"); the bar below is the duplicate */
+.na-qv-drawer__body .product-details product-inventory {
+  display: none;
 }
 
 /* ── "View full details" link ── */

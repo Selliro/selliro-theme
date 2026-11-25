@@ -347,13 +347,16 @@
 .rb__sentence {
   color: inherit;
   text-transform: none;
-  max-width: 24ch;
+  max-width: var(--rb-measure, 24ch);
   margin: 0.25rem 0 0;
   font-family: var(--rb-family, var(--font-heading--family));
   font-weight: var(--rb-weight, 400);
-  font-size: clamp(2rem, 5.2vw, var(--rb-size, 64px));
-  line-height: 1.36;
-  letter-spacing: -0.015em;
+  /* "Match section headings" sets --rb-font-size to the shared section title size (assets/base.css) */
+  font-size: var(--rb-font-size, clamp(2rem, 5.2vw, var(--rb-size, 64px)));
+  /* Roomy lines so the answer chips never crowd the line above or below */
+  line-height: 1.55;
+  letter-spacing: 0.012em;
+  word-spacing: 0.04em;
   text-wrap: balance;
 }
 
@@ -363,6 +366,12 @@
 
 .rb__words {
   white-space: pre-wrap;
+}
+
+/* A chip and its punctuation stay on one line */
+.rb__pair,
+.rb__pair > .rb__words {
+  white-space: nowrap;
 }
 
 /* Punctuation hugs the blank before it */
@@ -386,6 +395,8 @@
   background: transparent;
   color: inherit;
   font: inherit;
+  /* The answer chips ("choose") read a little smaller than the sentence around them */
+  font-size: 0.82em;
   font-style: italic;
   line-height: 1.12;
   vertical-align: baseline;
@@ -1407,8 +1418,8 @@
   }
 
   .rb__sentence {
-    font-size: clamp(1.75rem, 8.4vw, 2.5rem);
-    line-height: 1.42;
+    font-size: var(--rb-font-size, clamp(1.75rem, 8.4vw, 2.5rem));
+    line-height: 1.5;
   }
 
   .rb__tray {
