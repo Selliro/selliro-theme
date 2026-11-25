@@ -1,0 +1,4 @@
+# Copy to .env and fill in. Used by webpack (npm start) to run `shopify theme dev`.
+# .env is git-ignored, so each developer keeps their own.
+STORE_URL=your-store.myshopify.com
+THEME_ID=000000000000

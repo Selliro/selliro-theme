@@ -5,10 +5,17 @@
   @param {string} filter_style - The filter style, can be 'horizontal' or 'vertical'.
   @param {boolean} [autofocus] - Whether to autofocus the filter.
   @param {boolean} [should_render_clear] - Whether to render the clear button.
+  @param {boolean} [in_drawer] - Whether the filter is in the mobile drawer (gives its ids a -drawer suffix).
 
   @example
   {% render 'price-filter', filter: filter, filter_style: 'vertical' %}
 {%- enddoc -%}
+{%- liquid
+  assign id_suffix = ''
+  if in_drawer
+    assign id_suffix = '-drawer'
+  endif
+-%}
 
 <accordion-custom
   class="facets__item"
@@ -71,7 +78,7 @@
 
       <price-facet-component
         class="price-facet"
-        id="facet-inputs-{{ filter.param_name | escape | replace: '.', '-' }}"
+        id="facet-inputs-{{ filter.param_name | escape | replace: '.', '-' }}{{ id_suffix }}"
         on:change="/updatePriceFilterAndResults"
       >
         <div class="price-facet__inputs-wrapper facets__inputs-wrapper facets__inputs-wrapper--row">
@@ -79,7 +86,7 @@
             <input
               class="field__input price-facet__input"
               name="{{ filter.min_value.param_name }}"
-              id="{{ filter.label | escape }}-GTE"
+              id="{{ filter.label | escape }}-GTE{{ id_suffix }}"
               {%- if filter.min_value.value -%}
                 value="{{ filter.min_value.value | money_without_currency }}"
               {%- endif -%}
@@ -96,7 +103,7 @@
             >
             <label
               class="field__label price-facet__label"
-              for="{{ filter.label | escape }}-GTE"
+              for="{{ filter.label | escape }}-GTE{{ id_suffix }}"
             >
               {{ cart.currency.symbol }}
             </label>
@@ -108,7 +115,7 @@
             <input
               class="field__input price-facet__input"
               name="{{ filter.max_value.param_name }}"
-              id="{{ filter.label | escape }}-LTE"
+              id="{{ filter.label | escape }}-LTE{{ id_suffix }}"
               {%- if filter.max_value.value -%}
                 value="{{ filter.max_value.value | money_without_currency }}"
               {%- endif -%}
@@ -125,7 +132,7 @@
             >
             <label
               class="field__label price-facet__label"
-              for="{{ filter.label | escape }}-LTE"
+              for="{{ filter.label | escape }}-LTE{{ id_suffix }}"
             >
               {{ cart.currency.symbol }}
             </label>

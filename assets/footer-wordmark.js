@@ -1,6 +1,6 @@
 /**
  * Footer wordmark (sections/footer.liquid): sizes the text so it spans the full footer width,
- * whatever its length, and (optionally) lets the letters rise in when the footer scrolls into view.
+ * whatever its length, and (optionally) lets the letters rise in one by one when it comes into view.
  */
 (() => {
   if (window.__footerWordmarkInit) return;
@@ -61,13 +61,14 @@
       split(root);
       refit();
       root.classList.add('is-ready');
+      // Letters rise in once, the first time the wordmark is well in view
       const io = new IntersectionObserver(
         (entries) => {
           if (!entries.some((e) => e.isIntersecting)) return;
           io.disconnect();
           root.classList.add('is-in');
         },
-        { threshold: 0.25 }
+        { threshold: 0.4 }
       );
       io.observe(root);
     });

@@ -54,15 +54,19 @@
     "number_color_info": "Leave empty to use the color scheme text color."
   },
   "footer_wordmark": {
-    "header": "Big text at the bottom",
+    "header": "Big text at the bottom of the footer",
     "text": "Text",
-    "text_info": "Shown huge across the full width of the footer bottom, like a wordmark. Leave empty to hide.",
+    "text_info": "Shown huge across the full width of the bottom of the footer, like a wordmark. Leave empty to hide.",
     "font": "Font",
     "crop": "Cut off at the bottom",
     "crop_info": "How much of the letters runs off the bottom edge.",
     "color": "Color",
-    "color_info": "Leave empty to use the footer bottom color scheme.",
-    "animate": "Letters rise in on scroll"
+    "color_info": "Leave empty to use the footer text color.",
+    "animate": "Letters rise in on scroll",
+    "case": "Letter case",
+    "case_info": "Capitals are much shorter than lowercase letters at the same width, so the word takes less height.",
+    "case_as_typed": "As typed",
+    "case_uppercase": "Capitals"
   },
   "slideshow_media": {
     "card_spacing": "Space above and below",
@@ -757,7 +761,7 @@
     "video_section": "Video",
     "view_all_button": "View all",
     "pills": "Pills",
-    "comparison_slider": "Comparison slider"
+    "comparison_slider": "Before and after comparison"
   },
   "options": {
     "above_carousel": "Above carousel",
@@ -1499,9 +1503,9 @@
     "full_width": "Full width",
     "after_image": "After image",
     "before_image": "Before image",
-    "cs_slider_style": "Slider style",
-    "cs_slider_color": "Slider color",
-    "cs_slider_inner_color": "Slider inner color",
+    "cs_slider_style": "Divider style",
+    "cs_slider_color": "Divider color",
+    "cs_slider_inner_color": "Divider inner color",
     "text_on_images": "Text on images",
     "x_position": "Horizontal position",
     "y_position": "Vertical position"
@@ -1728,9 +1732,9 @@
         "new_badge_days": "“New” badge window (days)",
         "new_badge_text": "“New” badge text",
         "hover_image_button": "Image hover button label",
-        "fallback_star_count": "Fallback star rating",
+        "fallback_star_count": "Stars on placeholder cards",
         "star_color": "Star color",
-        "yellow_cta": "Accent yellow (CTA)",
+        "yellow_cta": "Accent yellow (buttons)",
         "demo_category": "Demo category label",
         "demo_product_title": "Demo product title",
         "carousel_header": "Carousel",
@@ -1741,7 +1745,7 @@
       },
       "options": {
         "layout": {
-          "slider": "Slider",
+          "slider": "Carousel",
           "grid": "Grid"
         },
         "scribble": {

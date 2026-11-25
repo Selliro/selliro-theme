@@ -7,9 +7,16 @@
 <header-actions
   {{- block.shopify_attributes -}}
 >
+  {%- comment -%}
+    Shopify's account component (required in the header, desktop and mobile): sign-in sheet and account menu.
+    Signed out it shows the theme's own account icon; Shopify loads the component itself.
+  {%- endcomment -%}
   {% if shop.customer_accounts_enabled %}
-    {% render 'account-popover' %}
-    {% render 'account-drawer' %}
+    <shopify-account class="header-actions__action header-actions__account" menu="customer-account-main-menu">
+      <span slot="signed-out-avatar" class="svg-wrapper">
+        {{- 'icon-account.svg' | inline_asset_content -}}
+      </span>
+    </shopify-account>
   {% endif %}
 
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
@@ -219,6 +226,26 @@
   .header-actions__action svg {
     width: var(--icon-size-md);
     height: var(--icon-size-md);
+  }
+
+  /* Account component: same size and colour as the other header icons */
+  .header-actions__account {
+    --shopify-account-signed-in-avatar-size: 28px;
+    --shopify-account-signed-in-avatar-color-background: var(--color-foreground);
+    --shopify-account-signed-in-avatar-color-text: var(--color-background);
+    --shopify-account-color-accent: var(--color-foreground);
+    --shopify-account-font-body: var(--font-body--family);
+
+    align-items: center;
+    min-width: var(--button-size);
+    min-height: var(--button-size);
+    color: var(--color-foreground);
+  }
+
+  .header-actions__account .svg-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .header-actions__cart-icon {

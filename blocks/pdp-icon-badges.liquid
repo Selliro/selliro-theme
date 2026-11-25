@@ -28,23 +28,39 @@
 </ul>
 
 {% stylesheet %}
+  /* Centred row: the badges share the width evenly, and a wrapped row stays centred too */
   .pdp-badges {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem 1.25rem;
+    justify-content: center;
+    gap: 1rem 0.5rem;
     margin: 0;
+    padding: 0;
   }
 
   .pdp-badges__item {
     display: flex;
+    flex: 1 1 0;
     flex-direction: column;
     align-items: center;
     gap: 0.4rem;
-    min-width: 3.75rem;
+    min-width: 4.5rem;
+    max-width: 8rem;
     text-align: center;
     font-size: 0.6875rem;
     letter-spacing: 0.02em;
     line-height: 1.25;
+  }
+
+  /* Phones: keep all five on one row */
+  @media screen and (max-width: 480px) {
+    .pdp-badges {
+      gap: 0.75rem 0.25rem;
+    }
+
+    .pdp-badges__item {
+      min-width: 3.6rem;
+    }
   }
 
   .pdp-badges__icon {

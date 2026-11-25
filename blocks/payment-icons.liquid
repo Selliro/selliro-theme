@@ -22,7 +22,18 @@
   >
     {%- for type in shop.enabled_payment_types -%}
       <li class="payment-icons__item">
-        {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+        {%- comment -%}
+          Image version of Shopify's full-colour icon: the inline SVG carries fixed ids (pi-visa…), which repeat
+          when the footer shows the icons on the same page.
+        {%- endcomment -%}
+        <img
+          class="icon icon--full-color payment-icons__image"
+          src="{{ type | payment_type_img_url }}"
+          alt="{{ type | replace: '_', ' ' | capitalize | escape }}"
+          width="38"
+          height="24"
+          loading="lazy"
+        >
       </li>
     {%- endfor -%}
   </ul>
@@ -46,6 +57,11 @@
   .payment-icons__item {
     display: flex;
     align-items: center;
+  }
+
+  .payment-icons__image {
+    width: 38px;
+    height: 24px;
   }
 {% endstylesheet %}
 

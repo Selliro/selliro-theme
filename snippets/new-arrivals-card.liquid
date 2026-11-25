@@ -221,8 +221,9 @@
       {%- if extra != blank -%}
         {{ extra }}
       {%- endif -%}
+      {%- comment -%} Stars only from real reviews (reviews.rating metafield, filled by review apps) {%- endcomment -%}
       {%- liquid
-        assign r = fallback_stars | plus: 0
+        assign r = 0
         assign rating_drop = product.metafields.reviews.rating.value
         if rating_drop != blank and rating_drop.rating != blank
           assign r = rating_drop.rating | plus: 0
@@ -232,11 +233,13 @@
           assign rf = 5
         endif
       -%}
-      <div class="new-arrivals-card__stars" style="--new-arrivals-star: {{ star_color }};" aria-hidden="true">
-        {%- for si in (1..5) -%}
-          <span class="new-arrivals-card__star{% if si <= rf %} is-on{% endif %}">★</span>
-        {%- endfor -%}
-      </div>
+      {%- if r > 0 -%}
+        <div class="new-arrivals-card__stars" style="--new-arrivals-star: {{ star_color }};" role="img" aria-label="{{ 'accessibility.rating' | t: rating: r | escape }}">
+          {%- for si in (1..5) -%}
+            <span class="new-arrivals-card__star{% if si <= rf %} is-on{% endif %}" aria-hidden="true">★</span>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
     </div>
     {%- if cta_bottom -%}
       <div class="new-arrivals-card__quick-add new-arrivals-card__quick-add--bottom">{{ na_quick_add }}</div>

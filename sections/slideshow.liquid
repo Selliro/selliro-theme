@@ -723,40 +723,6 @@
     },
     {
       "type": "select",
-      "id": "header_style",
-      "label": "Header style",
-      "info": "Used when this slideshow is the first section on the home page. Transparent: the header floats over the slides and turns solid on scroll.",
-      "options": [
-        { "value": "transparent", "label": "Transparent header" },
-        { "value": "solid", "label": "Solid header" }
-      ],
-      "default": "solid"
-    },
-    {
-      "type": "range",
-      "id": "corner_radius",
-      "label": "t:settings.corner_radius",
-      "min": 0,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "default": 24,
-      "visible_if": "{{ section.settings.section_width == 'page-width' }}"
-    },
-    {
-      "type": "range",
-      "id": "card_spacing",
-      "label": "t:slideshow_media.card_spacing",
-      "info": "t:slideshow_media.card_spacing_info",
-      "min": 0,
-      "max": 96,
-      "step": 4,
-      "unit": "px",
-      "default": 24,
-      "visible_if": "{{ section.settings.section_width == 'page-width' }}"
-    },
-    {
-      "type": "select",
       "id": "slide_height",
       "options": [
         {

@@ -226,7 +226,7 @@
                     </ul>
                   {% endif %}
 
-                  <div>
+                  <div class="cart-items__unit-price">
                     {% if item.original_price != item.final_price %}
                       <span class="visually-hidden">{{ 'content.price_sale' | t }}</span>
                       <span>{{ item.final_price | money }}</span>

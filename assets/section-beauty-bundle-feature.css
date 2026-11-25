@@ -148,7 +148,7 @@
 .shop-the-look__item-title {
   margin: 0;
   font-size: 18px;
-  font-family: "Jost", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-body--family); /* theme body font (Theme settings → Typography) */
 }
 
 .shop-the-look__item-price {

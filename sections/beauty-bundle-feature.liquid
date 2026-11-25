@@ -160,10 +160,19 @@
                 {%- elsif block.settings.description != blank -%}
                   <p class="shop-the-look__item-desc">{{ block.settings.description }}</p>
                 {%- endif -%}
-                {%- if section.settings.show_rating and block.settings.rating > 0 -%}
-                  <div class="shop-the-look__rating" aria-label="{{ 'accessibility.rating' | t: rating: block.settings.rating | escape }}">
+                {%- liquid
+                  # Rating from the product's real reviews (reviews.rating metafield); the block's value is a theme editor preview
+                  assign stl_rating = 0
+                  if block_product != blank and block_product.metafields.reviews.rating.value.rating != blank
+                    assign stl_rating = block_product.metafields.reviews.rating.value.rating | round
+                  elsif request.design_mode
+                    assign stl_rating = block.settings.rating
+                  endif
+                -%}
+                {%- if section.settings.show_rating and stl_rating > 0 -%}
+                  <div class="shop-the-look__rating" role="img" aria-label="{{ 'accessibility.rating' | t: rating: stl_rating | escape }}">
                     {%- for i in (1..5) -%}
-                      <span class="shop-the-look__star{% if i <= block.settings.rating %} is-filled{% endif %}">★</span>
+                      <span class="shop-the-look__star{% if i <= stl_rating %} is-filled{% endif %}" aria-hidden="true">★</span>
                     {%- endfor -%}
                   </div>
                 {%- endif -%}
@@ -432,7 +441,7 @@
 
 {% schema %} 
 {
-  "name": "Beauty Bundle Feature",
+  "name": "Beauty bundle feature",
   "tag": "section",
   "class": "section-beauty-bundle-feature",
   "settings": [
@@ -570,7 +579,7 @@
         {
           "type": "range",
           "id": "hotspot_x",
-          "label": "Hotspot X position",
+          "label": "Hotspot horizontal position",
           "min": 0,
           "max": 100,
           "step": 1,
@@ -580,7 +589,7 @@
         {
           "type": "range",
           "id": "hotspot_y",
-          "label": "Hotspot Y position",
+          "label": "Hotspot vertical position",
           "min": 0,
           "max": 100,
           "step": 1,
@@ -595,7 +604,7 @@
         {
           "type": "text",
           "id": "title",
-          "label": "Title",
+          "label": "Heading",
           "default": "Face Cream"
         },
         {
@@ -613,7 +622,8 @@
         {
           "type": "range",
           "id": "rating",
-          "label": "Rating",
+          "label": "Preview rating",
+          "info": "Stars come from the product's reviews (review app). This value is only shown in the theme editor.",
           "min": 0,
           "max": 5,
           "step": 1,
@@ -629,7 +639,7 @@
   ],
   "presets": [
     {
-      "name": "Beauty Bundle Feature",
+      "name": "Beauty bundle feature",
       "blocks": [
         {
           "type": "item"

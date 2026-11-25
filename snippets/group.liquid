@@ -31,7 +31,8 @@
   {{ shopify_attributes }}
   data-testid="group-block"
 >
-  {%- if settings.link != blank -%}
+  {%- comment -%} "#" goes nowhere: no overlay link then (an empty link is an accessibility error) {%- endcomment -%}
+  {%- if settings.link != blank and settings.link != '#' -%}
     <a
       href="{{ settings.link }}"
       class="group-block__link"

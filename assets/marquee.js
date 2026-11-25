@@ -1,6 +1,15 @@
 import { Component } from '@theme/component';
 import { debounce } from '@theme/utilities';
 
+/**
+ * Copies of the marquee items are decorative (aria-hidden): drop their ids so the page has no duplicates.
+ * @param {HTMLElement} element
+ */
+function stripIds(element) {
+  element.removeAttribute('id');
+  element.querySelectorAll('[id]').forEach((node) => node.removeAttribute('id'));
+}
+
 const ANIMATION_OPTIONS = {
   duration: 500,
 };
@@ -140,6 +149,7 @@ class MarqueeComponent extends Component {
 
     clone.setAttribute('aria-hidden', 'true');
     clone.removeAttribute('ref');
+    stripIds(clone);
 
     this.refs.wrapper.appendChild(clone);
   }
@@ -150,7 +160,8 @@ class MarqueeComponent extends Component {
     if (!marqueeItems[0]) return;
 
     for (let i = 0; i < numberOfCopies - 1; i++) {
-      const clone = marqueeItems[0].cloneNode(true);
+      const clone = /** @type {HTMLElement} */ (marqueeItems[0].cloneNode(true));
+      stripIds(clone);
       content.appendChild(clone);
     }
   }

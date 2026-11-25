@@ -29,7 +29,7 @@
             "slideshow_mobile_controls_style": "dots",
             "thumbnail_position": "left",
             "thumbnail_width": 100,
-            "aspect_ratio": "1",
+            "aspect_ratio": "5/4",
             "constrain_to_viewport": false,
             "media_fit": "cover",
             "media_radius": 16,
@@ -282,7 +282,7 @@
             "social_proof": {
               "type": "pdp-social-proof",
               "settings": {
-                "text": "Loved by <strong>12,000+</strong> happy customers",
+                "text": "Made in <strong>small batches</strong> with clean, plant-based ingredients",
                 "avatar_1": "shopify://shop_images/whispo-avatar-1.jpg",
                 "avatar_2": "shopify://shop_images/whispo-avatar-2.jpg",
                 "avatar_3": "shopify://shop_images/whispo-avatar-3.jpg",
@@ -313,9 +313,14 @@
                 "heading": "Pair it with",
                 "products": [
                   "luxury-face-creams",
-                  "glass-skin-overnight-mask"
+                  "glass-skin-overnight-mask",
+                  "brightening-serum",
+                  "luminous-balance-toner",
+                  "comfort-matte-bullet-lipstick"
                 ],
-                "button_label": "Add"
+                "button_label": "Add",
+                "max_products": 6,
+                "layout": "auto"
               },
               "blocks": {}
             },
@@ -766,7 +771,7 @@
             "overlay_color": "#00000026",
             "overlay_style": "solid",
             "gradient_direction": "to top",
-            "link": "#",
+            "link": "",
             "open_in_new_tab": false,
             "placeholder": "",
             "padding-block-start": 0,
@@ -1440,7 +1445,7 @@
         "image": "shopify://shop_images/skincare-serum-drop.jpg",
         "image_position": "left",
         "show_stars": true,
-        "eyebrow": "Rated 4.8/5 by 12,000+ customers",
+        "eyebrow": "Why customers choose it",
         "heading": "",
         "text": "<p>Clean, effective skincare made with natural actives and nothing you don't need.</p>",
         "note": "Dermatologist tested. Free from parabens, sulfates and synthetic fragrance.",
@@ -1744,9 +1749,9 @@
   },
   "order": [
     "main",
-    "natural_banner",
     "ingredients",
     "routine",
+    "natural_banner",
     "promises",
     "facts",
     "results",

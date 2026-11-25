@@ -1,117 +1,456 @@
+{%- comment -%}
+  Blog post (article template) — editorial layout.
+  · Header: Split (a soft panel with the text beside the image) or Stacked (title above a wide image). Text: back to
+    the blog, tags, title, summary (if the post has one), author (initial avatar), date and reading time.
+    Image height: Small / Medium / Large or its original shape.
+  · Body: a ~720px reading column with styled headings, quotes, lists and images; share bar (sticky on desktop,
+    a row on mobile); tags; comments when enabled; previous / next post; "Keep reading" related posts.
+  · Reading progress bar at the top of the page.
+  Files:  assets/section-main-blog-post.css (styles), assets/section-main-blog-post.js (share + progress).
+  Order:  1. CSS   2. Liquid (data + markup)   3. Schema
+{%- endcomment -%}
 
+{%- comment -%} ============================================================== 1. CSS {%- endcomment -%}
+{{ 'section-main-blog-post.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%} Values that come from this section's settings (the rest is in section-main-blog-post.css) {%- endcomment -%}
+{% style %}
+  #shopify-section-{{ section.id }} .article {
+    --article-pad-top: {{ section.settings.padding-block-start }}px;
+    --article-pad-bottom: {{ section.settings.padding-block-end }}px;
+    --article-measure: {{ section.settings.content_width }}px;
+    --article-radius: {{ section.settings.image_radius }}px;
+  }
+{% endstyle %}
+
+{%- comment -%} =========================================================== 2. Liquid {%- endcomment -%}
+<script
+  src="{{ 'section-main-blog-post.js' | asset_url }}"
+  defer
+></script>
+
+{%- liquid
+  assign words = article.content | strip_html | strip_newlines | split: ' ' | size
+  assign minutes = words | divided_by: 200.0 | ceil
+  if minutes < 1
+    assign minutes = 1
+  endif
+
+  assign share_url = shop.url | append: article.url
+  assign share_url_encoded = share_url | url_encode
+  assign share_title_encoded = article.title | url_encode
+  assign author_initial = article.author | strip | slice: 0 | upcase
+
+  assign image_height = section.settings.image_height | default: 'medium'
+
+  comment
+    Previous = the older post, Next = the newer one. At the oldest / newest post the missing side wraps round to
+    the other end of the blog, so both links are always there when the blog has more than one post.
+  endcomment
+  assign prev_post = blog.previous_article
+  assign next_post = blog.next_article
+  if blog.articles_count > 1
+    comment
+      blog.articles is newest first: past the oldest post, Previous wraps to the newest; past the newest, Next wraps to the oldest
+    endcomment
+    if prev_post == blank
+      assign prev_post = blog.articles.first
+    endif
+    if next_post == blank
+      assign next_post = blog.articles.last
+    endif
+    if prev_post.id == article.id
+      assign prev_post = nil
+    endif
+    if next_post.id == article.id
+      assign next_post = nil
+    endif
+  endif
+  assign show_pager = false
+  if section.settings.show_navigation
+    if prev_post or next_post
+      assign show_pager = true
+    endif
+  endif
+-%}
 
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
-<div class="section color-{{ section.settings.color_scheme }}">
-  <div
-    class="
-      spacing-style
-      layout-panel-flex
-      layout-panel-flex--column
-      section-content-wrapper
-      mobile-column
-    "
-    style="
-      {% render 'layout-panel-style', settings: section.settings %}
-      {% render 'spacing-style', settings: section.settings %}
-    "
-  >
-    <header>
-      {%- content_for 'block', id: 'blog-post-title', type: 'text' %}
-      {%- content_for 'block', id: 'blog-post-details', type: '_blog-post-info-text' %}
-    </header>
+<article
+  class="article color-{{ section.settings.color_scheme }}"
+  itemscope
+  itemtype="https://schema.org/BlogPosting"
+>
+  {%- if section.settings.show_progress -%}
+    <article-progress
+      class="article__progress"
+      role="progressbar"
+      aria-label="{{ 'article_plus.reading_progress' | t }}"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="0"
+    >
+      <span class="article__progress-bar"></span>
+    </article-progress>
+  {%- endif -%}
+
+  {%- comment -%} ---------------------------------------------------------- head + image {%- endcomment -%}
+  {%- assign hero_layout = section.settings.hero_layout | default: 'split' -%}
+  <header class="article__head article__head--{{ hero_layout }}{% unless article.image %} article__head--no-image{% endunless %} page-width">
+    <div class="article__intro">
+      <a
+        class="article__back"
+        href="{{ blog.url }}"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        {{- 'article_plus.back_to_blog' | t: blog: blog.title -}}
+      </a>
+
+      {%- if section.settings.show_tags and article.tags.size > 0 -%}
+        <ul
+          class="article__tags list-unstyled"
+          role="list"
+        >
+          {%- for tag in article.tags limit: 3 -%}
+            <li>
+              <a
+                class="article__tag"
+                href="{{ blog.url }}/tagged/{{ tag | handleize }}"
+              >
+                {{- tag | escape -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      <h1
+        class="article__title"
+        itemprop="headline"
+      >
+        {{- article.title | escape -}}
+      </h1>
+
+      {%- if article.excerpt != blank -%}
+        <p class="article__lede">{{ article.excerpt | strip_html | truncatewords: 40 }}</p>
+      {%- endif -%}
+
+      <div class="article__meta">
+        {%- if section.settings.show_author and article.author != blank -%}
+          <span
+            class="article__author"
+            itemprop="author"
+          >
+            <span
+              class="article__avatar"
+              aria-hidden="true"
+            >
+              {%- if article.user.image -%}
+                {{ article.user.image | image_url: width: 80 | image_tag: loading: 'lazy', alt: '' }}
+              {%- else -%}
+                {{ author_initial }}
+              {%- endif -%}
+            </span>
+            {{- 'article_plus.by_author' | t: author: article.author -}}
+          </span>
+        {%- endif -%}
+        {%- if section.settings.show_date -%}
+          <span class="article__meta-item">
+            {{- article.published_at | time_tag: format: 'date' -}}
+          </span>
+        {%- endif -%}
+        {%- if section.settings.show_reading_time -%}
+          <span class="article__meta-item">{{ 'article_plus.min_read' | t: count: minutes }}</span>
+        {%- endif -%}
+      </div>
+    </div>
 
     {%- if article.image -%}
-      {%- content_for 'block', id: 'blog-post-image', type: '_blog-post-featured-image' %}
+      <figure class="article__hero article__hero--{{ image_height }}">
+        {{
+          article.image
+          | image_url: width: 2000
+          | image_tag:
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '600, 900, 1200, 1600, 2000',
+            sizes: '(min-width: 990px) 50vw, 94vw',
+            class: 'article__hero-img',
+            alt: article.image.alt,
+            itemprop: 'image'
+        }}
+      </figure>
     {%- endif -%}
-    {%- content_for 'block', id: 'blog-post-content', type: '_blog-post-content' %}
+  </header>
 
-    {% comment %} Dynamic area for @app blocks only, at the bottom {% endcomment %}
-    {% content_for 'blocks' %}
+  {%- comment -%} ---------------------------------------------------------------- body {%- endcomment -%}
+  <div class="article__layout page-width">
+    {%- if section.settings.show_share -%}
+      {%- capture share_links -%}
+        <button
+          type="button"
+          class="article__share-btn"
+          data-article-copy="{{ share_url }}"
+          data-copied-label="{{ 'article_plus.copied' | t | escape }}"
+          aria-label="{{ 'article_plus.copy_link' | t | escape }}"
+          title="{{ 'article_plus.copy_link' | t | escape }}"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.1 1.1M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.1-1.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </button>
+        <a
+          class="article__share-btn"
+          href="https://www.facebook.com/sharer/sharer.php?u={{ share_url_encoded }}"
+          target="_blank"
+          rel="noopener"
+          aria-label="{{ 'article_plus.share_on' | t: network: 'Facebook' | escape }}"
+          title="Facebook"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21h3.1Z"/></svg>
+        </a>
+        <a
+          class="article__share-btn"
+          href="https://twitter.com/intent/tweet?url={{ share_url_encoded }}&text={{ share_title_encoded }}"
+          target="_blank"
+          rel="noopener"
+          aria-label="{{ 'article_plus.share_on' | t: network: 'X' | escape }}"
+          title="X"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.7 8 10.3h-6.2l-4.9-6.3L5.4 21H2.3l7.2-8.3L1.9 3h6.4l4.4 5.8L17.8 3Zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5Z"/></svg>
+        </a>
+        <a
+          class="article__share-btn"
+          href="https://pinterest.com/pin/create/button/?url={{ share_url_encoded }}{% if article.image %}&media={{ article.image | image_url: width: 1200 | prepend: 'https:' | url_encode }}{% endif %}&description={{ share_title_encoded }}"
+          target="_blank"
+          rel="noopener"
+          aria-label="{{ 'article_plus.share_on' | t: network: 'Pinterest' | escape }}"
+          title="Pinterest"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5a9.5 9.5 0 0 0-3.5 18.3c-.1-.8-.1-2 .1-2.8l1.2-5.2s-.3-.6-.3-1.5c0-1.4.8-2.5 1.9-2.5.9 0 1.3.7 1.3 1.5 0 .9-.6 2.3-.9 3.6-.3 1.1.6 2 1.7 2 2 0 3.5-2.1 3.5-5.2 0-2.7-2-4.6-4.8-4.6-3.3 0-5.2 2.5-5.2 5 0 1 .4 2.1.9 2.7.1.1.1.2.1.3l-.3 1.3c-.1.2-.2.3-.4.2-1.4-.7-2.3-2.7-2.3-4.4 0-3.6 2.6-6.9 7.5-6.9 3.9 0 7 2.8 7 6.6 0 3.9-2.5 7.1-5.9 7.1-1.2 0-2.2-.6-2.6-1.3l-.7 2.7c-.3 1-1 2.2-1.4 3A9.5 9.5 0 1 0 12 2.5Z"/></svg>
+        </a>
+        <a
+          class="article__share-btn"
+          href="mailto:?subject={{ share_title_encoded }}&body={{ share_url_encoded }}"
+          aria-label="{{ 'article_plus.share_email' | t | escape }}"
+          title="Email"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      {%- endcapture -%}
 
-    {% if blog.comments_enabled? %}
-      <div class="blog-post-comments-container">
-        <h2 class="h3">{{- 'blogs.article.comments_heading' | t: count: article.comments_count -}}</h2>
+      <aside
+        class="article__share article__share--rail"
+        aria-label="{{ 'article_plus.share' | t }}"
+      >
+        <span class="article__share-label">{{ 'article_plus.share' | t }}</span>
+        {{ share_links }}
+      </aside>
+    {%- endif -%}
 
-        <div class="blog-post-comments">
-          {% paginate article.comments by 10 %}
-            {% for comment in article.comments %}
-              <div class="blog-post-comment">
-                {{ comment.content }}
-                <div class="blog-post-comment__author">
-                  <span class="blog-post-comment__author-name">{{- comment.author -}}</span>
-                  <span>{{- 'blogs.article.comment_author_separator' | t -}}</span>
-                  <span class="blog-post-comment__date">
-                    {{- comment.created_at | time_tag: format: 'date' -}}
-                  </span>
-                </div>
-              </div>
-            {% endfor %}
-
-            <div class="blog-post-comments-pagination">
-              {{- paginate | default_pagination -}}
-            </div>
-          {% endpaginate %}
-        </div>
-
-        {% render 'blog-comment-form', article: article, section_id: section.id %}
+    <div class="article__main">
+      <div
+        class="article__content rte"
+        itemprop="articleBody"
+        data-article-content
+      >
+        {{ article.content }}
       </div>
-    {% endif %}
+
+      {%- comment -%} Blocks added in the theme editor (and app blocks) {%- endcomment -%}
+      {% content_for 'blocks' %}
+
+      {%- if section.settings.show_tags and article.tags.size > 0 or section.settings.show_share -%}
+        <div class="article__footer">
+          {%- if section.settings.show_tags and article.tags.size > 0 -%}
+            <div class="article__tagged">
+              <span class="article__footer-label">{{ 'article_plus.tagged' | t }}</span>
+              <ul
+                class="article__tags list-unstyled"
+                role="list"
+              >
+                {%- for tag in article.tags -%}
+                  <li>
+                    <a
+                      class="article__tag"
+                      href="{{ blog.url }}/tagged/{{ tag | handleize }}"
+                    >
+                      {{- tag | escape -}}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.show_share -%}
+            <div
+              class="article__share article__share--row"
+              aria-label="{{ 'article_plus.share' | t }}"
+            >
+              <span class="article__footer-label">{{ 'article_plus.share' | t }}</span>
+              {{ share_links }}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} -------------------------------------------------------- comments {%- endcomment -%}
+      {% if blog.comments_enabled? %}
+        <div class="blog-post-comments-container">
+          <h2 class="h3">{{- 'blogs.article.comments_heading' | t: count: article.comments_count -}}</h2>
+
+          <div class="blog-post-comments">
+            {% paginate article.comments by 10 %}
+              {% for comment in article.comments %}
+                <div class="blog-post-comment">
+                  {{ comment.content }}
+                  <div class="blog-post-comment__author">
+                    <span class="blog-post-comment__author-name">{{- comment.author -}}</span>
+                    <span>{{- 'blogs.article.comment_author_separator' | t -}}</span>
+                    <span class="blog-post-comment__date">
+                      {{- comment.created_at | time_tag: format: 'date' -}}
+                    </span>
+                  </div>
+                </div>
+              {% endfor %}
+
+              <div class="blog-post-comments-pagination">
+                {{- paginate | default_pagination -}}
+              </div>
+            {% endpaginate %}
+          </div>
+
+          {% render 'blog-comment-form', article: article, section_id: section.id %}
+        </div>
+      {% endif %}
+
+      {%- comment -%} ------------------------------------------------ previous / next {%- endcomment -%}
+      {%- if show_pager -%}
+        <nav
+          class="article__pager"
+          aria-label="{{ 'article_plus.previous' | t }} / {{ 'article_plus.next' | t }}"
+        >
+          {%- for pair in (1..2) -%}
+            {%- liquid
+              if forloop.first
+                assign pager_post = prev_post
+                assign pager_kind = 'prev'
+                assign pager_label = 'article_plus.previous' | t
+              else
+                assign pager_post = next_post
+                assign pager_kind = 'next'
+                assign pager_label = 'article_plus.next' | t
+              endif
+            -%}
+            {%- if pager_post -%}
+              <a
+                class="article__pager-link article__pager-link--{{ pager_kind }}"
+                href="{{ pager_post.url }}"
+                rel="{{ pager_kind }}"
+              >
+                <span class="article__pager-media">
+                  {%- if pager_post.image -%}
+                    {{ pager_post.image | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120, 180, 240', sizes: '96px', alt: '' }}
+                  {%- else -%}
+                    {{ 'blog-apparel-1' | placeholder_svg_tag: 'article__pager-placeholder' }}
+                  {%- endif -%}
+                </span>
+                <span class="article__pager-body">
+                  <span class="article__pager-label">
+                    {%- if pager_kind == 'prev' -%}←&nbsp;{%- endif -%}
+                    {{- pager_label -}}
+                    {%- if pager_kind == 'next' -%}&nbsp;→{%- endif -%}
+                  </span>
+                  <span class="article__pager-title">{{ pager_post.title | escape }}</span>
+                </span>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </nav>
+      {%- endif -%}
+    </div>
   </div>
-</div>
+
+  {%- comment -%} ------------------------------------------------------- keep reading {%- endcomment -%}
+  {%- if section.settings.show_related -%}
+    {%- capture related_cards -%}
+      {%- assign shown = 0 -%}
+      {%- for post in blog.articles -%}
+        {%- if post.id == article.id -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- if shown >= section.settings.related_count -%}
+          {%- break -%}
+        {%- endif -%}
+        {%- assign shown = shown | plus: 1 -%}
+        <li class="article__related-item">
+          <a
+            class="article__related-card"
+            href="{{ post.url }}"
+          >
+            <span class="article__related-media">
+              {%- if post.image -%}
+                {{ post.image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '400, 600, 800', sizes: '(min-width: 990px) 30vw, (min-width: 750px) 45vw, 90vw', alt: post.image.alt }}
+              {%- else -%}
+                {{ 'blog-apparel-1' | placeholder_svg_tag: 'article__related-placeholder' }}
+              {%- endif -%}
+            </span>
+            <span class="article__related-body">
+              <span class="article__related-meta">{{ post.published_at | time_tag: format: 'date' }}</span>
+              <span class="article__related-title">{{ post.title | escape }}</span>
+              <span class="article__related-cta">
+                {{- 'article_plus.read_article' | t -}}
+                <span aria-hidden="true">→</span>
+              </span>
+            </span>
+          </a>
+        </li>
+      {%- endfor -%}
+    {%- endcapture -%}
+    {%- if shown > 0 -%}
+      <section
+        class="article__related page-width"
+        aria-labelledby="ArticleRelated-{{ section.id }}"
+      >
+        <div class="article__related-head">
+          <h2
+            class="article__related-heading"
+            id="ArticleRelated-{{ section.id }}"
+          >
+            {%- assign related_heading = section.settings.related_heading -%}
+            {%- if related_heading == blank -%}
+              {%- assign related_heading = 'article_plus.keep_reading' | t -%}
+            {%- endif -%}
+            {{ related_heading | escape }}
+          </h2>
+          <a
+            class="article__related-all"
+            href="{{ blog.url }}"
+          >
+            {{- blog.title | escape }} <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <ul
+          class="article__related-grid list-unstyled"
+          role="list"
+        >
+          {{ related_cards }}
+        </ul>
+      </section>
+    {%- endif -%}
+  {%- endif -%}
+</article>
 
 <script type="application/ld+json">
   {{ article | structured_data }}
 </script>
 
-{% stylesheet %}
-  .blog-post-comments-container {
-    width: 100%;
-    max-width: var(--normal-content-width);
-    margin: 0 auto;
-  }
-
-  .blog-post-comments {
-    display: flex;
-    flex-direction: column;
-    gap: var(--gap-3xl);
-  }
-
-  .blog-post-comment__author {
-    display: flex;
-    align-items: center;
-    gap: var(--gap-2xs);
-    margin-top: var(--margin-md);
-    font-size: var(--font-size--body-sm);
-    color: rgb(var(--color-foreground-rgb) / var(--opacity-subdued-text));
-  }
-
-  .blog-post-comments-pagination {
-    display: flex;
-    justify-content: center;
-    gap: var(--gap-2xs);
-  }
-
-  .blog-post-comments-pagination,
-  .blog-post-comments-pagination a {
-    color: var(--color-foreground);
-  }
-
-  .blog-post-comments-pagination .current {
-    color: var(--color-foreground);
-  }
-
-  .blog-post-comments-pagination .current,
-  .blog-post-comments-pagination a {
-    display: block;
-    padding: var(--padding-2xs) var(--padding-xs);
-  }
-
-  .blog-post-comments-pagination .current,
-  .blog-post-comments-pagination a:hover {
-    border-bottom: 1px solid var(--color-foreground);
-  }
-{% endstylesheet %}
-
+{%- comment -%} =========================================================== 3. Schema {%- endcomment -%}
 {% schema %}
 {
   "name": "t:names.blog_post",
@@ -126,27 +465,145 @@
   "class": "section-wrapper",
   "settings": [
     {
+      "type": "header",
+      "content": "Header and image"
+    },
+    {
       "type": "select",
-      "id": "content_direction",
-      "label": "t:settings.direction",
+      "id": "hero_layout",
+      "label": "Header layout",
       "options": [
         {
-          "value": "column",
-          "label": "t:options.vertical"
+          "value": "split",
+          "label": "Split: text beside the image"
+        },
+        {
+          "value": "stacked",
+          "label": "Stacked: title above a wide image"
         }
       ],
-      "default": "column",
-      "visible_if": "{{ section.settings.gap < 0 }}"
+      "default": "split"
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "label": "Image height",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        },
+        {
+          "value": "original",
+          "label": "Original image shape"
+        }
+      ],
+      "default": "medium"
     },
     {
       "type": "range",
-      "id": "gap",
-      "label": "t:settings.gap",
+      "id": "image_radius",
+      "label": "Image corner radius",
       "min": 0,
-      "max": 100,
-      "step": 1,
+      "max": 40,
+      "step": 2,
       "unit": "px",
-      "default": 12
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Post"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Text width",
+      "min": 560,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "default": 720
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reading_time",
+      "label": "Show reading time",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show tags",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share",
+      "label": "Show share buttons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_progress",
+      "label": "Show reading progress bar",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation",
+      "label": "Show previous / next post",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Keep reading"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_related",
+      "label": "Show more posts",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "related_heading",
+      "label": "Heading",
+      "default": "Keep reading",
+      "visible_if": "{{ section.settings.show_related }}"
+    },
+    {
+      "type": "range",
+      "id": "related_count",
+      "label": "Posts to show",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "visible_if": "{{ section.settings.show_related }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
     },
     {
       "type": "color_scheme",
@@ -166,7 +623,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 0
+      "default": 24
     },
     {
       "type": "range",
@@ -176,7 +633,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 0
+      "default": 72
     }
   ],
   "presets": []

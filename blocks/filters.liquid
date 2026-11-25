@@ -408,7 +408,7 @@
                         assign is_active = true
                       endif
 
-                      render 'price-filter', filter: filter, filter_style: 'vertical', should_render_clear: false, autofocus: should_autofocus
+                      render 'price-filter', filter: filter, filter_style: 'vertical', should_render_clear: false, autofocus: should_autofocus, in_drawer: true
                     -%}
                   {% else %}
                     {% liquid

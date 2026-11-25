@@ -110,8 +110,9 @@
                         {%- endif -%}
                         <span class="fcc-price">{{ product.price | money }}</span>
                       </div>
+                      {%- comment -%} Stars only from real reviews (reviews.rating metafield) {%- endcomment -%}
                       {%- liquid
-                        assign rating_val = section.settings.default_rating | plus: 0
+                        assign rating_val = 0
                         if product.metafields.reviews.rating.value.rating != blank
                           assign rating_val = product.metafields.reviews.rating.value.rating | plus: 0
                         endif
@@ -120,12 +121,14 @@
                           assign full_stars = 5
                         endif
                       -%}
-                      <div class="fcc-stars" style="--fcc-star: {{ star_c }};" aria-hidden="true">
-                        {%- assign full = full_stars -%}
-                        {%- for i in (1..5) -%}
-                          <span class="fcc-star{% if i <= full %} is-full{% endif %}">★</span>
-                        {%- endfor -%}
-                      </div>
+                      {%- if rating_val > 0 -%}
+                        <div class="fcc-stars" style="--fcc-star: {{ star_c }};" role="img" aria-label="{{ 'accessibility.rating' | t: rating: rating_val | escape }}">
+                          {%- assign full = full_stars -%}
+                          {%- for i in (1..5) -%}
+                            <span class="fcc-star{% if i <= full %} is-full{% endif %}" aria-hidden="true">★</span>
+                          {%- endfor -%}
+                        </div>
+                      {%- endif -%}
                     </div>
                   </div>
                 </article>
