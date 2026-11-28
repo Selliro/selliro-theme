@@ -239,8 +239,6 @@
                   <p class="featured-collection-grid__card-desc">
                     {%- if product != blank -%}
                       {{ product.description | strip_html | truncate: section.settings.description_length }}
-                    {%- else -%}
-                      Faucibus a pellentesque sit amet porttitor eget dolor morbi non.
                     {%- endif -%}
                   </p>
                 {%- endif -%}
@@ -356,7 +354,7 @@
                     {%- if product != blank -%}
                       {{ product.description | strip_html | truncate: section.settings.description_length }}
                     {%- else -%}
-                      Urna porttitor rhoncus dolor purus non enim praesent elementum.
+                      Add a short description for this card.
                     {%- endif -%}
                   </p>
                 {%- endif -%}
@@ -466,7 +464,7 @@
                 {%- if product != blank -%}
                   {{ product.description | strip_html | truncate: section.settings.description_length_large }}
                 {%- else -%}
-                  Urna porttitor rhoncus dolor purus non enim praesent elementum.
+                  Add a short description for this card.
                 {%- endif -%}
               </p>
             {%- endif -%}
@@ -541,7 +539,7 @@
     {
       "type": "range",
       "id": "title_font_size",
-      "label": "Title font size",
+      "label": "Heading font size",
       "info": "Largest size on desktop. Smaller screens scale it down.",
       "min": 24,
       "max": 64,
@@ -773,7 +771,7 @@
             "position": "1",
             "tag": "BODYCARE",
             "title": "Body Lotion",
-            "description": "Faucibus a pellentesque sit amet porttitor eget dolor morbi non."
+            "description": "Add a short description for this section."
           }
         },
         {
@@ -793,7 +791,7 @@
             "position": "1",
             "tag": "SMOOTH",
             "title": "Moisturizer",
-            "description": "Urna porttitor rhoncus dolor purus non enim praesent elementum."
+            "description": "Add a short description for this card."
           }
         },
         {
@@ -803,7 +801,7 @@
             "position": "2",
             "tag": "CHEMICAL FREE",
             "title": "Tooth Paste",
-            "description": "A iaculis at erat pellentesque adipiscing commodo etiamat."
+            "description": "Add a short description for this card."
           }
         },
         {
@@ -813,7 +811,7 @@
             "position": "1",
             "tag": "NATURAL",
             "title": "Bathing Salts",
-            "description": "Urna porttitor rhoncus dolor purus non enim praesent elementum."
+            "description": "Add a short description for this card."
           }
         }
       ]
