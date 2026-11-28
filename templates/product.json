@@ -327,8 +327,8 @@
           "type": "step",
           "settings": {
             "image": "shopify://shop_images/routine-moisturize.jpg",
-            "title": "Moisturise",
-            "text": "Seal it all in with a light moisturiser — and SPF by day.",
+            "title": "Moisturize",
+            "text": "Seal it all in with a light moisturizer — and SPF by day.",
             "duration": "20 sec",
             "tip": "In the morning, finish with SPF 30 or higher.",
             "product": "luxury-face-creams",

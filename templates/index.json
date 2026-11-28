@@ -63,7 +63,7 @@
             "image_1": "shopify://shop_images/whispo-slide-bestsellers.jpg",
             "image_2": "",
             "overlay_opacity": 35,
-            "eyebrow": "Customer favourites",
+            "eyebrow": "Customer favorites",
             "heading": "Bestsellers",
             "text": "<p>Discover the bestsellers that have captured the hearts of our customers with their perfect blend of functionality and style.</p>",
             "text_position": "right",
@@ -848,7 +848,7 @@
           "type": "step",
           "settings": {
             "image": "shopify://shop_images/routine-moisturize.jpg",
-            "label": "Moisturise",
+            "label": "Moisturize",
             "heading": "Seal in all-day softness",
             "text": "<p>A rich yet weightless cream that locks in hydration and keeps your barrier calm and comfortable.</p>",
             "product": "luxury-face-creams",
