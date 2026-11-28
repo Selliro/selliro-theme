@@ -250,6 +250,11 @@
   gap: 0.75rem 1.25rem;
 }
 
+.footer__follow {
+  display: flex;
+  align-items: center;
+}
+
 .footer__payment {
   display: flex;
   flex-wrap: wrap;

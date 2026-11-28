@@ -1,6 +1,9 @@
 {%- comment -%}
   Whispo — footer (footer section group).
 
+  Follow on Shop (Shopify's login_button filter, branded colors untouched) shows in the bottom bar when the
+  shop has Shop Pay turned on.
+
   Two layers: the main card (brand, menus, newsletter, text) with rounded lower corners, sitting on the
   bottom bar (copyright, policies, country/region and language, payment icons, back to top). Each layer
   has its own color scheme; the bottom bar reaches up behind the card to fill its corners. The wrapper
@@ -183,6 +186,9 @@
       </div>
 
       <div class="footer__utilities">
+        {%- if section.settings.show_follow_on_shop and shop.features.follow_on_shop? -%}
+          <div class="footer__follow">{{ shop | login_button: action: 'follow' }}</div>
+        {%- endif -%}
         {%- render 'localization-form',
           id: 'FooterLocalization',
           show_country: section.settings.show_country,
@@ -250,6 +256,13 @@
       "type": "checkbox",
       "id": "show_language",
       "label": "t:sections.footer.show_language",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_follow_on_shop",
+      "label": "t:sections.footer.show_follow_on_shop",
+      "info": "t:sections.footer.show_follow_on_shop_info",
       "default": true
     },
     {
