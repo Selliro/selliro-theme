@@ -417,6 +417,17 @@
   margin: 0;
 }
 
+/* Featured product section: the title links to the product */
+.featured-product__title-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.featured-product__title-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
 .product-rating {
   display: inline-flex;
   align-items: center;

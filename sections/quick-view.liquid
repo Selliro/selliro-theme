@@ -1,7 +1,7 @@
 {%- comment -%}
   Quick view content. Not added in the theme editor: assets/quick-view.js loads it from
   {product url}?section_id=quick-view and shows it in a dialog; variant changes re-render it the same way
-  (product-info data-section-id="quick-view"). Only the essentials: all images stacked on the left (the details
+  (product-info data-section-id="quick-view"). Only the essentials: all media stacked on the left (images, video, YouTube or Vimeo, 3D models) (the details
   stay in view while they scroll), then vendor, title, rating, price, a short description, tags, variant picker,
   stock, add to cart and buy it now, and a link to the full product page. Styles: assets/component-product-card.css
   ("Quick view").
@@ -40,9 +40,13 @@
       {%- endfor -%}
       {%- for media in ordered limit: 6 -%}
         {%- if media.media_type == 'image' -%}
+          {%- assign image_alt = media.alt | default: product.title -%}
           <div class="quick-view__image media">
-            {%- assign image_alt = media.alt | default: product.title -%}
             {{ media | image_url: width: 1200 | image_tag: widths: '400, 600, 800, 1000, 1200', sizes: '(min-width: 750px) 480px, 100vw', loading: 'lazy', alt: image_alt }}
+          </div>
+        {%- else -%}
+          <div class="quick-view__image media product-media product-media--interactive">
+            {%- render 'product-media', media: media, loop: true -%}
           </div>
         {%- endif -%}
       {%- else -%}
