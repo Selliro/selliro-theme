@@ -844,11 +844,11 @@
             "button_link": ""
           }
         },
-        "step_moisturise": {
+        "step_moisturize": {
           "type": "step",
           "settings": {
             "image": "shopify://shop_images/routine-moisturize.jpg",
-            "label": "Moisturise",
+            "label": "Moisturize",
             "heading": "Seal in all-day softness",
             "text": "<p>A rich yet weightless cream that locks in hydration and keeps your barrier calm and comfortable.</p>",
             "product": "luxury-face-creams",
@@ -883,7 +883,7 @@
       },
       "block_order": [
         "step_tone",
-        "step_moisturise",
+        "step_moisturize",
         "step_renew",
         "step_protect"
       ],
