@@ -393,7 +393,7 @@
             "image": "shopify://shop_images/text_with_icon_img1.png",
             "icon": "none",
             "heading": "Natural Ingredients",
-            "text": "Praesent in nunc vel urna consequat mattis eget vel libero. Phasellus entesque",
+            "text": "Botanicals grown on small organic farms, chosen for how well they work.",
             "link": ""
           }
         },
@@ -403,7 +403,7 @@
             "image": "shopify://shop_images/text_with_icon_img2.png",
             "icon": "none",
             "heading": "Fragrance Free",
-            "text": "Ahasellus entesque praesent in nunc vel urna consequat mattis eget vel libero.",
+            "text": "No synthetic perfumes, just the gentle natural scent of the plants.",
             "link": ""
           }
         },
@@ -413,7 +413,7 @@
             "image": "shopify://shop_images/text_with_icon_img3.png",
             "icon": "none",
             "heading": "Allergy Tested",
-            "text": "Nunc vel urna consequat praesent in mattis eget vel libero zhasellus entesque.",
+            "text": "Every formula is patch tested on sensitive skin before it reaches you.",
             "link": ""
           }
         },
@@ -423,7 +423,7 @@
             "image": "shopify://shop_images/text_with_icon_img4.png",
             "icon": "none",
             "heading": "Paraben Free",
-            "text": "Mattis eget vel libero praesent in nunc vel urna consequat ehasellus entesque",
+            "text": "Clean preservation that keeps every formula fresh, safely.",
             "link": ""
           }
         }
