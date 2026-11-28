@@ -327,8 +327,8 @@
           "type": "step",
           "settings": {
             "image": "shopify://shop_images/routine-moisturize.jpg",
-            "title": "Moisturize",
-            "text": "Seal it all in with a light moisturizer — and SPF by day.",
+            "title": "Moisturise",
+            "text": "Seal it all in with a light moisturiser — and SPF by day.",
             "duration": "20 sec",
             "tip": "In the morning, finish with SPF 30 or higher.",
             "product": "luxury-face-creams",
@@ -393,7 +393,7 @@
             "image": "shopify://shop_images/text_with_icon_img1.png",
             "icon": "none",
             "heading": "Natural Ingredients",
-            "text": "Botanicals grown on small organic farms, chosen for how well they work.",
+            "text": "Praesent in nunc vel urna consequat mattis eget vel libero. Phasellus entesque",
             "link": ""
           }
         },
@@ -403,7 +403,7 @@
             "image": "shopify://shop_images/text_with_icon_img2.png",
             "icon": "none",
             "heading": "Fragrance Free",
-            "text": "No synthetic perfumes, just the gentle natural scent of the plants.",
+            "text": "Ahasellus entesque praesent in nunc vel urna consequat mattis eget vel libero.",
             "link": ""
           }
         },
@@ -413,7 +413,7 @@
             "image": "shopify://shop_images/text_with_icon_img3.png",
             "icon": "none",
             "heading": "Allergy Tested",
-            "text": "Every formula is patch tested on sensitive skin before it reaches you.",
+            "text": "Nunc vel urna consequat praesent in mattis eget vel libero zhasellus entesque.",
             "link": ""
           }
         },
@@ -423,7 +423,7 @@
             "image": "shopify://shop_images/text_with_icon_img4.png",
             "icon": "none",
             "heading": "Paraben Free",
-            "text": "Clean preservation that keeps every formula fresh, safely.",
+            "text": "Mattis eget vel libero praesent in nunc vel urna consequat ehasellus entesque",
             "link": ""
           }
         }

@@ -229,7 +229,7 @@
             "image": "shopify://shop_images/text_with_icon_img1.png",
             "icon": "none",
             "heading": "Natural Ingredients",
-            "text": "Botanicals grown on small organic farms, chosen for how well they work.",
+            "text": "Praesent in nunc vel urna consequat mattis eget vel libero. Phasellus entesque",
             "link": ""
           }
         },
@@ -239,7 +239,7 @@
             "image": "shopify://shop_images/text_with_icon_img2.png",
             "icon": "none",
             "heading": "Fragrance Free",
-            "text": "No synthetic perfumes, just the gentle natural scent of the plants.",
+            "text": "Ahasellus entesque praesent in nunc vel urna consequat mattis eget vel libero.",
             "link": ""
           }
         },
@@ -249,7 +249,7 @@
             "image": "shopify://shop_images/text_with_icon_img3.png",
             "icon": "none",
             "heading": "Allergy Tested",
-            "text": "Every formula is patch tested on sensitive skin before it reaches you.",
+            "text": "Nunc vel urna consequat praesent in mattis eget vel libero zhasellus entesque.",
             "link": ""
           }
         },
@@ -259,7 +259,7 @@
             "image": "shopify://shop_images/text_with_icon_img4.png",
             "icon": "none",
             "heading": "Paraben Free",
-            "text": "Clean preservation that keeps every formula fresh, safely.",
+            "text": "Mattis eget vel libero praesent in nunc vel urna consequat ehasellus entesque",
             "link": ""
           }
         }
@@ -513,7 +513,7 @@
             "tag": "Bodycare",
             "title": "Body Lotion",
             "color_scheme": "scheme-4",
-            "description": "Our most-loved skincare,\nchosen by customers like you.",
+            "description": "Faucibus a pellentesque sit amet\nporttitor eget dolor morbi non.",
             "link": ""
           }
         },
@@ -527,7 +527,7 @@
             "tag": "Smooth",
             "title": "Moisturizer",
             "color_scheme": "scheme-4",
-            "description": "Hand-picked favorites for a simple, \nglowing routine.",
+            "description": "Urna porttitor rhoncus dolor purus non \nenim praesent elementum.",
             "link": ""
           }
         },
@@ -555,7 +555,7 @@
             "tag": "Chemical Free",
             "title": "Tooth Paste",
             "color_scheme": "scheme-4",
-            "description": "Gentle formulas for every \nskin type and season.",
+            "description": "A iaculis at erat pellentesque \nadipiscing commodo etiamat.",
             "link": ""
           }
         },
@@ -569,7 +569,7 @@
             "tag": "Natural",
             "title": "Bathing Salts",
             "color_scheme": "scheme-4",
-            "description": "Hand-picked favorites for a simple, \nglowing routine.",
+            "description": "Urna porttitor rhoncus dolor purus non \nenim praesent elementum.",
             "link": ""
           }
         }
@@ -844,11 +844,11 @@
             "button_link": ""
           }
         },
-        "step_moisturize": {
+        "step_moisturise": {
           "type": "step",
           "settings": {
             "image": "shopify://shop_images/routine-moisturize.jpg",
-            "label": "Moisturize",
+            "label": "Moisturise",
             "heading": "Seal in all-day softness",
             "text": "<p>A rich yet weightless cream that locks in hydration and keeps your barrier calm and comfortable.</p>",
             "product": "luxury-face-creams",
@@ -883,7 +883,7 @@
       },
       "block_order": [
         "step_tone",
-        "step_moisturize",
+        "step_moisturise",
         "step_renew",
         "step_protect"
       ],
