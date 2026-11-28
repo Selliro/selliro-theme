@@ -235,7 +235,7 @@
       "padding_block": "Vertical padding",
       "show_divider": "Show divider",
       "navigation": "Navigation",
-      "menu": "Menu",
+      "menu": "Main menu",
       "submenu_style": "Submenu style",
       "submenu_style_info": "Automatic uses a mega menu for links with three levels or with a mega menu image, and a dropdown for the rest.",
       "submenu_auto": "Automatic",
@@ -334,9 +334,9 @@
           "show_social_info": "Add accounts in Theme settings → Social media."
         },
         "menu": {
-          "name": "Menu",
+          "name": "Footer menu",
           "heading": "Heading",
-          "menu": "Menu"
+          "menu": "Footer menu"
         },
         "newsletter": {
           "name": "Newsletter",
@@ -351,7 +351,9 @@
           "heading": "Heading",
           "text": "Text"
         }
-      }
+      },
+      "show_follow_on_shop": "Show Follow on Shop",
+      "show_follow_on_shop_info": "Customers can follow the store on the Shop app. Shop Pay must be turned on."
     },
     "pair_with": {
       "name": "Complementary products"
@@ -762,6 +764,17 @@
           "product_size": "Size"
         }
       }
+    },
+    "custom_liquid": {
+      "name": "Custom Liquid",
+      "custom_liquid": "Custom Liquid",
+      "custom_liquid_info": "Add app snippets or other code to create advanced customizations."
+    },
+    "featured_product": {
+      "name": "Featured product",
+      "product": "Product",
+      "view_details": "View details link",
+      "words": "Description length (words)"
     }
   },
   "bundle_builder": {

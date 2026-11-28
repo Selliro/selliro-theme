@@ -54,6 +54,19 @@ async function show(url, button) {
     const dialog = getDialog();
     /** @type {HTMLElement} */ (dialog.querySelector('[data-quick-view-body]')).replaceChildren(content);
     openDialog(dialog, button);
+    // 3D models need Shopify's model viewer UI
+    if (dialog.querySelector('model-viewer') && window.Shopify?.loadFeatures) {
+      window.Shopify.loadFeatures([
+        {
+          name: 'model-viewer-ui',
+          version: '1.0',
+          onLoad: (error) => {
+            if (error || !window.Shopify?.ModelViewerUI) return;
+            dialog.querySelectorAll('model-viewer').forEach((element) => new window.Shopify.ModelViewerUI(element));
+          },
+        },
+      ]);
+    }
   } catch (_) {
     window.location.href = url;
   } finally {

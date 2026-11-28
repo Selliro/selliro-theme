@@ -86,7 +86,14 @@
       "name": "Recipient name (optional)",
       "message": "Message (optional)",
       "send_on": "Send on (optional)"
-    }
+    },
+    "heading": "Your gift card for {{ shop }}",
+    "initial_value": "Original value {{ value }}",
+    "copy_code": "Copy code",
+    "copied": "Copied",
+    "qr_label": "QR code for this gift card",
+    "print": "Print",
+    "shop": "Start shopping"
   },
   "password": {
     "title": "This shop is private",
