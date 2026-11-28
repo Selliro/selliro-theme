@@ -106,10 +106,14 @@
 /* ==============================================================================
    3. Blocks
    ============================================================================== */
+/* minmax(0, 1fr) and min-width: 0 keep the block inside its column: Firefox otherwise sizes it to the
+   newsletter input's intrinsic width and the page scrolls sideways on phones */
 .footer-block {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   align-content: start;
   gap: 1.1rem;
+  min-width: 0;
 }
 
 .footer-block__heading {

@@ -1101,6 +1101,7 @@ a.pagination__item:hover {
 
 .newsletter-form__input {
   flex: 1;
+  width: 0; /* fills the row instead of its 20-character default (wider in Firefox) */
   min-width: 0;
   min-height: 44px;
   padding: 0 0.9rem;
