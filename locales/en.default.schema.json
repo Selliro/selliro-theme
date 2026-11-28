@@ -775,6 +775,95 @@
       "product": "Product",
       "view_details": "View details link",
       "words": "Description length (words)"
+    },
+    "new_arrivals_showcase": {
+      "settings": {
+        "product_layout": "Product layout",
+        "heading_scribble": "Heading underline",
+        "scribble_color": "Underline color",
+        "tabs_a11y": "Tab list label for screen readers",
+        "active_tab_background": "Active tab background",
+        "active_tab_text": "Active tab text",
+        "inactive_tab_background": "Inactive tab background",
+        "inactive_tab_text": "Inactive tab text",
+        "promotion_header": "Promotion column",
+        "show_promotion_column": "Show promotion column",
+        "promo_column_width": "Promotion column width",
+        "promo_media_type": {
+          "label": "Promotion media",
+          "info": "Uploaded videos play muted. Embedded videos use a YouTube or Vimeo link."
+        },
+        "promo_image": "Image",
+        "promo_video": "Video",
+        "promo_video_url": {
+          "label": "Video link",
+          "info": "YouTube or Vimeo"
+        },
+        "promo_video_autoplay": "Autoplay video",
+        "promo_video_loop": "Loop video",
+        "promo_video_controls": "Show video controls",
+        "promo_badge": "Badge",
+        "promo_heading": "Heading",
+        "promo_text": "Text",
+        "promo_button": "Button label",
+        "promo_link": "Button link",
+        "products_per_tab": "Products per tab",
+        "new_badge_days": "Show \"New\" badge for products added in the last (days)",
+        "new_badge_text": "New badge text",
+        "hover_image_button": "Button label on image hover",
+        "fallback_star_count": "Star rating when a product has no reviews",
+        "star_color": "Star color",
+        "yellow_cta": "Button color",
+        "demo_category": "Placeholder product type",
+        "demo_product_title": "Placeholder product name",
+        "carousel_header": "Slider",
+        "slides_visible_mobile": "Products visible on mobile",
+        "slides_visible_desktop": "Products visible on desktop",
+        "gap_mobile": "Gap on mobile",
+        "gap_desktop": "Gap on desktop"
+      },
+      "options": {
+        "layout": {
+          "slider": "Slider",
+          "grid": "Grid"
+        },
+        "scribble": {
+          "none": "None",
+          "squiggle": "Squiggle",
+          "wave": "Wave",
+          "brush": "Brush",
+          "double": "Double line",
+          "scribble_underline": "Scribble",
+          "hand_drawn": "Hand drawn",
+          "sketch": "Sketch",
+          "marker": "Marker",
+          "zigzag": "Zigzag",
+          "arc": "Arc",
+          "dotted": "Dotted",
+          "erratic": "Erratic",
+          "ribbon": "Ribbon"
+        },
+        "promo_media": {
+          "image": "Image",
+          "video_upload": "Uploaded video",
+          "video_embed": "Embedded video"
+        }
+      },
+      "blocks": {
+        "layout_placeholder": {
+          "name": "Placeholder tab",
+          "paragraph": "Shows placeholder products. Replace it with a Collection tab block once your collections are ready.",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        },
+        "collection_tab": {
+          "name": "Collection tab",
+          "settings": {
+            "tab_label": "Tab label"
+          }
+        }
+      }
     }
   },
   "bundle_builder": {
