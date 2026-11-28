@@ -18,6 +18,9 @@
   assign heading_bold = heading_font | font_modify: 'weight', 'bold'
   assign heading_italic = heading_font | font_modify: 'style', 'italic'
   assign heading_bold_italic = heading_bold | font_modify: 'style', 'italic'
+  assign accent_bold = accent_font | font_modify: 'weight', 'bold'
+  assign accent_italic = accent_font | font_modify: 'style', 'italic'
+  assign accent_bold_italic = accent_bold | font_modify: 'style', 'italic'
   assign body_scale = settings.body_scale | default: 100 | divided_by: 100.0
   assign heading_scale = settings.heading_scale | default: 100 | divided_by: 100.0
 -%}
@@ -31,6 +34,9 @@
   {{ heading_italic | font_face: font_display: 'swap' }}
   {{ heading_bold_italic | font_face: font_display: 'swap' }}
   {{ accent_font | font_face: font_display: 'swap' }}
+  {{ accent_bold | font_face: font_display: 'swap' }}
+  {{ accent_italic | font_face: font_display: 'swap' }}
+  {{ accent_bold_italic | font_face: font_display: 'swap' }}
 
   :root {
     /* Fonts */

@@ -1,0 +1,41 @@
+{%- comment -%}
+  Whispo — Custom Liquid. Merchants and app instructions can add Liquid, HTML or embed code here; it renders
+  inside the page column with the section's color scheme and padding. Available on every template.
+{%- endcomment -%}
+
+{%- comment -%} 1. CSS {%- endcomment -%}
+{% style %}
+  #shopify-section-{{ section.id }} .custom-liquid {
+    padding-block: {{ section.settings.padding_top }}px {{ section.settings.padding_bottom }}px;
+  }
+{% endstyle %}
+
+{%- comment -%} 2. Liquid {%- endcomment -%}
+<div class="custom-liquid color-{{ section.settings.color_scheme }}">
+  <div class="{% if section.settings.full_width %}page-width--full{% else %}page-width{% endif %}">
+    {{ section.settings.custom_liquid }}
+  </div>
+</div>
+
+{%- comment -%} 3. Schema {%- endcomment -%}
+{% schema %}
+{
+  "name": "t:sections.custom_liquid.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "t:sections.custom_liquid.custom_liquid",
+      "info": "t:sections.custom_liquid.custom_liquid_info"
+    },
+    { "type": "checkbox", "id": "full_width", "label": "t:sections.slideshow.full_width", "default": false },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:sections.main_collection.color_scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "t:sections.main_collection.padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "label": "t:sections.main_collection.padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 40 }
+  ],
+  "presets": [
+    { "name": "t:sections.custom_liquid.name" }
+  ]
+}
+{% endschema %}

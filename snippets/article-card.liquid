@@ -36,11 +36,7 @@
     </h2>
     {%- if show_excerpt -%}
       <p class="article-card__excerpt">
-        {%- if article.excerpt != blank -%}
-          {{ article.excerpt | strip_html | truncatewords: 26 }}
-        {%- else -%}
-          {{ article.content | strip_html | truncatewords: 26 }}
-        {%- endif -%}
+        {{- article.excerpt_or_content | strip_html | truncatewords: 26 -}}
       </p>
     {%- endif -%}
     {%- if show_author and article.author != blank -%}
