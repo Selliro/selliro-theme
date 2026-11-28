@@ -1,0 +1,89 @@
+{%- doc -%}
+  Search modal, opened by the header's search button (aria-controls="SearchModal", assets/dialog.js).
+
+  With "Show suggestions while typing" on (Theme settings → Search), the field is a combobox: assets/predictive-search.js
+  fetches sections/predictive-search.liquid through the Predictive Search API and lists products, collections,
+  pages, articles and query suggestions. Without it — or without JavaScript — the form goes to the search page.
+  Before anything is typed, the optional "Popular links" menu is shown. Styles: assets/component-search.css.
+
+  @param {object} [popular_menu] - Link list shown before a search (header setting "Popular links")
+  @param {string} [color_scheme] - Color scheme id for the panel
+
+  @example
+  {% render 'search-modal', popular_menu: section.settings.search_menu, color_scheme: 'scheme-1' %}
+{%- enddoc -%}
+{%- assign predictive = settings.predictive_search -%}
+{{ 'component-search.css' | asset_url | stylesheet_tag }}
+{%- if predictive -%}
+  <script src="{{ 'predictive-search.js' | asset_url }}" type="module"></script>
+{%- endif -%}
+
+<dialog id="SearchModal" class="dialog modal search-modal" aria-labelledby="SearchModalHeading">
+  <div class="dialog__panel{% if color_scheme != blank %} color-{{ color_scheme }}{% endif %}">
+    <div class="search-modal__inner page-width">
+      <h2 id="SearchModalHeading" class="visually-hidden">{{ 'search.title' | t }}</h2>
+
+      <predictive-search class="search-modal__search" {% unless predictive %}data-static{% endunless %}>
+        <form
+          id="SearchModalForm"
+          action="{{ routes.search_url }}"
+          method="get"
+          role="search"
+          class="search-modal__form"
+          data-ref="form"
+        >
+          <label for="SearchModalInput" class="visually-hidden">{{ 'search.placeholder' | t }}</label>
+          {%- render 'icon', name: 'search', class: 'search-modal__icon' -%}
+          <input
+            id="SearchModalInput"
+            class="search-modal__input"
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="{{ 'search.placeholder' | t }}"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            enterkeyhint="search"
+            autofocus
+            data-ref="input"
+            {% if predictive %}
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="PredictiveSearchResults"
+              aria-autocomplete="list"
+              aria-haspopup="listbox"
+            {% endif %}
+          >
+          <input type="hidden" name="options[prefix]" value="last">
+          <button type="reset" class="search-modal__reset link link--quiet" data-ref="reset" hidden>
+            {{- 'search.clear' | t -}}
+          </button>
+          <button type="button" class="icon-button search-modal__close" data-dialog-close>
+            {%- render 'icon', name: 'close' -%}
+            <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+          </button>
+        </form>
+
+        {%- if popular_menu.links.size > 0 -%}
+          <nav class="search-modal__popular" aria-labelledby="SearchModalPopular" data-ref="popular">
+            <p id="SearchModalPopular" class="eyebrow">{{ 'search.popular' | t }}</p>
+            <ul class="search-modal__chips" role="list">
+              {%- for link in popular_menu.links -%}
+                <li>
+                  <a href="{{ link.url }}" class="search-modal__chip">{{ link.title | escape }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+
+        {%- if predictive -%}
+          <div id="PredictiveSearchResults" class="predictive-search" data-ref="results" hidden></div>
+          <p class="visually-hidden" role="status" data-ref="status"></p>
+        {%- endif -%}
+      </predictive-search>
+    </div>
+  </div>
+</dialog>

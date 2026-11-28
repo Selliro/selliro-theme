@@ -1,0 +1,119 @@
+{%- comment -%}
+  Whispo — icons with text. Up to six columns, each with an icon (uploaded image or a theme icon), a heading,
+  a short text and an optional link. Used for brand promises ("Natural ingredients", "Fragrance free" …).
+  Optional section heading. Columns stack in pairs on mobile. Styles: assets/section-icons-with-text.css.
+{%- endcomment -%}
+
+{%- comment -%} 1. CSS {%- endcomment -%}
+{{ 'section-icons-with-text.css' | asset_url | stylesheet_tag }}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --icon-size: {{ section.settings.icon_size }}px;
+  }
+{% endstyle %}
+
+{%- comment -%} 2. Liquid {%- endcomment -%}
+<div class="icons-with-text color-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="icons-with-text__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    <ul class="icons-with-text__list icons-with-text__list--{{ section.settings.alignment }}" role="list" style="--columns: {{ section.blocks.size | at_most: 6 | at_least: 1 }};">
+      {%- for block in section.blocks -%}
+        <li class="icons-with-text__item" data-animate data-animate-order="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          {%- capture inner -%}
+            <span class="icons-with-text__icon">
+              {%- if block.settings.image != blank -%}
+                {{ block.settings.image | image_url: width: 240 | image_tag: widths: '80, 120, 160, 240', sizes: '80px', loading: 'lazy', alt: '' }}
+              {%- elsif block.settings.icon != 'none' -%}
+                {%- render 'icon', name: block.settings.icon -%}
+              {%- endif -%}
+            </span>
+            {%- if block.settings.heading != blank -%}
+              <span class="icons-with-text__title">{{ block.settings.heading | escape }}</span>
+            {%- endif -%}
+            {%- if block.settings.text != blank -%}
+              <span class="icons-with-text__text">{{ block.settings.text }}</span>
+            {%- endif -%}
+          {%- endcapture -%}
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="icons-with-text__link">{{ inner }}</a>
+          {%- else -%}
+            <div class="icons-with-text__link">{{ inner }}</div>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{%- comment -%} 3. Schema {%- endcomment -%}
+{% schema %}
+{
+  "name": "t:sections.icons_with_text.name",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:sections.icons_with_text.heading" },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:sections.icons_with_text.alignment",
+      "options": [
+        { "value": "center", "label": "t:sections.header.position_center" },
+        { "value": "left", "label": "t:sections.header.position_left" }
+      ],
+      "default": "center"
+    },
+    { "type": "range", "id": "icon_size", "label": "t:sections.icons_with_text.icon_size", "min": 32, "max": 120, "step": 4, "unit": "px", "default": 72 },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:sections.main_collection.color_scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "t:sections.main_collection.padding_top", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "t:sections.main_collection.padding_bottom", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 48 }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "t:sections.icons_with_text.blocks.item.name",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "t:sections.icons_with_text.blocks.item.image", "info": "t:sections.icons_with_text.blocks.item.image_info" },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "t:sections.icons_with_text.blocks.item.icon",
+          "options": [
+            { "value": "none", "label": "t:sections.main_product.icons.none" },
+            { "value": "leaf", "label": "t:sections.main_product.icons.leaf" },
+            { "value": "heart", "label": "t:sections.main_product.icons.heart" },
+            { "value": "shield", "label": "t:sections.main_product.icons.shield" },
+            { "value": "flask", "label": "t:sections.main_product.icons.flask" },
+            { "value": "rabbit", "label": "t:sections.main_product.icons.rabbit" },
+            { "value": "recycle", "label": "t:sections.main_product.icons.recycle" },
+            { "value": "droplet", "label": "t:sections.main_product.icons.droplet" },
+            { "value": "sun", "label": "t:sections.main_product.icons.sun" },
+            { "value": "truck", "label": "t:sections.main_product.icons.truck" },
+            { "value": "return", "label": "t:sections.main_product.icons.return" },
+            { "value": "lock", "label": "t:sections.main_product.icons.lock" },
+            { "value": "chat", "label": "t:sections.main_product.icons.chat" }
+          ],
+          "default": "leaf"
+        },
+        { "type": "text", "id": "heading", "label": "t:sections.icons_with_text.blocks.item.heading", "default": "Natural ingredients" },
+        { "type": "inline_richtext", "id": "text", "label": "t:sections.icons_with_text.blocks.item.text", "default": "Share a short detail about this promise." },
+        { "type": "url", "id": "link", "label": "t:sections.icons_with_text.blocks.item.link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.icons_with_text.name",
+      "blocks": [
+        { "type": "item", "settings": { "icon": "leaf", "heading": "Natural ingredients" } },
+        { "type": "item", "settings": { "icon": "heart", "heading": "Fragrance free" } },
+        { "type": "item", "settings": { "icon": "shield", "heading": "Allergy tested" } },
+        { "type": "item", "settings": { "icon": "flask", "heading": "Paraben free" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

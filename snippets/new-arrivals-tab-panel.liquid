@@ -1,0 +1,255 @@
+{% comment %}
+  New Arrivals Showcase — one tab: promo column + Swiper or CSS grid products.
+  @param block {block} — collection_tab or layout_placeholder
+  @param section {section}
+  @param tab_index {number}
+{% endcomment %}
+{%- liquid
+  assign collection = block.settings.collection
+  if block.type == 'layout_placeholder'
+    assign collection = blank
+  endif
+  assign na_promo_url = section.settings.promo_url
+  assign na_promo_url_blank = false
+  if na_promo_url == blank
+    assign na_promo_url_blank = true
+    assign na_promo_url = '#'
+  endif
+  assign show_promo = false
+  if section.settings.show_promotion
+    assign show_promo = true
+  endif
+  assign limit = section.settings.product_count | default: 12
+  assign accent = section.settings.cta_yellow | default: '#f5c518'
+  assign star_color = section.settings.star_color | default: '#e6b800'
+  assign new_days = section.settings.new_window_days | default: 45
+
+  assign na_layout = section.settings.product_layout | default: 'slider'
+  assign na_use_grid = false
+  if na_layout == 'grid'
+    assign na_use_grid = true
+  endif
+  assign na_demo_slots = 4
+  if na_use_grid
+    assign na_demo_slots = 6
+  endif
+  assign promo_media_type = section.settings.promo_media_type | default: 'image'
+-%}
+<div
+  class="new-arrivals-showcase__panel{% if tab_index == 0 %} is-active{% endif %}{% if show_promo %} new-arrivals-showcase__panel--split{% endif %}"
+  data-new-arrivals-panel
+  role="tabpanel"
+  id="new-arrivals-panel-{{ section.id }}-{{ block.id }}"
+  aria-labelledby="new-arrivals-tab-{{ section.id }}-{{ block.id }}"
+  {% unless tab_index == 0 %}hidden{% endunless %}
+  {{ block.shopify_attributes }}
+>
+  <div class="new-arrivals-showcase__panel-inner{% if show_promo %} new-arrivals-showcase__panel-inner--split{% endif %}">
+    {%- if show_promo -%}
+      <aside class="new-arrivals-showcase__promo-aside" aria-label="{{ section.settings.promo_badge | escape }}">
+        {%- if na_use_grid -%}
+          <div class="new-arrivals-showcase__promo-sticky">
+        {%- endif -%}
+        <div class="new-arrivals-showcase__promo" data-na-promo>
+          {%- if promo_media_type == 'image' -%}
+          <a
+            class="new-arrivals-showcase__promo-media-link"
+            href="{{ na_promo_url }}"
+            {% if na_promo_url_blank %}aria-disabled="true"{% endif %}
+          >
+            {%- if section.settings.promo_badge != blank -%}<span class="new-arrivals-showcase__promo-label">{{ section.settings.promo_badge | escape }}</span>{%- endif -%}
+            <div class="new-arrivals-showcase__promo-picture">
+              {%- if section.settings.promo_image != blank -%}
+                {{
+                  section.settings.promo_image
+                  | image_url: width: 960
+                  | image_tag:
+                    loading: 'lazy',
+                    class: 'new-arrivals-showcase__promo-img',
+                    sizes: '(min-width: 990px) min(320px, 28vw), 92vw',
+                    widths: '400, 600, 960',
+                    alt: ''
+                }}
+              {%- else -%}
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'new-arrivals-showcase__promo-placeholder' }}
+              {%- endif -%}
+            </div>
+          </a>
+          {%- else -%}
+          <div
+            class="new-arrivals-showcase__promo-media-link new-arrivals-showcase__promo-media-link--video"
+            {% if na_promo_url_blank %}aria-disabled="true"{% endif %}
+          >
+            {%- if section.settings.promo_badge != blank -%}<span class="new-arrivals-showcase__promo-label">{{ section.settings.promo_badge | escape }}</span>{%- endif -%}
+            <div class="new-arrivals-showcase__promo-picture new-arrivals-showcase__promo-picture--video">
+              {%- if promo_media_type == 'video_upload' and section.settings.promo_video != blank -%}
+                {%- liquid
+                  assign na_vid_muted = false
+                  assign na_vid_lazy = '<video '
+                  if section.settings.promo_video_autoplay
+                    assign na_vid_muted = true
+                    assign na_vid_lazy = '<video data-autoplay-visible '
+                  endif
+                -%}
+                {{
+                  section.settings.promo_video
+                  | video_tag:
+                    poster: nil,
+                    image_size: '1920x',
+                    autoplay: false,
+                    loop: section.settings.promo_video_loop,
+                    muted: na_vid_muted,
+                    controls: section.settings.promo_video_controls,
+                    playsinline: true,
+                    preload: 'none',
+                    class: 'new-arrivals-showcase__promo-video'
+                  | replace: '<img ', '<img alt="" '
+                  | replace: '<video ', na_vid_lazy
+                }}
+              {%- elsif promo_media_type == 'video_embed' and section.settings.promo_video_url != blank -%}
+                {%- assign na_pv = section.settings.promo_video_url -%}
+                {%- assign na_pv_id = na_pv.external_id | default: na_pv.id -%}
+                {%- assign na_pv_host = na_pv.type | default: na_pv.host -%}
+                {%- if na_pv_host == 'youtube' -%}
+                  {{
+                    na_pv
+                    | external_video_url:
+                      autoplay: section.settings.promo_video_autoplay,
+                      loop: section.settings.promo_video_loop,
+                      playlist: na_pv_id,
+                      mute: '1',
+                      controls: section.settings.promo_video_controls,
+                      enablejsapi: true
+                    | external_video_tag: class: 'new-arrivals-showcase__promo-iframe'
+                  }}
+                {%- elsif na_pv_host == 'vimeo' -%}
+                  {{
+                    na_pv
+                    | external_video_url:
+                      autoplay: section.settings.promo_video_autoplay,
+                      loop: section.settings.promo_video_loop,
+                      muted: '1',
+                      controls: section.settings.promo_video_controls,
+                      api: true
+                    | external_video_tag: class: 'new-arrivals-showcase__promo-iframe'
+                  }}
+                {%- else -%}
+                  {{ 'lifestyle-1' | placeholder_svg_tag: 'new-arrivals-showcase__promo-placeholder' }}
+                {%- endif -%}
+              {%- else -%}
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'new-arrivals-showcase__promo-placeholder' }}
+              {%- endif -%}
+            </div>
+          </div>
+          {%- endif -%}
+          {%- if section.settings.promo_heading != blank or section.settings.promo_text != blank -%}
+            <div class="new-arrivals-showcase__promo-content">
+              {%- if section.settings.promo_heading != blank -%}
+                <h3 class="new-arrivals-showcase__promo-heading" data-na-promo-heading>{{ section.settings.promo_heading | escape }}</h3>
+              {%- endif -%}
+              {%- if section.settings.promo_text != blank -%}
+                <p class="new-arrivals-showcase__promo-text">{{ section.settings.promo_text | escape }}</p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+          <button
+            type="button"
+            class="new-arrivals-showcase__promo-btn"
+            style="--new-arrivals-cta: {{ accent }};"
+            {% if na_promo_url_blank %}
+              disabled
+              aria-disabled="true"
+            {% else %}
+              onclick="window.location.href = {{ section.settings.promo_url | json }}"
+            {% endif %}
+          >
+            {{ section.settings.promo_btn_text | escape }}
+          </button>
+        </div>
+        {%- if na_use_grid -%}
+          </div>
+        {%- endif -%}
+      </aside>
+    {%- endif -%}
+
+    <div class="new-arrivals-showcase__carousel{% if na_use_grid %} new-arrivals-showcase__carousel--mode-grid{% endif %}">
+      {%- if na_use_grid -%}
+        <div class="new-arrivals-showcase__grid" role="list">
+      {%- else -%}
+        <div class="new-arrivals-showcase__swiper swiper">
+          <div class="swiper-wrapper">
+      {%- endif -%}
+          {%- if collection != blank and collection.products_count > 0 -%}
+            {%- for product in collection.products limit: limit -%}
+              <div class="{% if na_use_grid %}new-arrivals-showcase__grid-cell{% else %}swiper-slide new-arrivals-showcase__slide{% endif %}"{% if na_use_grid %} role="listitem"{% endif %}{% if tab_index == 0 %} data-reveal-card{% endif %}>
+                {%- render 'new-arrivals-card',
+                  product: product,
+                  accent: accent,
+                  star_color: star_color,
+                  new_days: new_days,
+                  new_label: section.settings.new_label,
+                  add_label: section.settings.image_hover_cta,
+                  fallback_stars: section.settings.fallback_stars
+                -%}
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for pi in (1..na_demo_slots) -%}
+              <div class="{% if na_use_grid %}new-arrivals-showcase__grid-cell{% else %}swiper-slide new-arrivals-showcase__slide{% endif %}"{% if na_use_grid %} role="listitem"{% endif %}{% if tab_index == 0 %} data-reveal-card{% endif %}>
+                <new-arrivals-product-card class="new-arrivals-card new-arrivals-card--sample">
+                  <div class="new-arrivals-card__inner">
+                    <div class="new-arrivals-card__media">
+                      <span class="new-arrivals-card__media-stack" aria-hidden="true" data-reveal-zoom>
+                        {{ 'product-1' | placeholder_svg_tag: 'new-arrivals-card__img new-arrivals-card__img--placeholder new-arrivals-card__img--primary' }}
+                      </span>
+                    </div>
+                    <div class="new-arrivals-card__body">
+                      <p class="new-arrivals-card__type">{{ section.settings.demo_type | escape }}</p>
+                      <h3 class="new-arrivals-card__title">{{ section.settings.demo_title | escape }}</h3>
+                      <div class="new-arrivals-card__prices">
+                        <span class="new-arrivals-card__price new-arrivals-card__price--compare">{{ 5800 | money }}</span>
+                        <span class="new-arrivals-card__price">{{ 3800 | money }}</span>
+                      </div>
+                      {%- assign df = section.settings.fallback_stars | floor | at_most: 5 -%}
+                      <div class="new-arrivals-card__stars" style="--new-arrivals-star: {{ star_color }};" aria-hidden="true">
+                        {%- for si in (1..5) -%}
+                          <span class="new-arrivals-card__star{% if si <= df %} is-on{% endif %}">★</span>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                  </div>
+                </new-arrivals-product-card>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+      {%- if na_use_grid -%}
+        </div>
+      {%- else -%}
+        </div>
+      </div>
+      {%- endif -%}
+
+      {%- unless na_use_grid -%}
+      <div class="new-arrivals-showcase__carousel-toolbar"{% if tab_index == 0 %} data-reveal-fade{% endif %}>
+        <div class="new-arrivals-showcase__scrollbar" aria-hidden="true">
+          <div class="new-arrivals-showcase__scrollbar-rail">
+            <div class="new-arrivals-showcase__scrollbar-thumb" data-new-arrivals-progress></div>
+          </div>
+        </div>
+        <div class="new-arrivals-showcase__carousel-arrows">
+          <button type="button" class="new-arrivals-showcase__carousel-arrow new-arrivals-showcase__carousel-arrow--prev" data-new-arrivals-prev aria-label="{{ 'accessibility.slideshow_previous' | t }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <button type="button" class="new-arrivals-showcase__carousel-arrow new-arrivals-showcase__carousel-arrow--next" data-new-arrivals-next aria-label="{{ 'accessibility.slideshow_next' | t }}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      {%- endunless -%}
+    </div>
+  </div>
+</div>

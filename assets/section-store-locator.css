@@ -1,0 +1,792 @@
+/* ==============================================================================
+   Store locator section
+   ------------------------------------------------------------------------------
+   Markup:   sections/store-locator.liquid
+   Script:   assets/section-store-locator.js   (<store-locator>: search, filters, selection, map,
+                                                  open / closed status, "Use my location")
+   Shared:   assets/section-reveal.css (scroll-in animation)
+
+   Settings-driven values are set per section in sections/store-locator.liquid ({% style %}):
+     --sl-pad-top, --sl-pad-bottom   section padding
+     --sl-accent                     accent colour (selected store bar, badges)
+     --sl-radius                     corner radius of cards and controls
+     --sl-map-height                 height of the panel + map on desktop
+   Tokens defined below on .sl:
+     --sl-ink, --sl-muted, --sl-line, --sl-soft, --sl-card, --sl-ease, --sl-gutter
+
+   Breakpoints: 990px and up (list beside the map), 989px and below (map above the list).
+
+   Contents
+     1. Base and width
+     2. Heading
+     3. Shell (panel + map)
+     4. Search, "Use my location", filters, status
+     5. Store cards
+     6. Store details (hours, services, actions)
+     7. Map and map card
+     8. Empty states
+     9. Phones and tablets
+    10. Reduced motion
+   ============================================================================== */
+
+/* ============================================================================
+   1. Base and width
+   Same content width and side margin as the header, footer and other sections.
+   ============================================================================ */
+.sl {
+  --sl-ink: var(--color-text);
+  --sl-muted: rgb(var(--color-text-rgb) / 0.64);
+  --sl-line: rgb(var(--color-text-rgb) / 0.1);
+  --sl-soft: rgb(var(--color-text-rgb) / 0.045);
+  --sl-card: var(--color-background);
+  --sl-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --sl-gutter: var(--page-margin, 16px);
+
+  display: block;
+  padding-block: var(--sl-pad-top, 48px) var(--sl-pad-bottom, 72px);
+  color: var(--sl-ink);
+}
+
+.sl__inner {
+  width: min(calc(var(--page-width, 1440px) - var(--sl-gutter) * 2), calc(100% - var(--sl-gutter) * 2));
+  margin-inline: auto;
+}
+
+/* ============================================================================
+   2. Heading
+   ============================================================================ */
+.sl__head {
+  max-width: 44rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.sl__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sl-muted);
+}
+
+.sl__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: var(--section-title-weight, 600);
+  font-size: var(--section-title-size, clamp(1.65rem, 3.2vw, 2.35rem));
+  line-height: var(--section-title-leading, 1.12);
+  letter-spacing: var(--section-title-tracking, -0.02em);
+}
+
+.sl__text {
+  margin-top: 0.9rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--sl-muted);
+}
+
+.sl__text > * {
+  margin: 0;
+}
+
+/* ============================================================================
+   3. Shell
+   Desktop: panel (list) beside the map, in one rounded card of fixed height.
+   ============================================================================ */
+.sl__shell {
+  display: grid;
+  grid-template-columns: minmax(20rem, 27rem) minmax(0, 1fr);
+  height: var(--sl-map-height, 600px);
+  border: 1px solid var(--sl-line);
+  border-radius: calc(var(--sl-radius, 20px) + 6px);
+  overflow: hidden;
+  background: var(--sl-card);
+  box-shadow: 0 30px 60px -40px rgb(0 0 0 / 0.35);
+}
+
+.sl--no-map .sl__shell {
+  grid-template-columns: minmax(0, 1fr);
+  height: auto;
+}
+
+.sl__panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border-inline-end: 1px solid var(--sl-line);
+}
+
+.sl--no-map .sl__panel {
+  border-inline-end: 0;
+}
+
+/* ============================================================================
+   4. Search, "Use my location", filters, status
+   ============================================================================ */
+.sl__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1.1rem 1.1rem 0;
+}
+
+.sl__search {
+  position: relative;
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+.sl__search-icon {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  translate: 0 -50%;
+  color: var(--sl-muted);
+  pointer-events: none;
+}
+
+.sl__search-input {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.7rem 1rem 0.7rem 2.75rem;
+  border: 1px solid var(--sl-line);
+  border-radius: 999px;
+  background: var(--sl-soft);
+  color: inherit;
+  font: inherit;
+  font-size: 0.9375rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sl__search-input::placeholder {
+  color: var(--sl-muted);
+}
+
+.sl__search-input:focus-visible {
+  outline: none;
+  border-color: var(--sl-ink);
+  background: var(--sl-card);
+  box-shadow: 0 0 0 3px rgb(var(--color-text-rgb) / 0.08);
+}
+
+.sl__locate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 3rem;
+  padding: 0 1.1rem;
+  border: 1px solid var(--sl-ink);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sl-ink);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sl__locate:hover {
+  background: var(--sl-ink);
+  color: var(--sl-card);
+}
+
+.sl__locate[aria-busy='true'] {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.sl__locate[aria-busy='true'] svg {
+  animation: sl-spin 1.1s linear infinite;
+}
+
+@keyframes sl-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+/* Desktop: the pills wrap; phones: one row that scrolls sideways (section 9) */
+.sl__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.85rem 1.1rem 0;
+}
+
+.sl__filters::-webkit-scrollbar {
+  display: none;
+}
+
+.sl__filter {
+  flex: none;
+  min-height: 2.25rem;
+  padding: 0 0.95rem;
+  border: 1px solid var(--sl-line);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.sl__filter:hover {
+  border-color: var(--sl-ink);
+}
+
+.sl__filter[aria-pressed='true'] {
+  border-color: var(--sl-ink);
+  background: var(--sl-ink);
+  color: var(--sl-card);
+}
+
+.sl__status {
+  margin: 0;
+  padding: 0.9rem 1.1rem 0.6rem;
+  border-bottom: 1px solid var(--sl-line);
+  font-size: 0.8125rem;
+  color: var(--sl-muted);
+}
+
+/* ============================================================================
+   5. Store cards
+   The list scrolls inside the panel; the selected card opens (section 6).
+   ============================================================================ */
+.sl__list {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0.6rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--color-text-rgb) / 0.2) transparent;
+}
+
+.sl__list[hidden] {
+  display: none;
+}
+
+.sl__item[hidden] {
+  display: none;
+}
+
+.sl__item + .sl__item {
+  margin-top: 0.4rem;
+}
+
+.sl__item {
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: var(--sl-radius, 20px);
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.sl__item:hover {
+  background: var(--sl-soft);
+}
+
+.sl__item.is-active {
+  border-color: var(--sl-line);
+  background: var(--sl-soft);
+}
+
+/* accent bar on the selected store */
+.sl__item::before {
+  content: '';
+  position: absolute;
+  inset-block: 1rem;
+  inset-inline-start: 0;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--sl-accent, #f8d12f);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.sl__item.is-active::before {
+  opacity: 1;
+}
+
+.sl-card {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.85rem 0.9rem;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.sl-card:focus-visible {
+  outline: 2px solid var(--sl-ink);
+  outline-offset: -2px;
+}
+
+.sl-card__media {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: calc(var(--sl-radius, 20px) * 0.6);
+  background: rgb(var(--color-text-rgb) / 0.06);
+  color: var(--sl-muted);
+}
+
+.sl-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sl-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.sl-card__top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.sl-card__top:empty {
+  display: none;
+}
+
+.sl-card__type,
+.sl-card__badge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sl-card__type {
+  color: var(--sl-muted);
+}
+
+.sl-card__badge {
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--sl-accent, #f8d12f);
+  color: #111;
+  letter-spacing: 0.04em;
+}
+
+.sl-card__name {
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.sl-card__address {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--sl-muted);
+}
+
+.sl-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.sl-card__meta:has(> [hidden]:only-child),
+.sl-card__meta:not(:has(> :not([hidden]))) {
+  display: none;
+}
+
+.sl-card__open {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--sl-muted);
+}
+
+.sl-card__open::before {
+  content: '';
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: rgb(var(--color-text-rgb) / 0.3);
+}
+
+.sl-card__open.is-open {
+  color: #2e7d32;
+}
+
+.sl-card__open.is-open::before {
+  background: #2e9d48;
+  box-shadow: 0 0 0 3px rgb(46 157 72 / 0.18);
+}
+
+.sl-card__open[hidden],
+.sl-card__distance[hidden] {
+  display: none;
+}
+
+.sl-card__distance {
+  color: var(--sl-ink);
+}
+
+.sl-card__chevron {
+  align-self: center;
+  color: var(--sl-muted);
+  transition: rotate 0.3s var(--sl-ease);
+}
+
+.sl__item.is-active .sl-card__chevron {
+  rotate: 90deg;
+  color: var(--sl-ink);
+}
+
+/* ============================================================================
+   6. Store details (selected store only)
+   ============================================================================ */
+.sl-details {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s var(--sl-ease);
+}
+
+.sl__item.is-active .sl-details {
+  grid-template-rows: 1fr;
+}
+
+.sl-details__inner {
+  min-height: 0;
+  overflow: hidden;
+  padding-inline: 0.9rem;
+}
+
+.sl__item.is-active .sl-details__inner {
+  padding-bottom: 1rem;
+}
+
+.sl-details__block {
+  padding-top: 0.85rem;
+  margin-top: 0.1rem;
+  border-top: 1px solid var(--sl-line);
+}
+
+.sl-details__block + .sl-details__block {
+  margin-top: 0.85rem;
+}
+
+.sl-details__label {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sl-muted);
+}
+
+.sl-hours {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+}
+
+.sl-hours__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.8125rem;
+  color: var(--sl-muted);
+}
+
+.sl-hours__row.is-today {
+  color: var(--sl-ink);
+  font-weight: 600;
+}
+
+.sl-hours__row.is-today .sl-hours__days::after {
+  content: '';
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  margin-inline-start: 0.45rem;
+  border-radius: 50%;
+  background: var(--sl-accent, #f8d12f);
+  vertical-align: middle;
+}
+
+.sl-services {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+}
+
+.sl-services__item {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: rgb(var(--color-text-rgb) / 0.06);
+  font-size: 0.75rem;
+}
+
+.sl-details__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding-top: 1rem;
+}
+
+.sl-details__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  border: 1px solid var(--sl-line);
+  border-radius: 999px;
+  color: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.sl-details__action:hover {
+  border-color: var(--sl-ink);
+}
+
+.sl-details__action--primary {
+  border-color: var(--sl-ink);
+  background: var(--sl-ink);
+  color: var(--sl-card);
+}
+
+.sl-details__action--primary:hover {
+  background: transparent;
+  color: var(--sl-ink);
+}
+
+/* ============================================================================
+   7. Map and map card
+   ============================================================================ */
+.sl__map {
+  position: relative;
+  min-height: 0;
+  background: rgb(var(--color-text-rgb) / 0.06);
+}
+
+.sl__map-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: saturate(0.85);
+}
+
+.sl__map-card {
+  position: absolute;
+  inset-inline: 1rem;
+  bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  max-width: 30rem;
+  padding: 0.75rem 0.75rem 0.75rem 0.9rem;
+  border-radius: calc(var(--sl-radius, 20px) + 2px);
+  background: var(--sl-card);
+  box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.4), 0 0 0 1px rgb(0 0 0 / 0.04);
+}
+
+.sl__map-card-pin {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--sl-accent, #f8d12f);
+  color: #111;
+}
+
+.sl__map-card-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.sl__map-card-name {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sl__map-card-address {
+  font-size: 0.75rem;
+  color: var(--sl-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sl__map-card-link {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  border-radius: 999px;
+  background: var(--sl-ink);
+  color: var(--sl-card);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* ============================================================================
+   8. Empty states
+   ============================================================================ */
+.sl__empty {
+  margin: auto;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+}
+
+.sl__empty[hidden] {
+  display: none;
+}
+
+.sl__empty-title {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.sl__empty-text {
+  margin: 0 0 1rem;
+  font-size: 0.875rem;
+  color: var(--sl-muted);
+}
+
+.sl__empty-clear {
+  min-height: 2.5rem;
+  padding: 0 1.1rem;
+  border: 1px solid var(--sl-ink);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ============================================================================
+   9. Phones and tablets (989px and below)
+   The map sits above the list; the list is part of the page (no inner scroll).
+   ============================================================================ */
+@media screen and (max-width: 989px) {
+  .sl__shell {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+  }
+
+  .sl__map {
+    order: -1;
+    height: clamp(260px, 55vw, 380px);
+    border-bottom: 1px solid var(--sl-line);
+  }
+
+  .sl__panel {
+    border-inline-end: 0;
+  }
+
+  .sl__list {
+    overflow: visible;
+  }
+
+  .sl__map-card {
+    inset-inline: 0.75rem;
+    bottom: 0.75rem;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .sl__tools {
+    padding: 0.9rem 0.9rem 0;
+  }
+
+  .sl__locate {
+    flex: 1 1 100%;
+  }
+
+  .sl__filters {
+    flex-wrap: nowrap;
+    padding: 0.75rem 0.9rem 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+  }
+
+  .sl__status {
+    padding-inline: 0.9rem;
+  }
+
+  .sl__list {
+    padding: 0.45rem;
+  }
+
+  .sl-card {
+    grid-template-columns: 3.25rem minmax(0, 1fr) auto;
+    gap: 0.75rem;
+    padding: 0.8rem 0.75rem;
+  }
+
+  .sl-card__media {
+    width: 3.25rem;
+  }
+
+  .sl-details__inner {
+    padding-inline: 0.75rem;
+  }
+
+  .sl__map-card-address {
+    display: none;
+  }
+}
+
+/* ============================================================================
+   10. Reduced motion
+   ============================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .sl-details,
+  .sl-card__chevron,
+  .sl__item {
+    transition: none;
+  }
+
+  .sl__locate[aria-busy='true'] svg {
+    animation: none;
+  }
+}

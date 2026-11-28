@@ -1,0 +1,38 @@
+{%- doc -%}
+  Links to the shop's social accounts (Theme settings → Social media), in a fixed order. Accounts
+  without a link are skipped; nothing is rendered when none are set. Each link opens in a new tab and
+  is labelled with the network's name. Styles: assets/base.css ("Social icons").
+
+  @param {string} [class] - extra class on the list
+
+  @example
+  {% render 'social-icons', class: 'footer-block__social' %}
+{%- enddoc -%}
+{%- liquid
+  assign networks = 'instagram,facebook,tiktok,pinterest,youtube,x' | split: ','
+  assign has_any = false
+  for network in networks
+    assign key = 'social_' | append: network
+    if settings[key] != blank
+      assign has_any = true
+      break
+    endif
+  endfor
+-%}
+{%- if has_any -%}
+  <ul class="social-icons{% if class != blank %} {{ class }}{% endif %}" role="list">
+    {%- for network in networks -%}
+      {%- assign key = 'social_' | append: network -%}
+      {%- assign url = settings[key] -%}
+      {%- if url != blank -%}
+        {%- assign label_key = 'social.' | append: network -%}
+        <li>
+          <a href="{{ url }}" class="social-icons__link" target="_blank" rel="noopener">
+            {%- render 'icon', name: network -%}
+            <span class="visually-hidden">{{ label_key | t }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

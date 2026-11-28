@@ -1,0 +1,170 @@
+{%- comment -%}
+  Whispo — search results page. Search field (with predictive suggestions), result count, filters and sorting
+  (snippets/facets.liquid, product results only), results grid: product cards for products, text cards for
+  articles and pages, pagination. Without a search, the popular links menu is shown.
+  Files: assets/component-facets.css, assets/component-product-card.css, assets/facets.js,
+  assets/quick-view.js, assets/predictive-search.js.
+{%- endcomment -%}
+
+{%- comment -%} 1. CSS {%- endcomment -%}
+{{ 'component-facets.css' | asset_url | stylesheet_tag }}
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-search.css' | asset_url | stylesheet_tag }}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{% endstyle %}
+
+{%- comment -%} 2. Liquid {%- endcomment -%}
+<script src="{{ 'facets.js' | asset_url }}" type="module"></script>
+<script src="{{ 'quick-view.js' | asset_url }}" type="module"></script>
+
+{%- liquid
+  assign terms = search.terms | escape
+  assign filtering = section.settings.enable_filtering
+  if search.filters.size == 0
+    assign filtering = false
+  endif
+-%}
+
+<div class="main-search color-{{ section.settings.color_scheme }}">
+  <header class="search-page__header page-width">
+    <h1 class="search-page__title h2">
+      {%- if search.performed -%}
+        {{ 'search.results_for_html' | t: count: search.results_count, terms: terms }}
+      {%- else -%}
+        {{ 'search.title' | t }}
+      {%- endif -%}
+    </h1>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-page__form">
+      <label for="SearchPageInput" class="visually-hidden">{{ 'search.placeholder' | t }}</label>
+      {%- render 'icon', name: 'search', class: 'search-page__icon' -%}
+      <input
+        id="SearchPageInput"
+        class="search-page__input"
+        type="search"
+        name="q"
+        value="{{ terms }}"
+        placeholder="{{ 'search.placeholder' | t }}"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        enterkeyhint="search"
+      >
+      <input type="hidden" name="options[prefix]" value="last">
+      <button type="submit" class="button">{{ 'search.submit' | t }}</button>
+    </form>
+  </header>
+
+  {%- if search.performed -%}
+    {%- paginate search.results by section.settings.results_per_page -%}
+      <facet-filters
+        class="collection-results page-width collection-results--{{ section.settings.filter_layout }}{% if filtering %} has-filters{% endif %}"
+        data-section-id="{{ section.id }}"
+        data-form-id="FacetsForm-{{ section.id }}"
+      >
+        {%- render 'facets', part: 'form', results: search, id: section.id, action: routes.search_url, terms: search.terms -%}
+        {%- if filtering -%}
+          {%- render 'facets', part: 'filters', results: search, id: section.id, action: routes.search_url, terms: search.terms, layout: section.settings.filter_layout -%}
+        {%- endif -%}
+
+        <div class="collection-results__main">
+          {%- if filtering or section.settings.enable_sorting -%}
+            {%- render 'facets', part: 'toolbar', results: search, id: section.id, action: routes.search_url, terms: search.terms, enable_sorting: section.settings.enable_sorting -%}
+          {%- endif -%}
+          {%- render 'facets', part: 'active', results: search, id: section.id, action: routes.search_url, terms: search.terms -%}
+
+          <div class="collection-results__grid" data-facets-update="results">
+            {%- if search.results.size > 0 -%}
+              <ul class="product-grid" role="list" style="--columns: {{ section.settings.columns }}; --columns-mobile: 2;">
+                {%- for item in search.results -%}
+                  <li>
+                    {%- case item.object_type -%}
+                      {%- when 'product' -%}
+                        {%- render 'product-card', product: item, ratio: section.settings.image_ratio, show_quick_add: section.settings.show_quick_add, id_prefix: section.id, heading_level: 'h2' -%}
+                      {%- else -%}
+                        <a href="{{ item.url }}" class="search-result-card">
+                          <span class="search-result-card__media media">
+                            {%- assign item_image = item.image -%}
+                            {%- if item_image -%}
+                              {{ item_image | image_url: width: 800 | image_tag: widths: '300, 500, 800', sizes: '(min-width: 990px) 25vw, 50vw', loading: 'lazy', alt: '' }}
+                            {%- else -%}
+                              <span class="search-result-card__type">
+                                {%- if item.object_type == 'article' -%}{{ 'search.article' | t }}{%- else -%}{{ 'search.page' | t }}{%- endif -%}
+                              </span>
+                            {%- endif -%}
+                          </span>
+                          <span class="search-result-card__eyebrow">
+                            {%- if item.object_type == 'article' -%}{{ item.blog.title | escape }}{%- else -%}{{ 'search.page' | t }}{%- endif -%}
+                          </span>
+                          <h2 class="search-result-card__title">{{ item.title | escape }}</h2>
+                          <span class="search-result-card__excerpt">{{ item.content | strip_html | truncatewords: 18 }}</span>
+                        </a>
+                    {%- endcase -%}
+                  </li>
+                {%- endfor -%}
+              </ul>
+              {%- render 'pagination', paginate: paginate -%}
+            {%- else -%}
+              <div class="collection-empty">
+                <p class="h4">{{ 'search.no_results_html' | t: terms: terms }}</p>
+                <p>{{ 'search.no_results_hint' | t }}</p>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </facet-filters>
+    {%- endpaginate -%}
+  {%- elsif section.settings.popular_menu.links.size > 0 -%}
+    <nav class="page-width search-page__popular" aria-labelledby="SearchPagePopular">
+      <p id="SearchPagePopular" class="eyebrow">{{ 'search.popular' | t }}</p>
+      <ul class="search-modal__chips" role="list">
+        {%- for link in section.settings.popular_menu.links -%}
+          <li><a href="{{ link.url }}" class="search-modal__chip">{{ link.title | escape }}</a></li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  {%- endif -%}
+</div>
+
+{%- comment -%} 3. Schema {%- endcomment -%}
+{% schema %}
+{
+  "name": "t:sections.main_search.name",
+  "settings": [
+    { "type": "range", "id": "results_per_page", "label": "t:sections.main_search.results_per_page", "min": 8, "max": 48, "step": 4, "default": 24 },
+    { "type": "range", "id": "columns", "label": "t:sections.main_collection.columns", "min": 2, "max": 5, "step": 1, "default": 4 },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:sections.main_collection.image_ratio",
+      "options": [
+        { "value": "1", "label": "t:sections.main_collection.ratio_square" },
+        { "value": "0.8", "label": "t:sections.main_collection.ratio_portrait" },
+        { "value": "0.75", "label": "t:sections.main_collection.ratio_tall" }
+      ],
+      "default": "0.8"
+    },
+    { "type": "checkbox", "id": "show_quick_add", "label": "t:sections.main_collection.show_quick_add", "default": true },
+    { "type": "checkbox", "id": "enable_filtering", "label": "t:sections.main_collection.enable_filtering", "default": true },
+    {
+      "type": "select",
+      "id": "filter_layout",
+      "label": "t:sections.main_collection.filter_layout",
+      "options": [
+        { "value": "sidebar", "label": "t:sections.main_collection.layout_sidebar" },
+        { "value": "drawer", "label": "t:sections.main_collection.layout_drawer" }
+      ],
+      "default": "drawer"
+    },
+    { "type": "checkbox", "id": "enable_sorting", "label": "t:sections.main_collection.enable_sorting", "default": true },
+    { "type": "link_list", "id": "popular_menu", "label": "t:sections.header.search_menu", "info": "t:sections.main_search.popular_menu_info" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:sections.main_collection.color_scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "t:sections.main_collection.padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 40 },
+    { "type": "range", "id": "padding_bottom", "label": "t:sections.main_collection.padding_bottom", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 80 }
+  ]
+}
+{% endschema %}

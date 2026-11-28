@@ -11,12 +11,105 @@
   "type": "header",
   "name": "t:general.header",
   "sections": {
+    "announcement_bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement_shipping": {
+          "type": "announcement",
+          "settings": {
+            "text": "Free shipping on orders over $40",
+            "link": "shopify://collections/all",
+            "icon": "shopify://shop_images/whispo-icon-delivery.png"
+          }
+        },
+        "announcement_edit": {
+          "type": "announcement",
+          "settings": {
+            "text": "New: <strong>the moisturizer edit</strong>",
+            "link": "",
+            "icon": "shopify://shop_images/whispo-icon-sale-tag.png"
+          }
+        },
+        "announcement_quiz": {
+          "type": "announcement",
+          "settings": {
+            "text": "Not sure where to start? Take the skin quiz",
+            "link": "",
+            "icon": "shopify://shop_images/whispo-feature-soft-feather.png"
+          }
+        }
+      },
+      "block_order": [
+        "announcement_shipping",
+        "announcement_edit",
+        "announcement_quiz"
+      ],
+      "settings": {
+        "style": "marquee",
+        "autoplay": true,
+        "autoplay_speed": 5,
+        "marquee_speed": 8,
+        "full_width": false,
+        "padding_block": 8,
+        "color_scheme": "scheme-4"
+      }
+    },
     "header": {
       "type": "header",
-      "settings": {}
+      "blocks": {
+        "promo_holiday": {
+          "type": "mega_promo",
+          "settings": {
+            "menu_item": "Shop",
+            "image": "shopify://shop_images/whispo-menu-holiday-set.jpg",
+            "subheading": "Gift sets",
+            "heading": "The holiday set",
+            "link_label": "Shop now",
+            "link": "shopify://collections/all"
+          }
+        },
+        "promo_moisturizer": {
+          "type": "mega_promo",
+          "settings": {
+            "menu_item": "Shop",
+            "image": "shopify://shop_images/whispo-menu-moisturizer-edit.jpg",
+            "subheading": "New collection",
+            "heading": "The moisturizer edit",
+            "link_label": "Explore the collection",
+            "link": "shopify://collections/moisturizer"
+          }
+        }
+      },
+      "block_order": [
+        "promo_holiday",
+        "promo_moisturizer"
+      ],
+      "settings": {
+        "use_inverse_logo": false,
+        "logo_position": "left",
+        "menu_position": "center",
+        "sticky": "always",
+        "padding_block": 14,
+        "show_divider": true,
+        "menu": "main-menu",
+        "submenu_style": "auto",
+        "show_cta": true,
+        "cta_label": "Take the quiz",
+        "cta_link": "shopify://pages/skin-quiz",
+        "cta_style": "primary",
+        "show_search": true,
+        "search_menu": "footer-collection",
+        "show_country": true,
+        "show_flags": true,
+        "show_language": true,
+        "customer_account_menu": "customer-account-main-menu",
+        "color_scheme": "scheme-1",
+        "menu_color_scheme": "scheme-1"
+      }
     }
   },
   "order": [
+    "announcement_bar",
     "header"
-  ],
+  ]
 }

@@ -1,0 +1,98 @@
+/* ==============================================================================
+   Whispo — featured collection (sections/featured-collection.liquid)
+   Grid uses .product-grid (assets/component-product-card.css); the carousel turns the same list into a
+   horizontal scroll-snap row.
+   ============================================================================== */
+.featured-collection {
+  padding-block: var(--section-padding-top, 48px) var(--section-padding-bottom, 48px);
+}
+
+.featured-collection__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.featured-collection__heading {
+  margin: 0;
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  line-height: var(--section-title-leading);
+  letter-spacing: var(--section-title-tracking);
+}
+
+.featured-collection__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.featured-collection__view-all {
+  margin-inline-start: 0.5rem;
+}
+
+.featured-collection__view-all .icon {
+  transition: translate 0.25s ease;
+}
+
+.featured-collection__view-all:hover .icon {
+  translate: 3px 0;
+}
+
+.featured-collection__arrow {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.featured-collection__arrow:hover {
+  border-color: var(--color-text);
+}
+
+.featured-collection__arrow .icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Carousel */
+.featured-collection__list--carousel {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: none;
+  grid-auto-columns: calc((100% - (var(--columns-mobile, 2) - 1) * 0.75rem) / var(--columns-mobile, 2) * 0.88);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.featured-collection__list--carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.featured-collection__list--carousel > li {
+  scroll-snap-align: start;
+}
+
+@media screen and (min-width: 990px) {
+  .featured-collection__list--carousel {
+    grid-auto-columns: calc((100% - (var(--columns, 4) - 1) * clamp(0.75rem, 1.6vw, 1.5rem)) / var(--columns, 4));
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .featured-collection__arrow {
+    display: none;
+  }
+}

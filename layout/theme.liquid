@@ -34,7 +34,12 @@
         "imports": {
           "@whispo/component": "{{ 'component.js' | asset_url }}",
           "@whispo/utilities": "{{ 'utilities.js' | asset_url }}",
-          "@whispo/events": "{{ 'events.js' | asset_url }}"
+          "@whispo/events": "{{ 'events.js' | asset_url }}",
+          "@whispo/dialog": "{{ 'dialog.js' | asset_url }}",
+          "@whispo/cart": "{{ 'cart.js' | asset_url }}",
+          "@whispo/product-info": "{{ 'product-info.js' | asset_url }}",
+          "@whispo/quantity-input": "{{ 'quantity-input.js' | asset_url }}",
+          "@whispo/media-gallery": "{{ 'media-gallery.js' | asset_url }}"
         }
       }
     </script>
@@ -61,9 +66,23 @@
           soldOut: {{ 'products.sold_out' | t | json }},
           unavailable: {{ 'products.unavailable' | t | json }},
           cartError: {{ 'cart.error' | t | json }},
-          quantityError: {{ 'cart.quantity_error' | t | json }}
+          quantityError: {{ 'cart.quantity_error' | t | json }},
+          cartCountOne: {{ 'accessibility.cart_count' | t: count: 1 | json }},
+          cartCountOther: {{ 'accessibility.cart_count' | t: count: 2 | json }},
+          searchResultsOne: {{ 'search.results_count' | t: count: 1 | json }},
+          searchResultsOther: {{ 'search.results_count' | t: count: 2 | json }},
+          discountNotApplicable: {{ 'cart.discount_not_applicable' | t | json }},
+          close: {{ 'accessibility.close' | t | json }}
         }
       };
+      // Translations arrive HTML-escaped (for example &#39;); scripts show them as plain text
+      (function (strings) {
+        var decoder = document.createElement('textarea');
+        Object.keys(strings).forEach(function (key) {
+          decoder.innerHTML = strings[key];
+          strings[key] = decoder.value;
+        });
+      })(window.Whispo.strings);
     </script>
 
     {{ content_for_header }}
@@ -79,5 +98,9 @@
     </main>
 
     {% sections 'footer-group' %}
+
+    {%- if settings.cart_type == 'drawer' and template.name != 'cart' -%}
+      {% render 'cart-drawer' %}
+    {%- endif -%}
   </body>
 </html>

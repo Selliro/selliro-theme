@@ -1,0 +1,50 @@
+{%- doc -%}
+  Blog article card: image, date, title, excerpt and author. The title link covers the whole card.
+  Styles: assets/template-content.css ("Article card").
+
+  @param {object} article - Article
+  @param {boolean} [show_excerpt] - Show the excerpt (default true)
+  @param {boolean} [show_author] - Show the author
+  @param {number} [loading] - 1 loads the image eagerly (first card), otherwise lazy
+
+  @example
+  {% render 'article-card', article: article %}
+{%- enddoc -%}
+{%- liquid
+  assign show_excerpt = show_excerpt | default: true, allow_false: true
+  assign image_loading = 'lazy'
+  if loading == 1
+    assign image_loading = 'eager'
+  endif
+-%}
+<article class="article-card">
+  <div class="article-card__media media">
+    {%- if article.image -%}
+      {%- assign image_alt = article.image.alt | default: '' -%}
+      {{ article.image | image_url: width: 1600 | image_tag: widths: '400, 600, 800, 1000, 1200, 1600', sizes: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw', loading: image_loading, alt: image_alt }}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+  <div class="article-card__body">
+    <p class="article-card__meta">
+      {{- article.published_at | time_tag: format: 'date' -}}
+      {%- if article.tags.size > 0 %} · {{ article.tags.first | escape }}{% endif -%}
+    </p>
+    <h2 class="article-card__title h4">
+      <a href="{{ article.url }}" class="article-card__link">{{ article.title | escape }}</a>
+    </h2>
+    {%- if show_excerpt -%}
+      <p class="article-card__excerpt">
+        {%- if article.excerpt != blank -%}
+          {{ article.excerpt | strip_html | truncatewords: 26 }}
+        {%- else -%}
+          {{ article.content | strip_html | truncatewords: 26 }}
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+    {%- if show_author and article.author != blank -%}
+      <p class="article-card__author">{{ 'blog.by_author' | t: author: article.author }}</p>
+    {%- endif -%}
+  </div>
+</article>

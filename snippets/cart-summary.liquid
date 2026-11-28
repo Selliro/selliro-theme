@@ -1,0 +1,127 @@
+{%- doc -%}
+  Cart summary, shared by the cart drawer and the cart page: order note (Theme settings → Cart), discount
+  codes (apply / remove, shown as chips), cart-level discounts, the estimated total, tax and shipping note,
+  "Check out" and the accelerated checkout buttons. Behaviour: assets/cart-items.js. Styles: assets/cart.css
+  ("Summary").
+
+  @param {string} id - Unique prefix (cart section id)
+  @param {boolean} [compact] - Drawer layout (note and discounts fold away)
+
+  @example
+  {% render 'cart-summary', id: 'cart-drawer', compact: true %}
+{%- enddoc -%}
+{%- liquid
+  assign code_list = ''
+  for application in cart.cart_level_discount_applications
+    if application.type == 'discount_code'
+      assign code_list = code_list | append: application.title | append: ','
+    endif
+  endfor
+  for item in cart.items
+    for allocation in item.line_level_discount_allocations
+      if allocation.discount_application.type == 'discount_code'
+        unless code_list contains allocation.discount_application.title
+          assign code_list = code_list | append: allocation.discount_application.title | append: ','
+        endunless
+      endif
+    endfor
+  endfor
+  assign codes = code_list | split: ','
+-%}
+<div class="cart-summary{% if compact %} cart-summary--compact{% endif %}">
+  {%- if settings.cart_show_note -%}
+    <details class="cart-summary__fold"{% if cart.note != blank and compact == false %} open{% endif %}>
+      <summary class="cart-summary__fold-toggle">
+        {{- 'cart.note' | t -}}
+        {%- render 'icon', name: 'plus' -%}
+      </summary>
+      <div class="cart-summary__fold-content field">
+        <label class="visually-hidden" for="{{ id }}-note">{{ 'cart.note' | t }}</label>
+        <textarea id="{{ id }}-note" name="note" rows="2" placeholder="{{ 'cart.note_placeholder' | t }}" data-ref="note">{{ cart.note }}</textarea>
+      </div>
+    </details>
+  {%- endif -%}
+
+  <details class="cart-summary__fold"{% if codes.size > 0 or compact == false %} open{% endif %}>
+    <summary class="cart-summary__fold-toggle">
+      {{- 'cart.discount' | t -}}
+      {%- render 'icon', name: 'plus' -%}
+    </summary>
+    <div class="cart-summary__fold-content">
+      <div class="cart-discount" data-ref="discountForm">
+        <label class="visually-hidden" for="{{ id }}-discount">{{ 'cart.discount_code' | t }}</label>
+        <input
+          id="{{ id }}-discount"
+          class="field__input cart-discount__input"
+          type="text"
+          autocomplete="off"
+          placeholder="{{ 'cart.discount_code' | t }}"
+          data-ref="discountInput"
+        >
+        <button type="button" class="button button--secondary button--small cart-discount__apply" data-ref="discountApply">
+          {{- 'cart.apply' | t -}}
+        </button>
+      </div>
+      <p class="cart-discount__error form-message--error" role="alert" data-ref="discountError" hidden></p>
+      {%- if codes.size > 0 -%}
+        <ul class="cart-discount__codes" role="list" data-codes="{{ codes | join: ',' | escape }}">
+          {%- for code in codes -%}
+            <li class="cart-discount__code">
+              {%- render 'icon', name: 'gift' -%}
+              <span>{{ code | escape }}</span>
+              <button type="button" class="cart-discount__remove" data-remove-code="{{ code | escape }}">
+                {%- render 'icon', name: 'close' -%}
+                <span class="visually-hidden">{{ 'cart.remove_discount' | t: code: code }}</span>
+              </button>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </details>
+
+  <dl class="cart-summary__totals">
+    {%- if cart.cart_level_discount_applications.size > 0 -%}
+      <div class="cart-summary__row">
+        <dt>{{ 'cart.subtotal' | t }}</dt>
+        <dd>{{ cart.items_subtotal_price | money }}</dd>
+      </div>
+      {%- for application in cart.cart_level_discount_applications -%}
+        <div class="cart-summary__row cart-summary__row--discount">
+          <dt>{% render 'icon', name: 'gift' %}{{ application.title | escape }}</dt>
+          <dd>−{{ application.total_allocated_amount | money }}</dd>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+    <div class="cart-summary__row cart-summary__row--total">
+      <dt>{{ 'cart.estimated_total' | t }}</dt>
+      <dd>
+        {%- if settings.show_currency_code -%}
+          {{ cart.total_price | money_with_currency }}
+        {%- else -%}
+          {{ cart.total_price | money }}
+        {%- endif -%}
+      </dd>
+    </div>
+  </dl>
+
+  <p class="cart-summary__taxes">
+    {%- if cart.duties_included and cart.taxes_included -%}
+      {{ 'cart.duties_and_taxes_included_shipping_at_checkout' | t }}
+    {%- elsif cart.taxes_included -%}
+      {{ 'cart.taxes_included_shipping_at_checkout' | t }}
+    {%- else -%}
+      {{ 'cart.taxes_and_shipping_at_checkout' | t }}
+    {%- endif -%}
+  </p>
+
+  <div class="cart-summary__checkout">
+    <button type="submit" form="{{ id }}-form" name="checkout" class="button button--full-width cart-summary__checkout-button"{% if cart.item_count == 0 %} disabled{% endif %}>
+      {%- render 'icon', name: 'lock' -%}
+      {{ 'cart.checkout' | t }}
+    </button>
+    {%- if additional_checkout_buttons and compact == false -%}
+      <div class="cart-summary__accelerated">{{ content_for_additional_checkout_buttons }}</div>
+    {%- endif -%}
+  </div>
+</div>

@@ -1,83 +1,54 @@
-{% comment %}
-  This section is used in the list-collections template to render a list of
-  collections.
+{%- comment -%}
+  Whispo — list of collections (/collections). Every collection as a card with image, title and product count,
+  in the order the shop sorts them. Styles: assets/template-content.css ("Collection cards").
+{%- endcomment -%}
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
-{% endcomment %}
+{%- comment -%} 1. CSS {%- endcomment -%}
+{{ 'template-content.css' | asset_url | stylesheet_tag }}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{% endstyle %}
 
-<h1>{{ 'collections.title' | t }}</h1>
-
-<div
-  class="collections {{ section.settings.grid_item_width }}"
-  style="--grid-gap: {{ section.settings.grid_gap }}px"
->
-  {% for collection in collections %}
-    <a class="collection-card" href="{{ collection.url }}">
-      {% if collection.featured_image %}
-        {% render 'image',
-          class: 'collection-card__image',
-          image: collection.featured_image,
-          width: 600,
-          height: 600,
-          crop: 'center'
-        %}
-      {% endif %}
-
-      <div class="collection-card__content">
-        <p>{{ collection.title }}</p>
-
-        {% if collection.description %}
-          <p>{{ collection.description | strip_html | truncatewords: 15 }}</p>
-        {% endif %}
-      </div>
-    </a>
-  {% endfor %}
+{%- comment -%} 2. Liquid {%- endcomment -%}
+<div class="collections-page color-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    <h1 class="collections-page__title h1">{{ 'collections.title' | t }}</h1>
+    {%- paginate collections by 24 -%}
+      <ul class="collection-cards" role="list" style="--columns: {{ section.settings.columns }};">
+        {%- for collection in collections -%}
+          <li>
+            {%- render 'collection-card', collection: collection, ratio: section.settings.image_ratio -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+      {%- render 'pagination', paginate: paginate -%}
+    {%- endpaginate -%}
+  </div>
 </div>
 
-{% stylesheet %}
-  .collections {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(var(--collection-card-size), 100%), 1fr));
-    gap: var(--grid-gap);
-  }
-  .collections--compact {
-    --collection-card-size: 160px;
-  }
-  .collections--full {
-    --collection-card-size: 280px;
-  }
-  .collection-card {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-{% endstylesheet %}
-
+{%- comment -%} 3. Schema {%- endcomment -%}
 {% schema %}
 {
-  "name": "t:general.collections_grid",
+  "name": "t:sections.main_list_collections.name",
   "settings": [
+    { "type": "range", "id": "columns", "label": "t:sections.main_collection.columns", "min": 2, "max": 5, "step": 1, "default": 3 },
     {
       "type": "select",
-      "id": "grid_item_width",
-      "label": "t:labels.grid_item_width",
+      "id": "image_ratio",
+      "label": "t:sections.main_collection.image_ratio",
       "options": [
-        { "value": "collections--compact", "label": "t:options.size.small" },
-        { "value": "collections--full", "label": "t:options.size.large" }
+        { "value": "1", "label": "t:sections.main_collection.ratio_square" },
+        { "value": "0.8", "label": "t:sections.main_collection.ratio_portrait" },
+        { "value": "1.333", "label": "t:sections.main_list_collections.ratio_landscape" }
       ],
-      "default": "collections--full"
+      "default": "0.8"
     },
-    {
-      "type": "range",
-      "id": "grid_gap",
-      "label": "t:labels.grid_gap",
-      "min": 0,
-      "max": 50,
-      "step": 5,
-      "unit": "px",
-      "default": 10
-    }
-  ],
-  "presets": [{ "name": "t:general.collections_grid" }]
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:sections.main_collection.color_scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "t:sections.main_collection.padding_top", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "t:sections.main_collection.padding_bottom", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 88 }
+  ]
 }
 {% endschema %}

@@ -1,0 +1,45 @@
+{%- doc -%}
+  Inside of the cart drawer: heading with the item count, the lines, and the summary — or the empty state
+  with a link to keep shopping. Rendered on page load (snippets/cart-drawer.liquid) and again after every
+  cart change through sections/cart-drawer.liquid (Section Rendering API), which <cart-items> swaps in.
+
+  @example
+  {% render 'cart-drawer-content' %}
+{%- enddoc -%}
+<cart-items class="cart-items cart-items--drawer" data-section-id="cart-drawer">
+  <div class="dialog__header cart-drawer__header">
+    <h2 id="CartDrawerHeading" class="cart-drawer__heading h5" tabindex="-1" autofocus>
+      {{- 'cart.title' | t -}}
+      {%- if cart.item_count > 0 -%}
+        <span class="cart-drawer__count">{{ cart.item_count }}</span>
+      {%- endif -%}
+    </h2>
+    <button type="button" class="icon-button" data-dialog-close>
+      {%- render 'icon', name: 'close' -%}
+      <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+    </button>
+  </div>
+
+  {%- if cart.item_count > 0 -%}
+    <form action="{{ routes.cart_url }}" method="post" id="cart-drawer-form" class="cart-items__form" novalidate>
+      <ul class="cart-items__list" role="list" aria-label="{{ 'cart.items' | t }}">
+        {%- for item in cart.items -%}
+          {%- render 'cart-line', item: item, id: 'cart-drawer', compact: true -%}
+        {%- endfor -%}
+      </ul>
+    </form>
+    <div class="cart-drawer__footer">
+      {%- render 'cart-summary', id: 'cart-drawer', compact: true -%}
+    </div>
+  {%- else -%}
+    <div class="cart-empty">
+      <span class="cart-empty__icon">{% render 'icon', name: 'cart' %}</span>
+      <p class="cart-empty__title h4">{{ 'cart.empty' | t }}</p>
+      <a href="{{ routes.all_products_collection_url }}" class="button">{{ 'cart.continue_shopping' | t }}</a>
+      {%- if shop.customer_accounts_enabled and customer == nil -%}
+        <p class="cart-empty__login">{{ 'cart.login_html' | t: link: routes.account_login_url }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+  <p class="visually-hidden" role="status" data-ref="status"></p>
+</cart-items>

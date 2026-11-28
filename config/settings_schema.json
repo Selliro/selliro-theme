@@ -37,7 +37,7 @@
         "label": "t:settings_schema.logo.logo_width_mobile",
         "min": 40,
         "max": 200,
-        "step": 5,
+        "step": 4,
         "unit": "px",
         "default": 96
       },

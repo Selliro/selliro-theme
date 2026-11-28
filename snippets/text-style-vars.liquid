@@ -1,0 +1,55 @@
+{%- doc -%}
+  Inline CSS custom properties for a block's text settings (preset, font, size, line height, letter spacing,
+  case, wrap, color), read by the block's own CSS as --font-family, --font-size, --font-weight, --line-height,
+  --letter-spacing, --text-transform, --text-wrap and --color. Presets map to the theme's type scale
+  (h1–h6 sizes, heading or body font); "custom" uses the block's own values. Used by sections/ticker-duo.liquid.
+
+  @param {object} settings - Block settings (type_preset, font, font_size, line_height, letter_spacing, case,
+    wrap, color)
+
+  @example
+  <span style="{% render 'text-style-vars', settings: block.settings %}">…</span>
+{%- enddoc -%}
+{%- liquid
+  assign preset = settings.type_preset | default: 'rte'
+  case preset
+    when 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+      assign size = 'var(--' | append: preset | append: ')'
+      assign family = 'var(--font-heading)'
+      assign weight = 'var(--font-heading-weight)'
+    when 'paragraph', 'rte'
+      assign size = 'var(--text-md)'
+      assign family = 'var(--font-body)'
+      assign weight = 'var(--font-body-weight)'
+    else
+      assign size = settings.font_size | default: 'var(--text-md)'
+      assign family = settings.font | default: 'var(--font-body)'
+      if family contains 'heading'
+        assign weight = 'var(--font-heading-weight)'
+      elsif family contains 'accent'
+        assign weight = 'var(--font-accent-weight)'
+      else
+        assign weight = 'var(--font-body-weight)'
+      endif
+  endcase
+  assign line_height = settings.line_height
+  case line_height
+    when 'tight'
+      assign line_height = '1'
+    when 'normal', blank
+      assign line_height = '1.2'
+    when 'loose'
+      assign line_height = '1.5'
+  endcase
+  assign spacing = settings.letter_spacing
+  case spacing
+    when 'tight'
+      assign spacing = '-0.03em'
+    when 'loose'
+      assign spacing = '0.06em'
+    when 'normal', blank
+      assign spacing = 'normal'
+  endcase
+-%}
+--font-family: {{ family }}; --font-size: {{ size }}; --font-weight: {{ weight }}; --line-height: {{ line_height }}; --letter-spacing: {{ spacing }}; --text-transform: {{ settings.case | default: 'none' }}; --text-wrap: {{ settings.wrap | default: 'wrap' }};
+{%- if settings.color != blank %} --color: {{ settings.color }};{% endif -%}

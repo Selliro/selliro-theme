@@ -1,0 +1,205 @@
+{%- doc -%}
+  Product form (assets/product-info.js → <product-form>): quantity with the variant's quantity rules and volume
+  prices, purchase options (selling plans / subscriptions), gift card recipient fields, "Add to cart", dynamic
+  checkout buttons (Shop Pay, Apple Pay …) and pickup availability.
+
+  Without JavaScript the form posts to /cart/add as usual. With it, the item is added in place and the cart
+  drawer opens (or the cart page loads, Theme settings → Cart). Parts marked data-variant-update are
+  replaced when the variant changes. Styles: assets/section-main-product.css ("Buy buttons").
+
+  @param {object} product - Product
+  @param {object} variant - Selected variant (nil when the chosen combination doesn't exist)
+  @param {string} id - Unique id prefix (section id); the form id is "ProductForm-{id}"
+  @param {object} [block] - The buy buttons block (settings: show_quantity, show_dynamic_checkout,
+    show_pickup_availability, show_gift_card_recipient)
+
+  @example
+  {% render 'buy-buttons', product: product, variant: current_variant, id: section.id, block: block %}
+{%- enddoc -%}
+{%- liquid
+  assign form_id = 'ProductForm-' | append: id
+  assign show_quantity = block.settings.show_quantity | default: true, allow_false: true
+  assign show_dynamic = block.settings.show_dynamic_checkout | default: true, allow_false: true
+  assign show_pickup = block.settings.show_pickup_availability | default: true, allow_false: true
+  assign show_recipient = block.settings.show_gift_card_recipient | default: true, allow_false: true
+
+  assign rule = variant.quantity_rule
+  assign min = rule.min | default: 1
+  assign step = rule.increment | default: 1
+  assign in_cart = 0
+  if variant
+    assign in_cart = cart | item_count_for_variant: variant.id
+  endif
+  assign quantity_id = 'Quantity-' | append: id
+
+  assign show_rules = false
+  if variant
+    if rule.min > 1 or rule.increment > 1 or in_cart > 0
+      assign show_rules = true
+    endif
+    if rule.max
+      assign show_rules = true
+    endif
+  endif
+-%}
+
+<product-form class="product-form" data-section-id="{{ id }}" data-cart-type="{{ settings.cart_type }}">
+  {%- form 'product', product, id: form_id, class: 'product-form__form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+    <input
+      type="hidden"
+      name="id"
+      value="{{ variant.id }}"
+      {% if variant == nil %}
+        disabled
+      {% endif %}
+      data-variant-update="variant-id"
+    >
+
+    {%- comment -%} Purchase options (subscriptions) {%- endcomment -%}
+    {%- if product.selling_plan_groups.size > 0 -%}
+      <fieldset class="purchase-options" data-variant-update="selling-plans">
+        <legend class="purchase-options__legend">{{ 'products.purchase_options' | t }}</legend>
+        {%- unless product.requires_selling_plan -%}
+          <label class="purchase-options__option">
+            <input type="radio" name="selling_plan" value="" {% if variant.selected_selling_plan_allocation == nil %}checked{% endif %}>
+            <span class="purchase-options__label">{{ 'products.one_time_purchase' | t }}</span>
+            <span class="purchase-options__price">{{ variant.price | money }}</span>
+          </label>
+        {%- endunless -%}
+        {%- for group in product.selling_plan_groups -%}
+          {%- for plan in group.selling_plans -%}
+            {%- assign allocation = nil -%}
+            {%- for item in variant.selling_plan_allocations -%}
+              {%- if item.selling_plan.id == plan.id -%}
+                {%- assign allocation = item -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            <label class="purchase-options__option">
+              <input
+                type="radio"
+                name="selling_plan"
+                value="{{ plan.id }}"
+                {% if plan.selected or product.requires_selling_plan and forloop.parentloop.first and forloop.first %}
+                  checked
+                {% endif %}
+              >
+              <span class="purchase-options__label">
+                {{- group.name | escape }} · {{ plan.name | escape -}}
+                {%- if plan.description != blank -%}
+                  <span class="purchase-options__description">{{ plan.description | escape }}</span>
+                {%- endif -%}
+              </span>
+              {%- if allocation -%}
+                <span class="purchase-options__price">{{ allocation.price | money }}</span>
+              {%- endif -%}
+            </label>
+          {%- endfor -%}
+        {%- endfor -%}
+      </fieldset>
+    {%- endif -%}
+
+    {%- comment -%} Gift card recipient {%- endcomment -%}
+    {%- if product.gift_card? and show_recipient -%}
+      {%- render 'gift-card-recipient', form_id: form_id -%}
+    {%- endif -%}
+
+    <div class="product-form__row">
+      {%- if show_quantity -%}
+        <div class="product-form__quantity" data-variant-update="quantity-rules">
+          {%- render 'quantity-input',
+            id: quantity_id,
+            min: min,
+            max: rule.max,
+            step: step,
+            value: min
+          -%}
+        </div>
+      {%- endif -%}
+
+      <button
+        type="submit"
+        name="add"
+        class="button product-form__submit"
+        data-ref="submit"
+        data-variant-update="submit"
+        {% if variant == nil or variant.available == false %}
+          disabled
+        {% endif %}
+      >
+        <span data-ref="submitLabel">
+          {%- if variant == nil -%}
+            {{ 'products.unavailable' | t }}
+          {%- elsif variant.available == false -%}
+            {{ 'products.sold_out' | t }}
+          {%- elsif product.selling_plan_groups.size > 0 and product.requires_selling_plan -%}
+            {{ 'products.subscribe' | t }}
+          {%- else -%}
+            {{ 'products.add_to_cart' | t }}
+          {%- endif -%}
+        </span>
+      </button>
+    </div>
+
+    {%- comment -%} Quantity rules and volume pricing (B2B) {%- endcomment -%}
+    <div class="product-form__rules" data-variant-update="rules">
+      {%- if show_rules -%}
+        <p class="product-form__rules-text">
+          {%- if rule.increment > 1 -%}
+            <span>{{ 'products.quantity_increment' | t: quantity: rule.increment }}</span>
+          {%- endif -%}
+          {%- if rule.min > 1 -%}
+            <span>{{ 'products.quantity_minimum' | t: quantity: rule.min }}</span>
+          {%- endif -%}
+          {%- if rule.max -%}
+            <span>{{ 'products.quantity_maximum' | t: quantity: rule.max }}</span>
+          {%- endif -%}
+          {%- if in_cart > 0 -%}
+            <span>{{ 'products.quantity_in_cart' | t: quantity: in_cart }}</span>
+          {%- endif -%}
+        </p>
+      {%- endif -%}
+      {%- if variant.quantity_price_breaks.size > 0 -%}
+        <table class="product-form__breaks">
+          <caption class="visually-hidden">{{ 'products.volume_pricing' | t }}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{{ 'products.quantity' | t }}</th>
+              <th scope="col">{{ 'products.price_each' | t }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ rule.min }}+</td>
+              <td>{{ variant.price | money }}</td>
+            </tr>
+            {%- for break in variant.quantity_price_breaks -%}
+              <tr>
+                <td>{{ break.minimum_quantity }}+</td>
+                <td>{{ break.price | money }}</td>
+              </tr>
+            {%- endfor -%}
+          </tbody>
+        </table>
+      {%- endif -%}
+    </div>
+
+    <p class="product-form__error form-message--error" role="alert" data-ref="error" hidden></p>
+
+    {%- if show_dynamic and product.gift_card? == false -%}
+      <div class="product-form__dynamic">{{ form | payment_button }}</div>
+    {%- endif -%}
+  {%- endform -%}
+
+  {%- if show_pickup and variant and product.gift_card? == false -%}
+    <pickup-availability
+      class="pickup-availability"
+      data-variant-id="{{ variant.id }}"
+      data-root-url="{{ routes.root_url }}"
+      data-variant-update="pickup"
+      {% if variant.available == false %}
+        hidden
+      {% endif %}
+    ></pickup-availability>
+  {%- endif -%}
+</product-form>

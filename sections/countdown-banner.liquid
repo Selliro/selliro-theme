@@ -1,0 +1,491 @@
+{%- comment -%}
+  Countdown banner
+  A sale banner with a live countdown to a date: small heading, heading, the timer (days : hrs : min : sec),
+  text and a button, framed by images.
+
+  Layouts
+  - Split: one tall image on each side, running to the section edges.
+  - Collage: two overlapping rounded image cards on each side.
+
+  The end date and time are read in the store's timezone. When the countdown ends the section can show
+  a message, hide itself, or keep showing zeros. Screen readers hear a fixed "Offer ends …" label
+  instead of a value that changes every second.
+
+  Files: assets/section-countdown-banner.css, assets/countdown-banner.js (+ shared assets/section-reveal.*)
+{%- endcomment -%}
+
+{{ 'section-countdown-banner.css' | asset_url | stylesheet_tag }}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign layout = section.settings.layout | default: 'split'
+  assign end_date = section.settings.end_date | strip
+  assign end_time = section.settings.end_time | strip | default: '23:59'
+  assign has_end = false
+  assign end_iso = ''
+  assign remaining = 0
+
+  if end_date != blank
+    # Store timezone offset, e.g. +0530 → +05:30
+    assign tz = 'now' | date: '%z'
+    assign tz_hours = tz | slice: 0, 3
+    assign tz_minutes = tz | slice: 3, 2
+    assign tz_offset = tz_hours | append: ':' | append: tz_minutes
+    assign end_iso = end_date | append: 'T' | append: end_time | append: ':00' | append: tz_offset
+    assign end_epoch = end_iso | date: '%s' | plus: 0
+    if end_epoch > 0
+      assign has_end = true
+      assign now_epoch = 'now' | date: '%s' | plus: 0
+      assign remaining = end_epoch | minus: now_epoch
+      if remaining < 0
+        assign remaining = 0
+      endif
+      assign end_label = end_iso | date: format: 'date'
+    endif
+  endif
+
+  assign days = remaining | divided_by: 86400
+  assign hours = remaining | modulo: 86400 | divided_by: 3600
+  assign minutes = remaining | modulo: 3600 | divided_by: 60
+  assign seconds = remaining | modulo: 60
+
+  assign expired_action = section.settings.after_end | default: 'message'
+  assign is_expired = false
+  if has_end and remaining == 0
+    assign is_expired = true
+  endif
+
+  assign img_sizes = '(min-width: 990px) 30vw, 50vw'
+  if layout == 'collage'
+    assign img_sizes = '(min-width: 990px) 22vw, 45vw'
+  elsif layout == 'stacked'
+    assign img_sizes = '(min-width: 990px) 30vw, 45vw'
+  endif
+-%}
+
+{%- unless is_expired and expired_action == 'hide' and request.design_mode == false -%}
+{% style %}
+  #CountdownBanner-{{ section.id }} {
+    --cdb-min-height: {% case section.settings.height %}{% when 'small' %}460px{% when 'large' %}760px{% else %}620px{% endcase %};
+    --cdb-heading-size: {{ section.settings.heading_size | default: 56 }}px;
+    --cdb-number-size: {{ section.settings.number_size | default: 72 }}px;
+    --cdb-heading-case: {% if section.settings.heading_case == 'uppercase' %}uppercase{% else %}none{% endif %};
+    --cdb-radius: {{ section.settings.image_radius | default: 20 }}px;
+    --cdb-pad: {{ section.settings.image_padding | default: 32 }}px;
+    --cdb-parallax: {{ section.settings.image_parallax | default: 0 }};
+    {%- if section.settings.number_color != blank %}
+      --cdb-number-color: {{ section.settings.number_color }};
+    {%- endif %}
+    {%- if section.settings.button_background != blank %}
+      --cdb-btn-bg: {{ section.settings.button_background }};
+      --cdb-btn-fg: {{ section.settings.button_text | default: '#ffffff' }};
+    {%- endif %}
+  }
+{% endstyle %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<countdown-banner
+  id="CountdownBanner-{{ section.id }}"
+  class="cdb cdb--{{ layout }} {{ section.settings.section_width | default: 'full-width' }} color-{{ section.settings.color_scheme }}{% if section.settings.mobile_images == 'hide' %} cdb--mobile-no-images{% endif %}{% if section.settings.button_background != blank %} cdb--custom-btn{% endif %}{% if is_expired %} is-expired{% endif %}"
+  {% if has_end %}data-end="{{ end_iso }}"{% endif %}
+  data-after-end="{{ expired_action }}"
+  data-reveal
+>
+  <div class="cdb__grid">
+    {%- comment -%} Left images {%- endcomment -%}
+    <div class="cdb__media cdb__media--left">
+      {%- for n in (1..2) -%}
+        {%- liquid
+          if layout == 'split' and n == 2
+            break
+          endif
+          assign key = 'image_left_' | append: n
+          assign img = section.settings[key]
+        -%}
+        <div class="cdb__card cdb__card--{{ n }}" data-reveal-card>
+          {%- if img != blank -%}
+            {{ img | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1200, 1400', sizes: img_sizes, class: 'cdb__img' }}
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'cdb__img cdb__img--placeholder' }}
+          {%- endif -%}
+        </div>
+        {%- if n == 1 and section.settings.badge_text != blank -%}
+          <p class="cdb__sticker"><span>{{ section.settings.badge_text | escape }}</span></p>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} Content {%- endcomment -%}
+    <div class="cdb__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="cdb__eyebrow" data-reveal-fade="first"><span class="cdb__eyebrow-dot" aria-hidden="true"></span>{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="cdb__heading" data-reveal-title>{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      {%- if has_end -%}
+        <div
+          class="cdb__timer cdb__timer--{{ section.settings.timer_style | default: 'tiles' }}{% if section.settings.show_labels == false %} cdb__timer--no-labels{% endif %}"
+          role="timer"
+          aria-live="off"
+          aria-label="{{ 'countdown_banner.ends_on' | t: date: end_label | escape }}"
+          data-reveal-fade
+          {% if is_expired and expired_action == 'message' %}hidden{% endif %}
+        >
+          {%- liquid
+            assign units = 'days,hours,minutes,seconds' | split: ','
+          -%}
+          {%- for unit in units -%}
+            {%- liquid
+              case unit
+                when 'days'
+                  assign value = days
+                when 'hours'
+                  assign value = hours
+                when 'minutes'
+                  assign value = minutes
+                else
+                  assign value = seconds
+              endcase
+              assign shown = value | prepend: '0' | slice: -2, 2
+              if value > 99
+                assign shown = value
+              endif
+              assign label_key = 'countdown_banner.' | append: unit
+            -%}
+            <div class="cdb__unit" aria-hidden="true">
+              <span class="cdb__num" data-cdb="{{ unit }}">{{ shown }}</span>
+              {%- if section.settings.show_labels -%}
+                <span class="cdb__label">{{ label_key | t }}</span>
+              {%- endif -%}
+            </div>
+            {%- unless forloop.last -%}
+              <span class="cdb__sep" aria-hidden="true">:</span>
+            {%- endunless -%}
+          {%- endfor -%}
+        </div>
+        {%- if section.settings.show_end_date and is_expired == false -%}
+          <p class="cdb__ends" data-reveal-fade>{{ 'countdown_banner.ends_on' | t: date: end_label }}</p>
+        {%- endif -%}
+        {%- if section.settings.expired_message != blank -%}
+          <p class="cdb__expired" data-cdb-expired {% unless is_expired and expired_action == 'message' %}hidden{% endunless %}>
+            {{- section.settings.expired_message | escape -}}
+          </p>
+        {%- endif -%}
+      {%- elsif request.design_mode -%}
+        <p class="cdb__hint">{{ 'countdown_banner.editor_hint' | t }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <div class="cdb__text rte" data-reveal-fade>{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <div class="cdb__actions" data-reveal-fade>
+          <a class="button cdb__btn" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">
+            {{- section.settings.button_label | escape -}}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Right images {%- endcomment -%}
+    <div class="cdb__media cdb__media--right">
+      {%- for n in (1..2) -%}
+        {%- liquid
+          if layout == 'split' and n == 2
+            break
+          endif
+          assign key = 'image_right_' | append: n
+          assign img = section.settings[key]
+        -%}
+        <div class="cdb__card cdb__card--{{ n }}" data-reveal-card>
+          {%- if img != blank -%}
+            {{ img | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '480, 720, 960, 1200, 1400', sizes: img_sizes, class: 'cdb__img' }}
+          {%- else -%}
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'cdb__img cdb__img--placeholder' }}
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</countdown-banner>
+
+<script src="{{ 'countdown-banner.js' | asset_url }}" defer></script>
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "t:countdown_banner.name",
+  "tag": "section",
+  "class": "section-countdown-banner",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:countdown_banner.layout",
+      "options": [
+        { "value": "split", "label": "t:countdown_banner.layout_split" },
+        { "value": "collage", "label": "t:countdown_banner.layout_collage" },
+        { "value": "stacked", "label": "t:countdown_banner.layout_stacked" }
+      ],
+      "default": "split"
+    },
+    {
+      "type": "header",
+      "content": "t:countdown_banner.countdown"
+    },
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "t:countdown_banner.end_date",
+      "info": "t:countdown_banner.end_date_info",
+      "placeholder": "2026-11-27"
+    },
+    {
+      "type": "text",
+      "id": "end_time",
+      "label": "t:countdown_banner.end_time",
+      "info": "t:countdown_banner.end_time_info",
+      "placeholder": "23:59",
+      "default": "23:59"
+    },
+    {
+      "type": "select",
+      "id": "timer_style",
+      "label": "t:countdown_banner.timer_style",
+      "options": [
+        { "value": "tiles", "label": "t:countdown_banner.timer_tiles" },
+        { "value": "plain", "label": "t:countdown_banner.timer_plain" }
+      ],
+      "default": "tiles"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_labels",
+      "label": "t:countdown_banner.show_labels",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_end_date",
+      "label": "t:countdown_banner.show_end_date",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "after_end",
+      "label": "t:countdown_banner.after_end",
+      "options": [
+        { "value": "message", "label": "t:countdown_banner.after_message" },
+        { "value": "hide", "label": "t:countdown_banner.after_hide" },
+        { "value": "zeros", "label": "t:countdown_banner.after_zeros" }
+      ],
+      "default": "message"
+    },
+    {
+      "type": "text",
+      "id": "expired_message",
+      "label": "t:countdown_banner.expired_message",
+      "default": "t:countdown_banner.d_expired",
+      "visible_if": "{{ section.settings.after_end == 'message' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.text"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:slideshow_media.eyebrow",
+      "default": "t:countdown_banner.d_eyebrow"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:settings.heading",
+      "default": "t:countdown_banner.d_heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:settings.text",
+      "default": "t:countdown_banner.d_text"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:settings.label",
+      "default": "t:countdown_banner.d_button"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:settings.link"
+    },
+    {
+      "type": "header",
+      "content": "t:countdown_banner.images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_left_1",
+      "label": "t:countdown_banner.left_image"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "t:countdown_banner.badge_text",
+      "info": "t:countdown_banner.badge_text_info",
+      "default": "t:countdown_banner.d_badge"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_left_2",
+      "label": "t:countdown_banner.left_image_2",
+      "visible_if": "{{ section.settings.layout != 'split' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_right_1",
+      "label": "t:countdown_banner.right_image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_right_2",
+      "label": "t:countdown_banner.right_image_2",
+      "visible_if": "{{ section.settings.layout != 'split' }}"
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "label": "t:settings.corner_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "image_padding",
+      "label": "t:countdown_banner.image_padding",
+      "info": "t:countdown_banner.image_padding_info",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "image_parallax",
+      "label": "t:countdown_banner.image_parallax",
+      "info": "t:countdown_banner.image_parallax_info",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "select",
+      "id": "mobile_images",
+      "label": "t:countdown_banner.mobile_images",
+      "options": [
+        { "value": "show", "label": "t:countdown_banner.show_images" },
+        { "value": "hide", "label": "t:countdown_banner.hide_images" }
+      ],
+      "default": "show"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        { "value": "page-width", "label": "t:options.page" },
+        { "value": "full-width", "label": "t:options.full" }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "t:settings.height",
+      "options": [
+        { "value": "small", "label": "t:options.small" },
+        { "value": "medium", "label": "t:options.medium" },
+        { "value": "large", "label": "t:options.large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "t:slideshow_media.heading_size",
+      "min": 24,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "select",
+      "id": "heading_case",
+      "label": "t:settings.case",
+      "options": [
+        { "value": "default", "label": "t:options.default" },
+        { "value": "uppercase", "label": "t:options.uppercase" }
+      ],
+      "default": "uppercase"
+    },
+    {
+      "type": "range",
+      "id": "number_size",
+      "label": "t:countdown_banner.number_size",
+      "min": 32,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "color",
+      "id": "number_color",
+      "label": "t:countdown_banner.number_color",
+      "info": "t:countdown_banner.number_color_info"
+    },
+    {
+      "type": "color",
+      "id": "button_background",
+      "label": "t:settings.primary_button_background"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "t:settings.primary_button_text"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:countdown_banner.name",
+      "category": "t:categories.banners"
+    }
+  ]
+}
+{% endschema %}

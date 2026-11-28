@@ -1,0 +1,976 @@
+/* ==============================================================================
+   Wholesale / B2B section
+   ------------------------------------------------------------------------------
+   Markup:   sections/b2b-wholesale.liquid
+   Script:   assets/b2b-wholesale.js   (<b2b-wholesale>: tabs, calculator, quote form)
+   Shared:   assets/section-reveal.css (scroll-in animation)
+
+   Settings-driven values are set per section in sections/b2b-wholesale.liquid ({% style %}):
+     --b2b-pad-top, --b2b-pad-bottom   section padding
+     --b2b-accent                      accent colour (tier highlight, badges, progress)
+     --b2b-card                        pricing card background
+     --b2b-radius                      corner radius of cards and inputs
+   Tokens defined below on .b2b:
+     --b2b-ink, --b2b-line, --b2b-soft, --b2b-ease
+
+   Breakpoints: 990px (two columns), 750-989px (tablet), 749px and below (phone).
+
+   Contents
+     1. Base
+     2. Pitch (left column)
+     3. Pricing card (right column)
+     4. Tier ladder and progress
+     5. Price summary and actions
+     6. Quote form
+     7. Thank-you message
+     8. Animations
+     9. Responsive layout
+    10. Reduced motion
+   ============================================================================== */
+
+/* ============================================================================
+   1. Base
+   Section wrapper, design tokens and the two-column grid.
+   ============================================================================ */
+.b2b[id] {
+  scroll-margin-top: calc(var(--header-height, 72px) + 16px);
+}
+
+.b2b {
+  --b2b-ink: var(--color-text);
+  --b2b-line: color-mix(in srgb, var(--color-text) 12%, transparent);
+  --b2b-soft: color-mix(in srgb, var(--color-text) 5%, transparent);
+  --b2b-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  padding-block: var(--b2b-pad-top) var(--b2b-pad-bottom);
+}
+
+.b2b__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+
+/* ============================================================================
+   2. Pitch (left column)
+   Eyebrow, heading, text, account status, benefit cards, key numbers and buttons.
+   ============================================================================ */
+
+/* ---- 2.1 Intro: eyebrow, heading, text -------------------------------------- */
+.b2b__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: var(--b2b-accent);
+  color: #111;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.b2b__heading {
+  margin: 0;
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  line-height: var(--section-title-leading);
+  letter-spacing: var(--section-title-tracking);
+  text-wrap: balance;
+}
+
+.b2b__text {
+  margin-top: 1rem;
+  max-width: 34rem;
+  opacity: 0.78;
+}
+
+/* ---- 2.2 Account status (B2B customer / sign in) ---------------------------- */
+.b2b__account {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px dashed var(--b2b-line);
+  border-radius: 14px;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.b2b__account-dot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-text) 30%, transparent);
+}
+
+.b2b__account-dot--ok {
+  background: #2e9e5b;
+  box-shadow: 0 0 0 4px rgb(46 158 91 / 0.15);
+}
+
+.b2b__account-link {
+  margin-inline-start: auto;
+  color: inherit;
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+/* ---- 2.3 Benefit cards ------------------------------------------------------ */
+.b2b__benefits {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.b2b__benefit {
+  display: flex;
+  gap: 0.85rem;
+  padding: 1rem;
+  border-radius: 16px;
+  background: var(--b2b-soft);
+}
+
+.b2b__benefit-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 12px;
+  background: var(--color-background);
+  box-shadow: 0 6px 16px -10px rgb(0 0 0 / 0.35);
+}
+
+.b2b__benefit-icon img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+}
+
+.b2b__benefit-copy {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.b2b__benefit-title {
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+.b2b__benefit-text {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  opacity: 0.72;
+}
+
+/* ---- 2.4 Key numbers -------------------------------------------------------- */
+.b2b__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2.5rem;
+  margin: 1.75rem 0 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--b2b-line);
+}
+
+.b2b__stat {
+  display: flex;
+  flex-direction: column-reverse;
+  margin: 0;
+}
+
+.b2b__stat-value {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.b2b__stat-label {
+  font-size: 0.8rem;
+  opacity: 0.65;
+}
+
+/* ---- 2.5 Buttons and links -------------------------------------------------- */
+.b2b__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin-top: 1.75rem;
+}
+
+.b2b__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.b2b__text-link {
+  color: inherit;
+  font-weight: 600;
+  text-underline-offset: 4px;
+}
+
+/* ============================================================================
+   3. Pricing card (right column)
+   The card with the "Bulk pricing" and "Request a quote" tabs.
+   ============================================================================ */
+
+/* ---- 3.1 Card and tabs ------------------------------------------------------ */
+.b2b__card {
+  display: block;
+  min-width: 0;
+  padding: clamp(1.1rem, 2.5vw, 1.75rem);
+  border: 1px solid var(--b2b-line);
+  border-radius: var(--b2b-radius);
+  background: var(--b2b-card);
+  color: #161616;
+  box-shadow: 0 30px 60px -40px rgb(0 0 0 / 0.35);
+  --b2b-line: rgb(0 0 0 / 0.1);
+  --b2b-soft: rgb(0 0 0 / 0.04);
+}
+
+.b2b__tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--b2b-soft);
+}
+
+.b2b__tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.25s, color 0.25s, box-shadow 0.25s;
+}
+
+.b2b__tab.is-active {
+  background: #161616;
+  color: #fff;
+  box-shadow: 0 8px 20px -12px rgb(0 0 0 / 0.6);
+}
+
+.b2b__panel {
+  padding-top: 1.25rem;
+}
+
+.b2b__panel[hidden] {
+  display: none;
+}
+
+/* ---- 3.2 Pricing mode badge (preview / contract) ---------------------------- */
+.b2b__mode {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  font-size: 0.78rem;
+  opacity: 0.75;
+}
+
+.b2b__mode-dot {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--b2b-accent);
+}
+
+.b2b__mode--contract .b2b__mode-dot {
+  background: #2e9e5b;
+}
+
+/* ---- 3.3 Product picker ----------------------------------------------------- */
+.b2b__label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.b2b__products {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.b2b__product-list {
+  display: flex;
+  gap: 0.5rem;
+  margin-inline: -2px;
+  padding: 2px 2px 6px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+
+.b2b__product {
+  position: relative; /* keeps the hidden radio inside the scrolling row */
+  display: grid;
+  flex: 0 0 6.5rem;
+  gap: 0.4rem;
+  padding: 0.45rem;
+  border: 1.5px solid var(--b2b-line);
+  border-radius: 14px;
+  background: #fff;
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: border-color 0.2s, box-shadow 0.2s, translate 0.3s var(--b2b-ease);
+}
+
+.b2b__product:hover {
+  translate: 0 -2px;
+}
+
+.b2b__product.is-active {
+  border-color: #161616;
+  box-shadow: 0 10px 22px -16px rgb(0 0 0 / 0.55);
+}
+
+.b2b__product:has(:focus-visible) {
+  outline: 2px solid #161616;
+  outline-offset: 2px;
+}
+
+.b2b__product-media {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f4f1ea;
+}
+
+.b2b__product-media :is(img, svg) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.b2b__placeholder {
+  fill: rgb(0 0 0 / 0.3);
+}
+
+.b2b__product-name {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.3;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* ---- 3.4 Fields, selects and quantity stepper ------------------------------- */
+.b2b__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem 1rem;
+  margin-top: 1.1rem;
+}
+
+.b2b__row:has(.b2b__field--variant:not([hidden])) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.b2b__field {
+  display: block;
+  min-width: 0;
+}
+
+.b2b__field[hidden] {
+  display: none;
+}
+
+.b2b__select,
+.b2b__input {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.6rem 0.9rem;
+  border: 1.5px solid var(--b2b-line);
+  border-radius: 12px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  font-size: 1rem;
+}
+
+/* Dropdowns: our own chevron instead of the browser's, which sits right against the border
+   (Safari / Chrome on Mac). It's drawn in currentColor, 1rem in from the right edge. */
+.b2b__select {
+  -webkit-appearance: none;
+  appearance: none;
+  padding-right: 2.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' stroke='%23161616' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 12px 12px;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.b2b__select::-ms-expand {
+  display: none;
+}
+
+.b2b__select:focus-visible,
+.b2b__input:focus-visible {
+  outline: none;
+  border-color: #161616;
+  box-shadow: 0 0 0 3px rgb(0 0 0 / 0.08);
+}
+
+.b2b__textarea {
+  min-height: 5.5rem;
+  resize: vertical;
+}
+
+.b2b__stepper {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr) 3rem;
+  border: 1.5px solid var(--b2b-line);
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.b2b__step {
+  display: grid;
+  place-items: center;
+  min-height: 3rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.b2b__step:hover {
+  background: var(--b2b-soft);
+}
+
+.b2b__qty {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  border-inline: 1px solid var(--b2b-line);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+.b2b__qty::-webkit-outer-spin-button,
+.b2b__qty::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.b2b__qty:focus-visible {
+  outline: 2px solid #161616;
+  outline-offset: -2px;
+}
+
+.b2b__hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.b2b__hint:empty {
+  display: none;
+}
+
+/* ============================================================================
+   4. Tier ladder and progress
+   Volume tiers, the bar towards the next tier and the "add N more" nudge.
+   ============================================================================ */
+.b2b__tiers {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.b2b__tiers:empty {
+  display: none;
+}
+
+.b2b__tier-btn {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  gap: 0.1rem;
+  padding: 0.7rem 0.6rem;
+  border: 1.5px solid var(--b2b-line);
+  border-radius: 14px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.25s, translate 0.3s var(--b2b-ease);
+}
+
+.b2b__tier-btn:hover {
+  translate: 0 -2px;
+}
+
+.b2b__tier-name {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.b2b__tier-off {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.b2b__tier-qty {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.b2b__tier.is-reached .b2b__tier-btn {
+  border-color: color-mix(in srgb, var(--b2b-accent) 70%, #000 10%);
+  background: color-mix(in srgb, var(--b2b-accent) 18%, #fff);
+}
+
+.b2b__tier.is-current .b2b__tier-btn {
+  border-color: #161616;
+  background: var(--b2b-accent);
+  color: #111;
+}
+
+.b2b__tier.is-current .b2b__tier-name {
+  opacity: 0.8;
+}
+
+.b2b__progress {
+  height: 6px;
+  margin-top: 0.75rem;
+  border-radius: 999px;
+  background: var(--b2b-soft);
+  overflow: hidden;
+}
+
+.b2b__progress-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--b2b-accent) 70%, #fff), var(--b2b-accent));
+  transition: width 0.5s var(--b2b-ease);
+}
+
+.b2b__nudge {
+  min-height: 1.25rem;
+  margin: 0.5rem 0 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.b2b__nudge.is-top {
+  color: #2e7d4f;
+}
+
+/* ============================================================================
+   5. Price summary and actions
+   Unit price, totals, saving, margin at retail, add to cart / quote buttons, errors.
+   ============================================================================ */
+
+/* ---- 5.1 Summary ------------------------------------------------------------ */
+.b2b__summary {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1.1rem;
+  border-radius: 16px;
+  background: #161616;
+  color: #fff;
+}
+
+.b2b__summary .b2b__label {
+  opacity: 0.6;
+}
+
+.b2b__price-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.7rem;
+}
+
+.b2b__unit {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 3.6vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.b2b__retail {
+  opacity: 0.55;
+}
+
+.b2b__retail:empty {
+  display: none;
+}
+
+.b2b__badge {
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: var(--b2b-accent);
+  color: #111;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.b2b__badge[hidden] {
+  display: none;
+}
+
+.b2b__totals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgb(255 255 255 / 0.14);
+}
+
+.b2b__totals > div {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.b2b__totals dt {
+  font-size: 0.72rem;
+  opacity: 0.6;
+}
+
+.b2b__totals dd {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.b2b__save dd {
+  color: var(--b2b-accent);
+}
+
+.b2b__margin[hidden] {
+  display: none;
+}
+
+.b2b__margin-note {
+  margin: -0.25rem 0 0;
+  font-size: 0.75rem;
+  opacity: 0.65;
+}
+
+.b2b__margin-note:empty {
+  display: none;
+}
+
+/* ---- 5.2 Buttons ------------------------------------------------------------ */
+.b2b__ctas {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.b2b__ctas:has(> :nth-child(2)) {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+}
+
+.b2b__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 3.25rem;
+}
+
+.b2b__cta[aria-busy='true'] {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.b2b__cta.is-success {
+  --button-background-color: #2e9e5b;
+  --button-border-color: #2e9e5b;
+}
+
+/* ---- 5.3 Errors and empty state --------------------------------------------- */
+.b2b__error,
+.b2b__form-error {
+  margin: 0.75rem 0 0;
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  background: #fdecea;
+  color: #a32019;
+  font-size: 0.85rem;
+}
+
+.b2b__error[hidden] {
+  display: none;
+}
+
+.b2b__empty {
+  padding: 2rem 1rem;
+  border-radius: 14px;
+  background: var(--b2b-soft);
+  text-align: center;
+  opacity: 0.7;
+}
+
+/* ============================================================================
+   6. Quote form
+   Shopify contact form pre-filled from the calculator.
+   ============================================================================ */
+.b2b__quote-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--b2b-accent) 22%, #fff);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.b2b__quote-summary[hidden] {
+  display: none;
+}
+
+.b2b__form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.b2b__field--full {
+  grid-column: 1 / -1;
+}
+
+.b2b__submit {
+  margin-top: 1rem;
+}
+
+.b2b__form-note {
+  margin: 0.6rem 0 0;
+  font-size: 0.75rem;
+  text-align: center;
+  opacity: 0.6;
+}
+
+/* ============================================================================
+   7. Thank-you message
+   Shown after a quote is sent, with a timer bar before the form returns.
+   ============================================================================ */
+.b2b__success {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 2.5rem 1rem;
+  text-align: center;
+}
+
+.b2b__success p {
+  max-width: 22rem;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.b2b__success[hidden],
+.b2b__form-body[hidden] {
+  display: none;
+}
+
+.b2b__success {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  outline: none;
+  animation: b2b-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.b2b__again {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.9rem;
+  margin-top: 0.25rem;
+}
+
+/* Thin bar that empties while the message is on screen; it freezes while the visitor hovers / focuses */
+.b2b__success-timer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: rgb(0 0 0 / 0.06);
+}
+
+.b2b__success-timer span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #2e9e5b;
+  transform-origin: left center;
+}
+
+.b2b__form-body.is-back {
+  animation: b2b-pop 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ============================================================================
+   8. Animations
+   ============================================================================ */
+@keyframes b2b-pop {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+
+.b2b__success-icon {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: #2e9e5b;
+  color: #fff;
+}
+
+/* ============================================================================
+   9. Responsive layout
+   990px+: two columns. 750-989px: tablet. Up to 749px: phone.
+   ============================================================================ */
+@media screen and (min-width: 990px) {
+  .b2b__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  }
+
+  .b2b__card {
+    position: sticky;
+    top: calc(var(--header-height, 72px) + 1.5rem);
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .b2b__benefits {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .b2b__benefits {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .b2b__tab {
+    gap: 0.35rem;
+    padding: 0 0.6rem;
+    font-size: 0.8125rem;
+    white-space: nowrap;
+  }
+
+  .b2b__tab svg {
+    display: none;
+  }
+
+  .b2b__row:has(.b2b__field--variant:not([hidden])) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .b2b__tiers {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .b2b__tier-btn {
+    padding: 0.6rem 0.5rem;
+  }
+
+  .b2b__tier-off {
+    font-size: 1rem;
+  }
+
+  .b2b__totals {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .b2b__totals > .b2b__margin {
+    grid-column: 1 / -1;
+  }
+
+  .b2b__ctas:has(> :nth-child(2)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .b2b__form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .b2b__account-link {
+    margin-inline-start: 0;
+  }
+}
+
+/* ============================================================================
+   10. Reduced motion
+   ============================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .b2b__product,
+  .b2b__tier-btn,
+  .b2b__progress-fill {
+    transition: none;
+  }
+}

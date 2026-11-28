@@ -9,12 +9,1700 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
-      "settings": {}
+    "slideshow_AnCCTe": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_mxTnik": {
+          "type": "slide",
+          "settings": {
+            "layout": "full",
+            "image_1": "",
+            "video_1": "shopify://files/videos/home_slider_2.mp4",
+            "image_2": "",
+            "overlay_opacity": 35,
+            "eyebrow": "Just landed",
+            "heading": "New arrivals",
+            "text": "<p>Introducing our latest products, made especially for the season. Shop your favorites before they're gone!</p>",
+            "text_position": "left",
+            "text_tone": "light",
+            "button_label_1": "Shop now",
+            "button_link_1": "shopify://collections/all",
+            "button_label_2": "",
+            "button_link_2": "",
+            "product_image": "shopify://shop_images/whispo-slide-lipstick.png",
+            "product_position": "right",
+            "product_size": 85
+          }
+        },
+        "slide_ca9DCF": {
+          "type": "slide",
+          "settings": {
+            "layout": "split",
+            "image_1": "shopify://shop_images/whispo-slide-serum-glow.jpg",
+            "image_2": "",
+            "video_2": "shopify://files/videos/home_slider_1.mp4",
+            "overlay_opacity": 35,
+            "eyebrow": "Skin serums",
+            "heading": "The Best Skin Serums for a Healthy Glow",
+            "text": "<p>Introducing our latest products, made especially for the season. Shop your favorites before they're gone!</p>",
+            "text_position": "left",
+            "text_tone": "light",
+            "button_label_1": "Shop now",
+            "button_link_1": "shopify://collections/all",
+            "button_label_2": "",
+            "button_link_2": "",
+            "product_image": "",
+            "product_position": "right",
+            "product_size": 85
+          }
+        },
+        "slide_mkVqxG": {
+          "type": "slide",
+          "settings": {
+            "layout": "full",
+            "image_1": "shopify://shop_images/whispo-slide-bestsellers.jpg",
+            "image_2": "",
+            "overlay_opacity": 35,
+            "eyebrow": "Customer favourites",
+            "heading": "Bestsellers",
+            "text": "<p>Discover the bestsellers that have captured the hearts of our customers with their perfect blend of functionality and style.</p>",
+            "text_position": "right",
+            "text_tone": "light",
+            "button_label_1": "Shop now",
+            "button_link_1": "shopify://collections/all",
+            "button_label_2": "",
+            "button_link_2": "",
+            "product_image": "",
+            "product_position": "right",
+            "product_size": 85
+          }
+        }
+      },
+      "block_order": [
+        "slide_mxTnik",
+        "slide_ca9DCF",
+        "slide_mkVqxG"
+      ],
+      "settings": {
+        "label": "",
+        "height": "full",
+        "full_width": false,
+        "corner_radius": 20,
+        "heading_size": 64,
+        "autoplay": true,
+        "autoplay_speed": 6,
+        "media_effect": "zoom",
+        "color_scheme": "scheme-3",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "hero_jVaWmY": {
+      "type": "image-banner",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Browse our latest products",
+            "size": "h1"
+          }
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {
+            "label_1": "Shop all",
+            "link_1": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "buttons"
+      ],
+      "disabled": true,
+      "settings": {
+        "image": "shopify://shop_images/whispo-banner-kind-desktop.jpg",
+        "image_mobile": "shopify://shop_images/whispo-banner-kind-mobile.jpg",
+        "height": "medium",
+        "content_position": "bottom-center",
+        "overlay_opacity": 40,
+        "text_light": true,
+        "full_width": false,
+        "color_scheme": "scheme-5",
+        "padding_top": 24,
+        "padding_bottom": 24
+      }
+    },
+    "product_list_fa6P9H": {
+      "type": "featured-collection",
+      "disabled": true,
+      "settings": {
+        "collection": "all",
+        "heading": "",
+        "limit": 8,
+        "layout": "grid",
+        "columns": 4,
+        "columns_mobile": "2",
+        "image_ratio": "0.8",
+        "show_vendor": false,
+        "show_quick_add": true,
+        "show_view_all": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "new_arrivals_showcase_6GTQmq": {
+      "type": "new-arrivals-showcase",
+      "blocks": {
+        "collection_tab_XBE6wc": {
+          "type": "collection_tab",
+          "settings": {
+            "label": "New Arrivals",
+            "collection": "moisturizer"
+          }
+        },
+        "collection_tab_rMcRQt": {
+          "type": "collection_tab",
+          "settings": {
+            "label": "Best Sellers",
+            "collection": "sunscreen"
+          }
+        }
+      },
+      "block_order": [
+        "collection_tab_XBE6wc",
+        "collection_tab_rMcRQt"
+      ],
+      "settings": {
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "product_layout": "slider",
+        "heading": "New Arrivals",
+        "subheading": "All our new arrivals in a exclusive brand selection",
+        "highlight_word": "Arrivals",
+        "highlight_style": "marker",
+        "highlight_color": "#f8d12f",
+        "heading_scribble": "squiggle",
+        "heading_scribble_color": "#0a0a0a",
+        "tabs_a11y": "Collection tabs",
+        "tab_on_bg": "#2563eb",
+        "tab_on_text": "#ffffff",
+        "tab_off_bg": "#f0f0f0",
+        "tab_off_text": "#555555",
+        "show_promotion": true,
+        "promo_width_pct": 25,
+        "promo_media_type": "video_upload",
+        "promo_video": "shopify://files/videos/kling_20260811_VIDEO_The_woman__4244_0.mp4",
+        "promo_video_url": "",
+        "promo_video_autoplay": true,
+        "promo_video_loop": true,
+        "promo_video_controls": false,
+        "promo_badge": "PROMOTION",
+        "promo_heading": "Glow-up sale",
+        "promo_text": "Up to 30% off cleansers & serums",
+        "promo_btn_text": "Shop sale",
+        "promo_url": "#",
+        "product_count": 12,
+        "new_window_days": 45,
+        "new_label": "New",
+        "image_hover_cta": "ADD TO CART",
+        "fallback_stars": 5,
+        "star_color": "#e6b800",
+        "cta_yellow": "#f5c518",
+        "demo_type": "FACE SERUMS",
+        "demo_title": "Mens daily serum",
+        "spv_mobile": 1.1,
+        "spv_desktop": 3.2,
+        "gap_mobile": 14,
+        "gap_desktop": 8,
+        "pad_top": 56,
+        "pad_bottom": 56
+      }
+    },
+    "section_cp3z68": {
+      "type": "icons-with-text",
+      "blocks": {
+        "item_1": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/text_with_icon_img1.png",
+            "icon": "none",
+            "heading": "Natural Ingredients",
+            "text": "Praesent in nunc vel urna consequat mattis eget vel libero. Phasellus entesque",
+            "link": ""
+          }
+        },
+        "item_2": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/text_with_icon_img2.png",
+            "icon": "none",
+            "heading": "Fragrance Free",
+            "text": "Ahasellus entesque praesent in nunc vel urna consequat mattis eget vel libero.",
+            "link": ""
+          }
+        },
+        "item_3": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/text_with_icon_img3.png",
+            "icon": "none",
+            "heading": "Allergy Tested",
+            "text": "Nunc vel urna consequat praesent in mattis eget vel libero zhasellus entesque.",
+            "link": ""
+          }
+        },
+        "item_4": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/text_with_icon_img4.png",
+            "icon": "none",
+            "heading": "Paraben Free",
+            "text": "Mattis eget vel libero praesent in nunc vel urna consequat ehasellus entesque",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4"
+      ],
+      "settings": {
+        "heading": "",
+        "alignment": "center",
+        "icon_size": 72,
+        "color_scheme": "",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "image_text_collage_bBArGe": {
+      "type": "image-text-collage",
+      "blocks": {
+        "feature_HnJpjx": {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "lips",
+            "icon": "shopify://shop_images/whispo-feature-soft-feather.png",
+            "title": "Healthy & Soft"
+          }
+        },
+        "feature_Jdk3PU": {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "globe",
+            "title": "Free from Sulfates"
+          }
+        },
+        "feature_Y8qJiX": {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "no_bottle",
+            "title": "No Parabens Added"
+          }
+        },
+        "feature_hjE68w": {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "sprout",
+            "title": "100% Plant-Powered"
+          }
+        }
+      },
+      "block_order": [
+        "feature_HnJpjx",
+        "feature_Jdk3PU",
+        "feature_Y8qJiX",
+        "feature_hjE68w"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "background_color": "#eaf5df",
+        "background_image": "shopify://shop_images/abstract-floral-background-for-design-8ae644.png",
+        "background_image_mobile": "shopify://shop_images/abstract-floral-background-for-design-8ae644.png",
+        "background_image_show_mobile": true,
+        "background_image_fit": "cover",
+        "background_image_position": "focal",
+        "background_overlay_color": "#000000",
+        "background_overlay_opacity": 0,
+        "pattern_image": "shopify://shop_images/abstract-floral-background-for-design-8ae644.png",
+        "pattern_color": "#4c9a47",
+        "pattern_opacity": 60,
+        "pattern_fit": "cover",
+        "section_width": "page-width",
+        "media_position": "left",
+        "mobile_media_position": "top",
+        "media_column_width": 48,
+        "column_gap": 72,
+        "content_vertical_alignment": "center",
+        "content_max_width": 560,
+        "design": "collage",
+        "collage_layout": "stack",
+        "collage_ratio": 118,
+        "image_radius": 16,
+        "image_shadow": true,
+        "image_hover": "lift",
+        "image_1": "shopify://shop_images/whispo-collage-hair-serum-woman.jpg",
+        "image_1_rotation": 2,
+        "image_1_width": 76,
+        "image_1_height": 40,
+        "image_1_zindex": 4,
+        "image_1_top": 0,
+        "image_1_right": 0,
+        "image_1_bottom": -1,
+        "image_1_left": -1,
+        "image_2": "shopify://shop_images/whispo-collage-hair-oil-bottle.jpg",
+        "image_2_rotation": -3,
+        "image_2_width": 68,
+        "image_2_height": 72,
+        "image_2_zindex": 3,
+        "image_2_top": 32,
+        "image_2_right": -1,
+        "image_2_bottom": -1,
+        "image_2_left": 0,
+        "image_3": "shopify://shop_images/whispo-collage-hair-comb.jpg",
+        "image_3_rotation": 3,
+        "image_3_width": 48,
+        "image_3_height": 50,
+        "image_3_zindex": 3,
+        "image_3_top": 60,
+        "image_3_right": 3,
+        "image_3_bottom": 0,
+        "image_3_left": -1,
+        "show_subtitle": true,
+        "subtitle": "Pure and simple",
+        "heading": "Intensive Hair Serum for Radiant Shine & Lasting Strength",
+        "heading_size": "medium",
+        "heading_weight": "700",
+        "heading_max_width": 20,
+        "show_description": true,
+        "description": "<p>Our concentrated serum helps smooth the look of damage and adds luminous shine with plant-based actives you can feel good about.</p>",
+        "description_size": "medium",
+        "show_feature_grid": true,
+        "feature_columns": "2",
+        "feature_icon_style": "outline",
+        "feature_icon_size": 56,
+        "feature_icon_color": "",
+        "feature_label_size": 17,
+        "show_cta": true,
+        "button_label": "Explore sale",
+        "button_link": "",
+        "button_new_tab": false,
+        "button_style": "filled",
+        "btn_bg": "#f5c518",
+        "btn_fg": "#111111",
+        "btn_hover_bg": "#ddb015",
+        "show_badge": true,
+        "badge_text": "EXPLORE MORE ~ EXPLORE MORE ~",
+        "badge_separator": "sparkle",
+        "badge_font": "outfit_n6",
+        "badge_center": "arrow",
+        "badge_center_text": "2019",
+        "badge_link": "",
+        "badge_bg": "#f2c419",
+        "badge_fg": "#1a1a1a",
+        "badge_inner_color": "#ffffff",
+        "badge_inner_style": "dashed",
+        "badge_outline": true,
+        "badge_speed": 14,
+        "badge_pause_hover": true,
+        "badge_size": 28,
+        "badge_top": 40,
+        "badge_left": 78,
+        "hide_badge_mobile": false,
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "ticker_duo_UeLfnF": {
+      "type": "ticker-duo",
+      "blocks": {
+        "ticker_row_G9yKcm": {
+          "type": "ticker_row",
+          "settings": {
+            "content_type": "text",
+            "text": "40% Off On Booking",
+            "textarea": "",
+            "text_style": "solid",
+            "outline_width": 1,
+            "type_preset": "custom",
+            "font": "var(--font-body)",
+            "font_size": "1.5rem",
+            "line_height": "tight",
+            "letter_spacing": "tight",
+            "case": "none",
+            "wrap": "balance",
+            "image_height": 64,
+            "image_shape": "natural",
+            "image_grayscale": false,
+            "separator": "icon",
+            "icon": "shopify://shop_images/whispo-ticker-sparkle.png",
+            "icon_size": 20,
+            "item_gap": 16,
+            "link": "",
+            "direction": "forward",
+            "speed": 24,
+            "padding_top": 24,
+            "padding_bottom": 24,
+            "rotation": 1,
+            "color_scheme": "scheme-2"
+          }
+        },
+        "ticker_row_inztn9": {
+          "type": "ticker_row",
+          "settings": {
+            "content_type": "text",
+            "text": "Face Mask  •  Cleanser  •  Hair Care  •  Sun Protection  •  Toner / Mist  •  Skin Care",
+            "textarea": "",
+            "text_style": "solid",
+            "outline_width": 1,
+            "type_preset": "rte",
+            "font": "var(--font-body)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "image_height": 64,
+            "image_shape": "natural",
+            "image_grayscale": false,
+            "separator": "icon",
+            "icon_size": 20,
+            "item_gap": 16,
+            "link": "",
+            "direction": "reverse",
+            "speed": 52,
+            "padding_top": 24,
+            "padding_bottom": 24,
+            "rotation": -1,
+            "color_scheme": "scheme-4"
+          }
+        }
+      },
+      "block_order": [
+        "ticker_row_G9yKcm",
+        "ticker_row_inztn9"
+      ],
+      "settings": {
+        "layout": "tilted",
+        "padding_top": 44,
+        "padding_bottom": 44,
+        "row_gap": 6,
+        "section_width": "full-width",
+        "color_scheme": "scheme-3",
+        "scroll_boost": true,
+        "scroll_boost_strength": 5,
+        "scroll_up_behavior": "faster",
+        "pause_on_hover": false,
+        "edge_fade": false
+      }
+    },
+    "featured_collection_grid_LHPfHM": {
+      "type": "featured-collection-grid",
+      "blocks": {
+        "product_card_aHVzPG": {
+          "type": "product_card",
+          "settings": {
+            "product": "luminous-balance-toner",
+            "column": "left",
+            "position": "1",
+            "image": "shopify://shop_images/whispo-product-toner.jpg",
+            "tag": "Bodycare",
+            "title": "Body Lotion",
+            "color_scheme": "scheme-4",
+            "description": "Faucibus a pellentesque sit amet\nporttitor eget dolor morbi non.",
+            "link": ""
+          }
+        },
+        "product_card_YfqGTe": {
+          "type": "product_card",
+          "settings": {
+            "product": "luxury-face-creams",
+            "column": "left",
+            "position": "2",
+            "image": "shopify://shop_images/whispo-product-face-cream.jpg",
+            "tag": "Smooth",
+            "title": "Moisturizer",
+            "color_scheme": "scheme-4",
+            "description": "Urna porttitor rhoncus dolor purus non \nenim praesent elementum.",
+            "link": ""
+          }
+        },
+        "product_card_QkKgCr": {
+          "type": "product_card",
+          "settings": {
+            "product": "brightening-serum",
+            "column": "middle",
+            "position": "1",
+            "image": "shopify://shop_images/whispo-product-vitc-serum.jpg",
+            "tag": "Organic",
+            "title": "Face Scrub",
+            "color_scheme": "scheme-4",
+            "description": "Bibendum neque egestas congue quisque \negestas diam in arcu cursus.",
+            "link": ""
+          }
+        },
+        "product_card_crEXxt": {
+          "type": "product_card",
+          "settings": {
+            "product": "glass-skin-overnight-mask",
+            "column": "middle",
+            "position": "2",
+            "image": "shopify://shop_images/whispo-product-gel-mask.jpg",
+            "tag": "Chemical Free",
+            "title": "Tooth Paste",
+            "color_scheme": "scheme-4",
+            "description": "A iaculis at erat pellentesque \nadipiscing commodo etiamat.",
+            "link": ""
+          }
+        },
+        "product_card_DMWRwt": {
+          "type": "product_card",
+          "settings": {
+            "product": "comfort-matte-bullet-lipstick",
+            "column": "right",
+            "position": "2",
+            "image": "shopify://shop_images/whispo-product-lipstick.jpg",
+            "tag": "Natural",
+            "title": "Bathing Salts",
+            "color_scheme": "scheme-4",
+            "description": "Urna porttitor rhoncus dolor purus non \nenim praesent elementum.",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_card_aHVzPG",
+        "product_card_YfqGTe",
+        "product_card_QkKgCr",
+        "product_card_crEXxt",
+        "product_card_DMWRwt"
+      ],
+      "settings": {
+        "data_source": "manual",
+        "collection": "automated-collection",
+        "title": "Shop by category",
+        "subtitle": "Only the best seller products added recently in our catalog",
+        "highlight_word": "category",
+        "highlight_style": "marker",
+        "highlight_color": "#f8d12f",
+        "title_font_size": 38,
+        "subtitle_font_size": 15,
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "header_alignment": "center",
+        "section_width": "page-width",
+        "tall_card_side": "right",
+        "card_gradient": "none",
+        "card_gradient_color": "#535353",
+        "card_gradient_color_tall": "#535353",
+        "card_body_alignment": "bottom",
+        "show_tag": true,
+        "tag_source": "product_type",
+        "show_description": true,
+        "description_length": 90,
+        "description_length_large": 120,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "countdown_banner_bf": {
+      "type": "countdown-banner",
+      "settings": {
+        "layout": "collage",
+        "end_date": "2026-11-27",
+        "end_time": "23:59",
+        "timer_style": "tiles",
+        "show_labels": true,
+        "show_end_date": true,
+        "after_end": "message",
+        "expired_message": "This offer has ended",
+        "eyebrow": "Black Friday sale",
+        "heading": "Your favorites, now for less",
+        "text": "<p>Save up to 25% on everyday skincare essentials. Build a routine that works for your skin before the offer ends.</p>",
+        "button_label": "Shop the sale",
+        "button_link": "shopify://collections/all",
+        "image_left_1": "shopify://shop_images/skincare-cleanse-foam.jpg",
+        "badge_text": "Up to 25% off",
+        "image_left_2": "shopify://shop_images/skincare-shelf.jpg",
+        "image_right_1": "shopify://shop_images/skincare-serum-drop.jpg",
+        "image_right_2": "shopify://shop_images/whispo-countdown-gift-set.jpg",
+        "image_radius": 24,
+        "image_padding": 32,
+        "image_parallax": 36,
+        "mobile_images": "show",
+        "color_scheme": "scheme-3",
+        "section_width": "full-width",
+        "height": "medium",
+        "heading_size": 56,
+        "heading_case": "uppercase",
+        "number_size": 72,
+        "number_color": "",
+        "button_background": "",
+        "button_text": ""
+      }
+    },
+    "bundle_builder_box": {
+      "type": "bundle-builder",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Build your Bundle",
+        "highlight_word": "Bundle",
+        "highlight_style": "squiggle",
+        "highlight_color": "#f4c9a8",
+        "text": "<p>The choice is yours. With our bundle builder, you can select any combination from our range of products. The easiest way to keep everyone happy.</p>",
+        "products": [
+          "luxury-face-creams",
+          "glass-skin-overnight-mask",
+          "luminous-balance-toner",
+          "sun-cream-spf-protection",
+          "rewind-concealer",
+          "comfort-matte-bullet-lipstick"
+        ],
+        "collection": "",
+        "products_limit": 8,
+        "card_add_label": "Add to bundle",
+        "min_items": 3,
+        "max_items": 3,
+        "tier_1_qty": 3,
+        "tier_1_discount": 30,
+        "tier_1_code": "",
+        "tier_2_qty": 0,
+        "tier_2_discount": 20,
+        "tier_2_code": "",
+        "tier_3_qty": 0,
+        "tier_3_discount": 30,
+        "tier_3_code": "",
+        "tier_label": "[count] products · [discount]% off",
+        "add_property": true,
+        "box_title": "Your bundle",
+        "box_position": "left",
+        "slots": 3,
+        "msg_min": "Add [count] more to proceed and save [discount]",
+        "msg_more": "Add [count] more to save [discount]",
+        "msg_top": "Your bundle is complete, you're saving [discount]!",
+        "msg_max": "You can choose up to [count] products",
+        "cta_label": "Add bundle to cart",
+        "success_label": "Bundle added to cart",
+        "show_fill": true,
+        "fill_label": "Fill my box",
+        "note": "Discount applied at checkout",
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "accent_color": "#f8d12f",
+        "accent_text_color": "#000000",
+        "card_radius": 18,
+        "columns_desktop": 3,
+        "columns_mobile": "2",
+        "image_ratio": "1 / 1",
+        "show_compare_price": true,
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "before_after_slider_CUEk9V": {
+      "type": "before-after-slider",
+      "settings": {
+        "before_image": "shopify://shop_images/skincare-before-acne.jpg",
+        "after_image": "shopify://shop_images/skincare-after-clear.jpg",
+        "initial_position": 50,
+        "image_radius": 16,
+        "show_image_labels": true,
+        "before_label": "Before",
+        "before_label_vertical": "top",
+        "before_label_horizontal": "left",
+        "after_label": "After",
+        "after_label_vertical": "bottom",
+        "after_label_horizontal": "right",
+        "label_inset": 12,
+        "before_caption": "Breakouts & redness",
+        "after_caption": "Clear, glowing skin",
+        "show_content": false,
+        "heading": "Enough With Acne Ruling Your Life",
+        "description": "<p>In addition to diminishing the visibility of blemishes and blackheads, this cleanser also eliminates surplus oil and enhances the look of pores.</p>",
+        "button_label": "Explore sale",
+        "button_link": "",
+        "layout": "media_left",
+        "enable_particles": false,
+        "particle_opacity": 16,
+        "particle_size": 150,
+        "particle_speed": 22,
+        "color_scheme": "",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "product_3d_bC9kEE": {
+      "type": "product-3d",
+      "blocks": {
+        "f_cap": {
+          "type": "feature",
+          "settings": {
+            "title": "Whipped, cloud-light texture",
+            "text": "Melts in on contact and leaves skin soft, never greasy.",
+            "turn_model": true,
+            "view_angle": 0,
+            "view_height": 45,
+            "hotspot": ""
+          }
+        },
+        "f_alu": {
+          "type": "feature",
+          "settings": {
+            "title": "Polished silver lid",
+            "text": "A weighty screw-top that seals in freshness.",
+            "turn_model": true,
+            "view_angle": 135,
+            "view_height": 20,
+            "hotspot": ""
+          }
+        },
+        "f_lining": {
+          "type": "feature",
+          "settings": {
+            "title": "Porcelain-finish jar",
+            "text": "Glossy, heavy glass that keeps light and air out.",
+            "turn_model": true,
+            "view_angle": 90,
+            "view_height": 10,
+            "hotspot": ""
+          }
+        },
+        "f_refill": {
+          "type": "feature",
+          "settings": {
+            "title": "Refill, don't rebuy",
+            "text": "Pop in a refill pod and keep the jar for years.",
+            "turn_model": true,
+            "view_angle": -120,
+            "view_height": 15,
+            "hotspot": ""
+          }
+        }
+      },
+      "block_order": [
+        "f_cap",
+        "f_alu",
+        "f_lining",
+        "f_refill"
+      ],
+      "settings": {
+        "eyebrow": "360° view",
+        "heading": "See it from every angle",
+        "text": "<p>Turn it, tilt it, peek inside. Meet our Luxury Face Cream before it reaches your shelf.</p>",
+        "product": "luxury-face-creams",
+        "model_url": "",
+        "model_usdz_url": "",
+        "load_mode": "scroll",
+        "layout": "showcase",
+        "media_position": "right",
+        "stage_height": 600,
+        "stage_height_mobile": 420,
+        "radius": 28,
+        "backdrop": "rings",
+        "stage_color": "#1c1a17",
+        "accent_color": "#f8d12f",
+        "background_text": "",
+        "shadow_intensity": 10,
+        "exposure": 10,
+        "auto_rotate": true,
+        "rotate_speed": 20,
+        "model_size": 80,
+        "start_angle": 30,
+        "start_height": 15,
+        "allow_drag": true,
+        "allow_zoom": false,
+        "enable_ar": true,
+        "show_controls": true,
+        "show_readout": true,
+        "show_hint": true,
+        "show_product_info": true,
+        "show_price": true,
+        "button_label": "Shop now",
+        "button_link": "",
+        "section_width": "page-width",
+        "color_scheme": "",
+        "anchor_id": "",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "product_story_ritual": {
+      "type": "product-story",
+      "blocks": {
+        "step_tone": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/routine-tone.jpg",
+            "label": "Tone",
+            "heading": "Rebalance in seconds",
+            "text": "<p>Sweep on toner to reset your skin's pH, refine pores and prep it to drink in everything that follows.</p>",
+            "product": "luminous-balance-toner",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "step_moisturise": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/routine-moisturize.jpg",
+            "label": "Moisturise",
+            "heading": "Seal in all-day softness",
+            "text": "<p>A rich yet weightless cream that locks in hydration and keeps your barrier calm and comfortable.</p>",
+            "product": "luxury-face-creams",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "step_renew": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/skincare-shelf.jpg",
+            "label": "Renew",
+            "heading": "Wake up to glass skin",
+            "text": "<p>Twice a week, finish with an overnight mask so skin repairs, plumps and glows while you sleep.</p>",
+            "product": "glass-skin-overnight-mask",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "step_protect": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/whispo-story-step-protect.jpg",
+            "label": "Protect",
+            "heading": "Never skip the last step",
+            "text": "<p>Broad-spectrum SPF shields today's glow from tomorrow's dark spots — light, invisible and kind to skin.</p>",
+            "product": "sun-cream-spf-protection",
+            "button_label": "Shop the full routine",
+            "button_link": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "step_tone",
+        "step_moisturise",
+        "step_renew",
+        "step_protect"
+      ],
+      "settings": {
+        "eyebrow": "The routine",
+        "heading": "Your glow ritual, step by step",
+        "text": "<p>Four simple steps, one radiant result. Scroll through — and add each one as you go.</p>",
+        "layout": "split",
+        "media_position": "left",
+        "media_ratio": "4 / 5",
+        "transition": "wipe",
+        "show_rail": true,
+        "radius": 24,
+        "card_color": "#f4f1ea",
+        "panel_tone": "light",
+        "add_label": "Add",
+        "accent_color": "#f8d12f",
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "anchor_id": "",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "routine_builder_main": {
+      "type": "routine-builder",
+      "blocks": {
+        "blank_skin": {
+          "type": "blank",
+          "settings": {
+            "before": "My skin feels",
+            "after": ",",
+            "placeholder": "",
+            "question": "How does your skin feel?",
+            "allow_multiple": false,
+            "answer_1_label": "dry",
+            "answer_1_color": "#f4c9a0",
+            "answer_1_products": [
+              "luxury-face-creams",
+              "glass-skin-overnight-mask"
+            ],
+            "answer_2_label": "oily",
+            "answer_2_color": "#b9e2c8",
+            "answer_2_products": [
+              "luminous-balance-toner",
+              "sun-cream-spf-protection"
+            ],
+            "answer_3_label": "a bit of both",
+            "answer_3_color": "#d9c9f2",
+            "answer_3_products": [
+              "luminous-balance-toner",
+              "brightening-serum"
+            ],
+            "answer_4_label": "sensitive",
+            "answer_4_color": "#f5b8c0",
+            "answer_4_products": [
+              "luxury-face-creams",
+              "sun-cream-spf-protection"
+            ],
+            "answer_5_label": "",
+            "answer_5_color": "",
+            "answer_5_products": [],
+            "answer_6_label": "",
+            "answer_6_color": "",
+            "answer_6_products": []
+          }
+        },
+        "blank_concern": {
+          "type": "blank",
+          "settings": {
+            "before": "I'd love to fix",
+            "after": "",
+            "placeholder": "",
+            "question": "What would you like to improve?",
+            "allow_multiple": true,
+            "answer_1_label": "dullness",
+            "answer_1_color": "#ffe08a",
+            "answer_1_products": [
+              "brightening-serum"
+            ],
+            "answer_2_label": "dryness",
+            "answer_2_color": "#bfe0f5",
+            "answer_2_products": [
+              "glass-skin-overnight-mask",
+              "luxury-face-creams"
+            ],
+            "answer_3_label": "dark spots",
+            "answer_3_color": "#f2c6a8",
+            "answer_3_products": [
+              "brightening-serum",
+              "rewind-concealer"
+            ],
+            "answer_4_label": "fine lines",
+            "answer_4_color": "#e3cdf0",
+            "answer_4_products": [
+              "glass-skin-overnight-mask"
+            ],
+            "answer_5_label": "sun damage",
+            "answer_5_color": "#ffd2a6",
+            "answer_5_products": [
+              "sun-cream-spf-protection"
+            ],
+            "answer_6_label": "",
+            "answer_6_color": "",
+            "answer_6_products": []
+          }
+        },
+        "blank_time": {
+          "type": "blank",
+          "settings": {
+            "before": "and I have",
+            "after": "for my routine.",
+            "placeholder": "",
+            "question": "How much time do you have for your routine?",
+            "allow_multiple": false,
+            "answer_1_label": "five minutes",
+            "answer_1_color": "#c9ead9",
+            "answer_1_products": [
+              "sun-cream-spf-protection",
+              "comfort-matte-bullet-lipstick"
+            ],
+            "answer_2_label": "ten minutes",
+            "answer_2_color": "#f8e3b5",
+            "answer_2_products": [
+              "luminous-balance-toner",
+              "brightening-serum"
+            ],
+            "answer_3_label": "all the time in the world",
+            "answer_3_color": "#e6d3f7",
+            "answer_3_products": [
+              "glass-skin-overnight-mask",
+              "luxury-face-creams",
+              "rewind-concealer"
+            ],
+            "answer_4_label": "",
+            "answer_4_color": "#f5b8c0",
+            "answer_4_products": [],
+            "answer_5_label": "",
+            "answer_5_color": "",
+            "answer_5_products": [],
+            "answer_6_label": "",
+            "answer_6_color": "",
+            "answer_6_products": []
+          }
+        }
+      },
+      "block_order": [
+        "blank_skin",
+        "blank_concern",
+        "blank_time"
+      ],
+      "settings": {
+        "eyebrow": "Build your routine",
+        "sentence_font_source": "heading",
+        "sentence_font": "playfair_display_n4",
+        "sentence_scale": "section",
+        "sentence_size": 64,
+        "alignment": "center",
+        "placeholder": "choose",
+        "hint": "Tap the underlined words to build your routine",
+        "multiple_note": "Pick as many as you like",
+        "done_label": "Done",
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "palette": "botanical",
+        "panel_style": "card",
+        "accent_color": "#f8d12f",
+        "accent_text_color": "#000000",
+        "show_mood": true,
+        "mood_strength": 55,
+        "card_radius": 18,
+        "float_image_1": "shopify://shop_images/whispo-routine-float-towel.jpg",
+        "float_image_2": "shopify://shop_images/whispo-routine-float-clay.jpg",
+        "float_first": "left",
+        "float_shape": "rounded",
+        "float_size": 17,
+        "float_tilt": 5,
+        "float_speed": 4,
+        "floats_mobile": "show",
+        "results_eyebrow": "Made for you",
+        "results_done": "Your routine is ready",
+        "scroll_to_results": true,
+        "max_results": 8,
+        "results_columns": 4,
+        "fallback_collection": "all",
+        "show_add_all": true,
+        "add_all_label": "Add routine to cart",
+        "add_label": "ADD TO CART",
+        "reset_label": "Start over",
+        "remember": true,
+        "padding_top": 120,
+        "padding_bottom": 120
+      }
+    },
+    "reveal_image_yFL9GW": {
+      "type": "reveal-image",
+      "settings": {
+        "media_type": "video",
+        "image": "shopify://shop_images/whispo-reveal-collection.jpg",
+        "video": "shopify://files/videos/1103779_1080p_4k_1280x720.mp4",
+        "video_url": "",
+        "heading": "Discover the Collection",
+        "subheading": "Crafted with intention. Worn with purpose.",
+        "button_label": "Shop Now",
+        "button_url": "",
+        "button_style": "outline_light",
+        "text_position": "center",
+        "text_vertical": "middle",
+        "scroll_distance": 1000,
+        "start_inset": 35,
+        "start_inset_h": 35,
+        "overlay_opacity": 35,
+        "border_radius_start": 16,
+        "border_radius_end": 0,
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "beauty_bundle_feature_RdWw6Q": {
+      "type": "beauty-bundle-feature",
+      "blocks": {
+        "item_69nP8w": {
+          "type": "item",
+          "settings": {
+            "product": "comfort-matte-bullet-lipstick",
+            "hotspot_x": 31,
+            "hotspot_y": 52,
+            "image": "shopify://shop_images/whispo-product-lipstick.jpg",
+            "title": "Face Cream",
+            "description": "A lightweight, deeply nourishing cream that hydrates and soothes.",
+            "price": "$100",
+            "rating": 5,
+            "link": ""
+          }
+        },
+        "item_DBRt88": {
+          "type": "item",
+          "settings": {
+            "product": "rewind-concealer",
+            "hotspot_x": 50,
+            "hotspot_y": 71,
+            "title": "Body Lotion",
+            "description": "A lightweight, deeply nourishing cream that hydrates and soothes.",
+            "price": "$58",
+            "rating": 5,
+            "link": ""
+          }
+        },
+        "item_iH7jaV": {
+          "type": "item",
+          "settings": {
+            "product": "glass-skin-overnight-mask",
+            "hotspot_x": 65,
+            "hotspot_y": 62,
+            "image": "shopify://shop_images/whispo-product-concealer.jpg",
+            "title": "Face Cream",
+            "description": "A lightweight, deeply nourishing cream that hydrates and soothes.",
+            "price": "$100",
+            "rating": 5,
+            "link": ""
+          }
+        },
+        "item_AfnLjM": {
+          "type": "item",
+          "settings": {
+            "product": "sun-cream-spf-protection",
+            "hotspot_x": 77,
+            "hotspot_y": 74,
+            "image": "shopify://shop_images/whispo-product-gel-mask.jpg",
+            "title": "Face Cream",
+            "description": "A lightweight, deeply nourishing cream that hydrates and soothes.",
+            "price": "$100",
+            "rating": 5,
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_69nP8w",
+        "item_DBRt88",
+        "item_iH7jaV",
+        "item_AfnLjM"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/whispo-bundle-lookbook.jpg",
+        "image_position": "left",
+        "eyebrow": "Be yourself",
+        "heading": "Beauty Cream Bundles",
+        "subheading": "",
+        "show_rating": true,
+        "divider_style": "lines",
+        "max_items": 3,
+        "card_background": "#ffffff",
+        "card_radius": 14,
+        "button_label": "",
+        "button_link": "",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "section_width": "page-width",
+        "color_scheme": ""
+      }
+    },
+    "b2b_wholesale": {
+      "type": "b2b-wholesale",
+      "blocks": {
+        "benefit_pricing": {
+          "type": "benefit",
+          "settings": {
+            "icon": "tag",
+            "title": "Tiered volume pricing",
+            "text": "Save up to 40% as your order grows."
+          }
+        },
+        "benefit_terms": {
+          "type": "benefit",
+          "settings": {
+            "icon": "calendar",
+            "title": "Net-30 payment terms",
+            "text": "Approved partners pay 30 days after delivery."
+          }
+        },
+        "benefit_manager": {
+          "type": "benefit",
+          "settings": {
+            "icon": "headset",
+            "title": "Dedicated account manager",
+            "text": "One contact for orders, training and marketing assets."
+          }
+        },
+        "benefit_freight": {
+          "type": "benefit",
+          "settings": {
+            "icon": "truck",
+            "title": "Free freight on cases",
+            "text": "Free delivery on wholesale orders over $500."
+          }
+        },
+        "stat_partners": {
+          "type": "stat",
+          "settings": {
+            "value": "1,200+",
+            "label": "salons & retailers"
+          }
+        },
+        "stat_dispatch": {
+          "type": "stat",
+          "settings": {
+            "value": "48h",
+            "label": "dispatch on stock"
+          }
+        },
+        "stat_discount": {
+          "type": "stat",
+          "settings": {
+            "value": "40%",
+            "label": "max trade discount"
+          }
+        },
+        "tier_starter": {
+          "type": "tier",
+          "settings": {
+            "label": "Starter",
+            "min_qty": 12,
+            "discount": 20,
+            "discount_code": ""
+          }
+        },
+        "tier_pro": {
+          "type": "tier",
+          "settings": {
+            "label": "Pro",
+            "min_qty": 48,
+            "discount": 30,
+            "discount_code": ""
+          }
+        },
+        "tier_distributor": {
+          "type": "tier",
+          "settings": {
+            "label": "Distributor",
+            "min_qty": 120,
+            "discount": 40,
+            "discount_code": ""
+          }
+        }
+      },
+      "block_order": [
+        "benefit_pricing",
+        "benefit_terms",
+        "benefit_manager",
+        "benefit_freight",
+        "stat_partners",
+        "stat_dispatch",
+        "stat_discount",
+        "tier_starter",
+        "tier_pro",
+        "tier_distributor"
+      ],
+      "settings": {
+        "eyebrow": "Wholesale & B2B",
+        "heading": "Grow your business with trade pricing",
+        "text": "<p>Stock award-winning skincare at wholesale prices. Tiered volume pricing, flexible payment terms and a dedicated account manager: everything a salon, spa or retailer needs to sell more.</p>",
+        "apply_label": "Apply for a wholesale account",
+        "sheet_label": "Download line sheet",
+        "sheet_link": "",
+        "call_label": "Book a call with our team",
+        "call_link": "/pages/contact",
+        "products": [
+          "brightening-serum",
+          "luxury-face-creams",
+          "luminous-balance-toner",
+          "glass-skin-overnight-mask",
+          "sun-cream-spf-protection",
+          "comfort-matte-bullet-lipstick",
+          "rewind-concealer"
+        ],
+        "collection": "",
+        "product_limit": 7,
+        "min_order": 12,
+        "case_size": 6,
+        "retail_ordering": false,
+        "volume_options": "Under $500\n$500 – $2,000\n$2,000 – $10,000\n$10,000+",
+        "form_note": "We reply within one business day. No commitment.",
+        "success_text": "",
+        "success_delay": "8",
+        "accent_color": "#f8d12f",
+        "card_color": "#ffffff",
+        "radius": 26,
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "anchor_id": "wholesale",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "faq_split_gallery_LpzKU4": {
+      "type": "faq-split-gallery",
+      "blocks": {
+        "faq_entry_kFzm8b": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Dermatologist Approved",
+            "answer": "<p>Formulated and reviewed with dermatologists so you can trust what you put on your skin every day.</p>"
+          }
+        },
+        "faq_entry_8Dwwtk": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Hypoallergenic Formula",
+            "answer": "<p>Designed to minimize the risk of irritation for sensitive skin.</p>"
+          }
+        },
+        "faq_entry_4hJpy3": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Eco-Friendly Ingredients",
+            "answer": "<p>We prioritize responsibly sourced ingredients and mindful packaging where possible.</p>"
+          }
+        },
+        "faq_entry_JWRUTt": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Suitable For All Skin Types",
+            "answer": "<p>Balanced for everyday use across normal, dry, and combination skin.</p>"
+          }
+        },
+        "faq_entry_wdc7TJ": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Works on every skin type",
+            "answer": "<p>Our routine is built to layer cleanly and absorb without heaviness.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_entry_kFzm8b",
+        "faq_entry_8Dwwtk",
+        "faq_entry_4hJpy3",
+        "faq_entry_JWRUTt",
+        "faq_entry_wdc7TJ"
+      ],
+      "settings": {
+        "title": "Frequently Asked Questions",
+        "anchor_id": "faq",
+        "color_scheme": "scheme-2",
+        "column_layout": "faq_left",
+        "swap_gallery_images": false,
+        "padding_top": 64,
+        "padding_bottom": 64,
+        "gallery_image_tall": "shopify://shop_images/whispo-faq-eye-cream.jpg",
+        "gallery_image_front": "shopify://shop_images/whispo-faq-cream-hands.jpg",
+        "image_radius": 16,
+        "image_scroll_parallax": 32,
+        "expand_first_item": true,
+        "allow_collapse_active": false
+      }
+    },
+    "client_trust_testimonials_D4AhAL": {
+      "type": "client-trust-testimonials",
+      "blocks": {
+        "testimonial_MnefiL": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Jenny W.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Absolutely love this product! My hair feels so much softer and healthier after just one week of use.</p>",
+            "product": "the-3p-fulfilled-snowboard",
+            "product_title": "Detangling Hair Spray",
+            "product_link": ""
+          }
+        },
+        "testimonial_76pLRD": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Marcus T.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Great quality and fast shipping. Will definitely order again.</p>",
+            "product": "",
+            "product_title": "Daily Serum",
+            "product_link": ""
+          }
+        },
+        "testimonial_p9BgGR": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Sarah L.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Finally found something that works for my sensitive skin. Highly recommend!</p>",
+            "product": "",
+            "product_title": "Gentle Cleanser",
+            "product_link": ""
+          }
+        },
+        "testimonial_ByiDH9": {
+          "type": "testimonial",
+          "settings": {
+            "name": "David R.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Clean ingredients and visible results. Worth every penny.</p>",
+            "product": "",
+            "product_title": "Night Cream",
+            "product_link": ""
+          }
+        },
+        "testimonial_zChWha": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Emma K.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Smells amazing and absorbs quickly. A staple in my routine now.</p>",
+            "product": "",
+            "product_title": "Body Oil",
+            "product_link": ""
+          }
+        },
+        "testimonial_9MF6mr": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Alex P.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Customer service was excellent and the product exceeded expectations.</p>",
+            "product": "",
+            "product_title": "Face Mist",
+            "product_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_MnefiL",
+        "testimonial_76pLRD",
+        "testimonial_p9BgGR",
+        "testimonial_ByiDH9",
+        "testimonial_zChWha",
+        "testimonial_9MF6mr"
+      ],
+      "settings": {
+        "section_width": "page-width",
+        "color_scheme": "scheme-2",
+        "heading": "Why Our Clients Trust Us",
+        "subheading": "",
+        "heading_alignment": "center",
+        "animation_duration": 36,
+        "layout_mode": "marquee",
+        "show_slider_arrows": true,
+        "show_slider_dragger": true,
+        "card_gap": 16,
+        "star_color": "#e6b800",
+        "card_background": "#ffffff",
+        "anchor_id": "",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "store_locator": {
+      "type": "store-locator",
+      "blocks": {
+        "store_soho": {
+          "type": "store",
+          "settings": {
+            "name": "Whispo Flagship Soho",
+            "store_type": "Flagship store",
+            "badge": "Skin lab",
+            "address": "21 Greek Street\nLondon W1D 4DZ",
+            "phone": "+44 20 7946 0123",
+            "email": "",
+            "hours": "Mon–Sat: 10:00–20:00\nSun: 12:00–18:00",
+            "services": "Free skin consultation, Facials, Click & collect",
+            "latitude": "51.5139",
+            "longitude": "-0.1316",
+            "map_query": ""
+          }
+        },
+        "store_covent": {
+          "type": "store",
+          "settings": {
+            "name": "Whispo Covent Garden",
+            "store_type": "Whispo store",
+            "badge": "",
+            "address": "8 Neal Street\nLondon WC2H 9PU",
+            "phone": "+44 20 7946 0456",
+            "email": "",
+            "hours": "Mon–Fri: 09:30–19:30\nSat: 10:00–19:00\nSun: 11:00–17:00",
+            "services": "Click & collect, Gift wrapping",
+            "latitude": "51.5145",
+            "longitude": "-0.1263",
+            "map_query": ""
+          }
+        },
+        "store_kensington": {
+          "type": "store",
+          "settings": {
+            "name": "Glow Studio Spa",
+            "store_type": "Partner spa",
+            "badge": "New",
+            "address": "140 Kensington High Street\nLondon W8 7RL",
+            "phone": "+44 20 7946 0789",
+            "email": "",
+            "hours": "Tue–Sat: 09:00–20:00\nSun: 10:00–16:00\nMon: Closed",
+            "services": "Whispo facials, Skin consultation",
+            "latitude": "51.5009",
+            "longitude": "-0.1925",
+            "map_query": ""
+          }
+        },
+        "store_islington": {
+          "type": "store",
+          "settings": {
+            "name": "Greenleaf Pharmacy",
+            "store_type": "Stockist",
+            "badge": "",
+            "address": "62 Upper Street\nLondon N1 0NY",
+            "phone": "+44 20 7946 0321",
+            "email": "",
+            "hours": "Mon–Sat: 08:30–21:00\nSun: 10:00–18:00",
+            "services": "",
+            "latitude": "51.5383",
+            "longitude": "-0.1027",
+            "map_query": ""
+          }
+        },
+        "store_canary": {
+          "type": "store",
+          "settings": {
+            "name": "Whispo Canary Wharf",
+            "store_type": "Whispo store",
+            "badge": "Click & collect",
+            "address": "Unit 14, Jubilee Place\nLondon E14 5NY",
+            "phone": "+44 20 7946 0654",
+            "email": "",
+            "hours": "Mon–Fri: 08:00–20:00\nSat: 10:00–18:00\nSun: 12:00–18:00",
+            "services": "Click & collect, Express pick-up",
+            "latitude": "51.5033",
+            "longitude": "-0.0186",
+            "map_query": ""
+          }
+        }
+      },
+      "block_order": [
+        "store_soho",
+        "store_covent",
+        "store_kensington",
+        "store_islington",
+        "store_canary"
+      ],
+      "settings": {
+        "eyebrow": "Visit us",
+        "heading": "Find a Whispo store near you",
+        "text": "<p>Try our bestsellers in person, book a free skin consultation and pick up online orders at our stores and partner spas.</p>",
+        "show_search": true,
+        "show_locate": true,
+        "show_filters": true,
+        "distance_unit": "km",
+        "show_map": true,
+        "map_zoom": 15,
+        "map_height": 600,
+        "accent_color": "#f8d12f",
+        "radius": 20,
+        "color_scheme": "scheme-1",
+        "padding_top": 48,
+        "padding_bottom": 72
+      }
+    },
+    "marquee_xXM4Hr": {
+      "type": "logo-marquee",
+      "blocks": {
+        "logo_1": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/whispo-logo-aurelle.png",
+            "name": "Aurelle",
+            "link": ""
+          }
+        },
+        "logo_2": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/whispo-logo-fernwood.png",
+            "name": "Fernwood",
+            "link": ""
+          }
+        },
+        "logo_3": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/whispo-logo-solene.png",
+            "name": "Solene",
+            "link": ""
+          }
+        },
+        "logo_4": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/whispo-logo-dew-daily.png",
+            "name": "Dew Daily",
+            "link": ""
+          }
+        },
+        "logo_5": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/whispo-logo-norva.png",
+            "name": "Norva",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_1",
+        "logo_2",
+        "logo_3",
+        "logo_4",
+        "logo_5"
+      ],
+      "settings": {
+        "heading": "",
+        "logo_height": 36,
+        "speed": 30,
+        "page_width": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "featured_blog_posts_8riExY": {
+      "type": "featured-blog-posts",
+      "settings": {
+        "blog": "news",
+        "heading": "Latest Stories",
+        "layout_mode": "carousel",
+        "grid_columns": 3,
+        "mobile_columns": "2",
+        "mobile_slides_per_view": "1.1",
+        "tablet_slides_per_view": "2.1",
+        "desktop_slides_per_view": "3",
+        "mobile_space_between": 16,
+        "carousel_card_min": 16,
+        "post_limit": 4,
+        "card_gap": 24,
+        "show_tags": true,
+        "show_excerpt": true,
+        "show_comments": true,
+        "show_view_all": true,
+        "view_all_text": "View All Posts",
+        "section_width": "page-width",
+        "color_scheme": "",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
-    "main"
+    "slideshow_AnCCTe",
+    "hero_jVaWmY",
+    "product_list_fa6P9H",
+    "new_arrivals_showcase_6GTQmq",
+    "section_cp3z68",
+    "image_text_collage_bBArGe",
+    "ticker_duo_UeLfnF",
+    "featured_collection_grid_LHPfHM",
+    "countdown_banner_bf",
+    "bundle_builder_box",
+    "before_after_slider_CUEk9V",
+    "product_3d_bC9kEE",
+    "product_story_ritual",
+    "routine_builder_main",
+    "reveal_image_yFL9GW",
+    "beauty_bundle_feature_RdWw6Q",
+    "b2b_wholesale",
+    "faq_split_gallery_LpzKU4",
+    "client_trust_testimonials_D4AhAL",
+    "store_locator",
+    "marquee_xXM4Hr",
+    "featured_blog_posts_8riExY"
   ]
 }

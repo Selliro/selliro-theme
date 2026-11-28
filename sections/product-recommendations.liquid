@@ -1,0 +1,86 @@
+{%- comment -%}
+  Whispo — product recommendations ("You may also like") for product pages. The page loads without them; once
+  the section is near the screen, assets/product-recommendations.js asks the Product Recommendations API for this
+  same section and fills in the product cards. Nothing shows when Shopify has no related products.
+  Files: assets/component-product-card.css, assets/product-recommendations.js, assets/quick-view.js.
+{%- endcomment -%}
+
+{%- comment -%} 1. CSS {%- endcomment -%}
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{% endstyle %}
+
+{%- comment -%} 2. Liquid {%- endcomment -%}
+<script src="{{ 'product-recommendations.js' | asset_url }}" type="module"></script>
+<script src="{{ 'quick-view.js' | asset_url }}" type="module"></script>
+
+<div class="recommendations section color-{{ section.settings.color_scheme }}" style="padding-block: var(--section-padding-top) var(--section-padding-bottom);">
+  <div class="page-width">
+    <product-recommendations
+      class="recommendations__inner"
+      data-url="{{ routes.product_recommendations_url }}?product_id={{ product.id }}&limit={{ section.settings.limit }}&intent=related&section_id={{ section.id }}"
+      {% unless recommendations.performed %}
+        hidden
+      {% endunless %}
+    >
+      <div data-recommendations data-count="{{ recommendations.products_count }}">
+        {%- if recommendations.performed and recommendations.products_count > 0 -%}
+          {%- if section.settings.heading != blank -%}
+            <h2 class="recommendations__heading {{ section.settings.heading_size }}">{{ section.settings.heading | escape }}</h2>
+          {%- endif -%}
+          <ul class="product-grid" role="list" style="--columns: {{ section.settings.columns }}; --columns-mobile: 2;">
+            {%- for item in recommendations.products -%}
+              <li>{%- render 'product-card', product: item, ratio: section.settings.image_ratio, id_prefix: section.id -%}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+    </product-recommendations>
+  </div>
+</div>
+
+{%- comment -%} 3. Schema {%- endcomment -%}
+{% schema %}
+{
+  "name": "t:sections.product_recommendations.name",
+  "enabled_on": { "templates": ["product"] },
+  "settings": [
+    { "type": "paragraph", "content": "t:sections.product_recommendations.info" },
+    { "type": "text", "id": "heading", "label": "t:sections.product_recommendations.heading", "default": "You may also like" },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "t:sections.main_page.heading_size",
+      "options": [
+        { "value": "h3", "label": "t:sections.main_product.blocks.title.size_small" },
+        { "value": "h2", "label": "t:sections.main_product.blocks.title.size_medium" },
+        { "value": "h1", "label": "t:sections.main_product.blocks.title.size_large" }
+      ],
+      "default": "h2"
+    },
+    { "type": "range", "id": "limit", "label": "t:sections.product_recommendations.limit", "min": 2, "max": 10, "step": 1, "default": 4 },
+    { "type": "range", "id": "columns", "label": "t:sections.main_collection.columns", "min": 2, "max": 5, "step": 1, "default": 4 },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:sections.main_collection.image_ratio",
+      "options": [
+        { "value": "1", "label": "t:sections.main_collection.ratio_square" },
+        { "value": "0.8", "label": "t:sections.main_collection.ratio_portrait" },
+        { "value": "0.75", "label": "t:sections.main_collection.ratio_tall" }
+      ],
+      "default": "0.8"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:sections.main_collection.color_scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "t:sections.main_collection.padding_top", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "t:sections.main_collection.padding_bottom", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 88 }
+  ],
+  "presets": [
+    { "name": "t:sections.product_recommendations.name" }
+  ]
+}
+{% endschema %}

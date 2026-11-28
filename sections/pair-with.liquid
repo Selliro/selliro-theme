@@ -1,0 +1,20 @@
+{%- comment -%}
+  Complementary products for the "Pair it with" block. Not added in the theme editor: rendered through the
+  Product Recommendations API (intent=complementary) and placed by assets/product-recommendations.js.
+{%- endcomment -%}
+<div data-recommendations data-count="{{ recommendations.products_count }}">
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <ul class="pair-with__list" role="list">
+      {%- for item in recommendations.products -%}
+        {%- render 'pair-with-row', item: item, id_prefix: 'complementary' -%}
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.pair_with.name",
+  "settings": []
+}
+{% endschema %}

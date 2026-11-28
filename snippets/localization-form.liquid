@@ -1,0 +1,129 @@
+{%- doc -%}
+  Country/region and language selectors (Shopify's localization form).
+
+  Each choice is a submit button that sends country_code or language_code, so the selectors work without
+  JavaScript. The lists are <details data-disclosure> disclosures: assets/header.js closes them on an outside
+  click, on Escape and when another one opens. Styles: assets/section-header.css ("Localization").
+  Nothing is rendered when the shop has a single country and a single language.
+
+  @param {string} id - Unique form id (the header and the menu drawer both render this snippet)
+  @param {boolean} [show_country] - Show the country/region selector (default true)
+  @param {boolean} [show_language] - Show the language selector (default true)
+  @param {boolean} [show_flags] - Show country flags (default true)
+  @param {string} [placement] - 'header' (lists open below) or 'drawer' (lists open above, full width)
+
+  @example
+  {% render 'localization-form', id: 'HeaderLocalization', placement: 'header' %}
+{%- enddoc -%}
+{%- liquid
+  assign show_country = show_country | default: true, allow_false: true
+  assign show_language = show_language | default: true, allow_false: true
+  assign show_flags = show_flags | default: true, allow_false: true
+  assign placement = placement | default: 'header'
+
+  assign has_countries = false
+  if show_country and localization.available_countries.size > 1
+    assign has_countries = true
+  endif
+  assign has_languages = false
+  if show_language and localization.available_languages.size > 1
+    assign has_languages = true
+  endif
+-%}
+
+{%- if has_countries or has_languages -%}
+  <div class="localization localization--{{ placement }}">
+    {%- form 'localization', id: id, class: 'localization__form' -%}
+      {%- if has_countries -%}
+        {%- assign current_country = localization.country -%}
+        <details class="disclosure" data-disclosure>
+          <summary class="disclosure__button">
+            <span class="visually-hidden">{{ 'localization.country_label' | t }}:</span>
+            {%- if show_flags -%}
+              {{
+                current_country
+                | image_url: width: 40
+                | image_tag: width: 20, height: 14, alt: '', class: 'disclosure__flag', loading: 'lazy'
+              }}
+            {%- endif -%}
+            <span class="disclosure__value">
+              {%- if placement == 'drawer' -%}{{ current_country.name }} ·{% endif %}
+              {{ current_country.currency.iso_code }}
+              {{ current_country.currency.symbol -}}
+            </span>
+            {%- render 'icon', name: 'chevron-down', class: 'disclosure__chevron' -%}
+          </summary>
+
+          <div class="disclosure__panel">
+            <p class="disclosure__heading" aria-hidden="true">{{ 'localization.country_label' | t }}</p>
+            <ul class="disclosure__list" role="list">
+              {%- for country in localization.available_countries -%}
+                <li>
+                  <button
+                    type="submit"
+                    name="country_code"
+                    value="{{ country.iso_code }}"
+                    class="disclosure__option"
+                    {% if country.iso_code == current_country.iso_code %}
+                      aria-current="true"
+                    {% endif %}
+                  >
+                    {%- if show_flags -%}
+                      {{
+                        country
+                        | image_url: width: 40
+                        | image_tag: width: 20, height: 14, alt: '', class: 'disclosure__flag', loading: 'lazy'
+                      }}
+                    {%- endif -%}
+                    <span class="disclosure__label">{{ country.name }}</span>
+                    <span class="disclosure__meta">
+                      {{- country.currency.iso_code }}
+                      {{ country.currency.symbol -}}
+                    </span>
+                    {%- render 'icon', name: 'check', class: 'disclosure__check' -%}
+                  </button>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        </details>
+      {%- endif -%}
+
+      {%- if has_languages -%}
+        <details class="disclosure" data-disclosure>
+          <summary class="disclosure__button">
+            <span class="visually-hidden">{{ 'localization.language_label' | t }}:</span>
+            {%- unless has_countries -%}
+              {%- render 'icon', name: 'globe', class: 'disclosure__globe' -%}
+            {%- endunless -%}
+            <span class="disclosure__value">{{ localization.language.endonym_name | capitalize }}</span>
+            {%- render 'icon', name: 'chevron-down', class: 'disclosure__chevron' -%}
+          </summary>
+
+          <div class="disclosure__panel">
+            <p class="disclosure__heading" aria-hidden="true">{{ 'localization.language_label' | t }}</p>
+            <ul class="disclosure__list" role="list">
+              {%- for language in localization.available_languages -%}
+                <li>
+                  <button
+                    type="submit"
+                    name="language_code"
+                    value="{{ language.iso_code }}"
+                    class="disclosure__option"
+                    lang="{{ language.iso_code }}"
+                    {% if language.iso_code == localization.language.iso_code %}
+                      aria-current="true"
+                    {% endif %}
+                  >
+                    <span class="disclosure__label">{{ language.endonym_name | capitalize }}</span>
+                    {%- render 'icon', name: 'check', class: 'disclosure__check' -%}
+                  </button>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        </details>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+{%- endif -%}

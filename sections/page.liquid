@@ -1,17 +1,56 @@
-{% comment %}
-  This section is used in the page template to render store pages like About us
-  or Contact us.
+{%- comment -%}
+  Whispo — page (main section for page templates such as About or Shipping). Heading and the page content in a
+  readable column; optional width setting. Styles: assets/template-content.css.
+{%- endcomment -%}
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/page
-{% endcomment %}
+{%- comment -%} 1. CSS {%- endcomment -%}
+{{ 'template-content.css' | asset_url | stylesheet_tag }}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{% endstyle %}
 
-<h1>{{ page.title }}</h1>
+{%- comment -%} 2. Liquid {%- endcomment -%}
+<article class="content-page color-{{ section.settings.color_scheme }}">
+  <div class="page-width content-page__inner content-page__inner--{{ section.settings.width }}">
+    <h1 class="content-page__title {{ section.settings.heading_size }}">{{ page.title | escape }}</h1>
+    {%- if page.content != blank -%}
+      <div class="content-page__body rte">{{ page.content }}</div>
+    {%- endif -%}
+  </div>
+</article>
 
-{{ page.content }}
-
+{%- comment -%} 3. Schema {%- endcomment -%}
 {% schema %}
 {
-  "name": "t:general.page",
-  "settings": []
+  "name": "t:sections.main_page.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:sections.main_page.width",
+      "options": [
+        { "value": "narrow", "label": "t:sections.main_page.width_narrow" },
+        { "value": "wide", "label": "t:sections.main_page.width_wide" }
+      ],
+      "default": "narrow"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "t:sections.main_page.heading_size",
+      "options": [
+        { "value": "h2", "label": "t:sections.main_product.blocks.title.size_small" },
+        { "value": "h1", "label": "t:sections.main_product.blocks.title.size_medium" },
+        { "value": "display", "label": "t:sections.main_product.blocks.title.size_large" }
+      ],
+      "default": "h1"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:sections.main_collection.color_scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "t:sections.main_collection.padding_top", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 56 },
+    { "type": "range", "id": "padding_bottom", "label": "t:sections.main_collection.padding_bottom", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 88 }
+  ]
 }
 {% endschema %}

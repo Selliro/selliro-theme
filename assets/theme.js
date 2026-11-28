@@ -6,8 +6,12 @@
  *    (styles in assets/base.css, section 12). Only when <html> has .animations-reveal, and not in the
  *    theme editor or for reduced motion. Add data-animate-order="1" … to stagger siblings.
  *  - Theme editor: newly loaded sections are animated in at once.
+ *  - Loads the dialog behaviour (assets/dialog.js) used by every drawer and modal.
+ *  - Muted looping videos marked video[data-autoplay-visible] download and play only near the screen and
+ *    pause when they leave it (keeps the first screen fast); reduced motion keeps their still poster.
  */
 import { prefersReducedMotion } from '@whispo/utilities';
+import '@whispo/dialog';
 
 const root = document.documentElement;
 root.classList.remove('no-js');
@@ -48,4 +52,37 @@ document.addEventListener('shopify:section:load', (event) => {
   if (event.target instanceof Element) {
     event.target.querySelectorAll('[data-animate]').forEach((el) => el.classList.add('is-in'));
   }
+});
+
+/* --------------------------------------------------------------------------- lazy videos */
+/** @type {IntersectionObserver | null} */
+const videoObserver =
+  'IntersectionObserver' in window
+    ? new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            const video = /** @type {HTMLVideoElement} */ (entry.target);
+            if (entry.isIntersecting && !prefersReducedMotion()) {
+              video.muted = true;
+              video.play().catch(() => {});
+            } else {
+              video.pause();
+            }
+          }
+        },
+        { rootMargin: '200px 0px' }
+      )
+    : null;
+
+/** @param {ParentNode} scope */
+function observeVideos(scope = document) {
+  scope.querySelectorAll('video[data-autoplay-visible]').forEach((video) => {
+    if (videoObserver) videoObserver.observe(video);
+    else if (!prefersReducedMotion()) /** @type {HTMLVideoElement} */ (video).play().catch(() => {});
+  });
+}
+
+observeVideos();
+document.addEventListener('shopify:section:load', (event) => {
+  if (event.target instanceof Element) observeVideos(event.target);
 });

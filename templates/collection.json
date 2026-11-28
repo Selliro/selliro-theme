@@ -9,12 +9,69 @@
  */
 {
   "sections": {
+    "collection_hero": {
+      "type": "collection-hero",
+      "settings": {
+        "use_collection_image": true,
+        "image": "shopify://shop_images/whispo-collection-hero-flatlay.jpg",
+        "height": "medium",
+        "overlay_color": "#000000",
+        "overlay_opacity": 55,
+        "text_color": "#ffffff",
+        "alignment": "left",
+        "vertical_position": "bottom",
+        "title_size": "medium",
+        "rounded_bottom": true,
+        "radius": 28,
+        "show_breadcrumbs": true,
+        "show_description": false,
+        "show_count": false,
+        "quick_links": [
+          "moisturizer",
+          "sunscreen",
+          "frontpage"
+        ],
+        "show_all_link": true,
+        "show_link_counts": true
+      }
+    },
+    "section": {
+      "type": "icons-with-text",
+      "disabled": true,
+      "settings": {
+        "heading": "",
+        "alignment": "center",
+        "icon_size": 72,
+        "color_scheme": "scheme-1",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
     "main": {
-      "type": "collection",
-      "settings": {}
+      "type": "main-collection",
+      "settings": {
+        "show_banner": false,
+        "show_description": true,
+        "show_image": false,
+        "products_per_page": 24,
+        "columns": 4,
+        "columns_mobile": "2",
+        "image_ratio": "0.8",
+        "show_vendor": false,
+        "show_rating": true,
+        "show_quick_add": true,
+        "enable_filtering": true,
+        "filter_layout": "sidebar",
+        "enable_sorting": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 32,
+        "padding_bottom": 80
+      }
     }
   },
   "order": [
+    "collection_hero",
+    "section",
     "main"
   ]
 }

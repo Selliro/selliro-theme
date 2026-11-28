@@ -1,0 +1,154 @@
+/* ==============================================================================
+   Whispo — image banner (sections/image-banner.liquid)
+   Setting values (inline {% style %}): --banner-overlay, --banner-radius, --banner-ratio, --banner-padding-*.
+   Contents: 1. Frame and heights  2. Media and overlay  3. Content positions  4. Text
+   ============================================================================== */
+
+/* 1. Frame and heights */
+.image-banner-section {
+  padding-block: var(--banner-padding-top, 24px) var(--banner-padding-bottom, 24px);
+}
+
+.image-banner {
+  position: relative;
+  display: grid;
+  min-height: var(--banner-height, 32rem);
+  overflow: hidden;
+  border-radius: var(--banner-radius, 16px);
+  isolation: isolate;
+}
+
+.image-banner--small {
+  --banner-height: 24rem;
+}
+
+.image-banner--medium {
+  --banner-height: clamp(28rem, 55vw, 38rem);
+}
+
+.image-banner--large {
+  --banner-height: clamp(32rem, 72vw, 48rem);
+}
+
+.image-banner--full {
+  --banner-height: calc(100svh - var(--header-bottom, 80px));
+}
+
+.image-banner--adapt {
+  --banner-height: 0;
+  aspect-ratio: var(--banner-ratio, 16 / 9);
+}
+
+@media screen and (max-width: 749px) {
+  .image-banner--adapt {
+    aspect-ratio: auto;
+    --banner-height: 28rem;
+  }
+}
+
+/* 2. Media and overlay */
+.image-banner__media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  border-radius: 0;
+}
+
+.image-banner__media :is(img, video, svg) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-banner__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgb(0 0 0 / var(--banner-overlay, 0.35));
+  pointer-events: none;
+}
+
+/* 3. Content positions */
+.image-banner__content {
+  display: flex;
+  padding: clamp(1.75rem, 5vw, 4.5rem);
+}
+
+.image-banner[class*='--top-'] .image-banner__content {
+  align-items: flex-start;
+}
+
+.image-banner[class*='--middle-'] .image-banner__content {
+  align-items: center;
+}
+
+.image-banner[class*='--bottom-'] .image-banner__content {
+  align-items: flex-end;
+}
+
+.image-banner[class*='-center'] .image-banner__content {
+  justify-content: center;
+  text-align: center;
+}
+
+.image-banner[class*='-right'] .image-banner__content {
+  justify-content: flex-end;
+}
+
+/* 4. Text */
+.image-banner__text {
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+  max-width: 40rem;
+}
+
+.image-banner[class*='-center'] .image-banner__text {
+  justify-items: center;
+}
+
+.image-banner--light {
+  color: #fff;
+}
+
+.image-banner--light .image-banner__heading {
+  color: #fff;
+}
+
+.image-banner__eyebrow {
+  font-size: var(--text-xs);
+  font-weight: var(--font-body-weight-bold);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.image-banner__heading {
+  margin: 0;
+  text-wrap: balance;
+}
+
+.image-banner__body {
+  max-width: 34rem;
+  font-size: var(--text-lg);
+}
+
+.image-banner__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.image-banner--light .image-banner__button:not(.button--secondary) {
+  --button-bg: #fff;
+  --button-fg: #111;
+  --button-border: #fff;
+}
+
+.image-banner--light .image-banner__button.button--secondary {
+  --button-bg: transparent;
+  --button-fg: #fff;
+  --button-border: rgb(255 255 255 / 0.85);
+}

@@ -1,0 +1,109 @@
+{% comment %}
+  Single review card for the Client trust testimonials section.
+  @param block
+  @param star_color
+  @param [show_shopify_attributes] — pass true only once per block (mobile stack) so marquee duplicates do not repeat editor attributes
+{% endcomment %}
+{%- liquid
+  assign stars = block.settings.rating | default: 5 | plus: 0
+  if stars > 5
+    assign stars = 5
+  elsif stars < 1
+    assign stars = 5
+  endif
+  assign verified = block.settings.verified_label | default: 'Verified Buyer'
+  assign star_c = star_color | default: '#e6b800'
+
+  assign footer_title = block.settings.product_title
+  assign footer_url = block.settings.product_link
+  assign footer_image = block.settings.product_image
+  if block.settings.product != blank
+    assign linked_product = block.settings.product
+    if footer_title == blank
+      assign footer_title = linked_product.title
+    endif
+    if footer_url == blank
+      assign footer_url = linked_product.url
+    endif
+    if footer_image == blank and linked_product.featured_image != blank
+      assign footer_image = linked_product.featured_image
+    endif
+  endif
+-%}
+<article class="client-trust-testimonial-card"{% if show_shopify_attributes %} {{ block.shopify_attributes }}{% endif %}>
+  <div class="client-trust-testimonial-card__header">
+    <div class="client-trust-testimonial-card__avatar">
+      {%- if block.settings.avatar != blank -%}
+        {{
+          block.settings.avatar
+          | image_url: width: 120
+          | image_tag:
+            loading: 'lazy',
+            class: 'client-trust-testimonial-card__avatar-image',
+            widths: '60, 120',
+            alt: block.settings.name
+        }}
+      {%- else -%}
+        <span class="client-trust-testimonial-card__avatar-placeholder" aria-hidden="true">
+          <svg
+            class="client-trust-testimonial-card__avatar-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            focusable="false"
+            aria-hidden="true"
+          >
+            <path
+      d="M12.5 12.0391H7.5C4.46243 12.0391 2 14.5484 2 17.6437V18.481H18V17.6437C18 14.5484 15.5376 12.0391 12.5 12.0391ZM7.5 11.0201C3.91015 11.0201 1 13.9856 1 17.6437V19.5H19V17.6437C19 13.9856 16.0899 11.0201 12.5 11.0201H7.5Z"
+      fill-rule="evenodd"
+    />
+    <path d="M14.3596 5.08556C14.3596 7.6181 12.3448 9.67113 9.85956 9.67113C7.37428 9.67113 5.35956 7.6181 5.35956 5.08556C5.35956 2.55303 7.37428 0.5 9.85956 0.5C12.3448 0.5 14.3596 2.55303 14.3596 5.08556ZM9.85956 8.65211C11.7926 8.65211 13.3596 7.05532 13.3596 5.08556C13.3596 3.11581 11.7926 1.51901 9.85956 1.51901C7.92656 1.51901 6.35956 3.11581 6.35956 5.08556C6.35956 7.05532 7.92656 8.65211 9.85956 8.65211Z" />
+          </svg>
+        </span>
+      {%- endif -%}
+    </div>
+    <div class="client-trust-testimonial-card__identity">
+      {%- if block.settings.name != blank -%}
+        <p class="client-trust-testimonial-card__name">{{ block.settings.name | escape }}</p>
+      {%- endif -%}
+      {%- if verified != blank -%}
+        <p class="client-trust-testimonial-card__verified">{{ verified | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="client-trust-testimonial-card__stars" style="--client-trust-star-color: {{ star_c }};" aria-hidden="true">
+    {%- for i in (1..5) -%}
+      <span class="client-trust-testimonial-card__star{% if i <= stars %} is-active{% endif %}">★</span>
+    {%- endfor -%}
+  </div>
+  {%- if block.settings.quote != blank -%}
+    <div class="client-trust-testimonial-card__quote rte">{{ block.settings.quote }}</div>
+  {%- endif -%}
+  <hr class="client-trust-testimonial-card__divider" />
+  {%- if footer_title != blank or footer_image != blank -%}
+    <div class="client-trust-testimonial-card__product">
+      {%- if footer_url != blank -%}
+        <a class="client-trust-testimonial-card__product-link" href="{{ footer_url }}">
+      {%- endif -%}
+      {%- if footer_image != blank -%}
+        <div class="client-trust-testimonial-card__product-thumbnail">
+          {{
+            footer_image
+            | image_url: width: 120
+            | image_tag:
+              loading: 'lazy',
+              class: 'client-trust-testimonial-card__product-image',
+              widths: '60, 120',
+              alt: footer_title
+          }}
+        </div>
+      {%- endif -%}
+      {%- if footer_title != blank -%}
+        <span class="client-trust-testimonial-card__product-title">{{ footer_title | escape }}</span>
+      {%- endif -%}
+      {%- if footer_url != blank -%}
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</article>

@@ -1,0 +1,502 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "story_hero": {
+      "type": "image-banner",
+      "blocks": {
+        "eyebrow": {
+          "type": "eyebrow",
+          "settings": {
+            "text": "Our story"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Skincare rooted in nature,\nmade with honesty.",
+            "size": "h1"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Whispo began with one simple belief: what you put on your skin should be as kind as what you put in your body. Six years on, that belief still shapes every bottle we make.</p>"
+          }
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {
+            "label_1": "Shop the collection",
+            "link_1": "shopify://collections/all",
+            "label_2": "Our journey",
+            "link_2": "/pages/our-story#our-journey"
+          }
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "heading",
+        "text",
+        "buttons"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/story-studio-hero.jpg",
+        "image_mobile": "shopify://shop_images/whispo-banner-kind-mobile.jpg",
+        "video": "shopify://files/videos/1103779_1080p_4k_1280x720.mp4",
+        "height": "full",
+        "content_position": "bottom-center",
+        "overlay_opacity": 40,
+        "text_light": true,
+        "full_width": true,
+        "color_scheme": "scheme-5",
+        "padding_top": 24,
+        "padding_bottom": 24
+      }
+    },
+    "story_beginning": {
+      "type": "image-text-collage",
+      "blocks": {
+        "f_plant": {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "sprout",
+            "title": "100% plant-powered actives"
+          }
+        },
+        "f_batch": {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "droplet",
+            "title": "Hand-poured in small batches"
+          }
+        },
+        "f_kind": {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "heart",
+            "title": "Cruelty-free, always"
+          }
+        },
+        "f_safe": {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "shield",
+            "title": "Dermatologist tested"
+          }
+        }
+      },
+      "block_order": [
+        "f_plant",
+        "f_batch",
+        "f_kind",
+        "f_safe"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "background_color": "#f7f3ec",
+        "background_image_show_mobile": true,
+        "background_image_fit": "cover",
+        "background_image_position": "focal",
+        "background_overlay_color": "#000000",
+        "background_overlay_opacity": 0,
+        "pattern_color": "#4c9a47",
+        "pattern_opacity": 60,
+        "pattern_fit": "cover",
+        "section_width": "page-width",
+        "media_position": "left",
+        "mobile_media_position": "top",
+        "media_column_width": 48,
+        "column_gap": 72,
+        "content_vertical_alignment": "center",
+        "content_max_width": 560,
+        "design": "mosaic",
+        "collage_layout": "stack",
+        "collage_ratio": 118,
+        "image_radius": 16,
+        "image_shadow": true,
+        "image_hover": "lift",
+        "image_1": "shopify://shop_images/story-small-batch.jpg",
+        "image_1_rotation": 2,
+        "image_1_width": 76,
+        "image_1_height": 40,
+        "image_1_zindex": 4,
+        "image_1_top": 0,
+        "image_1_right": 0,
+        "image_1_bottom": -1,
+        "image_1_left": -1,
+        "image_2": "shopify://shop_images/story-greenhouse.jpg",
+        "image_2_rotation": -3,
+        "image_2_width": 68,
+        "image_2_height": 72,
+        "image_2_zindex": 3,
+        "image_2_top": 32,
+        "image_2_right": -1,
+        "image_2_bottom": -1,
+        "image_2_left": 0,
+        "image_3": "shopify://shop_images/story-formulation-lab.jpg",
+        "image_3_rotation": 3,
+        "image_3_width": 48,
+        "image_3_height": 50,
+        "image_3_zindex": 3,
+        "image_3_top": 60,
+        "image_3_right": 3,
+        "image_3_bottom": 0,
+        "image_3_left": -1,
+        "show_subtitle": true,
+        "subtitle": "Where it began",
+        "heading": "It started at a kitchen table with a jar of rosehip oil",
+        "heading_size": "medium",
+        "heading_weight": "700",
+        "heading_max_width": 20,
+        "show_description": true,
+        "description": "<p>Frustrated by long ingredient lists she couldn't pronounce, our founder began blending botanicals at home for her own sensitive skin. Friends asked for a jar, then their friends did too. Today our tiny studio still follows the same rule: if we wouldn't use it ourselves, it never leaves the lab.</p>",
+        "description_size": "medium",
+        "show_feature_grid": true,
+        "feature_columns": "2",
+        "feature_icon_style": "outline",
+        "feature_icon_size": 56,
+        "feature_icon_color": "",
+        "feature_label_size": 17,
+        "show_cta": true,
+        "button_label": "Meet our ingredients",
+        "button_link": "shopify://collections/all",
+        "button_new_tab": false,
+        "button_style": "filled",
+        "btn_bg": "#f5c518",
+        "btn_fg": "#111111",
+        "btn_hover_bg": "#ddb015",
+        "show_badge": true,
+        "badge_text": "Est. 2019 ~ Small batch ~ Plant powered",
+        "badge_link": "",
+        "badge_bg": "#fad02c",
+        "badge_fg": "#1a1a1a",
+        "badge_inner_color": "#ffffff",
+        "badge_inner_style": "dashed",
+        "badge_speed": 14,
+        "badge_pause_hover": true,
+        "badge_size": 26,
+        "badge_top": 88,
+        "badge_left": 86,
+        "hide_badge_mobile": false,
+        "padding_top": 96,
+        "padding_bottom": 96,
+        "badge_separator": "sparkle",
+        "badge_font": "outfit_n6",
+        "badge_center": "arrow",
+        "badge_outline": true
+      }
+    },
+    "story_values_ticker": {
+      "type": "ticker-duo",
+      "blocks": {
+        "ticker_row_G9yKcm": {
+          "type": "ticker_row",
+          "settings": {
+            "text": "Clean formulas  •  Kind to skin  •  Kind to the planet  •  Made in small batches",
+            "textarea": "",
+            "type_preset": "custom",
+            "font": "var(--font-body)",
+            "font_size": "1.5rem",
+            "line_height": "tight",
+            "letter_spacing": "tight",
+            "case": "none",
+            "wrap": "balance",
+            "icon": "shopify://shop_images/whispo-ticker-sparkle.png",
+            "direction": "forward",
+            "speed": 24,
+            "padding_top": 24,
+            "padding_bottom": 24,
+            "rotation": 1,
+            "color_scheme": "scheme-2"
+          }
+        },
+        "ticker_row_inztn9": {
+          "type": "ticker_row",
+          "settings": {
+            "text": "No parabens  •  No sulfates  •  No synthetic fragrance  •  Never tested on animals  •  Recyclable glass",
+            "textarea": "",
+            "type_preset": "rte",
+            "font": "var(--font-body)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "direction": "reverse",
+            "speed": 52,
+            "padding_top": 24,
+            "padding_bottom": 24,
+            "rotation": -1,
+            "color_scheme": "scheme-4"
+          }
+        }
+      },
+      "block_order": [
+        "ticker_row_G9yKcm",
+        "ticker_row_inztn9"
+      ],
+      "settings": {
+        "layout": "tilted",
+        "padding_top": 8,
+        "padding_bottom": 8,
+        "row_gap": 6,
+        "section_width": "full-width",
+        "color_scheme": "scheme-3",
+        "scroll_boost": true,
+        "scroll_boost_strength": 10,
+        "scroll_up_behavior": "reverse"
+      }
+    },
+    "story_timeline": {
+      "type": "timeline",
+      "blocks": {
+        "y2019": {
+          "type": "milestone",
+          "settings": {
+            "image": "shopify://shop_images/story-mortar-botanicals.jpg",
+            "label": "2019",
+            "heading": "A kitchen-table beginning",
+            "text": "<p>The first Whispo balm is blended by hand in a home kitchen — six ingredients, no fillers, and a waiting list of friends by the end of the month.</p>",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "y2020": {
+          "type": "milestone",
+          "settings": {
+            "image": "shopify://shop_images/whispo-story-test-batches.jpg",
+            "label": "2020",
+            "heading": "Our first serum, perfected",
+            "text": "<p>After 40+ test batches with dermatologists, our Brightening Vitamin C Serum launches — and sells out in three weeks.</p>",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "y2022": {
+          "type": "milestone",
+          "settings": {
+            "image": "shopify://shop_images/story-flower-field.jpg",
+            "label": "2022",
+            "heading": "Partnering with small farms",
+            "text": "<p>We begin sourcing chamomile, calendula and rosehip directly from family-run organic farms, paying fairly and planting more than we harvest.</p>",
+            "button_label": "",
+            "button_link": ""
+          }
+        },
+        "y2025": {
+          "type": "milestone",
+          "settings": {
+            "image": "shopify://shop_images/whispo-story-morning-ritual.jpg",
+            "label": "Today",
+            "heading": "A ritual for 12,000+ people",
+            "text": "<p>Still independent and still made in small batches, Whispo is now part of thousands of morning and evening routines around the world.</p>",
+            "button_label": "Shop the collection",
+            "button_link": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "y2019",
+        "y2020",
+        "y2022",
+        "y2025"
+      ],
+      "settings": {
+        "eyebrow": "Our journey",
+        "heading": "From one jar to a daily ritual",
+        "text": "<p>A few milestones that shaped who we are — scroll through the story.</p>",
+        "layout": "horizontal",
+        "media_position": "left",
+        "image_height": 360,
+        "image_height_mobile": 240,
+        "show_numbers": true,
+        "show_card": true,
+        "card_color": "#f7f3ec",
+        "radius": 24,
+        "accent_color": "#f8d12f",
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "anchor_id": "our-journey",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "story_promises": {
+      "type": "icons-with-text",
+      "blocks": {
+        "item_1": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/text_with_icon_img1.png",
+            "icon": "none",
+            "heading": "Natural ingredients",
+            "text": "Botanicals grown on small organic farms, chosen for how well they work.",
+            "link": ""
+          }
+        },
+        "item_2": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/text_with_icon_img2.png",
+            "icon": "none",
+            "heading": "Fragrance free",
+            "text": "No synthetic perfumes — just the gentle, natural scent of the plants.",
+            "link": ""
+          }
+        },
+        "item_3": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/text_with_icon_img3.png",
+            "icon": "none",
+            "heading": "Allergy tested",
+            "text": "Every formula is patch tested on sensitive skin before it reaches you.",
+            "link": ""
+          }
+        },
+        "item_4": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/text_with_icon_img4.png",
+            "icon": "none",
+            "heading": "Paraben free",
+            "text": "Clean preservation systems that keep formulas fresh, safely.",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4"
+      ],
+      "settings": {
+        "heading": "",
+        "alignment": "center",
+        "icon_size": 72,
+        "color_scheme": "scheme-3",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "story_glance": {
+      "type": "pdp-specs",
+      "blocks": {
+        "row_0": {
+          "type": "row",
+          "settings": {
+            "label": "Founded",
+            "value": "2019, in a home kitchen",
+            "indent": false
+          }
+        },
+        "row_1": {
+          "type": "row",
+          "settings": {
+            "label": "Ingredients",
+            "value": "100% plant-powered, traceable actives",
+            "indent": false
+          }
+        },
+        "row_2": {
+          "type": "row",
+          "settings": {
+            "label": "Made",
+            "value": "Hand-poured in small batches",
+            "indent": false
+          }
+        },
+        "row_3": {
+          "type": "row",
+          "settings": {
+            "label": "Testing",
+            "value": "Dermatologist tested, never on animals",
+            "indent": false
+          }
+        },
+        "row_4": {
+          "type": "row",
+          "settings": {
+            "label": "Packaging",
+            "value": "Recyclable glass & refill pouches",
+            "indent": false
+          }
+        },
+        "row_5": {
+          "type": "row",
+          "settings": {
+            "label": "Giving back",
+            "value": "1% of every order to reforestation",
+            "indent": false
+          }
+        }
+      },
+      "block_order": [
+        "row_0",
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4",
+        "row_5"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/story-ingredients-flatlay.jpg",
+        "image_position": "right",
+        "show_stars": true,
+        "eyebrow": "Made with care",
+        "heading": "Whispo at a glance",
+        "text": "<p>Everything we make is guided by the same promises we made on day one.</p>",
+        "note": "Certified clean formulas. Free from parabens, sulfates and synthetic fragrance.",
+        "card_background": "#f7f3ec",
+        "card_text": "#2a2118",
+        "radius": 20,
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "story_reveal": {
+      "type": "reveal-image",
+      "settings": {
+        "media_type": "image",
+        "image": "shopify://shop_images/story-herb-farm.jpg",
+        "video_url": "",
+        "heading": "Grown slowly. Made with care.",
+        "subheading": "Every ingredient is traceable to the farm it came from — because good skincare starts long before the bottle.",
+        "button_label": "Explore the collection",
+        "button_url": "shopify://collections/all",
+        "button_style": "outline_light",
+        "text_position": "center",
+        "text_vertical": "middle",
+        "scroll_distance": 800,
+        "start_inset": 30,
+        "start_inset_h": 30,
+        "overlay_opacity": 30,
+        "border_radius_start": 20,
+        "border_radius_end": 0,
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "story_hero",
+    "story_beginning",
+    "story_values_ticker",
+    "story_timeline",
+    "story_promises",
+    "story_glance",
+    "story_reveal"
+  ]
+}

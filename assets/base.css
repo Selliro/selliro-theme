@@ -24,6 +24,14 @@
     10. Media
     11. Utilities (visually hidden, skip link)
     12. Scroll-in animation and reduced motion
+    13. Dialogs, drawers and modals (assets/dialog.js)
+    14. Icons and counters
+    15. Social icons
+    16. Quantity input
+    17. Price and badges
+    18. Pagination
+    19. Newsletter form (footer, password page, newsletter sections)
+    20. Helpers for the ported Selliro sections
    ============================================================================== */
 
 /* ==============================================================================
@@ -294,13 +302,16 @@ b {
    .section      vertical spacing between sections (Theme settings → Layout)
    .grid         simple responsive grid: --grid-columns, --grid-columns-mobile, --grid-gap
    ============================================================================== */
+/* The side margin is padding, so sections may give the element width: 100% or a background */
 .page-width {
-  width: min(calc(var(--page-width) - var(--page-margin) * 2), calc(100% - var(--page-margin) * 2));
+  width: 100%;
+  max-width: var(--page-width);
   margin-inline: auto;
+  padding-inline: var(--page-margin);
 }
 
 .page-width--full {
-  width: calc(100% - var(--page-margin) * 2);
+  max-width: none;
 }
 
 .section {
@@ -568,7 +579,11 @@ input[type='radio'] {
 :focus-visible {
   outline: 2px solid var(--color-text);
   outline-offset: 3px;
-  border-radius: 4px;
+}
+
+/* Headings that receive focus when a drawer opens don't need a ring */
+[tabindex='-1']:focus-visible:is(h1, h2, h3) {
+  outline: none;
 }
 
 .button:focus-visible {
@@ -675,4 +690,527 @@ input[type='radio'] {
     opacity: 1 !important;
     translate: none !important;
   }
+}
+
+/* ==============================================================================
+   13. Dialogs, drawers and modals
+   Native <dialog class="dialog"> opened by assets/dialog.js. The visible box is .dialog__panel; the
+   <dialog> itself is only the positioning frame, so a click outside the panel lands on the backdrop.
+     .drawer.drawer--left / .drawer--right   full-height side panel
+     .modal                                  panel that drops in from the top (search)
+   [data-closing] plays the exit animation before the dialog closes.
+   ============================================================================== */
+html.has-dialog {
+  overflow: hidden;
+}
+
+.dialog {
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  overflow: visible;
+}
+
+.dialog::backdrop {
+  background: rgb(15 15 15 / 0.45);
+  backdrop-filter: blur(2px);
+  animation: dialog-fade-in 0.3s ease both;
+}
+
+.dialog[data-closing]::backdrop {
+  animation: dialog-fade-out 0.28s ease both;
+}
+
+.dialog__panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: var(--gradient-background, var(--color-background));
+  color: var(--color-text);
+}
+
+.dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem var(--page-margin);
+  border-bottom: 1px solid rgb(var(--color-border-rgb) / 1);
+}
+
+/* Drawers */
+.drawer {
+  --drawer-width: 26rem;
+
+  inset: 0 auto 0 0;
+  width: min(var(--drawer-width), calc(100vw - 2.5rem));
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+}
+
+.drawer--right {
+  inset: 0 0 0 auto;
+}
+
+.drawer[open] .dialog__panel {
+  animation: drawer-in-left 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.drawer--right[open] .dialog__panel {
+  animation-name: drawer-in-right;
+}
+
+.drawer[data-closing] .dialog__panel {
+  animation: drawer-out-left 0.3s cubic-bezier(0.55, 0, 0.75, 0.2) both;
+}
+
+.drawer--right[data-closing] .dialog__panel {
+  animation-name: drawer-out-right;
+}
+
+/* Modal from the top */
+.modal {
+  inset: 0 0 auto;
+  width: 100%;
+  margin: 0;
+}
+
+.modal .dialog__panel {
+  height: auto;
+  max-height: min(100dvh, 46rem);
+  border-radius: 0 0 var(--radius-card) var(--radius-card);
+  box-shadow: 0 24px 60px -30px rgb(0 0 0 / 0.35);
+}
+
+.modal[open] .dialog__panel {
+  animation: modal-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.modal[data-closing] .dialog__panel {
+  animation: modal-out 0.26s ease-in both;
+}
+
+@keyframes dialog-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes drawer-in-left {
+  from {
+    translate: -100% 0;
+  }
+}
+
+@keyframes drawer-out-left {
+  to {
+    translate: -100% 0;
+  }
+}
+
+@keyframes drawer-in-right {
+  from {
+    translate: 100% 0;
+  }
+}
+
+@keyframes drawer-out-right {
+  to {
+    translate: 100% 0;
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    translate: 0 -1.5rem;
+  }
+}
+
+@keyframes modal-out {
+  to {
+    opacity: 0;
+    translate: 0 -1rem;
+  }
+}
+
+/* ==============================================================================
+   14. Icons and counters
+   snippets/icon.liquid draws 1em icons, so they follow the font size of their button or link.
+   ============================================================================== */
+.icon {
+  flex: none;
+  width: 1em;
+  height: 1em;
+}
+
+.icon-button .icon {
+  width: 22px;
+  height: 22px;
+}
+
+/* ==============================================================================
+   15. Social icons (snippets/social-icons.liquid)
+   ============================================================================== */
+.social-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.social-icons__link {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgb(var(--color-text-rgb) / 0.25);
+  border-radius: 50%;
+  color: inherit;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.social-icons__link:hover {
+  border-color: var(--color-text);
+  background: var(--color-text);
+  color: var(--color-background);
+}
+
+.social-icons__link .icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* ==============================================================================
+   16. Quantity input (snippets/quantity-input.liquid)
+   ============================================================================== */
+.quantity {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--button-height);
+  border: 1px solid rgb(var(--color-input-text-rgb) / 0.22);
+  border-radius: var(--radius-button);
+  background: var(--color-input);
+  color: var(--color-input-text);
+}
+
+.quantity__button {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.quantity__button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.quantity__button .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.quantity__input {
+  width: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-weight: var(--font-body-weight-bold);
+  text-align: center;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.quantity__input::-webkit-outer-spin-button,
+.quantity__input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.quantity__input:focus-visible {
+  outline: none;
+}
+
+.quantity:focus-within {
+  border-color: var(--color-input-text);
+}
+
+.quantity--small {
+  min-height: 38px;
+}
+
+.quantity--small .quantity__button {
+  width: 34px;
+  min-height: 36px;
+}
+
+.quantity--small .quantity__input {
+  width: 2rem;
+  font-size: var(--text-sm);
+}
+
+/* ==============================================================================
+   17. Price and badges (snippets/price.liquid)
+   ============================================================================== */
+.price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15rem 0.6rem;
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1.3;
+}
+
+.price--large {
+  font-size: var(--text-xl);
+}
+
+.price--large .price__current {
+  font-size: calc(var(--text-xl) * 1.15);
+}
+
+.price__compare {
+  color: rgb(var(--color-text-rgb) / 0.7);
+  font-weight: var(--font-body-weight);
+  font-size: 0.9em;
+}
+
+.price__unit {
+  flex-basis: 100%;
+  color: rgb(var(--color-text-rgb) / 0.7);
+  font-size: var(--text-xs);
+  font-weight: var(--font-body-weight);
+}
+
+.price--sold-out .price__current {
+  color: rgb(var(--color-text-rgb) / 0.6);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 0.6rem;
+  border-radius: 999px;
+  font-size: var(--text-xs);
+  font-weight: var(--font-body-weight-bold);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.badge--sale {
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+.badge--sold-out {
+  background: rgb(var(--color-text-rgb) / 0.1);
+  color: var(--color-text);
+}
+
+/* ==============================================================================
+   18. Pagination (snippets/pagination.liquid)
+   ============================================================================== */
+.pagination {
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+}
+
+.pagination__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pagination__item {
+  display: inline-grid;
+  place-items: center;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 0.6rem;
+  border-radius: 999px;
+  color: inherit;
+  font-weight: var(--font-body-weight-bold);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+a.pagination__item:hover {
+  background: rgb(var(--color-text-rgb) / 0.07);
+}
+
+.pagination__item--current {
+  background: var(--color-button);
+  color: var(--color-button-text);
+}
+
+.pagination__item .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.pagination__item--gap {
+  min-width: 24px;
+}
+
+/* ==============================================================================
+   19. Newsletter form: one pill field with the button inside
+   ============================================================================== */
+.newsletter-form__field {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem;
+  border: 1px solid rgb(var(--color-text-rgb) / 0.28);
+  border-radius: calc(var(--radius-button) + 0.35rem);
+  background: rgb(var(--color-text-rgb) / 0.04);
+  transition: border-color 0.2s ease;
+}
+
+.newsletter-form__field:focus-within {
+  border-color: var(--color-text);
+}
+
+.newsletter-form__input {
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border: 0;
+  background: none;
+  color: var(--color-text);
+}
+
+.newsletter-form__input::placeholder {
+  color: rgb(var(--color-text-rgb) / 0.6);
+}
+
+.newsletter-form__input:focus-visible {
+  outline: none;
+}
+
+.newsletter-form__button {
+  flex: none;
+  min-height: 46px;
+}
+
+.newsletter-form__message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  font-size: var(--text-sm);
+}
+
+.newsletter-form__message--success {
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-input);
+  background: rgb(var(--color-text-rgb) / 0.08);
+  color: var(--color-text);
+}
+
+/* ==============================================================================
+   20. Helpers for the ported Selliro sections (store locator, bundle builder, timeline …)
+   Small utilities those sections' markup relies on.
+   ============================================================================== */
+/* Full-bleed color layer behind a section's content */
+.section-background {
+  position: absolute;
+  inset: 0;
+  z-index: var(--layer-section-background);
+  pointer-events: none;
+}
+
+.shopify-section:has(> .section-background),
+:where(.shopify-section) :has(> .section-background) {
+  position: relative;
+  isolation: isolate;
+}
+
+.section-container {
+  width: 100%;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--page-margin);
+}
+
+/* Secondary button for markup that uses the single class */
+.button-secondary:not(.button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: var(--button-height);
+  padding: 0 1.6em;
+  border: 1.5px solid var(--color-secondary-button-text);
+  border-radius: var(--radius-button);
+  background: var(--color-secondary-button);
+  color: var(--color-secondary-button-text);
+  font-weight: var(--font-body-weight-bold);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button-unstyled {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.svg-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: currentColor;
+  pointer-events: none;
+}
+
+.svg-wrapper svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Touch targets: at least 24 x 24px for small text links in these sections (WCAG 2.2) */
+:is(.pstory__product-title, .pstory__link, .b2b__account-link, .b2b__text-link, .featured-blog-posts-v2__read-more, .featured-blog-posts-v2__view-all, .pdp-pair__title, .product-card__link, .pair-with__title, .new-arrivals-card__title a, .featured-collection-grid__card-title a, .tl__link) {
+  padding-block: 3px;
+  margin-block: -3px;
+}
+
+.ch__crumbs a {
+  padding-inline: 4px;
+  margin-inline: -4px;
 }

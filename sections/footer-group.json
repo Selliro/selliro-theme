@@ -13,9 +13,67 @@
   "sections": {
     "footer": {
       "type": "footer",
+      "blocks": {
+        "brand": {
+          "type": "brand",
+          "settings": {
+            "use_theme_logo": true,
+            "logo": "",
+            "text": "<p>Skincare powered by botanicals and backed by science, for healthy, radiant skin you can feel good about.</p>",
+            "show_social": true
+          }
+        },
+        "menu_company": {
+          "type": "menu",
+          "settings": {
+            "heading": "Company",
+            "menu": "company"
+          }
+        },
+        "menu_collection": {
+          "type": "menu",
+          "settings": {
+            "heading": "Collection",
+            "menu": "footer-collection"
+          }
+        },
+        "menu_explore": {
+          "type": "menu",
+          "settings": {
+            "heading": "Explore",
+            "menu": "footer-explore"
+          }
+        },
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Never miss a beat. Subscribe to our weekly newsletter.",
+            "text": "<p>New launches, routines and member-only offers, once a week.</p>",
+            "button_label": "Subscribe",
+            "note": "<p>By subscribing you agree to receive marketing emails. Unsubscribe at any time.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "brand",
+        "menu_company",
+        "menu_collection",
+        "menu_explore",
+        "newsletter"
+      ],
       "settings": {
-        "menu": "",
-        "show_payment_icons": true
+        "reveal": true,
+        "logo_width": 140,
+        "show_country": true,
+        "show_language": true,
+        "show_payment_icons": true,
+        "show_policies": true,
+        "show_back_to_top": true,
+        "show_powered_by": false,
+        "color_scheme": "scheme-5",
+        "bottom_color_scheme": "scheme-4",
+        "padding_top": 72,
+        "padding_bottom": 64
       }
     }
   },

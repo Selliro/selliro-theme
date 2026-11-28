@@ -1,0 +1,869 @@
+/* ==============================================================================
+   Whispo — theme features (sections/theme-features.liquid)
+   Moved out of the section's {% stylesheet %} block so it loads only on pages that use the section.
+   ============================================================================== */
+
+.tf {
+  --tf-line: color-mix(in srgb, var(--color-text) 11%, transparent);
+  --tf-soft: color-mix(in srgb, var(--color-text) 5%, transparent);
+  --tf-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  padding-block: var(--tf-pad-top) var(--tf-pad-bottom);
+}
+
+/* ---------------------------------------------------------------- hero */
+.tf__hero {
+  display: grid;
+  justify-items: center;
+  max-width: 52rem;
+  margin: 0 auto clamp(2.5rem, 6vw, 4.5rem);
+  text-align: center;
+}
+
+.tf__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 1.1rem;
+  padding: 0.45rem 0.95rem;
+  border: 1px solid var(--tf-line);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.tf__eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--tf-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--tf-accent) 30%, transparent);
+}
+
+.tf__heading {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  font-weight: var(--section-title-weight, 600);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.tf__hl {
+  position: relative;
+  display: inline-block;
+  z-index: 0;
+}
+
+.tf__hl::after {
+  content: '';
+  position: absolute;
+  inset: 58% -0.08em 0.06em;
+  z-index: -1;
+  border-radius: 0.2em;
+  background: var(--tf-accent);
+  transform: skewX(-8deg);
+}
+
+.tf__intro {
+  max-width: 38rem;
+  margin-top: 1.1rem;
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  opacity: 0.75;
+}
+
+.tf__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.tf__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tf__stats {
+  display: grid;
+  grid-template-columns: repeat(var(--tf-stats, 4), minmax(0, 1fr));
+  gap: 0;
+  width: 100%;
+  margin: clamp(2rem, 4vw, 3rem) 0 0;
+  border: 1px solid var(--tf-line);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.tf__stat {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.2rem;
+  margin: 0;
+  padding: 1.1rem 0.75rem;
+}
+
+.tf__stat + .tf__stat {
+  border-inline-start: 1px solid var(--tf-line);
+}
+
+.tf__stat-value {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.tf__stat-label {
+  font-size: 0.8rem;
+  opacity: 0.65;
+}
+
+
+/* ---------------------------------------------------------------- hero image (centered style) */
+.tf__hero-media {
+  width: 100%;
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.tf__hero-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------------------------------------------------------------- banner hero */
+.tf__hero--banner,
+.tf__hero--background {
+  max-width: none;
+  justify-items: stretch;
+  text-align: start;
+}
+
+.tf__banner {
+  --tf-banner: #161616;
+  --tf-banner-pad: clamp(1.75rem, 5vw, 4.5rem);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  min-height: clamp(26rem, 44vw, 38rem);
+  padding: var(--tf-banner-pad);
+  padding-bottom: 0;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: calc(var(--tf-radius) + 10px);
+  background: var(--tf-banner);
+}
+
+.tf__banner--dark {
+  color: #fff;
+}
+
+.tf__banner--light {
+  color: #161616;
+}
+
+.tf__banner-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(55% 70% at 85% 30%, color-mix(in srgb, var(--tf-accent) 38%, transparent), transparent 70%),
+    radial-gradient(40% 50% at 0% 100%, color-mix(in srgb, var(--tf-accent) 18%, transparent), transparent 70%);
+  pointer-events: none;
+}
+
+.tf__banner-copy {
+  position: relative;
+  align-self: center;
+  padding-bottom: var(--tf-banner-pad);
+}
+
+.tf__banner .tf__eyebrow {
+  border-color: currentColor;
+  border-color: color-mix(in srgb, currentColor 30%, transparent);
+}
+
+.tf__banner .tf__heading {
+  color: inherit;
+  font-size: clamp(2.2rem, 4.6vw, 4rem);
+}
+
+.tf__banner .tf__hl::after {
+  opacity: 0.95;
+}
+
+/* On dark banners the highlighted words take the accent color over a slim underline (a half-height bar
+   behind dark text would leave the top of the letters unreadable) */
+.tf__banner--dark .tf__hl {
+  color: var(--tf-accent);
+}
+
+.tf__banner--dark .tf__hl::after,
+.tf__hero--background .tf__hl::after {
+  inset: auto -0.02em -0.02em;
+  height: 0.09em;
+  border-radius: 999px;
+  transform: none;
+}
+
+.tf__hero--background .tf__hl {
+  color: var(--tf-accent);
+}
+
+.tf__banner .tf__intro {
+  margin-inline: 0;
+  opacity: 0.8;
+}
+
+.tf__banner .tf__buttons {
+  justify-content: flex-start;
+}
+
+.tf__banner--dark .tf__btn--primary {
+  --button-background-color: var(--tf-accent);
+  --button-border-color: var(--tf-accent);
+  --button-color: #111;
+}
+
+.tf__banner--dark .tf__btn--ghost {
+  --button-color: #fff;
+  --button-background-color: transparent;
+  --button-border-color: rgb(255 255 255 / 0.55);
+  border: 1px solid rgb(255 255 255 / 0.55);
+}
+
+.tf__banner--dark .tf__btn--ghost:hover {
+  --button-background-color: rgb(255 255 255 / 0.12);
+}
+
+/* The image rises from the bottom edge of the banner */
+.tf__banner-media {
+  position: relative;
+  align-self: end;
+  margin-right: calc(var(--tf-banner-pad) * -0.6);
+}
+
+.tf__banner-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  translate: 0 4%;
+  filter: drop-shadow(0 30px 50px rgb(0 0 0 / 0.35));
+  animation: tf-rise 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.tf__banner--media-left {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+}
+
+.tf__banner--media-left .tf__banner-media {
+  order: -1;
+  margin-right: 0;
+  margin-left: calc(var(--tf-banner-pad) * -0.6);
+}
+
+/* Background image style */
+.tf__hero--background .tf__banner {
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 0.25fr);
+  padding-bottom: var(--tf-banner-pad);
+  color: #fff;
+}
+
+.tf__hero--background .tf__banner-copy {
+  padding-bottom: 0;
+}
+
+.tf__banner-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.tf__banner-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tf__banner-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgb(0 0 0 / var(--tf-overlay, 0.55)) 0%, rgb(0 0 0 / calc(var(--tf-overlay, 0.55) * 0.35)) 70%, transparent 100%);
+}
+
+.tf__hero--background .tf__btn--primary {
+  --button-background-color: var(--tf-accent);
+  --button-border-color: var(--tf-accent);
+  --button-color: #111;
+}
+
+.tf__hero--background .tf__btn--ghost {
+  --button-color: #fff;
+  --button-background-color: transparent;
+  --button-border-color: rgb(255 255 255 / 0.6);
+  border: 1px solid rgb(255 255 255 / 0.6);
+}
+
+/* Numbers sit in a row just under the banner */
+.tf__hero--banner .tf__stats,
+.tf__hero--background .tf__stats {
+  width: min(100%, 60rem);
+  margin: clamp(1.25rem, 2.5vw, 2rem) auto 0;
+  background: var(--color-background);
+  text-align: center;
+}
+
+@keyframes tf-rise {
+  from {
+    opacity: 0;
+    translate: 0 14%;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .tf__banner,
+  .tf__banner--media-left,
+  .tf__hero--background .tf__banner {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+    text-align: center;
+  }
+
+  .tf__banner .tf__buttons {
+    justify-content: center;
+  }
+
+  .tf__banner .tf__intro {
+    margin-inline: auto;
+  }
+
+  .tf__banner-copy {
+    padding-bottom: 0;
+    justify-self: center;
+    max-width: 40rem;
+  }
+
+  .tf__banner-media,
+  .tf__banner--media-left .tf__banner-media {
+    order: 2;
+    margin: 0 calc(var(--tf-banner-pad) * -0.4);
+  }
+
+  .tf__hero--background .tf__banner {
+    padding-block: clamp(3rem, 12vw, 5rem);
+  }
+
+  .tf__banner-bg::after {
+    background: rgb(0 0 0 / var(--tf-overlay, 0.55));
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .tf__banner-img {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------- toolbar */
+.tf__finder {
+  display: block;
+  scroll-margin-top: calc(var(--header-height, 72px) + 16px);
+}
+
+.tf__toolbar {
+  position: sticky;
+  top: calc(var(--header-height, 0px) + 0.5rem);
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding: 0.6rem;
+  border: 1px solid var(--tf-line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-background) 88%, transparent);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 14px 36px -28px rgb(0 0 0 / 0.45);
+}
+
+.tf__chips {
+  display: flex;
+  gap: 0.35rem;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tf__chips::-webkit-scrollbar {
+  display: none;
+}
+
+.tf__chip {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.6rem;
+  padding: 0 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.25s, color 0.25s;
+}
+
+.tf__chip:hover {
+  background: var(--tf-soft);
+}
+
+.tf__chip.is-active {
+  background: var(--color-text);
+  color: var(--color-background);
+}
+
+.tf__chip-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  background: var(--tf-soft);
+  font-size: 0.72rem;
+}
+
+.tf__chip.is-active .tf__chip-count {
+  background: var(--tf-accent);
+  color: #111;
+}
+
+.tf__search {
+  position: relative;
+  display: flex;
+  flex: 0 1 17rem;
+  align-items: center;
+  min-width: 12rem;
+}
+
+.tf__search svg {
+  position: absolute;
+  left: 0.9rem;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.tf__search-input {
+  width: 100%;
+  min-height: 2.6rem;
+  padding: 0 1rem 0 2.6rem;
+  border: 1px solid var(--tf-line);
+  border-radius: 999px;
+  background: var(--color-background);
+  color: inherit;
+  font: inherit;
+  font-size: 0.9375rem;
+}
+
+.tf__search-input:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 1px;
+}
+
+.tf__count {
+  margin: 1.1rem 0 1.25rem;
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+/* ---------------------------------------------------------------- grid */
+.tf__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-flow: dense;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tf__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--tf-line);
+  border-radius: var(--tf-radius);
+  background: var(--tf-card);
+  color: #161616;
+  transition: translate 0.45s var(--tf-ease), box-shadow 0.45s var(--tf-ease), border-color 0.3s;
+}
+
+.tf__card[hidden] {
+  display: none;
+}
+
+.tf__card.is-entering {
+  animation: tf-in 0.45s var(--tf-ease) both;
+}
+
+.tf__card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.tf__card-link:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: -2px;
+  border-radius: var(--tf-radius);
+}
+
+@media (hover: hover) {
+  .tf__card:hover {
+    translate: 0 -4px;
+    border-color: rgb(0 0 0 / 0.16);
+    box-shadow: 0 26px 50px -34px rgb(0 0 0 / 0.45);
+  }
+
+  .tf__card:hover .tf__img {
+    scale: 1.04;
+  }
+
+  .tf__card:hover .tf__more svg {
+    translate: 4px 0;
+  }
+}
+
+.tf__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-bottom: 1px solid rgb(0 0 0 / 0.06);
+  background: #f3efe7;
+}
+
+.tf__img,
+.tf__placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: scale 0.9s var(--tf-ease);
+}
+
+.tf__placeholder {
+  fill: rgb(0 0 0 / 0.25);
+}
+
+.tf__tag,
+.tf__badge {
+  position: absolute;
+  top: 0.85rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tf__tag {
+  left: 0.85rem;
+  background: rgb(255 255 255 / 0.92);
+  color: #161616;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 14px -6px rgb(0 0 0 / 0.3);
+}
+
+.tf__badge {
+  right: 0.85rem;
+  background: #161616;
+  color: #fff;
+}
+
+.tf__badge--new {
+  background: var(--tf-accent);
+  color: #111;
+}
+
+.tf__badge--unique {
+  background: #2b2bd9;
+  color: #fff;
+}
+
+.tf__badge--builtin {
+  background: #fff;
+  color: #161616;
+}
+
+.tf__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: clamp(1.1rem, 2vw, 1.4rem);
+}
+
+.tf__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 1.6vw, 1.35rem);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.tf__text {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  opacity: 0.72;
+}
+
+.tf__points {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.82rem;
+}
+
+.tf__points li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+}
+
+.tf__points svg {
+  flex: none;
+  margin-top: 0.15rem;
+  padding: 2px;
+  box-sizing: content-box;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--tf-accent) 45%, #fff);
+}
+
+.tf__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.tf__more svg {
+  transition: translate 0.3s var(--tf-ease);
+}
+
+/* Wide card: image beside the text */
+@media screen and (min-width: 990px) {
+  .tf__card--wide {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  }
+
+  .tf__card--wide .tf__media {
+    aspect-ratio: auto;
+    min-height: 100%;
+    border-bottom: 0;
+    border-inline-end: 1px solid rgb(0 0 0 / 0.06);
+  }
+
+  .tf__card--wide .tf__img {
+    object-position: left top;
+  }
+
+  .tf__card--wide .tf__body {
+    justify-content: center;
+    padding: clamp(1.5rem, 2.5vw, 2.25rem);
+  }
+
+  .tf__card--wide .tf__title {
+    font-size: clamp(1.4rem, 2vw, 1.75rem);
+  }
+}
+
+.tf__empty {
+  padding: 3rem 1rem;
+  border: 1px dashed var(--tf-line);
+  border-radius: var(--tf-radius);
+  text-align: center;
+  opacity: 0.7;
+}
+
+.tf__empty[hidden] {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- CTA */
+.tf__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem 2rem;
+  padding: clamp(1.75rem, 4vw, 3rem);
+  border-radius: calc(var(--tf-radius) + 6px);
+  background:
+    radial-gradient(60% 120% at 100% 0%, color-mix(in srgb, var(--tf-accent) 45%, transparent), transparent 60%),
+    #161616;
+  color: #fff;
+}
+
+.tf__finder + .tf__cta,
+.tf__hero + .tf__cta {
+  margin-top: clamp(3rem, 7vw, 5rem);
+}
+
+.tf__cta-copy {
+  max-width: 38rem;
+}
+
+.tf__cta-heading {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.1;
+  color: #fff;
+}
+
+.tf__cta-text {
+  margin: 0.75rem 0 0;
+  opacity: 0.75;
+}
+
+.tf__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 3.25rem;
+  padding: 0 1.75rem;
+  border-radius: 999px;
+  background: var(--tf-accent);
+  color: #111;
+  font-weight: 700;
+  text-decoration: none;
+  transition: translate 0.3s var(--tf-ease), box-shadow 0.3s;
+}
+
+.tf__cta-btn:hover {
+  translate: 0 -2px;
+  box-shadow: 0 16px 30px -18px color-mix(in srgb, var(--tf-accent) 80%, #000);
+}
+
+/* ---------------------------------------------------------------- responsive */
+/* Desktop: chips and search share one row; the chips scroll sideways if they run out of room */
+@media screen and (min-width: 990px) {
+  .tf__toolbar {
+    flex-wrap: nowrap;
+  }
+
+  .tf__chips {
+    flex: 1 1 auto;
+  }
+
+  .tf__search {
+    flex: 0 0 15rem;
+    min-width: 0;
+  }
+}
+
+@media screen and (max-width: 989px) {
+  .tf__toolbar {
+    border-radius: 24px;
+  }
+
+  .tf__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tf__card--wide {
+    grid-column: span 2;
+  }
+
+  .tf__card--wide .tf__media {
+    aspect-ratio: 16 / 8;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .tf__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tf__stat:nth-child(3) {
+    border-inline-start: 0;
+  }
+
+  .tf__stat:nth-child(n + 3) {
+    border-top: 1px solid var(--tf-line);
+  }
+
+  .tf__toolbar {
+    position: static;
+    border-radius: 22px;
+  }
+
+  .tf__chips {
+    width: 100%;
+  }
+
+  .tf__search {
+    flex: 1 1 100%;
+  }
+
+  .tf__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tf__card--wide {
+    grid-column: auto;
+  }
+
+  .tf__card--wide .tf__media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .tf__cta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@keyframes tf-in {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tf__card,
+  .tf__img,
+  .tf__card.is-entering {
+    animation: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,159 @@
+{%- doc -%}
+  Product card for grids and sliders (collection, search, recommendations, home page sections).
+
+  Image (the second image fades in on hover), Sale / Sold out badge, vendor, title, rating (reviews metafield),
+  price and color swatches. Quick add: products with one variant are added in place; others open the quick
+  view (sections/quick-view.liquid, assets/quick-view.js). The whole card is one link; the buttons sit above it.
+  Styles: assets/component-product-card.css.
+
+  @param {object} [product] - Product (leave out for a placeholder card)
+  @param {string} [ratio] - Image aspect ratio, for example '1', '0.8' (default '0.8')
+  @param {boolean} [show_vendor] - Show the vendor
+  @param {boolean} [show_rating] - Show the rating when the product has one (default true)
+  @param {boolean} [show_quick_add] - Show quick add (default true)
+  @param {boolean} [show_secondary] - Show the second image on hover (default true)
+  @param {string} [sizes] - Image sizes attribute
+  @param {string} [id_prefix] - Unique prefix for form ids (section id)
+  @param {string} [loading] - Image loading ('lazy' by default)
+  @param {string} [heading_level] - Title element: 'h3' (default, under a section heading) or 'h2' (collection and search grids)
+
+  @example
+  {% render 'product-card', product: product, id_prefix: section.id %}
+{%- enddoc -%}
+{%- liquid
+  assign ratio = ratio | default: '0.8'
+  assign show_rating = show_rating | default: true, allow_false: true
+  assign show_quick_add = show_quick_add | default: true, allow_false: true
+  assign show_secondary = show_secondary | default: true, allow_false: true
+  assign sizes = sizes | default: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw'
+  assign loading = loading | default: 'lazy'
+  assign heading_level = heading_level | default: 'h3'
+  assign variant = product.selected_or_first_available_variant
+  assign secondary = product.media[1]
+  if secondary.media_type != 'image'
+    assign secondary = nil
+  endif
+
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+
+  assign swatch_option = nil
+  for option in product.options_with_values
+    if option.values.first.swatch
+      assign swatch_option = option
+      break
+    endif
+  endfor
+-%}
+{%- if product == blank -%}
+  <div class="product-card product-card--placeholder">
+    <div class="product-card__media media" style="--ratio: {{ ratio }};">
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    </div>
+    <div class="product-card__info">
+      <p class="product-card__title">{{ 'products.placeholder_title' | t }}</p>
+      <div class="price">{{ 1999 | money }}</div>
+    </div>
+  </div>
+{%- else -%}
+  <div class="product-card{% if secondary and show_secondary %} product-card--secondary{% endif %}" data-product-id="{{ product.id }}">
+    <div class="product-card__media media" style="--ratio: {{ ratio }};">
+      {%- if product.featured_media -%}
+        {%- assign image_alt = product.featured_media.alt | default: product.title -%}
+        {{
+          product.featured_media
+          | image_url: width: 1200
+          | image_tag: widths: '300, 400, 500, 600, 800, 1000, 1200', sizes: sizes, loading: loading, class: 'product-card__image', alt: image_alt }}
+        {%- if secondary and show_secondary -%}
+          {{
+            secondary
+            | image_url: width: 1200
+            | image_tag: widths: '300, 400, 500, 600, 800, 1000, 1200', sizes: sizes, loading: 'lazy', alt: '', class: 'product-card__image product-card__image--secondary'
+          }}
+        {%- endif -%}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+
+      {%- if product.available == false -%}
+        <span class="product-card__badge badge badge--sold-out">{{ 'products.sold_out' | t }}</span>
+      {%- elsif on_sale -%}
+        <span class="product-card__badge badge badge--sale">{{ 'products.sale' | t }}</span>
+      {%- endif -%}
+
+      {%- if show_quick_add and product.available -%}
+        <div class="product-card__quick">
+          {%- if product.has_only_default_variant -%}
+            {%- assign form_id = 'QuickAdd-' | append: id_prefix | append: '-' | append: product.id -%}
+            <product-form class="product-card__quick-form" data-cart-type="{{ settings.cart_type }}" data-source="quick-add">
+              {%- form 'product', product, id: form_id, data-type: 'add-to-cart-form' -%}
+                <input type="hidden" name="id" value="{{ variant.id }}">
+                <input type="hidden" name="quantity" value="{{ variant.quantity_rule.min | default: 1 }}">
+                <button type="submit" name="add" class="product-card__quick-button">
+                  {%- render 'icon', name: 'plus' -%}
+                  <span class="product-card__quick-label">{{ 'products.add_to_cart' | t }}</span>
+                  <span class="visually-hidden">: {{ product.title | escape }}</span>
+                </button>
+                <p class="visually-hidden" role="alert" data-ref="error" hidden></p>
+              {%- endform -%}
+            </product-form>
+          {%- else -%}
+            <button
+              type="button"
+              class="product-card__quick-button"
+              data-quick-view="{{ product.url }}"
+              aria-haspopup="dialog"
+            >
+              {%- render 'icon', name: 'plus' -%}
+              <span class="product-card__quick-label">{{ 'products.quick_view' | t }}</span>
+              <span class="visually-hidden">: {{ product.title | escape }}</span>
+            </button>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="product-card__info">
+      {%- if show_vendor and product.vendor != blank -%}
+        <p class="product-card__vendor">{{ product.vendor | escape }}</p>
+      {%- endif -%}
+      <{{ heading_level }} class="product-card__title">
+        <a href="{{ product.url }}" class="product-card__link">{{ product.title | escape }}</a>
+      </{{ heading_level }}>
+      {%- assign rating = product.metafields.reviews.rating.value -%}
+      {%- if show_rating and rating != blank -%}
+        {%- assign rating_count = product.metafields.reviews.rating_count.value | default: 0 -%}
+        <p class="product-card__rating">
+          {%- render 'icon', name: 'star' -%}
+          <span aria-hidden="true">{{ rating.rating | round: 1 }}</span>
+          {%- if rating_count > 0 %}<span class="product-card__rating-count" aria-hidden="true">({{ rating_count }})</span>{% endif -%}
+          <span class="visually-hidden">{{ 'products.rating_html' | t: rating: rating.rating, max: rating.scale_max }}</span>
+        </p>
+      {%- endif -%}
+      {%- render 'price', product: product, show_badge: false -%}
+      {%- if swatch_option -%}
+        <ul class="product-card__swatches" role="list" aria-label="{{ swatch_option.name | escape }}">
+          {%- for value in swatch_option.values limit: 5 -%}
+            {%- liquid
+              assign swatch_style = ''
+              if value.swatch.image
+                assign swatch_url = value.swatch.image | image_url: width: 40
+                assign swatch_style = 'background-image: url(' | append: swatch_url | append: ');'
+              elsif value.swatch.color
+                assign swatch_style = 'background-color: ' | append: value.swatch.color | append: ';'
+              endif
+            -%}
+            <li class="product-card__swatch" style="{{ swatch_style }}" title="{{ value | escape }}">
+              <span class="visually-hidden">{{ value | escape }}</span>
+            </li>
+          {%- endfor -%}
+          {%- if swatch_option.values.size > 5 -%}
+            <li class="product-card__swatch-more">+{{ swatch_option.values.size | minus: 5 }}</li>
+          {%- endif -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

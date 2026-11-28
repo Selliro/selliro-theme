@@ -1,0 +1,307 @@
+/* ==============================================================================
+   Whispo — pdp ingredients (sections/pdp-ingredients.liquid)
+   Moved out of the section's {% stylesheet %} block so it loads only on pages that use the section.
+   ============================================================================== */
+
+.pdp-ingredients {
+  position: relative;
+  padding-block: var(--pdp-ing-pad-top) var(--pdp-ing-pad-bottom);
+}
+
+.pdp-ingredients__header {
+  max-width: 40rem;
+  margin: 0 auto clamp(2rem, 5vw, 3.5rem);
+  text-align: center;
+}
+
+.pdp-ingredients__eyebrow {
+  margin: 0 0 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.pdp-ingredients__heading {
+  margin: 0;
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  line-height: var(--section-title-leading);
+  letter-spacing: var(--section-title-tracking);
+}
+
+.pdp-ingredients__text {
+  margin-block-start: 0.75rem;
+  opacity: 0.75;
+}
+
+.pdp-ingredients__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.75rem 1rem;
+}
+
+.pdp-ingredients__visual {
+  position: relative;
+  grid-column: 1 / -1;
+  display: grid;
+  place-items: center;
+  width: min(72vw, 22rem);
+  margin-inline: auto;
+  aspect-ratio: 1;
+}
+
+.pdp-ingredients__halo {
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, var(--pdp-ing-halo) 0 60%, color-mix(in srgb, var(--pdp-ing-halo) 55%, transparent) 61% 100%);
+}
+
+.pdp-ingredients__image {
+  position: relative;
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.pdp-ingredients__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: center;
+}
+
+.pdp-ingredients__thumb {
+  display: grid;
+  place-items: center;
+  width: 4.25rem;
+  height: 4.25rem;
+  border-radius: 50%;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-text) 5%, transparent);
+  box-shadow: 0 10px 24px -14px rgb(0 0 0 / 0.45);
+}
+
+.pdp-ingredients__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pdp-ingredients__thumb svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.pdp-ingredients__name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.pdp-ingredients__benefit {
+  margin: 0.3rem 0 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  opacity: 0.75;
+}
+
+/* Desktop: ingredients in two columns either side of the product image */
+@media screen and (min-width: 990px) {
+  .pdp-ingredients__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 26rem) minmax(0, 1fr);
+    grid-auto-flow: dense;
+    align-items: center;
+    gap: 2.75rem 3rem;
+  }
+
+  .pdp-ingredients__visual {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    width: 100%;
+  }
+
+  .pdp-ingredients__item--left {
+    grid-column: 1;
+    flex-direction: row-reverse;
+    text-align: end;
+  }
+
+  .pdp-ingredients__item--right {
+    grid-column: 3;
+    flex-direction: row;
+    text-align: start;
+  }
+
+  .pdp-ingredients__item {
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .pdp-ingredients__thumb {
+    flex: 0 0 auto;
+    width: 4.75rem;
+    height: 4.75rem;
+  }
+}
+
+/* ---------------------------------------------------------------- Orbit layout
+   Round image inside a thin ring; numbered circles sit on the ring with the ingredient beside each. */
+.pdp-orbit {
+  --orbit-copy: 17rem;
+  --orbit-badge: 3.75rem;
+  --orbit-gap: 1.6rem;
+  --orbit-line: color-mix(in srgb, var(--color-text) 14%, transparent);
+
+  container-type: inline-size;
+}
+
+.pdp-orbit__frame {
+  position: relative;
+}
+
+.pdp-orbit__stage {
+  position: relative;
+  width: min(78vw, 22rem);
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+
+.pdp-orbit__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--orbit-line);
+}
+
+.pdp-orbit__media {
+  position: absolute;
+  inset: 13%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--pdp-ing-halo);
+  box-shadow: 0 30px 60px -40px rgb(0 0 0 / 0.45);
+}
+
+.pdp-orbit__media :is(img, svg) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pdp-orbit__num {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: var(--orbit-badge);
+  height: var(--orbit-badge);
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--color-text) 45%, transparent);
+  background: var(--color-background);
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+.pdp-orbit__name {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.pdp-orbit__benefit {
+  margin: 0.55rem 0 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  opacity: 0.78;
+}
+
+/* Phones & tablets: ring on top, numbered list underneath */
+.pdp-orbit__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.75rem 1.25rem;
+  margin: 2.25rem 0 0;
+}
+
+.pdp-orbit__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.pdp-orbit__item .pdp-orbit__num {
+  --orbit-badge: 2.5rem;
+  font-size: 0.875rem;
+}
+
+@media screen and (max-width: 599px) {
+  .pdp-orbit__list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Laptops and up: numbers on the ring, copy outside it */
+@container (min-width: 960px) {
+  .pdp-orbit__frame {
+    --orbit-size: clamp(20rem, calc(100cqw - 2 * (var(--orbit-copy) + var(--orbit-badge) + var(--orbit-gap) + 2rem)), 36rem);
+
+    width: var(--orbit-size);
+    height: var(--orbit-size);
+    margin: 0 auto calc(var(--orbit-badge) + 1rem);
+  }
+
+  .pdp-orbit__stage {
+    position: absolute;
+    inset: 0;
+    width: auto;
+  }
+
+  .pdp-orbit__list {
+    position: absolute;
+    inset: 0;
+    display: block;
+    margin: 0;
+  }
+
+  .pdp-orbit__item {
+    position: absolute;
+    left: calc(50% + var(--dx) * 50%);
+    top: calc(50% + var(--dy) * 50%);
+    display: block;
+    width: 0;
+    height: 0;
+  }
+
+  .pdp-orbit__item .pdp-orbit__num {
+    --orbit-badge: 3.75rem;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%);
+    font-size: 1rem;
+  }
+
+  .pdp-orbit__copy {
+    position: absolute;
+    top: calc(var(--orbit-badge) / -2 - 0.35rem);
+    width: var(--orbit-copy);
+  }
+
+  .pdp-orbit__item--left .pdp-orbit__copy {
+    right: calc(var(--orbit-badge) / 2 + var(--orbit-gap));
+  }
+
+  .pdp-orbit__item--right .pdp-orbit__copy {
+    left: calc(var(--orbit-badge) / 2 + var(--orbit-gap));
+  }
+}

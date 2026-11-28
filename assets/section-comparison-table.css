@@ -1,0 +1,235 @@
+/* ==============================================================================
+   Whispo — comparison table (sections/comparison-table.liquid)
+   Moved out of the section's {% stylesheet %} block so it loads only on pages that use the section.
+   ============================================================================== */
+
+.cmp {
+  position: relative;
+  display: grid;
+  gap: 2rem;
+  padding-block: var(--cmp-pad-top) var(--cmp-pad-bottom);
+}
+
+.cmp__heading {
+  margin: 0;
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  line-height: var(--section-title-leading);
+  letter-spacing: var(--section-title-tracking);
+}
+
+.cmp__text {
+  margin: 0.75rem 0 0;
+  max-width: 24rem;
+  opacity: 0.75;
+}
+
+.cmp__scroller {
+  overflow-x: auto;
+  padding-block-start: 1.25rem;
+}
+
+.cmp__table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+.cmp__corner,
+.cmp__feature {
+  width: 34%;
+}
+
+.cmp__col {
+  position: relative;
+  padding: 1.5rem 0.75rem 1rem;
+  vertical-align: bottom;
+  font-weight: 400;
+  border-radius: 18px 18px 0 0;
+}
+
+.cmp__col--ours {
+  color: var(--cmp-accent-text);
+  background: var(--cmp-accent);
+}
+
+.cmp__badge {
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  translate: -50% 0;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  color: var(--cmp-accent-text);
+  background: var(--cmp-accent);
+  box-shadow: 0 0 0 4px var(--color-background);
+}
+
+.cmp__badge svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.cmp__product {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.cmp__product img {
+  width: clamp(4rem, 9vw, 6.5rem);
+  height: clamp(4rem, 9vw, 6.5rem);
+  object-fit: cover;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.cmp__name {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.cmp__price {
+  font-size: 0.8125rem;
+  opacity: 0.85;
+}
+
+.cmp__feature {
+  padding: 1rem 1rem 1rem 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-align: start;
+  text-transform: uppercase;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+}
+
+.cmp__cell {
+  padding: 1rem 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 12%, transparent);
+}
+
+.cmp__cell--ours {
+  color: var(--cmp-accent-text);
+  background: var(--cmp-accent);
+  border-bottom-color: color-mix(in srgb, var(--cmp-accent-text) 18%, transparent);
+}
+
+tbody tr:last-child .cmp__cell--ours {
+  border-radius: 0 0 18px 18px;
+  border-bottom-color: transparent;
+}
+
+.cmp__mark {
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+}
+
+.cmp__mark svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.cmp__mark--yes {
+  background: color-mix(in srgb, currentColor 14%, transparent);
+}
+
+.cmp__mark--no {
+  opacity: 0.4;
+}
+
+.cmp__mark--some {
+  width: auto;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* Phones: shrink everything so the three columns fit without sideways scrolling */
+@media screen and (max-width: 749px) {
+  .cmp__table {
+    min-width: 0;
+  }
+
+  .cmp__corner,
+  .cmp__feature {
+    width: 31%;
+  }
+
+  .cmp__col {
+    padding: 1.25rem 0.25rem 0.75rem;
+    border-radius: 14px 14px 0 0;
+  }
+
+  .cmp__product img {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 8px;
+  }
+
+  .cmp__name {
+    font-size: 0.75rem;
+  }
+
+  .cmp__price {
+    font-size: 0.6875rem;
+  }
+
+  .cmp__feature {
+    padding-inline-end: 0.5rem;
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+  }
+
+  .cmp__cell {
+    padding: 0.75rem 0.25rem;
+  }
+
+  .cmp__mark {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .cmp__mark--some {
+    font-size: 0.625rem;
+  }
+
+  tbody tr:last-child .cmp__cell--ours {
+    border-radius: 0 0 14px 14px;
+  }
+}
+
+/* Layout: centred intro above a full-width table */
+.cmp--intro-top .cmp__intro {
+  max-width: 40rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.cmp--intro-top .cmp__text {
+  margin-inline: auto;
+}
+
+.cmp--intro-top .cmp__table {
+  max-width: 62rem;
+  margin-inline: auto;
+}
+
+@media screen and (min-width: 990px) {
+  .cmp.cmp--intro-side {
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 2fr);
+    align-items: center;
+    gap: 3rem;
+  }
+}

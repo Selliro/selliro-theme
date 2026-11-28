@@ -1,35 +1,67 @@
-{% comment %}
-  This section is used in the blog template to render the blog page listing all
-  articles within a blog.
+{%- comment -%}
+  Whispo — blog (article list). Same width as the header and footer. The newest article can be shown large
+  (setting); the rest are cards with image, date, title, excerpt and author. Tag filter links when the blog
+  has tags; pagination. Styles: assets/template-content.css ("Blog").
+{%- endcomment -%}
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/blog
-{% endcomment %}
+{%- comment -%} 1. CSS {%- endcomment -%}
+{{ 'template-content.css' | asset_url | stylesheet_tag }}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{% endstyle %}
 
-<h1>{{ blog.title }}</h1>
+{%- comment -%} 2. Liquid {%- endcomment -%}
+<div class="blog-page color-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    <header class="blog-page__header">
+      <h1 class="blog-page__title h1">{{ blog.title | escape }}</h1>
+      {%- if section.settings.show_tags and blog.all_tags.size > 0 -%}
+        <ul class="blog-page__tags" role="list">
+          <li><a href="{{ blog.url }}" class="blog-tag{% if current_tags == blank %} is-active{% endif %}"{% if current_tags == blank %} aria-current="page"{% endif %}>{{ 'blog.all' | t }}</a></li>
+          {%- for tag in blog.all_tags -%}
+            {%- assign active = false -%}
+            {%- if current_tags contains tag -%}{%- assign active = true -%}{%- endif -%}
+            <li>
+              <a href="{{ blog.url }}/tagged/{{ tag | handleize }}" class="blog-tag{% if active %} is-active{% endif %}"{% if active %} aria-current="page"{% endif %}>{{ tag | escape }}</a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </header>
 
-{% paginate blog.articles by 5 %}
-  {% for article in blog.articles %}
-    <div>
-      {% if article.image %}
-        {{ article.image | image_url: width: 1000 | image_tag }}
-      {% endif %}
-      <h2>
-        {{ article.title | link_to: article.url }}
-      </h2>
-      {% assign date = article.published_at | time_tag: format: 'date' %}
-      <p>{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
-      <p>{{ article.excerpt }}</p>
-    </div>
-  {% endfor %}
+    {%- paginate blog.articles by section.settings.per_page -%}
+      {%- if blog.articles.size > 0 -%}
+        <ul class="blog-grid{% if section.settings.feature_first and paginate.current_page == 1 %} blog-grid--featured{% endif %}" role="list">
+          {%- for article in blog.articles -%}
+            <li class="blog-grid__item">
+              {%- render 'article-card', article: article, show_excerpt: section.settings.show_excerpt, show_author: section.settings.show_author, loading: forloop.index -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+        {%- render 'pagination', paginate: paginate -%}
+      {%- else -%}
+        <p class="collection-empty h4">{{ 'blog.empty' | t }}</p>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
 
-  {%- if paginate.pages > 1 -%}
-    {{- paginate | default_pagination -}}
-  {%- endif -%}
-{% endpaginate %}
-
+{%- comment -%} 3. Schema {%- endcomment -%}
 {% schema %}
 {
-  "name": "t:general.blog",
-  "settings": []
+  "name": "t:sections.main_blog.name",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "t:sections.main_blog.per_page", "min": 3, "max": 24, "step": 1, "default": 9 },
+    { "type": "checkbox", "id": "feature_first", "label": "t:sections.main_blog.feature_first", "default": true },
+    { "type": "checkbox", "id": "show_excerpt", "label": "t:sections.main_blog.show_excerpt", "default": true },
+    { "type": "checkbox", "id": "show_author", "label": "t:sections.main_blog.show_author", "default": true },
+    { "type": "checkbox", "id": "show_tags", "label": "t:sections.main_blog.show_tags", "default": true },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:sections.main_collection.color_scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "t:sections.main_collection.padding_top", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "t:sections.main_collection.padding_bottom", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 88 }
+  ]
 }
 {% endschema %}

@@ -1,0 +1,74 @@
+{%- doc -%}
+  One product media item: image, Shopify-hosted video, external video (YouTube or Vimeo) or 3D model.
+  Videos play inline with controls; 3D models load on interaction and get a "View in your space" button
+  (Shopify XR) on supported phones. Styles: assets/section-main-product.css ("Media").
+
+  @param {object} media - Product media
+  @param {string} [sizes] - Image sizes attribute
+  @param {string} [loading] - 'eager' for the first image, 'lazy' otherwise
+  @param {boolean} [loop] - Loop Shopify-hosted videos
+
+  @example
+  {% render 'product-media', media: media, loading: 'eager' %}
+{%- enddoc -%}
+{%- liquid
+  assign loading = loading | default: 'lazy'
+  assign priority = 'auto'
+  if loading == 'eager'
+    assign priority = 'high'
+  endif
+  assign sizes = sizes | default: '(min-width: 990px) 55vw, 100vw'
+  assign alt = media.alt | default: media.product.title | escape
+-%}
+{%- case media.media_type -%}
+  {%- when 'image' -%}
+    {{
+      media
+      | image_url: width: 2200
+      | image_tag:
+        widths: '400, 600, 800, 1000, 1200, 1500, 1800, 2200',
+        sizes: sizes,
+        loading: loading,
+        fetchpriority: priority,
+        alt: alt,
+        class: 'product-media__image'
+    }}
+  {%- when 'video' -%}
+    {%- if loop -%}
+      {{
+        media
+        | video_tag:
+          image_size: '1200x',
+          controls: true,
+          playsinline: true,
+          muted: true,
+          loop: true,
+          preload: 'metadata',
+          class: 'product-media__video',
+          aria-label: alt | replace: '<img ', '<img alt="" ' }}
+    {%- else -%}
+      {{
+        media
+        | video_tag:
+          image_size: '1200x',
+          controls: true,
+          playsinline: true,
+          preload: 'metadata',
+          class: 'product-media__video',
+          aria-label: alt | replace: '<img ', '<img alt="" ' }}
+    {%- endif -%}
+  {%- when 'external_video' -%}
+    {{ media | external_video_tag: class: 'product-media__iframe', loading: 'lazy', title: alt }}
+  {%- when 'model' -%}
+    {{ media | model_viewer_tag: image_size: '1200x', reveal: 'interaction', toggleable: true, class: 'product-media__model', data-model-id: media.id }}
+    <button
+      type="button"
+      class="button button--secondary button--small product-media__xr"
+      data-shopify-xr
+      data-shopify-model3d-id="{{ media.id }}"
+      data-shopify-title="{{ media.product.title | escape }}"
+      data-shopify-xr-hidden
+    >
+      {{- 'products.view_in_space' | t -}}
+    </button>
+{%- endcase -%}

@@ -1,0 +1,75 @@
+{%- doc -%}
+  Gift card recipient fields (Shopify's gift card recipient feature). Unchecked, the gift card goes to the buyer;
+  checked, Shopify emails it to the recipient on the chosen date. The fields stay disabled until the box is
+  ticked, so nothing is sent by accident (assets/product-info.js). The time zone offset lets Shopify send it
+  on the right day. Styles: assets/section-main-product.css ("Gift card recipient").
+
+  @param {string} form_id - Product form id
+
+  @example
+  {% render 'gift-card-recipient', form_id: form_id %}
+{%- enddoc -%}
+{%- assign prefix = form_id | append: '-recipient' -%}
+<gift-card-recipient class="recipient">
+  <label class="recipient__toggle">
+    <input
+      type="checkbox"
+      name="properties[__shopify_send_gift_card_to_recipient]"
+      value="on"
+      data-ref="toggle"
+    >
+    <span>{{ 'gift_card.recipient.toggle' | t }}</span>
+  </label>
+
+  <div class="recipient__fields" data-ref="fields" hidden>
+    <div class="field">
+      <label class="field__label" for="{{ prefix }}-email">{{ 'gift_card.recipient.email' | t }}</label>
+      <input
+        id="{{ prefix }}-email"
+        class="field__input"
+        type="email"
+        name="properties[Recipient email]"
+        autocomplete="email"
+        required
+        disabled
+        data-ref="field[]"
+      >
+    </div>
+    <div class="field">
+      <label class="field__label" for="{{ prefix }}-name">{{ 'gift_card.recipient.name' | t }}</label>
+      <input
+        id="{{ prefix }}-name"
+        class="field__input"
+        type="text"
+        name="properties[Recipient name]"
+        autocomplete="name"
+        disabled
+        data-ref="field[]"
+      >
+    </div>
+    <div class="field">
+      <label class="field__label" for="{{ prefix }}-message">{{ 'gift_card.recipient.message' | t }}</label>
+      <textarea
+        id="{{ prefix }}-message"
+        name="properties[Message]"
+        maxlength="200"
+        rows="3"
+        disabled
+        data-ref="field[]"
+      ></textarea>
+    </div>
+    <div class="field">
+      <label class="field__label" for="{{ prefix }}-date">{{ 'gift_card.recipient.send_on' | t }}</label>
+      <input
+        id="{{ prefix }}-date"
+        class="field__input"
+        type="date"
+        name="properties[Send on]"
+        pattern="\d{4}-\d{2}-\d{2}"
+        disabled
+        data-ref="field[]"
+      >
+    </div>
+    <input type="hidden" name="properties[__shopify_offset]" value="" disabled data-ref="offset">
+  </div>
+</gift-card-recipient>

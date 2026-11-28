@@ -1,0 +1,94 @@
+{%- comment -%}
+  Pickup availability for one variant. Not added in the theme editor: requested by <pickup-availability>
+  (assets/product-info.js) from /variants/{id}/?section_id=pickup-availability, which makes the variant
+  "product.selected_or_first_available_variant" here. Shows the closest location and, in a drawer, every
+  location with its pickup time and address. Styles: assets/section-main-product.css ("Pickup").
+{%- endcomment -%}
+{%- assign variant = product.selected_or_first_available_variant -%}
+{%- assign pick_up = variant.store_availabilities | where: 'pick_up_enabled', true -%}
+
+<div data-pickup-content>
+  {%- if pick_up.size > 0 -%}
+    {%- assign closest = pick_up.first -%}
+    <div class="pickup">
+      <span class="pickup__icon{% if closest.available %} pickup__icon--available{% endif %}">
+        {%- if closest.available -%}
+          {%- render 'icon', name: 'check' -%}
+        {%- else -%}
+          {%- render 'icon', name: 'close' -%}
+        {%- endif -%}
+      </span>
+      <div class="pickup__summary">
+        <p class="pickup__status">
+          {%- if closest.available -%}
+            {{ 'products.pickup.available_at_html' | t: location: closest.location.name }}
+          {%- else -%}
+            {{ 'products.pickup.unavailable_at_html' | t: location: closest.location.name }}
+          {%- endif -%}
+        </p>
+        {%- if closest.available -%}
+          <p class="pickup__time">{{ closest.pick_up_time }}</p>
+        {%- endif -%}
+        <button
+          type="button"
+          class="link pickup__more"
+          aria-controls="PickupDrawer-{{ variant.id }}"
+          aria-expanded="false"
+          data-dialog-open
+        >
+          {%- if pick_up.size > 1 -%}
+            {{ 'products.pickup.view_all' | t }}
+          {%- else -%}
+            {{ 'products.pickup.view_store' | t }}
+          {%- endif -%}
+        </button>
+      </div>
+    </div>
+
+    <dialog id="PickupDrawer-{{ variant.id }}" class="dialog drawer drawer--right pickup-drawer" aria-labelledby="PickupDrawer-{{ variant.id }}-heading">
+      <div class="dialog__panel">
+        <div class="dialog__header">
+          <div>
+            <h2 id="PickupDrawer-{{ variant.id }}-heading" class="h5">{{ product.title | escape }}</h2>
+            {%- unless product.has_only_default_variant -%}
+              <p class="pickup-drawer__variant">{{ variant.title | escape }}</p>
+            {%- endunless -%}
+          </div>
+          <button type="button" class="icon-button" data-dialog-close>
+            {%- render 'icon', name: 'close' -%}
+            <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+          </button>
+        </div>
+        <ul class="pickup-drawer__list" role="list">
+          {%- for availability in pick_up -%}
+            <li class="pickup-drawer__item">
+              <h3 class="pickup-drawer__location h6">{{ availability.location.name | escape }}</h3>
+              <p class="pickup-drawer__status">
+                {%- if availability.available -%}
+                  {%- render 'icon', name: 'check' -%}
+                  {{ 'products.pickup.available' | t }} · {{ availability.pick_up_time }}
+                {%- else -%}
+                  {%- render 'icon', name: 'close' -%}
+                  {{ 'products.pickup.unavailable' | t }}
+                {%- endif -%}
+              </p>
+              <address class="pickup-drawer__address">
+                {{- availability.location.address | format_address -}}
+                {%- if availability.location.address.phone != blank -%}
+                  <a href="tel:{{ availability.location.address.phone | remove: ' ' }}">{{ availability.location.address.phone }}</a>
+                {%- endif -%}
+              </address>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </dialog>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.pickup_availability.name",
+  "settings": []
+}
+{% endschema %}

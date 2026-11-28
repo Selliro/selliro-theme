@@ -1,31 +1,132 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "current": "Whispo",
+  "current": {
+    "logo": "shopify:\/\/shop_images\/Logo_whispo.svg",
+    "logo_inverse": "shopify:\/\/shop_images\/whispo-logo-white.svg",
+    "logo_width": 120,
+    "logo_width_mobile": 96,
+    "color_schemes": {
+      "scheme-1": {
+        "settings": {
+          "background": "#FFFFFF",
+          "background_gradient": "",
+          "text": "#1A1A1A",
+          "heading": "#000000",
+          "accent": "#FAD02C",
+          "accent_text": "#000000",
+          "border": "#E6E6E6",
+          "button": "#000000",
+          "button_text": "#FFFFFF",
+          "secondary_button": "#FFFFFF",
+          "secondary_button_text": "#000000",
+          "input": "#FFFFFF",
+          "input_text": "#1A1A1A"
+        }
+      },
+      "scheme-2": {
+        "settings": {
+          "background": "#F5F5F2",
+          "background_gradient": "",
+          "text": "#1A1A1A",
+          "heading": "#000000",
+          "accent": "#FAD02C",
+          "accent_text": "#000000",
+          "border": "#E2E2DC",
+          "button": "#000000",
+          "button_text": "#FFFFFF",
+          "secondary_button": "#FFFFFF",
+          "secondary_button_text": "#000000",
+          "input": "#FFFFFF",
+          "input_text": "#1A1A1A"
+        }
+      },
+      "scheme-3": {
+        "settings": {
+          "background": "#EEF1EA",
+          "background_gradient": "",
+          "text": "#1F2A1C",
+          "heading": "#141C12",
+          "accent": "#FAD02C",
+          "accent_text": "#000000",
+          "border": "#D6DCCF",
+          "button": "#141C12",
+          "button_text": "#FFFFFF",
+          "secondary_button": "#FFFFFF",
+          "secondary_button_text": "#141C12",
+          "input": "#FFFFFF",
+          "input_text": "#1F2A1C"
+        }
+      },
+      "scheme-4": {
+        "settings": {
+          "background": "#FAD02C",
+          "background_gradient": "",
+          "text": "#1A1A1A",
+          "heading": "#000000",
+          "accent": "#000000",
+          "accent_text": "#FAD02C",
+          "border": "#E0B820",
+          "button": "#000000",
+          "button_text": "#FFFFFF",
+          "secondary_button": "#FAD02C",
+          "secondary_button_text": "#000000",
+          "input": "#FFFFFF",
+          "input_text": "#1A1A1A"
+        }
+      },
+      "scheme-5": {
+        "settings": {
+          "background": "#222222",
+          "background_gradient": "",
+          "text": "#F2F2F2",
+          "heading": "#FFFFFF",
+          "accent": "#FAD02C",
+          "accent_text": "#000000",
+          "border": "#3A3A3A",
+          "button": "#FAD02C",
+          "button_text": "#000000",
+          "secondary_button": "#222222",
+          "secondary_button_text": "#FFFFFF",
+          "input": "#2E2E2E",
+          "input_text": "#FFFFFF"
+        }
+      }
+    },
+    "type_heading_font": "fraunces_n6",
+    "heading_scale": 100,
+    "heading_case": "none",
+    "type_body_font": "figtree_n4",
+    "body_scale": 100,
+    "type_accent_font": "fraunces_i4",
+    "page_width": "1440px",
+    "page_margin": 40,
+    "section_spacing": 96,
+    "section_spacing_mobile": 56,
+    "button_radius": 14,
+    "button_height": 52,
+    "input_radius": 12,
+    "card_radius": 20,
+    "media_radius": 16,
+    "animations_reveal": true,
+    "animations_hover": true,
+    "cart_type": "drawer",
+    "cart_show_note": true,
+    "show_currency_code": false,
+    "predictive_search": true,
+    "search_show_price": true
+  },
   "presets": {
     "Whispo": {
       "logo_width": 120,
       "logo_width_mobile": 96,
-      "type_heading_font": "fraunces_n6",
-      "heading_scale": 100,
-      "heading_case": "none",
-      "type_body_font": "figtree_n4",
-      "body_scale": 100,
-      "type_accent_font": "fraunces_i4",
-      "page_width": "1440px",
-      "page_margin": 40,
-      "section_spacing": 96,
-      "section_spacing_mobile": 56,
-      "button_radius": 14,
-      "button_height": 52,
-      "input_radius": 12,
-      "card_radius": 20,
-      "media_radius": 16,
-      "animations_reveal": true,
-      "animations_hover": true,
-      "cart_type": "drawer",
-      "cart_show_note": true,
-      "show_currency_code": false,
-      "predictive_search": true,
-      "search_show_price": true,
       "color_schemes": {
         "scheme-1": {
           "settings": {
@@ -112,7 +213,29 @@
             "input_text": "#FFFFFF"
           }
         }
-      }
+      },
+      "type_heading_font": "fraunces_n6",
+      "heading_scale": 100,
+      "heading_case": "none",
+      "type_body_font": "figtree_n4",
+      "body_scale": 100,
+      "type_accent_font": "fraunces_i4",
+      "page_width": "1440px",
+      "page_margin": 40,
+      "section_spacing": 96,
+      "section_spacing_mobile": 56,
+      "button_radius": 14,
+      "button_height": 52,
+      "input_radius": 12,
+      "card_radius": 20,
+      "media_radius": 16,
+      "animations_reveal": true,
+      "animations_hover": true,
+      "cart_type": "drawer",
+      "cart_show_note": true,
+      "show_currency_code": false,
+      "predictive_search": true,
+      "search_show_price": true
     }
   }
 }

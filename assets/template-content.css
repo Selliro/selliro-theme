@@ -1,0 +1,568 @@
+/* ==============================================================================
+   Whispo — content pages
+   ------------------------------------------------------------------------------
+   Markup: sections/page.liquid, main-contact.liquid, 404.liquid, blog.liquid, article.liquid,
+   collections.liquid, password.liquid; snippets/article-card.liquid, collection-card.liquid.
+   Setting values (inline {% style %}): --section-padding-top / -bottom.
+
+   Contents
+     1. Page
+     2. Contact
+     3. Not found
+     4. Blog and article card
+     5. Article and comments
+     6. Collection cards (list of collections, home page sections)
+     7. Password page
+   ============================================================================== */
+
+.content-page,
+.contact-page,
+.blog-page,
+.article-page,
+.collections-page {
+  padding-block: var(--section-padding-top, 56px) var(--section-padding-bottom, 88px);
+}
+
+/* ==============================================================================
+   1. Page
+   ============================================================================== */
+.content-page__inner {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.content-page__inner--narrow {
+  max-width: 48rem;
+}
+
+.content-page__title {
+  margin: 0;
+}
+
+.content-page__body {
+  color: rgb(var(--color-text-rgb) / 0.88);
+  font-size: var(--text-lg);
+}
+
+/* ==============================================================================
+   2. Contact
+   ============================================================================== */
+.contact-page__inner {
+  display: grid;
+  gap: clamp(2rem, 5vw, 5rem);
+}
+
+@media screen and (min-width: 990px) {
+  .contact-page__inner {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: start;
+  }
+}
+
+.contact-page__intro {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.contact-page__title {
+  margin: 0;
+}
+
+.contact-page__text {
+  color: rgb(var(--color-text-rgb) / 0.82);
+  font-size: var(--text-lg);
+}
+
+.contact-page__details {
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-card);
+  background: rgb(var(--color-text-rgb) / 0.04);
+}
+
+.contact-form {
+  display: grid;
+  gap: 1.1rem;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+}
+
+.contact-form__row {
+  display: grid;
+  gap: 1.1rem;
+}
+
+@media screen and (min-width: 750px) {
+  .contact-form__row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.contact-form__message {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-input);
+  background: rgb(var(--color-text-rgb) / 0.05);
+}
+
+.contact-form__message.form-message--success {
+  flex-direction: row;
+  align-items: center;
+}
+
+.contact-form__submit {
+  justify-self: start;
+}
+
+/* ==============================================================================
+   3. Not found
+   ============================================================================== */
+.not-found__inner {
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
+  padding-block: clamp(4rem, 10vw, 8rem);
+  text-align: center;
+}
+
+.not-found__code {
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: clamp(5rem, 3rem + 10vw, 11rem);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  -webkit-text-stroke: 2px var(--color-heading);
+}
+
+.not-found__title {
+  margin: 0;
+}
+
+.not-found__text {
+  max-width: 32rem;
+  color: rgb(var(--color-text-rgb) / 0.78);
+}
+
+.not-found__search {
+  width: min(100%, 32rem);
+}
+
+/* ==============================================================================
+   4. Blog and article card
+   ============================================================================== */
+.blog-page__header {
+  display: grid;
+  gap: 1.25rem;
+  margin-bottom: clamp(1.75rem, 3.5vw, 3rem);
+}
+
+.blog-page__title {
+  margin: 0;
+}
+
+.blog-page__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.blog-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  padding: 0 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: inherit;
+  font-size: var(--text-sm);
+  text-decoration: none;
+}
+
+.blog-tag:hover {
+  border-color: var(--color-text);
+}
+
+.blog-tag.is-active {
+  border-color: var(--color-button);
+  background: var(--color-button);
+  color: var(--color-button-text);
+}
+
+.blog-grid {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3rem) clamp(1rem, 2vw, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media screen and (min-width: 750px) {
+  .blog-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .blog-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .blog-grid--featured .blog-grid__item:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .blog-grid--featured .blog-grid__item:first-child .article-card {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+
+  .blog-grid--featured .blog-grid__item:first-child .article-card__title {
+    font-size: var(--h2);
+  }
+}
+
+.article-card {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+}
+
+.article-card__media {
+  aspect-ratio: 3 / 2;
+  border-radius: var(--radius-media);
+}
+
+.article-card__media img {
+  transition: scale 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animations-hover .article-card:hover .article-card__media img {
+  scale: 1.04;
+}
+
+.article-card__body {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.article-card__meta,
+.article-card__author {
+  color: rgb(var(--color-text-rgb) / 0.65);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.article-card__title {
+  margin: 0;
+}
+
+.article-card__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.article-card__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.article-card:hover .article-card__link {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.article-card__excerpt {
+  color: rgb(var(--color-text-rgb) / 0.78);
+}
+
+/* ==============================================================================
+   5. Article and comments
+   ============================================================================== */
+.article-page__header {
+  display: grid;
+  justify-items: center;
+  gap: 0.85rem;
+  max-width: 52rem;
+  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+  text-align: center;
+}
+
+.article-page__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 44px;
+  font-size: var(--text-sm);
+}
+
+.article-page__back .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.article-page__meta,
+.article-page__author {
+  color: rgb(var(--color-text-rgb) / 0.68);
+  font-size: var(--text-sm);
+}
+
+.article-page__meta a {
+  color: inherit;
+}
+
+.article-page__title {
+  margin: 0;
+}
+
+.article-page__image {
+  aspect-ratio: 16 / 8;
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+  border-radius: var(--radius-media);
+}
+
+.article-page__content,
+.article-page__footer,
+.article-comments {
+  max-width: 46rem;
+  margin-inline: auto;
+}
+
+.article-page__content {
+  font-size: var(--text-lg);
+}
+
+.article-page__footer {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.article-comments {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.article-comments__list {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.article-comments__item {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1.25rem;
+  border-radius: var(--radius-card);
+  background: rgb(var(--color-text-rgb) / 0.04);
+}
+
+.article-comments__author {
+  font-size: var(--text-sm);
+  font-weight: var(--font-body-weight-bold);
+}
+
+.article-comments__form {
+  display: grid;
+  gap: 1rem;
+}
+
+.article-comments__note {
+  color: rgb(var(--color-text-rgb) / 0.65);
+  font-size: var(--text-xs);
+}
+
+/* ==============================================================================
+   6. Collection cards
+   ============================================================================== */
+.collections-page__title {
+  margin: 0 0 clamp(1.75rem, 3.5vw, 3rem);
+}
+
+.collection-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.75rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media screen and (min-width: 990px) {
+  .collection-cards {
+    grid-template-columns: repeat(var(--columns, 3), minmax(0, 1fr));
+  }
+}
+
+.collection-card {
+  display: grid;
+  gap: 0.85rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.collection-card__media {
+  aspect-ratio: var(--ratio, 0.8);
+  border-radius: var(--radius-media);
+}
+
+.collection-card__media img {
+  transition: scale 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animations-hover .collection-card:hover .collection-card__media img {
+  scale: 1.04;
+}
+
+.collection-card__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.15rem 1rem;
+}
+
+.collection-card__title {
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  font-size: var(--h5);
+}
+
+.collection-card__count {
+  grid-row: 2;
+  color: rgb(var(--color-text-rgb) / 0.65);
+  font-size: var(--text-sm);
+}
+
+.collection-card__arrow {
+  grid-row: 1 / 3;
+  grid-column: 2;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  transition: background-color 0.2s ease, color 0.2s ease, translate 0.25s ease;
+}
+
+.collection-card:hover .collection-card__arrow {
+  border-color: var(--color-button);
+  background: var(--color-button);
+  color: var(--color-button-text);
+}
+
+/* ==============================================================================
+   7. Password page
+   ============================================================================== */
+.password-page {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100dvh;
+}
+
+.password-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 1.25rem;
+}
+
+.password-page__logo-image {
+  width: 140px;
+  height: auto;
+}
+
+.password-page__enter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  font-size: var(--text-sm);
+}
+
+.password-page__enter .icon {
+  width: 16px;
+  height: 16px;
+}
+
+.password-page__main {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1.5rem;
+  padding-block: 3rem;
+  text-align: center;
+}
+
+.password-page__title {
+  max-width: 14ch;
+  margin: 0;
+}
+
+.password-page__message {
+  max-width: 34rem;
+  color: rgb(var(--color-text-rgb) / 0.8);
+  font-size: var(--text-lg);
+}
+
+.password-page__newsletter {
+  width: min(100%, 30rem);
+}
+
+.password-page__footer {
+  padding-block: 1.5rem;
+  color: rgb(var(--color-text-rgb) / 0.65);
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+.password-page__footer a {
+  color: inherit;
+}
+
+.password-dialog {
+  inset: 0;
+  width: min(26rem, calc(100vw - 2rem));
+  height: fit-content;
+  margin: auto;
+}
+
+.password-dialog__panel {
+  position: relative;
+  display: grid;
+  gap: 1.25rem;
+  padding: 2rem;
+  border-radius: var(--radius-card);
+}
+
+.password-dialog[open] .password-dialog__panel {
+  animation: modal-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.password-dialog[data-closing] .password-dialog__panel {
+  animation: modal-out 0.25s ease-in both;
+}
+
+.password-dialog__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+}
+
+.password-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.password-form__admin {
+  color: rgb(var(--color-text-rgb) / 0.65);
+  font-size: var(--text-xs);
+  text-align: center;
+}

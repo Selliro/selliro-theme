@@ -1,0 +1,96 @@
+{%- comment -%}
+  Whispo — cart page. Lines on the left, the summary (note, discounts, total, check out, accelerated
+  checkout buttons) in a sticky panel on the right. Works without JavaScript (the form posts quantities to
+  /cart and "Check out" goes to checkout); with it, changes apply in place (assets/cart-items.js).
+  Files: assets/cart.css, snippets/cart-line.liquid, snippets/cart-summary.liquid.
+{%- endcomment -%}
+
+{%- comment -%} 1. CSS {%- endcomment -%}
+{{ 'cart.css' | asset_url | stylesheet_tag }}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{% endstyle %}
+
+{%- comment -%} 2. Liquid {%- endcomment -%}
+<script src="{{ 'cart-items.js' | asset_url }}" type="module"></script>
+<script src="{{ 'quantity-input.js' | asset_url }}" type="module"></script>
+
+{%- assign form_id = section.id | append: '-form' -%}
+<div class="main-cart color-{{ section.settings.color_scheme }}" data-cart-section="{{ section.id }}">
+  <div class="page-width">
+    <cart-items class="cart-items cart-items--page" data-section-id="{{ section.id }}">
+      <div class="main-cart__heading">
+        <h1 class="h2">{{ 'cart.title' | t }}</h1>
+        {%- if cart.item_count > 0 -%}
+          <a href="{{ routes.all_products_collection_url }}" class="link main-cart__continue">{{ 'cart.continue_shopping' | t }}</a>
+        {%- endif -%}
+      </div>
+
+      {%- if cart.item_count > 0 -%}
+        <div class="cart-items__layout">
+          <form action="{{ routes.cart_url }}" method="post" id="{{ form_id }}" class="cart-items__form" novalidate>
+            <ul class="cart-items__list" role="list" aria-label="{{ 'cart.items' | t }}">
+              {%- for item in cart.items -%}
+                {%- render 'cart-line', item: item, id: section.id -%}
+              {%- endfor -%}
+            </ul>
+            <noscript>
+              <button type="submit" class="button button--secondary" name="update">{{ 'cart.update' | t }}</button>
+            </noscript>
+          </form>
+          <aside class="cart-items__aside" aria-label="{{ 'cart.summary' | t }}">
+            {%- render 'cart-summary', id: section.id -%}
+          </aside>
+        </div>
+      {%- else -%}
+        <div class="cart-empty">
+          <span class="cart-empty__icon">{% render 'icon', name: 'cart' %}</span>
+          <p class="cart-empty__title h4">{{ 'cart.empty' | t }}</p>
+          <a href="{{ routes.all_products_collection_url }}" class="button">{{ 'cart.continue_shopping' | t }}</a>
+          {%- if shop.customer_accounts_enabled and customer == nil -%}
+            <p class="cart-empty__login">{{ 'cart.login_html' | t: link: routes.account_login_url }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <p class="visually-hidden" role="status" data-ref="status"></p>
+    </cart-items>
+  </div>
+</div>
+
+{%- comment -%} 3. Schema {%- endcomment -%}
+{% schema %}
+{
+  "name": "t:sections.main_cart.name",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.main_cart.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:sections.main_cart.padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:sections.main_cart.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ]
+}
+{% endschema %}

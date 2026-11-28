@@ -1,0 +1,327 @@
+/* ==============================================================================
+   Whispo — footer
+   ------------------------------------------------------------------------------
+   Markup: sections/footer.liquid. Behaviour: assets/footer.js (reveal on scroll).
+   Setting values (inline {% style %}): --footer-padding-top, --footer-padding-bottom, --footer-logo-width.
+
+   Contents
+     1. Layers: main card over the bottom bar
+     2. Block grid
+     3. Blocks: brand, menu, newsletter, text
+     4. Bottom bar: copyright, policies, localization, payment icons, back to top
+     5. Reveal on scroll (body[data-footer-reveal], set by assets/footer.js)
+   ============================================================================== */
+
+/* ==============================================================================
+   1. Layers
+   The bottom bar reaches up behind the card (::before) so the card's rounded corners show its color;
+   the wrapper stays transparent.
+   ============================================================================== */
+.footer {
+  --footer-radius: clamp(18px, 2.2vw, 28px);
+
+  display: block;
+}
+
+.footer__bottom {
+  position: relative;
+}
+
+.footer__bottom::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--footer-radius) * -1) 0 auto;
+  height: var(--footer-radius);
+  background: inherit;
+  pointer-events: none;
+}
+
+.footer__main {
+  position: relative;
+  z-index: 1;
+  padding-block: var(--footer-padding-top, 72px) var(--footer-padding-bottom, 64px);
+  border-radius: 0 0 var(--footer-radius) var(--footer-radius);
+}
+
+.footer__main:not(:has(.footer__grid)) {
+  display: none;
+}
+
+/* ==============================================================================
+   2. Block grid
+   Mobile: brand and newsletter full width, menus in pairs. Desktop: one row, brand and newsletter wider.
+   ============================================================================== */
+.footer__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2.5rem 1.5rem;
+}
+
+.footer-block--brand,
+.footer-block--newsletter,
+.footer-block--text {
+  grid-column: 1 / -1;
+}
+
+@media screen and (min-width: 750px) {
+  .footer__grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .footer-block--brand,
+  .footer-block--newsletter {
+    grid-column: span 3;
+  }
+
+  .footer-block--menu,
+  .footer-block--text {
+    grid-column: span 2;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .footer__grid {
+    display: flex;
+    gap: clamp(2rem, 4vw, 4.5rem);
+  }
+
+  .footer-block {
+    flex: 0.85 1 0;
+    min-width: 0;
+  }
+
+  .footer-block--brand {
+    flex-grow: 1.25;
+  }
+
+  .footer-block--newsletter {
+    flex-grow: 1.75;
+  }
+
+  .footer-block--text {
+    flex-grow: 1.1;
+  }
+}
+
+/* ==============================================================================
+   3. Blocks
+   ============================================================================== */
+.footer-block {
+  display: grid;
+  align-content: start;
+  gap: 1.1rem;
+}
+
+.footer-block__heading {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: var(--font-body-weight-bold);
+  font-size: var(--text-xs);
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: rgb(var(--color-text-rgb) / 0.7);
+}
+
+.footer-block__heading--large {
+  font-family: var(--font-heading);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  font-size: var(--h4);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  text-transform: var(--heading-case, none);
+  color: var(--color-heading);
+}
+
+.footer-block__text,
+.footer-block__note {
+  color: rgb(var(--color-text-rgb) / 0.78);
+  max-width: 34rem;
+}
+
+.footer-block__note {
+  font-size: var(--text-xs);
+  color: rgb(var(--color-text-rgb) / 0.62);
+}
+
+.footer-block__note a,
+.footer-block__text a {
+  color: var(--color-text);
+}
+
+/* Brand */
+.footer-block__logo {
+  display: inline-flex;
+  width: fit-content;
+  color: var(--color-heading);
+  text-decoration: none;
+}
+
+.footer-block__logo-image {
+  width: var(--footer-logo-width, 140px);
+  height: auto;
+}
+
+.footer-block__logo-text {
+  margin: 0;
+}
+
+.footer-block__social {
+  margin-top: 0.25rem;
+}
+
+/* Menu */
+.footer-block__links {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.footer-block__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  color: rgb(var(--color-text-rgb) / 0.82);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-block__link:hover,
+.footer-block__link[aria-current='page'] {
+  color: var(--color-heading);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+/* Newsletter field: assets/base.css ("Newsletter form") */
+
+/* ==============================================================================
+   4. Bottom bar
+   ============================================================================== */
+.footer__bottom-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 2rem;
+  padding-block: 1.1rem;
+  font-size: var(--text-sm);
+}
+
+.footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1.25rem;
+}
+
+.footer__copyright a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer__copyright a:hover {
+  text-decoration: underline;
+}
+
+.footer__policies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+}
+
+.footer__policies a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer__policies a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.footer__utilities {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
+
+.footer__payment {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.footer__payment-icon {
+  display: block;
+  width: 38px;
+  height: 24px;
+}
+
+.footer__top {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 40px;
+  padding: 0 0.9rem;
+  border: 1px solid rgb(var(--color-text-rgb) / 0.35);
+  border-radius: 999px;
+  color: inherit;
+  font-weight: var(--font-body-weight-bold);
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.footer__top:hover {
+  background: var(--color-text);
+  color: var(--color-background);
+}
+
+/* Localization lists open upwards in the footer */
+.localization--footer .disclosure__panel {
+  top: auto;
+  bottom: calc(100% + 0.4rem);
+  left: 0;
+  right: auto;
+}
+
+@media screen and (max-width: 749px) {
+  .footer__bottom-inner,
+  .footer__utilities {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ==============================================================================
+   5. Reveal on scroll
+   pin   the footer fits the screen: it waits under the page (sticky to the bottom, behind <main>) and
+         its parts rise at a slower pace than the page while the page lifts away.
+   rise  taller than the screen: it stays in the flow and its parts slide up as it comes into view.
+   The transforms themselves are set by assets/footer.js. body[data-footer-zone] (footer on screen)
+   moves the sticky header out of the way.
+   ============================================================================== */
+body[data-footer-reveal] #MainContent {
+  position: relative;
+  z-index: 1;
+  background: var(--gradient-background, var(--color-background));
+}
+
+body[data-footer-reveal='pin'] .footer-section {
+  position: sticky;
+  bottom: 0;
+  z-index: 0;
+}
+
+body[data-footer-reveal] .footer__main,
+body[data-footer-reveal] .footer__bottom {
+  will-change: transform;
+}
+
+body[data-footer-zone] .header-section header-component {
+  translate: 0 -100%;
+}

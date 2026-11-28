@@ -1,0 +1,12 @@
+{%- comment -%}
+  Cart drawer content for the Section Rendering API. Not added in the theme editor: assets/cart.js asks for it
+  (section id "cart-drawer") with every cart change and <cart-items> swaps it in.
+{%- endcomment -%}
+{%- render 'cart-drawer-content' -%}
+
+{% schema %}
+{
+  "name": "t:sections.cart_drawer.name",
+  "settings": []
+}
+{% endschema %}

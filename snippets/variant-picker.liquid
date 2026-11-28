@@ -1,0 +1,109 @@
+{%- doc -%}
+  Variant picker (assets/product-info.js → <variant-picker>). Each option is a group of buttons (radio
+  inputs), color/image swatches when the option has swatches, or a dropdown (setting "Style").
+
+  Every value carries its option value id (data-option-value-id); when the selection changes the script asks
+  Shopify for the section rendered with those values (option_values), so the price, availability, media and
+  buttons always match the real variant, including combined listings (values that link to another product).
+  Values that are sold out are struck through; combinations that don't exist are marked unavailable.
+  Styles: assets/section-main-product.css ("Variant picker").
+
+  @param {object} product - Product
+  @param {string} id - Unique id prefix (section id)
+  @param {string} [style] - 'buttons' (default) or 'dropdown'
+  @param {boolean} [show_swatches] - Use swatches for options that have them (default true)
+
+  @example
+  {% render 'variant-picker', product: product, id: section.id, style: 'buttons' %}
+{%- enddoc -%}
+{%- liquid
+  assign style = style | default: 'buttons'
+  assign show_swatches = show_swatches | default: true, allow_false: true
+-%}
+{%- unless product.has_only_default_variant -%}
+  <variant-picker
+    class="variant-picker"
+    data-product-url="{{ product.url }}"
+    data-variant-update="picker"
+  >
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign option_id = id | append: '-option-' | append: forloop.index
+        assign uses_swatches = false
+        if show_swatches and option.values.first.swatch
+          assign uses_swatches = true
+        endif
+      -%}
+      {%- if style == 'dropdown' and uses_swatches == false -%}
+        <div class="variant-picker__option field">
+          <label class="field__label" for="{{ option_id }}">{{ option.name | escape }}</label>
+          <select id="{{ option_id }}" class="select__select variant-picker__select" name="options[{{ option.name | escape }}]">
+            {%- for value in option.values -%}
+              <option
+                value="{{ value | escape }}"
+                data-option-value-id="{{ value.id }}"
+                data-product-url="{{ value.product_url }}"
+                {% if value.selected %}
+                  selected
+                {% endif %}
+              >
+                {{- value | escape -}}
+                {%- unless value.available %} · {{ 'products.sold_out' | t }}{% endunless -%}
+              </option>
+            {%- endfor -%}
+          </select>
+        </div>
+      {%- else -%}
+        <fieldset class="variant-picker__option variant-picker__option--{% if uses_swatches %}swatches{% else %}buttons{% endif %}">
+          <legend class="variant-picker__legend">
+            {{- option.name | escape -}}:
+            <span class="variant-picker__selected">{{ option.selected_value | escape }}</span>
+          </legend>
+          <div class="variant-picker__values">
+            {%- for value in option.values -%}
+              {%- assign input_id = option_id | append: '-' | append: forloop.index -%}
+              <input
+                type="radio"
+                class="variant-picker__input visually-hidden"
+                id="{{ input_id }}"
+                name="{{ option_id }}"
+                value="{{ value | escape }}"
+                data-option-value-id="{{ value.id }}"
+                data-product-url="{{ value.product_url }}"
+                {% if value.selected %}
+                  checked
+                {% endif %}
+              >
+              <label
+                for="{{ input_id }}"
+                class="variant-picker__value{% unless value.available %} is-sold-out{% endunless %}{% if value.variant == nil %} is-unavailable{% endif %}"
+                {% if uses_swatches %}
+                  title="{{ value | escape }}"
+                {% endif %}
+              >
+                {%- if uses_swatches -%}
+                  {%- liquid
+                    assign swatch_style = ''
+                    if value.swatch.image
+                      assign swatch_url = value.swatch.image | image_url: width: 80
+                      assign swatch_style = 'background-image: url(' | append: swatch_url | append: ');'
+                    elsif value.swatch.color
+                      assign swatch_style = 'background-color: ' | append: value.swatch.color | append: ';'
+                    endif
+                  -%}
+                  <span class="variant-picker__swatch" style="{{ swatch_style }}"></span>
+                  <span class="visually-hidden">{{ value | escape }}</span>
+                {%- else -%}
+                  {{- value | escape -}}
+                {%- endif -%}
+                {%- unless value.available -%}
+                  <span class="visually-hidden">, {{ 'products.sold_out' | t }}</span>
+                {%- endunless -%}
+              </label>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+      {%- endif -%}
+    {%- endfor -%}
+  </variant-picker>
+{%- endunless -%}

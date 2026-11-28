@@ -1,0 +1,677 @@
+/* ==============================================================================
+   Whispo — product story (sections/product-story.liquid)
+   Moved out of the section's {% stylesheet %} block so it loads only on pages that use the section.
+   ============================================================================== */
+
+.pstory[id] {
+  scroll-margin-top: calc(var(--header-height, 72px) + 16px);
+}
+
+.pstory {
+  position: relative;
+  padding-block: var(--pstory-pad-top) var(--pstory-pad-bottom);
+}
+
+.pstory__header {
+  max-width: 44rem;
+  margin: 0 auto clamp(2rem, 5vw, 4rem);
+  text-align: center;
+}
+
+.pstory__eyebrow {
+  margin: 0 0 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.pstory__heading {
+  margin: 0;
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  line-height: var(--section-title-leading);
+  letter-spacing: var(--section-title-tracking);
+}
+
+.pstory__intro {
+  margin-block-start: 0.75rem;
+  opacity: 0.75;
+}
+
+.pstory__layout {
+  display: block;
+}
+
+/* ---------------------------------------------------------------- media */
+.pstory__media-col,
+.pstory__rail {
+  display: none;
+}
+
+.pstory__media {
+  position: relative;
+  aspect-ratio: var(--pstory-ratio);
+  border-radius: var(--pstory-radius);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-text) 6%, transparent);
+  isolation: isolate;
+}
+
+.pstory__slide {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z, 1);
+}
+
+.pstory__img,
+.pstory__slide :is(img, svg) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Wipe: later slides wait below the frame and wipe up over the previous one */
+.pstory--wipe .pstory__slide {
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.pstory--wipe .pstory__slide img {
+  scale: 1.12;
+  transition: scale 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pstory--wipe .pstory__slide.is-past {
+  clip-path: inset(0 0 0 0);
+}
+
+.pstory--wipe .pstory__slide.is-active img {
+  scale: 1;
+}
+
+/* Fade + zoom */
+.pstory--fade .pstory__slide {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.pstory--fade .pstory__slide img {
+  scale: 1.08;
+  transition: scale 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pstory--fade .pstory__slide.is-active {
+  opacity: 1;
+}
+
+.pstory--fade .pstory__slide.is-active img {
+  scale: 1;
+}
+
+.pstory__hud {
+  position: absolute;
+  inset: auto 1rem 1rem;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  pointer-events: none;
+}
+
+.pstory__counter,
+.pstory__hud-label {
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #fff;
+  background: rgb(0 0 0 / 0.38);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.pstory__counter {
+  font-variant-numeric: tabular-nums;
+}
+
+.pstory__hud-label:empty {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- steps */
+.pstory__steps {
+  display: grid;
+  gap: clamp(2.5rem, 8vw, 4rem);
+  margin: 0;
+}
+
+.pstory__step-media {
+  aspect-ratio: var(--pstory-ratio);
+  margin-block-end: 1.25rem;
+  border-radius: var(--pstory-radius);
+  overflow: hidden;
+}
+
+.pstory__step-media :is(img, svg) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pstory__step-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.pstory__step-num {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  padding-inline: 0.4rem;
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  color: #111;
+  background: var(--pstory-accent);
+}
+
+.pstory__step-heading {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
+  font-weight: var(--section-title-weight);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.pstory__step-text {
+  margin-block-start: 0.85rem;
+  max-width: 32rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.78;
+}
+
+/* Featured product */
+.pstory__product {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.9rem;
+  max-width: 30rem;
+  margin-block-start: 1.5rem;
+  padding: 0.65rem 0.75rem 0.65rem 0.65rem;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--color-text) 5%, var(--color-background));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.pstory__product-media img {
+  display: block;
+  width: 3.75rem;
+  height: 3.75rem;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #fff;
+}
+
+.pstory__product-info {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.pstory__product-title {
+  overflow: hidden;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: inherit;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pstory__product-title:hover {
+  text-decoration: underline;
+}
+
+.pstory__product-price {
+  font-size: 0.875rem;
+}
+
+.pstory__product-price s {
+  margin-inline-start: 0.35rem;
+  opacity: 0.72;
+}
+
+.pstory__add {
+  position: relative;
+  min-height: 2.5rem;
+  padding: 0 1.1rem;
+  border: 0;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #111;
+  background: var(--pstory-accent);
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.pstory__add:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(0.96);
+}
+
+.pstory__add:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pstory__add-done {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+}
+
+.pstory__add-done svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.pstory__add.is-added .pstory__add-label {
+  opacity: 0;
+}
+
+.pstory__add.is-added .pstory__add-done {
+  opacity: 1;
+}
+
+.pstory__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-block-start: 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.pstory__link svg {
+  transition: translate 0.25s ease;
+}
+
+.pstory__link:hover svg {
+  translate: 3px 0;
+}
+
+/* ---------------------------------------------------------------- desktop: pinned media + scrolling steps */
+/* Tablets (split layout): each step's photo sits beside its text, alternating sides, instead of a
+   full-width photo per step */
+@media screen and (min-width: 750px) and (max-width: 989px) {
+  .pstory--layout-split .pstory__step {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    align-items: center;
+  }
+
+  .pstory--layout-split .pstory__step-media {
+    margin: 0;
+  }
+
+  .pstory--layout-split .pstory__step:nth-child(even) .pstory__step-media {
+    order: 2;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .pstory__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) auto minmax(0, 0.95fr);
+    gap: clamp(2rem, 4vw, 4.5rem);
+    align-items: start;
+  }
+
+  .pstory--media-right .pstory__layout {
+    grid-template-columns: minmax(0, 0.95fr) auto minmax(0, 1.05fr);
+  }
+
+  .pstory--media-right .pstory__media-col {
+    order: 3;
+  }
+
+  .pstory--media-right .pstory__rail {
+    order: 2;
+  }
+
+  .pstory--media-right .pstory__steps {
+    order: 1;
+  }
+
+  .pstory__media-col {
+    display: block;
+    position: sticky;
+    top: calc(var(--header-height, 0px) + 2rem);
+  }
+
+  .pstory__media {
+    max-height: calc(100vh - var(--header-height, 0px) - 4rem);
+    margin-inline: auto;
+  }
+
+  .pstory__rail {
+    position: sticky;
+    top: calc(var(--header-height, 0px) + 2rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: min(26rem, 60vh);
+    margin-block-start: 4rem;
+  }
+
+  .pstory__rail-track {
+    position: absolute;
+    inset: 1rem auto 1rem 50%;
+    width: 2px;
+    translate: -50% 0;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--color-text) 12%, transparent);
+  }
+
+  .pstory__rail-fill {
+    position: absolute;
+    inset: 0 0 auto;
+    height: calc(var(--pstory-progress, 0) * 100%);
+    border-radius: inherit;
+    background: var(--color-text);
+  }
+
+  .pstory__rail-dot {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in srgb, var(--color-text) 72%, transparent);
+    background: var(--color-background);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-text) 18%, transparent);
+    transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, scale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .pstory__rail-dot.is-active {
+    color: #111;
+    background: var(--pstory-accent);
+    box-shadow: none;
+    scale: 1.12;
+  }
+
+  .pstory__step-media {
+    display: none;
+  }
+
+  .pstory__steps {
+    gap: 0;
+  }
+
+  .pstory__step {
+    display: flex;
+    align-items: center;
+    min-height: min(78vh, 46rem);
+    padding-block: 2rem;
+    opacity: 0.28;
+    transition: opacity 0.6s ease;
+  }
+
+  .pstory__step:first-child {
+    min-height: min(62vh, 38rem);
+    align-items: flex-start;
+    padding-block-start: 4rem;
+  }
+
+  .pstory__step:last-child {
+    min-height: min(70vh, 42rem);
+  }
+
+  .pstory__step.is-active {
+    opacity: 1;
+  }
+
+  .pstory__step-body > * {
+    transition: translate 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .pstory__step:not(.is-active) .pstory__step-body > * {
+    translate: 0 14px;
+  }
+
+  /* Without JS every step is fully visible */
+  .pstory__layout:not([data-ready]) .pstory__step {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pstory__slide,
+  .pstory__slide img,
+  .pstory__step,
+  .pstory__step-body > *,
+  .pstory__rail-dot {
+    transition: none !important;
+  }
+}
+
+.pstory__empty {
+  padding: 3rem;
+  text-align: center;
+  opacity: 0.6;
+  border: 1px dashed currentColor;
+  border-radius: 12px;
+}
+
+/* ================================================================ Layout: Stacked cards
+   Every step is a card (image + text) that sticks and piles up; cards underneath shrink and dim. */
+.pstory--layout-stacked .pstory__media-col,
+.pstory--layout-stacked .pstory__rail {
+  display: none !important;
+}
+
+.pstory--layout-stacked .pstory__layout {
+  display: block !important;
+}
+
+.pstory--layout-stacked .pstory__steps {
+  display: block;
+  padding-block-end: 2rem;
+}
+
+.pstory--layout-stacked .pstory__step {
+  position: sticky;
+  top: calc(var(--header-height, 0px) + 1.25rem + var(--i) * 1rem);
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+  min-height: 0 !important;
+  margin-block-end: clamp(1.5rem, 6vh, 3.5rem);
+  padding: 0 !important;
+  border-radius: var(--pstory-radius);
+  overflow: hidden;
+  opacity: 1 !important;
+  background: var(--pstory-card);
+  box-shadow: 0 -12px 40px -24px rgb(0 0 0 / 0.35);
+  transform-origin: 50% 0;
+  scale: var(--stack-scale, 1);
+  filter: brightness(var(--stack-dim, 1));
+  transition: scale 0.35s ease, filter 0.35s ease;
+}
+
+.pstory--layout-stacked .pstory__step-media {
+  display: block !important;
+  margin: 0;
+  border-radius: 0;
+  aspect-ratio: 16 / 11;
+}
+
+.pstory--layout-stacked .pstory__step-body {
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  align-self: center;
+}
+
+.pstory--layout-stacked .pstory__step-body > * {
+  translate: none !important;
+}
+
+@media screen and (min-width: 990px) {
+  .pstory--layout-stacked .pstory__step {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: min(70vh, 34rem) !important;
+  }
+
+  .pstory--layout-stacked .pstory__step-media {
+    aspect-ratio: auto;
+    height: 100%;
+    min-height: min(70vh, 34rem);
+  }
+
+  .pstory--layout-stacked.pstory--media-right .pstory__step-media {
+    order: 2;
+  }
+}
+
+/* ================================================================ Layout: Immersive
+   A full-screen image stays pinned; frosted panels with each step scroll over it. */
+.pstory--layout-immersive .pstory__layout {
+  --pstory-screen: calc(100svh - var(--header-height, 0px));
+
+  display: block !important;
+}
+
+.pstory--layout-immersive .pstory__rail {
+  display: none !important;
+}
+
+.pstory--layout-immersive .pstory__media-col {
+  position: sticky;
+  top: var(--header-height, 0px);
+  display: block;
+  height: var(--pstory-screen);
+}
+
+.pstory--layout-immersive .pstory__media {
+  height: 100%;
+  max-height: none;
+  aspect-ratio: auto;
+}
+
+.pstory--layout-immersive.full-width .pstory__media {
+  border-radius: 0;
+}
+
+.pstory--layout-immersive .pstory__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  background: linear-gradient(90deg, rgb(0 0 0 / 0.28), transparent 55%);
+  pointer-events: none;
+}
+
+.pstory--layout-immersive.pstory--media-right .pstory__media::after {
+  background: linear-gradient(270deg, rgb(0 0 0 / 0.28), transparent 55%);
+}
+
+.pstory--layout-immersive .pstory__steps {
+  position: relative;
+  z-index: 2;
+  display: block;
+  margin-block-start: calc(-1 * var(--pstory-screen));
+}
+
+.pstory--layout-immersive .pstory__step {
+  display: flex !important;
+  align-items: center;
+  min-height: var(--pstory-screen) !important;
+  padding: 2rem clamp(1rem, 6vw, 6rem) !important;
+  opacity: 1 !important;
+}
+
+.pstory--layout-immersive.pstory--media-right .pstory__step {
+  justify-content: flex-end;
+}
+
+.pstory--layout-immersive .pstory__step-media {
+  display: none !important;
+}
+
+.pstory--layout-immersive .pstory__step-body {
+  width: min(100%, 30rem);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border-radius: calc(var(--pstory-radius) * 0.8);
+  background: rgb(255 255 255 / 0.82);
+  color: #1b1b1b;
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.45);
+}
+
+.pstory--layout-immersive.pstory--panel-dark .pstory__step-body {
+  background: rgb(18 18 18 / 0.62);
+  color: #fff;
+}
+
+.pstory--layout-immersive.pstory--panel-dark .pstory__product {
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16);
+}
+
+.pstory--layout-immersive .pstory__step:not(.is-active) .pstory__step-body > * {
+  translate: none;
+}
+
+.pstory--layout-immersive .pstory__step-body {
+  transition: opacity 0.5s ease, translate 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pstory--layout-immersive .pstory__step:not(.is-active) .pstory__step-body {
+  opacity: 0.55;
+  translate: 0 20px;
+}
+
+.pstory--layout-immersive .pstory__hud {
+  inset: auto 1.25rem 1.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pstory--layout-stacked .pstory__step {
+    scale: 1;
+    filter: none;
+    transition: none;
+  }
+
+  .pstory--layout-immersive .pstory__step-body {
+    transition: none;
+  }
+}

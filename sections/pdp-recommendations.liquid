@@ -1,0 +1,298 @@
+{%- comment -%}
+  You may also like — Shopify product recommendations shown with the homepage (New Arrivals) product card:
+  image gallery, quick view, badges, stars, and an Add to cart button that is always visible at the bottom.
+  Shopify only fills `recommendations` when the section is fetched from the recommendations URL,
+  so the first render is a placeholder and <pdp-recommendations> swaps in the real cards.
+{%- endcomment -%}
+{{ 'section-pdp-recommendations.css' | asset_url | stylesheet_tag }}
+{%- if section.settings.layout == 'slider' -%}
+  {{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
+{%- endif -%}
+{{ 'section-new-arrivals-showcase.css' | asset_url | stylesheet_tag }}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign limit = section.settings.products_to_show
+  assign intent = section.settings.intent | default: 'related'
+  assign per_row = section.settings.columns_desktop
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="pdp-recs {{ section.settings.section_width }} color-{{ section.settings.color_scheme }} pdp-recs--{{ section.settings.layout | default: 'grid' }}"
+  style="--pdp-recs-pad-top: {{ section.settings.padding_top }}px; --pdp-recs-pad-bottom: {{ section.settings.padding_bottom }}px; --pdp-recs-cols: {{ per_row }};"
+  data-new-arrivals-root
+  data-new-arrivals-qv-id="new-arrivals-qv-drawer-{{ section.id }}"
+>
+  {%- if product -%}
+    <pdp-recommendations
+      class="pdp-recs__loader"
+      data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ limit }}&intent={{ intent }}"
+    >
+      {%- if recommendations.performed? and recommendations.products_count > 0 -%}
+        <div class="pdp-recs__content" data-pdp-recs-ready>
+          <header class="pdp-recs__header">
+            {%- if section.settings.layout == 'slider' -%}
+              <div class="pdp-recs__arrows">
+                <button type="button" class="pdp-recs__arrow" data-pdp-recs-prev aria-label="{{ 'accessibility.slideshow_previous' | t }}">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button type="button" class="pdp-recs__arrow" data-pdp-recs-next aria-label="{{ 'accessibility.slideshow_next' | t }}">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            {%- endif -%}
+            {%- if section.settings.heading != blank -%}
+              <h2 class="pdp-recs__heading" data-reveal-title>{{ section.settings.heading | escape }}</h2>
+            {%- endif -%}
+            {%- if section.settings.subheading != blank -%}
+              <p class="pdp-recs__subheading" data-reveal-fade>{{ section.settings.subheading | escape }}</p>
+            {%- endif -%}
+          </header>
+          <ul class="pdp-recs__grid list-unstyled" role="list">
+            {%- for item in recommendations.products limit: limit -%}
+              <li class="pdp-recs__item" data-reveal-card>
+                {%- render 'new-arrivals-card',
+                  product: item,
+                  accent: section.settings.cta_color,
+                  star_color: section.settings.star_color,
+                  add_label: section.settings.add_label,
+                  cta_bottom: true,
+                  image_sizes: '(min-width: 990px) 24vw, (min-width: 750px) 33vw, 62vw'
+                -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- elsif request.design_mode and recommendations.performed? == false -%}
+        <p class="pdp-recs__placeholder">{{ section.settings.heading | escape }}</p>
+      {%- endif -%}
+    </pdp-recommendations>
+  {%- elsif request.design_mode -%}
+    <p class="pdp-recs__placeholder">Product recommendations appear on product pages.</p>
+  {%- endif -%}
+</section>
+
+<script src="{{ 'quick-view.js' | asset_url }}" type="module"></script>
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'image-loader.js' | asset_url }}" defer></script>
+<script src="{{ 'new-arrivals-components.js' | asset_url }}" defer></script>
+<script src="{{ 'new-arrivals-showcase.js' | asset_url }}" defer></script>
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
+<script>
+  if (!customElements.get('pdp-recommendations')) {
+    customElements.define(
+      'pdp-recommendations',
+      class extends HTMLElement {
+        connectedCallback() {
+          if (this.querySelector('[data-pdp-recs-ready]')) return this.reveal();
+          if (!this.dataset.url) return;
+          const io = new IntersectionObserver(
+            (entries) => {
+              if (!entries.some((e) => e.isIntersecting)) return;
+              io.disconnect();
+              this.load();
+            },
+            { rootMargin: '0px 0px 600px 0px' }
+          );
+          io.observe(this);
+        }
+
+        load() {
+          fetch(this.dataset.url)
+            .then((response) => response.text())
+            .then((html) => {
+              const doc = new DOMParser().parseFromString(html, 'text/html');
+              const fresh = doc.querySelector('pdp-recommendations');
+              const section = this.closest('.shopify-section');
+              if (fresh && fresh.querySelector('[data-pdp-recs-ready]')) {
+                this.innerHTML = fresh.innerHTML;
+                this.reveal();
+              } else if (section && !(window.Shopify && window.Shopify.designMode)) {
+                section.hidden = true;
+              }
+            })
+            .catch(() => {});
+        }
+
+        bindArrows() {
+          const grid = this.querySelector('.pdp-recs__grid');
+          if (!grid) return;
+          const step = (dir) => {
+            const card = grid.querySelector('.pdp-recs__item');
+            const gap = parseFloat(getComputedStyle(grid).columnGap) || 0;
+            grid.scrollBy({ left: dir * ((card ? card.offsetWidth : 300) + gap), behavior: 'smooth' });
+          };
+          this.querySelector('[data-pdp-recs-prev]')?.addEventListener('click', () => step(-1));
+          this.querySelector('[data-pdp-recs-next]')?.addEventListener('click', () => step(1));
+          const sync = () => {
+            const prev = this.querySelector('[data-pdp-recs-prev]');
+            const next = this.querySelector('[data-pdp-recs-next]');
+            if (prev) prev.disabled = grid.scrollLeft <= 2;
+            if (next) next.disabled = grid.scrollLeft + grid.clientWidth >= grid.scrollWidth - 2;
+            // Nothing to scroll (all products fit on one row): hide the arrows altogether
+            const arrows = this.querySelector('.pdp-recs__arrows');
+            if (arrows) arrows.hidden = grid.scrollWidth <= grid.clientWidth + 2;
+          };
+          grid.addEventListener('scroll', sync, { passive: true });
+          window.addEventListener('resize', sync, { passive: true });
+          sync();
+        }
+
+        reveal() {
+          this.bindArrows();
+          const root = this.closest('.pdp-recs');
+          if (!root || root.hasAttribute('data-reveal')) return;
+          root.setAttribute('data-reveal', '');
+          const run = () => window.SectionReveal && window.SectionReveal.setup(root.parentElement);
+          if (window.SectionReveal) run();
+          else window.addEventListener('load', run, { once: true });
+        }
+      }
+    );
+  }
+</script>
+
+
+{% schema %}
+{
+  "name": "You may also like",
+  "class": "pdp-recs-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "Recommendations",
+      "options": [
+        {
+          "value": "related",
+          "label": "Related products"
+        },
+        {
+          "value": "complementary",
+          "label": "Complementary products"
+        }
+      ],
+      "default": "related",
+      "info": "Complementary products are set in the Search & Discovery app."
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "slider",
+          "label": "Carousel with arrows"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Products per row on desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "Button label",
+      "default": "ADD TO CART"
+    },
+    {
+      "type": "color",
+      "id": "cta_color",
+      "label": "Button color",
+      "default": "#f5c518"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#e6b800"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "presets": [
+    {
+      "name": "You may also like"
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "product"
+    ]
+  }
+}
+{% endschema %}

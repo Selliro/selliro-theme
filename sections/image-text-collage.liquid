@@ -1,0 +1,1697 @@
+{% comment %}
+  Image with text collage — stacked photo collage + text column.
+
+  Collage layouts
+  - "stack"  (default): designed 3-photo arrangement; only rotation/radius sliders apply.
+  - "custom": every photo's size, layer and position comes from the sliders (−1 = auto).
+{% endcomment %}
+
+{{ 'section-image-text-collage.css' | asset_url | stylesheet_tag }}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+{%- if section.settings.show_badge != false and section.settings.badge_font -%}
+  {% style %}
+    {{ section.settings.badge_font | font_face: font_display: 'swap' }}
+  {% endstyle %}
+{%- endif -%}
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign img1 = section.settings.image_1
+  assign img2 = section.settings.image_2
+  assign img3 = section.settings.image_3
+
+  assign img_count = 0
+  if img1 != blank
+    assign img_count = img_count | plus: 1
+  endif
+  if img2 != blank
+    assign img_count = img_count | plus: 1
+  endif
+  if img3 != blank
+    assign img_count = img_count | plus: 1
+  endif
+
+  assign stack_mode = img_count
+  if stack_mode == 0
+    assign stack_mode = 3
+  endif
+
+  assign has_feature_blocks = false
+  for block in section.blocks
+    if block.type == 'feature'
+      assign has_feature_blocks = true
+    endif
+  endfor
+
+  assign collage_layout = section.settings.collage_layout | default: 'stack'
+  assign design = section.settings.design | default: 'collage'
+  if design != 'collage'
+    assign collage_layout = 'stack'
+  endif
+
+  assign badge_link = section.settings.badge_link | default: section.settings.button_link
+  assign badge_text = section.settings.badge_text | default: 'Explore more'
+  assign badge_label = section.settings.button_label | default: badge_text | replace: '~', '' | strip
+
+  case section.settings.heading_weight
+    when '400', '500', '600', '700'
+      assign heading_weight = section.settings.heading_weight
+    else
+      assign heading_weight = 'var(--font-heading-weight, 700)'
+  endcase
+
+  assign section_classes = ''
+  if section.settings.image_shadow == false
+    assign section_classes = section_classes | append: ' itc--no-shadow'
+  endif
+  if section.settings.image_hover != blank and section.settings.image_hover != 'none'
+    assign section_classes = section_classes | append: ' itc--hover-' | append: section.settings.image_hover
+  endif
+  if section.settings.mobile_media_position == 'bottom'
+    assign section_classes = section_classes | append: ' itc--mobile-media-bottom'
+  endif
+  if section.settings.hide_badge_mobile
+    assign section_classes = section_classes | append: ' itc--hide-badge-mobile'
+  endif
+-%}
+
+{%- capture pos_vars -%}
+  {%- if collage_layout == 'custom' -%}
+    {%- liquid
+      assign p1t = section.settings.image_1_top    | default: 0
+      assign p1r = section.settings.image_1_right  | default: 0
+      assign p1b = section.settings.image_1_bottom | default: -1
+      assign p1l = section.settings.image_1_left   | default: -1
+      assign p1h = section.settings.image_1_height | default: -1
+      assign p2t = section.settings.image_2_top    | default: 28
+      assign p2r = section.settings.image_2_right  | default: -1
+      assign p2b = section.settings.image_2_bottom | default: -1
+      assign p2l = section.settings.image_2_left   | default: 0
+      assign p2h = section.settings.image_2_height | default: -1
+      assign p3t = section.settings.image_3_top    | default: -1
+      assign p3r = section.settings.image_3_right  | default: 3
+      assign p3b = section.settings.image_3_bottom | default: 0
+      assign p3l = section.settings.image_3_left   | default: -1
+      assign p3h = section.settings.image_3_height | default: -1
+    -%}
+    {%- if p1t < 0 -%}--itc-p1-top:auto;{%- else -%}--itc-p1-top:{{ p1t }}%;{%- endif -%}
+    {%- if p1r < 0 -%}--itc-p1-right:auto;{%- else -%}--itc-p1-right:{{ p1r }}%;{%- endif -%}
+    {%- if p1b < 0 -%}--itc-p1-bottom:auto;{%- else -%}--itc-p1-bottom:{{ p1b }}%;{%- endif -%}
+    {%- if p1l < 0 -%}--itc-p1-left:auto;{%- else -%}--itc-p1-left:{{ p1l }}%;{%- endif -%}
+    --itc-p1-w:{{ section.settings.image_1_width | default: 56 }}%;
+    {%- if p1h < 0 -%}--itc-p1-h:auto;--itc-p1-ar:4/3;--itc-p1-ar2:3/4;{%- else -%}--itc-p1-h:{{ p1h }}%;--itc-p1-ar:auto;--itc-p1-ar2:auto;{%- endif -%}
+    --itc-p1-z:{{ section.settings.image_1_zindex | default: 2 }};
+    {%- if p2t < 0 -%}--itc-p2-top:auto;{%- else -%}--itc-p2-top:{{ p2t }}%;{%- endif -%}
+    {%- if p2r < 0 -%}--itc-p2-right:auto;{%- else -%}--itc-p2-right:{{ p2r }}%;{%- endif -%}
+    {%- if p2b < 0 -%}--itc-p2-bottom:auto;{%- else -%}--itc-p2-bottom:{{ p2b }}%;{%- endif -%}
+    {%- if p2l < 0 -%}--itc-p2-left:auto;{%- else -%}--itc-p2-left:{{ p2l }}%;{%- endif -%}
+    --itc-p2-w:{{ section.settings.image_2_width | default: 68 }}%;
+    {%- if p2h < 0 -%}--itc-p2-h:auto;--itc-p2-ar:2/3;--itc-p2-ar2:3/4;{%- else -%}--itc-p2-h:{{ p2h }}%;--itc-p2-ar:auto;--itc-p2-ar2:auto;{%- endif -%}
+    --itc-p2-z:{{ section.settings.image_2_zindex | default: 3 }};
+    {%- if p3t < 0 -%}--itc-p3-top:auto;{%- else -%}--itc-p3-top:{{ p3t }}%;{%- endif -%}
+    {%- if p3r < 0 -%}--itc-p3-right:auto;{%- else -%}--itc-p3-right:{{ p3r }}%;{%- endif -%}
+    {%- if p3b < 0 -%}--itc-p3-bottom:auto;{%- else -%}--itc-p3-bottom:{{ p3b }}%;{%- endif -%}
+    {%- if p3l < 0 -%}--itc-p3-left:auto;{%- else -%}--itc-p3-left:{{ p3l }}%;{%- endif -%}
+    --itc-p3-w:{{ section.settings.image_3_width | default: 48 }}%;
+    {%- if p3h < 0 -%}--itc-p3-h:auto;--itc-p3-ar:3/4;{%- else -%}--itc-p3-h:{{ p3h }}%;--itc-p3-ar:auto;{%- endif -%}
+    --itc-p3-z:{{ section.settings.image_3_zindex | default: 2 }};
+  {%- endif -%}
+{%- endcapture -%}
+
+<div
+  class="section-background color-{{ section.settings.color_scheme }}"
+  {% if section.settings.background_color != blank %}
+    style="background-color: {{ section.settings.background_color }};"
+  {% endif %}
+></div>
+
+{%- if section.settings.background_image != blank -%}
+  {%- liquid
+    assign bg_img = section.settings.background_image
+    assign bg_img_mobile = section.settings.background_image_mobile | default: bg_img
+    assign bg_loading = 'lazy'
+    if section.index != blank and section.index <= 2
+      assign bg_loading = 'eager'
+    endif
+  -%}
+  <div
+    class="itc__bg-media itc__bg-media--{{ section.settings.background_image_fit | default: 'cover' }} itc__bg-media--pos-{{ section.settings.background_image_position | default: 'focal' }}{% if section.settings.background_image_show_mobile == false %} itc__bg-media--hide-mobile{% endif %}"
+    aria-hidden="true"
+  >
+    <picture>
+      {%- if section.settings.background_image_mobile != blank -%}
+        <source
+          media="(max-width: 749px)"
+          srcset="{{ bg_img_mobile | image_url: width: 750 }} 750w, {{ bg_img_mobile | image_url: width: 1100 }} 1100w, {{ bg_img_mobile | image_url: width: 1500 }} 1500w"
+          sizes="100vw"
+        >
+      {%- endif -%}
+      {{
+        bg_img
+        | image_url: width: 3000
+        | image_tag:
+          loading: bg_loading,
+          widths: '750, 1100, 1500, 1920, 2400, 3000',
+          sizes: '100vw',
+          alt: '',
+          class: 'itc__bg-img'
+      }}
+    </picture>
+  </div>
+  {%- if section.settings.background_overlay_opacity > 0 -%}
+    <div
+      class="itc__bg-overlay"
+      style="background-color: {{ section.settings.background_overlay_color | default: '#000000' }}; opacity: {{ section.settings.background_overlay_opacity | times: 0.01 }};"
+      aria-hidden="true"
+    ></div>
+  {%- endif -%}
+{%- endif -%}
+
+{%- if section.settings.pattern_image != blank -%}
+  {%- if section.settings.pattern_color != blank -%}
+    {%- comment -%}
+      Tint via SVG filter (not CSS mask): masks need CORS headers for CDN images and would hide
+      the pattern entirely. Darker / more opaque pixels take the tint; white and transparent stay clear,
+      so both transparent PNGs and patterns on a white background work.
+    {%- endcomment -%}
+    <svg class="itc__tint-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <filter id="ItcTint-{{ section.id }}" color-interpolation-filters="sRGB" x="0" y="0" width="100%" height="100%">
+        <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -0.5315 -1.788 -0.1805 2.5 0" result="shape"/>
+        <feFlood flood-color="{{ section.settings.pattern_color }}" result="tint"/>
+        <feComposite in="tint" in2="shape" operator="in"/>
+      </filter>
+    </svg>
+  {%- endif -%}
+  <div
+    class="itc__pattern itc__pattern--{{ section.settings.pattern_fit | default: 'cover' }}"
+    style="
+      --itc-pattern-url: url('{{ section.settings.pattern_image | image_url: width: 2400 }}');
+      --itc-pattern-opacity: {{ section.settings.pattern_opacity | default: 14 | times: 0.01 }};
+      {% if section.settings.pattern_color != blank %}filter: url('#ItcTint-{{ section.id }}');{% endif %}
+    "
+    aria-hidden="true"
+  ></div>
+{%- endif -%}
+
+<section
+  data-reveal
+  class="itc itc--design-{{ design }} itc--layout-{{ collage_layout }}{{ section_classes }} {{ section.settings.section_width | default: 'page-width' }} color-{{ section.settings.color_scheme }}"
+  id="ImageTextCollage-{{ section.id }}"
+  {% if section.settings.heading != blank %}
+    aria-labelledby="ImageTextCollage-heading-{{ section.id }}"
+  {% else %}
+    aria-label="{{ 'sections.image_text_collage.section_aria_label' | t | escape }}"
+  {% endif %}
+  style="
+    {{ pos_vars | strip }}
+    padding-top: {{ section.settings.padding_top | default: 72 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | default: 72 }}px;
+    --itc-media-col: {{ section.settings.media_column_width | default: 50 }}%;
+    --itc-gap: {{ section.settings.column_gap | default: 64 }}px;
+    --itc-align: {{ section.settings.content_vertical_alignment | default: 'center' }};
+    --itc-content-max: {{ section.settings.content_max_width | default: 560 }}px;
+    --itc-collage-ratio: {{ section.settings.collage_ratio | default: 118 }};
+    --itc-img-radius: {{ section.settings.image_radius | default: 16 }}px;
+    {% if section.settings.background_color != blank %}--itc-frame-color: {{ section.settings.background_color }};{% endif %}
+    --sr-radius: {{ section.settings.image_radius | default: 16 }}px;
+    --itc-rot1: {{ section.settings.image_1_rotation | default: 0 }}deg;
+    --itc-rot2: {{ section.settings.image_2_rotation | default: 0 }}deg;
+    --itc-rot3: {{ section.settings.image_3_rotation | default: 0 }}deg;
+    --itc-heading-weight: {{ heading_weight }};
+    --itc-heading-max: {{ section.settings.heading_max_width | default: 20 }}ch;
+    --itc-feature-cols: {{ section.settings.feature_columns | default: 2 }};
+    --itc-icon-size: {{ section.settings.feature_icon_size | default: 56 }}px;
+    --itc-feature-label-size: {{ section.settings.feature_label_size | default: 17 }}px;
+    {% if section.settings.feature_icon_color != blank %}--itc-icon-color: {{ section.settings.feature_icon_color }};{% endif %}
+    --itc-btn-bg: {{ section.settings.btn_bg | default: '#f5c518' }};
+    --itc-btn-fg: {{ section.settings.btn_fg | default: '#111111' }};
+    --itc-btn-hover-bg: {{ section.settings.btn_hover_bg | default: '#ddb015' }};
+    --itc-badge-bg: {{ section.settings.badge_bg | default: '#f2c419' }};
+    --itc-badge-fg: {{ section.settings.badge_fg | default: '#1a1a1a' }};
+    --itc-badge-inner: {{ section.settings.badge_inner_color | default: '#ffffff' }};
+    --itc-badge-size: {{ section.settings.badge_size | default: 28 }}%;
+    --itc-badge-top: {{ section.settings.badge_top | default: 50 }}%;
+    --itc-badge-left: {{ section.settings.badge_left | default: 78 }}%;
+    --itc-badge-speed: {{ section.settings.badge_speed | default: 14 }}s;
+    {% if section.settings.badge_font %}--itc-badge-font: {{ section.settings.badge_font.family }}, {{ section.settings.badge_font.fallback_families }}; --itc-badge-weight: {{ section.settings.badge_font.weight }};{% endif %}
+    {% case section.settings.heading_size %}
+      {% when 'small'  %}--itc-heading-size: clamp(1.25rem, 2vw, 1.75rem);
+      {% when 'medium' %}--itc-heading-size: var(--section-title-size);
+      {% when 'large'  %}--itc-heading-size: clamp(1.75rem, 3.1vw, 2.75rem);
+      {% when 'xlarge' %}--itc-heading-size: clamp(2.1rem, 4.2vw, 3.6rem);
+      {% else           %}--itc-heading-size: var(--section-title-size);
+    {% endcase %}
+    {% case section.settings.description_size %}
+      {% when 'small'  %}--itc-description-size: 0.9375rem;
+      {% when 'large'  %}--itc-description-size: clamp(1.0625rem, 1.3vw, 1.1875rem);
+      {% else           %}--itc-description-size: clamp(0.9375rem, 1.1vw, 1.0625rem);
+    {% endcase %}
+  "
+>
+  <div class="section-container">
+    <div class="itc__inner{% if section.settings.media_position == 'right' %} itc__inner--reversed{% endif %}">
+      {%- comment -%}─── COLLAGE COLUMN ───{%- endcomment -%}
+      <div class="itc__collage-wrap{% if stack_mode == 1 %} itc__collage-wrap--solo{% endif %}">
+        <div class="itc__stack itc__stack--{{ stack_mode }}">
+          {%- if img1 != blank -%}
+            <div class="itc__photo itc__photo--1" data-reveal-card>
+              {{
+                img1
+                | image_url: width: 1200
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '400, 600, 800, 1000, 1200',
+                  sizes: '(min-width: 990px) 28vw, 62vw',
+                  alt: img1.alt,
+                  class: 'itc__img'
+              }}
+            </div>
+          {%- elsif stack_mode >= 2 -%}
+            <div class="itc__photo itc__photo--1 itc__photo--placeholder" data-reveal-card aria-hidden="true">
+              {{ 'image' | placeholder_svg_tag: 'itc__img itc__img--ph' }}
+            </div>
+          {%- endif -%}
+
+          {%- if img2 != blank -%}
+            <div class="itc__photo itc__photo--2" data-reveal-card>
+              {{
+                img2
+                | image_url: width: 1200
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '400, 600, 800, 1000, 1200',
+                  sizes: '(min-width: 990px) 30vw, 66vw',
+                  alt: img2.alt,
+                  class: 'itc__img'
+              }}
+            </div>
+          {%- elsif stack_mode >= 2 -%}
+            <div class="itc__photo itc__photo--2 itc__photo--placeholder" data-reveal-card aria-hidden="true">
+              {{ 'image' | placeholder_svg_tag: 'itc__img itc__img--ph' }}
+            </div>
+          {%- endif -%}
+
+          {%- if img3 != blank -%}
+            <div class="itc__photo itc__photo--3" data-reveal-card>
+              {{
+                img3
+                | image_url: width: 1000
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '300, 500, 700, 900, 1000',
+                  sizes: '(min-width: 990px) 24vw, 52vw',
+                  alt: img3.alt,
+                  class: 'itc__img'
+              }}
+            </div>
+          {%- elsif stack_mode >= 2 -%}
+            <div class="itc__photo itc__photo--3 itc__photo--placeholder" data-reveal-card aria-hidden="true">
+              {{ 'image' | placeholder_svg_tag: 'itc__img itc__img--ph' }}
+            </div>
+          {%- endif -%}
+
+          {%- if stack_mode >= 2 and section.settings.show_badge != false -%}
+            {%- liquid
+              assign inner_style = section.settings.badge_inner_style | default: 'dashed'
+              assign badge_center = section.settings.badge_center | default: 'arrow'
+              assign badge_classes = 'itc-badge itc-badge--inner-' | append: inner_style | append: ' itc-badge--center-' | append: badge_center
+              if section.settings.badge_pause_hover != false
+                assign badge_classes = badge_classes | append: ' itc-badge--pause-hover'
+              endif
+              if section.settings.badge_outline
+                assign badge_classes = badge_classes | append: ' itc-badge--outline'
+              endif
+
+              case section.settings.badge_separator
+                when 'star'
+                  assign ring_sep = '★'
+                when 'sparkle'
+                  assign ring_sep = '✦'
+                when 'dash'
+                  assign ring_sep = '—'
+                when 'slash'
+                  assign ring_sep = '/'
+                else
+                  assign ring_sep = '•'
+              endcase
+
+              comment
+                Ring text (non-breaking spaces round the separator survive SVG whitespace trimming at the seam):
+                phrases separated by "~" are used as written; a single phrase is repeated
+                automatically so the ring is evenly filled. Font size adapts to the text length.
+              endcomment
+              assign ring_sep_html = '<tspan class="itc-badge__sep">' | append: ring_sep | append: '</tspan>'
+              assign ring_text = ''
+              assign ring_html = ''
+              if badge_text contains '~'
+                assign ring_parts = badge_text | split: '~'
+                for part in ring_parts
+                  assign part_clean = part | strip | upcase
+                  if part_clean != blank
+                    assign ring_text = ring_text | append: part_clean | append: ' ' | append: ring_sep | append: ' '
+                    assign part_safe = part_clean | escape
+                    assign ring_html = ring_html | append: part_safe | append: ' ' | append: ring_sep_html | append: ' '
+                  endif
+                endfor
+              else
+                assign ring_phrase = badge_text | strip | upcase
+                assign ring_phrase_safe = ring_phrase | escape
+                assign ring_phrase_len = ring_phrase | size | plus: 3
+                assign ring_reps = 36 | divided_by: ring_phrase_len
+                if ring_reps < 1
+                  assign ring_reps = 1
+                elsif ring_reps > 6
+                  assign ring_reps = 6
+                endif
+                for i in (1..ring_reps)
+                  assign ring_text = ring_text | append: ring_phrase | append: ' ' | append: ring_sep | append: ' '
+                  assign ring_html = ring_html | append: ring_phrase_safe | append: ' ' | append: ring_sep_html | append: ' '
+                endfor
+              endif
+              assign ring_len = ring_text | size
+              assign ring_size = 520.0 | divided_by: ring_len
+              if ring_size > 13
+                assign ring_size = 13
+              elsif ring_size < 8.5
+                assign ring_size = 8.5
+              endif
+            -%}
+            {%- if badge_link != blank -%}
+              <a class="{{ badge_classes }}" data-reveal-pop href="{{ badge_link }}" aria-label="{{ badge_label | escape }}">
+            {%- else -%}
+              <div class="{{ badge_classes }}" data-reveal-pop aria-hidden="true">
+            {%- endif -%}
+              {%- comment -%} Outer text ring — letters spread evenly round the circle, turns clockwise {%- endcomment -%}
+              <svg class="itc-badge__ring" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+                <defs>
+                  <path id="itc-ring-{{ section.id }}" d="M80,80 m-61,0 a61,61 0 1,1 122,0 a61,61 0 1,1 -122,0"/>
+                </defs>
+                <text font-size="{{ ring_size }}">
+                  <textPath href="#itc-ring-{{ section.id }}" textLength="378" lengthAdjust="spacing">{{ ring_html }}</textPath>
+                </text>
+              </svg>
+
+              {%- comment -%} Thin inner ring — turns anti-clockwise {%- endcomment -%}
+              {%- unless inner_style == 'none' -%}
+                <svg class="itc-badge__inner" viewBox="0 0 160 160" aria-hidden="true" focusable="false">
+                  <circle class="itc-badge__inner-circle" cx="80" cy="80" r="45" fill="none"/>
+                </svg>
+              {%- endunless -%}
+
+              {%- unless badge_center == 'none' -%}
+                <span class="itc-badge__center" aria-hidden="true">
+                  {%- case badge_center -%}
+                    {%- when 'text' -%}
+                      <span class="itc-badge__center-text">{{ section.settings.badge_center_text | default: badge_label | escape }}</span>
+                    {%- when 'sparkle' -%}
+                      <span class="itc-badge__icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M12 1.5c.5 5.6 4.9 10 10.5 10.5-5.6.5-10 4.9-10.5 10.5C11.5 16.9 7.1 12.5 1.5 12 7.1 11.5 11.5 7.1 12 1.5z"/></svg>
+                      </span>
+                    {%- else -%}
+                      <span class="itc-badge__arrow">
+                        <svg viewBox="0 0 24 24" fill="none" focusable="false"><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      </span>
+                  {%- endcase -%}
+                </span>
+              {%- endunless -%}
+            {%- if badge_link != blank -%}
+              </a>
+            {%- else -%}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- comment -%}─── CONTENT COLUMN ───{%- endcomment -%}
+      <div class="itc__content">
+        {%- if section.settings.show_subtitle
+          and section.settings.subtitle != blank
+          or section.settings.heading != blank
+        -%}
+          <div class="itc__heading-group">
+            {%- if section.settings.show_subtitle and section.settings.subtitle != blank -%}
+              <p class="itc__eyebrow" data-reveal-fade="first">{{ section.settings.subtitle | escape }}</p>
+            {%- endif -%}
+            {%- if section.settings.heading != blank -%}
+              <h2 class="itc__heading" data-reveal-title id="ImageTextCollage-heading-{{ section.id }}">
+                {{- section.settings.heading | escape -}}
+              </h2>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.show_description and section.settings.description != blank -%}
+          <div class="itc__description rte" data-reveal-fade>{{ section.settings.description }}</div>
+        {%- endif -%}
+
+        {%- if section.settings.show_feature_grid and has_feature_blocks -%}
+          {%- assign icon_style = section.settings.feature_icon_style | default: 'outline' -%}
+          <ul class="itc__features" role="list">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'feature' -%}
+                {%- assign icon_preset = block.settings.icon_preset | default: 'none' -%}
+                <li class="itc__feature" data-reveal-fade {{ block.shopify_attributes }}>
+                  {%- if block.settings.icon != blank -%}
+                    <span class="itc__feature-icon itc__feature-icon--{{ icon_style }}" aria-hidden="true">
+                      {{
+                        block.settings.icon
+                        | image_url: width: 160
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '80, 120, 160',
+                          sizes: '64px',
+                          alt: '',
+                          class: 'itc__feature-img'
+                      }}
+                    </span>
+                  {%- elsif icon_preset != 'none' -%}
+                    <span class="itc__feature-icon itc__feature-icon--{{ icon_style }} itc__feature-icon--svg" aria-hidden="true">
+                      {%- render 'itc-feature-icon', icon: icon_preset -%}
+                    </span>
+                  {%- endif -%}
+                  {%- if block.settings.title != blank -%}
+                    <span class="itc__feature-label">{{ block.settings.title | escape }}</span>
+                  {%- endif -%}
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if section.settings.show_cta and section.settings.button_label != blank -%}
+          {%- assign btn_style = section.settings.button_style | default: 'filled' -%}
+          {%- assign btn_class = 'itc__btn itc__btn--' | append: btn_style -%}
+          {%- if section.settings.button_link != blank -%}
+            <a
+              href="{{ section.settings.button_link }}"
+              class="{{ btn_class }}"
+              data-reveal-fade
+              {% if section.settings.button_new_tab %}
+                target="_blank" rel="noopener"
+              {% endif %}
+            >
+              {{- section.settings.button_label | escape -}}
+              {%- if section.settings.button_new_tab -%}
+                <span class="visually-hidden"> {{ 'accessibility.new_window' | t }}</span>
+              {%- endif -%}
+            </a>
+          {%- else -%}
+            <span class="{{ btn_class }} itc__btn--static" data-reveal-fade>
+              {{- section.settings.button_label | escape -}}
+            </span>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image with text collage",
+  "tag": "section",
+  "class": "image-text-collage-section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors and background"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Custom background color",
+      "info": "Overrides the color scheme background for this section only."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image",
+      "info": "Full-width photo behind the section. Set a focal point on the image in Shopify to control cropping."
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "Mobile background image",
+      "info": "Optional. Shown on screens under 750px wide."
+    },
+    {
+      "type": "checkbox",
+      "id": "background_image_show_mobile",
+      "label": "Show background image on mobile",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "background_image_fit",
+      "label": "Background image sizing",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Fill section"
+        },
+        {
+          "value": "contain",
+          "label": "Fit inside"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "select",
+      "id": "background_image_position",
+      "label": "Background image position",
+      "options": [
+        {
+          "value": "focal",
+          "label": "Use image focal point"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "focal"
+    },
+    {
+      "type": "color",
+      "id": "background_overlay_color",
+      "label": "Image overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "background_overlay_opacity",
+      "label": "Image overlay opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 0,
+      "info": "Darken or tint the photo so text stays readable."
+    },
+    {
+      "type": "image_picker",
+      "id": "pattern_image",
+      "label": "Decorative pattern",
+      "info": "Works with transparent PNG/SVG patterns, or a darker pattern on a white background."
+    },
+    {
+      "type": "color",
+      "id": "pattern_color",
+      "label": "Pattern tint",
+      "info": "Recolors the pattern. Leave empty to keep the image's own colors."
+    },
+    {
+      "type": "range",
+      "id": "pattern_opacity",
+      "label": "Pattern visibility",
+      "min": 4,
+      "max": 100,
+      "step": 2,
+      "default": 14,
+      "unit": "%"
+    },
+    {
+      "type": "select",
+      "id": "pattern_fit",
+      "label": "Pattern sizing",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Fill section"
+        },
+        {
+          "value": "contain",
+          "label": "Fit inside"
+        },
+        {
+          "value": "repeat",
+          "label": "Tile"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "select",
+      "id": "media_position",
+      "label": "Collage side on desktop",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "mobile_media_position",
+      "label": "Collage on mobile",
+      "options": [
+        {
+          "value": "top",
+          "label": "Above text"
+        },
+        {
+          "value": "bottom",
+          "label": "Below text"
+        }
+      ],
+      "default": "top"
+    },
+    {
+      "type": "range",
+      "id": "media_column_width",
+      "label": "Collage column width",
+      "min": 35,
+      "max": 65,
+      "step": 1,
+      "default": 50,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Space between columns",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 64,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "content_vertical_alignment",
+      "label": "Text vertical alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Middle"
+        },
+        {
+          "value": "end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "label": "Text column max width",
+      "min": 320,
+      "max": 800,
+      "step": 10,
+      "default": 560,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Collage"
+    },
+    {
+      "type": "select",
+      "id": "design",
+      "label": "Design",
+      "options": [
+        {
+          "value": "collage",
+          "label": "Scattered collage"
+        },
+        {
+          "value": "editorial",
+          "label": "Editorial frame"
+        },
+        {
+          "value": "mosaic",
+          "label": "Mosaic grid"
+        }
+      ],
+      "default": "collage",
+      "info": "Scattered: tilted, overlapping photos. Editorial: one large photo with a framed inset. Mosaic: a clean photo grid."
+    },
+    {
+      "type": "select",
+      "id": "collage_layout",
+      "label": "Collage layout",
+      "visible_if": "{{ section.settings.design == 'collage' }}",
+      "options": [
+        {
+          "value": "stack",
+          "label": "Stacked (recommended)"
+        },
+        {
+          "value": "custom",
+          "label": "Custom positions"
+        }
+      ],
+      "default": "stack",
+      "info": "Stacked uses a balanced arrangement for 3 photos. Choose Custom to set each photo's size and position yourself."
+    },
+    {
+      "type": "range",
+      "id": "collage_ratio",
+      "label": "Collage height",
+      "min": 80,
+      "max": 140,
+      "step": 2,
+      "default": 118,
+      "unit": "%",
+      "info": "Height relative to the collage width."
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_shadow",
+      "label": "Show image shadow",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_hover",
+      "label": "Image hover effect",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "lift",
+          "label": "Lift"
+        },
+        {
+          "value": "straighten",
+          "label": "Straighten"
+        }
+      ],
+      "default": "lift"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_1",
+      "label": "Image 1"
+    },
+    {
+      "type": "range",
+      "id": "image_1_rotation",
+      "label": "Image 1 rotation",
+      "min": -15,
+      "max": 15,
+      "step": 1,
+      "default": 2,
+      "unit": "°"
+    },
+    {
+      "type": "header",
+      "content": "Image 1 — custom size and position",
+      "info": "Used only when Collage layout is \"Custom\". −1 = automatic."
+    },
+    {
+      "type": "range",
+      "id": "image_1_width",
+      "label": "Width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "default": 56,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_1_height",
+      "label": "Height (−1 = auto)",
+      "min": -1,
+      "max": 99,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_1_zindex",
+      "label": "Layer order",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "image_1_top",
+      "label": "From top",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": 0,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_1_right",
+      "label": "From right",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": 0,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_1_bottom",
+      "label": "From bottom",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_1_left",
+      "label": "From left",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_2",
+      "label": "Image 2"
+    },
+    {
+      "type": "range",
+      "id": "image_2_rotation",
+      "label": "Image 2 rotation",
+      "min": -15,
+      "max": 15,
+      "step": 1,
+      "default": -3,
+      "unit": "°"
+    },
+    {
+      "type": "header",
+      "content": "Image 2 — custom size and position",
+      "info": "Used only when Collage layout is \"Custom\". −1 = automatic."
+    },
+    {
+      "type": "range",
+      "id": "image_2_width",
+      "label": "Width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "default": 68,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_2_height",
+      "label": "Height (−1 = auto)",
+      "min": -1,
+      "max": 99,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_2_zindex",
+      "label": "Layer order",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "image_2_top",
+      "label": "From top",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": 28,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_2_right",
+      "label": "From right",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_2_bottom",
+      "label": "From bottom",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_2_left",
+      "label": "From left",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": 0,
+      "unit": "%"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_3",
+      "label": "Image 3"
+    },
+    {
+      "type": "range",
+      "id": "image_3_rotation",
+      "label": "Image 3 rotation",
+      "min": -15,
+      "max": 15,
+      "step": 1,
+      "default": 3,
+      "unit": "°"
+    },
+    {
+      "type": "header",
+      "content": "Image 3 — custom size and position",
+      "info": "Used only when Collage layout is \"Custom\". −1 = automatic."
+    },
+    {
+      "type": "range",
+      "id": "image_3_width",
+      "label": "Width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "default": 48,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_3_height",
+      "label": "Height (−1 = auto)",
+      "min": -1,
+      "max": 99,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_3_zindex",
+      "label": "Layer order",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "image_3_top",
+      "label": "From top",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_3_right",
+      "label": "From right",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": 3,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_3_bottom",
+      "label": "From bottom",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": 0,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "image_3_left",
+      "label": "From left",
+      "min": -1,
+      "max": 80,
+      "step": 1,
+      "default": -1,
+      "unit": "%"
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_subtitle",
+      "label": "Show eyebrow text",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Eyebrow text",
+      "default": "Pure and simple"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Intensive Hair Serum for Radiant Shine & Lasting Strength"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        },
+        {
+          "value": "xlarge",
+          "label": "Extra large"
+        }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "select",
+      "id": "heading_weight",
+      "label": "Heading weight",
+      "options": [
+        {
+          "value": "theme",
+          "label": "Theme default"
+        },
+        {
+          "value": "400",
+          "label": "Regular"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semibold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "range",
+      "id": "heading_max_width",
+      "label": "Heading line length",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "default": 20,
+      "unit": "ch",
+      "info": "Lower values wrap the heading onto more lines."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Our concentrated serum helps smooth the look of damage and adds luminous shine with plant-based actives you can feel good about.</p>"
+    },
+    {
+      "type": "select",
+      "id": "description_size",
+      "label": "Description size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_feature_grid",
+      "label": "Show features",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "feature_columns",
+      "label": "Columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "feature_icon_style",
+      "label": "Icon style",
+      "options": [
+        {
+          "value": "outline",
+          "label": "Outlined circle"
+        },
+        {
+          "value": "filled",
+          "label": "Filled circle"
+        },
+        {
+          "value": "plain",
+          "label": "Icon only"
+        }
+      ],
+      "default": "outline"
+    },
+    {
+      "type": "range",
+      "id": "feature_icon_size",
+      "label": "Icon size",
+      "min": 32,
+      "max": 80,
+      "step": 2,
+      "default": 56,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "feature_icon_color",
+      "label": "Icon color",
+      "info": "Leave empty to use the text color."
+    },
+    {
+      "type": "range",
+      "id": "feature_label_size",
+      "label": "Label size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "default": 17,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Label",
+      "default": "Explore sale"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_new_tab",
+      "label": "Open link in new tab",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "filled",
+          "label": "Filled"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        }
+      ],
+      "default": "filled"
+    },
+    {
+      "type": "color",
+      "id": "btn_bg",
+      "label": "Button color",
+      "default": "#f5c518"
+    },
+    {
+      "type": "color",
+      "id": "btn_fg",
+      "label": "Text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "btn_hover_bg",
+      "label": "Hover color",
+      "default": "#ddb015"
+    },
+    {
+      "type": "header",
+      "content": "Explore badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show rotating badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "Explore more",
+      "info": "A short phrase is repeated automatically to fill the ring. Use ~ to write several phrases yourself."
+    },
+    {
+      "type": "select",
+      "id": "badge_separator",
+      "label": "Separator",
+      "options": [
+        { "value": "dot", "label": "Dot •" },
+        { "value": "star", "label": "Star ★" },
+        { "value": "sparkle", "label": "Sparkle ✦" },
+        { "value": "dash", "label": "Dash —" },
+        { "value": "slash", "label": "Slash /" }
+      ],
+      "default": "sparkle"
+    },
+    {
+      "type": "font_picker",
+      "id": "badge_font",
+      "label": "Badge font",
+      "default": "outfit_n6"
+    },
+    {
+      "type": "select",
+      "id": "badge_center",
+      "label": "Center",
+      "options": [
+        { "value": "arrow", "label": "Arrow" },
+        { "value": "text", "label": "Short text" },
+        { "value": "sparkle", "label": "Sparkle icon" },
+        { "value": "none", "label": "Nothing" }
+      ],
+      "default": "arrow"
+    },
+    {
+      "type": "text",
+      "id": "badge_center_text",
+      "label": "Center text",
+      "default": "2019",
+      "info": "Keep it short, e.g. a year or \"New\".",
+      "visible_if": "{{ section.settings.badge_center == 'text' }}"
+    },
+    {
+      "type": "url",
+      "id": "badge_link",
+      "label": "Badge link",
+      "info": "Leave empty to use the button link."
+    },
+    {
+      "type": "color",
+      "id": "badge_bg",
+      "label": "Badge color",
+      "default": "#f2c419"
+    },
+    {
+      "type": "color",
+      "id": "badge_fg",
+      "label": "Text and arrow color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "badge_inner_color",
+      "label": "Center color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "badge_inner_style",
+      "label": "Inner ring style",
+      "options": [
+        {
+          "value": "dashed",
+          "label": "Dashed"
+        },
+        {
+          "value": "dotted",
+          "label": "Dotted"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "dashed",
+      "info": "Dashed or dotted lets shoppers see the inner ring turning."
+    },
+    {
+      "type": "checkbox",
+      "id": "badge_outline",
+      "label": "Show outer hairline",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "badge_speed",
+      "label": "Rotation speed",
+      "min": 4,
+      "max": 40,
+      "step": 1,
+      "default": 14,
+      "unit": "s",
+      "info": "Seconds per full turn. The outer text turns clockwise, the inner ring anti-clockwise."
+    },
+    {
+      "type": "checkbox",
+      "id": "badge_pause_hover",
+      "label": "Pause rotation on hover",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "badge_size",
+      "label": "Badge size",
+      "min": 12,
+      "max": 36,
+      "step": 1,
+      "default": 28,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "badge_top",
+      "label": "Badge position from top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 50,
+      "unit": "%"
+    },
+    {
+      "type": "range",
+      "id": "badge_left",
+      "label": "Badge position from left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 78,
+      "unit": "%"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_badge_mobile",
+      "label": "Hide badge on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "default": 72,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_preset",
+          "label": "Icon",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "lips",
+              "label": "Lips / soft"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "sprout",
+              "label": "Plant / sprout"
+            },
+            {
+              "value": "globe",
+              "label": "Globe / earth"
+            },
+            {
+              "value": "no_bottle",
+              "label": "Free from (bottle crossed)"
+            },
+            {
+              "value": "droplet",
+              "label": "Droplet"
+            },
+            {
+              "value": "sparkle",
+              "label": "Sparkle"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "shield",
+              "label": "Shield / safe"
+            },
+            {
+              "value": "flask",
+              "label": "Lab / formula"
+            },
+            {
+              "value": "recycle",
+              "label": "Recycle"
+            },
+            {
+              "value": "sun",
+              "label": "Sun"
+            },
+            {
+              "value": "rabbit",
+              "label": "Cruelty free"
+            },
+            {
+              "value": "check",
+              "label": "Check"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "truck",
+              "label": "Delivery"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            }
+          ],
+          "default": "leaf"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Custom icon image",
+          "info": "Replaces the icon above."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Label",
+          "default": "Healthy & soft"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text collage",
+      "settings": {
+        "heading": "Intensive Hair Serum for Radiant Shine & Lasting Strength",
+        "subtitle": "Pure and simple",
+        "button_label": "Explore sale"
+      },
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "lips",
+            "title": "Healthy & Soft"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "globe",
+            "title": "Free from Sulfates"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "no_bottle",
+            "title": "No Parabens Added"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon_preset": "sprout",
+            "title": "100% Plant-Powered"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

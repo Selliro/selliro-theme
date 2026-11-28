@@ -1,0 +1,45 @@
+{%- doc -%}
+  Image card inside a mega menu ("Mega menu image" block of sections/header.liquid). The whole card is one
+  link; the subheading, heading and link label sit on a gradient over the image so they stay readable.
+  Without an image a soft placeholder keeps the card's shape. Styles: assets/section-header.css ("Mega menu").
+
+  @param {object} block - The mega_promo block
+
+  @example
+  {% render 'header-mega-promo', block: block %}
+{%- enddoc -%}
+{%- liquid
+  assign s = block.settings
+  assign href = s.link | default: routes.all_products_collection_url
+-%}
+<a href="{{ href }}" class="mega-promo" {{ block.shopify_attributes }}>
+  <span class="mega-promo__media media">
+    {%- if s.image != blank -%}
+      {%- assign image_alt = s.image.alt | default: '' -%}
+      {{
+        s.image
+        | image_url: width: 900
+        | image_tag:
+          widths: '300, 450, 600, 900',
+          sizes: '(min-width: 990px) 20vw, 50vw',
+          loading: 'lazy',
+          alt: image_alt }}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </span>
+  <span class="mega-promo__content">
+    {%- if s.subheading != blank -%}
+      <span class="mega-promo__subheading">{{ s.subheading | escape }}</span>
+    {%- endif -%}
+    {%- if s.heading != blank -%}
+      <span class="mega-promo__heading">{{ s.heading | escape }}</span>
+    {%- endif -%}
+    {%- if s.link_label != blank -%}
+      <span class="mega-promo__cta">
+        {{- s.link_label | escape -}}
+        {%- render 'icon', name: 'arrow-right' -%}
+      </span>
+    {%- endif -%}
+  </span>
+</a>

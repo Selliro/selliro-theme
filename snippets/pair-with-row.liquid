@@ -1,0 +1,46 @@
+{%- doc -%}
+  One row of the "Pair it with" list: image, title, price and an add button. Products with a single available
+  variant get a small product form (added in place, assets/product-info.js); others link to the product.
+
+  @param {object} item - Product
+  @param {string} id_prefix - Unique prefix for the form id
+
+  @example
+  {% render 'pair-with-row', item: item, id_prefix: section.id %}
+{%- enddoc -%}
+{%- assign variant = item.selected_or_first_available_variant -%}
+<li class="pair-with__item">
+  <a href="{{ item.url }}" class="pair-with__image media" tabindex="-1" aria-hidden="true">
+    {%- if item.featured_media -%}
+      {{ item.featured_media | image_url: width: 200 | image_tag: widths: '100, 150, 200', sizes: '72px', loading: 'lazy', alt: '' }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </a>
+  <div class="pair-with__info">
+    <a href="{{ item.url }}" class="pair-with__title">{{ item.title | escape }}</a>
+    {%- render 'price', product: item, show_badge: false -%}
+  </div>
+  {%- if item.has_only_default_variant and item.available -%}
+    {%- assign form_id = 'PairWith-' | append: id_prefix | append: '-' | append: item.id -%}
+    <product-form class="pair-with__form" data-cart-type="{{ settings.cart_type }}">
+      {%- form 'product', item, id: form_id, data-type: 'add-to-cart-form' -%}
+        <input type="hidden" name="id" value="{{ variant.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <button type="submit" name="add" class="button button--secondary button--small pair-with__button">
+          {%- render 'icon', name: 'plus' -%}
+          <span>{{ 'products.add' | t }}</span>
+          <span class="visually-hidden">{{ item.title | escape }}</span>
+        </button>
+        <p class="form-message--error pair-with__error" role="alert" data-ref="error" hidden></p>
+      {%- endform -%}
+    </product-form>
+  {%- elsif item.available -%}
+    <a href="{{ item.url }}" class="button button--secondary button--small pair-with__button">
+      {{- 'products.choose_options' | t -}}
+      <span class="visually-hidden">{{ item.title | escape }}</span>
+    </a>
+  {%- else -%}
+    <span class="pair-with__sold-out">{{ 'products.sold_out' | t }}</span>
+  {%- endif -%}
+</li>

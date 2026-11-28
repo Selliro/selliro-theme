@@ -1,0 +1,88 @@
+{%- doc -%}
+  Product price: sale price with the regular price struck through, "From" when variant prices differ (product
+  cards), unit price (for example "$2.40 / 100 ml") and a Sale / Sold out badge. Prices follow Theme settings →
+  Cart → "Show currency codes". Styles: assets/base.css ("Price").
+
+  @param {object} product - Product
+  @param {object} [variant] - Show this variant's price (product page); without it the card shows the lowest
+  @param {boolean} [show_badge] - Show the Sale / Sold out badge (default true)
+  @param {string} [size] - 'large' (product page) or 'small' (cards, default)
+  @param {string} [class] - Extra classes
+
+  @example
+  {% render 'price', product: product, variant: product.selected_or_first_available_variant, size: 'large' %}
+{%- enddoc -%}
+{%- liquid
+  assign show_badge = show_badge | default: true, allow_false: true
+  if variant
+    assign target = variant
+    assign price = variant.price
+    assign compare_at = variant.compare_at_price
+    assign available = variant.available
+    assign varies = false
+  else
+    assign target = product.selected_or_first_available_variant
+    assign price = product.price
+    assign compare_at = product.compare_at_price
+    assign available = product.available
+    assign varies = product.price_varies
+  endif
+
+  assign on_sale = false
+  if compare_at > price
+    assign on_sale = true
+  endif
+
+  if settings.show_currency_code
+    assign price_text = price | money_with_currency
+    assign compare_text = compare_at | money_with_currency
+  else
+    assign price_text = price | money
+    assign compare_text = compare_at | money
+  endif
+-%}
+<div
+  class="price price--{{ size | default: 'small' }}{% if on_sale %} price--on-sale{% endif %}{% unless available %} price--sold-out{% endunless %}{% if class != blank %} {{ class }}{% endif %}"
+  data-variant-update="price"
+>
+  <span class="price__current">
+    {%- if on_sale -%}
+      <span class="visually-hidden">{{ 'products.sale_price' | t }}</span>
+    {%- else -%}
+      <span class="visually-hidden">{{ 'products.regular_price' | t }}</span>
+    {%- endif -%}
+    {%- if varies -%}
+      {{ 'products.price_from_html' | t: price: price_text }}
+    {%- else -%}
+      {{ price_text }}
+    {%- endif -%}
+  </span>
+
+  {%- if on_sale -%}
+    <s class="price__compare">
+      <span class="visually-hidden">{{ 'products.regular_price' | t }}</span>
+      {{- compare_text -}}
+    </s>
+  {%- endif -%}
+
+  {%- if target.unit_price_measurement -%}
+    <span class="price__unit">
+      <span class="visually-hidden">{{ 'products.unit_price' | t }}</span>
+      {{- target.unit_price | money -}}
+      <span aria-hidden="true">/</span>
+      <span class="visually-hidden">{{ 'products.per' | t }}</span>
+      {%- if target.unit_price_measurement.reference_value != 1 -%}
+        {{- target.unit_price_measurement.reference_value -}}
+      {%- endif -%}
+      {{- target.unit_price_measurement.reference_unit -}}
+    </span>
+  {%- endif -%}
+
+  {%- if show_badge -%}
+    {%- if available == false -%}
+      <span class="badge badge--sold-out">{{ 'products.sold_out' | t }}</span>
+    {%- elsif on_sale -%}
+      <span class="badge badge--sale">{{ 'products.sale' | t }}</span>
+    {%- endif -%}
+  {%- endif -%}
+</div>

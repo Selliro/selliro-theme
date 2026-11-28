@@ -1,0 +1,31 @@
+{%- doc -%}
+  Collection card: image (the collection image, or its first product's image), title with an arrow and the
+  product count. The whole card is one link. Styles: assets/template-content.css ("Collection cards"); also
+  used by home page sections.
+
+  @param {object} collection - Collection
+  @param {string} [ratio] - Image aspect ratio (default '0.8')
+  @param {string} [sizes] - Image sizes attribute
+
+  @example
+  {% render 'collection-card', collection: collection %}
+{%- enddoc -%}
+{%- liquid
+  assign ratio = ratio | default: '0.8'
+  assign sizes = sizes | default: '(min-width: 990px) 33vw, 50vw'
+  assign image = collection.featured_image | default: collection.products.first.featured_media.preview_image
+-%}
+<a href="{{ collection.url }}" class="collection-card">
+  <span class="collection-card__media media" style="--ratio: {{ ratio }};">
+    {%- if image -%}
+      {{ image | image_url: width: 1200 | image_tag: widths: '300, 500, 700, 900, 1200', sizes: sizes, loading: 'lazy', alt: '' }}
+    {%- else -%}
+      {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </span>
+  <span class="collection-card__body">
+    <span class="collection-card__title">{{ collection.title | escape }}</span>
+    <span class="collection-card__count">{{ 'collections.product_count' | t: count: collection.products_count }}</span>
+    {%- render 'icon', name: 'arrow-right', class: 'collection-card__arrow' -%}
+  </span>
+</a>

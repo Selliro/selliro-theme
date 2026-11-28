@@ -1,0 +1,338 @@
+{%- comment -%}
+  Comparison table — "Why we're different": your product (highlighted column) against two others,
+  one row per feature. Rows are blocks with a yes / no (or short text) per column.
+{%- endcomment -%}
+{{ 'section-comparison-table.css' | asset_url | stylesheet_tag }}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign ours = section.settings.product
+  if ours == blank
+    assign ours = product
+  endif
+  assign ours_image = section.settings.our_image | default: ours.featured_image
+  assign ours_title = section.settings.our_title | default: ours.title
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="cmp page-width color-{{ section.settings.color_scheme }} cmp--intro-{{ section.settings.intro_position | default: 'side' }}"
+  data-reveal
+  style="--cmp-pad-top: {{ section.settings.padding_top }}px; --cmp-pad-bottom: {{ section.settings.padding_bottom }}px; --cmp-accent: {{ section.settings.accent_color | default: '#1f3b1a' }}; --cmp-accent-text: {{ section.settings.accent_text | default: '#ffffff' }};"
+>
+  <div class="cmp__intro">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="cmp__heading" data-reveal-title>{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <p class="cmp__text" data-reveal-fade>{{ section.settings.text | escape }}</p>
+    {%- endif -%}
+  </div>
+
+  <div class="cmp__scroller" data-reveal-rise>
+    <table class="cmp__table">
+      <caption class="visually-hidden">{{ section.settings.heading | escape }}</caption>
+      <thead>
+        <tr>
+          <td class="cmp__corner"></td>
+          <th scope="col" class="cmp__col cmp__col--ours">
+            <span class="cmp__badge" aria-hidden="true">{%- render 'pdp-icon', icon: 'sparkle' -%}</span>
+            <span class="cmp__product">
+              {%- if ours_image != blank -%}
+                {{ ours_image | image_url: width: 320 | image_tag: loading: 'lazy', width: 120, height: 120, alt: '' }}
+              {%- endif -%}
+              <span class="cmp__name">{{ ours_title | escape }}</span>
+              {%- if ours != blank -%}
+                <span class="cmp__price">{{ ours.price | money }}</span>
+              {%- endif -%}
+            </span>
+          </th>
+          {%- for i in (1..2) -%}
+            {%- assign k_t = 'other_' | append: i | append: '_title' -%}
+            {%- assign k_i = 'other_' | append: i | append: '_image' -%}
+            <th scope="col" class="cmp__col">
+              <span class="cmp__product">
+                {%- if section.settings[k_i] != blank -%}
+                  {{ section.settings[k_i] | image_url: width: 320 | image_tag: loading: 'lazy', width: 120, height: 120, alt: '' }}
+                {%- endif -%}
+                <span class="cmp__name">{{ section.settings[k_t] | escape }}</span>
+              </span>
+            </th>
+          {%- endfor -%}
+        </tr>
+      </thead>
+      <tbody>
+        {%- for block in section.blocks -%}
+          <tr {{ block.shopify_attributes }}>
+            <th scope="row" class="cmp__feature">{{ block.settings.feature | escape }}</th>
+            {%- assign cells = 'ours,other_1,other_2' | split: ',' -%}
+            {%- for cell in cells -%}
+              {%- assign value = block.settings[cell] | default: 'no' -%}
+              <td class="cmp__cell{% if forloop.first %} cmp__cell--ours{% endif %}">
+                {%- case value -%}
+                  {%- when 'yes' -%}
+                    <span class="cmp__mark cmp__mark--yes">{%- render 'pdp-icon', icon: 'check' -%}<span class="visually-hidden">{{ section.settings.yes_label | escape }}</span></span>
+                  {%- when 'no' -%}
+                    <span class="cmp__mark cmp__mark--no">{%- render 'pdp-icon', icon: 'cross' -%}<span class="visually-hidden">{{ section.settings.no_label | escape }}</span></span>
+                  {%- else -%}
+                    <span class="cmp__mark cmp__mark--some">{{ section.settings.some_label | escape }}</span>
+                {%- endcase -%}
+              </td>
+            {%- endfor -%}
+          </tr>
+        {%- endfor -%}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Comparison table",
+  "class": "comparison-table-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "intro_position",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "side",
+          "label": "Intro beside the table"
+        },
+        {
+          "value": "top",
+          "label": "Intro above the table"
+        }
+      ],
+      "default": "side"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why it's different"
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Clean, clinically proven and kind to sensitive skin."
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Your product",
+      "info": "Defaults to the product on the page."
+    },
+    {
+      "type": "text",
+      "id": "our_title",
+      "label": "Your product name (optional)"
+    },
+    {
+      "type": "image_picker",
+      "id": "our_image",
+      "label": "Your product image (optional)"
+    },
+    {
+      "type": "text",
+      "id": "other_1_title",
+      "label": "Comparison 1 name",
+      "default": "Drugstore serum"
+    },
+    {
+      "type": "image_picker",
+      "id": "other_1_image",
+      "label": "Comparison 1 image"
+    },
+    {
+      "type": "text",
+      "id": "other_2_title",
+      "label": "Comparison 2 name",
+      "default": "Luxury serum"
+    },
+    {
+      "type": "image_picker",
+      "id": "other_2_image",
+      "label": "Comparison 2 image"
+    },
+    {
+      "type": "text",
+      "id": "yes_label",
+      "label": "Yes label (screen readers)",
+      "default": "Yes"
+    },
+    {
+      "type": "text",
+      "id": "no_label",
+      "label": "No label (screen readers)",
+      "default": "No"
+    },
+    {
+      "type": "text",
+      "id": "some_label",
+      "label": "Partly label",
+      "default": "Some"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Highlight column",
+      "default": "#1f3b1a"
+    },
+    {
+      "type": "color",
+      "id": "accent_text",
+      "label": "Highlight text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "row",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "feature",
+          "label": "Feature",
+          "default": "Clean ingredients"
+        },
+        {
+          "type": "select",
+          "id": "ours",
+          "label": "Your product",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes"
+            },
+            {
+              "value": "no",
+              "label": "No"
+            },
+            {
+              "value": "some",
+              "label": "Partly"
+            }
+          ],
+          "default": "yes"
+        },
+        {
+          "type": "select",
+          "id": "other_1",
+          "label": "Comparison 1",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes"
+            },
+            {
+              "value": "no",
+              "label": "No"
+            },
+            {
+              "value": "some",
+              "label": "Partly"
+            }
+          ],
+          "default": "no"
+        },
+        {
+          "type": "select",
+          "id": "other_2",
+          "label": "Comparison 2",
+          "options": [
+            {
+              "value": "yes",
+              "label": "Yes"
+            },
+            {
+              "value": "no",
+              "label": "No"
+            },
+            {
+              "value": "some",
+              "label": "Partly"
+            }
+          ],
+          "default": "some"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Comparison table",
+      "blocks": [
+        {
+          "type": "row",
+          "settings": {
+            "feature": "Clean ingredients",
+            "ours": "yes",
+            "other_1": "no",
+            "other_2": "some"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "feature": "Vegan & cruelty free",
+            "ours": "yes",
+            "other_1": "no",
+            "other_2": "no"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "feature": "Fragrance free",
+            "ours": "yes",
+            "other_1": "no",
+            "other_2": "yes"
+          }
+        },
+        {
+          "type": "row",
+          "settings": {
+            "feature": "Under $50",
+            "ours": "yes",
+            "other_1": "yes",
+            "other_2": "no"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

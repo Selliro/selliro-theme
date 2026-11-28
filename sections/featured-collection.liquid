@@ -1,0 +1,143 @@
+{%- comment -%}
+  Whispo — featured collection. Heading (the collection's title by default) with a "View all" link, then the
+  collection's products as product cards in a grid, or in a carousel that swipes on touch and scrolls with
+  arrow buttons on desktop. Empty in the editor until a collection is chosen (placeholder cards).
+  Files: assets/component-product-card.css, assets/section-featured-collection.css, assets/quick-view.js.
+{%- endcomment -%}
+
+{%- comment -%} 1. CSS {%- endcomment -%}
+{{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-featured-collection.css' | asset_url | stylesheet_tag }}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+{% endstyle %}
+
+{%- comment -%} 2. Liquid {%- endcomment -%}
+<script src="{{ 'quick-view.js' | asset_url }}" type="module"></script>
+
+{%- liquid
+  assign collection = section.settings.collection
+  assign heading = section.settings.heading
+  if heading == blank and collection != blank
+    assign heading = collection.title
+  endif
+  assign limit = section.settings.limit
+  assign list_id = 'FeaturedCollection-' | append: section.id
+-%}
+<div class="featured-collection color-{{ section.settings.color_scheme }}">
+  <div class="page-width">
+    <div class="featured-collection__header">
+      {%- if heading != blank -%}
+        <h2 class="featured-collection__heading">{{ heading | escape }}</h2>
+      {%- endif -%}
+      <div class="featured-collection__actions">
+        {%- if section.settings.layout == 'carousel' -%}
+          <button type="button" class="featured-collection__arrow" data-scroll-target="{{ list_id }}" data-scroll-direction="-1">
+            {%- render 'icon', name: 'chevron-left' -%}
+            <span class="visually-hidden">{{ 'accessibility.previous_slide' | t }}</span>
+          </button>
+          <button type="button" class="featured-collection__arrow" data-scroll-target="{{ list_id }}" data-scroll-direction="1">
+            {%- render 'icon', name: 'chevron-right' -%}
+            <span class="visually-hidden">{{ 'accessibility.next_slide' | t }}</span>
+          </button>
+        {%- endif -%}
+        {%- if section.settings.show_view_all and collection != blank -%}
+          <a href="{{ collection.url }}" class="link featured-collection__view-all">
+            {{- 'sections.featured_collection.view_all' | t -}}
+            {%- render 'icon', name: 'arrow-right' -%}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <ul
+      id="{{ list_id }}"
+      class="product-grid featured-collection__list featured-collection__list--{{ section.settings.layout }}"
+      role="list"
+      style="--columns: {{ section.settings.columns }}; --columns-mobile: {{ section.settings.columns_mobile }};"
+    >
+      {%- if collection != blank and collection.products_count > 0 -%}
+        {%- for product in collection.products limit: limit -%}
+          <li>
+            {%- render 'product-card', product: product, ratio: section.settings.image_ratio, show_vendor: section.settings.show_vendor, show_quick_add: section.settings.show_quick_add, id_prefix: section.id -%}
+          </li>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..4) -%}
+          <li>{%- render 'product-card', ratio: section.settings.image_ratio -%}</li>
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+  </div>
+</div>
+
+{%- if section.settings.layout == 'carousel' -%}
+  <script type="module">
+    document.querySelectorAll('[data-scroll-target="{{ list_id }}"]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const list = document.getElementById(button.dataset.scrollTarget);
+        if (!list) return;
+        const item = list.querySelector('li');
+        const step = item ? item.getBoundingClientRect().width + parseFloat(getComputedStyle(list).columnGap || '0') : list.clientWidth;
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        list.scrollBy({ left: step * Number(button.dataset.scrollDirection), behavior: reduce ? 'auto' : 'smooth' });
+      });
+    });
+  </script>
+{%- endif -%}
+
+{%- comment -%} 3. Schema {%- endcomment -%}
+{% schema %}
+{
+  "name": "t:sections.featured_collection.name",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "t:sections.featured_collection.collection" },
+    { "type": "text", "id": "heading", "label": "t:sections.featured_collection.heading", "info": "t:sections.featured_collection.heading_info" },
+    { "type": "range", "id": "limit", "label": "t:sections.featured_collection.limit", "min": 2, "max": 16, "step": 1, "default": 8 },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.featured_collection.layout",
+      "options": [
+        { "value": "grid", "label": "t:sections.layout_grid" },
+        { "value": "carousel", "label": "t:sections.layout_carousel" }
+      ],
+      "default": "grid"
+    },
+    { "type": "range", "id": "columns", "label": "t:sections.main_collection.columns", "min": 2, "max": 5, "step": 1, "default": 4 },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "t:sections.main_collection.columns_mobile",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:sections.main_collection.image_ratio",
+      "options": [
+        { "value": "1", "label": "t:sections.main_collection.ratio_square" },
+        { "value": "0.8", "label": "t:sections.main_collection.ratio_portrait" },
+        { "value": "0.75", "label": "t:sections.main_collection.ratio_tall" }
+      ],
+      "default": "0.8"
+    },
+    { "type": "checkbox", "id": "show_vendor", "label": "t:sections.main_collection.show_vendor", "default": false },
+    { "type": "checkbox", "id": "show_quick_add", "label": "t:sections.main_collection.show_quick_add", "default": true },
+    { "type": "checkbox", "id": "show_view_all", "label": "t:sections.featured_collection.show_view_all", "default": true },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:sections.main_collection.color_scheme", "default": "scheme-1" },
+    { "type": "range", "id": "padding_top", "label": "t:sections.main_collection.padding_top", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "t:sections.main_collection.padding_bottom", "min": 0, "max": 160, "step": 8, "unit": "px", "default": 48 }
+  ],
+  "presets": [
+    { "name": "t:sections.featured_collection.name" }
+  ]
+}
+{% endschema %}

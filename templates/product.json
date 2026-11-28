@@ -10,11 +10,813 @@
 {
   "sections": {
     "main": {
-      "type": "product",
-      "settings": {}
+      "type": "main-product",
+      "blocks": {
+        "eyebrow": {
+          "type": "text",
+          "settings": {
+            "text": "Whispo Skin",
+            "style": "eyebrow"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+            "size": "h2"
+          }
+        },
+        "rating": {
+          "type": "rating",
+          "settings": {
+            "link": "#reviews"
+          }
+        },
+        "tags": {
+          "type": "tags",
+          "settings": {
+            "source": "manual",
+            "tags": "Bestseller, Clean formula, Vegan, Cruelty free",
+            "limit": 4,
+            "highlight_first": true
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_installments": true,
+            "show_tax_note": true
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "clamp_lines": 3
+          }
+        },
+        "benefits": {
+          "type": "benefits",
+          "settings": {
+            "items": "Clean, skin-loving formula\nDermatologist tested, gentle on sensitive skin\nVegan and cruelty free\nFree from parabens and sulfates",
+            "columns": "1"
+          }
+        },
+        "picker": {
+          "type": "variant_picker",
+          "settings": {
+            "style": "buttons",
+            "show_swatches": true
+          }
+        },
+        "buy": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_quantity": true,
+            "show_dynamic_checkout": true,
+            "show_pickup_availability": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "inventory": {
+          "type": "inventory",
+          "settings": {
+            "threshold": 10,
+            "show_quantity": true,
+            "show_bar": true,
+            "full_at": 30
+          }
+        },
+        "proof": {
+          "type": "social_proof",
+          "settings": {
+            "avatar_1": "shopify://shop_images/whispo-avatar-1.jpg",
+            "avatar_2": "shopify://shop_images/whispo-avatar-2.jpg",
+            "avatar_3": "shopify://shop_images/whispo-avatar-3.jpg",
+            "text": "Made in <strong>small batches</strong> with clean, plant-based ingredients"
+          }
+        },
+        "badges": {
+          "type": "icon_badges",
+          "settings": {
+            "icon_1": "leaf",
+            "label_1": "Vegan",
+            "icon_2": "rabbit",
+            "label_2": "Cruelty free",
+            "icon_3": "shield",
+            "label_3": "Dermatologist tested",
+            "icon_4": "recycle",
+            "label_4": "Recyclable",
+            "icon_5": "flask",
+            "label_5": "Paraben free"
+          }
+        },
+        "pair": {
+          "type": "pair_with",
+          "settings": {
+            "heading": "Pair it with",
+            "source": "manual",
+            "products": [
+              "luxury-face-creams",
+              "glass-skin-overnight-mask",
+              "brightening-serum",
+              "luminous-balance-toner",
+              "comfort-matte-bullet-lipstick"
+            ],
+            "limit": 4
+          }
+        },
+        "how_to": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "How to use",
+            "icon": "clipboard",
+            "content": "<p>Apply to clean skin morning and/or evening, or as directed on the pack. Patch test before first use and follow with SPF during the day.</p>",
+            "open": true
+          }
+        },
+        "ingredients": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Ingredients",
+            "icon": "leaf",
+            "content": "<p>Made with plant-powered actives and no parabens, sulfates or synthetic fragrance. See the full ingredient list on the packaging.</p>",
+            "open": false
+          }
+        },
+        "love": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Why you will love it",
+            "icon": "heart",
+            "content": "<p>Lightweight, layers easily with the rest of your routine and is made to be kind to every skin type.</p>",
+            "open": false
+          }
+        },
+        "shipping": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Shipping and returns",
+            "icon": "truck",
+            "content": "<p>Free shipping on orders over $60. Not in love? Return it within 30 days, even if opened.</p>",
+            "open": false
+          }
+        },
+        "promos": {
+          "type": "promo_cards",
+          "settings": {
+            "icon_1": "truck",
+            "title_1": "Free shipping and a gift",
+            "text_1": "Free delivery and a travel-size cleanser on orders over $60.",
+            "icon_2": "sparkle",
+            "title_2": "20% off your first order",
+            "text_2": "Applied automatically at checkout."
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "title",
+        "rating",
+        "tags",
+        "price",
+        "description",
+        "benefits",
+        "picker",
+        "buy",
+        "inventory",
+        "proof",
+        "badges",
+        "pair",
+        "how_to",
+        "ingredients",
+        "love",
+        "shipping",
+        "promos",
+        "share"
+      ],
+      "settings": {
+        "gallery_layout": "thumbnails_left",
+        "media_width": 56,
+        "media_aspect": "1",
+        "enable_zoom": true,
+        "loop_video": true,
+        "sticky_details": true,
+        "show_sticky_bar": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 24,
+        "padding_bottom": 64
+      }
+    },
+    "ingredients": {
+      "type": "pdp-ingredients",
+      "blocks": {
+        "ing_vitamin_c": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ingredient-vitamin-c.jpg",
+            "name": "Vitamin C",
+            "benefit": "Brightens dull skin and evens out tone."
+          }
+        },
+        "ing_niacinamide": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ingredient-niacinamide.jpg",
+            "name": "Niacinamide",
+            "benefit": "Refines pores and fades dark spots."
+          }
+        },
+        "ing_licorice": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ingredient-licorice-root.jpg",
+            "name": "Licorice root",
+            "benefit": "Calms redness and soothes irritation."
+          }
+        },
+        "ing_hyaluronic": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ingredient-hyaluronic-acid.jpg",
+            "name": "Hyaluronic acid",
+            "benefit": "Pulls in moisture for plump, bouncy skin."
+          }
+        },
+        "ing_green_tea": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ingredient-green-tea.jpg",
+            "name": "Green tea",
+            "benefit": "Antioxidants that defend against daily stress."
+          }
+        },
+        "ing_rosehip": {
+          "type": "ingredient",
+          "settings": {
+            "image": "shopify://shop_images/ingredient-rosehip-oil.jpg",
+            "name": "Rosehip oil",
+            "benefit": "Nourishes and restores a healthy glow."
+          }
+        }
+      },
+      "block_order": [
+        "ing_vitamin_c",
+        "ing_niacinamide",
+        "ing_licorice",
+        "ing_hyaluronic",
+        "ing_green_tea",
+        "ing_rosehip"
+      ],
+      "settings": {
+        "eyebrow": "Our formulas",
+        "heading": "What's inside?",
+        "text": "<p>The hard-working, natural actives behind our skincare.</p>",
+        "halo_color": "#f6efe4",
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "layout": "orbit",
+        "image": "shopify://shop_images/serum-texture-swatch.jpg"
+      }
+    },
+    "routine": {
+      "type": "pdp-routine",
+      "blocks": {
+        "step_cleanse": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/routine-cleanse.jpg",
+            "title": "Cleanse",
+            "text": "Wash your face with a gentle cleanser to remove dirt and oil.",
+            "duration": "60 sec",
+            "tip": "Use lukewarm water: hot water strips the skin and leaves it tight.",
+            "highlight": false
+          }
+        },
+        "step_tone": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/routine-tone.jpg",
+            "title": "Tone",
+            "text": "Sweep on toner to rebalance and prep your skin.",
+            "duration": "10 sec",
+            "tip": "Pat it in, don't rub. Give it a few seconds to sink in.",
+            "product": "luminous-balance-toner",
+            "highlight": false
+          }
+        },
+        "step_serum": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/routine-serum.jpg",
+            "title": "Treat",
+            "text": "Press in your serum or treatment while skin is still damp.",
+            "duration": "30 sec",
+            "tip": "Apply while skin is still slightly damp so it absorbs better.",
+            "product": "brightening-serum",
+            "highlight": false
+          }
+        },
+        "step_moisturize": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/routine-moisturize.jpg",
+            "title": "Moisturise",
+            "text": "Seal it all in with a light moisturiser — and SPF by day.",
+            "duration": "20 sec",
+            "tip": "In the morning, finish with SPF 30 or higher.",
+            "product": "luxury-face-creams",
+            "highlight": false
+          }
+        }
+      },
+      "block_order": [
+        "step_cleanse",
+        "step_tone",
+        "step_serum",
+        "step_moisturize"
+      ],
+      "settings": {
+        "eyebrow": "How to use",
+        "heading": "Your daily routine",
+        "step_label": "Step",
+        "start_step": 1,
+        "card_radius": 24,
+        "accent_color": "#f8d12f",
+        "color_scheme": "scheme-3",
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "layout": "stepper",
+        "intro": "Four simple steps, morning and night. Tap a step to see how.",
+        "autoplay": true,
+        "autoplay_speed": 6,
+        "highlight_label": "This product",
+        "product_label": "Use with"
+      }
+    },
+    "natural_banner": {
+      "type": "reveal-image",
+      "settings": {
+        "media_type": "image",
+        "image": "shopify://shop_images/pdp-botanical-forest.jpg",
+        "video_url": "",
+        "heading": "100% natural actives",
+        "subheading": "Made in harmony with nature — powered by botanicals, backed by science.",
+        "button_label": "",
+        "button_url": "",
+        "button_style": "outline_light",
+        "text_position": "center",
+        "text_vertical": "middle",
+        "scroll_distance": 800,
+        "start_inset": 30,
+        "start_inset_h": 30,
+        "overlay_opacity": 35,
+        "border_radius_start": 20,
+        "border_radius_end": 0,
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "promises": {
+      "type": "icons-with-text",
+      "blocks": {
+        "item_1": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/text_with_icon_img1.png",
+            "icon": "none",
+            "heading": "Natural Ingredients",
+            "text": "Praesent in nunc vel urna consequat mattis eget vel libero. Phasellus entesque",
+            "link": ""
+          }
+        },
+        "item_2": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/text_with_icon_img2.png",
+            "icon": "none",
+            "heading": "Fragrance Free",
+            "text": "Ahasellus entesque praesent in nunc vel urna consequat mattis eget vel libero.",
+            "link": ""
+          }
+        },
+        "item_3": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/text_with_icon_img3.png",
+            "icon": "none",
+            "heading": "Allergy Tested",
+            "text": "Nunc vel urna consequat praesent in mattis eget vel libero zhasellus entesque.",
+            "link": ""
+          }
+        },
+        "item_4": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/text_with_icon_img4.png",
+            "icon": "none",
+            "heading": "Paraben Free",
+            "text": "Mattis eget vel libero praesent in nunc vel urna consequat ehasellus entesque",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4"
+      ],
+      "settings": {
+        "heading": "",
+        "alignment": "center",
+        "icon_size": 72,
+        "color_scheme": "",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "facts": {
+      "type": "pdp-specs",
+      "blocks": {
+        "row_benefits": {
+          "type": "row",
+          "settings": {
+            "label": "Skin benefits",
+            "value": "Nourishes, balances and protects",
+            "indent": false
+          }
+        },
+        "row_type": {
+          "type": "row",
+          "settings": {
+            "label": "Skin type",
+            "value": "All skin types, incl. sensitive",
+            "indent": false
+          }
+        },
+        "row_texture": {
+          "type": "row",
+          "settings": {
+            "label": "Texture",
+            "value": "Lightweight, fast-absorbing",
+            "indent": false
+          }
+        },
+        "row_scent": {
+          "type": "row",
+          "settings": {
+            "label": "Scent",
+            "value": "Fragrance free",
+            "indent": false
+          }
+        },
+        "row_area": {
+          "type": "row",
+          "settings": {
+            "label": "Application area",
+            "value": "Face, neck and décolleté",
+            "indent": false
+          }
+        },
+        "row_when": {
+          "type": "row",
+          "settings": {
+            "label": "When to use",
+            "value": "Morning and/or evening",
+            "indent": false
+          }
+        }
+      },
+      "block_order": [
+        "row_benefits",
+        "row_type",
+        "row_texture",
+        "row_scent",
+        "row_area",
+        "row_when"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/skincare-serum-drop.jpg",
+        "image_position": "left",
+        "show_stars": true,
+        "eyebrow": "Why customers choose it",
+        "heading": "",
+        "text": "<p>Clean, effective skincare made with natural actives and nothing you don't need.</p>",
+        "note": "Dermatologist tested. Free from parabens, sulfates and synthetic fragrance.",
+        "card_background": "#dff0e3",
+        "card_text": "#1d2b20",
+        "radius": 20,
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "results": {
+      "type": "before-after-slider",
+      "settings": {
+        "before_image": "shopify://shop_images/skincare-before-acne.jpg",
+        "after_image": "shopify://shop_images/skincare-after-clear.jpg",
+        "initial_position": 50,
+        "image_radius": 16,
+        "show_image_labels": true,
+        "before_label": "Before",
+        "before_label_vertical": "top",
+        "before_label_horizontal": "left",
+        "after_label": "After",
+        "after_label_vertical": "bottom",
+        "after_label_horizontal": "right",
+        "label_inset": 12,
+        "before_caption": "Breakouts & redness",
+        "after_caption": "Clear, glowing skin",
+        "show_content": true,
+        "heading": "Real results you can see",
+        "description": "<p>Drag the slider to see the difference a consistent routine makes.</p>",
+        "button_label": "",
+        "button_link": "",
+        "layout": "media_left",
+        "enable_particles": false,
+        "particle_opacity": 16,
+        "particle_size": 150,
+        "particle_speed": 22,
+        "color_scheme": "",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "compare": {
+      "type": "comparison-table",
+      "blocks": {
+        "row_clean": {
+          "type": "row",
+          "settings": {
+            "feature": "Clean, vegan formula",
+            "ours": "yes",
+            "other_1": "no",
+            "other_2": "some"
+          }
+        },
+        "row_vitc": {
+          "type": "row",
+          "settings": {
+            "feature": "Clinically tested actives",
+            "ours": "yes",
+            "other_1": "no",
+            "other_2": "yes"
+          }
+        },
+        "row_sensitive": {
+          "type": "row",
+          "settings": {
+            "feature": "Safe for sensitive skin",
+            "ours": "yes",
+            "other_1": "some",
+            "other_2": "no"
+          }
+        },
+        "row_fragrance": {
+          "type": "row",
+          "settings": {
+            "feature": "Fragrance free",
+            "ours": "yes",
+            "other_1": "no",
+            "other_2": "no"
+          }
+        },
+        "row_price": {
+          "type": "row",
+          "settings": {
+            "feature": "Under $50",
+            "ours": "yes",
+            "other_1": "yes",
+            "other_2": "no"
+          }
+        }
+      },
+      "block_order": [
+        "row_clean",
+        "row_vitc",
+        "row_sensitive",
+        "row_fragrance",
+        "row_price"
+      ],
+      "settings": {
+        "heading": "Why it's different",
+        "text": "Clean, effective skincare without the harsh extras — at a fair price.",
+        "product": "",
+        "our_title": "",
+        "other_1_title": "Drugstore brand",
+        "other_2_title": "Luxury brand",
+        "yes_label": "Yes",
+        "no_label": "No",
+        "some_label": "Some",
+        "accent_color": "#1f3b1a",
+        "accent_text": "#ffffff",
+        "color_scheme": "scheme-3",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "reviews": {
+      "type": "client-trust-testimonials",
+      "blocks": {
+        "testimonial_MnefiL": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Jenny W.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Absolutely love this product! My hair feels so much softer and healthier after just one week of use.</p>",
+            "product": "the-3p-fulfilled-snowboard",
+            "product_title": "Detangling Hair Spray",
+            "product_link": ""
+          }
+        },
+        "testimonial_76pLRD": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Marcus T.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Great quality and fast shipping. Will definitely order again.</p>",
+            "product": "",
+            "product_title": "Daily Serum",
+            "product_link": ""
+          }
+        },
+        "testimonial_p9BgGR": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Sarah L.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Finally found something that works for my sensitive skin. Highly recommend!</p>",
+            "product": "",
+            "product_title": "Gentle Cleanser",
+            "product_link": ""
+          }
+        },
+        "testimonial_ByiDH9": {
+          "type": "testimonial",
+          "settings": {
+            "name": "David R.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Clean ingredients and visible results. Worth every penny.</p>",
+            "product": "",
+            "product_title": "Night Cream",
+            "product_link": ""
+          }
+        },
+        "testimonial_zChWha": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Emma K.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Smells amazing and absorbs quickly. A staple in my routine now.</p>",
+            "product": "",
+            "product_title": "Body Oil",
+            "product_link": ""
+          }
+        },
+        "testimonial_9MF6mr": {
+          "type": "testimonial",
+          "settings": {
+            "name": "Alex P.",
+            "verified_label": "Verified Buyer",
+            "rating": 5,
+            "quote": "<p>Customer service was excellent and the product exceeded expectations.</p>",
+            "product": "",
+            "product_title": "Face Mist",
+            "product_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_MnefiL",
+        "testimonial_76pLRD",
+        "testimonial_p9BgGR",
+        "testimonial_ByiDH9",
+        "testimonial_zChWha",
+        "testimonial_9MF6mr"
+      ],
+      "settings": {
+        "section_width": "page-width",
+        "color_scheme": "scheme-2",
+        "heading": "Loved by your skin. Trusted by many.",
+        "subheading": "",
+        "heading_alignment": "center",
+        "animation_duration": 36,
+        "layout_mode": "marquee",
+        "show_slider_arrows": true,
+        "show_slider_dragger": true,
+        "card_gap": 16,
+        "star_color": "#e6b800",
+        "card_background": "#ffffff",
+        "anchor_id": "reviews",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "faq": {
+      "type": "faq-split-gallery",
+      "blocks": {
+        "faq_1": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Is it suitable for sensitive skin?",
+            "answer": "<p>Our formulas are dermatologist tested and free from synthetic fragrance. If your skin is very sensitive, patch test first.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "When will I see results?",
+            "answer": "<p>Most people notice a difference within 2–4 weeks of daily use.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Are your products vegan and cruelty free?",
+            "answer": "<p>Yes — every product is vegan and never tested on animals.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "Can I use it with the rest of my routine?",
+            "answer": "<p>Yes. Apply from thinnest to thickest texture, and finish with SPF in the morning.</p>"
+          }
+        },
+        "faq_5": {
+          "type": "faq_entry",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>Not in love? Return it within 30 days, even if opened.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5"
+      ],
+      "settings": {
+        "title": "Questions? Answered.",
+        "color_scheme": "scheme-2",
+        "column_layout": "faq_left",
+        "swap_gallery_images": false,
+        "padding_top": 64,
+        "padding_bottom": 64,
+        "gallery_image_tall": "shopify://shop_images/whispo-faq-eye-cream.jpg",
+        "gallery_image_front": "shopify://shop_images/whispo-faq-cream-hands.jpg",
+        "image_radius": 16,
+        "image_scroll_parallax": 32,
+        "expand_first_item": true,
+        "allow_collapse_active": false
+      }
+    },
+    "recommendations": {
+      "type": "pdp-recommendations",
+      "settings": {
+        "heading": "You may also like",
+        "subheading": "",
+        "intent": "related",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "add_label": "ADD TO CART",
+        "cta_color": "#f5c518",
+        "star_color": "#e6b800",
+        "section_width": "page-width",
+        "color_scheme": "scheme-1",
+        "padding_top": 56,
+        "padding_bottom": 72
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "ingredients",
+    "routine",
+    "natural_banner",
+    "promises",
+    "facts",
+    "results",
+    "compare",
+    "reviews",
+    "faq",
+    "recommendations"
   ]
 }

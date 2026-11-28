@@ -10,8 +10,20 @@
 {
   "sections": {
     "main": {
-      "type": "search",
-      "settings": {}
+      "type": "main-search",
+      "settings": {
+        "results_per_page": 24,
+        "columns": 4,
+        "image_ratio": "0.8",
+        "show_quick_add": true,
+        "enable_filtering": true,
+        "filter_layout": "drawer",
+        "enable_sorting": true,
+        "popular_menu": "footer-collection",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 80
+      }
     }
   },
   "order": [

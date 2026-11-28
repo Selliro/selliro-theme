@@ -1,0 +1,493 @@
+/* ==============================================================================
+   Whispo — filters, sorting and results layout (collection and search pages)
+   ------------------------------------------------------------------------------
+   Markup: snippets/facets.liquid, sections/main-collection.liquid, sections/main-search.liquid.
+   Behaviour: assets/facets.js (in-place updates), assets/dialog.js (filter drawer).
+
+   Contents
+     1. Section and banner
+     2. Results layout (sidebar | main)
+     3. Toolbar (filter button, count, sort)
+     4. Filter panel: drawer on mobile, sidebar on desktop
+     5. Filter groups and values (checkbox, swatch, image, price)
+     6. Active filter chips
+     7. Empty results
+   ============================================================================== */
+
+/* ==============================================================================
+   1. Section and banner
+   ============================================================================== */
+.main-collection,
+.main-search {
+  padding-block: var(--section-padding-top, 32px) var(--section-padding-bottom, 80px);
+}
+
+.collection-banner {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: clamp(1.75rem, 3vw, 2.75rem);
+}
+
+.collection-banner--image {
+  align-items: center;
+}
+
+@media screen and (min-width: 990px) {
+  .collection-banner--image {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+}
+
+.collection-banner__text {
+  display: grid;
+  gap: 0.85rem;
+  max-width: 46rem;
+}
+
+.collection-banner__title {
+  margin: 0;
+}
+
+.collection-banner__description {
+  color: rgb(var(--color-text-rgb) / 0.8);
+}
+
+.collection-banner__media {
+  aspect-ratio: 16 / 9;
+}
+
+/* ==============================================================================
+   2. Results layout
+   ============================================================================== */
+.collection-results {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media screen and (min-width: 990px) {
+  .collection-results--sidebar.has-filters {
+    grid-template-columns: 16.5rem minmax(0, 1fr);
+    align-items: start;
+    gap: clamp(2rem, 3.5vw, 3.5rem);
+  }
+}
+
+.collection-results__main {
+  display: grid;
+  align-content: start;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+facet-filters[aria-busy='true'] [data-facets-update='results'] {
+  opacity: 0.5;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* ==============================================================================
+   3. Toolbar
+   ============================================================================== */
+.facets__form {
+  display: contents;
+}
+
+.facets__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.facets__count {
+  flex: 1;
+  color: rgb(var(--color-text-rgb) / 0.75);
+  font-size: var(--text-sm);
+}
+
+.facets__open .icon {
+  width: 18px;
+  height: 18px;
+}
+
+.facets__badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--color-button);
+  color: var(--color-button-text);
+  font-size: 11px;
+}
+
+.facets__sort {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.facets__sort-label {
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
+.facets__sort-select {
+  width: auto;
+  min-height: 40px;
+  padding-block: 0.4rem;
+  font-size: var(--text-sm);
+}
+
+@media screen and (max-width: 749px) {
+  .facets__sort-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .facets__count {
+    order: 3;
+    flex-basis: 100%;
+  }
+}
+
+/* ==============================================================================
+   4. Filter panel
+   A <dialog>: a modal drawer by default. With layout "sidebar" on desktop the closed dialog is simply shown
+   in place as the left column (it is not modal there, so the page stays usable).
+   ============================================================================== */
+.facets__panel {
+  --drawer-width: 24rem;
+}
+
+.facets__panel .dialog__panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.facets__groups {
+  flex: 1 0 auto;
+  padding: 0.25rem var(--page-margin) 1rem;
+}
+
+.facets__panel-footer {
+  position: sticky;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  padding: 1rem var(--page-margin) calc(1rem + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--color-border);
+  background: var(--color-background);
+}
+
+@media screen and (min-width: 990px) {
+  .facets__panel--sidebar:not([open]) {
+    position: sticky;
+    top: calc(var(--header-height, 0px) + 1.5rem);
+    display: block;
+    width: auto;
+    height: auto;
+    max-height: calc(100dvh - var(--header-height, 0px) - 3rem);
+    margin: 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .facets__panel--sidebar:not([open]) .dialog__panel {
+    height: auto;
+    overflow: visible;
+    background: none;
+    animation: none;
+  }
+
+  .facets__panel--sidebar:not([open]) .facets__panel-header {
+    padding-inline: 0;
+    padding-top: 0;
+  }
+
+  .facets__panel--sidebar:not([open]) .facets__close,
+  .facets__panel--sidebar:not([open]) .facets__apply {
+    display: none;
+  }
+
+  .facets__panel--sidebar:not([open]) .facets__groups {
+    padding-inline: 0;
+  }
+
+  .facets__panel--sidebar:not([open]) .facets__panel-footer {
+    grid-template-columns: 1fr;
+    padding-inline: 0;
+    border-top: 0;
+    background: none;
+  }
+
+  .collection-results--sidebar .facets__open {
+    display: none;
+  }
+
+  .no-js .facets__panel--sidebar .facets__apply {
+    display: inline-flex;
+  }
+}
+
+/* ==============================================================================
+   5. Filter groups and values
+   ============================================================================== */
+.facet {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.facet__summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 52px;
+  font-weight: var(--font-body-weight-bold);
+  list-style: none;
+  cursor: pointer;
+}
+
+.facet__summary::-webkit-details-marker {
+  display: none;
+}
+
+.facet__label {
+  flex: 1;
+}
+
+.facet__active {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: rgb(var(--color-text-rgb) / 0.1);
+  font-size: 11px;
+}
+
+.facet__chevron {
+  width: 16px;
+  height: 16px;
+  transition: rotate 0.25s ease;
+}
+
+.facet[open] .facet__chevron {
+  rotate: 180deg;
+}
+
+.facet__values {
+  display: grid;
+  gap: 0.1rem;
+  max-height: 18rem;
+  margin: 0;
+  padding: 0 0 1rem;
+  overflow-y: auto;
+  border: 0;
+}
+
+.facet__values--visual {
+  grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr));
+  gap: 0.5rem;
+}
+
+.facet__value {
+  position: relative;
+}
+
+.facet__checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.facet__option {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 36px;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.facet__box {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid rgb(var(--color-text-rgb) / 0.35);
+  border-radius: 6px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.facet__box .icon {
+  width: 14px;
+  height: 14px;
+  color: var(--color-button-text);
+  opacity: 0;
+}
+
+.facet__checkbox:checked + .facet__option .facet__box {
+  border-color: var(--color-button);
+  background: var(--color-button);
+}
+
+.facet__checkbox:checked + .facet__option .facet__box .icon {
+  opacity: 1;
+}
+
+.facet__checkbox:focus-visible + .facet__option {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.facet__text {
+  flex: 1;
+}
+
+.facet__count {
+  color: rgb(var(--color-text-rgb) / 0.7);
+  font-size: var(--text-xs);
+}
+
+.facet__value.is-disabled .facet__option {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Swatches and images: tiles */
+.facet__values--visual .facet__option {
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.4rem 0.2rem;
+  border-radius: var(--radius-input);
+  text-align: center;
+}
+
+.facet__values--visual .facet__count {
+  display: none;
+}
+
+.facet__swatch,
+.facet__image {
+  display: block;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.12);
+}
+
+.facet__image {
+  border-radius: 8px;
+}
+
+.facet__checkbox:checked + .facet__option :is(.facet__swatch, .facet__image) {
+  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-text);
+}
+
+/* Price */
+.facet__price {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.facet__price-field {
+  position: relative;
+  display: grid;
+  gap: 0.3rem;
+  font-size: var(--text-xs);
+}
+
+.facet__price-field .field__input {
+  padding-inline-start: 1.75rem;
+  min-height: 44px;
+}
+
+.facet__currency {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 0.85rem;
+  color: rgb(var(--color-text-rgb) / 0.6);
+  font-size: var(--text-sm);
+}
+
+.facet__hint {
+  padding: 0.5rem 0 1rem;
+  color: rgb(var(--color-text-rgb) / 0.6);
+  font-size: var(--text-xs);
+}
+
+/* ==============================================================================
+   6. Active filter chips
+   ============================================================================== */
+.facets__chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.facet-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 34px;
+  padding: 0 0.6rem 0 0.85rem;
+  border-radius: 999px;
+  background: rgb(var(--color-text-rgb) / 0.07);
+  color: inherit;
+  font-size: var(--text-sm);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.facet-chip:hover {
+  background: rgb(var(--color-text-rgb) / 0.13);
+}
+
+.facet-chip__label {
+  color: rgb(var(--color-text-rgb) / 0.65);
+}
+
+.facet-chip .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.facets__clear-link {
+  font-size: var(--text-sm);
+}
+
+.facets__active:empty {
+  display: none;
+}
+
+/* ==============================================================================
+   7. Empty results
+   ============================================================================== */
+.collection-empty {
+  display: grid;
+  justify-items: center;
+  gap: 1.25rem;
+  padding: clamp(3rem, 8vw, 6rem) 1rem;
+  text-align: center;
+}
+
+.collection-empty .h4 {
+  margin: 0;
+}

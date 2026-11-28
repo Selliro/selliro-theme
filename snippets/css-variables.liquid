@@ -77,6 +77,21 @@
     --radius-card: {{ settings.card_radius | default: 20 }}px;
     --radius-media: {{ settings.media_radius | default: 16 }}px;
 
+    /* Section titles: one shared scale for home page section headings (ported sections) */
+    --section-title-size: calc(clamp(1.65rem, 3.2vw, 2.35rem) * var(--heading-scale));
+    --section-title-weight: var(--font-heading-weight);
+    --section-title-leading: 1.12;
+    --section-title-tracking: -0.02em;
+
+    /* Misc */
+    --focus-outline-width: 2px;
+    --icon-stroke-width: 1.5px;
+    --layer-section-background: -2;
+    --opacity-10: 0.1;
+    --opacity-10-25: 0.1;
+    --drawer-border: 1px solid var(--color-border);
+    --drawer-shadow: 0 0 40px rgb(0 0 0 / 0.18);
+
     /* Logo */
     --logo-width: {{ settings.logo_width | default: 120 }}px;
     --logo-width-mobile: {{ settings.logo_width_mobile | default: 96 }}px;
@@ -118,6 +133,9 @@
       --color-input: {{ s.input }};
       --color-input-text: {{ s.input_text }};
       --color-input-text-rgb: {{ s.input_text.red }} {{ s.input_text.green }} {{ s.input_text.blue }};
+      --color-button-text-rgb: {{ s.button_text.red }} {{ s.button_text.green }} {{ s.button_text.blue }};
+      --color-text-muted: rgb({{ s.text.red }} {{ s.text.green }} {{ s.text.blue }} / 0.7);
+      --color-shadow-rgb: 0 0 0;
     }
   {% endfor %}
 {% endstyle %}

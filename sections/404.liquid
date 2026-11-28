@@ -1,23 +1,33 @@
-{% comment %}
-  This section is used in the 404 template to render page shown when customers
-  enter an invalid store URL.
+{%- comment -%}
+  Whispo — page not found. A large "404", a short message, a search field and a link back to the shop.
+  Styles: assets/template-content.css ("Not found").
+{%- endcomment -%}
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/404
-{% endcomment %}
+{%- comment -%} 1. CSS {%- endcomment -%}
+{{ 'template-content.css' | asset_url | stylesheet_tag }}
 
-<h1>{{ '404.title' | t }}</h1>
+{%- comment -%} 2. Liquid {%- endcomment -%}
+<div class="not-found color-{{ section.settings.color_scheme }}">
+  <div class="page-width not-found__inner">
+    <p class="not-found__code" aria-hidden="true">404</p>
+    <h1 class="not-found__title h2">{{ 'templates.404.title' | t }}</h1>
+    <p class="not-found__text">{{ 'templates.404.text' | t }}</p>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-page__form not-found__search">
+      <label for="NotFoundSearch" class="visually-hidden">{{ 'search.placeholder' | t }}</label>
+      {%- render 'icon', name: 'search', class: 'search-page__icon' -%}
+      <input id="NotFoundSearch" class="search-page__input" type="search" name="q" placeholder="{{ 'search.placeholder' | t }}">
+      <button type="submit" class="button">{{ 'search.submit' | t }}</button>
+    </form>
+    <a href="{{ routes.all_products_collection_url }}" class="link">{{ 'cart.continue_shopping' | t }}</a>
+  </div>
+</div>
 
-<p>
-  {{ '404.not_found' | t }}
-</p>
-
-<a href="{{ routes.all_products_collection_url }}">
-  {{ '404.back_to_shopping' | t }}
-</a>
-
+{%- comment -%} 3. Schema {%- endcomment -%}
 {% schema %}
 {
-  "name": "t:general.404",
-  "settings": []
+  "name": "t:sections.main_404.name",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:sections.main_collection.color_scheme", "default": "scheme-1" }
+  ]
 }
 {% endschema %}

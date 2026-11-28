@@ -1,0 +1,58 @@
+{%- doc -%}
+  Quantity field with minus and plus buttons (assets/quantity-input.js). Follows the variant's quantity
+  rules (minimum, maximum, increment). Styles: assets/base.css ("Quantity input").
+
+  @param {string} id - Input id (unique on the page)
+  @param {string} [name] - Input name (default "quantity")
+  @param {number} [value] - Current quantity
+  @param {number} [min] - Minimum (default 1)
+  @param {number} [max] - Maximum
+  @param {number} [step] - Increment (default 1)
+  @param {string} [label] - Accessible label (default "Quantity")
+  @param {string} [form] - Form id, when the field sits outside its form
+  @param {string} [line_key] - Cart line key (cart drawer and page)
+  @param {string} [size] - 'small' for the cart
+
+  @example
+  {% render 'quantity-input', id: 'Quantity-main', min: 1, value: 1 %}
+{%- enddoc -%}
+{%- liquid
+  assign min = min | default: 1
+  assign step = step | default: 1
+  assign value = value | default: min
+  assign name = name | default: 'quantity'
+  if label == blank
+    assign label = 'products.quantity' | t
+  endif
+-%}
+<quantity-input class="quantity{% if size == 'small' %} quantity--small{% endif %}">
+  <button type="button" class="quantity__button" data-ref="minus">
+    {%- render 'icon', name: 'minus' -%}
+    <span class="visually-hidden">{{ 'products.decrease_quantity' | t: label: label }}</span>
+  </button>
+  <label class="visually-hidden" for="{{ id }}">{{ label }}</label>
+  <input
+    id="{{ id }}"
+    class="quantity__input"
+    type="number"
+    inputmode="numeric"
+    name="{{ name }}"
+    value="{{ value }}"
+    min="{{ min }}"
+    {% if max %}
+      max="{{ max }}"
+    {% endif %}
+    step="{{ step }}"
+    {% if form != blank %}
+      form="{{ form }}"
+    {% endif %}
+    {% if line_key != blank %}
+      data-line-key="{{ line_key }}"
+    {% endif %}
+    data-ref="input"
+  >
+  <button type="button" class="quantity__button" data-ref="plus">
+    {%- render 'icon', name: 'plus' -%}
+    <span class="visually-hidden">{{ 'products.increase_quantity' | t: label: label }}</span>
+  </button>
+</quantity-input>

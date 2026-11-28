@@ -1,0 +1,175 @@
+{%- doc -%}
+  Product media gallery (assets/media-gallery.js → <media-gallery>).
+
+  Layouts (section setting "Gallery layout"):
+    thumbnails_left / thumbnails_bottom   one image at a time with thumbnails (desktop); swipe with dots on mobile
+    grid                                  all media stacked in two columns on desktop (large first image);
+                                          swipe with dots on mobile
+  The selected variant's image is shown first. With zoom on, images open in a full-screen viewer.
+  Video, external video and 3D models play in place. Styles: assets/section-main-product.css ("Media").
+
+  @param {object} product - Product
+  @param {object} [variant] - Selected variant (its image is shown first)
+  @param {string} [layout] - thumbnails_left, thumbnails_bottom or grid
+  @param {boolean} [zoom] - Open images in the viewer on click
+  @param {boolean} [loop_video] - Loop Shopify-hosted videos
+  @param {string} [aspect] - CSS aspect ratio for the slides ('adapt' keeps each image's own ratio)
+
+  @example
+  {% render 'media-gallery', product: product, variant: current_variant, layout: 'thumbnails_left' %}
+{%- enddoc -%}
+{%- liquid
+  assign layout = layout | default: 'thumbnails_left'
+  assign featured = variant.featured_media | default: product.featured_media
+  assign count = product.media.size
+  assign has_3d = false
+  if product.media.size > 0
+    assign models = product.media | where: 'media_type', 'model'
+    if models.size > 0
+      assign has_3d = true
+    endif
+  endif
+  if aspect == blank or aspect == 'adapt'
+    assign ratio = featured.preview_image.aspect_ratio | default: 1
+  else
+    assign ratio = aspect
+  endif
+-%}
+<media-gallery
+  class="media-gallery media-gallery--{{ layout }}{% if count < 2 %} media-gallery--single{% endif %}"
+  data-layout="{{ layout }}"
+  {% if zoom %}
+    data-zoom
+  {% endif %}
+  style="--media-ratio: {{ ratio }};"
+  data-variant-update="media-root"
+>
+  {%- if count == 0 -%}
+    <div class="media-gallery__placeholder media">
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+    </div>
+  {%- else -%}
+    <div class="media-gallery__viewport">
+      <ul class="media-gallery__slides" role="list" data-ref="track" aria-label="{{ 'products.media_gallery' | t }}">
+        {%- comment -%} Selected variant's media first, then the rest in order {%- endcomment -%}
+        {%- assign ordered = product.media | where: 'id', featured.id -%}
+        {%- for media in product.media -%}
+          {%- if media.id != featured.id -%}
+            {%- assign one = product.media | where: 'id', media.id -%}
+            {%- assign ordered = ordered | concat: one -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- for media in ordered -%}
+          {%- liquid
+            assign loading = 'lazy'
+            if forloop.first
+              assign loading = 'eager'
+            endif
+            assign sizes = '(min-width: 990px) 55vw, 100vw'
+            if layout == 'grid' and forloop.first == false
+              assign sizes = '(min-width: 990px) 28vw, 100vw'
+            endif
+          -%}
+          <li
+            class="media-gallery__slide media-gallery__slide--{{ media.media_type }}"
+            data-ref="slide[]"
+            data-media-id="{{ media.id }}"
+            {% if forloop.first %}
+              data-active
+            {% endif %}
+            {% if media.media_type == 'image' %}
+              style="--slide-ratio: {{ media.preview_image.aspect_ratio | default: 1 }};"
+            {% endif %}
+          >
+            <div class="media-gallery__media product-media media{% if media.media_type != 'image' %} product-media--interactive{% endif %}">
+              {%- render 'product-media', media: media, loading: loading, sizes: sizes, loop: loop_video -%}
+              {%- if zoom and media.media_type == 'image' -%}
+                <button type="button" class="media-gallery__zoom" data-zoom-index="{{ forloop.index0 }}">
+                  <span class="visually-hidden">{{ 'products.zoom_image' | t: index: forloop.index }}</span>
+                  {%- render 'icon', name: 'zoom' -%}
+                </button>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if count > 1 -%}
+        <button type="button" class="media-gallery__arrow media-gallery__arrow--previous" data-ref="previous">
+          {%- render 'icon', name: 'chevron-left' -%}
+          <span class="visually-hidden">{{ 'products.previous_media' | t }}</span>
+        </button>
+        <button type="button" class="media-gallery__arrow media-gallery__arrow--next" data-ref="next">
+          {%- render 'icon', name: 'chevron-right' -%}
+          <span class="visually-hidden">{{ 'products.next_media' | t }}</span>
+        </button>
+        <p class="media-gallery__counter" aria-hidden="true">
+          <span data-ref="current">1</span> / {{ count }}
+        </p>
+        <div class="media-gallery__dots" aria-hidden="true">
+          {%- for media in ordered -%}
+            <span class="media-gallery__dot"{% if forloop.first %} data-active{% endif %}></span>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if count > 1 and layout != 'grid' -%}
+      <ul class="media-gallery__thumbs" role="list" data-ref="thumbs">
+        {%- for media in ordered -%}
+          <li>
+            <button
+              type="button"
+              class="media-gallery__thumb"
+              data-ref="thumb[]"
+              data-index="{{ forloop.index0 }}"
+              {% if forloop.first %}
+                aria-current="true"
+              {% endif %}
+            >
+              {{
+                media.preview_image
+                | image_url: width: 200
+                | image_tag: widths: '100, 150, 200', sizes: '72px', loading: 'lazy', alt: ''
+              }}
+              {%- if media.media_type != 'image' -%}
+                <span class="media-gallery__thumb-badge">{% render 'icon', name: 'play' %}</span>
+              {%- endif -%}
+              <span class="visually-hidden">{{ 'products.load_media' | t: index: forloop.index }}</span>
+            </button>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if zoom -%}
+      <dialog class="dialog media-viewer" aria-label="{{ 'products.media_viewer' | t }}" data-ref="viewer">
+        <div class="dialog__panel media-viewer__panel">
+          <button type="button" class="icon-button media-viewer__close" data-dialog-close>
+            {%- render 'icon', name: 'close' -%}
+            <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+          </button>
+          <ul class="media-viewer__list" role="list">
+            {%- for media in ordered -%}
+              {%- if media.media_type == 'image' -%}
+                <li class="media-viewer__item" data-viewer-index="{{ forloop.index0 }}">
+                  {%- assign image_alt = media.alt | default: product.title -%}
+                  {{
+                    media
+                    | image_url: width: 3000
+                    | image_tag: widths: '1200, 1800, 2400, 3000', sizes: '100vw', loading: 'lazy', alt: image_alt }}
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </div>
+      </dialog>
+    {%- endif -%}
+  {%- endif -%}
+</media-gallery>
+
+{%- if has_3d -%}
+  <script type="application/json" data-product-models>
+    {{- product.media | where: 'media_type', 'model' | json -}}
+  </script>
+{%- endif -%}

@@ -1,0 +1,48 @@
+{%- doc -%}
+  "Pair it with" list on the product page (block pair_with of sections/main-product.liquid).
+
+  Source "complementary": the products set in Search & Discovery → Complementary products, loaded after the
+  page through the Product Recommendations API (sections/pair-with.liquid, assets/product-recommendations.js);
+  the block stays hidden when there are none. Source "manual": the products picked in the block.
+  Each row has "Add" (products with one variant, added in place by <product-form>) or "Choose options".
+  Styles: assets/section-main-product.css ("Pair with").
+
+  @param {object} block - The pair_with block
+  @param {object} product - Current product
+  @param {string} section_id - Section id (unique form ids)
+
+  @example
+  {% render 'product-pair-with', block: block, product: product, section_id: section.id %}
+{%- enddoc -%}
+{%- liquid
+  assign limit = block.settings.limit | default: 4
+-%}
+{%- if block.settings.source == 'manual' -%}
+  {%- if block.settings.products.count > 0 -%}
+    <div class="product-block pair-with" {{ block.shopify_attributes }}>
+      {%- if block.settings.heading != blank -%}
+        <h2 class="pair-with__heading">{{ block.settings.heading | escape }}</h2>
+      {%- endif -%}
+      <ul class="pair-with__list" role="list">
+        {%- for item in block.settings.products limit: limit -%}
+          {%- if item.id != product.id -%}
+            {%- render 'pair-with-row', item: item, id_prefix: section_id -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- elsif request.design_mode -%}
+    <p class="product-block pair-with pair-with--empty" {{ block.shopify_attributes }}>
+      {{- 'products.pair_with_empty' | t -}}
+    </p>
+  {%- endif -%}
+{%- else -%}
+  <product-recommendations
+    class="product-block pair-with"
+    data-url="{{ routes.product_recommendations_url }}?product_id={{ product.id }}&limit={{ limit }}&intent=complementary&section_id=pair-with"
+    data-heading="{{ block.settings.heading | escape }}"
+    hidden
+    {{ block.shopify_attributes }}
+  ></product-recommendations>
+  <script src="{{ 'product-recommendations.js' | asset_url }}" type="module"></script>
+{%- endif -%}

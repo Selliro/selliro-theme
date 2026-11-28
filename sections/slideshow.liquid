@@ -1,0 +1,303 @@
+{%- comment -%}
+  Whispo — slideshow (home page hero).
+
+  Each slide: image or video (Shopify-hosted), an optional second media for a split layout, an optional
+  floating product image, a gradient overlay, and text (eyebrow, heading, text, two buttons) on the left,
+  center or right. Slides cross-fade; the active media zooms slowly and its text rises in.
+  Controls: progress bars (one per slide; the active one fills while autoplay runs), previous / next and a
+  pause button. Autoplay pauses on hover, keyboard focus and for reduced motion; videos play only on their own
+  slide. Theme editor: selecting a slide shows it and stops autoplay.
+
+  Files: assets/section-slideshow.css, assets/slideshow.js.
+{%- endcomment -%}
+
+{%- comment -%} 1. CSS {%- endcomment -%}
+{{ 'section-slideshow.css' | asset_url | stylesheet_tag }}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --slideshow-radius: {% if section.settings.full_width %}0px{% else %}{{ section.settings.corner_radius }}px{% endif %};
+    --slideshow-heading: calc({{ section.settings.heading_size }}px * var(--heading-scale));
+    --slideshow-padding-top: {{ section.settings.padding_top }}px;
+    --slideshow-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --slideshow-speed: {{ section.settings.autoplay_speed }}s;
+  }
+{% endstyle %}
+
+{%- comment -%} 2. Liquid {%- endcomment -%}
+{%- assign count = section.blocks.size -%}
+{%- if count > 0 -%}
+  <script src="{{ 'slideshow.js' | asset_url }}" type="module"></script>
+
+  <div class="slideshow-section{% unless section.settings.full_width %} page-width{% endunless %}">
+    <slideshow-component
+      class="slideshow slideshow--{{ section.settings.height }} color-{{ section.settings.color_scheme }}{% if section.settings.media_effect == 'zoom' %} slideshow--zoom{% endif %}"
+      role="region"
+      aria-roledescription="{{ 'accessibility.carousel' | t }}"
+      aria-label="{% if section.settings.label != blank %}{{ section.settings.label | escape }}{% else %}{{ 'accessibility.slideshow' | t }}{% endif %}"
+      data-speed="{{ section.settings.autoplay_speed | times: 1000 }}"
+      {% if section.settings.autoplay and count > 1 %}
+        data-autoplay
+      {% endif %}
+    >
+      <div class="slideshow__slides" data-ref="track" aria-live="off">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign s = block.settings
+            assign heading_tag = 'h2'
+            assign loading = 'lazy'
+            assign image_priority = 'auto'
+            if forloop.first and section.index <= 2
+              assign loading = 'eager'
+              assign image_priority = 'high'
+            endif
+          -%}
+          <div
+            class="slideshow__slide slideshow__slide--{{ s.layout }} slideshow__slide--text-{{ s.text_position }}{% if s.text_tone == 'light' %} slideshow__slide--light{% endif %}"
+            role="group"
+            aria-roledescription="{{ 'accessibility.slide' | t }}"
+            aria-label="{{ 'accessibility.slide_of' | t: index: forloop.index, count: count }}"
+            data-ref="slide[]"
+            {% if forloop.first %}
+              data-active
+            {% endif %}
+            style="--overlay: {{ s.overlay_opacity | divided_by: 100.0 }};"
+            {{ block.shopify_attributes }}
+          >
+            <div class="slideshow__media-wrap">
+              {%- for i in (1..2) -%}
+                {%- liquid
+                  if i == 2 and s.layout != 'split'
+                    break
+                  endif
+                  assign image_key = 'image_' | append: i
+                  assign video_key = 'video_' | append: i
+                  assign media_image = s[image_key]
+                  assign media_video = s[video_key]
+                  assign sizes = '100vw'
+                  if s.layout == 'split'
+                    assign sizes = '(min-width: 750px) 50vw, 100vw'
+                  endif
+                -%}
+                <div class="slideshow__media media">
+                  {%- if media_video != blank -%}
+                    {%- liquid
+                      assign video_preload = 'none'
+                      if forloop.parentloop.first
+                        assign video_preload = 'metadata'
+                      endif
+                    -%}
+                    {{ media_video | video_tag: autoplay: false, muted: true, loop: true, playsinline: true, preload: video_preload, image_size: '1600x', class: 'slideshow__video', aria-hidden: 'true' | replace: '<img ', '<img alt="" ' }}
+                  {%- elsif media_image != blank -%}
+                    {%- if i == 1 and s.image_mobile != blank -%}
+                      <picture>
+                        <source media="(max-width: 749px)" srcset="{{ s.image_mobile | image_url: width: 1200 }}">
+                        {%- assign image_alt = media_image.alt | default: '' -%}
+                        {{ media_image | image_url: width: 2800 | image_tag: widths: '750, 1100, 1500, 1900, 2400, 2800', sizes: sizes, loading: loading, fetchpriority: image_priority, alt: image_alt }}
+                      </picture>
+                    {%- else -%}
+                      {%- assign image_alt = media_image.alt | default: '' -%}
+                      {{ media_image | image_url: width: 2800 | image_tag: widths: '750, 1100, 1500, 1900, 2400, 2800', sizes: sizes, loading: loading, alt: image_alt }}
+                    {%- endif -%}
+                  {%- else -%}
+                    {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  {%- endif -%}
+                </div>
+              {%- endfor -%}
+            </div>
+            <div class="slideshow__overlay" aria-hidden="true"></div>
+
+            {%- if s.product_image != blank -%}
+              <div class="slideshow__product slideshow__product--{{ s.product_position }}" style="--product-size: {{ s.product_size }}%;" aria-hidden="true">
+                {{ s.product_image | image_url: width: 1200 | image_tag: widths: '400, 600, 800, 1200', sizes: '40vw', loading: loading, alt: '' }}
+              </div>
+            {%- endif -%}
+
+            <div class="slideshow__content page-width">
+              <div class="slideshow__text">
+                {%- if s.eyebrow != blank -%}
+                  <p class="slideshow__eyebrow">{{ s.eyebrow | escape }}</p>
+                {%- endif -%}
+                {%- if s.heading != blank -%}
+                  <{{ heading_tag }} class="slideshow__heading">{{ s.heading | escape }}</{{ heading_tag }}>
+                {%- endif -%}
+                {%- if s.text != blank -%}
+                  <div class="slideshow__body rte">{{ s.text }}</div>
+                {%- endif -%}
+                {%- if s.button_label_1 != blank or s.button_label_2 != blank -%}
+                  <div class="slideshow__buttons">
+                    {%- if s.button_label_1 != blank -%}
+                      <a href="{{ s.button_link_1 | default: routes.all_products_collection_url }}" class="button slideshow__button">{{ s.button_label_1 | escape }}</a>
+                    {%- endif -%}
+                    {%- if s.button_label_2 != blank -%}
+                      <a href="{{ s.button_link_2 | default: routes.all_products_collection_url }}" class="button button--secondary slideshow__button">{{ s.button_label_2 | escape }}</a>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if count > 1 -%}
+        <div class="slideshow__controls">
+          <div class="slideshow__bars" role="group" aria-label="{{ 'accessibility.choose_slide' | t }}">
+            {%- for block in section.blocks -%}
+              <button
+                type="button"
+                class="slideshow__bar"
+                data-ref="bar[]"
+                data-index="{{ forloop.index0 }}"
+                {% if forloop.first %}
+                  aria-current="true"
+                {% endif %}
+              >
+                <span class="slideshow__bar-fill"></span>
+                <span class="visually-hidden">{{ 'accessibility.go_to_slide' | t: index: forloop.index }}</span>
+              </button>
+            {%- endfor -%}
+          </div>
+          <div class="slideshow__buttons-nav">
+            <button type="button" class="slideshow__nav" data-ref="previous">
+              {%- render 'icon', name: 'chevron-left' -%}
+              <span class="visually-hidden">{{ 'accessibility.previous_slide' | t }}</span>
+            </button>
+            {%- if section.settings.autoplay -%}
+              <button
+                type="button"
+                class="slideshow__nav slideshow__pause"
+                aria-pressed="false"
+                data-ref="pause"
+                data-label-pause="{{ 'accessibility.pause_slideshow' | t }}"
+                data-label-play="{{ 'accessibility.play_slideshow' | t }}"
+              >
+                {%- render 'icon', name: 'pause', class: 'slideshow__pause-icon' -%}
+                {%- render 'icon', name: 'play', class: 'slideshow__play-icon' -%}
+                <span class="visually-hidden" data-ref="pauseLabel">{{ 'accessibility.pause_slideshow' | t }}</span>
+              </button>
+            {%- endif -%}
+            <button type="button" class="slideshow__nav" data-ref="next">
+              {%- render 'icon', name: 'chevron-right' -%}
+              <span class="visually-hidden">{{ 'accessibility.next_slide' | t }}</span>
+            </button>
+          </div>
+        </div>
+      {%- endif -%}
+    </slideshow-component>
+  </div>
+{%- endif -%}
+
+{%- comment -%} 3. Schema {%- endcomment -%}
+{% schema %}
+{
+  "name": "t:sections.slideshow.name",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "label", "label": "t:sections.slideshow.label", "info": "t:sections.slideshow.label_info" },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "t:sections.slideshow.height",
+      "options": [
+        { "value": "medium", "label": "t:sections.slideshow.height_medium" },
+        { "value": "large", "label": "t:sections.slideshow.height_large" },
+        { "value": "full", "label": "t:sections.slideshow.height_full" }
+      ],
+      "default": "full"
+    },
+    { "type": "checkbox", "id": "full_width", "label": "t:sections.slideshow.full_width", "default": false },
+    { "type": "range", "id": "corner_radius", "label": "t:sections.slideshow.corner_radius", "min": 0, "max": 40, "step": 2, "unit": "px", "default": 20 },
+    { "type": "range", "id": "heading_size", "label": "t:sections.slideshow.heading_size", "min": 32, "max": 96, "step": 4, "unit": "px", "default": 64 },
+    { "type": "checkbox", "id": "autoplay", "label": "t:sections.slideshow.autoplay", "default": true },
+    { "type": "range", "id": "autoplay_speed", "label": "t:sections.slideshow.autoplay_speed", "min": 3, "max": 12, "step": 1, "unit": "s", "default": 6 },
+    {
+      "type": "select",
+      "id": "media_effect",
+      "label": "t:sections.slideshow.media_effect",
+      "options": [
+        { "value": "none", "label": "t:sections.slideshow.effect_none" },
+        { "value": "zoom", "label": "t:sections.slideshow.effect_zoom" }
+      ],
+      "default": "zoom"
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:sections.main_collection.color_scheme", "default": "scheme-3" },
+    { "type": "range", "id": "padding_top", "label": "t:sections.main_collection.padding_top", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "t:sections.main_collection.padding_bottom", "min": 0, "max": 80, "step": 4, "unit": "px", "default": 0 }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "t:sections.slideshow.blocks.slide.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "t:sections.slideshow.blocks.slide.layout",
+          "options": [
+            { "value": "full", "label": "t:sections.slideshow.blocks.slide.layout_full" },
+            { "value": "split", "label": "t:sections.slideshow.blocks.slide.layout_split" }
+          ],
+          "default": "full"
+        },
+        { "type": "image_picker", "id": "image_1", "label": "t:sections.slideshow.blocks.slide.image_1" },
+        { "type": "image_picker", "id": "image_mobile", "label": "t:sections.slideshow.blocks.slide.image_mobile" },
+        { "type": "video", "id": "video_1", "label": "t:sections.slideshow.blocks.slide.video_1", "info": "t:sections.slideshow.blocks.slide.video_info" },
+        { "type": "image_picker", "id": "image_2", "label": "t:sections.slideshow.blocks.slide.image_2", "info": "t:sections.slideshow.blocks.slide.second_info" },
+        { "type": "video", "id": "video_2", "label": "t:sections.slideshow.blocks.slide.video_2" },
+        { "type": "range", "id": "overlay_opacity", "label": "t:sections.slideshow.blocks.slide.overlay_opacity", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 35 },
+        { "type": "header", "content": "t:sections.slideshow.blocks.slide.content" },
+        { "type": "text", "id": "eyebrow", "label": "t:sections.slideshow.blocks.slide.eyebrow", "default": "New in" },
+        { "type": "text", "id": "heading", "label": "t:sections.slideshow.blocks.slide.heading", "default": "Slide heading" },
+        { "type": "richtext", "id": "text", "label": "t:sections.slideshow.blocks.slide.text", "default": "<p>Tell customers about this slide.</p>" },
+        {
+          "type": "select",
+          "id": "text_position",
+          "label": "t:sections.slideshow.blocks.slide.text_position",
+          "options": [
+            { "value": "left", "label": "t:sections.header.position_left" },
+            { "value": "center", "label": "t:sections.header.position_center" },
+            { "value": "right", "label": "t:sections.slideshow.blocks.slide.position_right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "text_tone",
+          "label": "t:sections.slideshow.blocks.slide.text_tone",
+          "options": [
+            { "value": "light", "label": "t:sections.slideshow.blocks.slide.tone_light" },
+            { "value": "scheme", "label": "t:sections.slideshow.blocks.slide.tone_scheme" }
+          ],
+          "default": "light"
+        },
+        { "type": "text", "id": "button_label_1", "label": "t:sections.slideshow.blocks.slide.button_label_1", "default": "Shop now" },
+        { "type": "url", "id": "button_link_1", "label": "t:sections.slideshow.blocks.slide.button_link_1" },
+        { "type": "text", "id": "button_label_2", "label": "t:sections.slideshow.blocks.slide.button_label_2" },
+        { "type": "url", "id": "button_link_2", "label": "t:sections.slideshow.blocks.slide.button_link_2" },
+        { "type": "header", "content": "t:sections.slideshow.blocks.slide.product" },
+        { "type": "image_picker", "id": "product_image", "label": "t:sections.slideshow.blocks.slide.product_image", "info": "t:sections.slideshow.blocks.slide.product_image_info" },
+        {
+          "type": "select",
+          "id": "product_position",
+          "label": "t:sections.slideshow.blocks.slide.product_position",
+          "options": [
+            { "value": "left", "label": "t:sections.header.position_left" },
+            { "value": "right", "label": "t:sections.slideshow.blocks.slide.position_right" }
+          ],
+          "default": "right"
+        },
+        { "type": "range", "id": "product_size", "label": "t:sections.slideshow.blocks.slide.product_size", "min": 30, "max": 100, "step": 5, "unit": "%", "default": 85 }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.slideshow.name",
+      "blocks": [
+        { "type": "slide" },
+        { "type": "slide" }
+      ]
+    }
+  ]
+}
+{% endschema %}

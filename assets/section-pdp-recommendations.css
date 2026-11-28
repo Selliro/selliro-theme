@@ -1,0 +1,148 @@
+/* ==============================================================================
+   Whispo — pdp recommendations (sections/pdp-recommendations.liquid)
+   Moved out of the section's {% stylesheet %} block so it loads only on pages that use the section.
+   ============================================================================== */
+
+.pdp-recs {
+  position: relative;
+  padding-block: var(--pdp-recs-pad-top) var(--pdp-recs-pad-bottom);
+}
+
+.pdp-recs__loader {
+  display: block;
+  min-height: 1px;
+}
+
+.pdp-recs__header {
+  margin-block-end: clamp(1.25rem, 3vw, 2rem);
+}
+
+.pdp-recs__heading {
+  margin: 0;
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  line-height: var(--section-title-leading);
+  letter-spacing: var(--section-title-tracking);
+}
+
+.pdp-recs__subheading {
+  margin: 0.5rem 0 0;
+  opacity: 0.7;
+}
+
+.pdp-recs__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--pdp-recs-cols, 4), minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+}
+
+.pdp-recs__item {
+  min-width: 0;
+}
+
+/* Tablet: three across */
+@media screen and (max-width: 989px) {
+  .pdp-recs__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Phones: swipeable row, next card peeking */
+@media screen and (max-width: 749px) {
+  .pdp-recs__grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 62%;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--page-margin, 16px);
+    margin-inline: calc(-1 * var(--page-margin, 16px));
+    padding-inline: var(--page-margin, 16px);
+    padding-block-end: 0.5rem;
+    scrollbar-width: none;
+  }
+
+  .pdp-recs__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pdp-recs__item {
+    scroll-snap-align: start;
+  }
+}
+
+/* ---- Layout: slider — one row you can scroll with the arrows */
+.pdp-recs--slider .pdp-recs__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pdp-recs__arrows {
+  order: 2;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pdp-recs__arrows[hidden] {
+  display: none;
+}
+
+.pdp-recs__arrow {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid color-mix(in srgb, var(--color-text) 18%, transparent);
+  border-radius: 50%;
+  color: var(--color-text);
+  background: var(--color-background);
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.pdp-recs__arrow:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--color-text) 6%, var(--color-background));
+}
+
+.pdp-recs__arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+@media screen and (min-width: 750px) {
+  .pdp-recs--slider .pdp-recs__grid {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - (var(--pdp-recs-cols, 4) - 1) * 1rem) / var(--pdp-recs-cols, 4));
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .pdp-recs--slider .pdp-recs__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pdp-recs--slider .pdp-recs__item {
+    scroll-snap-align: start;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .pdp-recs__arrows {
+    display: none;
+  }
+}
+
+.pdp-recs__placeholder {
+  padding: 2rem;
+  text-align: center;
+  opacity: 0.6;
+  border: 1px dashed currentColor;
+  border-radius: 12px;
+}

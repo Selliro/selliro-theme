@@ -1,0 +1,315 @@
+{%- comment -%}
+  What's inside — key ingredients arranged around a product image (left / right columns on desktop,
+  image on top and a two-column list on mobile). Each ingredient is a block with a photo, name and benefit.
+{%- endcomment -%}
+{{ 'section-pdp-ingredients.css' | asset_url | stylesheet_tag }}
+{{ 'section-reveal.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'section-reveal.js' | asset_url }}" defer></script>
+
+{%- liquid
+  assign product_image = section.settings.image
+  if product_image == blank and product.featured_image
+    assign product_image = product.featured_image
+  endif
+  assign product_alt = product_image.alt | default: product.title
+  assign half = section.blocks.size | plus: 1 | divided_by: 2
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+<section
+  class="pdp-ingredients {{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  data-reveal
+  style="--pdp-ing-pad-top: {{ section.settings.padding_top }}px; --pdp-ing-pad-bottom: {{ section.settings.padding_bottom }}px; --pdp-ing-halo: {{ section.settings.halo_color | default: '#f6eadb' }};"
+>
+  <header class="pdp-ingredients__header">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="pdp-ingredients__eyebrow" data-reveal-fade="first">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="pdp-ingredients__heading" data-reveal-title>{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="pdp-ingredients__text rte" data-reveal-fade>{{ section.settings.text }}</div>
+    {%- endif -%}
+  </header>
+
+  {%- if section.settings.layout == 'orbit' -%}
+    {%- liquid
+      assign orbit_count = section.blocks.size | at_most: 6
+      assign orbit_rows = orbit_count | plus: 1 | divided_by: 2
+    -%}
+    <div class="pdp-orbit pdp-orbit--rows-{{ orbit_rows }}">
+      <div class="pdp-orbit__frame">
+        <div class="pdp-orbit__stage" aria-hidden="true">
+          <span class="pdp-orbit__ring" data-reveal-pop></span>
+          <div class="pdp-orbit__media" data-reveal-pop>
+            {%- if product_image != blank -%}
+              {{ product_image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '400, 600, 800, 1000', sizes: '(min-width: 990px) 28vw, 70vw', alt: '' }}
+            {%- else -%}
+              {{ 'product-apparel-1' | placeholder_svg_tag }}
+            {%- endif -%}
+          </div>
+        </div>
+
+        <ol class="pdp-orbit__list list-unstyled">
+          {%- for block in section.blocks limit: 6 -%}
+            {%- liquid
+              # 1 top-left, 2 top-right, 3 middle-left … numbers sit on the ring at fixed angles
+              assign i = forloop.index0
+              assign row = i | divided_by: 2
+              assign is_right = i | modulo: 2
+              case orbit_rows
+                when 1
+                  assign sx = 1
+                  assign dy = 0
+                when 2
+                  assign sx = 0.866
+                  if row == 0
+                    assign dy = -0.5
+                  else
+                    assign dy = 0.5
+                  endif
+                else
+                  case row
+                    when 0
+                      assign sx = 0.7071
+                      assign dy = -0.7071
+                    when 1
+                      assign sx = 1
+                      assign dy = 0
+                    else
+                      assign sx = 0.7071
+                      assign dy = 0.7071
+                  endcase
+              endcase
+              if is_right == 1
+                assign side = 'right'
+                assign dx = sx
+              else
+                assign side = 'left'
+                assign dx = sx | times: -1
+              endif
+            -%}
+            <li
+              class="pdp-orbit__item pdp-orbit__item--{{ side }}"
+              style="--dx: {{ dx }}; --dy: {{ dy }};"
+              data-reveal-fade
+              {{ block.shopify_attributes }}
+            >
+              <span class="pdp-orbit__num" aria-hidden="true">{{ forloop.index }}</span>
+              <div class="pdp-orbit__copy">
+                <h3 class="pdp-orbit__name">{{ block.settings.name | escape }}</h3>
+                {%- if block.settings.benefit != blank -%}
+                  <p class="pdp-orbit__benefit">{{ block.settings.benefit | escape }}</p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ol>
+      </div>
+    </div>
+  {%- else -%}
+  <div class="pdp-ingredients__layout">
+    <div class="pdp-ingredients__visual" data-reveal-pop>
+      <span class="pdp-ingredients__halo" aria-hidden="true"></span>
+      {%- if product_image != blank -%}
+        {{ product_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 540, 720, 900', sizes: '(min-width: 990px) 30vw, 70vw', class: 'pdp-ingredients__image', alt: product_alt }}
+      {%- else -%}
+        {{ 'product-apparel-1' | placeholder_svg_tag: 'pdp-ingredients__image' }}
+      {%- endif -%}
+    </div>
+
+    {%- for block in section.blocks -%}
+      {%- liquid
+        if forloop.index <= half
+          assign side = 'left'
+        else
+          assign side = 'right'
+        endif
+      -%}
+      <div class="pdp-ingredients__item pdp-ingredients__item--{{ side }}" data-reveal-fade {{ block.shopify_attributes }}>
+        <span class="pdp-ingredients__thumb" aria-hidden="true">
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 200 | image_tag: loading: 'lazy', width: 80, height: 80, alt: '' }}
+          {%- else -%}
+            {%- render 'pdp-icon', icon: 'leaf' -%}
+          {%- endif -%}
+        </span>
+        <div class="pdp-ingredients__copy">
+          <h3 class="pdp-ingredients__name">{{ block.settings.name | escape }}</h3>
+          {%- if block.settings.benefit != blank -%}
+            <p class="pdp-ingredients__benefit">{{ block.settings.benefit | escape }}</p>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+  {%- endif -%}
+</section>
+
+
+{% schema %}
+{
+  "name": "Ingredients spotlight",
+  "class": "pdp-ingredients-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "orbit",
+          "label": "Orbit — numbered ring"
+        },
+        {
+          "value": "classic",
+          "label": "Classic — ingredient photos"
+        }
+      ],
+      "default": "orbit",
+      "info": "Orbit shows up to 6 ingredients."
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "The formula"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What's inside?"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Center image",
+      "info": "Round center image, for example a product texture swatch. Defaults to the product's main image."
+    },
+    {
+      "type": "color",
+      "id": "halo_color",
+      "label": "Circle color",
+      "default": "#f6eadb"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page"
+        },
+        {
+          "value": "full-width",
+          "label": "Full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Used by the Classic layout."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Vitamin C"
+        },
+        {
+          "type": "text",
+          "id": "benefit",
+          "label": "Benefit",
+          "default": "Brightens dull skin and evens out tone."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Ingredients spotlight",
+      "blocks": [
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Vitamin C",
+            "benefit": "Brightens dull skin and evens out tone."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Niacinamide",
+            "benefit": "Refines pores and fades dark spots."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Licorice root",
+            "benefit": "Calms redness and soothes the skin."
+          }
+        },
+        {
+          "type": "ingredient",
+          "settings": {
+            "name": "Hyaluronic acid",
+            "benefit": "Holds moisture for plump, bouncy skin."
+          }
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": [
+      "product",
+      "page",
+      "index"
+    ]
+  }
+}
+{% endschema %}

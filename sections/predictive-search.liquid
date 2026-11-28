@@ -1,0 +1,186 @@
+{%- comment -%}
+  Predictive search results. Not added in the theme editor: assets/predictive-search.js requests it from
+  /search/suggest?section_id=predictive-search and places [data-predictive-results] inside the search modal
+  (snippets/search-modal.liquid). Styles: assets/component-search.css.
+
+  The results are a listbox: every result is an option (role="option", id ps-…), grouped by type. The
+  combobox input moves through them with the arrow keys (aria-activedescendant).
+  Layout: suggestions, collections, pages and articles on the left, products on the right; the button at the
+  bottom opens the full search page.
+{%- endcomment -%}
+
+{%- liquid
+  assign terms = predictive_search.terms | escape
+  assign resources = predictive_search.resources
+  assign queries = resources.queries
+  assign products = resources.products
+  assign collections = resources.collections
+  assign pages = resources.pages
+  assign articles = resources.articles
+  assign side_count = queries.size | plus: collections.size | plus: pages.size | plus: articles.size
+  assign total = side_count | plus: products.size
+-%}
+
+<div data-predictive-results data-count="{{ total }}" data-terms="{{ terms }}">
+  {%- if predictive_search.performed -%}
+    {%- if total > 0 -%}
+      <div
+        class="predictive-search__results{% if side_count == 0 %} predictive-search__results--products{% endif %}{% if products.size == 0 %} predictive-search__results--links{% endif %}"
+        role="listbox"
+        id="PredictiveSearchListbox"
+        aria-label="{{ 'search.results_label' | t: terms: terms }}"
+      >
+        {%- if side_count > 0 -%}
+          <div class="predictive-search__side">
+            {%- if queries.size > 0 -%}
+              <div class="predictive-search__group" role="group" aria-labelledby="ps-queries-heading">
+                <p id="ps-queries-heading" class="predictive-search__heading">{{ 'search.suggestions' | t }}</p>
+                {%- for query in queries -%}
+                  <a
+                    href="{{ query.url }}"
+                    class="predictive-search__query"
+                    id="ps-query-{{ forloop.index }}"
+                    role="option"
+                    aria-selected="false"
+                    tabindex="-1"
+                  >
+                    {%- render 'icon', name: 'search' -%}
+                    <span>{{ query.styled_text }}</span>
+                  </a>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+
+            {%- if collections.size > 0 -%}
+              <div class="predictive-search__group" role="group" aria-labelledby="ps-collections-heading">
+                <p id="ps-collections-heading" class="predictive-search__heading">{{ 'search.collections' | t }}</p>
+                {%- for collection in collections -%}
+                  <a
+                    href="{{ collection.url }}"
+                    class="predictive-search__link"
+                    id="ps-collection-{{ forloop.index }}"
+                    role="option"
+                    aria-selected="false"
+                    tabindex="-1"
+                  >
+                    {{- collection.title | escape -}}
+                  </a>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+
+            {%- if pages.size > 0 -%}
+              <div class="predictive-search__group" role="group" aria-labelledby="ps-pages-heading">
+                <p id="ps-pages-heading" class="predictive-search__heading">{{ 'search.pages' | t }}</p>
+                {%- for page in pages -%}
+                  <a
+                    href="{{ page.url }}"
+                    class="predictive-search__link"
+                    id="ps-page-{{ forloop.index }}"
+                    role="option"
+                    aria-selected="false"
+                    tabindex="-1"
+                  >
+                    {{- page.title | escape -}}
+                  </a>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+
+            {%- if articles.size > 0 -%}
+              <div class="predictive-search__group" role="group" aria-labelledby="ps-articles-heading">
+                <p id="ps-articles-heading" class="predictive-search__heading">{{ 'search.articles' | t }}</p>
+                {%- for article in articles -%}
+                  <a
+                    href="{{ article.url }}"
+                    class="predictive-search__link"
+                    id="ps-article-{{ forloop.index }}"
+                    role="option"
+                    aria-selected="false"
+                    tabindex="-1"
+                  >
+                    {{- article.title | escape -}}
+                  </a>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if products.size > 0 -%}
+          <div class="predictive-search__group predictive-search__products" role="group" aria-labelledby="ps-products-heading">
+            <p id="ps-products-heading" class="predictive-search__heading">{{ 'search.products' | t }}</p>
+            {%- for product in products -%}
+              <a
+                href="{{ product.url }}"
+                class="predictive-search__product"
+                id="ps-product-{{ forloop.index }}"
+                role="option"
+                aria-selected="false"
+                tabindex="-1"
+              >
+                <span class="predictive-search__thumb media">
+                  {%- if product.featured_media -%}
+                    {{
+                      product.featured_media
+                      | image_url: width: 160
+                      | image_tag: widths: '80, 120, 160', sizes: '64px', alt: '', loading: 'lazy'
+                    }}
+                  {%- else -%}
+                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  {%- endif -%}
+                </span>
+                <span class="predictive-search__product-info">
+                  {%- if product.vendor != blank -%}
+                    <span class="predictive-search__vendor">{{ product.vendor | escape }}</span>
+                  {%- endif -%}
+                  <span class="predictive-search__product-title">{{ product.title | escape }}</span>
+                  {%- if settings.search_show_price -%}
+                    <span class="predictive-search__price">
+                      {%- liquid
+                        if settings.show_currency_code
+                          assign price = product.price | money_with_currency
+                        else
+                          assign price = product.price | money
+                        endif
+                      -%}
+                      {%- if product.price_varies -%}
+                        {{ 'products.price_from_html' | t: price: price }}
+                      {%- else -%}
+                        {{ price }}
+                      {%- endif -%}
+                      {%- if product.compare_at_price > product.price -%}
+                        <s class="predictive-search__compare">
+                          <span class="visually-hidden">{{ 'products.regular_price' | t }}</span>
+                          {%- if settings.show_currency_code -%}
+                            {{ product.compare_at_price | money_with_currency }}
+                          {%- else -%}
+                            {{ product.compare_at_price | money }}
+                          {%- endif -%}
+                        </s>
+                      {%- endif -%}
+                    </span>
+                  {%- endif -%}
+                </span>
+              </a>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      <p class="predictive-search__empty">{{ 'search.no_results_html' | t: terms: terms }}</p>
+    {%- endif -%}
+
+    <button type="submit" class="button button--secondary button--full-width predictive-search__all" form="SearchModalForm">
+      {{- 'search.search_for_html' | t: terms: terms -}}
+      {%- render 'icon', name: 'arrow-right' -%}
+    </button>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.predictive_search.name",
+  "settings": []
+}
+{% endschema %}

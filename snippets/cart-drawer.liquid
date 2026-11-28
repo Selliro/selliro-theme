@@ -1,0 +1,24 @@
+{%- doc -%}
+  Cart drawer shell, rendered once in layout/theme.liquid when Theme settings → Cart → "Cart type" is Drawer
+  (not on the cart page). The header's cart link opens it; adding a product opens it too
+  (assets/cart-drawer.js). Outside the panel, a round close badge follows the pointer.
+  Styles: assets/cart.css.
+
+  @example
+  {% render 'cart-drawer' %}
+{%- enddoc -%}
+{{ 'cart.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'cart-items.js' | asset_url }}" type="module"></script>
+<script src="{{ 'cart-drawer.js' | asset_url }}" type="module"></script>
+<script src="{{ 'quantity-input.js' | asset_url }}" type="module"></script>
+
+<cart-drawer class="cart-drawer-root">
+  <dialog id="CartDrawer" class="dialog drawer drawer--right cart-drawer" aria-labelledby="CartDrawerHeading">
+    <div class="dialog__panel cart-drawer__panel color-{{ settings.color_schemes.first.id | default: 'scheme-1' }}" data-ref="panel">
+      {%- render 'cart-drawer-content' -%}
+    </div>
+    <span class="cart-drawer__cursor" aria-hidden="true" data-ref="cursor">
+      {%- render 'icon', name: 'close' -%}
+    </span>
+  </dialog>
+</cart-drawer>

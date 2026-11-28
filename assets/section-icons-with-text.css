@@ -1,0 +1,85 @@
+/* ==============================================================================
+   Whispo — icons with text (sections/icons-with-text.liquid)
+   Setting values (inline {% style %}): --icon-size, --section-padding-*; --columns from the block count.
+   ============================================================================== */
+.icons-with-text {
+  padding-block: var(--section-padding-top, 48px) var(--section-padding-bottom, 48px);
+}
+
+.icons-with-text__heading {
+  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  line-height: var(--section-title-leading);
+  letter-spacing: var(--section-title-tracking);
+  text-align: center;
+}
+
+.icons-with-text__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.75rem, 3vw, 2.5rem) clamp(1rem, 2.5vw, 2rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media screen and (min-width: 990px) {
+  .icons-with-text__list {
+    grid-template-columns: repeat(var(--columns, 4), minmax(0, 1fr));
+  }
+}
+
+.icons-with-text__link {
+  display: grid;
+  justify-items: center;
+  gap: 0.65rem;
+  height: 100%;
+  color: inherit;
+  text-align: center;
+  text-decoration: none;
+}
+
+.icons-with-text__list--left .icons-with-text__link {
+  justify-items: start;
+  text-align: start;
+}
+
+a.icons-with-text__link:hover .icons-with-text__title {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.icons-with-text__icon {
+  display: grid;
+  place-items: center;
+  width: var(--icon-size, 72px);
+  height: var(--icon-size, 72px);
+  margin-bottom: 0.35rem;
+}
+
+.icons-with-text__icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.icons-with-text__icon .icon {
+  width: 60%;
+  height: 60%;
+}
+
+.icons-with-text__title {
+  color: var(--color-heading);
+  font-family: var(--font-heading);
+  font-style: var(--font-heading-style);
+  font-weight: var(--font-heading-weight);
+  font-size: var(--h5);
+  line-height: 1.2;
+}
+
+.icons-with-text__text {
+  max-width: 18rem;
+  color: rgb(var(--color-text-rgb) / 0.78);
+  font-size: var(--text-sm);
+}

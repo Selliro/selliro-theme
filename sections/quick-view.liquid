@@ -1,0 +1,110 @@
+{%- comment -%}
+  Quick view content. Not added in the theme editor: assets/quick-view.js loads it from
+  {product url}?section_id=quick-view and shows it in a dialog; variant changes re-render it the same way
+  (product-info data-section-id="quick-view"). Only the essentials: all images stacked on the left (the details
+  stay in view while they scroll), then vendor, title, rating, price, a short description, tags, variant picker,
+  stock, add to cart and buy it now, and a link to the full product page. Styles: assets/component-product-card.css
+  ("Quick view").
+{%- endcomment -%}
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign combination_exists = true
+  for option in product.options_with_values
+    assign index = forloop.index0
+    if current_variant.options[index] != option.selected_value
+      assign combination_exists = false
+    endif
+  endfor
+  assign form_variant = current_variant
+  if combination_exists == false
+    assign form_variant = nil
+  endif
+  assign featured_media = current_variant.featured_media | default: product.featured_media
+  assign qty = current_variant.inventory_quantity
+-%}
+<div class="quick-view__content">
+  <product-info
+    class="quick-view__product"
+    data-section-id="quick-view"
+    data-product-url="{{ product.url }}"
+    data-variant-id="{{ form_variant.id }}"
+    data-featured-media-id="{{ featured_media.id }}"
+  >
+    <div class="quick-view__media{% if product.media.size > 2 %} quick-view__media--scroll{% endif %}" data-variant-update="quick-media">
+      {%- assign ordered = product.media | where: 'id', featured_media.id -%}
+      {%- for media in product.media -%}
+        {%- if media.id != featured_media.id -%}
+          {%- assign one = product.media | where: 'id', media.id -%}
+          {%- assign ordered = ordered | concat: one -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- for media in ordered limit: 6 -%}
+        {%- if media.media_type == 'image' -%}
+          <div class="quick-view__image media">
+            {%- assign image_alt = media.alt | default: product.title -%}
+            {{ media | image_url: width: 1200 | image_tag: widths: '400, 600, 800, 1000, 1200', sizes: '(min-width: 750px) 480px, 100vw', loading: 'lazy', alt: image_alt }}
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <div class="quick-view__image media">{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+      {%- endfor -%}
+    </div>
+
+    <div class="quick-view__details">
+      {%- if product.vendor != blank -%}
+        <p class="quick-view__vendor">{{ product.vendor | escape }}</p>
+      {%- endif -%}
+      <h2 class="quick-view__title h3" id="QuickViewTitle">
+        <a href="{{ product.url }}">{{ product.title | escape }}</a>
+      </h2>
+      {%- render 'price', product: product, variant: current_variant, size: 'large' -%}
+      {%- if product.description != blank -%}
+        <p class="quick-view__description">{{ product.description | strip_html | truncatewords: 32 }}</p>
+      {%- endif -%}
+      {%- if product.tags.size > 0 -%}
+        <ul class="product-tags product-tags--highlight" role="list">
+          {%- for tag in product.tags limit: 4 -%}
+            <li class="product-tags__tag">{{ tag | escape }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- render 'variant-picker', product: product, id: 'quick-view', style: 'buttons' -%}
+
+      {%- liquid
+        assign state = 'in'
+        if form_variant == nil or current_variant.available == false
+          assign state = 'out'
+        elsif current_variant.inventory_management == 'shopify' and qty > 0 and qty <= 10
+          assign state = 'low'
+        endif
+      -%}
+      <div class="quick-view__stock quick-view__stock--{{ state }}" role="status" data-variant-update="quick-stock">
+        <span class="quick-view__stock-icon">
+          {%- if state == 'out' -%}{%- render 'icon', name: 'close' -%}{%- else -%}{%- render 'icon', name: 'check' -%}{%- endif -%}
+        </span>
+        <span class="quick-view__stock-text">
+          {%- case state -%}
+            {%- when 'out' -%}{{ 'products.inventory_out' | t }}
+            {%- when 'low' -%}{{ 'products.inventory_low_count' | t: count: qty }}
+            {%- else -%}{{ 'products.inventory_in_stock' | t }}
+          {%- endcase -%}
+        </span>
+      </div>
+
+      {%- render 'buy-buttons', product: product, variant: form_variant, id: 'quick-view' -%}
+
+      <a href="{{ product.url }}" class="link quick-view__more">
+        {{- 'products.view_details' | t -}}
+        {%- render 'icon', name: 'arrow-right' -%}
+      </a>
+    </div>
+  </product-info>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.quick_view.name",
+  "settings": []
+}
+{% endschema %}

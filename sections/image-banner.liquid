@@ -1,0 +1,187 @@
+{%- comment -%}
+  Whispo — image banner. Full-bleed or page-width image or video (with its own mobile image), an overlay for
+  contrast, and text blocks (eyebrow, heading, text, buttons) placed in one of nine positions. Height: small,
+  medium, large, full screen or adapt to the image. Used on the home page and the Our story page.
+  Files: assets/section-image-banner.css.
+{%- endcomment -%}
+
+{%- comment -%} 1. CSS {%- endcomment -%}
+{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}
+{% style %}
+  #shopify-section-{{ section.id }} {
+    --banner-overlay: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --banner-radius: {% if section.settings.full_width %}0px{% else %}var(--radius-media){% endif %};
+    --banner-padding-top: {{ section.settings.padding_top }}px;
+    --banner-padding-bottom: {{ section.settings.padding_bottom }}px;
+    {%- if section.settings.image != blank and section.settings.height == 'adapt' %}
+      --banner-ratio: {{ section.settings.image.aspect_ratio }};
+    {%- endif %}
+  }
+{% endstyle %}
+
+{%- comment -%} 2. Liquid {%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign loading = 'lazy'
+  if section.index <= 2
+    assign loading = 'eager'
+  endif
+  comment
+    The first section of a page other than the home page (where the logo is the h1) carries the page's h1
+  endcomment
+  assign heading_tag = 'h2'
+  if section.index == 1 and request.page_type != 'index'
+    assign heading_tag = 'h1'
+  endif
+-%}
+<div class="image-banner-section{% unless s.full_width %} page-width{% endunless %}">
+  <div
+    class="image-banner image-banner--{{ s.height }} image-banner--{{ s.content_position }} color-{{ s.color_scheme }}{% if s.text_light %} image-banner--light{% endif %}"
+  >
+    <div class="image-banner__media media" aria-hidden="{% if s.video != blank %}true{% else %}false{% endif %}">
+      {%- if s.video != blank -%}
+        {%- if section.index == 1 -%}
+          {{ s.video | video_tag: autoplay: true, muted: true, loop: true, playsinline: true, preload: 'metadata', image_size: '1600x', class: 'image-banner__video' | replace: '<img ', '<img alt="" ' }}
+        {%- else -%}
+          {{ s.video | video_tag: autoplay: false, muted: true, loop: true, playsinline: true, preload: 'none', image_size: '1600x', class: 'image-banner__video' | replace: '<img ', '<img alt="" ' | replace: '<video ', '<video data-autoplay-visible ' }}
+        {%- endif -%}
+      {%- elsif s.image != blank -%}
+        <picture>
+          {%- if s.image_mobile != blank -%}
+            <source media="(max-width: 749px)" srcset="{{ s.image_mobile | image_url: width: 1100 }} 1100w, {{ s.image_mobile | image_url: width: 750 }} 750w" sizes="100vw">
+          {%- endif -%}
+          {%- assign image_alt = s.image.alt | default: '' -%}
+          {{ s.image | image_url: width: 3000 | image_tag: widths: '750, 1100, 1500, 1900, 2400, 3000', sizes: '100vw', loading: loading, alt: image_alt }}
+        </picture>
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </div>
+    <div class="image-banner__overlay" aria-hidden="true"></div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="image-banner__content">
+        <div class="image-banner__text" data-animate>
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'eyebrow' -%}
+                <p class="image-banner__eyebrow" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</p>
+              {%- when 'heading' -%}
+                <{{ heading_tag }} class="image-banner__heading {{ block.settings.size }}" {{ block.shopify_attributes }}>{{ block.settings.heading | newline_to_br }}</{{ heading_tag }}>
+              {%- when 'text' -%}
+                <div class="image-banner__body rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+              {%- when 'buttons' -%}
+                <div class="image-banner__buttons" {{ block.shopify_attributes }}>
+                  {%- if block.settings.label_1 != blank -%}
+                    <a href="{{ block.settings.link_1 | default: routes.all_products_collection_url }}" class="button image-banner__button">{{ block.settings.label_1 | escape }}</a>
+                  {%- endif -%}
+                  {%- if block.settings.label_2 != blank -%}
+                    <a href="{{ block.settings.link_2 | default: routes.all_products_collection_url }}" class="button button--secondary image-banner__button">{{ block.settings.label_2 | escape }}</a>
+                  {%- endif -%}
+                </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- comment -%} 3. Schema {%- endcomment -%}
+{% schema %}
+{
+  "name": "t:sections.image_banner.name",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "t:sections.image_banner.image" },
+    { "type": "image_picker", "id": "image_mobile", "label": "t:sections.image_banner.image_mobile" },
+    { "type": "video", "id": "video", "label": "t:sections.image_banner.video", "info": "t:sections.image_banner.video_info" },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "t:sections.image_banner.height",
+      "options": [
+        { "value": "small", "label": "t:sections.image_banner.height_small" },
+        { "value": "medium", "label": "t:sections.image_banner.height_medium" },
+        { "value": "large", "label": "t:sections.image_banner.height_large" },
+        { "value": "full", "label": "t:sections.image_banner.height_full" },
+        { "value": "adapt", "label": "t:sections.image_banner.height_adapt" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "t:sections.image_banner.content_position",
+      "options": [
+        { "value": "top-left", "label": "t:sections.image_banner.top_left" },
+        { "value": "top-center", "label": "t:sections.image_banner.top_center" },
+        { "value": "top-right", "label": "t:sections.image_banner.top_right" },
+        { "value": "middle-left", "label": "t:sections.image_banner.middle_left" },
+        { "value": "middle-center", "label": "t:sections.image_banner.middle_center" },
+        { "value": "middle-right", "label": "t:sections.image_banner.middle_right" },
+        { "value": "bottom-left", "label": "t:sections.image_banner.bottom_left" },
+        { "value": "bottom-center", "label": "t:sections.image_banner.bottom_center" },
+        { "value": "bottom-right", "label": "t:sections.image_banner.bottom_right" }
+      ],
+      "default": "bottom-center"
+    },
+    { "type": "range", "id": "overlay_opacity", "label": "t:sections.image_banner.overlay_opacity", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 35 },
+    { "type": "checkbox", "id": "text_light", "label": "t:sections.image_banner.text_light", "default": true },
+    { "type": "checkbox", "id": "full_width", "label": "t:sections.slideshow.full_width", "default": false },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:sections.main_collection.color_scheme", "default": "scheme-5" },
+    { "type": "range", "id": "padding_top", "label": "t:sections.main_collection.padding_top", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 24 },
+    { "type": "range", "id": "padding_bottom", "label": "t:sections.main_collection.padding_bottom", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 24 }
+  ],
+  "blocks": [
+    {
+      "type": "eyebrow",
+      "name": "t:sections.image_banner.blocks.eyebrow.name",
+      "limit": 1,
+      "settings": [{ "type": "text", "id": "text", "label": "t:sections.image_banner.blocks.eyebrow.text", "default": "New season" }]
+    },
+    {
+      "type": "heading",
+      "name": "t:sections.image_banner.blocks.heading.name",
+      "limit": 1,
+      "settings": [
+        { "type": "textarea", "id": "heading", "label": "t:sections.image_banner.blocks.heading.heading", "default": "Image banner" },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "t:sections.image_banner.blocks.heading.size",
+          "options": [
+            { "value": "h2", "label": "t:sections.main_product.blocks.title.size_small" },
+            { "value": "h1", "label": "t:sections.main_product.blocks.title.size_medium" },
+            { "value": "display", "label": "t:sections.main_product.blocks.title.size_large" }
+          ],
+          "default": "h1"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.image_banner.blocks.text.name",
+      "limit": 1,
+      "settings": [{ "type": "richtext", "id": "text", "label": "t:sections.image_banner.blocks.text.text", "default": "<p>Give customers details about the banner image.</p>" }]
+    },
+    {
+      "type": "buttons",
+      "name": "t:sections.image_banner.blocks.buttons.name",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label_1", "label": "t:sections.slideshow.blocks.slide.button_label_1", "default": "Shop all" },
+        { "type": "url", "id": "link_1", "label": "t:sections.slideshow.blocks.slide.button_link_1" },
+        { "type": "text", "id": "label_2", "label": "t:sections.slideshow.blocks.slide.button_label_2" },
+        { "type": "url", "id": "link_2", "label": "t:sections.slideshow.blocks.slide.button_link_2" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_banner.name",
+      "blocks": [{ "type": "heading" }, { "type": "text" }, { "type": "buttons" }]
+    }
+  ]
+}
+{% endschema %}

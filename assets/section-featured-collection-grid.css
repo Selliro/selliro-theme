@@ -1,0 +1,408 @@
+/**
+ * Featured collection grid — asymmetric product layout styles.
+ */
+
+/* ─── Section root ──────────────────────────────────────────── */
+.featured-collection-grid {
+  /* no padding/margin reset here: .page-width supplies the page margins (top/bottom padding comes from the section settings) */
+  background-color: var(--color-background);
+  overflow: hidden;
+}
+
+.featured-collection-grid__header {
+  margin-inline: auto;
+}
+
+/* ─── Header ────────────────────────────────────────────────── */
+/* Same type scale and spacing as the other homepage section headings (New Arrivals, Testimonials…) */
+.featured-collection-grid__header {
+  padding: 0 0 clamp(1.25rem, 2.6vw, 2rem);
+}
+
+.featured-collection-grid__title {
+  margin: 0 0 0.4rem;
+  font-size: var(--section-title-size);
+  font-weight: var(--section-title-weight);
+  line-height: var(--section-title-leading);
+  letter-spacing: var(--section-title-tracking);
+  text-transform: none;
+  color: var(--color-heading, var(--color-text));
+}
+
+.featured-collection-grid__subtitle {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.55;
+  color: rgb(var(--color-text-rgb) / 0.62);
+}
+
+/* ─── Main grid ─────────────────────────────────────────────── */
+.featured-collection-grid__grid {
+  display: grid;
+  grid-template-rows: 1fr;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+}
+
+.featured-collection-grid__cluster {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ─── Columns ───────────────────────────────────────────────── */
+.featured-collection-grid__col {
+  display: flex;
+  gap: 12px;
+}
+
+.featured-collection-grid__col--left .featured-collection-grid__card--half:first-child {
+  flex: 1 1 40%;
+}
+
+.featured-collection-grid__col--left .featured-collection-grid__card--half:last-child {
+  flex: 1 1 60%;
+}
+
+.featured-collection-grid__col--middle .featured-collection-grid__card--half:first-child {
+  flex: 1 1 60%;
+}
+
+.featured-collection-grid__col--middle .featured-collection-grid__card--half:last-child {
+  flex: 1 1 40%;
+}
+
+/* ─── Card ──────────────────────────────────────────────────── */
+.featured-collection-grid__card {
+  position: relative;
+  overflow: hidden;
+  background-color: #f0ece6;
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+}
+
+.featured-collection-grid__card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  text-indent: -9999px;
+}
+
+.featured-collection-grid__card-title a {
+  position: relative;
+  z-index: 4;
+}
+
+.featured-collection-grid__card--half {
+  flex: 1 1 0;
+  min-height: 295px;
+}
+
+.featured-collection-grid__card--tall {
+  flex: 1 1 100%;
+  min-height: 596px;
+}
+
+.featured-collection-grid__card-image-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.featured-collection-grid__card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ─── Hover: card lifts, photo zooms, title underline draws in ─── */
+.featured-collection-grid__card {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) {
+  .featured-collection-grid__card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 40px -26px rgb(40 30 20 / 0.45);
+  }
+
+  .featured-collection-grid__card:hover .featured-collection-grid__card-image {
+    transform: scale(1.07);
+  }
+}
+
+.featured-collection-grid__card-title a {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1.5px no-repeat;
+  transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.featured-collection-grid__card:hover .featured-collection-grid__card-title a,
+.featured-collection-grid__card:focus-within .featured-collection-grid__card-title a {
+  background-size: 100% 1.5px;
+}
+
+.featured-collection-grid__card:focus-within {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
+}
+
+.featured-collection-grid__card-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 15%;
+  opacity: 0.15;
+}
+
+.featured-collection-grid__card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(245, 240, 234, 0.97) 0%,
+    rgba(245, 240, 234, 0.8) 20%,
+    rgba(245, 240, 234, 0.3) 45%,
+    transparent 65%
+  );
+}
+
+.featured-collection-grid__card--tall::after {
+  background: linear-gradient(
+    to top,
+    rgba(240, 236, 228, 0.95) 0%,
+    rgba(240, 236, 228, 0.7) 18%,
+    rgba(240, 236, 228, 0.2) 38%,
+    transparent 55%
+  );
+}
+
+.featured-collection-grid__card-body {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  padding: 18px 20px 20px;
+}
+
+.featured-collection-grid__card-body--tall {
+  padding: 22px 26px 26px;
+}
+
+.featured-collection-grid__card-tag {
+  margin: 0 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: #444444;
+  line-height: 1;
+}
+
+.featured-collection-grid__card-title {
+  margin: 0 0 8px;
+  font-size: clamp(1.25rem, 1.9vw, 1.6875rem);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #111111;
+}
+
+.featured-collection-grid__card-title a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.featured-collection-grid__card-title a:hover {
+  opacity: 1;
+}
+
+.featured-collection-grid__card-desc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #333333;
+  max-width: 260px;
+}
+
+.featured-collection-grid__card-body--tall .featured-collection-grid__card-desc {
+  max-width: 320px;
+}
+
+/* ─── Tablets & phones ───────────────────────────────────────
+   The text-over-photo cards only work when the photo leaves room at the bottom (desktop). Below 1025px
+   every card puts its photo on top and its text underneath, in an even 2-column grid; the tall card
+   becomes a full-width feature (photo beside the text on tablets, above it on phones). */
+@media screen and (max-width: 1024px) {
+  .featured-collection-grid__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    gap: 14px;
+  }
+
+  /* Let the four small cards and the tall card sit directly in the grid */
+  .featured-collection-grid__cluster,
+  .featured-collection-grid__col {
+    display: contents;
+  }
+
+  .featured-collection-grid__col--right .featured-collection-grid__card,
+  .featured-collection-grid__card--tall {
+    grid-column: 1 / -1;
+  }
+
+  .featured-collection-grid__card,
+  .featured-collection-grid__card--half,
+  .featured-collection-grid__card--tall {
+    min-height: 0;
+  }
+
+  .featured-collection-grid__card-image-wrap {
+    position: relative;
+    inset: auto;
+    flex: none;
+    aspect-ratio: 1 / 1;
+  }
+
+  .featured-collection-grid__card-image {
+    object-position: center;
+  }
+
+  .featured-collection-grid__card::after,
+  .featured-collection-grid__card--tall::after {
+    display: none;
+  }
+
+  .featured-collection-grid__card-body,
+  .featured-collection-grid__card-body--tall {
+    margin-top: 0 !important;
+    padding: 14px 16px 18px;
+  }
+
+  .featured-collection-grid__card-title {
+    font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+  }
+
+  .featured-collection-grid__card-desc {
+    display: -webkit-box;
+    max-width: none;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .featured-collection-grid__card-body--tall .featured-collection-grid__card-desc {
+    max-width: none;
+    -webkit-line-clamp: 3;
+  }
+}
+
+@media screen and (min-width: 641px) and (max-width: 1024px) {
+  .featured-collection-grid__card--half .featured-collection-grid__card-image-wrap {
+    aspect-ratio: 5 / 4;
+  }
+
+  .featured-collection-grid__card--tall {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+  }
+
+  .featured-collection-grid__card--tall .featured-collection-grid__card-image-wrap {
+    aspect-ratio: 4 / 3;
+  }
+
+  .featured-collection-grid__card--tall .featured-collection-grid__card-body {
+    padding: 24px 28px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .featured-collection-grid__grid {
+    gap: 10px;
+  }
+
+  .featured-collection-grid__card-body {
+    padding: 10px 12px 14px;
+  }
+
+  .featured-collection-grid__card-tag {
+    font-size: 10px;
+  }
+
+  .featured-collection-grid__card-title {
+    margin-bottom: 4px;
+    font-size: 1rem;
+  }
+
+  .featured-collection-grid__card--half .featured-collection-grid__card-desc {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .featured-collection-grid__card--tall .featured-collection-grid__card-image-wrap {
+    aspect-ratio: 4 / 3;
+  }
+
+  .featured-collection-grid__card--tall .featured-collection-grid__card-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* Scroll-in animation: assets/section-reveal.css. Card text follows its card in. */
+.sr-anim .featured-collection-grid__card-body {
+  opacity: 0;
+  translate: 0 18px;
+}
+
+.sr-anim.is-in .featured-collection-grid__card-body {
+  opacity: 1;
+  translate: 0 0;
+  transition: opacity 0.45s ease calc(0.45s + var(--sr-i, 0) * 0.07s), translate 0.6s cubic-bezier(0.22, 1, 0.36, 1) calc(0.45s + var(--sr-i, 0) * 0.07s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-collection-grid__card,
+  .featured-collection-grid__card-image,
+  .featured-collection-grid__card-title a {
+    transition: none;
+  }
+
+  .sr-anim .featured-collection-grid__card-body {
+    opacity: 1;
+    translate: none;
+  }
+}
+
+/* Scroll-in animation: assets/section-reveal.css. Card text follows its card in. */
+.sr-anim .featured-collection-grid__card-body {
+  opacity: 0;
+  translate: 0 18px;
+}
+
+.sr-anim.is-in .featured-collection-grid__card-body {
+  opacity: 1;
+  translate: 0 0;
+  transition: opacity 0.45s ease calc(0.45s + var(--sr-i, 0) * 0.07s), translate 0.6s cubic-bezier(0.22, 1, 0.36, 1) calc(0.45s + var(--sr-i, 0) * 0.07s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-collection-grid__card,
+  .featured-collection-grid__card-image,
+  .featured-collection-grid__card-title a {
+    transition: none;
+  }
+
+  .sr-anim .featured-collection-grid__card-body {
+    opacity: 1;
+    translate: none;
+  }
+}

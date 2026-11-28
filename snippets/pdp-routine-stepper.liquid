@@ -1,0 +1,335 @@
+{%- doc -%}
+  Routine steps, "Step by step guide" layout (sections/pdp-routine.liquid).
+  A large photo of the selected step next to a numbered list of all steps; the selected step opens to show its
+  instructions, an optional tip and the product used for it (with quick add). Behaviour: <pdp-routine-stepper>
+  in assets/pdp-extras.js.
+
+  @param {object} section - The routine section
+  @param {object} [product] - The product of the page (its own step shows no Add button)
+{%- enddoc -%}
+{%- liquid
+  assign start = section.settings.start_step | minus: 1
+  if start >= section.blocks.size
+    assign start = 0
+  endif
+  assign autoplay_ms = section.settings.autoplay_speed | default: 6 | times: 1000
+-%}
+<pdp-routine-stepper
+  class="pdp-rs page-width"
+  data-start="{{ start }}"
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-speed="{{ autoplay_ms }}"
+  style="--pdp-rs-count: {{ section.blocks.size }}; --pdp-rs-speed: {{ section.settings.autoplay_speed | default: 6 }}s;"
+>
+  <header class="pdp-rs__header">
+    {%- if section.settings.eyebrow != blank -%}
+      <p
+        class="pdp-routine__eyebrow"
+        data-reveal-fade="first"
+      >
+        {{ section.settings.eyebrow | escape }}
+      </p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2
+        class="pdp-routine__heading"
+        data-reveal-title
+      >
+        {{ section.settings.heading | escape }}
+      </h2>
+    {%- endif -%}
+    {%- if section.settings.intro != blank -%}
+      <p
+        class="pdp-rs__intro"
+        data-reveal-fade
+      >
+        {{ section.settings.intro | escape }}
+      </p>
+    {%- endif -%}
+  </header>
+
+  <div
+    class="pdp-rs__stage"
+    data-rs-stage
+    data-reveal-rise
+  >
+    <div class="pdp-rs__frames">
+      {%- for block in section.blocks -%}
+        <figure
+          class="pdp-rs__frame{% if forloop.index0 == start %} is-active{% endif %}"
+          data-rs-frame
+          {% unless forloop.index0 == start %}
+            aria-hidden="true"
+          {% endunless %}
+        >
+          {%- if block.settings.image != blank -%}
+            {%- liquid
+              assign img_loading = 'lazy'
+              if forloop.index0 == start
+                assign img_loading = 'eager'
+              endif
+              assign img_alt = block.settings.image.alt | default: block.settings.title
+            -%}
+            {{
+              block.settings.image
+              | image_url: width: 1400
+              | image_tag:
+                loading: img_loading,
+                widths: '480, 720, 960, 1200, 1400',
+                sizes: '(min-width: 990px) 46vw, 92vw',
+                alt: img_alt
+            }}
+          {%- else -%}
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'pdp-rs__placeholder' }}
+          {%- endif -%}
+        </figure>
+      {%- endfor -%}
+    </div>
+
+    <div
+      class="pdp-rs__chip"
+      aria-hidden="true"
+    >
+      <span class="pdp-rs__chip-label">{{ section.settings.step_label | escape }}</span>
+      <span
+        class="pdp-rs__chip-num"
+        data-rs-current
+      >
+        {{- start | plus: 1 -}}
+      </span>
+      <span class="pdp-rs__chip-total">/ {{ section.blocks.size }}</span>
+    </div>
+
+    {%- if section.blocks.size > 1 -%}
+      <div
+        class="pdp-rs__bars"
+        aria-hidden="true"
+      >
+        {%- for block in section.blocks -%}
+          <span
+            class="pdp-rs__bar{% if forloop.index0 < start %} is-done{% elsif forloop.index0 == start %} is-active{% endif %}"
+            data-rs-bar
+          >
+            <i></i>
+          </span>
+        {%- endfor -%}
+      </div>
+      <div class="pdp-rs__arrows">
+        <button
+          type="button"
+          class="pdp-rs__arrow"
+          data-rs-prev
+          aria-label="{{ 'accessibility.slideshow_previous' | t }}"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="pdp-rs__arrow"
+          data-rs-next
+          aria-label="{{ 'accessibility.slideshow_next' | t }}"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    {%- endif -%}
+  </div>
+
+  <ol class="pdp-rs__steps list-unstyled">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign step_id = 'PdpRoutine-' | append: section.id | append: '-' | append: forloop.index
+        assign is_active = false
+        if forloop.index0 == start
+          assign is_active = true
+        endif
+      -%}
+      <li
+        class="pdp-rs__step{% if is_active %} is-active{% endif %}{% if forloop.index0 < start %} is-done{% endif %}{% if block.settings.highlight %} is-highlight{% endif %}"
+        data-rs-step
+        {{ block.shopify_attributes }}
+      >
+        <button
+          type="button"
+          class="pdp-rs__trigger"
+          data-rs-trigger
+          id="{{ step_id }}-trigger"
+          aria-expanded="{{ is_active }}"
+          aria-controls="{{ step_id }}-panel"
+        >
+          <span
+            class="pdp-rs__num"
+            aria-hidden="true"
+          >
+            <span class="pdp-rs__num-text">{{ forloop.index }}</span>
+            <svg
+              class="pdp-rs__num-check"
+              viewBox="0 0 20 20"
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m4.5 10.5 3.5 3.5 7.5-8"/>
+            </svg>
+          </span>
+          <span class="pdp-rs__head">
+            <span class="pdp-rs__meta">
+              {{- section.settings.step_label | escape }}
+              {{ forloop.index -}}
+              {%- if block.settings.duration != blank %} · {{ block.settings.duration | escape }}{% endif -%}
+            </span>
+            <span class="pdp-rs__title">{{ block.settings.title | escape }}</span>
+          </span>
+          {%- if block.settings.highlight and section.settings.highlight_label != blank -%}
+            <span class="pdp-rs__this">{{ section.settings.highlight_label | escape }}</span>
+          {%- endif -%}
+          <span
+            class="pdp-rs__chev"
+            aria-hidden="true"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+        <div
+          class="pdp-rs__panel"
+          id="{{ step_id }}-panel"
+          role="region"
+          aria-labelledby="{{ step_id }}-trigger"
+          {% unless is_active %}
+            inert
+          {% endunless %}
+        >
+          <div class="pdp-rs__panel-inner">
+            {%- if block.settings.text != blank -%}
+              <p class="pdp-rs__text">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+            {%- if block.settings.tip != blank -%}
+              <p class="pdp-rs__tip">
+                <svg
+                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M7.5 15.5h5M8.5 18h3M10 2.5a5.5 5.5 0 0 0-3.2 10c.5.4.7.9.7 1.5v.5h5V14c0-.6.3-1.1.7-1.5A5.5 5.5 0 0 0 10 2.5Z"/>
+                </svg>
+                <span>{{ block.settings.tip | escape }}</span>
+              </p>
+            {%- endif -%}
+            {%- assign step_product = block.settings.product -%}
+            {%- if step_product != blank -%}
+              {%- assign sp_variant = step_product.selected_or_first_available_variant -%}
+              <div class="pdp-rs__product">
+                <a
+                  class="pdp-rs__product-media"
+                  href="{{ step_product.url }}"
+                  tabindex="-1"
+                  aria-hidden="true"
+                >
+                  {%- if step_product.featured_image -%}
+                    {{ step_product.featured_image | image_url: width: 160 | image_tag: loading: 'lazy', alt: '' }}
+                  {%- endif -%}
+                </a>
+                <a
+                  class="pdp-rs__product-info"
+                  href="{{ step_product.url }}"
+                >
+                  <span class="pdp-rs__product-label">{{ section.settings.product_label | escape }}</span>
+                  <span class="pdp-rs__product-title">{{ step_product.title | escape }}</span>
+                  <span class="pdp-rs__product-price">
+                    {{- sp_variant.price | money -}}
+                    {%- if sp_variant.compare_at_price > sp_variant.price %}
+                      <s>{{ sp_variant.compare_at_price | money }}</s>
+                    {%- endif -%}
+                  </span>
+                </a>
+                {%- if step_product.id != product.id -%}
+                  <button
+                    type="button"
+                    class="pdp-rs__add"
+                    data-pdp-add
+                    data-variant-id="{{ sp_variant.id }}"
+                    data-product-id="{{ step_product.id }}"
+                    {% unless sp_variant.available %}
+                      disabled
+                    {% endunless %}
+                    aria-label="{{ 'actions.add_to_cart' | t }}: {{ step_product.title | escape }}"
+                  >
+                    <span class="pdp-rs__add-label">
+                      {%- if sp_variant.available -%}
+                        <svg
+                          viewBox="0 0 20 20"
+                          width="14"
+                          height="14"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M10 4v12M4 10h12"/>
+                        </svg>
+                        {{ 'cart_drawer_plus.add' | t }}
+                      {%- else -%}
+                        {{ 'content.product_badge_sold_out' | t }}
+                      {%- endif -%}
+                    </span>
+                    <span
+                      class="pdp-rs__add-done"
+                      aria-hidden="true"
+                    >
+                      <svg
+                        viewBox="0 0 20 20"
+                        width="16"
+                        height="16"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="m4.5 10.5 3.5 3.5 7.5-8"/>
+                      </svg>
+                    </span>
+                  </button>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </li>
+    {%- endfor -%}
+  </ol>
+</pdp-routine-stepper>
